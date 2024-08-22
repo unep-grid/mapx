@@ -6975,6 +6975,61 @@
     "fa": "نماهای این پروژه (شامل نماهای خارجی نیست). "
   },
   {
+    "id": "view_non_editable",
+    "en": "Non editable",
+    "fa": "غیر قابل ویرایش"
+  },
+  {
+    "id": "view_non_editable_desc",
+    "en": "Views for which you don't have editing rights.",
+    "fa": "نماهایی که حق ویرایش آنها را ندارید."
+  },
+  {
+    "id": "view_non_public",
+    "en": "Views not public",
+    "fa": "بازدیدها عمومی نیستند"
+  },
+  {
+    "id": "view_non_public_desc",
+    "en": "Views not readable by the 'public' group",
+    "fa": "بازدیدها توسط گروه \"عمومی\" قابل خواندن نیستند"
+  },
+  {
+    "id": "view_public",
+    "en": "Views public",
+    "fa": "بازدیدهای عمومی"
+  },
+  {
+    "id": "view_public_desc",
+    "en": "Views readable by the 'public' group",
+    "fa": "بازدیدها توسط گروه \"عمومی\" قابل خواندن است"
+  },
+  {
+    "id": "view_non_local",
+    "en": "External views",
+    "fa": "نماهای خارجی"
+  },
+  {
+    "id": "viewe_non_local_desc",
+    "en": "Views shared from other projects",
+    "fa": "نماهای به اشتراک گذاشته شده از پروژه های دیگر"
+  },
+  {
+    "id": "vf_group_types",
+    "en": "Types",
+    "fa": "انواع"
+  },
+  {
+    "id": "vf_group_features",
+    "en": "Features",
+    "fa": "ویژگی‌ها"
+  },
+  {
+    "id": "vf_group_rights",
+    "en": "Rights",
+    "fa": "حقوق"
+  },
+  {
     "id": "language_auto_warning",
     "en": "Languages other than English can be translated automatically, in case of missing translation. This does not apply to user-created content such as projects, sources, views, stories, layers, captions, and custom code. Titles, descriptions, attributes, licenses or any other text written by the user, even in multilanguage entries are not altered in any ways by this software.",
     "fa": "در صورت عدم وجود ترجمه ، زبانهای دیگری غیر از انگلیسی می توانند به طور خودکار ترجمه شوند. این در مورد محتوای ایجاد شده توسط کاربر مانند پروژه ها ، منابع ، بازدیدها ، داستان ها ، لایه ها ، زیرنویس ها و کد سفارشی اعمال نمی شود. عناوین ، توضیحات ، ویژگی ها ، مجوزها یا هر متن دیگری که توسط کاربر نوشته شده است ، حتی در ورودی های چند زبانه به هیچ وجه توسط این نرم افزار تغییر نمی کند."

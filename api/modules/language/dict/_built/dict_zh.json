@@ -6975,6 +6975,61 @@
     "zh": "该项目的视图（不包括外部视图）。 "
   },
   {
+    "id": "view_non_editable",
+    "en": "Non editable",
+    "zh": "不可编辑"
+  },
+  {
+    "id": "view_non_editable_desc",
+    "en": "Views for which you don't have editing rights.",
+    "zh": "您无权编辑的视图。"
+  },
+  {
+    "id": "view_non_public",
+    "en": "Views not public",
+    "zh": "观点不公开"
+  },
+  {
+    "id": "view_non_public_desc",
+    "en": "Views not readable by the 'public' group",
+    "zh": "“公共”组无法读取的视图"
+  },
+  {
+    "id": "view_public",
+    "en": "Views public",
+    "zh": "公开观看"
+  },
+  {
+    "id": "view_public_desc",
+    "en": "Views readable by the 'public' group",
+    "zh": "“公共”组可读的视图"
+  },
+  {
+    "id": "view_non_local",
+    "en": "External views",
+    "zh": "外部景观"
+  },
+  {
+    "id": "viewe_non_local_desc",
+    "en": "Views shared from other projects",
+    "zh": "来自其他项目的共享视图"
+  },
+  {
+    "id": "vf_group_types",
+    "en": "Types",
+    "zh": "类型"
+  },
+  {
+    "id": "vf_group_features",
+    "en": "Features",
+    "zh": "功能"
+  },
+  {
+    "id": "vf_group_rights",
+    "en": "Rights",
+    "zh": "权利"
+  },
+  {
     "id": "language_auto_warning",
     "en": "Languages other than English can be translated automatically, in case of missing translation. This does not apply to user-created content such as projects, sources, views, stories, layers, captions, and custom code. Titles, descriptions, attributes, licenses or any other text written by the user, even in multilanguage entries are not altered in any ways by this software.",
     "zh": "如果缺少翻译，可以自动翻译除英语以外的其他语言。这不适用于用户创建的内容，例如项目，源，视图，故事，图层，标题和自定义代码。用户编写的标题，描述，属性，许可或任何其他文本，即使是多语言条目也不会被该软件以任何方式更改。"

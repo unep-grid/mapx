@@ -6975,6 +6975,61 @@
     "es": "Vistas de este proyecto (excluye vistas externas). "
   },
   {
+    "id": "view_non_editable",
+    "en": "Non editable",
+    "es": "No editable"
+  },
+  {
+    "id": "view_non_editable_desc",
+    "en": "Views for which you don't have editing rights.",
+    "es": "Vistas para las que no tienes derechos de edición."
+  },
+  {
+    "id": "view_non_public",
+    "en": "Views not public",
+    "es": "Vistas no públicas"
+  },
+  {
+    "id": "view_non_public_desc",
+    "en": "Views not readable by the 'public' group",
+    "es": "Vistas no legibles por el grupo 'público'"
+  },
+  {
+    "id": "view_public",
+    "en": "Views public",
+    "es": "Vistas públicas"
+  },
+  {
+    "id": "view_public_desc",
+    "en": "Views readable by the 'public' group",
+    "es": "Vistas legibles por el grupo 'público'"
+  },
+  {
+    "id": "view_non_local",
+    "en": "External views",
+    "es": "Vistas externas"
+  },
+  {
+    "id": "viewe_non_local_desc",
+    "en": "Views shared from other projects",
+    "es": "Opiniones compartidas desde otros proyectos"
+  },
+  {
+    "id": "vf_group_types",
+    "en": "Types",
+    "es": "Tipos"
+  },
+  {
+    "id": "vf_group_features",
+    "en": "Features",
+    "es": "Características"
+  },
+  {
+    "id": "vf_group_rights",
+    "en": "Rights",
+    "es": "Derechos"
+  },
+  {
     "id": "language_auto_warning",
     "en": "Languages other than English can be translated automatically, in case of missing translation. This does not apply to user-created content such as projects, sources, views, stories, layers, captions, and custom code. Titles, descriptions, attributes, licenses or any other text written by the user, even in multilanguage entries are not altered in any ways by this software.",
     "es": "Los idiomas distintos al inglés se pueden traducir automáticamente, en caso de que falte la traducción. Esto no se aplica al contenido creado por el usuario, como proyectos, fuentes, vistas, historias, capas, leyendas y código personalizado. Los títulos, descripciones, atributos, licencias o cualquier otro texto escrito por el usuario, incluso en entradas multilingües, no son alterados de ninguna manera por este software."

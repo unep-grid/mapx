@@ -6975,6 +6975,61 @@
     "ps": "د دې پروژې نظریات (بهرني لیدونه خارجوي). "
   },
   {
+    "id": "view_non_editable",
+    "en": "Non editable",
+    "ps": "د ترمیم وړ نه دی"
+  },
+  {
+    "id": "view_non_editable_desc",
+    "en": "Views for which you don't have editing rights.",
+    "ps": "هغه لیدونه چې تاسو یې د ترمیم حق نلرئ."
+  },
+  {
+    "id": "view_non_public",
+    "en": "Views not public",
+    "ps": "لیدونه عامه ندي"
+  },
+  {
+    "id": "view_non_public_desc",
+    "en": "Views not readable by the 'public' group",
+    "ps": "لیدونه د 'عامه' ډلې لخوا د لوستلو وړ ندي"
+  },
+  {
+    "id": "view_public",
+    "en": "Views public",
+    "ps": "عامه لید"
+  },
+  {
+    "id": "view_public_desc",
+    "en": "Views readable by the 'public' group",
+    "ps": "د 'عامه' ډلې لخوا د لوستلو وړ لیدونه"
+  },
+  {
+    "id": "view_non_local",
+    "en": "External views",
+    "ps": "بهرني نظرونه"
+  },
+  {
+    "id": "viewe_non_local_desc",
+    "en": "Views shared from other projects",
+    "ps": "نظرونه د نورو پروژو څخه شریک شوي"
+  },
+  {
+    "id": "vf_group_types",
+    "en": "Types",
+    "ps": "ډولونه"
+  },
+  {
+    "id": "vf_group_features",
+    "en": "Features",
+    "ps": "ځانګړتیاوې"
+  },
+  {
+    "id": "vf_group_rights",
+    "en": "Rights",
+    "ps": "حقونه"
+  },
+  {
     "id": "language_auto_warning",
     "en": "Languages other than English can be translated automatically, in case of missing translation. This does not apply to user-created content such as projects, sources, views, stories, layers, captions, and custom code. Titles, descriptions, attributes, licenses or any other text written by the user, even in multilanguage entries are not altered in any ways by this software.",
     "ps": "د انګلیسي نه پرته نورې ژبې په اوتومات ډول ژباړل کیدی شي ، د ژباړې له لاسه ورکولو په صورت کې. دا د کارن لخوا رامینځته شوي مینځپانګې نه پلي کیږي لکه پروژې ، سرچینې ، لیدونه ، کیسې ، پرتونه ، سرلیکونه ، او دودیز کوډ. سرلیکونه ، توضیحات ، خاصیتونه ، جوازونه یا کوم بل متن چې د کارونکي لخوا لیکل شوی ، حتی په ژبو کې دننه د دې سافټویر لخوا په هیڅ ډول بدلون نه راځي."

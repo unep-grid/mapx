@@ -6975,6 +6975,61 @@
     "de": "Ansichten aus diesem Projekt (ausgenommen externe Ansichten). "
   },
   {
+    "id": "view_non_editable",
+    "en": "Non editable",
+    "de": "Nicht editierbar"
+  },
+  {
+    "id": "view_non_editable_desc",
+    "en": "Views for which you don't have editing rights.",
+    "de": "Ansichten, für die Sie keine Bearbeitungsrechte haben."
+  },
+  {
+    "id": "view_non_public",
+    "en": "Views not public",
+    "de": "Ansichten nicht öffentlich"
+  },
+  {
+    "id": "view_non_public_desc",
+    "en": "Views not readable by the 'public' group",
+    "de": "Ansichten, die von der Gruppe „öffentlich“ nicht gelesen werden können"
+  },
+  {
+    "id": "view_public",
+    "en": "Views public",
+    "de": "Aufrufe öffentlich"
+  },
+  {
+    "id": "view_public_desc",
+    "en": "Views readable by the 'public' group",
+    "de": "Von der Gruppe „öffentlich“ lesbare Ansichten"
+  },
+  {
+    "id": "view_non_local",
+    "en": "External views",
+    "de": "Externe Ansichten"
+  },
+  {
+    "id": "viewe_non_local_desc",
+    "en": "Views shared from other projects",
+    "de": "Aus anderen Projekten geteilte Ansichten"
+  },
+  {
+    "id": "vf_group_types",
+    "en": "Types",
+    "de": "Typen"
+  },
+  {
+    "id": "vf_group_features",
+    "en": "Features",
+    "de": "Funktionen"
+  },
+  {
+    "id": "vf_group_rights",
+    "en": "Rights",
+    "de": "Rechte"
+  },
+  {
     "id": "language_auto_warning",
     "en": "Languages other than English can be translated automatically, in case of missing translation. This does not apply to user-created content such as projects, sources, views, stories, layers, captions, and custom code. Titles, descriptions, attributes, licenses or any other text written by the user, even in multilanguage entries are not altered in any ways by this software.",
     "de": "Andere Sprachen als Englisch können bei fehlender Übersetzung automatisch übersetzt werden. Dies gilt nicht für vom Benutzer erstellte Inhalte wie Projekte, Quellen, Ansichten, Storys, Ebenen, Beschriftungen und benutzerdefinierten Code. Titel, Beschreibungen, Attribute, Lizenzen oder andere vom Benutzer geschriebene Texte, auch in mehrsprachigen Einträgen, werden von dieser Software in keiner Weise geändert."

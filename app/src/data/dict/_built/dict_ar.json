@@ -6975,6 +6975,61 @@
     "ar": "المشاهدات من هذا المشروع (باستثناء وجهات النظر الخارجية). "
   },
   {
+    "id": "view_non_editable",
+    "en": "Non editable",
+    "ar": "غير قابل للتعديل"
+  },
+  {
+    "id": "view_non_editable_desc",
+    "en": "Views for which you don't have editing rights.",
+    "ar": "المشاهدات التي ليس لديك حقوق تحريرها."
+  },
+  {
+    "id": "view_non_public",
+    "en": "Views not public",
+    "ar": "المشاهدات غير عامة"
+  },
+  {
+    "id": "view_non_public_desc",
+    "en": "Views not readable by the 'public' group",
+    "ar": "وجهات نظر غير قابلة للقراءة من قبل المجموعة \"العامة\""
+  },
+  {
+    "id": "view_public",
+    "en": "Views public",
+    "ar": "المشاهدات العامة"
+  },
+  {
+    "id": "view_public_desc",
+    "en": "Views readable by the 'public' group",
+    "ar": "المشاهدات التي يمكن للمجموعة العامة قراءتها"
+  },
+  {
+    "id": "view_non_local",
+    "en": "External views",
+    "ar": "المناظر الخارجية"
+  },
+  {
+    "id": "viewe_non_local_desc",
+    "en": "Views shared from other projects",
+    "ar": "وجهات نظر مشتركة من مشاريع أخرى"
+  },
+  {
+    "id": "vf_group_types",
+    "en": "Types",
+    "ar": "الأنواع"
+  },
+  {
+    "id": "vf_group_features",
+    "en": "Features",
+    "ar": "الميزات"
+  },
+  {
+    "id": "vf_group_rights",
+    "en": "Rights",
+    "ar": "الحقوق"
+  },
+  {
     "id": "language_auto_warning",
     "en": "Languages other than English can be translated automatically, in case of missing translation. This does not apply to user-created content such as projects, sources, views, stories, layers, captions, and custom code. Titles, descriptions, attributes, licenses or any other text written by the user, even in multilanguage entries are not altered in any ways by this software.",
     "ar": "يمكن ترجمة اللغات الأخرى غير الإنجليزية تلقائيًا في حالة فقد الترجمة. لا ينطبق هذا على المحتوى الذي تم إنشاؤه بواسطة المستخدم مثل المشاريع والمصادر وطرق العرض والقصص والطبقات والتعليقات التوضيحية والتعليمات البرمجية المخصصة. لا يتم تغيير العناوين أو الأوصاف أو السمات أو التراخيص أو أي نص آخر مكتوب بواسطة المستخدم ، حتى في إدخالات متعددة اللغات بأي شكل من الأشكال بواسطة هذا البرنامج."

@@ -1,8 +1,4 @@
-import {
-  getArrayDistinct,
-  getArrayStat,
-  getArrayIntersect,
-} from "../array_stat/index.js";
+import { getArrayDistinct, getArrayIntersect } from "../array_stat/index.js";
 import { Checkbox } from "./components/checkbox.js";
 import { Switch } from "./../switch/index.js";
 import { ListenerStore } from "./../listener_store/index.js";
@@ -10,10 +6,13 @@ import { debouncePromise, path } from "./../mx_helper_misc.js";
 import { el } from "../el/src/index.js";
 import { getDictItem } from "./../language";
 import { isElement, isEmpty } from "./../is_test/index.js";
-import { settings } from "./../settings";
+import { setViewsComponents } from "./views_components.js";
+import { elTitleKey, elGroup, elEmpty } from "./helpers_ui.js";
+import { getFreqTable } from "./stats.js";
 
 import "./style.less";
 import { isViewOpen } from "../is_test_mapx/index.js";
+
 const settingsDefault = {
   onFilter: (idViews) => {
     console.log(idViews);
@@ -21,8 +20,6 @@ const settingsDefault = {
   onUpdateCount: (nTot, nFilter) => {
     console.table({ nTot: nTot, nFilter: nFilter });
   },
-  typesAllowed: ["view_components", "view_collections"],
-  typesSelect: ["view_components"],
   typesTooltip: ["view_components"],
   mode: "intersection",
   elFilterText: document.body,
@@ -35,7 +32,7 @@ const settingsDefault = {
 class ViewsFilter {
   constructor(views, opt) {
     const vf = this;
-    vf.opt = Object.assign({}, settingsDefault, opt);
+    vf.opt = { ...settingsDefault, ...opt };
     vf._lStore = new ListenerStore();
     vf.initStorage(views);
     vf.initListeners();
@@ -44,9 +41,12 @@ class ViewsFilter {
     vf.update();
   }
 
+  /**
+   * @returns {Promise<void>}
+   */
   async update() {
+    const vf = this;
     try {
-      const vf = this;
       vf.removeRules();
       vf.updateViewsComponents();
       await vf.updateCheckboxes();
@@ -55,9 +55,12 @@ class ViewsFilter {
     }
   }
 
+  /**
+   * @param {Array} views - Array of view objects
+   */
   initStorage(views) {
     const vf = this;
-    vf._views = views || opt.views;
+    vf._views = views || vf.opt.views;
     vf._checkboxes = [];
     vf._rules = [];
     vf._previousState = [];
@@ -76,21 +79,23 @@ class ViewsFilter {
 
     vf._lStore.addListener({
       target: vf.opt.elFilterTags,
-      type: ["click"],
-      callback: handleFilterViewIdByCheckbox,
+      type: ["change"],
+      callback: vf.handleFilterViewIdByCheckbox,
       group: "view_filter",
       bind: vf,
     });
+
     vf._lStore.addListener({
       target: vf.opt.elFilterText,
       type: ["keyup"],
-      callback: handleFilterViewIdByText,
+      callback: vf.handleFilterViewIdByText,
       group: "view_filter",
       debounce: true,
       debounceTime: 100,
       bind: vf,
     });
   }
+
   initSwitchMode() {
     const vf = this;
     vf.switchMode = new Switch(vf.opt.elFilterSwitch, {
@@ -112,6 +117,9 @@ class ViewsFilter {
     });
   }
 
+  /**
+   * @returns {void}
+   */
   destroy() {
     const vf = this;
     vf.clear();
@@ -119,6 +127,9 @@ class ViewsFilter {
     vf.switchMode.destroy();
   }
 
+  /**
+   * @param {string} from - Source of the apply action
+   */
   apply(from) {
     const vf = this;
     const pState = vf._previousState;
@@ -134,44 +145,63 @@ class ViewsFilter {
     }
   }
 
+  /**
+   * @returns {Array} - Array of view objects
+   */
   getViews() {
     return this._views;
   }
+
+  /**
+   * @returns {Array} - Array of view IDs
+   */
   getViewsId() {
     return this._views.map((v) => v.id);
   }
+
+  /**
+   * @param {Array} views - Array of view objects
+   * @returns {Array} - Array of view objects or empty array
+   */
   setViews(views) {
-    return this._views === views || [];
+    return (this._views = views || []);
   }
 
+  /**
+   * @param {string} hash - Hash of the rule to find
+   * @returns {Object|null} - Found rule object or null
+   */
   getRuleByHash(hash) {
-    return this._rules.reduce(
-      (a, r) => (a ? a : r.hash === hash ? r : null),
-      null,
-    );
+    return this._rules.find((r) => r.hash === hash) || null;
   }
 
+  /**
+   * @returns {Array} - Array of rule objects
+   */
   getRules() {
     return this._rules || [];
   }
 
+  /**
+   * @returns {void}
+   */
   removeRules() {
     this._rules.length = 0;
   }
 
+  /**
+   * @param {Object} rule - Rule object to update
+   */
   updateRule(rule) {
     const vf = this;
-    rule = Object.assign(
-      {},
-      {
-        idViews: [],
-        type: null,
-        id: null,
-        group: null,
-        enable: false,
-      },
-      rule,
-    );
+    rule = {
+      idViews: [],
+      type: null,
+      id: null,
+      group: null,
+      enable: false,
+      ...rule,
+    };
 
     const hash = [rule.group, rule.type, rule.id].join(":");
     const rules = vf.getRules();
@@ -179,8 +209,7 @@ class ViewsFilter {
     const ruleExists = !!ruleStored;
 
     if (ruleExists && rule.enable) {
-      ruleStored.idViews.length = 0;
-      ruleStored.idViews.push(...rule.idViews);
+      ruleStored.idViews = [...rule.idViews];
     }
 
     if (!ruleExists && rule.enable) {
@@ -194,14 +223,19 @@ class ViewsFilter {
     }
   }
 
+  /**
+   * @returns {Array} - Array of filtered view objects
+   */
   getViewsSubset() {
     const vf = this;
     const idViews = vf.getViewsIdSubset();
     const views = vf.getViews();
-    const res = views.filter((v) => idViews.indexOf(v.id) > -1);
-    return res;
+    return views.filter((v) => idViews.includes(v.id));
   }
 
+  /**
+   * @returns {Array} - Array of filtered view IDs
+   */
   getViewsIdSubset() {
     const vf = this;
     const rules = vf.getRules();
@@ -209,27 +243,24 @@ class ViewsFilter {
     const viewsBase = isIntersect ? vf.getViewsId() : [];
     const subset = rules.reduce((a, r) => {
       const idViews = r.idViews;
-      if (isIntersect) {
-        return getArrayIntersect(a, idViews);
-      } else {
-        return a.concat(idViews);
-      }
+      return isIntersect ? getArrayIntersect(a, idViews) : [...a, ...idViews];
     }, viewsBase);
     let distinct = getArrayDistinct(subset);
-    /**
-     * By defaut, empty set in union mode,
-     * everything is displayed;
-     */
+
     if (!isIntersect && distinct.length === 0) {
       distinct = vf.getViewsId();
     }
     return distinct;
   }
 
+  /**
+   * @param {string} op - Operation mode ('intersection' or 'union')
+   * @param {boolean} updateSwitch - Whether to update the switch state
+   */
   setMode(op, updateSwitch) {
     const vf = this;
     const modes = ["intersection", "union"];
-    const opfinal = modes.indexOf(op) > -1 ? op : modes[0];
+    const opfinal = modes.includes(op) ? op : modes[0];
     const enableSwitch = opfinal === "union";
     vf.opt.mode = opfinal;
     if (updateSwitch !== false) {
@@ -237,6 +268,10 @@ class ViewsFilter {
     }
   }
 
+  /**
+   * @param {Checkbox} checkbox - Checkbox object to add
+   * @param {HTMLElement} elParent - Parent element to append the checkbox to
+   */
   addCheckbox(checkbox, elParent) {
     this._checkboxes.push(checkbox);
     if (elParent) {
@@ -244,94 +279,89 @@ class ViewsFilter {
     }
   }
 
+  /**
+   * @returns {Array} - Array of Checkbox objects
+   */
   getCheckboxes() {
     return this._checkboxes;
   }
 
+  /**
+   * @param {string} id - Checkbox ID
+   * @param {string} type - Checkbox type
+   * @returns {Checkbox|null} - Found Checkbox object or null
+   */
   getCheckbox(id, type) {
-    return this.getCheckboxes().reduce(
-      (a, t) => (!a && t._id === id && t_type === type ? t : a),
-      null,
+    return (
+      this.getCheckboxes().find((t) => t._id === id && t._type === type) || null
     );
   }
 
+  /**
+   * @param {Object} opt - Filter options
+   */
   filterCombined(opt) {
     const vf = this;
-    opt = Object.assign(
-      {},
-      {
-        reset: false,
-        rules: [],
-        mode: "intersection",
-      },
-      opt,
-    );
+    opt = {
+      reset: false,
+      rules: [],
+      mode: "intersection",
+      ...opt,
+    };
 
     if (opt.reset) {
       vf.reset();
     }
 
-    opt.rules.forEach((r) => {
+    for (const r of opt.rules) {
       if (r.type === "view_collections" || r.type === "view_components") {
         vf.updateCheckboxState(r);
       }
       if (r.type === "text") {
         vf.updateRuleByText(r, true);
       }
-    });
+    }
 
-    vf.getCheckboxes().forEach((t) => {
+    for (const t of vf.getCheckboxes()) {
       vf.updateRuleByCheckbox(t);
-    });
+    }
 
     vf.setMode(opt.mode);
     vf.apply("filter_combined");
   }
 
   /**
-   * Activate filter by activaed state
-   * @param {Boolean} enable/disable the filter and set button state accordingly
+   * @param {boolean} enable - Enable/disable the filter
    */
   filterActivated(enable) {
     const vf = this;
     const elBtn = vf.opt.elFilterActivated;
     const clActive = "active";
     const id = elBtn.id;
-    const isActive = elBtn.classList.contains(clActive) === true;
+    const isActive = elBtn.classList.contains(clActive);
     const isToggle = typeof enable !== "boolean";
 
     if (isToggle) {
       enable = !isActive;
-    } else {
-      if ((isActive && enable) || (!isActive && !enable)) {
-        return;
-      }
+    } else if ((isActive && enable) || (!isActive && !enable)) {
+      return;
     }
 
-    /*
-     * Set classes
-     */
     if (enable) {
       elBtn.classList.add(clActive);
     } else {
       elBtn.classList.remove(clActive);
     }
 
-    /*
-     * Filter views
-     */
     const views = vf.getViews();
     const idViews = views.reduce((a, v) => {
-      let isOpen = isViewOpen(v);
+      const isOpen = isViewOpen(v);
       if (enable && isOpen) {
         a.push(v.id);
       }
       return a;
     }, []);
 
-    /**
-     * Update rule
-     */
     vf.updateRule({
       group: "input",
       type: "views_activated",
@@ -340,62 +370,57 @@ class ViewsFilter {
       enable: enable,
     });
 
-    /**
-     * Apply
-     */
     vf.apply("handler_activated");
   }
 
+  /**
+   * @param {Object} opt - Checkbox state update options
+   */
   updateCheckboxState(opt) {
     const vf = this;
-    opt = Object.assign(
-      {},
-      {
-        type: null,
-        value: [],
-        state: true,
-      },
-      opt,
-    );
+    opt = {
+      type: null,
+      value: [],
+      state: true,
+      ...opt,
+    };
 
-    opt.state = opt.state === false ? false : true;
+    opt.state = opt.state !== false;
     opt.value = Array.isArray(opt.value) ? opt.value : [opt.value];
 
-    /*
-     * Enable or disable taggles
-     */
-    vf.getCheckboxes().forEach((t) => {
+    for (const t of vf.getCheckboxes()) {
       const hasType = t._type === opt.type;
       if (!hasType) {
-        return;
+        continue;
       }
-      const hasId = opt.value.indexOf(t.id) > -1;
+      const hasId = opt.value.includes(t.id);
       const enable = opt.state && hasId;
       if (t.getState() !== enable) {
         t.setState(enable);
       }
-    });
+    }
   }
 
+  /**
+   * @param {Object} opt - Text rule update options
+   * @param {boolean} update - Whether to update the text input element
+   */
   updateRuleByText(opt, update) {
     const vf = this;
     const views = vf.getViews();
     const id = vf.opt.elFilterText.id;
-    opt = Object.assign(
-      {},
-      {
-        value: "",
-        state: false,
-      },
-      opt,
-    );
+    opt = {
+      value: "",
+      state: false,
+      ...opt,
+    };
 
     if (update) {
       vf.opt.elFilterText.value = opt.value;
     }
 
     const enable = opt.value.length > 0;
-    const expr = txtToRegex(opt.value);
+    const expr = vf.txtToRegex(opt.value);
 
     const idViews = views.reduce((a, v) => {
       const found =
@@ -406,7 +431,7 @@ class ViewsFilter {
           .search(expr) > -1;
 
       if (found) {
-        return a.concat(v.id);
+        return [...a, v.id];
       }
 
       return a;
@@ -421,6 +446,9 @@ class ViewsFilter {
     });
   }
 
+  /**
+   * @param {Checkbox} cbx - Checkbox object to update rule for
+   */
   updateRuleByCheckbox(cbx) {
     const vf = this;
 
@@ -433,18 +461,13 @@ class ViewsFilter {
     const id = cbx.getId();
     const state = cbx.getState();
     const idViews = [];
-    let found = false;
 
     if (state) {
-      idViews.push(
-        ...views.reduce((a, v) => {
-          found = isFound(v, type, id);
-          if (found) {
-            a.push(v.id);
-          }
-          return a;
-        }, []),
-      );
+      for (const v of views) {
+        if (vf.isFound(v, id)) {
+          idViews.push(v.id);
+        }
+      }
     }
 
     vf.updateRule({
@@ -456,6 +479,9 @@ class ViewsFilter {
     });
   }
 
+  /**
+   * @param {Checkbox} checkbox - Checkbox object to remove
+   */
   removeCheckbox(checkbox) {
     const checkboxes = this._checkboxes;
     const pos = checkboxes.indexOf(checkbox);
@@ -464,6 +490,9 @@ class ViewsFilter {
     }
   }
 
+  /**
+   * @returns {Promise<void>}
+   */
   async updateCheckboxes() {
     const vf = this;
     const views = vf.getViews();
@@ -471,31 +500,28 @@ class ViewsFilter {
     const table = getFreqTable(views);
     const elCheckboxes = document.createDocumentFragment();
     const labels = [];
-
     const groupsContent = {};
     const parts = [];
-
+    vf._table = table;
     vf.clear();
 
-    for (const type of vf.opt.typesSelect) {
-      if (!vf.opt.typesAllowed.includes(type)) {
-        continue;
-      }
-      groupsContent[type] = elGroup();
-      parts.push(elTitleKey(type));
-      parts.push(groupsContent[type]);
+    const idGroups = vf.tableKeys;
+    for (const id of idGroups) {
+      groupsContent[id] = elGroup();
+      parts.push(elTitleKey(id));
+      parts.push(groupsContent[id]);
     }
 
     for (const elPart of parts) {
       elCheckboxes.appendChild(elPart);
     }
 
-    for (const type of vf.opt.typesSelect) {
+    for (const type of idGroups) {
       const tableType = table[type];
-      const addTooltip = vf.opt.typesTooltip.includes(type);
+      const addTooltip = true;
       const keys = Object.keys(tableType);
       const elParent = groupsContent[type];
-      if (keys.length === 0) {
+      if (isEmpty(keys)) {
         elParent.appendChild(elEmpty());
       }
       let pos = 0;
@@ -519,41 +545,32 @@ class ViewsFilter {
       }
     }
 
-    /**
-     * Render fragment
-     */
     elContainer.appendChild(elCheckboxes);
 
-    /**
-     * Wait labels to be rendered
-     */
     await Promise.all(labels);
 
-    /**
-     * Update checkboxes order after labels are updated
-     */
     vf.updateCheckboxesOrder();
   }
 
+  get tableKeys() {
+    return Object.keys(this._table || {});
+  }
+
+  /**
+   * Updates the order of checkboxes
+   */
   updateCheckboxesOrder() {
     const vf = this;
     const checkboxes = vf.getCheckboxes();
-    let pos, aLabel, bLabel;
-
-    for (const type of vf.opt.typesSelect) {
-      const tt = checkboxes.filter((checkbox) => checkbox.getType() === type);
-      pos = 0;
+    const idGroups = vf.tableKeys;
+    for (const id of idGroups) {
+      const tt = checkboxes.filter((checkbox) => checkbox.getType() === id);
+      let pos = 0;
 
       tt.sort((a, b) => {
-        aLabel = n(a.getLabel());
-        bLabel = n(b.getLabel());
-        if (aLabel > bLabel) {
-          return 1;
-        }
-        if (bLabel > aLabel) {
-          return -1;
-        }
-        return 0;
+        const aLabel = vf.normalise(a.getLabel());
+        const bLabel = vf.normalise(b.getLabel());
+        return aLabel.localeCompare(bLabel);
       });
 
       for (const t of tt) {
@@ -562,11 +579,14 @@ class ViewsFilter {
     }
   }
 
+  /**
+   * Resets the filter state
+   */
   reset() {
     const vf = this;
-    vf.getCheckboxes().forEach((t) => {
+    for (const t of vf.getCheckboxes()) {
       t.setState(false);
-    });
+    }
     vf.removeRules();
 
     const elFilter = vf.opt.elFilterActivated;
@@ -577,12 +597,13 @@ class ViewsFilter {
     vf.apply("reset");
   }
 
+  /**
+   * Clears all checkboxes and resets the filter
+   */
   clear() {
     const vf = this;
     vf.reset();
-    /**
-     * Remove checkboxes
-     */
+
     for (const t of vf.getCheckboxes()) {
       t.destroy();
       vf.removeCheckbox(t);
@@ -593,6 +614,9 @@ class ViewsFilter {
     }
   }
 
+  /**
+   * Updates the count of filtered views
+   */
   updateCount() {
     const vf = this;
     const views = vf.getViews();
@@ -601,275 +625,107 @@ class ViewsFilter {
     const viewsDisplayed = isIntersect ? viewsSubset : views;
     const checkboxes = vf.getCheckboxes();
     const checkboxesCount = getFreqTable(viewsDisplayed);
-    let count, byType, byId;
-    checkboxes.forEach((checkbox) => {
-      count = 0;
-      byType = checkboxesCount[checkbox.getType()];
+
+    for (const checkbox of checkboxes) {
+      let count = 0;
+      const byType = checkboxesCount[checkbox.getType()];
       if (byType) {
-        byId = byType[checkbox.getId()];
+        const byId = byType[checkbox.getId()];
         if (byId) {
           count = byId;
         }
       }
       checkbox.setCount(count);
-    });
+    }
+
     vf.opt.onUpdateCount({
       nTot: views.length,
       nSubset: viewsSubset.length,
     });
   }
 
+  /**
+   * Updates the components of views
+   */
   updateViewsComponents() {
     const vf = this;
     const views = vf.getViews();
     setViewsComponents(views);
   }
+
+  /**
+   * Checks if a view matches a given filter
+   * @param {Object} view - View object
+   * @param {string} filter - Filter value
+   * @returns {boolean} - True if the view matches the filter
+   */
+  isFound(view, filter) {
+    return view._components.includes(filter);
+  }
+
+  /**
+   * Normalizes text
+   * @param {string} txt - Text to normalize
+   * @returns {string} - Normalized text
+   */
+  normalise(txt) {
+    if (!txt || typeof txt !== "string") {
+      return txt;
+    }
+    return txt.toLowerCase().trim();
+  }
+
+  /**
+   * Handles text input for filtering
+   * @param {Event} event - Input event
+   */
+  handleFilterViewIdByText(event) {
+    const vf = this;
+    const text = event.target.value.toLowerCase();
+
+    vf.updateRuleByText({
+      value: text,
+    });
+    vf.apply("handler_text");
+  }
+
+  /**
+   * Handles checkbox changes for filtering
+   * @param {Event} event - Change event
+   */
+  handleFilterViewIdByCheckbox(event) {
+    const vf = this;
+    const cbx = event?.target?.checkbox;
+    const isValid = cbx instanceof Checkbox;
+
+    if (!isValid) {
+      console.warn("Not a checkbox");
+      return;
+    }
+
+    vf.updateRuleByCheckbox(cbx);
+    vf.apply("handler_checkbox");
+  }
+
+  /**
+   * Converts text to a regular expression
+   * @param {string} txt - Text to convert
+   * @returns {RegExp} - Resulting regular expression
+   */
+  txtToRegex(txt) {
+    txt = txt || "";
+    txt = txt.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+
+    if (txt.includes(" or ")) {
+      txt = txt.split(" or ").join("|");
+    }
+
+    if (txt.includes(" and ")) {
+      txt = "(?=" + txt.split(" and ").join(")(=?") + ")";
+    }
+
+    return new RegExp(txt);
+  }
 }
 
 export { ViewsFilter };
-
-/**
- * Helpers
- */
-function isFound(view, type, filter) {
-  let found = false;
-  switch (type) {
-    case "view_collections":
-      if (view.data && view.data.collections) {
-        found = view.data.collections.indexOf(filter) > -1;
-      }
-      break;
-    case "view_components":
-      if (view._components) {
-        found = view._components.indexOf(filter) > -1;
-      }
-      break;
-    default:
-      found = false;
-  }
-  return found;
-}
-
-/**
- * Add components in view for an array of views
- * @param {Array} views Array of views to update
- */
-function setViewsComponents(views) {
-  views.forEach((v) => {
-    let components = [],
-      isVt,
-      isGj,
-      isSm,
-      isCc,
-      isRt,
-      widgets,
-      storySteps,
-      overlap,
-      attributes,
-      customStyle,
-      local,
-      editable;
-
-    isVt = v.type === "vt";
-    isSm = v.type === "sm";
-    isCc = v.type === "cc";
-    isRt = v.type === "rt";
-    isGj = v.type === "gj";
-
-    widgets = path(v, "data.dashboard.widgets", []);
-    storySteps = path(v, "data.story.steps", []);
-    overlap = path(v, "data.source.layerInfo.maskName", "");
-    attributes = path(v, "data.attribute.names", "");
-    customStyle = path(v, "data.style.custom", "");
-
-    local = path(v, "project") === settings.project.id;
-
-    editable = path(v, "_edit") === true;
-
-    if (isVt) {
-      components.push("vt");
-    }
-
-    if (isGj) {
-      components.push("gj");
-    }
-
-    if (isRt) {
-      components.push("rt");
-    }
-
-    if (isSm && !isEmpty(storySteps)) {
-      components.push("sm");
-    }
-
-    if (!isEmpty(widgets)) {
-      components.push("dashboard");
-    }
-
-    if (isVt && attributes && attributes.indexOf("mx_t0") > -1) {
-      components.push("time_slider");
-    }
-    if (isVt && typeof overlap === "string" && overlap.length) {
-      components.push("overlap");
-    }
-    if (
-      isVt &&
-      customStyle &&
-      customStyle.json &&
-      JSON.parse(customStyle.json).enable
-    ) {
-      components.push("custom_style");
-    }
-    if (isCc) {
-      components.push("custom_code");
-    }
-
-    if (editable && local) {
-      components.push("view_editable");
-    }
-    if (local) {
-      components.push("view_local");
-    }
-
-    v._components = components;
-  });
-}
-/**
- * Extract checkboxes from various path in given views list and produce frequency tables
- * @param {Array} v Views list
- * @note : expect type, data.collections
- */
-export function getFreqTable(views) {
-  const checkboxes = {
-    components: [],
-    collections: [],
-  };
-  const stat = {};
-
-  views.forEach((v) => {
-    checkboxes.components.push(...path(v, "_components", []));
-    checkboxes.collections.push(...path(v, "data.collections", []));
-  });
-
-  /*
-   * groups
-   */
-  stat.view_components = getArrayStat({
-    arr: checkboxes.components,
-    stat: "frequency",
-  });
-
-  stat.view_collections = getArrayStat({
-    arr: checkboxes.collections,
-    stat: "frequency",
-  });
-
-  return stat;
-}
-
-/**
- * Helpers
- */
-function elTitleKey(key) {
-  return el(
-    "span",
-    {
-      class: "vf-checkbox-group-title",
-      dataset: { lang_key: key },
-    },
-    getDictItem(key),
-  );
-}
-
-function elGroup() {
-  return el("div", {
-    class: ["vf-checkbox-group"],
-  });
-}
-function elEmpty() {
-  return el(
-    "div",
-    {
-      class: ["vf-checkbox-empty"],
-      dataset: { lang_key: "view_filter_no_items" },
-    },
-    getDictItem("view_filter_no_items"),
-  );
-}
-
-/**
- * Normalise
- */
-function n(txt) {
-  if (!txt || !txt.toLowerCase) {
-    return txt;
-  }
-  return txt.toLowerCase().trim();
-}
-
-function handleFilterViewIdByText(event) {
-  const vf = this;
-  const text = event.target.value.toLowerCase();
-
-  vf.updateRuleByText({
-    value: text,
-  });
-  vf.apply("handler_text");
-}
-
-function handleFilterViewIdByCheckbox(event) {
-  const vf = this;
-  if (!(event instanceof Event)) {
-    return;
-  }
-
-  const elCheckbox = findCheckbox(event.target);
-
-  if (!elCheckbox || !isCheckbox(elCheckbox)) {
-    return;
-  }
-
-  event.stopPropagation();
-  event.stopImmediatePropagation();
-
-  const cbx = elCheckbox.checkbox;
-  vf.updateRuleByCheckbox(cbx);
-  vf.apply("handler_checkbox");
-}
-
-/**
- * Misc
- */
-
-function isCheckbox(el) {
-  return el instanceof Element && el.checkbox instanceof Checkbox;
-}
-
-function findCheckbox(el) {
-  let found = false;
-  while (el && el.parentElement && !found) {
-    if (isCheckbox(el)) {
-      found = true;
-      return el;
-    } else {
-      el = el.parentElement;
-    }
-  }
-  return false;
-}
-
-function txtToRegex(txt) {
-  txt = txt || "";
-  txt = txt.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
-  // OR
-
-  if (txt.match(/ or /)) {
-    txt = txt.split(" or ").join("|");
-  }
-  // AND
-  if (txt.match(/ and /)) {
-    txt = "(?=" + txt.split(" and ").join(")(=?") + ")";
-  }
-
-  return new RegExp(txt);
-}

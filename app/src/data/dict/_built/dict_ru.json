@@ -6975,6 +6975,61 @@
     "ru": "Просмотры из этого проекта (исключая внешние виды). "
   },
   {
+    "id": "view_non_editable",
+    "en": "Non editable",
+    "ru": "Не подлежит редактированию"
+  },
+  {
+    "id": "view_non_editable_desc",
+    "en": "Views for which you don't have editing rights.",
+    "ru": "Виды, для которых у вас нет прав редактирования."
+  },
+  {
+    "id": "view_non_public",
+    "en": "Views not public",
+    "ru": "Просмотры не публичны"
+  },
+  {
+    "id": "view_non_public_desc",
+    "en": "Views not readable by the 'public' group",
+    "ru": "Просмотры, не доступные для чтения группе «public»"
+  },
+  {
+    "id": "view_public",
+    "en": "Views public",
+    "ru": "Просмотры публичных"
+  },
+  {
+    "id": "view_public_desc",
+    "en": "Views readable by the 'public' group",
+    "ru": "Просмотры, доступные для чтения группе «public»"
+  },
+  {
+    "id": "view_non_local",
+    "en": "External views",
+    "ru": "Внешний вид"
+  },
+  {
+    "id": "viewe_non_local_desc",
+    "en": "Views shared from other projects",
+    "ru": "Мнения, общие из других проектов"
+  },
+  {
+    "id": "vf_group_types",
+    "en": "Types",
+    "ru": "Типы"
+  },
+  {
+    "id": "vf_group_features",
+    "en": "Features",
+    "ru": "Функции"
+  },
+  {
+    "id": "vf_group_rights",
+    "en": "Rights",
+    "ru": "Права"
+  },
+  {
     "id": "language_auto_warning",
     "en": "Languages other than English can be translated automatically, in case of missing translation. This does not apply to user-created content such as projects, sources, views, stories, layers, captions, and custom code. Titles, descriptions, attributes, licenses or any other text written by the user, even in multilanguage entries are not altered in any ways by this software.",
     "ru": "Другие языки, кроме английского, могут быть переведены автоматически, в случае отсутствия перевода. Это не относится к пользовательскому контенту, такому как проекты, источники, представления, истории, слои, подписи и настраиваемый код. Названия, описания, атрибуты, лицензии или любой другой текст, написанный пользователем, даже в многоязычных записях, это программное обеспечение никоим образом не изменяет."

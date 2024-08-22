@@ -6975,6 +6975,61 @@
     "bn": "এই প্রকল্পের দর্শন (বাহ্যিক দর্শনগুলি বাদ দেয়)। "
   },
   {
+    "id": "view_non_editable",
+    "en": "Non editable",
+    "bn": "সম্পাদনাযোগ্য নয়"
+  },
+  {
+    "id": "view_non_editable_desc",
+    "en": "Views for which you don't have editing rights.",
+    "bn": "ভিউ যার জন্য আপনার সম্পাদনার অধিকার নেই৷"
+  },
+  {
+    "id": "view_non_public",
+    "en": "Views not public",
+    "bn": "দৃশ্যগুলি সর্বজনীন নয়৷"
+  },
+  {
+    "id": "view_non_public_desc",
+    "en": "Views not readable by the 'public' group",
+    "bn": "ভিউ 'পাবলিক' গ্রুপ দ্বারা পঠনযোগ্য নয়"
+  },
+  {
+    "id": "view_public",
+    "en": "Views public",
+    "bn": "সর্বজনীন ভিউ"
+  },
+  {
+    "id": "view_public_desc",
+    "en": "Views readable by the 'public' group",
+    "bn": "'পাবলিক' গোষ্ঠীর দ্বারা পঠনযোগ্য ভিউ"
+  },
+  {
+    "id": "view_non_local",
+    "en": "External views",
+    "bn": "বাহ্যিক দৃষ্টিভঙ্গি"
+  },
+  {
+    "id": "viewe_non_local_desc",
+    "en": "Views shared from other projects",
+    "bn": "অন্যান্য প্রজেক্ট থেকে শেয়ার করা ভিউ"
+  },
+  {
+    "id": "vf_group_types",
+    "en": "Types",
+    "bn": "প্রকারগুলি"
+  },
+  {
+    "id": "vf_group_features",
+    "en": "Features",
+    "bn": "বৈশিষ্ট্যসমূহ"
+  },
+  {
+    "id": "vf_group_rights",
+    "en": "Rights",
+    "bn": "অধিকারসমূহ"
+  },
+  {
     "id": "language_auto_warning",
     "en": "Languages other than English can be translated automatically, in case of missing translation. This does not apply to user-created content such as projects, sources, views, stories, layers, captions, and custom code. Titles, descriptions, attributes, licenses or any other text written by the user, even in multilanguage entries are not altered in any ways by this software.",
     "bn": "অনুবাদ বাদ দিলে ইংরেজী ব্যতীত অন্য ভাষাগুলি স্বয়ংক্রিয়ভাবে অনুবাদ করা যায়। এটি ব্যবহারকারী-তৈরি সামগ্রী যেমন প্রকল্প, উত্স, দর্শন, গল্প, স্তর, ক্যাপশন এবং কাস্টম কোডে প্রযোজ্য নয়। শিরোনাম, বিবরণ, বৈশিষ্ট্য, লাইসেন্স বা ব্যবহারকারীর দ্বারা লিখিত অন্য কোনও পাঠ্য এমনকি বহুভাষার এন্ট্রি কোনওভাবেই এই সফ্টওয়্যার দ্বারা পরিবর্তিত হয় না।"

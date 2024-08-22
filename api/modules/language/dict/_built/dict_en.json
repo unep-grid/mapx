@@ -5580,6 +5580,50 @@
     "en": "Views from this project ( excludes external views )."
   },
   {
+    "id": "view_non_editable",
+    "en": "Non editable"
+  },
+  {
+    "id": "view_non_editable_desc",
+    "en": "Views for which you don't have editing rights."
+  },
+  {
+    "id": "view_non_public",
+    "en": "Views not public"
+  },
+  {
+    "id": "view_non_public_desc",
+    "en": "Views not readable by the 'public' group"
+  },
+  {
+    "id": "view_public",
+    "en": "Views public"
+  },
+  {
+    "id": "view_public_desc",
+    "en": "Views readable by the 'public' group"
+  },
+  {
+    "id": "view_non_local",
+    "en": "External views"
+  },
+  {
+    "id": "viewe_non_local_desc",
+    "en": "Views shared from other projects"
+  },
+  {
+    "id": "vf_group_types",
+    "en": "Types"
+  },
+  {
+    "id": "vf_group_features",
+    "en": "Features"
+  },
+  {
+    "id": "vf_group_rights",
+    "en": "Rights"
+  },
+  {
     "id": "language_auto_warning",
     "en": "Languages other than English can be translated automatically, in case of missing translation. This does not apply to user-created content such as projects, sources, views, stories, layers, captions, and custom code. Titles, descriptions, attributes, licenses or any other text written by the user, even in multilanguage entries are not altered in any ways by this software."
   },

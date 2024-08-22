@@ -271,12 +271,12 @@ class Checkbox {
               lang_key: cbx._label_key,
             },
           },
-          cbx._label
+          cbx._label,
         )),
         (elLabelCount = el("span", {
           class: "vf-checkbox-filter-count",
-        }))
-      ))
+        })),
+      )),
     );
 
     cbx.el = elCheckbox;
@@ -284,6 +284,7 @@ class Checkbox {
     cbx.elLabelText = elLabelText;
     cbx.elLabelCount = elLabelCount;
     cbx.elCheck = elCheck;
+    cbx.elCheck.checkbox = cbx;
 
     cbx.setCount(cbx._count);
 
