@@ -1100,3 +1100,7 @@ input[type="checkbox"] {
   justify-content: space-between;
   width: 100%;
 }
+.mx-flex-column {
+  display: flex;
+  flex-direction: column;
+}

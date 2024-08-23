@@ -6,7 +6,6 @@ import {
   getLayerNamesByPrefix,
   setMapProjection,
 } from "./../map_helpers/index.js";
-import { toggleSpotlight } from "./../mx_helper_map_pixop.js";
 import { ShareModal } from "./../share_modal/index.js";
 import {
   storyMapLock,
@@ -15,13 +14,10 @@ import {
 } from "./../story_map/index.js";
 import { modalMarkdown } from "../modal_markdown/index.js";
 import { settings } from "./../settings";
-import { UAParser } from "ua-parser-js";
 import { theme } from "./../mx.js";
 import { IssueReporterClient } from "../issue_reporter/index.js";
 import { modalIframe } from "../modal_iframe/index.js";
 
-const uaparser = new UAParser();
-const isNotBlink = uaparser.getEngine().name !== "Blink";
 
 export function generateButtons() {
   return [
@@ -175,12 +171,6 @@ export function generateButtons() {
           origin: "button",
         });
       },
-    }),
-    new Button({
-      key: "btn_overlap_spotlight",
-      classesIcon: ["fa", "fa-bullseye"],
-      action: toggleSpotlight,
-      disabled: isNotBlink,
     }),
     new Button({
       key: "btn_map_composer",
