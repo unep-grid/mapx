@@ -13,7 +13,7 @@
           for="selectNLayersOverlap">
           spotlight_mode
         </label>
-        <div>
+        <div class="mx-flex-column">
           <select class="form-control" id="selectNLayersOverlap">
             <option value="0" data-lang_key="spotlight_where_all"></option>
             <option
@@ -25,6 +25,22 @@
             <option value="4" data-lang_key="spotlight_where_four"></option>
             <option value="5" data-lang_key="spotlight_where_five"></option>
           </select>
+          <button
+            id="btnOverlapSpotlight"
+            type="button"
+            class="btn btn-default hint--bottom"
+            data-lang_type="tooltip"
+            data-lang_key="btn_overlap_spotlight"
+            aria-label="btn_overlap_spotlight">
+            <div class="btn-icon">
+              <span data-lang_key="btn_overlap_spotlight" data-lang_type="text">
+                Spotlight vector features
+              </span>
+              <div class="btn-icon-wrapper">
+                <i class="fa fa-lightbulb-o"></i>
+              </div>
+            </div>
+          </button>
         </div>
       </div>
       <div class="fold-container form-group shiny-input-container fold-check">
