@@ -23,6 +23,7 @@ async function mwMirror(req, res) {
 
     const response = await fetch(url, {
       method: req.method,
+      compress: false,
     });
 
     const headersToTransfer = [
