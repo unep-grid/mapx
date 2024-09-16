@@ -15,7 +15,7 @@ WITH
     FROM
       v_latest
     WHERE
-    type = 'vt'
+      type = 'vt'
   ),
   v_services AS (
     SELECT
@@ -207,14 +207,14 @@ WITH
         vs.services
       ) AS meta
     FROM
-      v_latest vl,
-      v_date_created vc,
-      v_project_info vpi,
-      v_projects_table vpds,
-      v_changes_editors_table vct,
-      v_editors_table vet,
-      v_readers_table vrt,
-      v_services vs
+      v_latest vl
+      JOIN v_date_created vc ON TRUE
+      JOIN v_project_info vpi ON TRUE
+      JOIN v_projects_table vpds ON TRUE
+      JOIN v_changes_editors_table vct ON TRUE
+      JOIN v_editors_table vet ON TRUE
+      JOIN v_readers_table vrt ON TRUE
+      LEFT JOIN v_services vs ON TRUE
   )
 SELECT
   *

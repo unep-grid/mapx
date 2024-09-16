@@ -93,6 +93,9 @@ function elAuto(render, data, opt) {
    * renderer
    */
   function renderAuto(x) {
+    if (test.isEmpty(x)) {
+      return;
+    }
     if (test.isElement(x)) {
       return x;
     }

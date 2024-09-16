@@ -520,7 +520,7 @@ async function buildViewMetaUi(meta) {
       stringAsLanguageKey: true,
       numberStyle: { marginRight: "5px" },
     }),
-    elAuto("array_table", meta.table_changes_editors, {
+    elAuto("array_table", meta?.table_changes_editors || [], {
       booleanValues: ["✓", ""],
       tableHeadersClasses: ["col-sm-6", "col-sm-3", "col-sm-3"],
       tableTitleAsLanguageKey: true,
