@@ -96,6 +96,8 @@ details > summary {
 pre {
   white-space: pre-wrap;
   word-wrap: break-word;
+  /* solves resize when pre in modal, e.g. ogc/wms template */
+  overflow: inherit;
 }
 
 img,
