@@ -20,9 +20,10 @@ export function setViewsComponents(views) {
     const overlap = path(data, "source.layerInfo.maskName", "");
     const attributes = path(data, "attribute.names", "");
     const customStyle = path(data, "style.custom", "");
+    const readers = path(v, "readers", []);
     const local = project === settings.project.id;
     const editable = _edit === true;
-    const isPublic = v.readers.includes("public");
+    const isPublic = readers.includes("public");
 
     // View Types
     if (isVt) {
