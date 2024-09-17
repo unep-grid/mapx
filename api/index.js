@@ -5,7 +5,7 @@ import { Server as SocketServer } from "socket.io";
 import query from "#mapx/query";
 import * as project from "#mapx/project";
 import mirror from "#mapx/mirror";
-import { mwSendMail, ioMailReportIssue } from "#mapx/mail";
+import { mwSendMail } from "#mapx/mail";
 import ip from "#mapx/ip";
 import tile from "#mapx/tile";
 import log from "#mapx/log";
@@ -23,6 +23,7 @@ import { ioUpdateGeoserver } from "#mapx/geoserver";
 import { ioEcho } from "#mapx/io";
 import { ioTestSum, ioTestEcho } from "#mapx/io";
 import { ioUploadSource } from "#mapx/upload";
+import { ioIssueReport } from "#mapx/issue_reporter";
 import {
   mwSetHeaders,
   mwGetConfigMap,
@@ -119,7 +120,7 @@ io.use((socket, next) => {
   socket.on("/client/view/get/stats", use(ioViewStatsGet));
   socket.on("/client/project/validate/name", use(ioProjectNameValidate));
   socket.on("/client/project/create", use(ioProjectCreate));
-  socket.on("/client/mail/report/issue", use(ioMailReportIssue));
+  socket.on("/client/issue/report", use(ioIssueReport));
   socket.on(
     "/client/source/get/attributes/alias",
     use(ioSourceAttributesAlias)

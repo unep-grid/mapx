@@ -66,6 +66,7 @@
     "style-loader": "^0.23.1",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "url-loader": "^1.1.2",
+    "vitest": "^2.1.1",
     "watch": "^1.0.2",
     "watchfile-webpack-plugin": "0.0.4",
     "webfonts-loader": "^4.4.0",

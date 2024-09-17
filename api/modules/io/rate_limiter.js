@@ -3,6 +3,7 @@ import { redisGetJSON, redisSetJSON } from "#mapx/db";
 const DEFAULT_CONFIG = {
   interval: 60 * 1000,
   limit: 1000,
+  dev: false,
 };
 
 /**
@@ -47,7 +48,12 @@ export class RateLimiter {
     const block = client.count > this.limit;
     if (block) {
       const t = convertDuration(client.resetTime - now);
-      throw new Error(`Rate limit exceeded. Please try again in ${t}.`);
+      const msg = `Rate limit exceeded. Please try again in ${t}.`;
+      if (this._config.dev) {
+        console.warn(msg);
+      } else {
+        throw new Error(msg);
+      }
     }
 
     await this.set(identifier, client);

@@ -10,6 +10,13 @@ try {
 }
 
 const settings = Object.assign({}, settings_global, {
+  contact: {
+    email_admin: env.MAIL_ADMIN,
+    email_info: env.MAIL_INFO,
+    email_issues: env.MAIL_ISSUES,
+    email_guest: env.MAIL_GUEST,
+    email_bot: env.MAIL_BOT,
+  },
   mapx: {
     users: {
       root: env.MAPX_ROOT_MODE_MEMBERS,
@@ -133,7 +140,6 @@ const settings = Object.assign({}, settings_global, {
   },
   mail: {
     config: {
-      emailAdmin: env.MAIL_ADMIN,
       host: env.MAIL_HOST,
       port: env.MAIL_PORT * 1,
       secure: false,

@@ -9,7 +9,7 @@ import { handleErrorText } from "#mapx/error";
 import { settings } from "#root/settings";
 import { randomString } from "#mapx/helpers";
 import { t } from "#mapx/language";
-const { emailAdmin } = settings.mail.config;
+const { email_admin } = settings.contact;
 import {
   removeSource,
   removeView,
@@ -196,7 +196,7 @@ async function handleFailure(socket, config, e) {
     });
 
     await sendMailAuto({
-      to: [userEmail, emailAdmin],
+      to: [userEmail, email_admin],
       subject: msgSubject,
       content: msg,
     });

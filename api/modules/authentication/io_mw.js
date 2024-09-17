@@ -1,47 +1,57 @@
 import { validateToken, validateUser, getUserRoles } from "./helpers.js";
 
 /**
- * Validate / authenticate user on connect
+ * Middleware to validate and authenticate the user on socket connection.
  */
 export async function ioMwAuthenticate(socket, next) {
   try {
-    /**
-     * Get auth info
-     */
-    const idUser = socket.handshake.auth.idUser;
-    const idProject = socket.handshake.auth.idProject;
-    const userToken = socket.handshake.auth.token;
-    /**
-     * Validate token
-     */
-    const tokenData = await validateToken(userToken);
-    const key = tokenData?.key;
-    /**
-     * Validate user
-     */
-    const userData = await validateUser(idUser, key);
-    /**
-     * Handle validation
-     */
-    const userAuthenticated = tokenData.isValid && userData.isValid;
+    // Ensure the handshake object exists
+    const { handshake } = socket;
+    if (!handshake) {
+      return next(new Error("Invalid socket handshake"));
+    }
 
-    const roles = userAuthenticated
-      ? await getUserRoles(idUser, idProject)
-      : {};
+    const {
+      auth: { idUser, idProject, token: userToken } = {},
+      headers: { origin } = {},
+    } = handshake;
 
+    // Check for missing authentication information
+    if (!idUser || !idProject || !userToken) {
+      return next(new Error("Missing authentication information"));
+    }
 
-    /**
-     * Store session data
-     */
-    socket.session = {};
-    socket.session.user_authenticated = userAuthenticated;
-    socket.session.user_roles = roles;
-    socket.session.user_email = userData.email;
-    socket.session.user_id = idUser;
-    socket.session.project_id = idProject;
+    // Validate the token
+    const { key, isValid: isKeyValid } = await validateToken(userToken);
 
+    if (!isKeyValid) {
+      return next(new Error("Invalid token"));
+    }
+
+    // Validate the user
+    const { email, isValid: isUserValid } = await validateUser(idUser, key);
+
+    if (!isUserValid) {
+      return next(new Error("Invalid user"));
+    }
+
+    // Get user roles
+    const roles = await getUserRoles(idUser, idProject);
+
+    // Store session data on the socket object
+    socket.session = {
+      user_authenticated: true,
+      user_roles: roles,
+      user_email: email,
+      user_id: idUser,
+      project_id: idProject,
+      origin: origin,
+    };
+
+    // Proceed to the next middleware or handler
     next();
-  } catch (e) {
-    next(e);
+  } catch (error) {
+    // Pass any errors to the next middleware
+    next(error);
   }
 }

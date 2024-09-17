@@ -1,4 +1,11 @@
 const settings_global = {
+  contact: {
+    email_admin: "admin@host",
+    email_info: "info@host",
+    email_issues: "issues@host",
+    email_guest: "guest@host",
+    email_bot: "bot@host",
+  },
   mapx: {
     users: {
       root: [1],
@@ -119,7 +126,6 @@ const settings_global = {
   },
   mail: {
     config: {
-      emailAdmin: "",
       host: "mail.mapx.org",
       port: 587,
       secure: false,

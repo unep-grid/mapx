@@ -3285,8 +3285,9 @@ export function viewLink(idView, opt) {
   }
   const def = {
     useStatic: true,
-    project: null,
+    project: settings.project.id,
     asString: false,
+    zoomToView: true,
   };
 
   /**
@@ -3334,7 +3335,7 @@ export function viewLink(idView, opt) {
   /**
    * Force zoomToViews
    */
-  urlView.searchParams.append("zoomToViews", true);
+  urlView.searchParams.append("zoomToViews", opt.zoomToView);
 
   /**
    * Return as string if required

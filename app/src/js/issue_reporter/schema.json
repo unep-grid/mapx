@@ -2,22 +2,22 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "title": "Report content or issues",
-  "description": "MapX reporting system allows you to send a message anonymously and directly to the right people. Any abuse of this tool could lead to a temporary ban of our IP and that's the only case where we would store identifiable data. Any other case, the data is held in memory for a limited time",
+  "description": "MapX reporting system allows you to send a message anonymously and directly to the right people. Any abuse of this tool could lead to a temporary ban of our IP and that's the only case where we would store identifiable data",
   "properties": {
     "type": {
       "type": "string",
       "title": "Report Type",
       "description": "The type of report or issue being submitted",
       "enum": [
-        "view_dashboard_issue",
         "bug_feature_request",
+        "view_dashboard_issue",
         "project_issue",
         "admin_issue"
       ],
       "options": {
         "enum_titles": [
-          "View, data or dashboard issue",
           "Bug or feature request",
+          "View, data or dashboard issue",
           "Project issue",
           "Administrative, institutional issue"
         ]

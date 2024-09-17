@@ -6,10 +6,10 @@ import { jedInit } from "../json_editor";
 import { el } from "../el_mapx";
 import { modalConfirm, modalSimple } from "../mx_helper_modal";
 import { isEmpty } from "../is_test";
-import { getMapPos, getViewsActive } from "../map_helpers";
+import { getMapPos, getViewsActive, viewLink } from "../map_helpers";
 import { isNotEmpty } from "../is_test";
 
-export class ReportContent {
+export class IssueReporterClient {
   constructor() {
     this.validate = this.validate.bind(this);
 
@@ -67,6 +67,7 @@ export class ReportContent {
         rc.destroy("modal close");
       },
     });
+
 
     events.on(["view_added", "view_removed"], this.validate);
   }
@@ -129,11 +130,10 @@ export class ReportContent {
       data._context = {
         map_config: data.includeMapConfig ? mapPos : null,
         id_views: data.includeActivatedViews ? idViews : null,
-        project: settings.project.id,
       };
 
       // Submit the report
-      const res = await ws.emitAsync("/client/mail/report/issue", data);
+      const res = await ws.emitAsync("/client/issue/report", data);
 
       if (!res.ok) {
         if (res.type === "error") {
@@ -146,7 +146,9 @@ export class ReportContent {
         await this.reset();
       }
     } catch (e) {
-      this.notifyError(e.message);
+      const errorMessage =
+        e && e.message ? e.message : "An unexpected error occurred.";
+      this.notifyError(errorMessage);
     } finally {
       if (this.valid) {
         this.enable();
@@ -188,6 +190,15 @@ export class ReportContent {
       this.block();
       this._jed.disable();
     }
+  }
+
+  viewsLink(ids) {
+    return ids.map((id) => {
+      return {
+        id: id,
+        link: viewLink(id, { asString: true, useStatic: false }),
+      };
+    });
   }
 
   allow() {

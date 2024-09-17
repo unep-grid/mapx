@@ -163,6 +163,7 @@ export async function sendMailAuto(config) {
   const html = templates.email_base;
   c.footer = parseTemplate(templates.email_footer, {
     host: settings.api.host_public,
+    email: settings.contact.email_info,
   });
   const body = parseTemplate(html, c);
   c.html = body;

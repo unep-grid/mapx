@@ -6,6 +6,7 @@ import { settings } from "#root/settings";
 import { readFile } from "fs/promises";
 import { clearDownload, deleteOldFiles } from "./deleteOldFiles.js";
 import crypto from "crypto";
+import he from "he";
 
 /**
  * Conversion of array of column names to pg columns
@@ -78,6 +79,22 @@ function escapeLiteral(str) {
   }
 
   return escaped;
+}
+
+function sanitizeData(data) {
+  if (typeof data === "string") {
+    return he.escape(data);
+  } else if (Array.isArray(data)) {
+    return data.map((item) => sanitizeData(item));
+  } else if (typeof data === "object" && data !== null) {
+    const sanitizedObj = {};
+    for (const key in data) {
+      sanitizedObj[key] = sanitizeData(data[key]);
+    }
+    return sanitizedObj;
+  } else {
+    return data;
+  }
 }
 
 /**
@@ -524,11 +541,21 @@ async function readJSON(file, base) {
 }
 
 /**
- * Pretty JSON
- * @return {String}  JSON formated
+ * Helper function to format JSON data with indentation.
+ * @param {Object} obj - The object to format.
+ * @returns {string} The formatted JSON string.
  */
-function prettyJson(obj) {
+function formatJSON(obj) {
   return JSON.stringify(obj, null, 2);
+}
+
+/**
+ * Helper function to capitalize strings.
+ * @param {string} str - The string to capitalize.
+ * @returns {string} The capitalized string.
+ */
+function capitalize(str) {
+  return str.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 }
 
 /**
@@ -586,9 +613,11 @@ export {
   onceInterval,
   withTimeLimit,
   readJSON,
-  prettyJson,
+  formatJSON,
+  capitalize,
   timeStep,
   escapeLiteral,
+  sanitizeData,
   /**
    * Middleware
    */
