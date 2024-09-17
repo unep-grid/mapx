@@ -1,0 +1,14 @@
+{
+  "name": "@mapx/event_simple",
+  "version": "0.0.1",
+  "description": "Mapx simple events system, with passthroughs and custo features for MapX.",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "vitest": "^2.1.1"
+  }
+}
