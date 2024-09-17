@@ -1,3 +1,14 @@
+  - [1.13.9-alpha.6](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.6) 
+
+    - Issue Reporter
+        - Updated as requested, added environment variable for issues email
+    - Events
+        - Fixed issue with event IDs not being removed after deletion
+    - OGC Services
+        - Fixed layout and parameter issues in OGC services
+    - Views
+        - Addressed missing view configuration and filter issues
+
   - [1.13.9-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.5) 
 
     - Views Filter
