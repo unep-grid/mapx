@@ -6,7 +6,6 @@
  */
 export async function ioConnect(socket) {
   const session = socket?.session;
-
   socket.emit("authentication", {
     authenticated: session?.user_authenticated,
     roles: session?.user_roles,
