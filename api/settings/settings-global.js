@@ -13,9 +13,6 @@ const settings_global = {
       dev: [1],
     },
   },
-  session: {
-    secret: "cat",
-  },
   ttl: {
     downloads: {
       hours: 48,

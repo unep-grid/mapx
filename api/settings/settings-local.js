@@ -30,9 +30,6 @@ const settings = Object.assign({}, settings_global, {
     host_public: env.API_HOST_PUBLIC,
     port_public: env.API_PORT_PUBLIC,
   },
-  session: {
-    secret: env.API_SESSION_SECRET,
-  },
   map: {
     token: env.MAPX_MAPBOX_TOKEN,
   },
