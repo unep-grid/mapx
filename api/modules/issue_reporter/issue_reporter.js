@@ -140,7 +140,7 @@ export class IssueReporter {
    * @param {Array<{ id: string, title: string, link: string, editorEmail: string }>} reportedViews - The reported views.
    */
   async handleAdminIssue(reportedViews) {
-    const recipients = [settings.contact.email_admin];
+    const recipients = [settings.contact.email_issues];
 
     // Generate email content including all reported views
     const emailContent = this.generateEmailContent(reportedViews, true);
