@@ -1,3 +1,12 @@
+  - [1.13.9-alpha.7](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.7) 
+    
+    - Internal
+        - Updated caniuse DB
+    - Websocket authentication
+        - Solved a bug preventing the socket connection and session to be set, when using the static mode
+    - View metadata
+        - Fixed a bug that blocked the rendering of link when using the mode 'auto' to render UI from data, e.g. view metadata panel
+
   - [1.13.9-alpha.6](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.6) 
 
     - Issue Reporter
