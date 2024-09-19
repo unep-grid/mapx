@@ -10,6 +10,7 @@ const modules = {
   shapefile: loadShapefile,
   "turf-bbox": loadTurfBbox,
   highcharts: loadHighcharts,
+  echarts: loadEcharts,
   "json-editor": loadJsonEditor,
   selectize: loadSelectize,
   pickolor: loadPickolor,
@@ -51,6 +52,7 @@ export async function modulesLoad(arr) {
 /*
  * LOADERS - without attribution
  */
+
 async function loadProj4() {
   const m = await import("proj4");
   return m.default || m;
@@ -194,6 +196,11 @@ if (module.hot) {
   module.hot.accept("./../extensions/index.js", function () {
     console.log("Accepting the updated module!");
   });
+}
+
+async function loadEcharts() {
+  const echarts = await import("echarts");
+  return echarts;
 }
 
 /**
