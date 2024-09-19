@@ -12558,6 +12558,19 @@
     "de": "Dieses Widget deaktivieren"
   },
   {
+    "id": "view_dashboard_widget_name",
+    "en": "Widget name",
+    "fr": "Nom du widget",
+    "es": "Nombre del widget",
+    "ru": "Имя виджета",
+    "zh": "小部件名称",
+    "ar": "اسم القطعة",
+    "fa": "نام ویجت",
+    "ps": "د ویجټ نوم",
+    "bn": "উইজেটের নাম",
+    "de": "Widgetname"
+  },
+  {
     "id": "view_dashboard_widget_disable_desc",
     "en": "If checked, this will prevent this widget to be rendered. Useful to quickly unpublish a widget : check this option + save a version. Uncheck during development + preview.",
     "fr": "Si coché, cela empêchera ce widget d'être rendu. Utile pour dépublier rapidement un widget : cochez cette option + enregistrez une version. Décochez pendant le développement + aperçu.",

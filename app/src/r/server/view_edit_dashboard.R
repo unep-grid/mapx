@@ -113,7 +113,15 @@ observeEvent(input$dashboardEdit_init, {
             uniqueItems = TRUE,
             items = list(
               type = "string",
-              enum = list("highcharts", "d3", "d3-geo", "topojson", "selectize", "nouislider")
+              enum = list(
+                "echarts",
+                "highcharts",
+                "d3",
+                "d3-geo",
+                "topojson",
+                "selectize",
+                "nouislider"
+              )
             )
           ),
           layout = list(
@@ -156,12 +164,18 @@ observeEvent(input$dashboardEdit_init, {
               options = list(
                 collapsed = TRUE
               ),
+              headerTemplate = "{{ i1 }}. {{ self.name }} ",
               properties = list(
                 disabled = list(
                   title = t("view_dashboard_widget_disable"),
                   description = t("view_dashboard_widget_disable_desc"),
                   type = "boolean",
                   format = "checkbox"
+                ),
+                name = list(
+                  propertyOrder = 0,
+                  type = "string",
+                  title = t("view_dashboard_widget_name")
                 ),
                 `source` = list(
                   title = t("view_dashboard_txt_which_data"),

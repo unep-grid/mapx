@@ -4830,6 +4830,11 @@
     "de": "Dieses Widget deaktivieren"
   },
   {
+    "id": "view_dashboard_widget_name",
+    "en": "Widget name",
+    "de": "Widgetname"
+  },
+  {
     "id": "view_dashboard_widget_disable_desc",
     "en": "If checked, this will prevent this widget to be rendered. Useful to quickly unpublish a widget : check this option + save a version. Uncheck during development + preview.",
     "de": "Wenn diese Option aktiviert ist, wird das Rendern dieses Widgets verhindert. Nützlich, um die Veröffentlichung eines Widgets schnell aufzuheben: Aktivieren Sie diese Option und speichern Sie eine Version. Deaktivieren Sie während der Entwicklung + Vorschau."

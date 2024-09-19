@@ -4830,6 +4830,11 @@
     "zh": "禁用此小部件"
   },
   {
+    "id": "view_dashboard_widget_name",
+    "en": "Widget name",
+    "zh": "小部件名称"
+  },
+  {
     "id": "view_dashboard_widget_disable_desc",
     "en": "If checked, this will prevent this widget to be rendered. Useful to quickly unpublish a widget : check this option + save a version. Uncheck during development + preview.",
     "zh": "如果选中，这将阻止呈现此小部件。用于快速取消发布小部件：选中此选项 + 保存版本。在开发 + 预览期间取消选中。"

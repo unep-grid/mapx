@@ -3864,6 +3864,10 @@
     "en": "Disable this widget"
   },
   {
+    "id": "view_dashboard_widget_name",
+    "en": "Widget name"
+  },
+  {
     "id": "view_dashboard_widget_disable_desc",
     "en": "If checked, this will prevent this widget to be rendered. Useful to quickly unpublish a widget : check this option + save a version. Uncheck during development + preview."
   },

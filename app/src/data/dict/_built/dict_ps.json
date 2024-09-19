@@ -4830,6 +4830,11 @@
     "ps": "دا ویجیټ غیر فعال کړئ"
   },
   {
+    "id": "view_dashboard_widget_name",
+    "en": "Widget name",
+    "ps": "د ویجټ نوم"
+  },
+  {
     "id": "view_dashboard_widget_disable_desc",
     "en": "If checked, this will prevent this widget to be rendered. Useful to quickly unpublish a widget : check this option + save a version. Uncheck during development + preview.",
     "ps": "که چک شوی وي، دا به د دې ویجټ د وړاندې کولو مخه ونیسي. د ویجټ ژر تر ژره خپریدو لپاره ګټور دی: دا اختیار چیک کړئ + نسخه خوندي کړئ. د پراختیا + مخکتنې پرمهال غیر چیک کړئ."

@@ -4830,6 +4830,11 @@
     "ru": "Отключить этот виджет"
   },
   {
+    "id": "view_dashboard_widget_name",
+    "en": "Widget name",
+    "ru": "Имя виджета"
+  },
+  {
     "id": "view_dashboard_widget_disable_desc",
     "en": "If checked, this will prevent this widget to be rendered. Useful to quickly unpublish a widget : check this option + save a version. Uncheck during development + preview.",
     "ru": "Если этот флажок установлен, это предотвратит рендеринг этого виджета. Полезно для быстрой отмены публикации виджета: отметьте эту опцию + сохраните версию. Снимите флажок во время разработки + предварительного просмотра."

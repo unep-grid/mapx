@@ -4830,6 +4830,11 @@
     "fa": "این ویجت را غیرفعال کنید"
   },
   {
+    "id": "view_dashboard_widget_name",
+    "en": "Widget name",
+    "fa": "نام ویجت"
+  },
+  {
     "id": "view_dashboard_widget_disable_desc",
     "en": "If checked, this will prevent this widget to be rendered. Useful to quickly unpublish a widget : check this option + save a version. Uncheck during development + preview.",
     "fa": "اگر علامت زده شود، از رندر شدن این ویجت جلوگیری می کند. برای لغو انتشار سریع یک ویجت مفید است: این گزینه را علامت بزنید + یک نسخه را ذخیره کنید. در حین توسعه + پیش نمایش علامت را بردارید."

@@ -4830,6 +4830,11 @@
     "ar": "تعطيل هذه القطعة"
   },
   {
+    "id": "view_dashboard_widget_name",
+    "en": "Widget name",
+    "ar": "اسم القطعة"
+  },
+  {
     "id": "view_dashboard_widget_disable_desc",
     "en": "If checked, this will prevent this widget to be rendered. Useful to quickly unpublish a widget : check this option + save a version. Uncheck during development + preview.",
     "ar": "إذا تم تحديده ، فسيؤدي ذلك إلى منع عرض هذه الأداة. من المفيد إلغاء نشر عنصر واجهة مستخدم بسرعة: حدد هذا الخيار + احفظ إصدارًا. قم بإلغاء التحديد أثناء التطوير + المعاينة."
