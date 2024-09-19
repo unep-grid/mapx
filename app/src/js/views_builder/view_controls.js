@@ -348,7 +348,9 @@ export async function createViewControls(view) {
         ),
       ),
     );
+  }
 
+  if ((isVt || isRt || isCc) && hasEditRight) {
     controlItems.push(
       el(
         "li",
