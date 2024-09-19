@@ -81,7 +81,7 @@ export function getSchema(language = "en") {
         title: t("join_joins"),
         type: "array",
         minItems: 1,
-        maxItems: 30,
+        maxItems: 5,
         items: {
           type: "object",
           required: [
@@ -112,6 +112,7 @@ export function getSchema(language = "en") {
               title: t("join_columns_join"),
               type: "array",
               minItems: 1,
+              maxItems: 50,
               items: {
                 type: "string",
               },
@@ -122,7 +123,8 @@ export function getSchema(language = "en") {
               },
               mx_options: {
                 renderer: "tom-select",
-                maxItems: 10,
+                minItems: 1,
+                maxItems: 50,
                 loader: "source_columns",
                 watch: {
                   property: "id_source",
