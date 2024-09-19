@@ -199,7 +199,15 @@ if (module.hot) {
 }
 
 async function loadEcharts() {
-  const echarts = await import("echarts");
+  const [echarts, dark, westeros] = await Promise.all([
+    import("echarts"),
+    import("../echarts/themes/dark.json"),
+    import("../echarts/themes/westeros.json"),
+  ]);
+
+  echarts.registerTheme("westeros", westeros.default);
+  echarts.registerTheme("dark", dark.default);
+
   return echarts;
 }
 

@@ -12,6 +12,7 @@ import {
   updateLanguageElements,
 } from "./../language";
 import { isLanguageObject, isEmpty, isViewId, isView } from "./../is_test_mapx";
+import { waitFrameAsync } from "../animation_frame";
 
 const def_opt = {
   add_menu: true,
@@ -68,15 +69,13 @@ async function viewStatsToUi(idView, elTarget, opt) {
 
   const view = await getViewAuto(idView);
   idView = view?.id;
+  elTarget.innerHTML = "";
 
   /**
    * View meta section
    */
   const viewStats = await getViewStats(idView, opt.stat_n_days);
-  const elViewStats = await buildViewStatsUi(viewStats);
-
-  elTarget.innerHTML = "";
-  elTarget.appendChild(elViewStats);
+  await buildViewStatsUi(viewStats, elTarget);
 
   /**
    * Build menu
@@ -93,9 +92,7 @@ async function viewStatsToUi(idView, elTarget, opt) {
   return elTarget;
 }
 
-async function buildViewStatsUi(stats, opt) {
-  opt = Object.assign({}, def_opt, opt);
-
+async function buildViewStatsUi(stats, elTarget) {
   const prefixKey = "meta_view_";
   const keys = [
     "title",
@@ -142,6 +139,8 @@ async function buildViewStatsUi(stats, opt) {
   const elPlot = el("div", {
     class: ["panel", "panel-default"],
     style: {
+      minWidth: "100px",
+      minHeight: "40px",
       width: "100%",
       maxWidth: "100%",
       display: "flex",
@@ -165,6 +164,8 @@ async function buildViewStatsUi(stats, opt) {
     }),
     elPlotPanel,
   ]);
+
+  elTarget.appendChild(elStats);
 
   await metaCountByCountryToPlot(stats.stat_n_add_by_country, elPlot);
   return elStats;
@@ -193,11 +194,10 @@ export async function getViewStats(id, stat_n_days = 365) {
 }
 
 /**
- * Build plot
- * @param {Array} table Array of value [{country:<2 leter code>,contry_name:<string>,count:<integer>},<...>]
+ * Build plot using ECharts
+ * @param {Array} table Array of values [{country:<2 letter code>, country_name:<string>, count:<integer>}, ...]
  * @param {Element} elPlot Plot element
- * @param {Boolean} useRandom Use rando data ( for dev)
- * @return {Object} Highcharts instance
+ * @return {Object} ECharts instance
  */
 async function metaCountByCountryToPlot(table, elPlot) {
   try {
@@ -205,115 +205,136 @@ async function metaCountByCountryToPlot(table, elPlot) {
       return;
     }
 
-    const highcharts = await moduleLoad("highcharts");
+    const echarts = await moduleLoad("echarts");
+    const isDark = mx.theme.isDark();
+    const colors = mx.theme.colors();
     const nCountryMap = new Map();
 
-    for (let i = 0, iL = table.length; i < iL; i++) {
-      const t = table[i];
-      if (!t.country) {
-        t.country = "?";
-      }
-      nCountryMap.set(t.country, t.country_name || t.country || "Unknown");
-    }
-
-    const data = table.map((r) => {
-      return {
-        name: r.country,
-        y: r.count,
-      };
+    // Populate country map
+    table.forEach((t) => {
+      const countryCode = t.country || "?";
+      const countryName = t.country_name || countryCode || "Unknown";
+      nCountryMap.set(countryCode, countryName);
     });
-    if (data.length > 20) {
-      const merged = data.splice(20, data.length);
-      const sum = merged.reduce((a, d) => a + d.y, 0);
-      data.push({
+
+    // Prepare data
+    const data = table.map((r) => ({
+      name: r.country || "?",
+      value: r.count,
+    }));
+
+    // Merge data if more than 20 entries
+    let displayData = [...data];
+    if (displayData.length > 20) {
+      const others = displayData.splice(20);
+      const othersSum = others.reduce((sum, item) => sum + item.value, 0);
+      displayData.push({
         name: await getDictItem("meta_view_stat_others_countries"),
-        y: sum,
+        value: othersSum,
       });
     }
 
     const txtReads = await getDictItem("meta_view_stat_activations");
-    const colors = theme.colors();
+    const chartTitle = await getDictItem(
+      "meta_view_stat_n_add_by_country_last_year",
+    );
+    const yAxisTitle = await getDictItem(
+      "meta_view_stat_n_add_by_country_axis",
+    );
+    const seriesName = await getDictItem("meta_view_stat_n_add_by_country");
 
-    const chart = highcharts.chart(elPlot, {
-      chart: {
-        type: "column",
-        height: chartHeight(),
-        inverted: true,
-        styledMode: false,
-        backgroundColor: colors.mx_ui_background,
-        plotBackgroundColor: colors.mx_ui_background.color,
-        plotBorderWidth: 0,
-        plotShadow: false,
-      },
+    const idTheme = isDark ? "dark" : "westeros";
+
+    const chart = echarts.init(elPlot, idTheme, {
+      renderer: "svg",
+    });
+
+    // Configure chart options
+    const option = {
+      backgroundColor: colors.mx_ui_background.color,
       title: {
-        text: await getDictItem("meta_view_stat_n_add_by_country_last_year"),
-      },
-      xAxis: {
-        categories: data.map((d) => d.name),
-        title: {
-          text: null,
+        text: chartTitle,
+        left: "center",
+        textStyle: {
+          fontSize: 14,
         },
-      },
-      yAxis: {
-        type: "logarithmic",
-        title: {
-          text: await getDictItem("meta_view_stat_n_add_by_country_axis"),
-        },
-      },
-      legend: {
-        enabled: false,
       },
       tooltip: {
-        formatter: function () {
-          return ` ${nCountryMap.get(this.x)} : ${this.y} ${txtReads}`;
+        trigger: "item",
+        formatter: (params) => {
+          const countryName = nCountryMap.get(params.name) || params.name;
+          return `${countryName} : ${params.value} ${txtReads}`;
         },
       },
-      series: [
-        {
-          name: await getDictItem("meta_view_stat_n_add_by_country"),
-          data: data,
-        },
-      ],
-      credits: {
-        enabled: false,
+      grid: {
+        left: "3%",
+        right: "4%",
+        bottom: "3%",
+        containLabel: true,
       },
-      exporting: {
-        buttons: {
-          contextButton: {
-            menuItems: [
-              "printChart",
-              "separator",
-              "downloadPNG",
-              "downloadJPEG",
-              "downloadSVG",
-              "separator",
-              "downloadCSV",
-              "downloadXLS",
-            ],
+      xAxis: {
+        type: "value",
+        name: yAxisTitle,
+        nameLocation: "middle",
+        nameGap: 50,
+        axisType: "log",
+        logBase: 10,
+        axisLabel: {
+          formatter: (value) => {
+            return value.toLocaleString();
           },
         },
       },
-    });
-    /**
-     * Small height = panel from file menu hidden.
-     * -> overflow visible to fix that
-     */
-    chart.container.style.overflow = "visible";
+      yAxis: {
+        type: "category",
+        data: displayData.map((d) => d.name),
+        inverse: true,
+      },
+      series: [
+        {
+          name: seriesName,
+          type: "bar",
+          data: displayData.map((d) => d.value),
+          itemStyle: {
+            color: colors.mx_ui_link.color,
+            width: 5,
+          },
+          label: {
+            show: true,
+            position: "right",
+            formatter: "{c}",
+          },
+        },
+      ],
+      toolbox: {
+        feature: {
+          saveAsImage: {},
+          dataView: { readOnly: true },
+          restore: {},
+        },
+      },
+    };
+
+    chart.setOption(option);
 
     /**
-     * Handle resize
+     * Handle resize using ResizeObserver
      */
-    elPlot._ro = new ResizeObserver(debounce(updateChart, 100));
-    elPlot._ro.observe(elPlot);
+    const resizeObserver = new ResizeObserver(
+      debounce(() => {
+        chart.resize();
+      }, 100),
+    );
+    resizeObserver.observe(elPlot);
 
-    function updateChart() {
-      const w = elPlot.getBoundingClientRect().width;
-      chart.setSize(w);
-    }
+    // Store the observer to element for potential cleanup
+    elPlot._ro = resizeObserver;
 
-    function chartHeight() {
-      return data.length * 20 + 100;
-    }
+    // Optional: Adjust chart height based on data length
+    const chartHeight = displayData.length * 30 + 100; // Adjust multiplier as needed
+    elPlot.style.height = `${chartHeight}px`;
+
+    return chart;
   } catch (e) {
     console.warn(e);
   }
