@@ -1,3 +1,18 @@
+  - [1.13.9-alpha.8](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.8) 
+
+   - Joins Tool
+        - Changed join max join columns from 30 to 50.
+
+    - ECharts Integration
+        - Added ECharts views stat viewer and themes.
+        - Added ECharts loader.
+
+    - Widgets
+        - Added widget name configuration.
+
+    - User Interface
+        - Changed visibility of dashboard edition button in SM views.
+
   - [1.13.9-alpha.7](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.7) 
     
     - Internal
