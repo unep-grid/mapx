@@ -3,6 +3,7 @@ import { isArrayOf, isEmail } from "@fxi/mx_valid";
 import { capitalize, formatJSON, sanitizeData } from "#mapx/helpers";
 import { mailValidate, sendMailAuto } from "#mapx/mail";
 import { pgRead } from "#mapx/db";
+import { uid } from "#mapx/helpers";
 
 /**
  * Class to handle issue reporting logic.
@@ -17,6 +18,7 @@ export class IssueReporter {
     this.data = sanitizeData(data);
     this.origin = session.origin;
     this.project_id = session.project_id;
+    this.issue_id = uid();
   }
 
   /**
@@ -29,6 +31,30 @@ export class IssueReporter {
     return `${this.origin}?viewsOpen=${id}&project=${
       this.project_id || project_id
     }&zoomToViews=true`;
+  }
+
+  /**
+   * Project link
+   */
+  projectLink(project_id) {
+    return `${this.origin}?project=${
+      this.project_id || project_id
+    }&zoomToViews=true`;
+  }
+
+  /**
+   * Retrieves the title of the project.
+   * @param {string} projectId - The project ID.
+   * @returns {Promise<string>} The project title.
+   */
+  async getProjectTitle(projectId) {
+    const sql = `
+      SELECT title->>'en' AS project_title
+      FROM mx_projects
+      WHERE id = $1
+    `;
+    const { rows } = await pgRead.query(sql, [projectId]);
+    return rows[0]?.project_title || "Untitled Project";
   }
 
   /**
@@ -61,13 +87,16 @@ export class IssueReporter {
    */
   async sendAcknowledgment() {
     const acknowledgmentContent = `
-      <p>Thank you for submitting your report. If your issue is not resolved promptly or in case of emergency, please <a href="mailto:${settings.contact.email_issues}">contact us directly</a>.</p>
+      <p>Thank you for submitting your report</p> 
+      <p>If your issue is not resolved promptly or in case of emergency, please <a href="mailto:${settings.contact.email_issues}?subject=Issue ${this.issue_id}">contact us directly</a>.</p>
+      <b>Issue ID<b>
+      <pre>${this.issue_id}</pre>
     `;
 
     const conf = {
       from: settings.contact.email_bot,
       to: [this.data.contactEmail],
-      subject: "Your Issue Report Submission",
+      subject: `Your Issue Report Submission [${this.issue_id}]`,
       content: acknowledgmentContent,
     };
 
@@ -96,12 +125,12 @@ export class IssueReporter {
 
     for (const [email, views] of viewsByEditor.entries()) {
       // Generate email content with only the recipient's views
-      const emailContent = this.generateEmailContent(views, false);
+      const emailContent = await this.generateEmailContent(views, false);
 
       const conf = {
         from: settings.contact.email_bot,
         to: [email],
-        subject: `View/Dashboard Issue: ${this.data.subject}`,
+        subject: `View/Dashboard Issue: ${this.data.subject} [${this.issue_id}]`,
         content: emailContent,
       };
 
@@ -122,12 +151,12 @@ export class IssueReporter {
     }
 
     // Generate email content including all reported views
-    const emailContent = this.generateEmailContent(reportedViews, true);
+    const emailContent = await this.generateEmailContent(reportedViews, true);
 
     const conf = {
       from: settings.contact.email_bot,
       to: recipients,
-      subject: `Project Issue: ${this.data.subject}`,
+      subject: `Project Issue: ${this.data.subject} [${this.issue_id}]`,
       content: emailContent,
     };
 
@@ -143,12 +172,12 @@ export class IssueReporter {
     const recipients = [settings.contact.email_issues];
 
     // Generate email content including all reported views
-    const emailContent = this.generateEmailContent(reportedViews, true);
+    const emailContent = await this.generateEmailContent(reportedViews, true);
 
     const conf = {
       from: settings.contact.email_bot,
       to: recipients,
-      subject: `Admin Issue: ${this.data.subject}`,
+      subject: `Admin Issue: ${this.data.subject} [${this.issue_id}]`,
       content: emailContent,
     };
 
@@ -167,24 +196,28 @@ export class IssueReporter {
     }
 
     const sql = `
-      SELECT
-        v.id,
-        v.project,
-        v.data->'title'->>'en' AS title,
-        u.email AS editor_email
-      FROM mx_views_latest v
-      JOIN mx_users u ON v.editor = u.id
-      WHERE v.id = ANY($1::text[])
-    `;
+    SELECT
+      v.id,
+      v.project,
+      v.data->'title'->>'en' AS title,
+      u.email AS editor_email,
+      p.title->>'en' AS project_title
+    FROM mx_views_latest v
+    JOIN mx_users u ON v.editor = u.id
+    JOIN mx_projects p ON v.project = p.id
+    WHERE v.id = ANY($1::text[])
+  `;
+
     const { rows } = await pgRead.query(sql, [views]);
 
-    // Map the results to the desired format
     return rows.map((row) => ({
       id: row.id,
       title: row.title || "Untitled View",
       link: this.viewLink(row.id, row.project),
       editorEmail: row.editor_email,
       project: row.project,
+      project_link: this.projectLink(row.project),
+      project_title: row.project_title || "Untitled Project",
     }));
   }
 
@@ -214,7 +247,7 @@ export class IssueReporter {
    * @param {boolean} includeEditorEmail - Whether to include the editor's email in the views table.
    * @returns {string} The formatted email content.
    */
-  generateEmailContent(views = [], includeEditorEmail = true) {
+  async generateEmailContent(views = [], includeEditorEmail = true) {
     let contactEmailDisplay = this.data.contactEmail
       ? this.data.contactEmail
       : "Anonymous";
@@ -242,11 +275,19 @@ export class IssueReporter {
           <td><strong>Submitter:</strong></td>
           <td>${contactEmailDisplay}</td>
         </tr>
-        <tr>
+            `;
+
+    if (this.project_id) {
+      const project_link = this.projectLink(this.project_id);
+      const project_title = await this.getProjectTitle(this.project_id);
+      content =
+        content +
+        `<tr>
           <td><strong>Project:</strong></td>
-          <td>${this.project_id}</td>
+          <td><a href=${project_link}>${project_title}</a></td>
         </tr>
     `;
+    }
 
     if (this.data.includeMapConfig && this.data._context.map_config) {
       content += `
@@ -266,7 +307,9 @@ export class IssueReporter {
           <strong>ID view</strong>&nbsp;<span>${view.id}</span>
           <ul>
           <li><strong>Link</strong>&nbsp;<a href="${view.link}">${view.title}</a></li>
+          <li><strong>Project</strong>&nbsp;<a href="${view.project_link}">${view.project_title}</a></li>
         `;
+
         if (includeEditorEmail) {
           viewsContent += `
             <li>
