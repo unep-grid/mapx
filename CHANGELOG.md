@@ -1,3 +1,8 @@
+  - [1.13.9-alpha.10](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.10) 
+    
+   - Issue Reporter
+        - Removed debug code   
+
   - [1.13.9-alpha.9](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.9) 
 
     - Issue Reporter 

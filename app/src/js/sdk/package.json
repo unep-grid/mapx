@@ -1,6 +1,6 @@
 {
   "name": "@fxi/mxsdk",
-  "version": "1.13.9-alpha.9",
+  "version": "1.13.9-alpha.10",
   "description": "sdk for mapx app",
   "source": "./src/index.js",
   "main": "./dist/mxsdk.cjs",
