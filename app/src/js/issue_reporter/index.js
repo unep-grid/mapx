@@ -143,8 +143,7 @@ export class IssueReporterClient {
         }
       } else {
         rc.notifySuccess("Message submitted successfully");
-        console.warn("remove this in prod")
-        //await this.reset();
+        await this.reset();
       }
     } catch (e) {
       const errorMessage =
