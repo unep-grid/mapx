@@ -1,3 +1,14 @@
+  - [1.13.9-alpha.9](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.9) 
+
+    - Issue Reporter 
+        - Added project title, link 
+        - Added view's project link 
+        - Issue id + mailto link that include issue id
+
+    - OGC / Geoserver 
+        - Module refactor
+        - Solve bbox order issue in the template too
+
   - [1.13.9-alpha.8](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.8) 
 
    - Joins Tool
