@@ -23,7 +23,6 @@ import {
 import { debouncePromise, parseTemplate } from "../mx_helper_misc.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { getQueryParametersAsObject } from "../url_utils";
-import { modalMarkdown } from "../modal_markdown";
 
 import {
   getView,
@@ -51,6 +50,7 @@ import socialLinks from "./social_link.json";
 import shareMode from "./share_mode.json";
 import { settings } from "./../settings";
 import { bindAll } from "../bind_class_methods/index.js";
+import { modalIframe } from "../modal_iframe/index.js";
 const t = elSpanTranslate;
 
 const def = {
@@ -626,9 +626,9 @@ export class ShareModal extends EventSimple {
    * Open sharing manager wiki
    */
   openHelp() {
-    return modalMarkdown({
+    return modalIframe({
       title: getDictItem("btn_help"),
-      wiki: "Sharing-Manager",
+      doc_id: "doc_sharing_manager",
     });
   }
 

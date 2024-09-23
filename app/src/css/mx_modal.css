@@ -81,6 +81,7 @@
   visibility: hidden !important;
 }
 
+
 .mx-modal-container.mx-modal-collapsed {
   overflow: hidden;
   resize: none;

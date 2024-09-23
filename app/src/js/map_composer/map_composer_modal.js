@@ -1,5 +1,4 @@
 import { getDictItem } from "./../language";
-import { modalMarkdown } from "./../modal_markdown/index.js";
 import { modal } from "./../mx_helper_modal.js";
 import { el, elSpanTranslate as tt } from "./../el_mapx";
 import {
@@ -10,11 +9,8 @@ import {
   getViewTitle,
 } from "./../map_helpers/index.js";
 import { getViewMetaToHtml } from "../metadata/utils";
-import {
-  objectToArray,
-  getContentSize,
-  getInnerContentRect,
-} from "./../mx_helper_misc.js";
+import { objectToArray, getContentSize } from "./../mx_helper_misc.js";
+import { modalIframe } from "../modal_iframe";
 
 const store = {
   mc: null,
@@ -58,9 +54,9 @@ export class MapComposerModal {
         class: "btn btn-default",
         on: {
           click: () => {
-            return modalMarkdown({
+            return modalIframe({
               title: getDictItem("btn_help"),
-              wiki: "Map-composer",
+              doc_id: "doc_map_composer",
             });
           },
         },

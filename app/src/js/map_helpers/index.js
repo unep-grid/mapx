@@ -1328,7 +1328,6 @@ export async function initMapx(o) {
   mx_local.draw = new MapxDraw({
     map: map,
     controls,
-    url_help: settings.links.repositoryWikiDrawTool,
   });
   mx_local.draw.on("enable", () => {
     setClickHandler({

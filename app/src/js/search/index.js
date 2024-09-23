@@ -4,7 +4,6 @@ import { storyRead } from "./../story_map/index.js";
 import { viewToMetaModal } from "./../metadata/utils.js";
 import { getDictItem } from "./../language";
 import { EventSimple } from "./../event_simple";
-import { modalMarkdown } from "./../modal_markdown/index.js";
 import { viewsListAddSingle } from "./../views_list_manager";
 import {
   el,
@@ -37,6 +36,7 @@ import {
 import { Facet } from "./facet.js";
 import { def } from "./default.js";
 import { bindAll } from "../bind_class_methods";
+import {modalIframe} from "../modal_iframe";
 
 class Search extends EventSimple {
   constructor(opt) {
@@ -839,10 +839,10 @@ class Search extends EventSimple {
           break;
         case "show_help":
           {
-            modalMarkdown({
+            modalIframe({
               title: getDictItem("btn_help"),
-              wiki: "Search-tool-UI",
-            });
+               doc_id : 'doc_search_tool'
+            })
           }
           break;
         case "update_facet_filter":

@@ -1,5 +1,4 @@
 import { getArrayDistinct } from "./../../array_stat/index.js";
-import { modalMarkdown } from "./../../modal_markdown/index.js";
 import { getDictItem, getLabelFromObjectPath } from "./../../language";
 import { elSpanTranslate } from "./../../el_mapx";
 import { getApiUrl } from "./../../api_routes";
@@ -25,7 +24,8 @@ import {
 } from "./../../map_helpers";
 import { isSourceId, isView, isArray, makeSafeName } from "./../../is_test";
 import { downloadCSV } from "../../download/index.js";
-import {editTable} from "../edit/instance.js";
+import { editTable } from "../edit/instance.js";
+import { modalIframe } from "../../modal_iframe/index.js";
 
 export function fetchSourceTableAttribute(opt) {
   opt = Object.assign({}, opt);
@@ -271,9 +271,9 @@ async function showSourceTableAttributeModal(opt) {
         return;
       }
       await editTable({
-         id_table : config.idSource, 
-         on_destroy : restart
-      })
+        id_table: config.idSource,
+        on_destroy: restart,
+      });
     } catch (e) {
       console.error(e);
     }
@@ -402,9 +402,9 @@ export async function getTableAttributeConfigFromView(view) {
 }
 
 function handleHelp() {
-  return modalMarkdown({
+  return modalIframe({
     title: getDictItem("btn_help"),
-    wiki: "Attribute-table",
+    doc_id: "doc_attribute_table",
   });
 }
 

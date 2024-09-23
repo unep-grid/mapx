@@ -538,6 +538,7 @@ export function modalDialog(opt) {
   let elModal;
   const def = {
     buttons: [],
+    addBackground: true,
   };
   opt = Object.assign({}, def, opt);
   return new Promise((resolve) => {
@@ -568,7 +569,6 @@ export function modalDialog(opt) {
       addSelectize: false,
       removeCloseButton: true,
       buttons: [elBtnClose, ...opt.buttons],
-      addBackground: true,
       onClose: () => {
         if (isFunction(opt.onClose)) {
           opt.onClose();

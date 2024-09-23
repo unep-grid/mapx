@@ -1164,7 +1164,7 @@ mxDbCreateUser <- function(
   subject <- mxParseTemplateDict("login_email_new_account_welcome_subject", language)
 
   msgWelcome <- mxParseTemplateDict("login_email_new_account_welcome", language, list(
-    linkKnowledgeBase = .get(config, c("links", "appKnowlegdeBase")),
+    linkKnowledgeBase = .get(config, c("links", "doc_base")),
     linkIssue = .get(config, c("links", "repositoryIssues"))
   ))
 

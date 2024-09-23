@@ -18,6 +18,7 @@ import { settings } from "./../settings";
 import { UAParser } from "ua-parser-js";
 import { theme } from "./../mx.js";
 import { IssueReporterClient } from "../issue_reporter/index.js";
+import { modalIframe } from "../modal_iframe/index.js";
 
 const uaparser = new UAParser();
 const isNotBlink = uaparser.getEngine().name !== "Blink";
@@ -223,7 +224,9 @@ export function generateButtons() {
       key: "btn_doc_wiki",
       classesIcon: ["fa", "fa-book"],
       action: () => {
-        window.open(settings.links.repositoryWiki, "_blank");
+        return modalIframe({
+          doc_id: "doc_home",
+        });
       },
     }),
   ];

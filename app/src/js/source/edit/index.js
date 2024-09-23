@@ -11,7 +11,6 @@ import { moduleLoad } from "./../../modules_loader_async";
 import { getDictTemplate, getDictItem } from "./../../language";
 import { getArrayDistinct } from "./../../array_stat";
 import { prefGet, prefSet } from "./../../user_pref";
-import { modalMarkdown } from "./../../modal_markdown/index.js";
 import { clone, makeId, buttonEnable } from "../../mx_helper_misc.js";
 import { RadialProgress } from "../../radial_progress";
 import { theme } from "../../mx.js";
@@ -45,6 +44,7 @@ import {
 import "./types.js";
 import "./style.less";
 import { onNextFrame, waitFrameAsync } from "../../animation_frame";
+import { modalIframe } from "../../modal_iframe";
 
 const defaults = {
   debug: false,
@@ -3277,10 +3277,10 @@ export class EditTableSessionClient extends EditTableBase {
    * Display a dialog with the help from wiki
    */
   dialogHelp(id) {
-    return modalMarkdown({
+    return modalIframe({
       title: getDictItem("edit_table_modal_help"),
-      wiki: "Attribute-table-edition",
-      idScrollTo: id,
+      doc_id: "doc_attribute_table_edit",
+      scroll_to: id,
     });
   }
 

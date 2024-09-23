@@ -2,14 +2,15 @@
   "mainProjectPage": "https://mapx.org",
   "mapboxSprites": "mapbox://sprites/mapbox/bright-v8",
   "mapboxGlyphs": "mapbox://fonts/helsinki/{fontstack}/{range}.pbf",
-  "appKnowlegdeBase": "https://www.mapx.org/knowledge-base/",
+  "repositoryIssues": "https://github.com/unep-grid/mapx/issues",
   "repositoryWiki": "https://github.com/unep-grid/mapx/wiki/",
   "repositoryWikiRaw": "https://raw.githubusercontent.com/wiki/unep-grid/mapx/",
-  "repositoryIssues": "https://github.com/unep-grid/mapx/issues",
-  "repositoryWikiMapComposer": "https://github.com/unep-grid/mapx/wiki/Map-composer",
-  "repositoryWikiDrawTool": "https://github.com/unep-grid/mapx/wiki/Draw-tool",
-  "repositoryWikiSharingManager": "https://github.com/unep-grid/mapx/wiki/Sharing-Manager",
-  "repositoryWikiAttributeTable": "https://github.com/unep-grid/mapx/wiki/Attribute-table",
-  "repositoryWikiSearchToolUI": "https://github.com/unep-grid/mapx/wiki/Search-tool-UI",
-  "repositoryWikiTableEditor": "https://github.com/unep-grid/mapx/wiki/Attribute-table-edition"
+  "doc_base": "https://docs.mapx.org",
+  "doc_home" : "/",
+  "doc_attribute_table": "/docs/views/attribute-table.html",
+  "doc_attribute_table_edit": "/docs/sources/edit-vector-source.html",
+  "doc_search_tool": "/docs/user-interface/search-tool.html",
+  "doc_map_composer": "/docs/user-interface/map-composer.html",
+  "doc_sharing_manager": "/docs/user-interface/sharing-manager.html",
+  "doc_draw_tool": "/docs/user-interface/draw-tool.html"
 }

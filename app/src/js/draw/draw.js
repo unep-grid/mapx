@@ -1,7 +1,7 @@
 import { el } from "./../el/src/index.js";
 import { elSpanTranslate } from "./../el_mapx/index.js";
 import { modal, modalConfirm, modalPrompt } from "./../mx_helper_modal.js";
-import { modalMarkdown } from "./../modal_markdown/index.js";
+import { modalIframe } from "../modal_iframe/index.js";
 import { Button } from "./../panel_controls/button.js";
 import { ControlsPanel } from "./../panel_controls/index.js";
 import { getDictItem } from "./../language";
@@ -13,9 +13,8 @@ import { controls } from "./../mx.js";
 
 import "./style.less";
 
-const def = {
-  url_help: null,
-};
+const def = {};
+
 const store = {
   instance: null,
 };
@@ -360,9 +359,9 @@ class MapxDraw extends EventSimple {
   }
 
   showModalHelp() {
-    return modalMarkdown({
+    return modalIframe({
       title: getDictItem("draw_help_title"),
-      wiki: "Draw-tool",
+      doc_id: "doc_draw_tool",
     });
   }
 
@@ -377,9 +376,9 @@ class MapxDraw extends EventSimple {
           (elType = el(
             "select",
             { class: "form-control" },
-            el("option", { value: "point" }, elSpanTranslate("draw_point")),
-            el("option", { value: "line" }, elSpanTranslate("draw_line")),
             el("option", { value: "polygon" }, elSpanTranslate("draw_polygon")),
+            el("option", { value: "line" }, elSpanTranslate("draw_line")),
+            el("option", { value: "point" }, elSpanTranslate("draw_point")),
           )),
         ]),
         el("div", { class: "form-group" }, [
