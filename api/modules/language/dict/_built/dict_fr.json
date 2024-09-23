@@ -3055,6 +3055,11 @@
     "fr": "Ouvrir le wiki"
   },
   {
+    "id": "btn_open_link",
+    "en": "Open link in a new window",
+    "fr": "Ouvrir le lien dans une nouvelle fenêtre"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "fr": "Demande d'adhésion à ce projet"
@@ -6681,7 +6686,7 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this app, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
     "fr": "Bienvnue! <br> Pour des informations techniques, vous pouvez consulter notre <a href='{{linkKnowledgeBase}}' target='_blank'>Base de connaissances</a>. Si vous avez des suggestions ou si vous souhaitez nous informer d'un bug, n'hésitez pas à utiliser notre <a href='{{linkIssue}}' target='_blank'>traqueur d'incidents</a> <br> Merci !"
   },
   {

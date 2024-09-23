@@ -2444,6 +2444,10 @@
     "en": "Open the wiki"
   },
   {
+    "id": "btn_open_link",
+    "en": "Open link in a new window"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project"
   },
@@ -5345,7 +5349,7 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !"
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this app, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !"
   },
   {
     "id": "login_email_new_account_welcome_subject",

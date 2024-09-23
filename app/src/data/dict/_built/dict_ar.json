@@ -3055,6 +3055,11 @@
     "ar": "افتح الويكي"
   },
   {
+    "id": "btn_open_link",
+    "en": "Open link in a new window",
+    "ar": "افتح الرابط في نافذة جديدة"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "ar": "طلب عضوية لهذا المشروع "
@@ -6681,8 +6686,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
-    "ar": "أهلا بك!<br> للحصول على معلومات تقنية ، يمكنك قراءة <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">قاعدة المعرفة الخاصة</a> بنا. إذا كان لديك اقتراح حول هذا الموقع ، أو إذا كنت تريد الإبلاغ عن خطأ ، فتفضل بزيارة أداة <a href=\"{{linkIssue}}\" target=\"_blank\">تعقب المشكلات الخاصة</a> بنا<br> شكرًا !"
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this app, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "ar": "مرحباً!<br> للحصول على معلومات تقنية، يمكنك قراءة <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">قاعدة المعرفة</a> الخاصة بنا. إذا كان لديك اقتراح حول هذا التطبيق، أو إذا كنت تريد الإبلاغ عن خطأ، قم بزيارة <a href=\"{{linkIssue}}\" target=\"_blank\">أداة تتبع المشكلات</a> الخاصة بنا<br> شكرًا !"
   },
   {
     "id": "login_email_new_account_welcome_subject",

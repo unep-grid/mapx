@@ -3055,6 +3055,11 @@
     "zh": "打开维基"
   },
   {
+    "id": "btn_open_link",
+    "en": "Open link in a new window",
+    "zh": "在新窗口中打开链接"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "zh": "申请成为此项目的成员"
@@ -6681,8 +6686,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
-    "zh": "欢迎！<br>有关技术信息，您可以阅读我们的<a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">知识库</a>。如果您对本网站有任何建议，或者想报告错误，请访问我们的<a href=\"{{linkIssue}}\" target=\"_blank\">问题跟踪器</a><br>谢谢 ！"
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this app, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "zh": "欢迎！<br>有关技术信息，您可以阅读我们的<a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">知识库</a>。如果您对此应用有任何建议，或者想要报告错误，请访问我们的<a href=\"{{linkIssue}}\" target=\"_blank\">问题跟踪器</a><br>谢谢 ！"
   },
   {
     "id": "login_email_new_account_welcome_subject",

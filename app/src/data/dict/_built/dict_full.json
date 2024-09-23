@@ -7943,6 +7943,19 @@
     "de": "Wiki öffnen"
   },
   {
+    "id": "btn_open_link",
+    "en": "Open link in a new window",
+    "fr": "Ouvrir le lien dans une nouvelle fenêtre",
+    "es": "Abrir enlace en una nueva ventana",
+    "ru": "Открыть ссылку в новом окне",
+    "zh": "在新窗口中打开链接",
+    "ar": "افتح الرابط في نافذة جديدة",
+    "fa": "باز کردن لینک در یک پنجره جدید",
+    "ps": "لینک په یوه نوي کړکۍ کې خلاص کړئ",
+    "bn": "নতুন উইন্ডোতে লিঙ্ক খুলুন",
+    "de": "Link in neuem Fenster öffnen"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "fr": "Demande d'adhésion à ce projet",
@@ -17369,16 +17382,16 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this app, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
     "fr": "Bienvnue! <br> Pour des informations techniques, vous pouvez consulter notre <a href='{{linkKnowledgeBase}}' target='_blank'>Base de connaissances</a>. Si vous avez des suggestions ou si vous souhaitez nous informer d'un bug, n'hésitez pas à utiliser notre <a href='{{linkIssue}}' target='_blank'>traqueur d'incidents</a> <br> Merci !",
-    "es": "¡Bienvenidos!<br> Para obtener información técnica, puede leer nuestra <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">Base de conocimiento</a> . Si tiene sugerencias sobre este sitio web, o si desea informar un error, visite nuestro <a href=\"{{linkIssue}}\" target=\"_blank\">rastreador de problemas</a><br> Gracias !",
-    "ru": "Добро пожаловать!<br> Для получения технической информации вы можете прочитать нашу <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">базу знаний</a> . Если у вас есть предложения по поводу этого веб-сайта или вы хотите сообщить об ошибке, посетите наш <a href=\"{{linkIssue}}\" target=\"_blank\">трекер проблем.</a><br> Спасибо !",
-    "zh": "欢迎！<br>有关技术信息，您可以阅读我们的<a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">知识库</a>。如果您对本网站有任何建议，或者想报告错误，请访问我们的<a href=\"{{linkIssue}}\" target=\"_blank\">问题跟踪器</a><br>谢谢 ！",
-    "ar": "أهلا بك!<br> للحصول على معلومات تقنية ، يمكنك قراءة <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">قاعدة المعرفة الخاصة</a> بنا. إذا كان لديك اقتراح حول هذا الموقع ، أو إذا كنت تريد الإبلاغ عن خطأ ، فتفضل بزيارة أداة <a href=\"{{linkIssue}}\" target=\"_blank\">تعقب المشكلات الخاصة</a> بنا<br> شكرًا !",
-    "fa": "خوش آمدی!<br> برای اطلاعات فنی، می توانید <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">پایگاه دانش</a> ما را بخوانید. اگر پیشنهادی در مورد این وب‌سایت دارید، یا اگر می‌خواهید یک اشکال را گزارش کنید، از <a href=\"{{linkIssue}}\" target=\"_blank\">ردیاب مشکل</a> ما دیدن کنید<br> با تشکر !",
-    "ps": "ښه راغلاست!<br> د تخنیکي معلوماتو لپاره، تاسو کولی شئ زموږ د <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">پوهې بنسټ</a> ولولئ. که تاسو د دې ویب پاڼې په اړه وړاندیز لرئ، یا که تاسو غواړئ د بګ راپور ورکړئ، زموږ د <a href=\"{{linkIssue}}\" target=\"_blank\">مسلې تعقیب کونکي</a> څخه لیدنه وکړئ<br> مننه !",
-    "bn": "স্বাগত!<br> প্রযুক্তিগত তথ্যের জন্য, আপনি আমাদের <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">নলেজ বেস</a> পড়তে পারেন। আপনার যদি এই ওয়েবসাইট সম্পর্কে পরামর্শ থাকে, বা আপনি যদি একটি বাগ রিপোর্ট করতে চান, আমাদের <a href=\"{{linkIssue}}\" target=\"_blank\">সমস্যা ট্র্যাকার</a> দেখুন<br> ধন্যবাদ!",
-    "de": "Herzlich willkommen!<br> Für technische Informationen können Sie unsere <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">Knowledge Base</a> lesen. Wenn Sie Vorschläge zu dieser Website haben oder einen Fehler melden möchten, besuchen Sie unseren <a href=\"{{linkIssue}}\" target=\"_blank\">Problem-Tracker</a><br> Vielen Dank !"
+    "es": "¡Bienvenido!<br> Para obtener información técnica, puede consultar nuestra <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">Base de conocimientos</a> . Si tiene alguna sugerencia sobre esta aplicación o desea informar un error, visite nuestro <a href=\"{{linkIssue}}\" target=\"_blank\">rastreador de problemas.</a><br> Gracias !",
+    "ru": "Добро пожаловать!<br> Для получения технической информации вы можете прочитать нашу <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">Базу знаний</a> . Если у вас есть предложение по этому приложению или вы хотите сообщить об ошибке, посетите наш <a href=\"{{linkIssue}}\" target=\"_blank\">трекер проблем</a><br> Спасибо !",
+    "zh": "欢迎！<br>有关技术信息，您可以阅读我们的<a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">知识库</a>。如果您对此应用有任何建议，或者想要报告错误，请访问我们的<a href=\"{{linkIssue}}\" target=\"_blank\">问题跟踪器</a><br>谢谢 ！",
+    "ar": "مرحباً!<br> للحصول على معلومات تقنية، يمكنك قراءة <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">قاعدة المعرفة</a> الخاصة بنا. إذا كان لديك اقتراح حول هذا التطبيق، أو إذا كنت تريد الإبلاغ عن خطأ، قم بزيارة <a href=\"{{linkIssue}}\" target=\"_blank\">أداة تتبع المشكلات</a> الخاصة بنا<br> شكرًا !",
+    "fa": "خوش آمدید!<br> برای اطلاعات فنی، می توانید <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">پایگاه دانش</a> ما را بخوانید. اگر پیشنهادی در مورد این برنامه دارید، یا اگر می‌خواهید یک اشکال را گزارش کنید، <a href=\"{{linkIssue}}\" target=\"_blank\">از ردیاب مشکل</a> ما دیدن کنید<br> با تشکر",
+    "ps": "ښه راغلاست!<br> د تخنیکي معلوماتو لپاره، تاسو کولی شئ زموږ <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">د پوهې بنسټ</a> ولولئ. که تاسو د دې اپلیکیشن په اړه وړاندیز لرئ، یا که تاسو غواړئ د بګ راپور ورکړئ، زموږ <a href=\"{{linkIssue}}\" target=\"_blank\">د مسلې تعقیبونکي څخه</a> لیدنه وکړئ<br> مننه !",
+    "bn": "স্বাগতম!<br> প্রযুক্তিগত তথ্যের জন্য, আপনি আমাদের <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">নলেজ বেস</a> পড়তে পারেন। আপনার যদি এই অ্যাপ সম্পর্কে পরামর্শ থাকে, বা আপনি যদি একটি বাগ রিপোর্ট করতে চান, আমাদের <a href=\"{{linkIssue}}\" target=\"_blank\">সমস্যা ট্র্যাকার</a> দেখুন<br> ধন্যবাদ!",
+    "de": "Willkommen!<br> Technische Informationen finden Sie in unserer <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">Knowledge Base</a> . Wenn Sie Vorschläge zu dieser App haben oder einen Fehler melden möchten, besuchen Sie unseren <a href=\"{{linkIssue}}\" target=\"_blank\">Issue Tracker.</a><br> Danke !"
   },
   {
     "id": "login_email_new_account_welcome_subject",

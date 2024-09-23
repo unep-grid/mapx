@@ -3055,6 +3055,11 @@
     "fa": "ویکی را باز کنید"
   },
   {
+    "id": "btn_open_link",
+    "en": "Open link in a new window",
+    "fa": "باز کردن لینک در یک پنجره جدید"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "fa": "درخواست عضویت در این پروژه "
@@ -6681,8 +6686,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
-    "fa": "خوش آمدی!<br> برای اطلاعات فنی، می توانید <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">پایگاه دانش</a> ما را بخوانید. اگر پیشنهادی در مورد این وب‌سایت دارید، یا اگر می‌خواهید یک اشکال را گزارش کنید، از <a href=\"{{linkIssue}}\" target=\"_blank\">ردیاب مشکل</a> ما دیدن کنید<br> با تشکر !"
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this app, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "fa": "خوش آمدید!<br> برای اطلاعات فنی، می توانید <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">پایگاه دانش</a> ما را بخوانید. اگر پیشنهادی در مورد این برنامه دارید، یا اگر می‌خواهید یک اشکال را گزارش کنید، <a href=\"{{linkIssue}}\" target=\"_blank\">از ردیاب مشکل</a> ما دیدن کنید<br> با تشکر"
   },
   {
     "id": "login_email_new_account_welcome_subject",

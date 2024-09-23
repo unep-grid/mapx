@@ -3055,6 +3055,11 @@
     "bn": "উইকি খুলুন"
   },
   {
+    "id": "btn_open_link",
+    "en": "Open link in a new window",
+    "bn": "নতুন উইন্ডোতে লিঙ্ক খুলুন"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "bn": "এই প্রকল্পের জন্য সদস্যতার অনুরোধ "
@@ -6681,8 +6686,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
-    "bn": "স্বাগত!<br> প্রযুক্তিগত তথ্যের জন্য, আপনি আমাদের <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">নলেজ বেস</a> পড়তে পারেন। আপনার যদি এই ওয়েবসাইট সম্পর্কে পরামর্শ থাকে, বা আপনি যদি একটি বাগ রিপোর্ট করতে চান, আমাদের <a href=\"{{linkIssue}}\" target=\"_blank\">সমস্যা ট্র্যাকার</a> দেখুন<br> ধন্যবাদ!"
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this app, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "bn": "স্বাগতম!<br> প্রযুক্তিগত তথ্যের জন্য, আপনি আমাদের <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">নলেজ বেস</a> পড়তে পারেন। আপনার যদি এই অ্যাপ সম্পর্কে পরামর্শ থাকে, বা আপনি যদি একটি বাগ রিপোর্ট করতে চান, আমাদের <a href=\"{{linkIssue}}\" target=\"_blank\">সমস্যা ট্র্যাকার</a> দেখুন<br> ধন্যবাদ!"
   },
   {
     "id": "login_email_new_account_welcome_subject",

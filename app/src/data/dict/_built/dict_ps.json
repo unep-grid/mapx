@@ -3055,6 +3055,11 @@
     "ps": "ويکي پرانيزئ"
   },
   {
+    "id": "btn_open_link",
+    "en": "Open link in a new window",
+    "ps": "لینک په یوه نوي کړکۍ کې خلاص کړئ"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "ps": "د دې پروژې لپاره د غړیتوب غوښتنه "
@@ -6681,8 +6686,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
-    "ps": "ښه راغلاست!<br> د تخنیکي معلوماتو لپاره، تاسو کولی شئ زموږ د <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">پوهې بنسټ</a> ولولئ. که تاسو د دې ویب پاڼې په اړه وړاندیز لرئ، یا که تاسو غواړئ د بګ راپور ورکړئ، زموږ د <a href=\"{{linkIssue}}\" target=\"_blank\">مسلې تعقیب کونکي</a> څخه لیدنه وکړئ<br> مننه !"
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this app, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "ps": "ښه راغلاست!<br> د تخنیکي معلوماتو لپاره، تاسو کولی شئ زموږ <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">د پوهې بنسټ</a> ولولئ. که تاسو د دې اپلیکیشن په اړه وړاندیز لرئ، یا که تاسو غواړئ د بګ راپور ورکړئ، زموږ <a href=\"{{linkIssue}}\" target=\"_blank\">د مسلې تعقیبونکي څخه</a> لیدنه وکړئ<br> مننه !"
   },
   {
     "id": "login_email_new_account_welcome_subject",
