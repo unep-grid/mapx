@@ -1,11 +1,9 @@
-import { RateLimiter } from "#mapx/io";
+import { RateLimiter } from "#mapx/rate_limiter";
 import { IssueReporter } from "./issue_reporter.js";
-const isDev = true;
 
 const rateLimiter = new RateLimiter({
-  limit: 4,
-  interval: isDev ? 60 * 1e3 : 60 * 60 * 1e3,
-  dev: isDev,
+  limit: 10,
+  interval: 60 * 60 * 1e3,
 });
 
 /**
@@ -17,7 +15,8 @@ const rateLimiter = new RateLimiter({
 export async function ioIssueReport(socket, data, cb) {
   try {
     const { session } = socket;
-    await rateLimiter.check(socket.handshake.address, 1);
+    const id = `rate_issue_reporter_for_${socket.handshake.address}`;
+    await rateLimiter.check(id, 1);
     const reporter = new IssueReporter(data, session);
     await reporter.send();
     cb({ ok: true });

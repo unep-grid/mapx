@@ -245,7 +245,7 @@ export class IssueReporter {
    * Generates the email content based on the issue data and views.
    * @param {Array<{ id: string, title: string, link: string, editorEmail: string }>} views - The views to include in the email.
    * @param {boolean} includeEditorEmail - Whether to include the editor's email in the views table.
-   * @returns {string} The formatted email content.
+   * @returns {Promise<string>} The formatted email content.
    */
   async generateEmailContent(views = [], includeEditorEmail = true) {
     let contactEmailDisplay = this.data.contactEmail

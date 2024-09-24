@@ -6,17 +6,18 @@ import { settings } from "#root/settings";
 import { parseTemplate } from "#mapx/helpers";
 import { decrypt } from "#mapx/db_utils";
 import { isEmail, isString, isArrayOf } from "@fxi/mx_valid";
-import rateLimit from "express-rate-limit";
 import { mailValidate } from "./validate.js";
+import { RateLimiter } from "#mapx/rate_limiter";
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 1, // limit each IP to 1 requests per windowMs
-  message: "Too many requests, please try again later.",
+/**
+ * 10 per hour
+ */
+const rateLimiter = new RateLimiter({
+  limit: 50,
+  interval: 60 * 60 * 1e3,
 });
 
 export const mwSendMail = [
-  limiter,
   express.json(),
   express.urlencoded({ extended: false }),
   mwSend,
@@ -44,6 +45,18 @@ async function mwSend(req, res) {
 
     if (!validation.ok) {
       throw new Error(JSON.stringify(validation));
+    }
+
+    /**
+     * Limit send message to a recipent
+     */
+    try {
+      const id_rate = `wm_rate_send_to_${JSON.stringify(conf.to)}`;
+      await rateLimiter.check(id_rate);
+    } catch (e) {
+      return res.status(429).json({
+        message: e.message,
+      });
     }
 
     try {
@@ -83,7 +96,7 @@ async function mwSend(req, res) {
       res.status(503).send(e);
     }
   } catch (e) {
-    return res.status(403).send(e);
+    return res.status(403).json(e);
   }
 }
 

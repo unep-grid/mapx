@@ -115,10 +115,14 @@ mxSendMail <- function(
     if(success){
       txt <-  mxParseTemplateDict("email_manager_sent_success_generic",language,list(email=to))
     }else{
-      txt <-  mxParseTemplateDict("email_manager_sent_error_generic",language,list(email=to))
+      if(isNotEmpty(res$message)){
+        txt <- sprintf("Email issue: %s",res$message)
+      }else{
+        txt <-  mxParseTemplateDict("email_manager_sent_error_generic",language,list(email=to))
+      }
     }
     if(isEmpty(idGroupNotify)){
-       idGroupNotify = randomString('mx_email')
+      idGroupNotify = randomString('mx_email')
     }
     mxNotify(
       notif = list(
@@ -126,14 +130,17 @@ mxSendMail <- function(
         type = 'info',
         message = txt,
         title = d("email_manager_title",language),
-        level = ifelse(success,'message','warning')
-        )
+        level = ifelse(success,'message','warning'),
+        open = TRUE
+      )
     )
   }
 
-  return(list(
+  return(
+    list(
       res = res,
       success = success
-      ))
+      )
+  )
 }
 

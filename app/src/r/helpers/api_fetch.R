@@ -61,6 +61,7 @@ mxApiFetch <- function(route, listParam = NULL, asDataFrame = FALSE, debug = FAL
 
     data <- fromJSON(strData, simplifyDataFrame = asDataFrame)
 
+
     if (isNotEmpty(data) && isTRUE(data$type == "error")) {
       stop(data$message)
     }
@@ -117,6 +118,7 @@ mxApiPost <- function(route, listParam) {
       } else {
         out <- list(msg = cnt)
       }
+      out$status = req$status
     },
     error = function(e) {
       mxKillProcess(sprintf("mxApiFetch: api issue, shut down. Details: %s", e$message))
