@@ -648,6 +648,7 @@ tr {
 }
 .btn i,
 .btn span,
+.btn .btn-icon,
 .btn .btn-icon-wrapper {
   pointer-events: none;
 }
