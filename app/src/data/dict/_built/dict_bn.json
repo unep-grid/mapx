@@ -3056,8 +3056,8 @@
   },
   {
     "id": "btn_open_link",
-    "en": "Open link in a new window",
-    "bn": "নতুন উইন্ডোতে লিঙ্ক খুলুন"
+    "en": "Open in a new window",
+    "bn": "একটি নতুন উইন্ডোতে খুলুন"
   },
   {
     "id": "btn_join_project_long",

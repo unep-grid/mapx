@@ -3056,8 +3056,8 @@
   },
   {
     "id": "btn_open_link",
-    "en": "Open link in a new window",
-    "fr": "Ouvrir le lien dans une nouvelle fenêtre"
+    "en": "Open in a new window",
+    "fr": "Ouvrir dans une nouvelle fenêtre"
   },
   {
     "id": "btn_join_project_long",

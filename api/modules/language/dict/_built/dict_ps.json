@@ -3056,8 +3056,8 @@
   },
   {
     "id": "btn_open_link",
-    "en": "Open link in a new window",
-    "ps": "لینک په یوه نوي کړکۍ کې خلاص کړئ"
+    "en": "Open in a new window",
+    "ps": "په نوي کړکۍ کې خلاص کړئ"
   },
   {
     "id": "btn_join_project_long",
