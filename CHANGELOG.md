@@ -1,3 +1,11 @@
+  - [1.13.9-alpha.12](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.12) 
+
+  - Modal iFrame / MapX documentation
+    - When the theme change in MapX, the theme change in doc 
+    - When the doc url change (hash, path, etc), the 'open in a new window' button will point and scroll to the section, if the user clicked on a # or an internal link )
+    - Link nutton label updated 
+    - When the doc is shown, it's now always displayed on top. 
+
   - [1.13.9-alpha.11](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.11) 
 
     - Modal iframe 
