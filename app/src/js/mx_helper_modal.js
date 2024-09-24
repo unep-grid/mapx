@@ -207,6 +207,10 @@ export function modal(o) {
     elModal.classList.add("mx-modal-background");
   }
 
+  if (o.alwaysPinned) {
+    elModal.classList.add("always_pinned");
+  }
+
   /**
    * Init shiny and selectize
    */

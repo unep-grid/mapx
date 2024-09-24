@@ -59,6 +59,7 @@ export async function modalIframe(options) {
 
   const opt_modal = {
     addBackground: false,
+    alwaysPinned: true,
     title: opt.title,
     styleContent: {
       padding: 0,
@@ -88,8 +89,8 @@ export async function modalIframe(options) {
     theme.on("set_colors", updateTheme);
   }
 
-  function initPost(){
-        // Send an "init" message to the iframe with the id
+  function initPost() {
+    // Send an "init" message to the iframe with the id
     elIframe.contentWindow.postMessage(
       {
         type: "init",
