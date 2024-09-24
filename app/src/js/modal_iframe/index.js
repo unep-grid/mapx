@@ -4,6 +4,7 @@ import { el, elButtonFa } from "../el_mapx";
 import { settings } from "../settings";
 import { isEmpty, isNotEmpty } from "../is_test/index.js";
 import { theme } from "../init_theme.js";
+import { makeId } from "../mx_helper_misc.js";
 
 const def = {
   url: null,
@@ -15,6 +16,8 @@ const def = {
 
 export async function modalIframe(options) {
   const opt = Object.assign({}, def, options);
+
+  const id = makeId();
 
   // Determine the base URL
   let baseUrl = opt.url;
@@ -39,16 +42,19 @@ export async function modalIframe(options) {
     url.hash = opt.id_scroll;
   }
 
+  opt.url = url;
+
   // Set title
   if (isEmpty(opt.title)) {
     opt.title = opt.doc_id ? "Documentation" : "External site";
   }
 
   const elIframe = el("iframe", {
-    width: 200,
-    height: 200,
-    src: url,
+    width: "200",
+    height: "200",
+    src: url.toString(),
     frameborder: 0,
+    on: ["load", init],
   });
 
   const opt_modal = {
@@ -56,20 +62,16 @@ export async function modalIframe(options) {
     title: opt.title,
     styleContent: {
       padding: 0,
-      minHeight : '800px'
+      minHeight: "800px",
     },
     onResize: resize,
+    onClose: clear,
     buttons: [
       elButtonFa("btn_open_link", {
         icon: "external-link",
         action: () => {
-          let currentUrl = url.toString();
-          try {
-            currentUrl = elIframe.contentWindow.location.href;
-          } catch (e) {
-            console.warn("Current url can't be used. Fallback to default.", e);
-          }
-          window.open(currentUrl, "_blank");
+          // opt.url should have been updated by the message handler
+          window.open(opt.url, "_blank");
         },
       }),
     ],
@@ -79,10 +81,60 @@ export async function modalIframe(options) {
 
   await modalDialog(opt_modal);
 
+  function init() {
+    window.addEventListener("message", handleMessage);
+    initPost();
+    updateTheme();
+    theme.on("set_colors", updateTheme);
+  }
+
+  function initPost(){
+        // Send an "init" message to the iframe with the id
+    elIframe.contentWindow.postMessage(
+      {
+        type: "init",
+        id: id,
+      },
+      "*",
+    );
+  }
+
+  function updateTheme() {
+    elIframe.contentWindow.postMessage(
+      {
+        id: id,
+        type: "set_theme",
+        theme: theme.isDark() ? "dark" : "light",
+      },
+      "*",
+    );
+  }
+
+  function handleMessage(event) {
+    const data = event.data;
+    // Ensure the message is from the iframe we are interacting with
+    if (data?.id !== id) {
+      return;
+    }
+
+    switch (data.type) {
+      case "url_changed":
+        opt.url = data.url;
+        break;
+      default:
+        console.warn(`Unhandled message`, data);
+    }
+  }
+
   function resize() {
     const elParent = elIframe.parentElement;
     const rect = elParent.getBoundingClientRect();
-    elIframe.width = rect.width ;
-    elIframe.height = rect.height ;
+    elIframe.style.width = `${rect.width}px`;
+    elIframe.style.height = `${rect.height}px`;
+  }
+
+  function clear() {
+    window.removeEventListener("message", handleMessage);
+    theme.off("set_colors", updateTheme);
   }
 }
