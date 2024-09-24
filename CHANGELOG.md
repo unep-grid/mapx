@@ -1,3 +1,13 @@
+  - [1.13.9-alpha.13](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.13) 
+
+    - Search tool
+        - Fixed filter button issue preventing the click to be propagated
+    - Mail system
+        - Use internal rate limiter
+        - Display better message in notif center
+    - Table editor
+        - Fixed issue preventing GID to be associated with the table, causing bug for all operation requiring gid matching, e.g. geom validation + correction tools
+
   - [1.13.9-alpha.12](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.12) 
 
   - Modal iFrame / MapX documentation
