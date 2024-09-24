@@ -3319,7 +3319,6 @@ export class EditTableSessionClient extends EditTableBase {
     if (!ok) {
       return;
     }
-
     const data = await et.emit(
       e.client_geom_validate,
       {
@@ -3328,7 +3327,6 @@ export class EditTableSessionClient extends EditTableBase {
       },
       et._config.timeout_geom_valid,
     );
-
     const res = await et.onGeomValidateResult(data);
     return res;
   }

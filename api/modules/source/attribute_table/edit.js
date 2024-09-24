@@ -480,7 +480,9 @@ class EditTableSession {
       const data = pgRes.rows;
       const nRow = pgRes.rowCount;
       const attributes = pgRes.fields.map((f) => f.name);
-      const types = await getColumnsTypesSimple(et._id_table, attributes);
+      const types = await getColumnsTypesSimple(et._id_table, attributes, [
+        "geom",
+      ]);
       const title = await getLayerTitle(et._id_table);
       const locked = await et.getState("lock_table");
       const columnsOrderSaved = await getMxSourceData(et._id_table, [
