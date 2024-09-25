@@ -1,3 +1,5 @@
+  - [1.13.9](https://github.com/unep-grid/mapx/tree/1.13.9) 
+
   - [1.13.9-alpha.14](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.14) 
 
     - Tom select 
