@@ -1,3 +1,8 @@
+  - [1.13.9-alpha.14](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.14) 
+
+    - Tom select 
+        - Set the default dropdown height to 30vh
+
   - [1.13.9-alpha.13](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.13) 
 
     - Search tool
