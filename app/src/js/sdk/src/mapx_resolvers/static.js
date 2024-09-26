@@ -65,11 +65,11 @@ import { getTableAttributeConfigFromView } from "../../../source/display/index.j
 import { getApiUrl } from "../../../api_routes/index.js";
 import { viewsListAddSingle } from "../../../views_list_manager";
 import { modalCloseAll } from "../../../mx_helper_modal.js";
-import { spotlightManager } from "../../../pixop/spotlight_instance.js";
 import { spatialDataToView } from "../../../mx_helper_map_dragdrop.js";
 import {
   settings,
   highlighter,
+  spotlight,
   theme,
   ws,
   controls,
@@ -880,11 +880,11 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * @return {Object} options realised {enable:<false/true>,calcArea:<true/false>,nLayers:<n>}
    */
   set_vector_spotlight(opt) {
-    return spotlightManager.toggle(opt);
+    return spotlight.toggle(opt);
   }
   set_vector_highlight(opt) {
     console.warn("Deprecated. Use set_vector_spotlight instead");
-    return spotlightManager.toggle(opt);
+    return spotlight.toggle(opt);
   }
 
   /**

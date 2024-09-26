@@ -1,11 +1,11 @@
 import { Spotlight } from "./spotlight.js";
-import { RadialProgress } from "./../radial_progress/index.js";
 import { events, listeners } from "./../mx.js";
-import { getMap } from "./..//map_helpers/index.js";
+import { getMap } from "./../map_helpers/index.js";
 import { el } from "./../el_mapx/index.js";
-import { isElement } from "./../is_test/index.js";
+import { isBoolean, isElement, isNumeric } from "./../is_test/index.js";
 import { setBusy } from "./../mx_helper_misc.js";
 import { bindAll } from "../bind_class_methods/index.js";
+import { onNextFrame } from "../animation_frame/index.js";
 
 /**
  * SpotlightManager class for managing spotlight functionality on a map.
@@ -13,22 +13,27 @@ import { bindAll } from "../bind_class_methods/index.js";
  */
 export class SpotlightManager {
   constructor(config) {
-    const sl = this;
-    bindAll(sl);
-    sl._init_config = config;
+    bindAll(this);
+    this._init_config = config;
+    this._init = false;
+    this._enabled = false;
+    this._spotlight = null;
   }
 
   get ready() {
-    return !!this._init;
+    return this._init;
   }
+
   get enabled() {
-    return !!this._enabled;
+    return this._enabled;
   }
-  get has_spotlight() {
+
+  get hasSpotlight() {
     return this._spotlight instanceof Spotlight;
   }
-  get has_progress() {
-    return this._prog instanceof RadialProgress;
+
+  get hasProgress() {
+    return isElement(this._elProgress);
   }
 
   /**
@@ -36,32 +41,29 @@ export class SpotlightManager {
    * @internal
    */
   init(config) {
+    if (this._init) return;
     this.initConfig(config);
     this.initUI();
     this.initEventListeners();
+    this.initSpotlight();
     this._init = true;
-    this._enabled = false;
   }
 
   initConfig(config) {
-    config = config || this._init_config;
-
     const defaultConfig = {
-      elIds: {
-        toggleMain: "btnOverlapSpotlight",
-        selectNum: "selectNLayersOverlap",
-        textArea: "txtAreaOverlap",
-        textResol: "txtResolOverlap",
-        enableCalcArea: "checkEnableOverlapArea",
-      },
+      idToggleMain: "btnOverlapSpotlight",
+      idSelectNum: "selectNLayersOverlap",
+      idTextArea: "txtAreaOverlap",
+      idTextResol: "txtResolOverlap",
+      idEnableCalcArea: "checkEnableOverlapArea",
+      nLayersOverlap: 0,
+      enable: false,
+      calcArea: false,
       map: getMap(),
     };
 
     this._config = { ...defaultConfig, ...config };
     this._map = this._config.map;
-    this._spotlight = null;
-    this._prog = null;
-    this._idTimeout = 0;
   }
 
   /**
@@ -69,23 +71,46 @@ export class SpotlightManager {
    * @internal
    */
   initUI() {
-    const { elIds } = this._config;
+    const {
+      idToggleMain,
+      idSelectNum,
+      idTextArea,
+      idTextResol,
+      idEnableCalcArea,
+    } = this._config;
 
-    this._elToggleMain = document.getElementById(elIds.toggleMain);
-    this._elSelectNum =
-      document.getElementById(elIds.selectNum) || el("select");
-    this._elTextArea = document.getElementById(elIds.textArea) || el("span");
-    this._elTextResol = document.getElementById(elIds.textResol) || el("span");
-    this._elEnableCalcArea =
-      document.getElementById(elIds.enableCalcArea) ||
-      el("input", { type: "checkbox" });
+    this._elToggleMain = document.getElementById(idToggleMain);
+    this._elSelectNum = document.getElementById(idSelectNum);
+    this._elTextArea = document.getElementById(idTextArea);
+    this._elTextResol = document.getElementById(idTextResol);
+    this._elEnableCalcArea = document.getElementById(idEnableCalcArea);
 
-    if (!this.has_progress) {
-      this._prog = new RadialProgress(this._elToggleMain, {
-        radius: 20,
-        stroke: 2,
-        strokeColor: "red",
-      });
+    this._elProgress = el("div", {
+      style: {
+        height: "100%",
+        width: "0px",
+        backgroundColor: "var(--mx_ui_link)",
+      },
+    });
+
+    const elProgressContainer = el(
+      "div",
+      {
+        style: {
+          height: "5px",
+          width: "100%",
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+        },
+      },
+      this._elProgress,
+    );
+
+    if (this._elToggleMain) {
+      this._elToggleMain.style.position = "relative";
+      this._elToggleMain.style.overflow = "hidden";
+      this._elToggleMain.appendChild(elProgressContainer);
     }
   }
 
@@ -94,7 +119,9 @@ export class SpotlightManager {
    * @internal
    */
   initEventListeners() {
-    this._elToggleMain.addEventListener("click", this.handleToggleClick);
+    if (this._elToggleMain) {
+      this._elToggleMain.addEventListener("click", this.handleToggleClick);
+    }
 
     if (this._elEnableCalcArea) {
       listeners.addListener({
@@ -125,30 +152,33 @@ export class SpotlightManager {
    * Create the Spotlight instance.
    * @internal
    */
-  createSpotlight() {
-    if (!this.ready) {
-      console.warn("spotlight is not ready");
-      return;
-    }
-    if (!this.enabled) {
-      console.warn("spotlight is not enabled");
-      return;
-    }
-    if (this.has_spotlight) {
+  initSpotlight() {
+    if (this.hasSpotlight) {
       this._spotlight.destroy();
     }
+
     this._spotlight = new Spotlight({
       map: this._map,
-      enabled: () => this._elToggleMain.checked,
-      nLayersOverlap: () =>
-        this._elSelectNum ? this._elSelectNum.value * 1 : 1,
-      calcArea: () =>
-        this._elEnableCalcArea ? this._elEnableCalcArea.checked : false,
+      enabled: () => this.enabled,
+      nLayersOverlap: this.nLayersOverlap,
+      calcArea: this.useCalcArea,
       onCalcArea: this.handleCalcArea,
       onProgress: this.handleProgress,
       onRendered: this.handleRendered,
       onRender: this.handleRender,
     });
+  }
+
+  nLayersOverlap() {
+    return this._elSelectNum
+      ? Number(this._elSelectNum.value)
+      : this._config.nLayersOverlap;
+  }
+
+  useCalcArea() {
+    return this._elEnableCalcArea
+      ? this._elEnableCalcArea.checked
+      : this._config.calcArea;
   }
 
   /**
@@ -164,27 +194,35 @@ export class SpotlightManager {
    * @param {Object} [opt] - Optional configuration object.
    */
   toggle(opt = {}) {
-    try {
-      const enable =
-        opt.enable ?? !this._elToggleMain.classList.contains("active");
+    const enable = isBoolean(opt.enable) ? opt.enable : !this.enabled;
 
-      this._enabled = enable;
+    this._enabled = enable;
+
+    const nLayers = opt.nLayers || opt.nLayersOverlap;
+    const calcArea = opt.calcArea;
+
+    if (isNumeric(nLayers)) {
+      this._config.nLayersOverlap = nLayers;
+    }
+    if (isBoolean(calcArea)) {
+      this._config.calcArea = calcArea;
+    }
+
+    if (this._elToggleMain) {
       this._elToggleMain.checked = enable;
       this._elToggleMain.classList.toggle("active", enable);
-
-      if (enable) {
-        this.render();
-      } else {
-        this.destroy();
-      }
-
-      events.fire({
-        type: "spotlight_update",
-        data: { enable },
-      });
-    } catch (e) {
-      console.error(e);
     }
+
+    if (enable) {
+      this.render();
+    } else {
+      this.clear();
+    }
+
+    events.fire({
+      type: "spotlight_update",
+      data: { enable },
+    });
   }
 
   /**
@@ -193,18 +231,19 @@ export class SpotlightManager {
    * @internal
    */
   handleCalcArea(area) {
-    if (!this._elEnableCalcArea || !this.has_spotlight) {
+    if (!this._elEnableCalcArea || !this.hasSpotlight) {
       return;
     }
 
     const resol = this._spotlight.getResolution();
-    if (isElement(this._elTextArea) && isElement(this._elTextResol)) {
-      const areaKm = Math.round(area * 1e-6);
-      const resolLat = this.formatDist(resol.lat);
-      const resolLng = this.formatDist(resol.lng);
-      this._elTextArea.innerText = `~ ${areaKm} km2`;
-      this._elTextResol.innerText = `~ ${resolLat} x ${resolLng}`;
+    if (!isElement(this._elTextArea) || !isElement(this._elTextResol)) {
+      return;
     }
+    const areaKm = Math.round(area * 1e-6);
+    const resolLat = this.formatDist(resol.lat);
+    const resolLng = this.formatDist(resol.lng);
+    this._elTextArea.innerText = `~ ${areaKm} km²`;
+    this._elTextResol.innerText = `~ ${resolLat} x ${resolLng}`;
   }
 
   /**
@@ -213,10 +252,16 @@ export class SpotlightManager {
    * @internal
    */
   handleProgress(p) {
-    this._prog.update(p * 100);
-    if (p * 100 === 100) {
-      this._prog.update(0);
-    }
+    onNextFrame(() => {
+      if (p > 0) {
+        this._elProgress.style.width = `${p * 100}%`;
+      } else {
+        setTimeout(() => {
+          this._elProgress.style.width = `0`;
+        }, 1000);
+      }
+    });
+
     events.fire({
       type: "spotlight_progress",
       data: { progress: p },
@@ -235,7 +280,6 @@ export class SpotlightManager {
 
   /**
    * Handle render event.
-   * @param {Object} px - Render object.
    * @internal
    */
   handleRender(px) {
@@ -252,13 +296,13 @@ export class SpotlightManager {
    */
   formatDist(v, squared = false) {
     v = v || 0;
-    const suffix = squared ? "2" : "";
+    const suffix = squared ? "²" : "";
     const factor = squared ? 1e-6 : 1e-3;
 
     if (v > 1000) {
-      return `${Math.round(v * factor * 1000) / 1000} km${suffix}`;
+      return `${(v * factor).toFixed(3)} km${suffix}`;
     } else {
-      return `${Math.round(v * 1000) / 1000} m${suffix}`;
+      return `${v.toFixed(3)} m${suffix}`;
     }
   }
 
@@ -267,7 +311,10 @@ export class SpotlightManager {
    * @internal
    */
   clear() {
-    this._spotlight.clear();
+    if (this.hasSpotlight) {
+      this._spotlight.clear();
+    }
+    this.handleProgress(0);
   }
 
   /**
@@ -275,21 +322,14 @@ export class SpotlightManager {
    * @internal
    */
   render() {
-    const sl = this;
-    if (!sl.ready || !sl.enabled) {
+    if (!this.ready || !this.enabled) {
       return;
     }
-
-    clearTimeout(sl._idTimeout);
-    sl._idTimeout = setTimeout(() => {
-      try {
-        if (!sl.has_spotlight) {
-          sl.createSpotlight();
-        }
-        sl._spotlight.render();
-      } catch (e) {
-        debugger;
-        console.error(e);
+    // timeout instead of frame : wait for tiles to be rendered
+    clearTimeout(this._id_timeout);
+    this._id_timeout = setTimeout(() => {
+      if (this.enabled) {
+        this._spotlight.render();
       }
     }, 200);
   }
@@ -298,17 +338,20 @@ export class SpotlightManager {
    * Destroy the SpotlightManager instance.
    */
   destroy() {
-    if (!this.ready) {
-      console.warn("Attempt to destroy spotlight when not ready");
-      return;
-    }
-    if (this.has_spotlight) {
+    if (this.hasSpotlight) {
       this._spotlight.destroy();
       delete this._spotlight;
     }
-    this._map.off("moveend", this.render);
+
     this._map.off("movestart", this.clear);
+    this._map.off("moveend", this.render);
     this._map.off("styledata", this.render);
+
     listeners.removeListenerByGroup("spotlight_pixop_ui");
+
+    this._elToggleMain.removeEventListener("click", this.handleToggleClick);
+
+    this._init = false;
+    this._enabled = false;
   }
 }

@@ -13,6 +13,7 @@ import { theme } from "./init_theme";
 import { ProjectManager } from "./project/index.js";
 import { ButtonPanelManager } from "./button_panel/manager.js";
 import { ControlsPanel } from "./panel_controls/index.js";
+import { SpotlightManager } from "./pixop/spotlight_manager.js";
 
 const panels = new ButtonPanelManager();
 const version = settings.version;
@@ -33,7 +34,6 @@ const data = {
   }),
 };
 
-
 const initQueryParams = {}; // set in init_common.js
 const listeners = new ListenerStore();
 const events = new EventSimple();
@@ -44,6 +44,7 @@ const project = new ProjectManager();
 const ws = new WsHandlerMapx();
 const nc = new NotifCenterMapx();
 const highlighter = new HighlighterMapx();
+const spotlight = new SpotlightManager();
 const selectize = {}; // manage selectize by groups id
 const editors = {};
 const extend = {
@@ -68,6 +69,7 @@ export {
   nc,
   mg,
   highlighter,
+  spotlight,
   initQueryParams,
   templates,
   maps,

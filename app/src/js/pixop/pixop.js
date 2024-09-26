@@ -57,17 +57,25 @@ export class PixOp {
       typeof opacity === "undefined" ? 0.5 : opacity;
   }
 
+  hide() {
+    this.setOpacity(0);
+  }
+  show() {
+    this.setOpacity(1);
+    }
+
   render(opt) {
     const px = this;
     opt = opt || {};
     cancelFrame(px._id_frame);
     px._id_frame = onNextFrame(() => {
+      px.show();
+
       if (px.isDestroyed()) {
         throw new Error("PixOp is destroyed");
       }
 
       if (px._rendering) {
-        console.log("already rendering");
         px.config.onProgress(0);
         px.resetWorker();
       }
@@ -120,6 +128,7 @@ export class PixOp {
           fillColor: "#F00",
           strokeColor: "#F00",
           circleRadius: 100, // meter radius for point -> area
+          spotlightRadius : 100,  // spotlight radius
           spotlightBuffer: 10, // pixel used to draw spotlight
         },
       },
@@ -215,13 +224,12 @@ export class PixOp {
     if (!worker) {
       px._worker = new PixopWorker();
 
-      console.log("init canvas worker");
       px._worker.postMessage(
         {
           type: "init",
           canvas: px.canvas,
         },
-        [px.canvas]
+        [px.canvas],
       );
 
       px._worker.addEventListener("message", (e) => {
@@ -235,7 +243,7 @@ export class PixOp {
           if (data.calcArea) {
             const area = data.points.reduce(
               (a, coord) => a + px.getPixelAreaAtPoint(coord),
-              0
+              0,
             );
             px.result.area = area;
             px.config.onCalcArea(area);
@@ -343,7 +351,7 @@ export class PixOp {
     const px = this;
     px.data = px.getDefault("data");
     px.opt = px.getDefault("render_options");
-    px.clear();
+    px.clearCanvas();
     return px;
   }
 
@@ -358,6 +366,7 @@ export class PixOp {
   clear() {
     const px = this;
     px.clearCanvas();
+    px.hide();
     return px;
   }
 
@@ -374,7 +383,7 @@ export class PixOp {
       {
         lng: ext.minLng,
         lat: ext.maxLat,
-      }
+      },
     );
     const distLng = px.getLatLngDistance(
       {
@@ -384,7 +393,7 @@ export class PixOp {
       {
         lng: ext.maxLng,
         lat: ext.maxLat,
-      }
+      },
     );
 
     return {
@@ -496,7 +505,7 @@ export class PixOp {
 
       if (featuresQuery.length >= config.max_features) {
         console.warn(
-          `Pixop, max number of features reached ${featuresQuery.length}/${config.max_features}`
+          `Pixop, max number of features reached ${featuresQuery.length}/${config.max_features}`,
         );
         featuresQuery = featuresQuery.slice(0, config.max_features);
       }
@@ -830,25 +839,5 @@ export class PixOp {
         });
       }
     }
-  }
-
-  createWorker(fun) {
-    /**
-     * As string
-     */
-    fun = fun.toString();
-    fun = fun.substring(fun.indexOf("{") + 1, fun.lastIndexOf("}"));
-    /**
-     * As blob
-     */
-    var blob = new Blob([fun], {
-      type: "application/javascript",
-    });
-    /**
-     * As URL
-     */
-    var blobUrl = URL.createObjectURL(blob);
-
-    return new Worker(blobUrl);
   }
 }

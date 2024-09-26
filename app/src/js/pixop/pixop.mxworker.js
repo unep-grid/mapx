@@ -23,7 +23,7 @@ async function handleMessages(m) {
   if (d.type === "clear" || d.type === "render") {
     width = w.canvas.width;
     height = w.canvas.height;
-    ctx = canvas.getContext("2d");
+    ctx = w.canvas.getContext("2d");
   }
 
   /**

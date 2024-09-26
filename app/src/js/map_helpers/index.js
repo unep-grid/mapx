@@ -10,6 +10,7 @@ import {
   mapboxgl,
   maps,
   highlighter,
+  spotlight,
   settings,
   panels,
   controls,
@@ -1410,6 +1411,18 @@ export function initMapListener(map) {
    * Highlight on event
    */
   highlighter.init(map);
+
+  /**
+   * Spotlight
+   */
+  spotlight.init({
+    map: map,
+    idToggleMain: "btnOverlapSpotlight",
+    idSelectNum: "selectNLayersOverlap",
+    idTextArea: "txtAreaOverlap",
+    idTextResol: "txtResolOverlap",
+    idEnableCalcArea: "checkEnableOverlapArea",
+  });
 
   events.on({
     type: [

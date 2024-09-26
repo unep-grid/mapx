@@ -2,9 +2,15 @@ import { PixOp } from "./pixop.js";
 import { onNextFrame, cancelFrame } from "./../animation_frame/index.js";
 
 const opt_default = {
-  enabled: false,
-  nLayersOverlap: 1,
-  calcArea: false,
+  enabled: () => {
+    return false;
+  },
+  nLayersOverlap: () => {
+    return 0;
+  },
+  calcArea: () => {
+    return false;
+  },
   map: null,
   onRendered: function (d) {
     console.log(d);
@@ -64,6 +70,11 @@ class Spotlight {
   render() {
     const sl = this;
     cancelFrame(sl.state.idFrame);
+
+    if (!sl.state.enabled()) {
+      return;
+    }
+
     sl.state.idFrame = onNextFrame(() => {
       sl.pixop.render({
         mode: "spotlight",
@@ -76,7 +87,7 @@ class Spotlight {
         canvas: {
           scale: window.devicePixelRatio === 2 ? 1 : 2,
           add: true,
-          spotlightRadius: 70, // Size of the rendered spotlight
+          spotlightRadius: 30, // Size of the rendered spotlight
           lineWidth: 35,
         },
       });
