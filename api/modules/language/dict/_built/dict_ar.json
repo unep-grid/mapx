@@ -3655,76 +3655,6 @@
     "ar": "تصغير "
   },
   {
-    "id": "btn_overlap_spotlight",
-    "en": "Spotlight vector features",
-    "ar": "ميزات ناقل أضواء كاشفة"
-  },
-  {
-    "id": "title_config_spotlight",
-    "en": "Spotlight tool configuration",
-    "ar": "تكوين أداة Spotlight"
-  },
-  {
-    "id": "select_spotlight_mode",
-    "en": "Select spotlight mode",
-    "ar": "حدد وضع تسليط الضوء"
-  },
-  {
-    "id": "spotlight_where_all",
-    "en": "Spotlight where all features overlap",
-    "ar": "تسليط الضوء حيث تتداخل جميع الميزات"
-  },
-  {
-    "id": "spotlight_where_any",
-    "en": "Spotlight any visible feature",
-    "ar": "سلط الضوء على أي ميزة مرئية"
-  },
-  {
-    "id": "spotlight_where_two",
-    "en": "Spotlight where two features overlap",
-    "ar": "تسليط الضوء حيث تتداخل ميزتان"
-  },
-  {
-    "id": "spotlight_where_three",
-    "en": "Spotlight where three features overlap",
-    "ar": "تسليط الضوء حيث تتداخل ثلاث ميزات"
-  },
-  {
-    "id": "spotlight_where_four",
-    "en": "Spotlight where four features overlap",
-    "ar": "تسليط الضوء حيث تتداخل أربع ميزات"
-  },
-  {
-    "id": "spotlight_where_five",
-    "en": "Spotlight where five features overlap",
-    "ar": "تسليط الضوء حيث تتداخل خمس ميزات"
-  },
-  {
-    "id": "label_check_instant_overlap",
-    "en": "Enable overlap area estimation",
-    "ar": "تمكين تقدير مساحة التداخل "
-  },
-  {
-    "id": "label_area_instant_overlap",
-    "en": "Instant area estimation",
-    "ar": "تقدير المساحة الفوري "
-  },
-  {
-    "id": "label_help_area_instant_overlap",
-    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
-    "ar": "يتم تقدير السطح المتداخل باستخدام التمثيل الكروي للأرض. ستختلف النتيجة اعتمادًا على جودة البيانات والفلاتر الحالية والدقة الحالية. "
-  },
-  {
-    "id": "label_resol_instant_overlap",
-    "en": "Current resolution",
-    "ar": "القرار الحالي "
-  },
-  {
-    "id": "label_help_resol_instant_overlap",
-    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
-    "ar": "تعتمد الدقة الحالية على مستوى التكبير / التصغير وخط العرض. يمثل متوسط المساحة التي يغطيها بكسل واحد. "
-  },
-  {
     "id": "categorical",
     "en": "Categorical",
     "ar": "قاطعة "
@@ -9043,6 +8973,76 @@
     "id": "share_in_project_btn",
     "en": "Add in selected project",
     "ar": "أضف في المشروع المحدد "
+  },
+  {
+    "id": "btn_overlap_spotlight",
+    "en": "Spotlight vector features",
+    "ar": "ميزات ناقل أضواء كاشفة"
+  },
+  {
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "ar": "تكوين أداة Spotlight"
+  },
+  {
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "ar": "حدد وضع تسليط الضوء"
+  },
+  {
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "ar": "تسليط الضوء حيث تتداخل جميع الميزات"
+  },
+  {
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "ar": "سلط الضوء على أي ميزة مرئية"
+  },
+  {
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "ar": "تسليط الضوء حيث تتداخل ميزتان"
+  },
+  {
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "ar": "تسليط الضوء حيث تتداخل ثلاث ميزات"
+  },
+  {
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "ar": "تسليط الضوء حيث تتداخل أربع ميزات"
+  },
+  {
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "ar": "تسليط الضوء حيث تتداخل خمس ميزات"
+  },
+  {
+    "id": "label_check_instant_overlap",
+    "en": "Enable overlap area estimation",
+    "ar": "تمكين تقدير مساحة التداخل "
+  },
+  {
+    "id": "label_area_instant_overlap",
+    "en": "Instant area estimation",
+    "ar": "تقدير المساحة الفوري "
+  },
+  {
+    "id": "label_help_area_instant_overlap",
+    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
+    "ar": "يتم تقدير السطح المتداخل باستخدام التمثيل الكروي للأرض. ستختلف النتيجة اعتمادًا على جودة البيانات والفلاتر الحالية والدقة الحالية. "
+  },
+  {
+    "id": "label_resol_instant_overlap",
+    "en": "Current resolution",
+    "ar": "القرار الحالي "
+  },
+  {
+    "id": "label_help_resol_instant_overlap",
+    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
+    "ar": "تعتمد الدقة الحالية على مستوى التكبير / التصغير وخط العرض. يمثل متوسط المساحة التي يغطيها بكسل واحد. "
   },
   {
     "id": "mx_ui_text",

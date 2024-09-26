@@ -3655,76 +3655,6 @@
     "fr": "Dézoomer"
   },
   {
-    "id": "btn_overlap_spotlight",
-    "en": "Spotlight vector features",
-    "fr": "Mise en évidence des objets vectoriels"
-  },
-  {
-    "id": "title_config_spotlight",
-    "en": "Spotlight tool configuration",
-    "fr": "Configuration de l'outil de mise en évidence"
-  },
-  {
-    "id": "select_spotlight_mode",
-    "en": "Select spotlight mode",
-    "fr": "Mode de mise en évidence"
-  },
-  {
-    "id": "spotlight_where_all",
-    "en": "Spotlight where all features overlap",
-    "fr": "Spotlight où toutes les fonctionnalités se chevauchent"
-  },
-  {
-    "id": "spotlight_where_any",
-    "en": "Spotlight any visible feature",
-    "fr": "Mettez en lumière toute caractéristique visible"
-  },
-  {
-    "id": "spotlight_where_two",
-    "en": "Spotlight where two features overlap",
-    "fr": "Spotlight où deux fonctionnalités se chevauchent"
-  },
-  {
-    "id": "spotlight_where_three",
-    "en": "Spotlight where three features overlap",
-    "fr": "Spotlight où trois fonctionnalités se chevauchent"
-  },
-  {
-    "id": "spotlight_where_four",
-    "en": "Spotlight where four features overlap",
-    "fr": "Spotlight où quatre fonctionnalités se chevauchent"
-  },
-  {
-    "id": "spotlight_where_five",
-    "en": "Spotlight where five features overlap",
-    "fr": "Spotlight où cinq fonctionnalités se chevauchent"
-  },
-  {
-    "id": "label_check_instant_overlap",
-    "en": "Enable overlap area estimation",
-    "fr": "Afficher une estimation de la surface de chevauchement"
-  },
-  {
-    "id": "label_area_instant_overlap",
-    "en": "Instant area estimation",
-    "fr": "Estimation instantanée de la surface"
-  },
-  {
-    "id": "label_help_area_instant_overlap",
-    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
-    "fr": "L'estimation de la surface est calculée en utilisant une représentation sphérique de la Terre. Le résultat peut varier en fonction de la qualité des données, des filtres appliqués, ainsi que de la résolution actuelle."
-  },
-  {
-    "id": "label_resol_instant_overlap",
-    "en": "Current resolution",
-    "fr": "Résolution actuelle"
-  },
-  {
-    "id": "label_help_resol_instant_overlap",
-    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
-    "fr": "La résolution dépend du niveau de zoom actuel ainsi que de la position latitudinale. Elle représente la surface couverte par un pixel. "
-  },
-  {
     "id": "categorical",
     "en": "Categorical",
     "fr": "Catégorielle"
@@ -9043,6 +8973,76 @@
     "id": "share_in_project_btn",
     "en": "Add in selected project",
     "fr": "Ajouter au projet sélectionné"
+  },
+  {
+    "id": "btn_overlap_spotlight",
+    "en": "Spotlight vector features",
+    "fr": "Mise en évidence des objets vectoriels"
+  },
+  {
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "fr": "Configuration de l'outil de mise en évidence"
+  },
+  {
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "fr": "Mode de mise en évidence"
+  },
+  {
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "fr": "Spotlight où toutes les fonctionnalités se chevauchent"
+  },
+  {
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "fr": "Mettez en lumière toute caractéristique visible"
+  },
+  {
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "fr": "Spotlight où deux fonctionnalités se chevauchent"
+  },
+  {
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "fr": "Spotlight où trois fonctionnalités se chevauchent"
+  },
+  {
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "fr": "Spotlight où quatre fonctionnalités se chevauchent"
+  },
+  {
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "fr": "Spotlight où cinq fonctionnalités se chevauchent"
+  },
+  {
+    "id": "label_check_instant_overlap",
+    "en": "Enable overlap area estimation",
+    "fr": "Afficher une estimation de la surface de chevauchement"
+  },
+  {
+    "id": "label_area_instant_overlap",
+    "en": "Instant area estimation",
+    "fr": "Estimation instantanée de la surface"
+  },
+  {
+    "id": "label_help_area_instant_overlap",
+    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
+    "fr": "L'estimation de la surface est calculée en utilisant une représentation sphérique de la Terre. Le résultat peut varier en fonction de la qualité des données, des filtres appliqués, ainsi que de la résolution actuelle."
+  },
+  {
+    "id": "label_resol_instant_overlap",
+    "en": "Current resolution",
+    "fr": "Résolution actuelle"
+  },
+  {
+    "id": "label_help_resol_instant_overlap",
+    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
+    "fr": "La résolution dépend du niveau de zoom actuel ainsi que de la position latitudinale. Elle représente la surface couverte par un pixel. "
   },
   {
     "id": "mx_ui_text",

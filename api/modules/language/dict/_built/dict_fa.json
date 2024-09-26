@@ -3655,76 +3655,6 @@
     "fa": "کوچک نمایی"
   },
   {
-    "id": "btn_overlap_spotlight",
-    "en": "Spotlight vector features",
-    "fa": "ویژگی های وکتور Spotlight"
-  },
-  {
-    "id": "title_config_spotlight",
-    "en": "Spotlight tool configuration",
-    "fa": "پیکربندی ابزار Spotlight"
-  },
-  {
-    "id": "select_spotlight_mode",
-    "en": "Select spotlight mode",
-    "fa": "حالت نورافکن را انتخاب کنید"
-  },
-  {
-    "id": "spotlight_where_all",
-    "en": "Spotlight where all features overlap",
-    "fa": "کانونی که در آن همه ویژگی‌ها همپوشانی دارند"
-  },
-  {
-    "id": "spotlight_where_any",
-    "en": "Spotlight any visible feature",
-    "fa": "هر ویژگی قابل مشاهده را در کانون توجه قرار دهید"
-  },
-  {
-    "id": "spotlight_where_two",
-    "en": "Spotlight where two features overlap",
-    "fa": "کانونی که در آن دو ویژگی با هم تداخل دارند"
-  },
-  {
-    "id": "spotlight_where_three",
-    "en": "Spotlight where three features overlap",
-    "fa": "کانون توجه که در آن سه ویژگی با هم همپوشانی دارند"
-  },
-  {
-    "id": "spotlight_where_four",
-    "en": "Spotlight where four features overlap",
-    "fa": "کانون توجه که در آن چهار ویژگی همپوشانی دارند"
-  },
-  {
-    "id": "spotlight_where_five",
-    "en": "Spotlight where five features overlap",
-    "fa": "کانون توجه که در آن پنج ویژگی با هم همپوشانی دارند"
-  },
-  {
-    "id": "label_check_instant_overlap",
-    "en": "Enable overlap area estimation",
-    "fa": "تخمین منطقه همپوشانی را فعال کنید "
-  },
-  {
-    "id": "label_area_instant_overlap",
-    "en": "Instant area estimation",
-    "fa": "برآورد فوری منطقه "
-  },
-  {
-    "id": "label_help_area_instant_overlap",
-    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
-    "fa": "سطح همپوشانی با استفاده از یک نمایش کروی از زمین تخمین زده می شود. نتیجه بسته به کیفیت داده ، فیلترهای فعلی و وضوح فعلی متفاوت خواهد بود. "
-  },
-  {
-    "id": "label_resol_instant_overlap",
-    "en": "Current resolution",
-    "fa": "وضوح فعلی "
-  },
-  {
-    "id": "label_help_resol_instant_overlap",
-    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
-    "fa": "وضوح فعلی به سطح زوم و عرض جغرافیایی بستگی دارد. این نشان دهنده مساحت متوسط تحت پوشش یک پیکسل است. "
-  },
-  {
     "id": "categorical",
     "en": "Categorical",
     "fa": "طبقه ایی"
@@ -9043,6 +8973,76 @@
     "id": "share_in_project_btn",
     "en": "Add in selected project",
     "fa": "اضافه کردن در پروژه انتخاب شده "
+  },
+  {
+    "id": "btn_overlap_spotlight",
+    "en": "Spotlight vector features",
+    "fa": "ویژگی های وکتور Spotlight"
+  },
+  {
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "fa": "پیکربندی ابزار Spotlight"
+  },
+  {
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "fa": "حالت نورافکن را انتخاب کنید"
+  },
+  {
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "fa": "کانونی که در آن همه ویژگی‌ها همپوشانی دارند"
+  },
+  {
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "fa": "هر ویژگی قابل مشاهده را در کانون توجه قرار دهید"
+  },
+  {
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "fa": "کانونی که در آن دو ویژگی با هم تداخل دارند"
+  },
+  {
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "fa": "کانون توجه که در آن سه ویژگی با هم همپوشانی دارند"
+  },
+  {
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "fa": "کانون توجه که در آن چهار ویژگی همپوشانی دارند"
+  },
+  {
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "fa": "کانون توجه که در آن پنج ویژگی با هم همپوشانی دارند"
+  },
+  {
+    "id": "label_check_instant_overlap",
+    "en": "Enable overlap area estimation",
+    "fa": "تخمین منطقه همپوشانی را فعال کنید "
+  },
+  {
+    "id": "label_area_instant_overlap",
+    "en": "Instant area estimation",
+    "fa": "برآورد فوری منطقه "
+  },
+  {
+    "id": "label_help_area_instant_overlap",
+    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
+    "fa": "سطح همپوشانی با استفاده از یک نمایش کروی از زمین تخمین زده می شود. نتیجه بسته به کیفیت داده ، فیلترهای فعلی و وضوح فعلی متفاوت خواهد بود. "
+  },
+  {
+    "id": "label_resol_instant_overlap",
+    "en": "Current resolution",
+    "fa": "وضوح فعلی "
+  },
+  {
+    "id": "label_help_resol_instant_overlap",
+    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
+    "fa": "وضوح فعلی به سطح زوم و عرض جغرافیایی بستگی دارد. این نشان دهنده مساحت متوسط تحت پوشش یک پیکسل است. "
   },
   {
     "id": "mx_ui_text",

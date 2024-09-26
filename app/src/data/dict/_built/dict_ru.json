@@ -3655,76 +3655,6 @@
     "ru": "Уменьшить "
   },
   {
-    "id": "btn_overlap_spotlight",
-    "en": "Spotlight vector features",
-    "ru": "Выделять векторные объекты"
-  },
-  {
-    "id": "title_config_spotlight",
-    "en": "Spotlight tool configuration",
-    "ru": "Конфигурация инструмента Spotlight"
-  },
-  {
-    "id": "select_spotlight_mode",
-    "en": "Select spotlight mode",
-    "ru": "Выберите режим прожектора"
-  },
-  {
-    "id": "spotlight_where_all",
-    "en": "Spotlight where all features overlap",
-    "ru": "В центре внимания, где все функции перекрываются"
-  },
-  {
-    "id": "spotlight_where_any",
-    "en": "Spotlight any visible feature",
-    "ru": "Выделите любую видимую особенность"
-  },
-  {
-    "id": "spotlight_where_two",
-    "en": "Spotlight where two features overlap",
-    "ru": "В центре внимания, где две функции пересекаются"
-  },
-  {
-    "id": "spotlight_where_three",
-    "en": "Spotlight where three features overlap",
-    "ru": "В центре внимания, где три функции пересекаются"
-  },
-  {
-    "id": "spotlight_where_four",
-    "en": "Spotlight where four features overlap",
-    "ru": "В центре внимания, где пересекаются четыре функции"
-  },
-  {
-    "id": "spotlight_where_five",
-    "en": "Spotlight where five features overlap",
-    "ru": "В центре внимания, где пять функций пересекаются"
-  },
-  {
-    "id": "label_check_instant_overlap",
-    "en": "Enable overlap area estimation",
-    "ru": "Включить оценку области перекрытия "
-  },
-  {
-    "id": "label_area_instant_overlap",
-    "en": "Instant area estimation",
-    "ru": "Мгновенная оценка площади "
-  },
-  {
-    "id": "label_help_area_instant_overlap",
-    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
-    "ru": "Поверхность перекрытия оценивается с использованием сферического изображения Земли. Результат будет зависеть от качества данных, текущих фильтров и текущего разрешения. "
-  },
-  {
-    "id": "label_resol_instant_overlap",
-    "en": "Current resolution",
-    "ru": "Текущее разрешение "
-  },
-  {
-    "id": "label_help_resol_instant_overlap",
-    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
-    "ru": "Текущее разрешение зависит от уровня масштабирования и широты. Он представляет собой среднюю площадь, покрытую одним пикселем. "
-  },
-  {
     "id": "categorical",
     "en": "Categorical",
     "ru": "Категоричный "
@@ -9043,6 +8973,76 @@
     "id": "share_in_project_btn",
     "en": "Add in selected project",
     "ru": "Добавить в выбранный проект "
+  },
+  {
+    "id": "btn_overlap_spotlight",
+    "en": "Spotlight vector features",
+    "ru": "Выделять векторные объекты"
+  },
+  {
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "ru": "Конфигурация инструмента Spotlight"
+  },
+  {
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "ru": "Выберите режим прожектора"
+  },
+  {
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "ru": "В центре внимания, где все функции перекрываются"
+  },
+  {
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "ru": "Выделите любую видимую особенность"
+  },
+  {
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "ru": "В центре внимания, где две функции пересекаются"
+  },
+  {
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "ru": "В центре внимания, где три функции пересекаются"
+  },
+  {
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "ru": "В центре внимания, где пересекаются четыре функции"
+  },
+  {
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "ru": "В центре внимания, где пять функций пересекаются"
+  },
+  {
+    "id": "label_check_instant_overlap",
+    "en": "Enable overlap area estimation",
+    "ru": "Включить оценку области перекрытия "
+  },
+  {
+    "id": "label_area_instant_overlap",
+    "en": "Instant area estimation",
+    "ru": "Мгновенная оценка площади "
+  },
+  {
+    "id": "label_help_area_instant_overlap",
+    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
+    "ru": "Поверхность перекрытия оценивается с использованием сферического изображения Земли. Результат будет зависеть от качества данных, текущих фильтров и текущего разрешения. "
+  },
+  {
+    "id": "label_resol_instant_overlap",
+    "en": "Current resolution",
+    "ru": "Текущее разрешение "
+  },
+  {
+    "id": "label_help_resol_instant_overlap",
+    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
+    "ru": "Текущее разрешение зависит от уровня масштабирования и широты. Он представляет собой среднюю площадь, покрытую одним пикселем. "
   },
   {
     "id": "mx_ui_text",

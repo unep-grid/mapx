@@ -3655,76 +3655,6 @@
     "ps": "کوچوني ښودل"
   },
   {
-    "id": "btn_overlap_spotlight",
-    "en": "Spotlight vector features",
-    "ps": "د سپټ لائټ ویکتور ځانګړتیاوې"
-  },
-  {
-    "id": "title_config_spotlight",
-    "en": "Spotlight tool configuration",
-    "ps": "د سپټ لائټ وسیلې ترتیب"
-  },
-  {
-    "id": "select_spotlight_mode",
-    "en": "Select spotlight mode",
-    "ps": "د سپټ لائټ حالت غوره کړئ"
-  },
-  {
-    "id": "spotlight_where_all",
-    "en": "Spotlight where all features overlap",
-    "ps": "سپټ لائټ چیرې چې ټولې ځانګړتیاوې یو ځای کیږي"
-  },
-  {
-    "id": "spotlight_where_any",
-    "en": "Spotlight any visible feature",
-    "ps": "هر لیدلی خصوصیت په نښه کړئ"
-  },
-  {
-    "id": "spotlight_where_two",
-    "en": "Spotlight where two features overlap",
-    "ps": "سپټ لائټ چیرې چې دوه ځانګړتیاوې یوځای کیږي"
-  },
-  {
-    "id": "spotlight_where_three",
-    "en": "Spotlight where three features overlap",
-    "ps": "سپټ لائټ چیرې چې درې ځانګړتیاوې یوځای کیږي"
-  },
-  {
-    "id": "spotlight_where_four",
-    "en": "Spotlight where four features overlap",
-    "ps": "سپټ لائټ چیرې چې څلور ځانګړتیاوې یوځای کیږي"
-  },
-  {
-    "id": "spotlight_where_five",
-    "en": "Spotlight where five features overlap",
-    "ps": "سپټ لائټ چیرې چې پنځه ځانګړتیاوې یوځای کیږي"
-  },
-  {
-    "id": "label_check_instant_overlap",
-    "en": "Enable overlap area estimation",
-    "ps": "د پراخه سیمه اټکل وړ کړئ "
-  },
-  {
-    "id": "label_area_instant_overlap",
-    "en": "Instant area estimation",
-    "ps": "د فوري ساحې اټکل "
-  },
-  {
-    "id": "label_help_area_instant_overlap",
-    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
-    "ps": "د پوښښ سطحه د ځمکې د کرهنیز نمایندګۍ په کارولو سره اټکل شوې ده. پایله به د معلوماتو کیفیت ، اوسني فلټرونو او اوسني ریزولوشن پورې اړه لري. "
-  },
-  {
-    "id": "label_resol_instant_overlap",
-    "en": "Current resolution",
-    "ps": "اوسنۍ پرېکړه "
-  },
-  {
-    "id": "label_help_resol_instant_overlap",
-    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
-    "ps": "اوسنی حل د زوم کچه او عرض البلد پورې اړه لري. دا د اوسط ساحه نمایندګي کوي چې د یوه پکسل پوښل شوی. "
-  },
-  {
     "id": "categorical",
     "en": "Categorical",
     "ps": "قطعي"
@@ -9043,6 +8973,76 @@
     "id": "share_in_project_btn",
     "en": "Add in selected project",
     "ps": "په ټاکل شوې پروژه کې اضافه کړئ "
+  },
+  {
+    "id": "btn_overlap_spotlight",
+    "en": "Spotlight vector features",
+    "ps": "د سپټ لائټ ویکتور ځانګړتیاوې"
+  },
+  {
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "ps": "د سپټ لائټ وسیلې ترتیب"
+  },
+  {
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "ps": "د سپټ لائټ حالت غوره کړئ"
+  },
+  {
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "ps": "سپټ لائټ چیرې چې ټولې ځانګړتیاوې یو ځای کیږي"
+  },
+  {
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "ps": "هر لیدلی خصوصیت په نښه کړئ"
+  },
+  {
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "ps": "سپټ لائټ چیرې چې دوه ځانګړتیاوې یوځای کیږي"
+  },
+  {
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "ps": "سپټ لائټ چیرې چې درې ځانګړتیاوې یوځای کیږي"
+  },
+  {
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "ps": "سپټ لائټ چیرې چې څلور ځانګړتیاوې یوځای کیږي"
+  },
+  {
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "ps": "سپټ لائټ چیرې چې پنځه ځانګړتیاوې یوځای کیږي"
+  },
+  {
+    "id": "label_check_instant_overlap",
+    "en": "Enable overlap area estimation",
+    "ps": "د پراخه سیمه اټکل وړ کړئ "
+  },
+  {
+    "id": "label_area_instant_overlap",
+    "en": "Instant area estimation",
+    "ps": "د فوري ساحې اټکل "
+  },
+  {
+    "id": "label_help_area_instant_overlap",
+    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
+    "ps": "د پوښښ سطحه د ځمکې د کرهنیز نمایندګۍ په کارولو سره اټکل شوې ده. پایله به د معلوماتو کیفیت ، اوسني فلټرونو او اوسني ریزولوشن پورې اړه لري. "
+  },
+  {
+    "id": "label_resol_instant_overlap",
+    "en": "Current resolution",
+    "ps": "اوسنۍ پرېکړه "
+  },
+  {
+    "id": "label_help_resol_instant_overlap",
+    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
+    "ps": "اوسنی حل د زوم کچه او عرض البلد پورې اړه لري. دا د اوسط ساحه نمایندګي کوي چې د یوه پکسل پوښل شوی. "
   },
   {
     "id": "mx_ui_text",

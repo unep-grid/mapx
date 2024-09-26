@@ -3655,76 +3655,6 @@
     "de": "Rauszoomen "
   },
   {
-    "id": "btn_overlap_spotlight",
-    "en": "Spotlight vector features",
-    "de": "Spotlight-Vektorfunktionen"
-  },
-  {
-    "id": "title_config_spotlight",
-    "en": "Spotlight tool configuration",
-    "de": "Konfiguration des Spotlight-Tools"
-  },
-  {
-    "id": "select_spotlight_mode",
-    "en": "Select spotlight mode",
-    "de": "Wählen Sie den Spotlight-Modus"
-  },
-  {
-    "id": "spotlight_where_all",
-    "en": "Spotlight where all features overlap",
-    "de": "Spotlight, bei dem sich alle Funktionen überschneiden"
-  },
-  {
-    "id": "spotlight_where_any",
-    "en": "Spotlight any visible feature",
-    "de": "Heben Sie jedes sichtbare Merkmal hervor"
-  },
-  {
-    "id": "spotlight_where_two",
-    "en": "Spotlight where two features overlap",
-    "de": "Spotlight, wo sich zwei Features überschneiden"
-  },
-  {
-    "id": "spotlight_where_three",
-    "en": "Spotlight where three features overlap",
-    "de": "Spotlight, bei dem sich drei Funktionen überschneiden"
-  },
-  {
-    "id": "spotlight_where_four",
-    "en": "Spotlight where four features overlap",
-    "de": "Spotlight, bei dem sich vier Funktionen überschneiden"
-  },
-  {
-    "id": "spotlight_where_five",
-    "en": "Spotlight where five features overlap",
-    "de": "Spotlight, bei dem sich fünf Funktionen überschneiden"
-  },
-  {
-    "id": "label_check_instant_overlap",
-    "en": "Enable overlap area estimation",
-    "de": "Aktivieren Sie die Überlappungsbereichsschätzung "
-  },
-  {
-    "id": "label_area_instant_overlap",
-    "en": "Instant area estimation",
-    "de": "Sofortige Flächenschätzung "
-  },
-  {
-    "id": "label_help_area_instant_overlap",
-    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
-    "de": "Die Überlappungsfläche wird unter Verwendung einer sphärischen Darstellung der Erde geschätzt. Das Ergebnis hängt von der Datenqualität, den aktuellen Filtern und der aktuellen Auflösung ab. "
-  },
-  {
-    "id": "label_resol_instant_overlap",
-    "en": "Current resolution",
-    "de": "Aktuelle Auflösung "
-  },
-  {
-    "id": "label_help_resol_instant_overlap",
-    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
-    "de": "Die aktuelle Auflösung hängt von der Zoomstufe und dem Breitengrad ab. Es stellt die durchschnittliche Fläche dar, die von einem Pixel abgedeckt wird. "
-  },
-  {
     "id": "categorical",
     "en": "Categorical",
     "de": "Kategorial "
@@ -9043,6 +8973,76 @@
     "id": "share_in_project_btn",
     "en": "Add in selected project",
     "de": "In ausgewähltem Projekt hinzufügen "
+  },
+  {
+    "id": "btn_overlap_spotlight",
+    "en": "Spotlight vector features",
+    "de": "Spotlight-Vektorfunktionen"
+  },
+  {
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "de": "Konfiguration des Spotlight-Tools"
+  },
+  {
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "de": "Wählen Sie den Spotlight-Modus"
+  },
+  {
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "de": "Spotlight, bei dem sich alle Funktionen überschneiden"
+  },
+  {
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "de": "Heben Sie jedes sichtbare Merkmal hervor"
+  },
+  {
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "de": "Spotlight, wo sich zwei Features überschneiden"
+  },
+  {
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "de": "Spotlight, bei dem sich drei Funktionen überschneiden"
+  },
+  {
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "de": "Spotlight, bei dem sich vier Funktionen überschneiden"
+  },
+  {
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "de": "Spotlight, bei dem sich fünf Funktionen überschneiden"
+  },
+  {
+    "id": "label_check_instant_overlap",
+    "en": "Enable overlap area estimation",
+    "de": "Aktivieren Sie die Überlappungsbereichsschätzung "
+  },
+  {
+    "id": "label_area_instant_overlap",
+    "en": "Instant area estimation",
+    "de": "Sofortige Flächenschätzung "
+  },
+  {
+    "id": "label_help_area_instant_overlap",
+    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
+    "de": "Die Überlappungsfläche wird unter Verwendung einer sphärischen Darstellung der Erde geschätzt. Das Ergebnis hängt von der Datenqualität, den aktuellen Filtern und der aktuellen Auflösung ab. "
+  },
+  {
+    "id": "label_resol_instant_overlap",
+    "en": "Current resolution",
+    "de": "Aktuelle Auflösung "
+  },
+  {
+    "id": "label_help_resol_instant_overlap",
+    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
+    "de": "Die aktuelle Auflösung hängt von der Zoomstufe und dem Breitengrad ab. Es stellt die durchschnittliche Fläche dar, die von einem Pixel abgedeckt wird. "
   },
   {
     "id": "mx_ui_text",

@@ -3655,76 +3655,6 @@
     "es": "Disminuir el zoom"
   },
   {
-    "id": "btn_overlap_spotlight",
-    "en": "Spotlight vector features",
-    "es": "Destacar objetos vectoriales"
-  },
-  {
-    "id": "title_config_spotlight",
-    "en": "Spotlight tool configuration",
-    "es": "Destacar la configuración de herramientas"
-  },
-  {
-    "id": "select_spotlight_mode",
-    "en": "Select spotlight mode",
-    "es": "Seleccionar modo resaltado"
-  },
-  {
-    "id": "spotlight_where_all",
-    "en": "Spotlight where all features overlap",
-    "es": "Spotlight donde todas las funciones se superponen"
-  },
-  {
-    "id": "spotlight_where_any",
-    "en": "Spotlight any visible feature",
-    "es": "Destacar cualquier característica visible"
-  },
-  {
-    "id": "spotlight_where_two",
-    "en": "Spotlight where two features overlap",
-    "es": "Destacar donde dos características se superponen"
-  },
-  {
-    "id": "spotlight_where_three",
-    "en": "Spotlight where three features overlap",
-    "es": "Spotlight donde se superponen tres características"
-  },
-  {
-    "id": "spotlight_where_four",
-    "en": "Spotlight where four features overlap",
-    "es": "Spotlight donde se superponen cuatro características"
-  },
-  {
-    "id": "spotlight_where_five",
-    "en": "Spotlight where five features overlap",
-    "es": "Spotlight donde se superponen cinco características"
-  },
-  {
-    "id": "label_check_instant_overlap",
-    "en": "Enable overlap area estimation",
-    "es": "Habilitar estimación de área superpuesta"
-  },
-  {
-    "id": "label_area_instant_overlap",
-    "en": "Instant area estimation",
-    "es": "Estimación de área superpuesta"
-  },
-  {
-    "id": "label_help_area_instant_overlap",
-    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
-    "es": "La superposición de la superficie se estima utilizando una representación esférica de la Tierra. El resultado variará según la calidad de los datos, los filtros actuales y la resolución actual."
-  },
-  {
-    "id": "label_resol_instant_overlap",
-    "en": "Current resolution",
-    "es": "Resolución actual"
-  },
-  {
-    "id": "label_help_resol_instant_overlap",
-    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
-    "es": "La resolución actual depende del nivel de zoom y la latitud. Representa el área promedio cubierta por un píxel."
-  },
-  {
     "id": "categorical",
     "en": "Categorical",
     "es": "Categórico"
@@ -9043,6 +8973,76 @@
     "id": "share_in_project_btn",
     "en": "Add in selected project",
     "es": "Adjuntar al proyecto seleccionado"
+  },
+  {
+    "id": "btn_overlap_spotlight",
+    "en": "Spotlight vector features",
+    "es": "Destacar objetos vectoriales"
+  },
+  {
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "es": "Destacar la configuración de herramientas"
+  },
+  {
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "es": "Seleccionar modo resaltado"
+  },
+  {
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "es": "Spotlight donde todas las funciones se superponen"
+  },
+  {
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "es": "Destacar cualquier característica visible"
+  },
+  {
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "es": "Destacar donde dos características se superponen"
+  },
+  {
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "es": "Spotlight donde se superponen tres características"
+  },
+  {
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "es": "Spotlight donde se superponen cuatro características"
+  },
+  {
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "es": "Spotlight donde se superponen cinco características"
+  },
+  {
+    "id": "label_check_instant_overlap",
+    "en": "Enable overlap area estimation",
+    "es": "Habilitar estimación de área superpuesta"
+  },
+  {
+    "id": "label_area_instant_overlap",
+    "en": "Instant area estimation",
+    "es": "Estimación de área superpuesta"
+  },
+  {
+    "id": "label_help_area_instant_overlap",
+    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
+    "es": "La superposición de la superficie se estima utilizando una representación esférica de la Tierra. El resultado variará según la calidad de los datos, los filtros actuales y la resolución actual."
+  },
+  {
+    "id": "label_resol_instant_overlap",
+    "en": "Current resolution",
+    "es": "Resolución actual"
+  },
+  {
+    "id": "label_help_resol_instant_overlap",
+    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
+    "es": "La resolución actual depende del nivel de zoom y la latitud. Representa el área promedio cubierta por un píxel."
   },
   {
     "id": "mx_ui_text",

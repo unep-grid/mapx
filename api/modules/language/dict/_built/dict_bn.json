@@ -3655,76 +3655,6 @@
     "bn": "ছোট করা "
   },
   {
-    "id": "btn_overlap_spotlight",
-    "en": "Spotlight vector features",
-    "bn": "স্পটলাইট ভেক্টর বৈশিষ্ট্য"
-  },
-  {
-    "id": "title_config_spotlight",
-    "en": "Spotlight tool configuration",
-    "bn": "স্পটলাইট টুল কনফিগারেশন"
-  },
-  {
-    "id": "select_spotlight_mode",
-    "en": "Select spotlight mode",
-    "bn": "স্পটলাইট মোড নির্বাচন করুন"
-  },
-  {
-    "id": "spotlight_where_all",
-    "en": "Spotlight where all features overlap",
-    "bn": "স্পটলাইট যেখানে সমস্ত বৈশিষ্ট্য ওভারল্যাপ"
-  },
-  {
-    "id": "spotlight_where_any",
-    "en": "Spotlight any visible feature",
-    "bn": "কোন দৃশ্যমান বৈশিষ্ট্য স্পটলাইট"
-  },
-  {
-    "id": "spotlight_where_two",
-    "en": "Spotlight where two features overlap",
-    "bn": "স্পটলাইট যেখানে দুটি বৈশিষ্ট্য ওভারল্যাপ"
-  },
-  {
-    "id": "spotlight_where_three",
-    "en": "Spotlight where three features overlap",
-    "bn": "স্পটলাইট যেখানে তিনটি বৈশিষ্ট্য ওভারল্যাপ"
-  },
-  {
-    "id": "spotlight_where_four",
-    "en": "Spotlight where four features overlap",
-    "bn": "স্পটলাইট যেখানে চারটি বৈশিষ্ট্য ওভারল্যাপ"
-  },
-  {
-    "id": "spotlight_where_five",
-    "en": "Spotlight where five features overlap",
-    "bn": "স্পটলাইট যেখানে পাঁচটি বৈশিষ্ট্য ওভারল্যাপ"
-  },
-  {
-    "id": "label_check_instant_overlap",
-    "en": "Enable overlap area estimation",
-    "bn": "ওভারল্যাপ অঞ্চল অনুমান সক্ষম করুন "
-  },
-  {
-    "id": "label_area_instant_overlap",
-    "en": "Instant area estimation",
-    "bn": "তাত্ক্ষণিক অঞ্চল অনুমান "
-  },
-  {
-    "id": "label_help_area_instant_overlap",
-    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
-    "bn": "ওভারল্যাপ পৃষ্ঠটি পৃথিবীর একটি গোলাকার উপস্থাপনা ব্যবহার করে অনুমান করা হয়। ফলাফলের গুণমান, বর্তমান ফিল্টার এবং বর্তমান রেজোলিউশনের উপর নির্ভর করে পৃথক হবে। "
-  },
-  {
-    "id": "label_resol_instant_overlap",
-    "en": "Current resolution",
-    "bn": "বর্তমান রেজোলিউশন "
-  },
-  {
-    "id": "label_help_resol_instant_overlap",
-    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
-    "bn": "বর্তমান রেজোলিউশন জুম স্তর এবং অক্ষাংশের উপর নির্ভর করে। এটি এক পিক্সেল দ্বারা আচ্ছাদিত গড় অঞ্চলকে উপস্থাপন করে। "
-  },
-  {
     "id": "categorical",
     "en": "Categorical",
     "bn": "শ্রেণিবদ্ধ "
@@ -9043,6 +8973,76 @@
     "id": "share_in_project_btn",
     "en": "Add in selected project",
     "bn": "নির্বাচিত প্রকল্পে যুক্ত করুন "
+  },
+  {
+    "id": "btn_overlap_spotlight",
+    "en": "Spotlight vector features",
+    "bn": "স্পটলাইট ভেক্টর বৈশিষ্ট্য"
+  },
+  {
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "bn": "স্পটলাইট টুল কনফিগারেশন"
+  },
+  {
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "bn": "স্পটলাইট মোড নির্বাচন করুন"
+  },
+  {
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "bn": "স্পটলাইট যেখানে সমস্ত বৈশিষ্ট্য ওভারল্যাপ"
+  },
+  {
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "bn": "কোন দৃশ্যমান বৈশিষ্ট্য স্পটলাইট"
+  },
+  {
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "bn": "স্পটলাইট যেখানে দুটি বৈশিষ্ট্য ওভারল্যাপ"
+  },
+  {
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "bn": "স্পটলাইট যেখানে তিনটি বৈশিষ্ট্য ওভারল্যাপ"
+  },
+  {
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "bn": "স্পটলাইট যেখানে চারটি বৈশিষ্ট্য ওভারল্যাপ"
+  },
+  {
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "bn": "স্পটলাইট যেখানে পাঁচটি বৈশিষ্ট্য ওভারল্যাপ"
+  },
+  {
+    "id": "label_check_instant_overlap",
+    "en": "Enable overlap area estimation",
+    "bn": "ওভারল্যাপ অঞ্চল অনুমান সক্ষম করুন "
+  },
+  {
+    "id": "label_area_instant_overlap",
+    "en": "Instant area estimation",
+    "bn": "তাত্ক্ষণিক অঞ্চল অনুমান "
+  },
+  {
+    "id": "label_help_area_instant_overlap",
+    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
+    "bn": "ওভারল্যাপ পৃষ্ঠটি পৃথিবীর একটি গোলাকার উপস্থাপনা ব্যবহার করে অনুমান করা হয়। ফলাফলের গুণমান, বর্তমান ফিল্টার এবং বর্তমান রেজোলিউশনের উপর নির্ভর করে পৃথক হবে। "
+  },
+  {
+    "id": "label_resol_instant_overlap",
+    "en": "Current resolution",
+    "bn": "বর্তমান রেজোলিউশন "
+  },
+  {
+    "id": "label_help_resol_instant_overlap",
+    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
+    "bn": "বর্তমান রেজোলিউশন জুম স্তর এবং অক্ষাংশের উপর নির্ভর করে। এটি এক পিক্সেল দ্বারা আচ্ছাদিত গড় অঞ্চলকে উপস্থাপন করে। "
   },
   {
     "id": "mx_ui_text",

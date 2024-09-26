@@ -3655,76 +3655,6 @@
     "zh": "缩小"
   },
   {
-    "id": "btn_overlap_spotlight",
-    "en": "Spotlight vector features",
-    "zh": "突出显示矢量要素"
-  },
-  {
-    "id": "title_config_spotlight",
-    "en": "Spotlight tool configuration",
-    "zh": "突出显示工具配置"
-  },
-  {
-    "id": "select_spotlight_mode",
-    "en": "Select spotlight mode",
-    "zh": "选择突出显示模式"
-  },
-  {
-    "id": "spotlight_where_all",
-    "en": "Spotlight where all features overlap",
-    "zh": "所有功能重叠的聚光灯"
-  },
-  {
-    "id": "spotlight_where_any",
-    "en": "Spotlight any visible feature",
-    "zh": "聚焦任何可见的特征"
-  },
-  {
-    "id": "spotlight_where_two",
-    "en": "Spotlight where two features overlap",
-    "zh": "聚焦两个特征重叠的地方"
-  },
-  {
-    "id": "spotlight_where_three",
-    "en": "Spotlight where three features overlap",
-    "zh": "聚焦三个特征重叠的地方"
-  },
-  {
-    "id": "spotlight_where_four",
-    "en": "Spotlight where four features overlap",
-    "zh": "四个功能重叠的聚光灯"
-  },
-  {
-    "id": "spotlight_where_five",
-    "en": "Spotlight where five features overlap",
-    "zh": "聚焦五个特征重叠的地方"
-  },
-  {
-    "id": "label_check_instant_overlap",
-    "en": "Enable overlap area estimation",
-    "zh": "启用重叠面积估计"
-  },
-  {
-    "id": "label_area_instant_overlap",
-    "en": "Instant area estimation",
-    "zh": "即时面积估计"
-  },
-  {
-    "id": "label_help_area_instant_overlap",
-    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
-    "zh": "重叠面是用地球的球形表面来估计的。结果将根据数据质量，当前筛选器和分辨率而有所不同。"
-  },
-  {
-    "id": "label_resol_instant_overlap",
-    "en": "Current resolution",
-    "zh": "当前分辨率"
-  },
-  {
-    "id": "label_help_resol_instant_overlap",
-    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
-    "zh": "当前分辨率取决于缩放级别和纬度。它表示一个像元覆盖的平均面积。"
-  },
-  {
     "id": "categorical",
     "en": "Categorical",
     "zh": "类别"
@@ -9043,6 +8973,76 @@
     "id": "share_in_project_btn",
     "en": "Add in selected project",
     "zh": "加入选定的项目"
+  },
+  {
+    "id": "btn_overlap_spotlight",
+    "en": "Spotlight vector features",
+    "zh": "突出显示矢量要素"
+  },
+  {
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "zh": "突出显示工具配置"
+  },
+  {
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "zh": "选择突出显示模式"
+  },
+  {
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "zh": "所有功能重叠的聚光灯"
+  },
+  {
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "zh": "聚焦任何可见的特征"
+  },
+  {
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "zh": "聚焦两个特征重叠的地方"
+  },
+  {
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "zh": "聚焦三个特征重叠的地方"
+  },
+  {
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "zh": "四个功能重叠的聚光灯"
+  },
+  {
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "zh": "聚焦五个特征重叠的地方"
+  },
+  {
+    "id": "label_check_instant_overlap",
+    "en": "Enable overlap area estimation",
+    "zh": "启用重叠面积估计"
+  },
+  {
+    "id": "label_area_instant_overlap",
+    "en": "Instant area estimation",
+    "zh": "即时面积估计"
+  },
+  {
+    "id": "label_help_area_instant_overlap",
+    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
+    "zh": "重叠面是用地球的球形表面来估计的。结果将根据数据质量，当前筛选器和分辨率而有所不同。"
+  },
+  {
+    "id": "label_resol_instant_overlap",
+    "en": "Current resolution",
+    "zh": "当前分辨率"
+  },
+  {
+    "id": "label_help_resol_instant_overlap",
+    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
+    "zh": "当前分辨率取决于缩放级别和纬度。它表示一个像元覆盖的平均面积。"
   },
   {
     "id": "mx_ui_text",
