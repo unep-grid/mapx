@@ -88,7 +88,7 @@ class Item extends Box {
     const item = this;
     // remove id,for, other unwanted attributes
     const elContent = cloneNodeClean(item._config.element);
-    const elsEditables = elContent.querySelectorAll("span");
+    const elsEditables = elContent.querySelectorAll("span:not(:empty)");
 
     for (const elEditable of elsEditables) {
       const elEditableNew = el(

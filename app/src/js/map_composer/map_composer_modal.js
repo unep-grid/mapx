@@ -7,6 +7,7 @@ import {
   getViewDescription,
   getViewLegend,
   getViewTitle,
+  getView,
 } from "./../map_helpers/index.js";
 import { getViewMetaToHtml } from "../metadata/utils";
 import { objectToArray, getContentSize } from "./../mx_helper_misc.js";
@@ -84,15 +85,18 @@ export class MapComposerModal {
     });
 
     for (const id of vVisible) {
+      const view = getView(id);
       const title = getViewTitle(id);
       const description = getViewDescription(id);
       const elTitle = el("div", [el("h1", title), el("p", description)]);
+
+      const isVt = view.type === "vt";
 
       const elLegend = getViewLegend(id, {
         clone: true,
         input: false,
         class: true,
-        style: false,
+        style: isVt ? false : true,
       });
 
       const dimLegend = getContentSize(elLegend);
