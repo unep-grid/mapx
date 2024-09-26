@@ -119,7 +119,7 @@ observeEvent(input$btnDeleteProject, {
 
     querySource <- sprintf(
       "
-      SELECT id
+      SELECT id, global
       FROM mx_sources
       WHERE project = '%1$s'
       ",
@@ -128,28 +128,65 @@ observeEvent(input$btnDeleteProject, {
 
     queryViews <- sprintf(
       "
-      SELECT distinct id
-      FROM mx_views_latest
-      WHERE project = '%1$s'
-      ",
+WITH
+-- Step 1: Get all views owned by the project
+project_views AS (
+    SELECT id, data
+    FROM mx_views_latest
+    WHERE project = '%1$s'
+),
+
+-- Step 2a: Find views that list other projects in their data->'projects'
+views_shared_via_data AS (
+    SELECT pv.id
+    FROM project_views pv,
+    jsonb_array_elements_text(pv.data->'projects') AS project_id
+    WHERE project_id != '%1$s'
+),
+
+-- Step 2b: Get all view IDs listed in views_external of other projects
+views_shared_via_external AS (
+    SELECT DISTINCT ve.view_id AS id
+    FROM mx_projects p,
+    jsonb_array_elements_text(p.views_external) AS ve(view_id)
+    WHERE p.id != '%1$s'
+),
+
+-- Step 2c: Combine all shared view IDs
+shared_view_ids AS (
+    SELECT id FROM views_shared_via_data
+    UNION
+    SELECT id FROM views_shared_via_external
+)
+
+-- Step 3: Assign the 'shared' flag to each view
+SELECT
+    pv.id,
+    CASE WHEN svi.id IS NOT NULL THEN TRUE ELSE FALSE END AS shared
+FROM
+    project_views pv
+LEFT JOIN
+    shared_view_ids svi ON pv.id = svi.id;
+",
       project
     )
 
-
-    sourcesToRemove <- mxDbGetQuery(querySource)$id
-    viewsProject <- mxDbGetQuery(queryViews)$id
+    sourcesToRemove <- mxDbGetQuery(querySource)
+    viewsProject <- mxDbGetQuery(queryViews)
 
     tableViewsProject <- mxDbGetViewsTitle(
-      viewsProject,
+      viewsProject$id,
       asNamedList = FALSE,
       language = language
     )
+    tableViewsProject$Shared <- ifelse(viewsProject$shared,'YES','NO')
 
     tableSourcesProject <- mxDbGetSourceTitle(
-      sourcesToRemove,
+      sourcesToRemove$id,
       asTable = TRUE,
       language = language
     )
+    tableSourcesProject$Global <- ifelse(sourcesToRemove$global,'YES','NO')
 
     #
     # Remove linked views
