@@ -145,7 +145,7 @@ class Item extends Box {
         container: elOut,
         fadeDuration: 0,
         trackResize: false, // handled in mapcomposer
-        renderWorldCopies: false,
+        renderWorldCopies: true,
       },
       item._config.options,
     );
