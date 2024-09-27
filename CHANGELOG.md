@@ -1,3 +1,12 @@
+  - [1.13.10-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.10-alpha.1) 
+
+    - Project Deletion
+        - Further improvements #1004
+    - MapComposer 
+        - Enable the map to be continuous at 180/180° allowing centering the map over the pacific ocean #1012
+    - Spotlight 
+        - Refactor + moved to toolbox. Still available for scripts, SDK and static mode #986
+
   - [1.13.9](https://github.com/unep-grid/mapx/tree/1.13.9) 
 
   - [1.13.9-alpha.14](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.14) 
