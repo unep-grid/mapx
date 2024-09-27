@@ -129,74 +129,75 @@ observeEvent(input$btnDeleteProject, {
     queryViews <- sprintf(
       "
 WITH
--- Step 1: Get all views owned by the project
-project_views AS (
-    SELECT id, data
-    FROM mx_views_latest
-    WHERE project = '%1$s'
+views_external as (
+  SELECT
+  id, jsonb_array_elements_text(p.views_external) id_view
+  FROM
+  mx_projects p
+  WHERE
+  p.id != '%1$s'
 ),
-
--- Step 2a: Find views that list other projects in their data->'projects'
-views_shared_via_data AS (
-    SELECT pv.id
-    FROM project_views pv,
-    jsonb_array_elements_text(pv.data->'projects') AS project_id
-    WHERE project_id != '%1$s'
+projects_by_view as (
+  SELECT  id_view,
+  to_jsonb(array_agg(id)) as projects_a
+  FROM
+  views_external
+  GROUP BY
+  id_view
 ),
-
--- Step 2b: Get all view IDs listed in views_external of other projects
-views_shared_via_external AS (
-    SELECT DISTINCT ve.view_id AS id
-    FROM mx_projects p,
-    jsonb_array_elements_text(p.views_external) AS ve(view_id)
-    WHERE p.id != '%1$s'
-),
-
--- Step 2c: Combine all shared view IDs
-shared_view_ids AS (
-    SELECT id FROM views_shared_via_data
-    UNION
-    SELECT id FROM views_shared_via_external
+project_view as (
+  SELECT v.id,
+  v.data #>> '{title,en}' as title,
+  CASE
+   WHEN jsonb_typeof(v.data->'projects') = 'array'
+   THEN data->'projects'
+   WHEN jsonb_typeof(v.data->'projects') = 'string'
+   THEN jsonb_build_array(v.data->'projects')
+   ELSE '[]'::jsonb
+  END as projects_b,
+  COALESCE(p.projects_a,'[]'::jsonb) as projects_a
+  FROM
+  mx_views_latest v
+  LEFT JOIN
+  projects_by_view p
+  on v.id = p.id_view
+  WHERE
+  v.project = '%1$s'
 )
 
--- Step 3: Assign the 'shared' flag to each view
 SELECT
-    pv.id,
-    CASE WHEN svi.id IS NOT NULL THEN TRUE ELSE FALSE END AS shared
+id, title,
+jsonb_array_length(projects_b) as n_share,
+jsonb_array_length(projects_a) as n_external
 FROM
-    project_views pv
-LEFT JOIN
-    shared_view_ids svi ON pv.id = svi.id;
-",
-      project
+project_view
+", project
     )
+
+    tableViewsProject <- mxDbGetQuery(queryViews)
 
     sourcesToRemove <- mxDbGetQuery(querySource)
-    viewsProject <- mxDbGetQuery(queryViews)
-
-    tableViewsProject <- mxDbGetViewsTitle(
-      viewsProject$id,
-      asNamedList = FALSE,
-      language = language
-    )
-    tableViewsProject$Shared <- ifelse(viewsProject$shared,'YES','NO')
 
     tableSourcesProject <- mxDbGetSourceTitle(
       sourcesToRemove$id,
       asTable = TRUE,
       language = language
     )
-    tableSourcesProject$Global <- ifelse(sourcesToRemove$global,'YES','NO')
+    tableSourcesProject$Global <- ifelse(sourcesToRemove$global, "YES", "NO")
 
     #
     # Remove linked views
     #
+    sourcesGlobal <- sourcesToRemove[sourcesToRemove$global, "id"]
+
+
     tableViewsDep <- data.frame(
       id = character(0),
       title = character(0),
       project = character(0)
     )
-    for (src in sourcesToRemove) {
+
+    for (src in sourcesGlobal) {
       tableViewsBySource <- mxDbGetViewsTableBySourceId(src)
       tableViewsDep <- rbind(tableViewsDep, tableViewsBySource)
     }
@@ -207,7 +208,7 @@ LEFT JOIN
       id_project = character(0)
     )
 
-    for (src in sourcesToRemove) {
+    for (src in sourcesGlobal) {
       tableSourcesBySource <- mxDbGetTableDependencies(src)
       tableSourcesDep <- rbind(tableSourcesDep, tableSourcesBySource)
     }
@@ -222,7 +223,6 @@ LEFT JOIN
       filter <-
         !tableViewsDep$project %in% project &
           !duplicated(tableViewsDep$id)
-
       tableViewsDep <- tableViewsDep[
         filter,
         c("id", "title", "project")
@@ -265,34 +265,34 @@ LEFT JOIN
 
 
     ui <- tags$ul(
-      if (hasSources) {
-        tags$li(
-          tags$b(dd("project_delete_table_sources", language)),
-          ":",
-          if (hasSources) mxTableToHtml(tableSourcesProject)
-        )
-      },
-      if (hasViews) {
-        tags$li(
-          tags$b(dd("project_delete_table_views", language)),
-          ":",
-          mxTableToHtml(tableViewsProject)
-        )
-      },
-      if (hasViewsDep) {
-        tags$li(
-          tags$b(dd("project_delete_table_views_dep", language)),
-          ":",
-          mxTableToHtml(tableViewsDep)
-        )
-      },
-      if (hasSourcesDep) {
-        tags$li(
-          tags$b(dd("project_delete_table_sources_dep", language)),
-          ":",
-          mxTableToHtml(tableSourcesDep)
-        )
-      }
+
+      # For Views
+      tags$li(
+        tags$b(dd("project_delete_table_views", language)),
+        ":",
+        mxTableToHtml(tableViewsProject)
+      ),
+
+      # For Sources
+      tags$li(
+        tags$b(dd("project_delete_table_sources", language)),
+        ":",
+        mxTableToHtml(tableSourcesProject)
+      ),
+
+      # For Views Dependencies
+      tags$li(
+        tags$b(dd("project_delete_table_views_dep", language)),
+        ":",
+        mxTableToHtml(tableViewsDep)
+      ),
+
+      # For Sources Dependencies
+      tags$li(
+        tags$b(dd("project_delete_table_sources_dep", language)),
+        ":",
+        mxTableToHtml(tableSourcesDep)
+      )
     )
 
     btnDelete <- actionButton(
@@ -303,6 +303,7 @@ LEFT JOIN
     mxModal(
       id = "deleteProject",
       title = modalTitle,
+      minWidth = "80%",
       content = ui,
       textCloseButton = dd("btn_cancel", language),
       buttons = list(btnDelete)
