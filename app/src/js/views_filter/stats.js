@@ -1,3 +1,5 @@
+import { isEmpty } from "../is_test";
+
 /**
  * Extract checkboxes from various path in given views list and produce frequency tables
  * @param {Array} v Views list
@@ -5,9 +7,12 @@
  */
 export function getFreqTable(views) {
   const data = views.map((v) => v._component_groups);
-  const stats = {};
 
+  const stats = {};
   for (const item of data) {
+    if (isEmpty(item)) {
+      return;
+    }
     for (const [key, value] of Object.entries(item)) {
       if (!stats[key]) {
         stats[key] = {};

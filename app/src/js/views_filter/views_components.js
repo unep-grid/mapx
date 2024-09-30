@@ -18,8 +18,8 @@ export function setViewsComponents(views) {
     const widgets = path(data, "dashboard.widgets", []);
     const storySteps = path(data, "story.steps", []);
     const overlap = path(data, "source.layerInfo.maskName", "");
-    const attributes = path(data, "attribute.names", "");
-    const customStyle = path(data, "style.custom", "");
+    const attributes = path(data, "attribute.names", []);
+    const customStyle = path(data, "style.custom", {});
     const readers = path(v, "readers", []);
     const local = project === settings.project.id;
     const editable = _edit === true;
