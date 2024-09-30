@@ -1,3 +1,7 @@
+  - [1.13.10-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.10-alpha.2) 
+
+    - Views Filter : issue with frequency table fired too early, blocking project loading logic
+
   - [1.13.10-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.10-alpha.1) 
 
     - Project Deletion
