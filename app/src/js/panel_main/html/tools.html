@@ -4,68 +4,72 @@
   data-panel="tools">
   <!-- Spotlight -->
   <div class="mx-tab--content-scrollable mx-tab--content-padding">
-    <h4 data-lang_key="title_config_spotlight"></h4>
-    <div class="well" id="spotlight_tools_box">
-      <div class="form-group shiny-input-container">
-        <label
-          class="control-label"
-          data-lang_key="select_spotlight_mode"
-          for="selectNLayersOverlap">
-          spotlight_mode
-        </label>
-        <div class="mx-flex-column">
-          <select class="form-control" id="selectNLayersOverlap">
-            <option value="0" data-lang_key="spotlight_where_all"></option>
-            <option
-              data-lang_key="spotlight_where_any"
-              selected="TRUE"
-              value="1"></option>
-            <option value="2" data-lang_key="spotlight_where_two"></option>
-            <option value="3" data-lang_key="spotlight_where_three"></option>
-            <option value="4" data-lang_key="spotlight_where_four"></option>
-            <option value="5" data-lang_key="spotlight_where_five"></option>
-          </select>
-          <button
-            id="btnOverlapSpotlight"
-            type="button"
-            class="btn btn-default hint--bottom"
-            data-lang_type="tooltip"
-            data-lang_key="btn_overlap_spotlight"
-            aria-label="btn_overlap_spotlight">
-            <div class="btn-icon">
-              <span data-lang_key="btn_overlap_spotlight" data-lang_type="text">
-                Spotlight vector features
-              </span>
-              <div class="btn-icon-wrapper">
-                <i class="fa fa-lightbulb-o"></i>
+    <div id="spotlight_tools_box_container">
+      <h4 data-lang_key="title_config_spotlight"></h4>
+      <div class="well" id="spotlight_tools_box">
+        <div class="form-group shiny-input-container">
+          <label
+            class="control-label"
+            data-lang_key="select_spotlight_mode"
+            for="selectNLayersOverlap">
+            spotlight_mode
+          </label>
+          <div class="mx-flex-column">
+            <select class="form-control" id="selectNLayersOverlap">
+              <option value="0" data-lang_key="spotlight_where_all"></option>
+              <option
+                data-lang_key="spotlight_where_any"
+                selected="TRUE"
+                value="1"></option>
+              <option value="2" data-lang_key="spotlight_where_two"></option>
+              <option value="3" data-lang_key="spotlight_where_three"></option>
+              <option value="4" data-lang_key="spotlight_where_four"></option>
+              <option value="5" data-lang_key="spotlight_where_five"></option>
+            </select>
+            <button
+              id="btnOverlapSpotlight"
+              type="button"
+              class="btn btn-default hint--bottom"
+              data-lang_type="tooltip"
+              data-lang_key="btn_overlap_spotlight"
+              aria-label="btn_overlap_spotlight">
+              <div class="btn-icon">
+                <span
+                  data-lang_key="btn_overlap_spotlight"
+                  data-lang_type="text">
+                  Spotlight vector features
+                </span>
+                <div class="btn-icon-wrapper">
+                  <i class="fa fa-lightbulb-o"></i>
+                </div>
               </div>
-            </div>
-          </button>
-        </div>
-      </div>
-      <div class="fold-container form-group shiny-input-container fold-check">
-        <input
-          type="checkbox"
-          id="checkEnableOverlapArea"
-          class="fold-switch fold-check" />
-        <label
-          class="fold-label"
-          for="checkEnableOverlapArea"
-          data-lang_key="label_check_instant_overlap"></label>
-        <div class="fold-content mx-scroll-styled">
-          <div class="form-group">
-            <label data-lang_key="label_area_instant_overlap"></label>
-            <div class="form-control" id="txtAreaOverlap"></div>
-            <small
-              data-lang_key="label_help_area_instant_overlap"
-              class="text-muted"></small>
+            </button>
           </div>
-          <div class="form-group">
-            <label data-lang_key="label_resol_instant_overlap"></label>
-            <div class="form-control" id="txtResolOverlap"></div>
-            <small
-              data-lang_key="label_help_resol_instant_overlap"
-              class="text-muted"></small>
+        </div>
+        <div class="fold-container form-group shiny-input-container fold-check">
+          <input
+            type="checkbox"
+            id="checkEnableOverlapArea"
+            class="fold-switch fold-check" />
+          <label
+            class="fold-label"
+            for="checkEnableOverlapArea"
+            data-lang_key="label_check_instant_overlap"></label>
+          <div class="fold-content mx-scroll-styled">
+            <div class="form-group">
+              <label data-lang_key="label_area_instant_overlap"></label>
+              <div class="form-control" id="txtAreaOverlap"></div>
+              <small
+                data-lang_key="label_help_area_instant_overlap"
+                class="text-muted"></small>
+            </div>
+            <div class="form-group">
+              <label data-lang_key="label_resol_instant_overlap"></label>
+              <div class="form-control" id="txtResolOverlap"></div>
+              <small
+                data-lang_key="label_help_resol_instant_overlap"
+                class="text-muted"></small>
+            </div>
           </div>
         </div>
       </div>

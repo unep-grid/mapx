@@ -2433,6 +2433,12 @@ export function getBrowserData() {
   };
 }
 
+export function isFirefox() {
+  const uaparser = new UAParser();
+  const isGecko = uaparser.getEngine().name === "Gecko";
+  return isGecko;
+}
+
 /**
  * Copy content of a div to clipboard
  *
@@ -2614,5 +2620,3 @@ export async function urlToImageBase64(url) {
     });
   }
 }
-
-

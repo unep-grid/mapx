@@ -3,7 +3,7 @@ import { events, listeners } from "./../mx.js";
 import { getMap } from "./../map_helpers/index.js";
 import { el } from "./../el_mapx/index.js";
 import { isBoolean, isElement, isNumeric } from "./../is_test/index.js";
-import { setBusy } from "./../mx_helper_misc.js";
+import { isFirefox, setBusy } from "./../mx_helper_misc.js";
 import { bindAll } from "../bind_class_methods/index.js";
 import { onNextFrame } from "../animation_frame/index.js";
 
@@ -44,6 +44,9 @@ export class SpotlightManager {
     if (this._init) return;
     this.initConfig(config);
     this.initUI();
+    if (isFirefox()) {
+      return;
+    }
     this.initEventListeners();
     this.initSpotlight();
     this._init = true;
@@ -56,6 +59,7 @@ export class SpotlightManager {
       idTextArea: "txtAreaOverlap",
       idTextResol: "txtResolOverlap",
       idEnableCalcArea: "checkEnableOverlapArea",
+      idToolboxContainer: "spotlight_tools_box_container",
       nLayersOverlap: 0,
       enable: false,
       calcArea: false,
@@ -77,8 +81,15 @@ export class SpotlightManager {
       idTextArea,
       idTextResol,
       idEnableCalcArea,
+      idToolboxContainer,
     } = this._config;
 
+    this._elToolboxContainer = document.getElementById(idToolboxContainer);
+
+    if (isFirefox()) {
+      this._elToolboxContainer.style.display = "none";
+      return;
+    }
     this._elToggleMain = document.getElementById(idToggleMain);
     this._elSelectNum = document.getElementById(idSelectNum);
     this._elTextArea = document.getElementById(idTextArea);

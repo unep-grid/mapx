@@ -6,7 +6,6 @@ import { modal } from "./../mx_helper_modal.js";
 import { settings as settingsMapx } from "./../settings";
 import { settings as storySettings } from "./settings.js";
 import { theme, panels, events, controls, listeners } from "./../mx";
-import { UAParser } from "ua-parser-js";
 import { ButtonPanelLegend } from "../panel_legend/index.js";
 import {
   onNextFrame,
@@ -21,6 +20,7 @@ import {
   scrollFromTo,
   cssTransform,
   debounce,
+  isFirefox,
 } from "./../mx_helper_misc.js";
 import { dashboard } from "./../dashboards/index.js";
 import { getArrayDiff } from "./../array_stat/index.js";
@@ -58,8 +58,6 @@ const viewsAdditional = []; // will be in state
 const story = {};
 const state = {};
 window._sm = { story, state };
-const uaparser = new UAParser();
-const isGecko = uaparser.getEngine().name === "Gecko";
 
 /**
  * Read and evaluate story map
@@ -405,7 +403,7 @@ export async function storyStop() {
  * -> see https://jsfiddle.net/fxi/u6ftLg9h/
  */
 async function cancelAll() {
-  if (isGecko) {
+  if (isFirefox()) {
     /**
      * Firefox breaks Shiny websocket when using window.stop.. "
      */
