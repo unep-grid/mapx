@@ -3490,16 +3490,6 @@
     "zh": "保存视图列表状态"
   },
   {
-    "id": "btn_show_project_delete",
-    "en": "Delete this project",
-    "zh": "删除此项目"
-  },
-  {
-    "id": "btn_show_project_delete_disabled",
-    "en": "Delete this project ( disabled )",
-    "zh": "删除此项目（不可用）"
-  },
-  {
     "id": "btn_show_role_manager",
     "en": "Define roles",
     "zh": "定义角色"
@@ -4616,7 +4606,7 @@
   },
   {
     "id": "project",
-    "en": "Projet",
+    "en": "Project",
     "zh": "项目"
   },
   {
@@ -4955,6 +4945,11 @@
     "zh": "视图ID"
   },
   {
+    "id": "view_id_short",
+    "en": "View ID",
+    "zh": "视图ID"
+  },
+  {
     "id": "view_new_created",
     "en": "View created",
     "zh": "已创建视图"
@@ -5260,9 +5255,29 @@
     "zh": "拒绝访问，你无法访问请求的项目"
   },
   {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "zh": "删除此项目"
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "zh": "删除此项目（不可用）"
+  },
+  {
     "id": "project_delete_confirm_title",
     "en": "Write the project name you want to delete",
     "zh": "输入要删除的项目名称"
+  },
+  {
+    "id": "project_delete_view_n_share",
+    "en": "Shared",
+    "zh": "共享"
+  },
+  {
+    "id": "project_delete_view_n_external",
+    "en": "External",
+    "zh": "外部"
   },
   {
     "id": "project_invite_modal_title",

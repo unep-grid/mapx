@@ -3490,16 +3490,6 @@
     "de": "Status der Ansichtsliste speichern "
   },
   {
-    "id": "btn_show_project_delete",
-    "en": "Delete this project",
-    "de": "Löschen Sie dieses Projekt "
-  },
-  {
-    "id": "btn_show_project_delete_disabled",
-    "en": "Delete this project ( disabled )",
-    "de": "Dieses Projekt löschen (deaktiviert) "
-  },
-  {
     "id": "btn_show_role_manager",
     "en": "Define roles",
     "de": "Rollen definieren "
@@ -4616,7 +4606,7 @@
   },
   {
     "id": "project",
-    "en": "Projet",
+    "en": "Project",
     "de": "Projekt"
   },
   {
@@ -4955,6 +4945,11 @@
     "de": "Bezeichner anzeigen "
   },
   {
+    "id": "view_id_short",
+    "en": "View ID",
+    "de": "Ansichts-ID"
+  },
+  {
     "id": "view_new_created",
     "en": "View created",
     "de": "Ansicht erstellt "
@@ -5260,9 +5255,29 @@
     "de": "Zugriff abgelehnt. Sie können nicht auf das angeforderte Projekt zugreifen "
   },
   {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "de": "Löschen Sie dieses Projekt "
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "de": "Dieses Projekt löschen (deaktiviert) "
+  },
+  {
     "id": "project_delete_confirm_title",
     "en": "Write the project name you want to delete",
     "de": "Schreiben Sie den Projektnamen, den Sie löschen möchten "
+  },
+  {
+    "id": "project_delete_view_n_share",
+    "en": "Shared",
+    "de": "Geteilt"
+  },
+  {
+    "id": "project_delete_view_n_external",
+    "en": "External",
+    "de": "Extern"
   },
   {
     "id": "project_invite_modal_title",

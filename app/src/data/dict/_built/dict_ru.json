@@ -3490,16 +3490,6 @@
     "ru": "Сохранить состояние списка просмотров "
   },
   {
-    "id": "btn_show_project_delete",
-    "en": "Delete this project",
-    "ru": "Удалить этот проект "
-  },
-  {
-    "id": "btn_show_project_delete_disabled",
-    "en": "Delete this project ( disabled )",
-    "ru": "Удалить этот проект (отключено) "
-  },
-  {
     "id": "btn_show_role_manager",
     "en": "Define roles",
     "ru": "Определить роли "
@@ -4616,7 +4606,7 @@
   },
   {
     "id": "project",
-    "en": "Projet",
+    "en": "Project",
     "ru": "Проект"
   },
   {
@@ -4955,6 +4945,11 @@
     "ru": "Просмотр идентификатора "
   },
   {
+    "id": "view_id_short",
+    "en": "View ID",
+    "ru": "ID представления"
+  },
+  {
     "id": "view_new_created",
     "en": "View created",
     "ru": "Просмотр создан "
@@ -5260,9 +5255,29 @@
     "ru": "В доступе отказано. Вы не можете получить доступ к запрошенному проекту "
   },
   {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "ru": "Удалить этот проект "
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "ru": "Удалить этот проект (отключено) "
+  },
+  {
     "id": "project_delete_confirm_title",
     "en": "Write the project name you want to delete",
     "ru": "Напишите название проекта, который хотите удалить "
+  },
+  {
+    "id": "project_delete_view_n_share",
+    "en": "Shared",
+    "ru": "Общий"
+  },
+  {
+    "id": "project_delete_view_n_external",
+    "en": "External",
+    "ru": "Внешний"
   },
   {
     "id": "project_invite_modal_title",

@@ -9074,32 +9074,6 @@
     "de": "Status der Ansichtsliste speichern "
   },
   {
-    "id": "btn_show_project_delete",
-    "en": "Delete this project",
-    "fr": "Supprimer ce projet",
-    "es": "Eliminar este proyecto",
-    "ru": "Удалить этот проект ",
-    "zh": "删除此项目",
-    "ar": "احذف هذا المشروع ",
-    "fa": "این پروژه را حذف کنید ",
-    "ps": "دا پروژه حذف کړئ ",
-    "bn": "এই প্রকল্পটি মুছুন ",
-    "de": "Löschen Sie dieses Projekt "
-  },
-  {
-    "id": "btn_show_project_delete_disabled",
-    "en": "Delete this project ( disabled )",
-    "fr": "Supprimer ce projet ( désactivé )",
-    "es": "Eliminar este proyecto ( discapacitado )",
-    "ru": "Удалить этот проект (отключено) ",
-    "zh": "删除此项目（不可用）",
-    "ar": "حذف هذا المشروع (معطل) ",
-    "fa": "حذف این پروژه (غیرفعال) ",
-    "ps": "دا پروژه ړنګ کړئ (معلول شوی) ",
-    "bn": "এই প্রকল্পটি মুছুন (অক্ষম) ",
-    "de": "Dieses Projekt löschen (deaktiviert) "
-  },
-  {
     "id": "btn_show_role_manager",
     "en": "Define roles",
     "fr": "Définir les rôles",
@@ -12000,12 +11974,12 @@
   },
   {
     "id": "project",
-    "en": "Projet",
+    "en": "Project",
     "fr": "Projet",
     "es": "Proyecto",
     "ru": "Проект",
     "zh": "项目",
-    "ar": "بروجيت",
+    "ar": "مشروع",
     "fa": "پروژه",
     "ps": "پروژه",
     "bn": "প্রকল্প",
@@ -12883,6 +12857,19 @@
     "de": "Bezeichner anzeigen "
   },
   {
+    "id": "view_id_short",
+    "en": "View ID",
+    "fr": "ID de la vue",
+    "es": "ID de vista",
+    "ru": "ID представления",
+    "zh": "视图ID",
+    "ar": "معرّف العرض",
+    "fa": "شناسه نمایش",
+    "ps": "د لید ID",
+    "bn": "ভিউ আইডি",
+    "de": "Ansichts-ID"
+  },
+  {
     "id": "view_new_created",
     "en": "View created",
     "fr": "Vue créée",
@@ -13676,6 +13663,32 @@
     "de": "Zugriff abgelehnt. Sie können nicht auf das angeforderte Projekt zugreifen "
   },
   {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "fr": "Supprimer ce projet",
+    "es": "Eliminar este proyecto",
+    "ru": "Удалить этот проект ",
+    "zh": "删除此项目",
+    "ar": "احذف هذا المشروع ",
+    "fa": "این پروژه را حذف کنید ",
+    "ps": "دا پروژه حذف کړئ ",
+    "bn": "এই প্রকল্পটি মুছুন ",
+    "de": "Löschen Sie dieses Projekt "
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "fr": "Supprimer ce projet ( désactivé )",
+    "es": "Eliminar este proyecto ( discapacitado )",
+    "ru": "Удалить этот проект (отключено) ",
+    "zh": "删除此项目（不可用）",
+    "ar": "حذف هذا المشروع (معطل) ",
+    "fa": "حذف این پروژه (غیرفعال) ",
+    "ps": "دا پروژه ړنګ کړئ (معلول شوی) ",
+    "bn": "এই প্রকল্পটি মুছুন (অক্ষম) ",
+    "de": "Dieses Projekt löschen (deaktiviert) "
+  },
+  {
     "id": "project_delete_confirm_title",
     "en": "Write the project name you want to delete",
     "fr": "Écrivez le titre du projet que vous désirez supprimer",
@@ -13687,6 +13700,32 @@
     "ps": "د پروژې نوم ولیکئ چې غواړئ یې حذف کړئ ",
     "bn": "আপনি মুছে ফেলতে চান এমন প্রকল্পের নাম লিখুন ",
     "de": "Schreiben Sie den Projektnamen, den Sie löschen möchten "
+  },
+  {
+    "id": "project_delete_view_n_share",
+    "en": "Shared",
+    "fr": "Partagé",
+    "es": "Compartido",
+    "ru": "Общий",
+    "zh": "共享",
+    "ar": "مشترَك",
+    "fa": "اشتراکی",
+    "ps": "شریک شوی",
+    "bn": "শেয়ারকৃত",
+    "de": "Geteilt"
+  },
+  {
+    "id": "project_delete_view_n_external",
+    "en": "External",
+    "fr": "Externe",
+    "es": "Externo",
+    "ru": "Внешний",
+    "zh": "外部",
+    "ar": "خارجي",
+    "fa": "خارجی",
+    "ps": "بهرنی",
+    "bn": "বহিরাগত",
+    "de": "Extern"
   },
   {
     "id": "project_invite_modal_title",

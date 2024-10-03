@@ -3490,16 +3490,6 @@
     "ps": "د لید لیست حالت خوندي کړئ "
   },
   {
-    "id": "btn_show_project_delete",
-    "en": "Delete this project",
-    "ps": "دا پروژه حذف کړئ "
-  },
-  {
-    "id": "btn_show_project_delete_disabled",
-    "en": "Delete this project ( disabled )",
-    "ps": "دا پروژه ړنګ کړئ (معلول شوی) "
-  },
-  {
     "id": "btn_show_role_manager",
     "en": "Define roles",
     "ps": "نقشونه وټاکئ "
@@ -4616,7 +4606,7 @@
   },
   {
     "id": "project",
-    "en": "Projet",
+    "en": "Project",
     "ps": "پروژه"
   },
   {
@@ -4955,6 +4945,11 @@
     "ps": "پېژندونکی وګورئ"
   },
   {
+    "id": "view_id_short",
+    "en": "View ID",
+    "ps": "د لید ID"
+  },
+  {
     "id": "view_new_created",
     "en": "View created",
     "ps": "لیدنه جوړه شوه"
@@ -5260,9 +5255,29 @@
     "ps": "رسۍ منکره شوه. تاسو غوښتل شوې پروژې ته لاسرسی نلرئ "
   },
   {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "ps": "دا پروژه حذف کړئ "
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "ps": "دا پروژه ړنګ کړئ (معلول شوی) "
+  },
+  {
     "id": "project_delete_confirm_title",
     "en": "Write the project name you want to delete",
     "ps": "د پروژې نوم ولیکئ چې غواړئ یې حذف کړئ "
+  },
+  {
+    "id": "project_delete_view_n_share",
+    "en": "Shared",
+    "ps": "شریک شوی"
+  },
+  {
+    "id": "project_delete_view_n_external",
+    "en": "External",
+    "ps": "بهرنی"
   },
   {
     "id": "project_invite_modal_title",

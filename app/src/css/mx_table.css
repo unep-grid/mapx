@@ -11,3 +11,8 @@
 .mx .table > tbody > tr:nth-child(odd) {
   background-color: var(--mx_ui_background_accent);
 }
+
+.mx .mx-table-container .table {
+  max-height: 300px;
+  overflow-y: auto;
+}

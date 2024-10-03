@@ -3490,16 +3490,6 @@
     "ar": "حفظ حالة قائمة العروض "
   },
   {
-    "id": "btn_show_project_delete",
-    "en": "Delete this project",
-    "ar": "احذف هذا المشروع "
-  },
-  {
-    "id": "btn_show_project_delete_disabled",
-    "en": "Delete this project ( disabled )",
-    "ar": "حذف هذا المشروع (معطل) "
-  },
-  {
     "id": "btn_show_role_manager",
     "en": "Define roles",
     "ar": "تحديد الأدوار "
@@ -4616,8 +4606,8 @@
   },
   {
     "id": "project",
-    "en": "Projet",
-    "ar": "بروجيت"
+    "en": "Project",
+    "ar": "مشروع"
   },
   {
     "id": "views",
@@ -4955,6 +4945,11 @@
     "ar": "عرض المعرف "
   },
   {
+    "id": "view_id_short",
+    "en": "View ID",
+    "ar": "معرّف العرض"
+  },
+  {
     "id": "view_new_created",
     "en": "View created",
     "ar": "تم إنشاء العرض "
@@ -5260,9 +5255,29 @@
     "ar": "تم الرفض. لا يمكنك الوصول إلى المشروع المطلوب "
   },
   {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "ar": "احذف هذا المشروع "
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "ar": "حذف هذا المشروع (معطل) "
+  },
+  {
     "id": "project_delete_confirm_title",
     "en": "Write the project name you want to delete",
     "ar": "اكتب اسم المشروع الذي تريد حذفه "
+  },
+  {
+    "id": "project_delete_view_n_share",
+    "en": "Shared",
+    "ar": "مشترَك"
+  },
+  {
+    "id": "project_delete_view_n_external",
+    "en": "External",
+    "ar": "خارجي"
   },
   {
     "id": "project_invite_modal_title",

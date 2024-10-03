@@ -3490,16 +3490,6 @@
     "fr": "Sauvegarder l'ordre des vues"
   },
   {
-    "id": "btn_show_project_delete",
-    "en": "Delete this project",
-    "fr": "Supprimer ce projet"
-  },
-  {
-    "id": "btn_show_project_delete_disabled",
-    "en": "Delete this project ( disabled )",
-    "fr": "Supprimer ce projet ( désactivé )"
-  },
-  {
     "id": "btn_show_role_manager",
     "en": "Define roles",
     "fr": "Définir les rôles"
@@ -4616,7 +4606,7 @@
   },
   {
     "id": "project",
-    "en": "Projet",
+    "en": "Project",
     "fr": "Projet"
   },
   {
@@ -4955,6 +4945,11 @@
     "fr": "Identifiant de la vue"
   },
   {
+    "id": "view_id_short",
+    "en": "View ID",
+    "fr": "ID de la vue"
+  },
+  {
     "id": "view_new_created",
     "en": "View created",
     "fr": "Vue créée"
@@ -5260,9 +5255,29 @@
     "fr": "Accès refusé. Vous ne pouvez pas accéder à ce projet"
   },
   {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "fr": "Supprimer ce projet"
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "fr": "Supprimer ce projet ( désactivé )"
+  },
+  {
     "id": "project_delete_confirm_title",
     "en": "Write the project name you want to delete",
     "fr": "Écrivez le titre du projet que vous désirez supprimer"
+  },
+  {
+    "id": "project_delete_view_n_share",
+    "en": "Shared",
+    "fr": "Partagé"
+  },
+  {
+    "id": "project_delete_view_n_external",
+    "en": "External",
+    "fr": "Externe"
   },
   {
     "id": "project_invite_modal_title",

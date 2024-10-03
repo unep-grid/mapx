@@ -3490,16 +3490,6 @@
     "bn": "দেখার তালিকার রাজ্য সংরক্ষণ করুন "
   },
   {
-    "id": "btn_show_project_delete",
-    "en": "Delete this project",
-    "bn": "এই প্রকল্পটি মুছুন "
-  },
-  {
-    "id": "btn_show_project_delete_disabled",
-    "en": "Delete this project ( disabled )",
-    "bn": "এই প্রকল্পটি মুছুন (অক্ষম) "
-  },
-  {
     "id": "btn_show_role_manager",
     "en": "Define roles",
     "bn": "ভূমিকা নির্ধারণ করুন "
@@ -4616,7 +4606,7 @@
   },
   {
     "id": "project",
-    "en": "Projet",
+    "en": "Project",
     "bn": "প্রকল্প"
   },
   {
@@ -4955,6 +4945,11 @@
     "bn": "সনাক্তকারী দেখুন View "
   },
   {
+    "id": "view_id_short",
+    "en": "View ID",
+    "bn": "ভিউ আইডি"
+  },
+  {
     "id": "view_new_created",
     "en": "View created",
     "bn": "ভিউ তৈরি হয়েছে "
@@ -5260,9 +5255,29 @@
     "bn": "অ্যাক্সেস অস্বীকৃত। আপনি অনুরোধ করা প্রকল্পটি অ্যাক্সেস করতে পারবেন না "
   },
   {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "bn": "এই প্রকল্পটি মুছুন "
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "bn": "এই প্রকল্পটি মুছুন (অক্ষম) "
+  },
+  {
     "id": "project_delete_confirm_title",
     "en": "Write the project name you want to delete",
     "bn": "আপনি মুছে ফেলতে চান এমন প্রকল্পের নাম লিখুন "
+  },
+  {
+    "id": "project_delete_view_n_share",
+    "en": "Shared",
+    "bn": "শেয়ারকৃত"
+  },
+  {
+    "id": "project_delete_view_n_external",
+    "en": "External",
+    "bn": "বহিরাগত"
   },
   {
     "id": "project_invite_modal_title",

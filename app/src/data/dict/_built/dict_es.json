@@ -3490,16 +3490,6 @@
     "es": "Guardar el estado de la lista de vistas"
   },
   {
-    "id": "btn_show_project_delete",
-    "en": "Delete this project",
-    "es": "Eliminar este proyecto"
-  },
-  {
-    "id": "btn_show_project_delete_disabled",
-    "en": "Delete this project ( disabled )",
-    "es": "Eliminar este proyecto ( discapacitado )"
-  },
-  {
     "id": "btn_show_role_manager",
     "en": "Define roles",
     "es": "Definir los roles"
@@ -4616,7 +4606,7 @@
   },
   {
     "id": "project",
-    "en": "Projet",
+    "en": "Project",
     "es": "Proyecto"
   },
   {
@@ -4955,6 +4945,11 @@
     "es": "Identificador de la vista"
   },
   {
+    "id": "view_id_short",
+    "en": "View ID",
+    "es": "ID de vista"
+  },
+  {
     "id": "view_new_created",
     "en": "View created",
     "es": "Vista creada"
@@ -5260,9 +5255,29 @@
     "es": "Aceso denegado. No puede acceder al proyecto seleccionado."
   },
   {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "es": "Eliminar este proyecto"
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "es": "Eliminar este proyecto ( discapacitado )"
+  },
+  {
     "id": "project_delete_confirm_title",
     "en": "Write the project name you want to delete",
     "es": "Escriba el título del proyecto que desea eliminar"
+  },
+  {
+    "id": "project_delete_view_n_share",
+    "en": "Shared",
+    "es": "Compartido"
+  },
+  {
+    "id": "project_delete_view_n_external",
+    "en": "External",
+    "es": "Externo"
   },
   {
     "id": "project_invite_modal_title",

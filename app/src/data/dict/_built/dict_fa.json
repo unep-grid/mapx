@@ -3490,16 +3490,6 @@
     "fa": "حالت لیست بازدیدها را ذخیره کنید "
   },
   {
-    "id": "btn_show_project_delete",
-    "en": "Delete this project",
-    "fa": "این پروژه را حذف کنید "
-  },
-  {
-    "id": "btn_show_project_delete_disabled",
-    "en": "Delete this project ( disabled )",
-    "fa": "حذف این پروژه (غیرفعال) "
-  },
-  {
     "id": "btn_show_role_manager",
     "en": "Define roles",
     "fa": "نقش ها را تعریف کنید "
@@ -4616,7 +4606,7 @@
   },
   {
     "id": "project",
-    "en": "Projet",
+    "en": "Project",
     "fa": "پروژه"
   },
   {
@@ -4955,6 +4945,11 @@
     "fa": "نمایش مشخص کننده"
   },
   {
+    "id": "view_id_short",
+    "en": "View ID",
+    "fa": "شناسه نمایش"
+  },
+  {
     "id": "view_new_created",
     "en": "View created",
     "fa": "نمایه ایجاد شد"
@@ -5260,9 +5255,29 @@
     "fa": "دسترسی ممنوع است. شما نمی توانید به پروژه درخواستی دسترسی پیدا کنید "
   },
   {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "fa": "این پروژه را حذف کنید "
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "fa": "حذف این پروژه (غیرفعال) "
+  },
+  {
     "id": "project_delete_confirm_title",
     "en": "Write the project name you want to delete",
     "fa": "نام پروژه ای را که می خواهید حذف کنید بنویسید "
+  },
+  {
+    "id": "project_delete_view_n_share",
+    "en": "Shared",
+    "fa": "اشتراکی"
+  },
+  {
+    "id": "project_delete_view_n_external",
+    "en": "External",
+    "fa": "خارجی"
   },
   {
     "id": "project_invite_modal_title",
