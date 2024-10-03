@@ -1,3 +1,12 @@
+  - [1.13.10-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.10-alpha.3) 
+
+    - Spotlight
+        - Firefox does not support updating the offscreen canvas size, which breaks the spotlight update system. No workaround has been found: using an onscreen canvas for pixel operations with PixOp results in performance issues. Spotlight will remain hidden until a patch is released.
+
+    - Project Deletion
+        - Improved table labels.
+        - Added links to static views and projects.
+
   - [1.13.10-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.10-alpha.2) 
 
     - Views Filter : issue with frequency table fired too early, blocking project loading logic
