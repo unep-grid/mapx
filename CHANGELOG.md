@@ -1,3 +1,12 @@
+  - [1.13.10](https://github.com/unep-grid/mapx/tree/1.13.10) 
+
+    - Project deletion
+        - Last minute requests
+            - Better table UI and translations
+            - Use project title in inks
+            - Added count of story maps using views to be deleted
+            - Various refactor
+
   - [1.13.10-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.10-alpha.3) 
 
     - Spotlight
