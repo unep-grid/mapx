@@ -135,6 +135,18 @@ export function modal(o) {
   if (o.minHeight) {
     elModal.style.minHeight = o.minHeight;
   }
+
+  if (isNotEmpty(o.top) || isNotEmpty(o.left)) {
+    elModal.style.position = "absolute";
+  }
+
+  if (isNotEmpty(o.top)) {
+    elModal.style.top = o.top;
+  }
+  if (isNotEmpty(o.left)) {
+    elModal.style.marginLeft = o.left;
+  }
+
   if (!o.removeCloseButton) {
     elButtonClose = el(
       "button",

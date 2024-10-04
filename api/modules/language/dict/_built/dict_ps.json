@@ -5271,13 +5271,18 @@
   },
   {
     "id": "project_delete_view_n_share",
-    "en": "Shared",
-    "ps": "شریک شوی"
+    "en": "Projects",
+    "ps": "پروژې"
   },
   {
     "id": "project_delete_view_n_external",
-    "en": "External",
-    "ps": "بهرنی"
+    "en": "Externals",
+    "ps": "بهرني"
+  },
+  {
+    "id": "project_delete_view_n_story",
+    "en": "Story Maps",
+    "ps": "د کیسې نقشې"
   },
   {
     "id": "project_invite_modal_title",

@@ -6,13 +6,24 @@
 .mx .table > thead > tr > th {
   width: 1%;
   border-color: var(--mx_ui_border);
+  border: 1px solid var(--mx_ui_border);
 }
 
 .mx .table > tbody > tr:nth-child(odd) {
   background-color: var(--mx_ui_background_accent);
 }
 
-.mx .mx-table-container .table {
+.mx .mx-table-container {
   max-height: 300px;
-  overflow-y: auto;
+  overflow: auto;
+  box-shadow: var(--mx_ui_box_shadow_inset);
+  border-radius: 5px;
+  border: 1px solid var(--mx_ui_border);
+}
+
+.mx .mx-table-container tr:first-of-type {
+  position: sticky;
+  top: 0;
+  background-color: var(--mx_ui_background);
+  z-index: 1; 
 }

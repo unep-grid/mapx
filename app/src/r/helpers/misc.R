@@ -2073,6 +2073,38 @@ mxGetAppUrl <- function(session = shiny::getDefaultReactiveDomain()) {
   return(urlProtocol + "//" + urlHost + urlPort)
 }
 
+
+#' mxLinkApp
+#' @return A character string representing the complete URL, including the protocol, hostname, and query parameters.
+#' @export
+mxGetAppUrlParam <- function(params, static = FALSE) {
+  base_url <- mxGetAppUrl()
+
+  if (isTRUE(static)) {
+    base_url <- base_url + "/static.html"
+  }
+
+
+  # Construct the query string from the params list
+  if (length(params) > 0) {
+    query_string <- paste(
+      sapply(names(params), function(name) {
+        paste0(URLencode(name), "=", URLencode(params[[name]]))
+      }),
+      collapse = "&"
+    )
+    # Append the query string to the base URL
+    full_url <- paste0(base_url, "?", query_string)
+  } else {
+    # If there are no parameters, just return the base URL
+    full_url <- base_url
+  }
+
+  return(full_url)
+}
+
+
+
 #' Get project url
 #'
 #' @param project {Character} id of the project
@@ -2200,60 +2232,4 @@ mxUpdateDefViewVt <- function(
   view <- update()
 
   return(view)
-}
-
-#' mxLinkApp
-#'
-#' @description
-#' Constructs a URL using the session object and a list of query parameters. The URL includes the appropriate protocol (`http` or `https`), hostname, and optionally the port (only for `http`). Query parameters are appended to the URL as a properly formatted query string.
-#'
-#' @usage
-#' mxLinkApp(session, params)
-#'
-#' @param session The Shiny `session` object, which provides information about the current client connection, including the protocol, hostname, and port.
-#' @param params A named list of query parameters to append to the URL. The names of the list elements are used as query parameter keys, and their corresponding values are used as query parameter values.
-#' Each parameter in `params` is URL-encoded to ensure that special characters are handled correctly. The resulting URL is suitable for use as a link in an R Shiny application.
-#'
-#' @return A character string representing the complete URL, including the protocol, hostname, and query parameters.
-#' @export
-mxLinkApp <- function(session, params, static=FALSE) {
-  # Retrieve protocol and host information from the session object
-  protocol <- session$clientData$url_protocol  # "http:" or "https:"
-  hostname <- session$clientData$url_hostname  # The hostname (e.g., "example.com")
-  port <- session$clientData$url_port          # Port number (e.g., "8080" or empty for default)
-
-  # Build the base URL (depending on the protocol)
-  if (protocol == "https:") {
-    # For https, skip the port
-    base_url <- paste0(protocol, "//", hostname)
-  } else {
-    # For http, include the port if it is provided
-    if (port != "") {
-      base_url <- paste0(protocol, "//", hostname, ":", port)
-    } else {
-      base_url <- paste0(protocol, "//", hostname)
-    }
-  }
-
-  if(isTRUE(static)){
-     base_url = base_url + '/static.html'
-  }
-
-
-  # Construct the query string from the params list
-  if (length(params) > 0) {
-    query_string <- paste(
-      sapply(names(params), function(name) {
-        paste0(URLencode(name), "=", URLencode(params[[name]]))
-      }),
-      collapse = "&"
-    )
-    # Append the query string to the base URL
-    full_url <- paste0(base_url, "?", query_string)
-  } else {
-    # If there are no parameters, just return the base URL
-    full_url <- base_url
-  }
-
-  return(full_url)
 }

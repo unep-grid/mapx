@@ -5271,13 +5271,18 @@
   },
   {
     "id": "project_delete_view_n_share",
-    "en": "Shared",
-    "fr": "Partagé"
+    "en": "Projects",
+    "fr": "Projets"
   },
   {
     "id": "project_delete_view_n_external",
-    "en": "External",
-    "fr": "Externe"
+    "en": "Externals",
+    "fr": "Externes"
+  },
+  {
+    "id": "project_delete_view_n_story",
+    "en": "Story Maps",
+    "fr": "Cartes narratives"
   },
   {
     "id": "project_invite_modal_title",

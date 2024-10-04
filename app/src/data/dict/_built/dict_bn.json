@@ -5271,13 +5271,18 @@
   },
   {
     "id": "project_delete_view_n_share",
-    "en": "Shared",
-    "bn": "শেয়ারকৃত"
+    "en": "Projects",
+    "bn": "প্রকল্প"
   },
   {
     "id": "project_delete_view_n_external",
-    "en": "External",
+    "en": "Externals",
     "bn": "বহিরাগত"
+  },
+  {
+    "id": "project_delete_view_n_story",
+    "en": "Story Maps",
+    "bn": "গল্পের মানচিত্র"
   },
   {
     "id": "project_invite_modal_title",

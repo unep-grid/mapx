@@ -129,48 +129,89 @@ observeEvent(input$btnDeleteProject, {
     queryViews <- sprintf(
       "
 WITH
-views_external as (
-  SELECT
-  id, jsonb_array_elements_text(p.views_external) id_view
-  FROM
-  mx_projects p
-  WHERE
-  p.id != '%1$s'
-),
-projects_by_view as (
-  SELECT  id_view,
-  to_jsonb(array_agg(id)) as projects_a
-  FROM
-  views_external
-  GROUP BY
-  id_view
-),
-project_view as (
-  SELECT v.id,
-  v.data #>> '{title,en}' as title,
-  CASE
-   WHEN jsonb_typeof(v.data->'projects') = 'array'
-   THEN data->'projects'
-   WHEN jsonb_typeof(v.data->'projects') = 'string'
-   THEN jsonb_build_array(v.data->'projects')
-   ELSE '[]'::jsonb
-  END as projects_b,
-  COALESCE(p.projects_a,'[]'::jsonb) as projects_a
-  FROM
-  mx_views_latest v
-  LEFT JOIN
-  projects_by_view p
-  on v.id = p.id_view
-  WHERE
-  v.project = '%1$s'
-)
-
+  views_external as (
+    SELECT
+      id,
+      jsonb_array_elements_text(p.views_external) id_view
+    FROM
+      mx_projects p
+    WHERE
+      p.id != '%1$s'
+  ),
+  projects_by_view as (
+    SELECT
+      id_view,
+      to_jsonb(array_agg(id)) as projects_a
+    FROM
+      views_external
+    GROUP BY
+      id_view
+  ),
+  story_views as (
+    SELECT
+      v.id as story_id,
+       jsonb_array_elements(
+      jsonb_array_elements(
+        COALESCE(v.data -> 'story' -> 'steps', '[]'::jsonb)
+      ) -> 'views'
+    ) as story_view
+    FROM
+      mx_views_latest v
+    WHERE
+      v.type = 'sm'
+  ),
+  story_views_clean as (
+    SELECT
+      story_id,
+	  CASE
+	  WHEN
+	  jsonb_typeof(story_view) = 'object' THEN story_view ->> 'view'
+	  ELSE
+	  story_view::text
+	  END as story_view
+    FROM
+      story_views
+  ),
+  project_view as (
+    SELECT
+      v.id,
+      v.data #>> '{title,en}' as title,
+      CASE
+        WHEN jsonb_typeof(v.data -> 'projects') = 'array' THEN data -> 'projects'
+        WHEN jsonb_typeof(v.data -> 'projects') = 'string' THEN jsonb_build_array(v.data -> 'projects')
+        ELSE '[]'::jsonb
+      END as projects_b,
+      COALESCE(p.projects_a, '[]'::jsonb) as projects_a
+    FROM
+      mx_views_latest v
+      LEFT JOIN projects_by_view p ON v.id = p.id_view
+    WHERE
+      v.project = '%1$s'
+  ),
+  view_stories as (
+    SELECT
+      pv.id,
+      COALESCE(jsonb_agg(s.story_id) FILTER (WHERE s.story_id IS NOT NULL), '[]'::jsonb) as stories
+    FROM
+      project_view pv
+    LEFT JOIN
+      story_views_clean s ON s.story_view = pv.id
+    GROUP BY
+      pv.id
+  )
 SELECT
-id, title,
-jsonb_array_length(projects_b) as n_share,
-jsonb_array_length(projects_a) as n_external
+  pv.id,
+  pv.title,
+  jsonb_array_length(pv.projects_b) as n_share,
+  jsonb_array_length(pv.projects_a) as n_external,
+  jsonb_array_length(sv.stories) as n_story
 FROM
-project_view
+  project_view pv
+  LEFT JOIN view_stories sv ON pv.id = sv.id
+  ORDER BY 
+  n_share DESC,
+  n_external DESC,
+  n_story DESC
 ", project
     )
 
@@ -227,7 +268,7 @@ project_view
           !duplicated(tableViewsDep$id)
       tableViewsDep <- tableViewsDep[
         filter,
-        c("id", "title", "project")
+        c("id", "title", "project", "title_project")
       ]
     }
 
@@ -239,7 +280,7 @@ project_view
 
       tableSourcesDep <- tableSourcesDep[
         filter,
-        c("id", "title", "id_project")
+        c("id", "title", "id_project", "title_project")
       ]
     }
 
@@ -272,8 +313,7 @@ project_view
         id <- tableViewsProject[i, "id"]
         title <- tableViewsProject[i, "title"]
 
-        url <- mxLinkApp(
-          session,
+        url <- mxGetAppUrlParam(
           list(views = id, zoomToViews = "true"),
           static = TRUE
         )
@@ -293,8 +333,7 @@ project_view
         id <- tableViewsDep[i, "id"]
         title <- tableViewsDep[i, "title"]
 
-        url <- mxLinkApp(
-          session,
+        url <- mxGetAppUrlParam(
           list(views = id, zoomToViews = "true"),
           static = TRUE
         )
@@ -311,11 +350,10 @@ project_view
     tableViewsDep$project <- lapply(
       seq_along(tableViewsDep$id), function(i) {
         id <- tableViewsDep[i, "project"]
-        title <- tableViewsDep[i, "project"]
+        title <- tableViewsDep[i, "title_project"]
         id_view <- tableViewsDep[i, "id"]
 
-        url <- mxLinkApp(
-          session,
+        url <- mxGetAppUrlParam(
           list(project = id, viewsOpen = id_view),
         )
 
@@ -327,14 +365,14 @@ project_view
         as.character(link)
       }
     )
+    tableViewsDep$title_project <- NULL
 
     tableSourcesDep$id_project <- lapply(
       seq_along(tableSourcesDep$id), function(i) {
         id <- tableSourcesDep[i, "id_project"]
-        title <- tableSourcesDep[i, "id_project"]
+        title <- tableSourcesDep[i, "title_project"]
 
-        url <- mxLinkApp(
-          session,
+        url <- mxGetAppUrlParam(
           list(project = id),
         )
 
@@ -346,13 +384,15 @@ project_view
         as.character(link)
       }
     )
+    tableSourcesDep$title_project <- NULL
 
 
     names(tableViewsProject) <- c(
       dd("view_id_short"),
       dd("view_title"),
       dd("project_delete_view_n_share"),
-      dd("project_delete_view_n_external")
+      dd("project_delete_view_n_external"),
+      dd("project_delete_view_n_story")
     )
 
     names(tableSourcesProject) <- c(
@@ -412,7 +452,9 @@ project_view
     mxModal(
       id = "deleteProject",
       title = modalTitle,
-      minWidth = "80%",
+      minWidth = "100%",
+      top = "0px",
+      left = "0px",
       content = ui,
       textCloseButton = dd("btn_cancel", language),
       buttons = list(btnDelete)

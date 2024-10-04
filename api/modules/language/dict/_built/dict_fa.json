@@ -5271,13 +5271,18 @@
   },
   {
     "id": "project_delete_view_n_share",
-    "en": "Shared",
-    "fa": "اشتراکی"
+    "en": "Projects",
+    "fa": "پروژه‌ها"
   },
   {
     "id": "project_delete_view_n_external",
-    "en": "External",
-    "fa": "خارجی"
+    "en": "Externals",
+    "fa": "خارجی‌ها"
+  },
+  {
+    "id": "project_delete_view_n_story",
+    "en": "Story Maps",
+    "fa": "نقشه‌های داستانی"
   },
   {
     "id": "project_invite_modal_title",
