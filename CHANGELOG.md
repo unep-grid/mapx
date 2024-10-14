@@ -1,3 +1,16 @@
+  - [1.13.11-beta.1](https://github.com/unep-grid/mapx/tree/1.13.11-beta.1) 
+
+    - Pixop 
+        - Fixed #1014 : no pixop in toolbox in static mode
+    - Story Maps 
+        - Editor
+            - Fix revent injecting 'string' value in the client editor instead of 'array' when the schema specify 'array' preventing false JSON diff (jsonlite vector/list issue) #1017
+            - Fix not switching back to english after using other language than english and re-open the editor in english #1018
+            - Fix views not being found #1013
+            - Fix events issue in story map editor #1016
+    - Project deletion 
+       - Fix case when views are stored as string in story maps (r jsonlite glitch : a solution is possible upstream, but impacts all R vector operations, e.g. using simplifyVector gives list instead of character vector, which is what we want in DB but not in R. )
+
   - [1.13.10](https://github.com/unep-grid/mapx/tree/1.13.10) 
 
     - Project deletion
