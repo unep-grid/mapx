@@ -3,7 +3,8 @@ import {
   getLanguageCurrent,
   updateLanguageElements,
 } from "./../language";
-import { isEmpty, isFunction, isObject } from "./../is_test_mapx";
+import { isArray, isEmpty, isFunction, isNotEmpty, isObject } from "./../is_test_mapx";
+
 import { el } from "../el/src/index.js";
 import {
   clone,
@@ -40,12 +41,15 @@ window.jed = jed;
  * @param {Object} o.options JSONEditor options
  */
 export async function jedInit(o) {
+
   const dict = await getDictJsonEditorDict();
   const { JSONEditor } = await moduleLoad("json-editor");
   const id = o.id;
   const schema = o.schema;
-  const startVal = o.startVal;
+  const startValOrig = o.startVal;
   const options = o.options;
+
+  const startVal = jsonSchemaArrayFixer(startValOrig, schema);
 
   if (dict) {
     JSONEditor.defaults.languages = dict;
@@ -94,7 +98,6 @@ export async function jedInit(o) {
     draftDbTimeStamp = opt_final.draftAutoSaveDbTimestamp;
   }
 
-  
   /**
    * Remove old editor if already exists
    */
@@ -109,8 +112,6 @@ export async function jedInit(o) {
   const editor = new JSONEditor(elJed, opt_final);
   jed.editors[id] = editor;
 
-  
-
   /**
    * Translate not available in custom validator (not binded)..
    * we set one globaly here in jed object. Used in e.g. ./validation.js
@@ -124,9 +125,6 @@ export async function jedInit(o) {
    */
   editor.on("ready", async function () {
     const hasShiny = isShinyReady();
-
-
-
 
     /**
      * Auto save draft
@@ -555,4 +553,38 @@ async function jedHooksApply(value, hooks) {
   } catch (e) {
     console.warn(e);
   }
+}
+
+function jsonSchemaArrayFixer(data, schema) {
+  if (!isObject(data) || data === null) {
+    if (schema && schema.type === "array") {
+      return [data];
+    }
+    return data;
+  }
+
+  if (isArray(data)) {
+    return data.map((item) => jsonSchemaArrayFixer(item, schema.items));
+  }
+
+  const result = {};
+  for (const [key, value] of Object.entries(data)) {
+    const propertySchema = schema.properties[key];
+
+    if (propertySchema && propertySchema.type === "array") {
+      if (isArray(value)) {
+        result[key] = value.map((item) =>
+          jsonSchemaArrayFixer(item, propertySchema.items),
+        );
+      } else {
+        result[key] = [jsonSchemaArrayFixer(value, propertySchema.items)];
+      }
+    } else if (isNotEmpty(propertySchema) && isObject(value)) {
+      result[key] = jsonSchemaArrayFixer(value, propertySchema);
+    } else {
+      result[key] = value;
+    }
+  }
+
+  return result;
 }
