@@ -4,7 +4,6 @@ import { getViewAuto } from "../../map_helpers";
 import { fetchViews } from "../../map_helpers/views_fetch";
 import { miniCacheGet, miniCacheSet } from "../../minicache";
 import { nc } from "../../mx";
-import { path } from "../../mx_helper_misc";
 import { settings } from "../../settings";
 import { _get_config } from "./utils";
 
@@ -66,7 +65,9 @@ function renderItem(view, escape) {
 
   return el(
     "div",
-    // remove button will be added here
+    /*
+     * remove button will be added here
+     */
     el(
       "div",
       {
@@ -144,10 +145,15 @@ async function create(id, callback) {
   callback(null);
 }
 
-async function load(query, callback) {
+async function load(_, callback) {
   try {
     const config = this.settings.loader_config;
-    const cacheKey = generateCacheKey(settings.user.id, settings.project.id);
+    const cacheKey = generateCacheKey(
+      settings.user.id,
+      settings.project.id,
+      settings.language,
+    );
+
     const noPendingPromise = !localCache.viewsPromiseCache[cacheKey];
     if (noPendingPromise) {
       localCache.viewsPromiseCache[cacheKey] = fetchViewsFromCacheOrRemote(
@@ -156,8 +162,7 @@ async function load(query, callback) {
       ).finally(() => delete localCache.viewsPromiseCache[cacheKey]);
     }
     const views = await localCache.viewsPromiseCache[cacheKey];
-    const viewsFiltered = filterViews(query, views, def.maxOptions);
-    callback(viewsFiltered);
+    callback(views);
   } catch (error) {
     console.error("Error loading views:", error);
     callback([]);
@@ -172,39 +177,25 @@ async function fetchViewsFromCacheOrRemote(
   if (isArrayOfViews(cachedViews)) {
     return cachedViews;
   }
-  return fetchAndCacheViews(types, includeAllPublic, cacheKey);
+  return fetchAndCacheViews(
+    types,
+    includeAllPublic,
+    cacheKey,
+    settings.language,
+  );
 }
 
-async function fetchAndCacheViews(types, includeAllPublic, cacheKey) {
-  const { views } = await fetchViews({ types, includeAllPublic });
+async function fetchAndCacheViews(
+  types,
+  includeAllPublic,
+  cacheKey,
+  language = "en",
+) {
+  const { views } = await fetchViews({ types, includeAllPublic, language });
   await miniCacheSet(cacheKey, views, { ttl: def.cacheTtl });
   return views;
 }
 
-function generateCacheKey(userId, projectId) {
-  return `ts_views_${projectId}_${userId}`;
-}
-
-function filterViews(str, views, maxOptions) {
-  if (isEmpty(str)) {
-    return [];
-  }
-  const strSplit = str.split(" ");
-  const regex = new RegExp(`${strSplit.join("|")}`, "i");
-  const keys = def.selectKeys;
-  const empty = isEmpty(str);
-
-  return views.filter((view) => {
-    if (maxOptions < 1) {
-      return false;
-    }
-    for (const k of keys) {
-      const found = empty || path(view, k, "")?.match(regex);
-      if (found) {
-        maxOptions--;
-        return true;
-      }
-    }
-    return false;
-  });
+function generateCacheKey(userId, projectId, language) {
+  return `ts_views_${projectId}_${userId}_${language}`;
 }
