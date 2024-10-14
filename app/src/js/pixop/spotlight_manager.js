@@ -86,7 +86,7 @@ export class SpotlightManager {
 
     this._elToolboxContainer = document.getElementById(idToolboxContainer);
 
-    if (isFirefox()) {
+    if (isFirefox() && this._elToolboxContainer) {
       this._elToolboxContainer.style.display = "none";
       return;
     }
