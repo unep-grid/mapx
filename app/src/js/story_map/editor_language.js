@@ -38,6 +38,6 @@ export async function updateEditorLanguage() {
   }
   if (langData) {
     ContentEdit.addTranslations(language, langData);
-    ContentEdit.LANGUAGE = language;
   }
+  ContentEdit.LANGUAGE = language;
 }
