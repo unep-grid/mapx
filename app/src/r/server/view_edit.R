@@ -1133,8 +1133,6 @@ observeEvent(input$btnViewSave, {
     view[["date_modified"]] <- time
     reactData$viewDataEdited$date_modified <- time
 
-
-
     #
     # save a version in db
     #

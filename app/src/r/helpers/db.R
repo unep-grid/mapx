@@ -884,9 +884,13 @@ mxDbTimeStampFormater <- function(ts) {
 #' @param {Character}
 mxDbAddRow <- function(data, table) {
   tExists <- mxDbExistsTable(table)
-  if (!tExists) stop(sprintf("mxDbAddRow : table %s does not exists", table))
+  if (!tExists){
+    stop(sprintf("mxDbAddRow : table %s does not exists", table))
+  }
 
-  if (!is.list(data)) data <- as.list(data)
+  if (!is.list(data)){
+    data <- as.list(data)
+  }
 
   data <- data[!names(data) == "pid"]
   tClass <- sapply(data, class)
@@ -899,6 +903,12 @@ mxDbAddRow <- function(data, table) {
   # Subset only existing
   data <- data[tName %in% rName]
   fName <- names(data)
+
+  #
+  # ⚠️   Probably better to use mxDbGetColumnsTypes(table)
+  #   - use db type to ensure correct type matching
+  #   - avoid guessing
+  #   - postgres as more complex types : probably will lead to missmatch
 
   dataProc <- lapply(data, function(x) {
     if (length(x) > 1) {
@@ -927,7 +937,6 @@ mxDbAddRow <- function(data, table) {
       sprintf("'%1$s'", x)
     )
   })
-
 
   q <- sprintf(
     "INSERT INTO %1$s (%2$s) VALUES (%3$s)",

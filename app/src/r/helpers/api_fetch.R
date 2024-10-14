@@ -59,6 +59,15 @@ mxApiFetch <- function(route, listParam = NULL, asDataFrame = FALSE, debug = FAL
       return(data)
     }
 
+    #
+    # ⚠️   default is `simplifyVector=TRUE` : 
+    #     - arrays will be converted as vector. 
+    #     - ["a"] in DB -> character("a") in R -> "a" in DB after save 
+    #       with auto_unbox=TRUE 
+    #    If simplifyVector=FALSE : 
+    #     - ["a"] in DB -> list("a") in R -> "a" in DB 
+    #     - but then ALL vector operations in R are no more possible. 
+    # 
     data <- fromJSON(strData, simplifyDataFrame = asDataFrame)
 
 
