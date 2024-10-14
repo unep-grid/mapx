@@ -47,6 +47,10 @@ const defaults = {
 export async function initEditing(state) {
   const ContentTools = await loadContentTools();
 
+  if (state.ct_editor_remove) {
+    state.ct_editor_remove();
+  }
+
   state.ct_editor = ContentTools.EditorApp.get();
 
   /**
