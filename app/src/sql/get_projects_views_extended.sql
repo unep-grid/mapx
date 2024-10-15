@@ -50,7 +50,8 @@ WITH
 	  WHEN
 	  jsonb_typeof(story_view) = 'object' THEN story_view ->> 'view'
 	  ELSE
-	  story_view::text
+	  -- story_view::text
+          story_view ->> 0
 	  END as story_view
     FROM
       story_views_clean_array
