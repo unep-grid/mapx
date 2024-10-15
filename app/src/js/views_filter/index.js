@@ -122,6 +122,10 @@ class ViewsFilter {
    */
   destroy() {
     const vf = this;
+    if (vf._destroyed) {
+      return;
+    }
+    vf._destroyed = true;
     vf.clear();
     vf._lStore.destroy();
     vf.switchMode.destroy();
