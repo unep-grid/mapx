@@ -1,3 +1,10 @@
+  - [1.13.11-beta.4](https://github.com/unep-grid/mapx/tree/1.13.11-beta.4) 
+
+    - Project deletion
+        - Second part of #994
+    - Maintenance
+        - New class/helper to set views filter state and update views list state 
+
   - [1.13.11-beta.3](https://github.com/unep-grid/mapx/tree/1.13.11-beta.3) 
     
     - Project deletion
