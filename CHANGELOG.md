@@ -1,3 +1,12 @@
+  - [1.13.11-beta.2](https://github.com/unep-grid/mapx/tree/1.13.11-beta.2) 
+
+    - Project deletion 
+        - Hide empty tables to avoid bug with column translation
+    - Views Filter 
+        - Prevent destroy event to be applied twice #1024
+    - Error handler 
+        - Email sender in app: activate message encryption,as unencrypted version caused issues in api 
+
   - [1.13.11-beta.1](https://github.com/unep-grid/mapx/tree/1.13.11-beta.1) 
 
     - Pixop 
