@@ -109,7 +109,7 @@ export class UserProjectsListRenderer {
         }
       },
       load_project: async () => {
-        const done = await setProject(ds.load_project);
+        const done = await setProject(ds.load_project, {}, "project_list");
         if (done) {
           this.detach();
         }

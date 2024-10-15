@@ -149,6 +149,8 @@ import { viewFiltersInit } from "./view_filters.js";
 import { fetchViews } from "./views_fetch.js";
 import { ButtonPanelLegend } from "../panel_legend/index.js";
 import { createViewControls } from "../views_builder/view_controls.js";
+import { ButtonFilter } from "../button_filter/index.js";
+import { ViewsUpdateHelper } from "../views_list_update/index.js";
 export * from "./view_filters.js";
 
 /**
@@ -161,6 +163,7 @@ export * from "./view_filters.js";
 const mx_local = {
   views_active: new Set(),
   panel_main: null,
+  button_filter: null,
   draw: null,
   search: null,
 };
@@ -511,8 +514,10 @@ export function triggerUpdateSourcesList() {
  * @param {Function} opt.onSuccess : Optional callback if project is changed
  * @return null
  */
-export async function setProject(idProject, opt) {
+export async function setProject(idProject, opt, origin) {
   const hasShiny = isShinyReady();
+
+  console.log("set project. Origin", origin);
   if (!hasShiny) {
     console.log("Project change requires a valid app session");
     return;
@@ -617,7 +622,7 @@ export async function setProject(idProject, opt) {
  * @param {String} opt.idProject id of the project
  */
 export function updateProject(opt) {
-  return setProject(opt.idProject, opt);
+  return setProject(opt.idProject, opt, "updateProject");
 }
 
 /**
@@ -668,7 +673,7 @@ export function initListenerGlobal() {
       if (!state) {
         return;
       }
-      await setProject(state.project);
+      await setProject(state.project, "popstate");
     },
   });
 
@@ -816,16 +821,8 @@ export function initListenersApp() {
   events.on({
     type: "project_changed",
     idGroup: "project_change",
-    callback: async () => {
-      const clActive = "active";
-      const clHide = "mx-hide";
-      const elBtn = document.getElementById("btnFilterShowPanel");
-      const isActive = elBtn.classList.contains(clActive);
-      const elPanel = document.getElementById("viewsFilterPanel");
-      if (isActive) {
-        elPanel.classList.add(clHide);
-        elBtn.classList.remove(clActive);
-      }
+    callback: () => {
+      mx_local.button_filter.close();
     },
   });
 
@@ -877,26 +874,6 @@ export function initListenersApp() {
     type: "click",
     callback: () => {
       panels.resetSizeAll();
-    },
-    group: "mapx_base",
-  });
-
-  listeners.addListener({
-    target: document.getElementById("btnFilterShowPanel"),
-    type: "click",
-    callback: (e) => {
-      let elBtn = e.target;
-      let clHide = "mx-hide";
-      let clActive = "active";
-      let elPanel = document.getElementById("viewsFilterPanel");
-      let isHidden = elPanel.classList.contains(clHide);
-      if (isHidden) {
-        elPanel.classList.remove(clHide);
-        elBtn.classList.add(clActive);
-      } else {
-        elPanel.classList.add(clHide);
-        elBtn.classList.remove(clActive);
-      }
     },
     group: "mapx_base",
   });
@@ -1242,6 +1219,14 @@ export async function initMapx(o) {
     if (!settings.initClosedPanels) {
       panels.get("main_panel").open();
     }
+
+    /**
+     * Init button filter
+     */
+    mx_local.button_filter = new ButtonFilter({
+      idBtn: "btnFilterShowPanel",
+      idPanel: "viewsFilterPanel",
+    });
 
     /**
      * Panels (static  handled later)
@@ -2141,207 +2126,9 @@ export async function getViewsRemote(idViews) {
  * @param {Boolean} opt.useQueryFilters In fetch all mode, use query filters
  */
 export async function updateViewsList(opt) {
-  const views = [];
-  let elProgContainer;
-  let nCache = 0,
-    nNetwork = 0,
-    nTot = 0,
-    prog;
-
-  const progressColor = theme.getColorThemeItem("mx_ui_link");
-  /*
-   * See default used:
-   * - app/src/r/server/view_update_client.R
-   * - app/src/r/helpers/binding_mgl.R
-   */
-  const def = {
-    id: "map_main",
-    project: path(mx, "settings.project.id"),
-    viewsList: [],
-    render: false,
-    resetViews: false,
-    useQueryFilters: true,
-  };
-  updateIfEmpty(opt, def);
-  const viewsToAdd = opt.viewsList;
-  const hasViewsList = isArrayOfViews(viewsToAdd) && isNotEmpty(viewsToAdd);
-
-  if (hasViewsList) {
-    nTot = viewsToAdd.length;
-  }
-
-  /**
-   * Set fetch mode
-   */
-  if (hasViewsList) {
-    /* Views are given, add them */
-    views.push(viewsToAdd);
-    await addLocal(viewsToAdd);
-  } else {
-    /* Views should be fetched */
-    views.push(...(await addAsyncAll()));
-  }
-
-  /**
-   * Remove progress if it has been instanciated. See :
-   *  - updateProgress
-   */
-  if (prog instanceof RadialProgress) {
-    prog.destroy();
-  }
-
+  const vu = new ViewsUpdateHelper();
+  const views = vu.updateViewsList(opt);
   return views;
-
-  /**
-   * Helpers
-   */
-
-  /* Add all view from automatic fetch. */
-  async function addAsyncAll() {
-    const views = [];
-    const state = [];
-    /**
-     * Local GeoJSON views
-     */
-    const viewsGeoJSON = await getGeoJSONViewsFromStorage({
-      project: opt.project,
-    });
-    views.push(...viewsGeoJSON);
-
-    /**
-     * Remote views
-     */
-    const data = await fetchViews({
-      onProgress: updateProgress,
-      idProject: opt.project,
-      useQueryFilters: opt.useQueryFilters,
-    });
-    views.push(...data.views);
-    state.push(
-      ...data.states.reduce((a, s) => {
-        if (s.id === "default") {
-          return s.state;
-        } else {
-          return a;
-        }
-      }, state),
-    );
-
-    /**
-     * Render
-     */
-    await viewsListRenderNew({
-      id: opt.id,
-      views: views,
-      state: state,
-    });
-
-    /**
-     * Add additional logic if query param should be used
-     */
-    if (opt.useQueryFilters) {
-      const conf = getQueryInit();
-      const viewsList = getViewsList();
-
-      /**
-       * Set flat mode (hide categories)
-       */
-      if (conf.isFlatMode) {
-        viewsList.setModeFlat(true, { permanent: true });
-      }
-      const idViewsOpen = conf.idViewsOpen;
-      const isFilterActivated = conf.isFilterActivated;
-
-      /**
-       * Move view to open to the top
-       */
-      if (isNotEmpty(idViewsOpen)) {
-        const idViewsOpenInv = idViewsOpen.reverse();
-        viewsList.setModeAnimate(false);
-        for (const id of idViewsOpenInv) {
-          viewsList.moveTargetTop(id);
-        }
-        viewsList.setModeAnimate(true);
-      }
-
-      /**
-       * Add views views
-       */
-      for (const id of idViewsOpen) {
-        await viewAdd(id);
-      }
-
-      /**
-       * If any view requested to be open, filter activated
-       */
-      if (isFilterActivated && idViewsOpen.length > 0) {
-        const viewsFilter = getViewsFilter();
-        viewsFilter.filterActivated(true);
-      }
-
-      /**
-       * Update layers order
-       */
-      layersOrderAuto("update_views_list");
-    }
-
-    events.fire({
-      type: "views_list_updated",
-    });
-
-    return views;
-  }
-
-  /* Add single view object, typically after an update */
-  async function addLocal(view) {
-    if (isArrayOfViews(view)) {
-      view = view[0];
-    }
-    await viewsListAddSingle(view, {
-      open: true,
-      render: true,
-    });
-    events.fire({
-      type: "views_list_updated",
-    });
-    events.fire({
-      type: "view_created",
-    });
-    return view;
-  }
-
-  /* Update progress */
-  function updateProgress(d) {
-    d = d || {
-      loaded: nCache + nNetwork,
-      total: nTot,
-    };
-
-    /**
-     * Init
-     */
-
-    if (!elProgContainer) {
-      elProgContainer = document.querySelector(".mx-views-list");
-    }
-
-    if (!prog && elProgContainer) {
-      elProgContainer.replaceChildren();
-      prog = new RadialProgress(elProgContainer, {
-        radius: 30,
-        stroke: 4,
-        strokeColor: progressColor,
-      });
-    }
-
-    /**
-     * Update
-     */
-
-    if (prog instanceof RadialProgress && prog.update && elProgContainer) {
-      prog.update((d.loaded / d.total) * 100);
-    }
-  }
 }
 
 /**

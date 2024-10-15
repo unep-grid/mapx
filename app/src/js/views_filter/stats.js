@@ -11,7 +11,7 @@ export function getFreqTable(views) {
   const stats = {};
   for (const item of data) {
     if (isEmpty(item)) {
-      return;
+      continue;
     }
     for (const [key, value] of Object.entries(item)) {
       if (!stats[key]) {
