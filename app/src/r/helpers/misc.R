@@ -990,7 +990,7 @@ mxCatchHandler <- function(type = "error", cond = NULL, session = shiny::getDefa
                   style = "color:red",
                   message
                 ),
-                mxTableToHtml(sysStack[[1]])
+                mxTableToHtml(sysStack)
               )
             )
           )
@@ -1025,7 +1025,7 @@ mxCatchHandler <- function(type = "error", cond = NULL, session = shiny::getDefa
       content = content,
       useNotify = FALSE,
       # If the DB is down, encryption is down
-      encrypt = FALSE
+      #encrypt = FALSE
     )
   })
 }
@@ -1099,6 +1099,7 @@ mxCatch <- function(
       captureStackTraces(eval(expression))
     },
     error = function(e) {
+      
       mxCatchHandler(
         type = "error",
         cond = e
