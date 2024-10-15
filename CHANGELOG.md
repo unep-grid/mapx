@@ -1,3 +1,8 @@
+  - [1.13.11-beta.3](https://github.com/unep-grid/mapx/tree/1.13.11-beta.3) 
+    
+    - Project deletion
+        - Solve issue in dockerignore preventing file to be loaded in built image
+
   - [1.13.11-beta.2](https://github.com/unep-grid/mapx/tree/1.13.11-beta.2) 
 
     - Project deletion 
