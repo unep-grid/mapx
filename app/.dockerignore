@@ -5,6 +5,7 @@
 # Don't ignore that
 !settings/**
 !src/r/**
+!src/sql/**
 !src/js/settings/**
 !src/data/**
 !src/templates/**
