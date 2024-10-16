@@ -29,30 +29,29 @@ WITH
       v.type = 'sm'
   ),
   story_views_clean_array AS (
+    /**
+     * string/array issue, see 1) in known_bugs.txt
+     */
     SELECT
       story_id,
-       jsonb_array_elements(
-      CASE
-        WHEN jsonb_typeof(story_view) = 'string' THEN 
-          jsonb_build_array(story_view)
-        WHEN jsonb_typeof(story_view) = 'array' THEN
-          story_view
-        ELSE
-          '[]'::jsonb
-      END ) AS story_view
+      jsonb_array_elements(
+        CASE
+          WHEN jsonb_typeof(story_view) = 'string' THEN jsonb_build_array(story_view)
+          WHEN jsonb_typeof(story_view) = 'array' THEN story_view
+          ELSE '[]'::jsonb
+        END
+      ) AS story_view
     FROM
       story_views
   ),
   story_views_clean as (
     SELECT
       story_id,
-	  CASE
-	  WHEN
-	  jsonb_typeof(story_view) = 'object' THEN story_view ->> 'view'
-	  ELSE
-	  -- story_view::text
-          story_view ->> 0
-	  END as story_view
+      CASE
+        WHEN jsonb_typeof(story_view) = 'object' THEN story_view ->> 'view'
+        -- select value at {} path: e.g. the  'x' string in '"x"' jsonb value
+        ELSE story_view #>> '{}'
+      END as story_view
     FROM
       story_views_clean_array
   ),
@@ -75,11 +74,16 @@ WITH
   view_stories as (
     SELECT
       pv.id,
-      COALESCE(jsonb_agg(s.story_id) FILTER (WHERE s.story_id IS NOT NULL), '[]'::jsonb) as stories
+      COALESCE(
+        jsonb_agg(s.story_id) FILTER (
+          WHERE
+            s.story_id IS NOT NULL
+        ),
+        '[]'::jsonb
+      ) as stories
     FROM
       project_view pv
-    LEFT JOIN
-      story_views_clean s ON s.story_view = pv.id
+      LEFT JOIN story_views_clean s ON s.story_view = pv.id
     GROUP BY
       pv.id
   )
@@ -92,7 +96,7 @@ SELECT
 FROM
   project_view pv
   LEFT JOIN view_stories sv ON pv.id = sv.id
-  ORDER BY 
+ORDER BY
   n_share DESC,
   n_external DESC,
   n_story DESC

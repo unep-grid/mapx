@@ -244,6 +244,7 @@ WITH
       p.projects_description_multilingual,
       /**
        * R jsonlite bug : list of one converted to 'string'
+       * more info in known_bugs.txt 
        */
       CASE jsonb_typeof(m.meta #> '{text, keywords, keys}')
         WHEN 'array' THEN m.meta #> '{text, keywords, keys}'
