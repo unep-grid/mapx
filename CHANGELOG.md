@@ -1,3 +1,8 @@
+  - [1.13.11-beta.5](https://github.com/unep-grid/mapx/tree/1.13.11-beta.5) 
+
+  - Project deletion
+        - Second part of #994 : after some research, revised method to select jsonb text 
+
   - [1.13.11-beta.4](https://github.com/unep-grid/mapx/tree/1.13.11-beta.4) 
 
     - Project deletion
