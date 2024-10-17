@@ -8,6 +8,7 @@ import {
   getViewsFilter,
   getViewsList,
   layersOrderAuto,
+  viewAdd,
 } from "../map_helpers";
 import { fetchViews } from "../map_helpers/views_fetch";
 import { viewsListAddSingle, viewsListRenderNew } from "../views_list_manager";
