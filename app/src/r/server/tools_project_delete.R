@@ -355,7 +355,7 @@ observeEvent(input$btnDeleteProject, {
         tags$li(
           tags$b(dd("project_delete_table_views_dep", language)),
           ":",
-          if (hasSourcesDep) mxTableToHtml(tableViewsDep)
+          if (hasViewsDep) mxTableToHtml(tableViewsDep)
         ),
 
         # For Sources Dependencies
