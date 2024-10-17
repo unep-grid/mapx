@@ -1,3 +1,7 @@
+  - [1.13.11-beta.8](https://github.com/unep-grid/mapx/tree/1.13.11-beta.8) 
+
+    - Delete project : typo preventing dependents views to be displayed
+
   - [1.13.11-beta.6](https://github.com/unep-grid/mapx/tree/1.13.11-beta.6) 
     
     - Views added/open during initial rendering : missing import in class
