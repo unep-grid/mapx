@@ -1,3 +1,7 @@
+  - [1.13.11-beta.6](https://github.com/unep-grid/mapx/tree/1.13.11-beta.6) 
+    
+    - Views added/open during initial rendering : missing import in class
+
   - [1.13.11-beta.5](https://github.com/unep-grid/mapx/tree/1.13.11-beta.5) 
 
   - Project deletion
