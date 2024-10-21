@@ -1,3 +1,8 @@
+  - [1.13.11-beta.9](https://github.com/unep-grid/mapx/tree/1.13.11-beta.9) 
+
+    - Table Editor 
+        - Should fix socket session not available when sockets are from different api instance
+
   - [1.13.11-beta.8](https://github.com/unep-grid/mapx/tree/1.13.11-beta.8) 
 
     - Delete project : typo preventing dependents views to be displayed
