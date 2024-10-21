@@ -270,6 +270,10 @@ class EditTableSession {
     const sockets = await et._io.in(et._id_room).fetchSockets();
     const members = [];
     for (const s of sockets) {
+      if (!s.session) {
+        // case when socket is remote, session could have been removed
+        s.session = s.data;
+      }
       const member = {
         id: s.session.user_id,
         email: s.session.user_email,

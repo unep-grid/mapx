@@ -38,6 +38,8 @@ export async function ioMwAuthenticate(socket, next) {
       project_id: idProject,
       origin: origin,
     };
+    // Populate socket data, for remote session object, e.g. multi user table editor
+    Object.assign(socket.data, socket.session);
 
     // Proceed to the next middleware or handler
     next();
