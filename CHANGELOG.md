@@ -1,3 +1,7 @@
+  - [1.13.11](https://github.com/unep-grid/mapx/tree/1.13.11) 
+
+    - Removed 'share to project' when the view is temporary, as this feature is only available for project local views. Could be migrated to API. 
+
   - [1.13.11-beta.9](https://github.com/unep-grid/mapx/tree/1.13.11-beta.9) 
 
     - Table Editor 
