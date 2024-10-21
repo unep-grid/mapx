@@ -472,7 +472,7 @@ export async function createViewControls(view) {
       ),
     );
 
-  if (isRegistered && (isSm || isVt || isRt || isCc)) {
+  if (isRegistered && !isTemp && (isSm || isVt || isRt || isCc)) {
     controlItems.push(
       el(
         "li",
