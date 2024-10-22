@@ -1,7 +1,5 @@
 import { el, elButtonFa } from "../el_mapx";
-import { moduleLoad } from "../modules_loader_async";
 import { settings } from "../settings";
-import "./style.less";
 import { mapboxgl } from "../mx";
 import { getMap } from "../map_helpers";
 import { modal } from "../mx_helper_modal";
@@ -12,7 +10,9 @@ const def_conf = {
   elTarget: null,
   idTarget: null,
   map: null,
-  throttle: 100,
+  proximity: false,
+  reverse: false,
+  onLocationSelect: null,
 };
 
 export class GeocoderModal {
@@ -61,101 +61,300 @@ export class Geocoder {
     }
     this._map = this.config.map;
     this._lastKnownLocation = null;
+    this._results = [];
 
     this.initUI();
-    await this.initTomSelect();
   }
 
-  // Initialize the UI
   initUI() {
-    // Create input group: [Tom Select dropdown][Zoom Button][Reset Button]
-    this._elSearch = el("input", {
+    this._elTarget.classList.add("gcm_container");
+    // Create search container
+    this._elSearchContainer = el("div", { class: "panel panel-default" });
+
+    // Create panel body for search
+    const panelBody = el("div", { class: "panel-body" });
+
+    // Create input group
+    const inputGroup = el("div", { class: "input-group" });
+
+    this._elInput = el("input", {
       type: "text",
+      class: "form-control",
       placeholder: "Type a place name...",
+      on: [
+        "keypress",
+        (e) => {
+          if (e.key === "Enter") {
+            this.performSearch();
+          }
+        },
+      ],
     });
-    this._elButtonZoom = elButtonFa("gc_btn_zoom", {
-      icon: "search-plus",
+
+    const inputGroupBtn = el("span", { class: "input-group-btn" });
+
+    this._elSearchBtn = elButtonFa("ngc_btn_search", {
+      icon: "search",
       mode: "icon",
-      action: () => {
-        this.zoomToLocation();
-      },
+      class: "btn btn-primary",
+      action: () => this.performSearch(),
     });
-    this._elButtonReset = elButtonFa("gc_btn_reset", {
+
+    inputGroupBtn.appendChild(this._elSearchBtn);
+    inputGroup.appendChild(this._elInput);
+    inputGroup.appendChild(inputGroupBtn);
+    panelBody.appendChild(inputGroup);
+
+    // Create results container
+    this._elResultsList = el("div", { class: "list-group" });
+
+    // Create reset button container
+    const resetContainer = el("div", { class: "panel-footer text-right" });
+
+    this._elButtonReset = elButtonFa("ngc_btn_reset", {
       icon: "undo",
       mode: "icon",
-      action: () => {
-        this.resetToLastKnownLocation();
-      },
+      class: "btn btn-default",
+      action: () => this.resetToLastKnownLocation(),
     });
+    this._elButtonReset.disabled = true;
 
-    this._elTarget.classList.add("gc_container");
+    resetContainer.appendChild(this._elButtonReset);
 
-    // Append elements to the container
-    this._elTarget.appendChild(this._elSearch);
-    this._elTarget.appendChild(this._elButtonZoom);
-    this._elTarget.appendChild(this._elButtonReset);
+    // Assemble the components
+    this._elSearchContainer.appendChild(panelBody);
+    this._elSearchContainer.appendChild(this._elResultsList);
+    this._elSearchContainer.appendChild(resetContainer);
+
+    this._elTarget.appendChild(this._elSearchContainer);
   }
 
   destroy() {
-    if (this._ts) {
-      this._ts.destroy();
-      delete this._ts;
+    if (this._abord_ctrl) {
+      this._abord_ctrl.abort();
     }
     if (this._marker) {
-      this._marker.remove();
       delete this._marker;
+      this._marker.remove();
     }
   }
 
-  async initTomSelect() {
-    const TomSelect = await moduleLoad("tom-select");
-    const gc = this;
-    this.enableZoom(false);
-    gc._ts = new TomSelect(this._elSearch, {
-      create: false,
-      closeAfterSelect: true,
-      maxItems: 1,
-      valueField: "display_name",
-      labelField: "display_name",
-      searchField: "display_name",
-      dropdownParent: "body",
-      onDropdownClose: () => {
-        gc._ts.blur();
-      },
-      load: async (query, callback) => {
-        if (!query.length) {
-          return callback();
-        }
+  async performSearch() {
+    const query = this._elInput.value.trim();
 
-        try {
-          const results = await this.fetchLocations(query);
-          callback(results);
-        } catch (error) {
-          console.warn(error);
-          callback();
-        }
-      },
-      render: {},
-      loadThrottle: this.config.throttle,
-      onChange: (value) => {
-        if (!value) {
-          this._newLocation = null;
-          this.enableZoom(false);
-          return;
-        }
-        const { feature } = gc._ts.options[value];
-        const { coordinates } = feature?.geometry;
+    if (!query) {
+      this._elResultsList.innerHTML = "";
+      this.setResetButtonState(false);
+      return;
+    }
 
-        this._lastKnownLocation = this._map.getCenter();
-        this._newLocation = { lng: coordinates[0], lat: coordinates[1] };
-        this.enableZoom(true);
-      },
+    // Abort previous request if exists
+    if (this._abord_ctrl) {
+      this._abord_ctrl.abort("new query");
+    }
+
+    this.showLoading();
+
+    try {
+      const results = await this.fetchLocations(query);
+      this.displayResults(results);
+    } catch (err) {
+      if (err.name === "AbortError") {
+        return;
+      }
+      this.showError("Failed to fetch results. Please try again.");
+    } finally {
+      this.hideLoading();
+    }
+  }
+
+  displayResults(results) {
+    this._elResultsList.innerHTML = "";
+    this._results = results;
+
+    if (!results || results.length === 0) {
+      const noResults = el("div", {
+        class: "list-group-item text-center text-muted",
+      });
+      noResults.textContent = "No results found";
+      this._elResultsList.appendChild(noResults);
+      return;
+    }
+
+    results.forEach((result) => {
+      const resultItem = this.createResultItem(result);
+      this._elResultsList.appendChild(resultItem);
     });
+  }
+
+  createResultItem(result) {
+    const item = el("a", {
+      class: "list-group-item",
+      href: "#",
+      on: [
+        "click",
+        (e) => {
+          e.preventDefault();
+          this.handleLocationSelect(result);
+        },
+      ],
+    });
+
+    item.textContent = result.display_name;
+    return item;
+  }
+
+  handleLocationSelect(result) {
+    if (this.config.onLocationSelect) {
+      return this.config.onLocationSelect(select);
+    }
+
+    this._lastKnownLocation = this._map.getCenter();
+    const coordinates = result.feature.geometry.coordinates;
+    this._newLocation = { lng: coordinates[0], lat: coordinates[1] };
+
+    this.setResetButtonState(true);
+    this.zoomToLocation();
+  }
+
+  setResetButtonState(enabled) {
+    this._elButtonReset.disabled = !enabled;
+  }
+
+  showLoading() {
+    this._elResultsList.innerHTML = "";
+    const loadingEl = el("div", { class: "list-group-item text-center" });
+    loadingEl.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Searching...';
+    this._elResultsList.appendChild(loadingEl);
+  }
+
+  hideLoading() {
+    const loadingEl = this._elResultsList.querySelector(".fa-spinner");
+    if (loadingEl) {
+      loadingEl.closest(".list-group-item").remove();
+    }
+  }
+
+  showError(message) {
+    this._elResultsList.innerHTML = "";
+    const errorEl = el("div", {
+      class: "list-group-item text-center text-danger",
+    });
+    errorEl.textContent = message;
+    this._elResultsList.appendChild(errorEl);
+  }
+
+  async fetchGeoJSON(query) {
+    const lang = settings.language;
+    const url = this.config.url;
+
+    if (this._abord_ctrl) {
+      this._abord_ctrl.abort("new query");
+    }
+
+    this._abord_ctrl = new AbortController();
+    const { signal } = this._abord_ctrl;
+
+    try {
+      url.searchParams.set("q", query);
+      url.searchParams.set("lang", lang);
+      url.searchParams.set("limit", this.config.limit);
+      url.pathname = this.config.reverse ? "/reverse" : "/api";
+
+      if (this.config.proximity) {
+        const center = this._map.getCenter();
+        url.searchParams.set("lat", center.lat);
+        url.searchParams.set("lon", center.lng);
+      }
+
+      const timeoutId = setTimeout(() => {
+        this._abord_ctrl.abort("timeout");
+      }, 10000);
+
+      const response = await fetch(url, {
+        signal,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return response.json();
+    } catch (err) {
+      if (err === "new query") {
+        return null;
+      }
+      console.warn("Geocoder fetch error:", err);
+      throw new Error("Failed to fetch location data");
+    } finally {
+      this._abord_ctrl = null;
+    }
+  }
+
+  async fetchLocations(query) {
+    try {
+      const fc = await this.fetchGeoJSON(query);
+      if (!fc) {
+        return;
+      }
+      return fc.features.map((feature) => {
+        return {
+          feature: feature,
+          display_name: this.formatLocationString(feature.properties),
+        };
+      });
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
+  formatLocationString(location, options = {}) {
+    const { separator = ", ", includePostcode = true } = options;
+    const components = [];
+
+    if (location.name) components.push(location.name);
+    if (location.locality) components.push(location.locality);
+    else if (location.city) components.push(location.city);
+    if (location.county) components.push(location.county);
+    if (location.state) components.push(location.state);
+    if (includePostcode && location.postcode)
+      components.push(location.postcode);
+    if (location.country) components.push(location.country);
+    else if (location.countrycode) components.push(location.countrycode);
+
+    return components.filter(Boolean).join(separator).trim();
+  }
+
+  zoomToLocation() {
+    if (this._newLocation) {
+      this.displayMarker(this._newLocation);
+      this._map.flyTo({
+        center: this._newLocation,
+        zoom: 14,
+      });
+    }
+  }
+
+  resetToLastKnownLocation() {
+    if (this._lastKnownLocation) {
+      if (this._marker) {
+        this._marker.remove();
+      }
+      this._map.flyTo({
+        center: this._lastKnownLocation,
+        zoom: 10,
+      });
+      this.setResetButtonState(false);
+    }
   }
 
   displayMarker(pos) {
     const { Marker } = mapboxgl;
-    // Remove existing marker if there is one
     if (this._marker) {
       this._marker.remove();
     }
@@ -165,127 +364,10 @@ export class Geocoder {
       .setLngLat(pos)
       .addTo(this._map);
 
-    // Add click event to remove the marker when clicked
     this._marker.getElement().addEventListener("click", () => {
       this._marker.remove();
       this._marker = null;
+      this.setResetButtonState(false);
     });
-  }
-  enableZoom(enable = true) {
-    if (enable) {
-      this._elButtonZoom.classList.remove("disabled");
-      this._elButtonReset.classList.remove("disabled");
-    } else {
-      this._elButtonZoom.classList.add("disabled");
-      this._elButtonReset.classList.add("disabled");
-    }
-  }
-
-  // Fetch locations from Nominatim
-  async fetchGeoJSON(query) {
-    const lang = settings.language;
-    const url = this.config.url;
-
-    url.searchParams.set("q", query);
-    url.searchParams.set("lang", lang);
-    url.searchParams.set("limit", this.config.limit);
-    url.pathname = this._reverse ? "/reverse" : "/api";
-
-    if (!this._reverse) {
-      const center = this._map.getCenter();
-      url.searchParams.set("lat", center.lat);
-      url.searchParams.set("lon", center.lng);
-    }
-
-    const response = await fetch(url);
-    return response.json();
-  }
-
-  async fetchLocations(query) {
-    const fc = await this.fetchGeoJSON(query);
-
-    return fc.features.map((feature) => {
-      return {
-        feature: feature,
-        display_name: this.formatLocationString(feature.properties),
-      };
-    });
-  }
-
-  /**
-   * Formats location data into a readable string
-   * @param {Object} location - Location data object
-   * @param {Object} options - Formatting options
-   * @param {string} options.separator - Separator between elements (default: ', ')
-   * @param {boolean} options.includePostcode - Whether to include postcode (default: true)
-   * @returns {string} Formatted location string
-   */
-  formatLocationString(location, options = {}) {
-    const { separator = ", ", includePostcode = true } = options;
-
-    // Define components to include in order of preference
-    const components = [];
-
-    // Add street name if available
-    if (location.name) {
-      components.push(location.name);
-    }
-
-    // Add locality or city
-    if (location.locality) {
-      components.push(location.locality);
-    } else if (location.city) {
-      components.push(location.city);
-    }
-
-    // Add county if available
-    if (location.county) {
-      components.push(location.county);
-    }
-
-    // Add state if available
-    if (location.state) {
-      components.push(location.state);
-    }
-
-    // Add postcode if enabled and available
-    if (includePostcode && location.postcode) {
-      components.push(location.postcode);
-    }
-
-    // Add country if available (using country code if full name not available)
-    if (location.country) {
-      components.push(location.country);
-    } else if (location.countrycode) {
-      components.push(location.countrycode);
-    }
-
-    // Filter out empty strings and join with separator
-    return components.filter(Boolean).join(separator).trim();
-  }
-
-  // Zoom to the selected location
-  zoomToLocation() {
-    if (this._newLocation) {
-      this.displayMarker(this._newLocation);
-      this._map.flyTo({
-        center: this._newLocation,
-        zoom: 14,
-      });
-    } else {
-      console.warn("Missing new location");
-    }
-  }
-
-  // Reset to the last known location
-  resetToLastKnownLocation() {
-    if (this._lastKnownLocation) {
-      this._map.flyTo({
-        center: this._lastKnownLocation,
-        zoom: 10,
-      });
-    } else {
-      console.warn("Missing previous location");
-    }
   }
 }

@@ -1,9 +1,24 @@
-.ngc_container {
-  display: flex;
-  .ts-wrapper {
-    flex-grow: 1;
+.gcm_container {
+  .panel {
+    margin-bottom: 0;
   }
-  button {
-    display: flex;
+
+  .list-group {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 0;
+  }
+
+  .list-group-item {
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--mx_ui_background_accent);
+    }
+  }
+
+  .panel-footer {
+    background-color: var(--mx_ui_background);
+    border-top: 1px solid var(--mx_ui_border);
   }
 }
