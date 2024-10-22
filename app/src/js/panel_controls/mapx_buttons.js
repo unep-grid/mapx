@@ -17,6 +17,7 @@ import { settings } from "./../settings";
 import { theme } from "./../mx.js";
 import { IssueReporterClient } from "../issue_reporter/index.js";
 import { modalIframe } from "../modal_iframe/index.js";
+import {GeocoderModal} from "../geocoder/index.js";
 
 
 export function generateButtons() {
@@ -73,6 +74,16 @@ export function generateButtons() {
       action: () => {
         const map = getMap();
         map.easeTo({ bearing: 0, pitch: 0 });
+      },
+    }),
+    new Button({
+      key: "btn_geocoder",
+      classesIcon: ["fa","fa-search"],
+      action: () => {
+        const map = getMap();
+        new GeocoderModal({
+           map : map
+        });
       },
     }),
     new Button({

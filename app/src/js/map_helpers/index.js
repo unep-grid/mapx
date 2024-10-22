@@ -16,7 +16,6 @@ import {
   controls,
 } from "./../mx.js";
 import { FeaturesToWidget } from "../features_to_widget";
-import { RadialProgress } from "./../radial_progress";
 import { handleViewClick } from "./../views_click";
 import { RasterMiniMap } from "./../raster_mini_map";
 import { el, elSpanTranslate as tt } from "./../el_mapx/index.js";
@@ -47,11 +46,7 @@ import {
   handleMapDragOver,
   handleMapDrop,
 } from "./../mx_helper_map_dragdrop.js";
-import {
-  updateViewsFilter,
-  viewsListRenderNew,
-  viewsListAddSingle,
-} from "./../views_list_manager";
+import { updateViewsFilter, viewsListAddSingle } from "./../views_list_manager";
 import { initLog } from "./../mx_helper_log.js";
 import { dashboard } from "./../dashboards/index.js";
 import {
@@ -146,7 +141,6 @@ import {
 } from "./../is_test_mapx/index.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { viewFiltersInit } from "./view_filters.js";
-import { fetchViews } from "./views_fetch.js";
 import { ButtonPanelLegend } from "../panel_legend/index.js";
 import { createViewControls } from "../views_builder/view_controls.js";
 import { ButtonFilter } from "../button_filter/index.js";
@@ -1349,7 +1343,7 @@ export async function initMapx(o) {
    */
   initLog();
   initListenerGlobal();
-  initMapListener(map);
+  await initMapListener(map);
 
   /**
    * Set initial globe button state
@@ -1368,7 +1362,7 @@ export async function initMapx(o) {
   return o;
 }
 
-export function initMapListener(map) {
+export async function initMapListener(map) {
   /**
    * Error handling
    */
