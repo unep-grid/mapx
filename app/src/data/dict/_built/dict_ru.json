@@ -9362,7 +9362,22 @@
   {
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
-    "ru": "Карта: контур текста водоема "
+    "ru": "Карта: контур текста водоема"
+  },
+  {
+    "id": "mx_map_contour_lines",
+    "en": "Map: contour lines",
+    "ru": "Карта: контурные линии"
+  },
+  {
+    "id": "mx_map_text_contour",
+    "en": "Map: contour text",
+    "ru": "Карта: текст контура"
+  },
+  {
+    "id": "mx_map_text_countour_outline",
+    "en": "Map: contour text outline",
+    "ru": "Карта: контур текста контура"
   },
   {
     "id": "mx_theme_input_font_family",

@@ -9362,7 +9362,22 @@
   {
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
-    "de": "Karte: Wasserkörpertextumriss "
+    "de": "Karte: Umriss des Wassertextes"
+  },
+  {
+    "id": "mx_map_contour_lines",
+    "en": "Map: contour lines",
+    "de": "Karte: Höhenlinien"
+  },
+  {
+    "id": "mx_map_text_contour",
+    "en": "Map: contour text",
+    "de": "Karte: Konturtext"
+  },
+  {
+    "id": "mx_map_text_countour_outline",
+    "en": "Map: contour text outline",
+    "de": "Karte: Umriss des Konturtextes"
   },
   {
     "id": "mx_theme_input_font_family",

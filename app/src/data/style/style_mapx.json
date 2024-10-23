@@ -355,6 +355,65 @@
       }
     },
     {
+      "id": "contour-lines",
+      "type": "line",
+      "source": "mapbox_composite",
+      "source-layer": "contour",
+      "minzoom": 11,
+      "filter": [
+        "any",
+        ["==", ["get", "index"], 2],
+        ["==", ["get", "index"], 10]
+      ],
+      "layout": {},
+      "paint": {
+        "line-color": "hsl(0, 0%, 2%)",
+        "line-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          13,
+          ["match", ["get", "index"], 10, 0.3, 0.1],
+          16,
+          ["match", ["get", "index"], 10, 0.4, 0.2]
+        ],
+        "line-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          13,
+          ["match", ["get", "index"], 10, 0.2, 0.1],
+          16,
+          ["match", ["get", "index"], 10, 0.4, 0.2]
+        ]
+      }
+    },
+    {
+      "id": "contour-label",
+      "type": "symbol",
+      "source": "mapbox_composite",
+      "source-layer": "contour",
+      "minzoom": 11,
+      "filter": ["==", ["get", "index"], 10],
+      "layout": {
+        "text-field": ["concat", ["get", "ele"], " m"],
+        "symbol-placement": "line",
+        "text-pitch-alignment": "viewport",
+        "text-max-angle": 25,
+        "text-padding": 5,
+        "text-font": ["Varela Round Regular", "Noto Sans Regular"],
+        "text-size": ["interpolate", ["linear"], ["zoom"], 15, 9.5, 20, 12],
+        "symbol-spacing": 1100,
+        "text-allow-overlap": false
+      },
+      "paint": {
+        "text-color": "hsl(0, 0%, 2%)",
+        "text-halo-width": 1,
+        "text-halo-color": "hsl(0, 0%, 90%)",
+        "text-opacity": 0.5
+      }
+    },
+    {
       "id": "bathymetry",
       "type": "fill",
       "source": "mapbox_composite",
@@ -398,7 +457,7 @@
       "type": "line",
       "source": "mapbox_composite",
       "source-layer": "water-depth",
-      "minzoom": 0,
+      "minzoom": 11,
       "filter": ["all", ["==", ["geometry-type"], "Polygon"]],
       "layout": {
         "visibility": "visible"
@@ -408,17 +467,22 @@
           "interpolate",
           ["linear"],
           ["zoom"],
-          0,
-          0,
-          5,
-          0.1,
-          7,
-          0.8,
-          22,
-          1
+          11,
+          ["match", ["get", "index"], [1, 2], 0.15, 0.3],
+          13,
+          ["match", ["get", "index"], [1, 2], 0.3, 0.5]
         ],
+
         "line-color": "rgba(255,255,255, 0)",
-        "line-width": 1,
+        "line-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          13,
+          ["match", ["get", "index"], [1, 2], 0.5, 0.6],
+          16,
+          ["match", ["get", "index"], [1, 2], 0.8, 1.2]
+        ],
         "line-dasharray": [1, 4]
       }
     },
@@ -427,13 +491,13 @@
       "type": "symbol",
       "source": "mapbox_composite",
       "source-layer": "water-depth",
-      "minzoom": 0,
+      "minzoom": 11,
       "filter": ["all", ["==", ["geometry-type"], "Polygon"]],
       "layout": {
         "visibility": "visible",
         "text-field": ["to-string", ["get", "depth"]],
         "text-font": ["Varela Round Regular", "Noto Sans Regular"],
-        "text-size": ["*",11,1],
+        "text-size": ["*", 11, 1],
         "symbol-placement": "line",
         "text-padding": 2,
         "text-max-angle": 25,
@@ -1674,7 +1738,7 @@
             "match",
             ["get", "class"],
             ["motorway", "trunk", "primary", "secondary", "tertiary"],
-            ["*",10,1],
+            ["*", 10, 1],
             [
               "motorway_link",
               "trunk_link",
@@ -1685,15 +1749,15 @@
               "street_limited",
               "path"
             ],
-             ["*",9,1],
-             ["*",8,1]
+            ["*", 9, 1],
+            ["*", 8, 1]
           ],
           18,
           [
             "match",
             ["get", "class"],
             ["motorway", "trunk", "primary", "secondary", "tertiary"],
-            ["*",11,1],
+            ["*", 11, 1],
             [
               "motorway_link",
               "trunk_link",
@@ -1704,15 +1768,15 @@
               "street_limited",
               "path"
             ],
-              ["*",10,1],
-              ["*",8,1]
+            ["*", 10, 1],
+            ["*", 8, 1]
           ],
           22,
           [
             "match",
             ["get", "class"],
             ["motorway", "trunk", "primary", "secondary", "tertiary"],
-              ["*",12,1],
+            ["*", 12, 1],
             [
               "motorway_link",
               "trunk_link",
@@ -1723,8 +1787,8 @@
               "street_limited",
               "path"
             ],
-              ["*",11,1],
-              ["*",10,1]
+            ["*", 11, 1],
+            ["*", 10, 1]
           ]
         ],
         "text-max-angle": 30,
@@ -1781,7 +1845,15 @@
           ["linear"],
           ["zoom"],
           7,
-          ["step", ["get", "sizerank"], ["*", 24, 1], 6, ["*", 18, 1], 12, ["*", 12, 1]],
+          [
+            "step",
+            ["get", "sizerank"],
+            ["*", 24, 1],
+            6,
+            ["*", 18, 1],
+            12,
+            ["*", 12, 1]
+          ],
           10,
           ["step", ["get", "sizerank"], ["*", 18, 1], 9, ["*", 12, 1]],
           11,
@@ -1838,7 +1910,15 @@
           ["linear"],
           ["zoom"],
           7,
-          ["step", ["get", "sizerank"], ["*", 24, 1], 6, ["*", 18, 1], 12, ["*", 12, 1]],
+          [
+            "step",
+            ["get", "sizerank"],
+            ["*", 24, 1],
+            6,
+            ["*", 18, 1],
+            12,
+            ["*", 12, 1]
+          ],
           10,
           ["step", ["get", "sizerank"], ["*", 18, 1], 9, ["*", 12, 1]]
         ],
@@ -2039,7 +2119,7 @@
         ],
         "text-radial-offset": 0.5,
         "icon-image": "maki-circle-11",
-        "icon-size":["*", 0.2, 1],
+        "icon-size": ["*", 0.2, 1],
         "visibility": "visible"
       },
       "paint": {

@@ -8,7 +8,7 @@ import { isEmpty, isJSON, isString } from "./../is_test/index.js";
  * @return {Promise<Boolean>}
  */
 export async function downloadJSON(data, filename) {
-  const text = isJSON(data) ? data : JSON.stringify(data);
+  const text = isJSON(data) ? data : JSON.stringify(data, 0, 2);
   const blob = new Blob([text], { type: "application/json" });
   return downloadBlob(blob, filename);
 }

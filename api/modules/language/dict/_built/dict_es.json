@@ -9362,7 +9362,22 @@
   {
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
-    "es": "Mapa: borde del texto cuerop de agua"
+    "es": "Mapa: borde del texto cuerpo de agua"
+  },
+  {
+    "id": "mx_map_contour_lines",
+    "en": "Map: contour lines",
+    "es": "Mapa: líneas de contorno"
+  },
+  {
+    "id": "mx_map_text_contour",
+    "en": "Map: contour text",
+    "es": "Mapa: texto de contorno"
+  },
+  {
+    "id": "mx_map_text_countour_outline",
+    "en": "Map: contour text outline",
+    "es": "Mapa: borde del texto de contorno"
   },
   {
     "id": "mx_theme_input_font_family",

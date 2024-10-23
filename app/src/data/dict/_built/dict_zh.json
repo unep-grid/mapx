@@ -9365,6 +9365,21 @@
     "zh": "地图：水体文本边框"
   },
   {
+    "id": "mx_map_contour_lines",
+    "en": "Map: contour lines",
+    "zh": "地图：等高线"
+  },
+  {
+    "id": "mx_map_text_contour",
+    "en": "Map: contour text",
+    "zh": "地图：等高线文本"
+  },
+  {
+    "id": "mx_map_text_countour_outline",
+    "en": "Map: contour text outline",
+    "zh": "地图：等高线文本边框"
+  },
+  {
     "id": "mx_theme_input_font_family",
     "en": "Font family",
     "zh": "字体系列"

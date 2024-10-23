@@ -7492,6 +7492,18 @@
     "en": "Map: water body text outline"
   },
   {
+    "id": "mx_map_contour_lines",
+    "en": "Map: contour lines"
+  },
+  {
+    "id": "mx_map_text_contour",
+    "en": "Map: contour text"
+  },
+  {
+    "id": "mx_map_text_countour_outline",
+    "en": "Map: contour text outline"
+  },
+  {
     "id": "mx_theme_input_font_family",
     "en": "Font family"
   },

@@ -9365,6 +9365,21 @@
     "fr": "Carte : bordure texte plan d'eau"
   },
   {
+    "id": "mx_map_contour_lines",
+    "en": "Map: contour lines",
+    "fr": "Carte : courbes de niveau"
+  },
+  {
+    "id": "mx_map_text_contour",
+    "en": "Map: contour text",
+    "fr": "Carte : texte des courbes de niveau"
+  },
+  {
+    "id": "mx_map_text_countour_outline",
+    "en": "Map: contour text outline",
+    "fr": "Carte : bordure texte des courbes de niveau"
+  },
+  {
     "id": "mx_theme_input_font_family",
     "en": "Font family",
     "fr": "Famille de polices"

@@ -135,6 +135,25 @@ export function layer_resolver(c) {
       },
     },
     {
+      id: ["contour-lines"],
+      layout: {
+        visibility: c.mx_map_contour_lines.visibility,
+      },
+      paint: {
+        "line-color": c.mx_map_contour_lines.color,
+      },
+    },
+    {
+      id: ["contour-label"],
+      layout: {
+        visibility: c.mx_map_text_contour.visibility,
+        "text-font": fontFallback(c.mx_map_text_contour.font),
+      },
+      paint: {
+        "text-color": c.mx_map_text_contour.color,
+      },
+    },
+    {
       id: ["waterway"],
       layout: {
         visibility: c.mx_map_water.visibility,
@@ -223,7 +242,7 @@ export function layer_resolver(c) {
         "fill-color": c.mx_map_building.color,
       },
     },
-   {
+    {
       id: ["building_border"],
       layout: {
         visibility: c.mx_map_building_border.visibility,
@@ -341,6 +360,7 @@ export function layer_resolver(c) {
         "country_un_0_label_5",
         "country_un_0_label_99",
         "country_un_1_label_1",
+        "contour-label"
       ],
       paint: {
         "text-halo-color": c.mx_map_text_land_outline.color,
