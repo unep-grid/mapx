@@ -2070,6 +2070,31 @@
     "fa": "حذف ردیف‌های انتخاب شده"
   },
   {
+    "id": "gc_btn_save",
+    "en": "Save results as view",
+    "fa": "ذخیره نتایج به عنوان نما"
+  },
+  {
+    "id": "gc_btn_clear",
+    "en": "Clear results",
+    "fa": "پاک کردن نتایج"
+  },
+  {
+    "id": "gc_btn_back",
+    "en": "Back",
+    "fa": "بازگشت"
+  },
+  {
+    "id": "gc_geocoder",
+    "en": "Geocoder",
+    "fa": "ژئوکدر"
+  },
+  {
+    "id": "gc_search_placeholder",
+    "en": "Search place..",
+    "fa": "جستجوی مکان.."
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "fa": "ابزار هندسه: لایه منبع را انتخاب کنید"

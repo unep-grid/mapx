@@ -2070,6 +2070,31 @@
     "zh": "删除选定行"
   },
   {
+    "id": "gc_btn_save",
+    "en": "Save results as view",
+    "zh": "将结果保存为视图"
+  },
+  {
+    "id": "gc_btn_clear",
+    "en": "Clear results",
+    "zh": "清除结果"
+  },
+  {
+    "id": "gc_btn_back",
+    "en": "Back",
+    "zh": "返回"
+  },
+  {
+    "id": "gc_geocoder",
+    "en": "Geocoder",
+    "zh": "地理编码器"
+  },
+  {
+    "id": "gc_search_placeholder",
+    "en": "Search place..",
+    "zh": "搜索地点.."
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "zh": "几何工具：选择源层"

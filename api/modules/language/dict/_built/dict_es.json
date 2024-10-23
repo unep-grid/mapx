@@ -2070,6 +2070,31 @@
     "es": "Eliminar filas seleccionadas"
   },
   {
+    "id": "gc_btn_save",
+    "en": "Save results as view",
+    "es": "Guardar resultados como vista"
+  },
+  {
+    "id": "gc_btn_clear",
+    "en": "Clear results",
+    "es": "Borrar resultados"
+  },
+  {
+    "id": "gc_btn_back",
+    "en": "Back",
+    "es": "Atrás"
+  },
+  {
+    "id": "gc_geocoder",
+    "en": "Geocoder",
+    "es": "Geocodificador"
+  },
+  {
+    "id": "gc_search_placeholder",
+    "en": "Search place..",
+    "es": "Buscar lugar.."
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "es": "Herramientas de geometría: seleccione la capa de origen"

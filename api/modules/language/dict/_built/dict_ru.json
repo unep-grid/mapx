@@ -2070,6 +2070,31 @@
     "ru": "Удалить выбранные строки"
   },
   {
+    "id": "gc_btn_save",
+    "en": "Save results as view",
+    "ru": "Сохранить результаты как вид"
+  },
+  {
+    "id": "gc_btn_clear",
+    "en": "Clear results",
+    "ru": "Очистить результаты"
+  },
+  {
+    "id": "gc_btn_back",
+    "en": "Back",
+    "ru": "Назад"
+  },
+  {
+    "id": "gc_geocoder",
+    "en": "Geocoder",
+    "ru": "Геокодер"
+  },
+  {
+    "id": "gc_search_placeholder",
+    "en": "Search place..",
+    "ru": "Поиск места.."
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ru": "Инструменты геометрии: выберите исходный слой"

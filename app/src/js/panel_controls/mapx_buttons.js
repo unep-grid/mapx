@@ -77,7 +77,7 @@ export function generateButtons() {
       },
     }),
     new Button({
-      key: "btn_geocoder",
+      key: "gc_geocoder",
       classesIcon: ["fa","fa-search"],
       action: () => {
         const map = getMap();

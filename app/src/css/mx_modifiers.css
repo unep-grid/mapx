@@ -27,6 +27,7 @@ input {
   border-color: var(--mx_ui_border);
 }
 
+.mx a.list-group-item:focus,
 .mx a.list-group-item:hover {
   background: var(--mx_ui_background_contrast);
 }
@@ -201,7 +202,6 @@ span.mx-badge-role {
   color: var(--mx_ui_text);
   background-color: var(--mx_ui_background);
 }
-
 
 .mx .btn-warning {
   border-color: var(--mx_ui_message_warning);

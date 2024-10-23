@@ -1015,6 +1015,10 @@ code {
   color: var(--mx_ui_link);
   background-color: var(--mx_ui_background_faded);
 }
+.panel-footer {
+  background-color: var(--mx_ui_background_contrast);
+  border-top: 1px solid var(--mx_ui_border);
+}
 .text-muted,
 .text-muted > * {
   font-size: 0.9em;

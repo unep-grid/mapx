@@ -1656,6 +1656,26 @@
     "en": "Remove selected rows"
   },
   {
+    "id": "gc_btn_save",
+    "en": "Save results as view"
+  },
+  {
+    "id": "gc_btn_clear",
+    "en": "Clear results"
+  },
+  {
+    "id": "gc_btn_back",
+    "en": "Back"
+  },
+  {
+    "id": "gc_geocoder",
+    "en": "Geocoder"
+  },
+  {
+    "id": "gc_search_placeholder",
+    "en": "Search place.."
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer"
   },

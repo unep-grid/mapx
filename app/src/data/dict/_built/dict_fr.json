@@ -2070,6 +2070,31 @@
     "fr": "Supprimer les lignes sélectionnées"
   },
   {
+    "id": "gc_btn_save",
+    "en": "Save results as view",
+    "fr": "Enregistrer comme vue"
+  },
+  {
+    "id": "gc_btn_clear",
+    "en": "Clear results",
+    "fr": "Effacer les résultats"
+  },
+  {
+    "id": "gc_btn_back",
+    "en": "Back",
+    "fr": "Retour"
+  },
+  {
+    "id": "gc_geocoder",
+    "en": "Geocoder",
+    "fr": "Géocodeur"
+  },
+  {
+    "id": "gc_search_placeholder",
+    "en": "Search place..",
+    "fr": "Rechercher un lieu.."
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "fr": "Outils de géométrie : sélectionner le calque source"

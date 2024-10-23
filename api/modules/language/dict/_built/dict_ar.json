@@ -2070,6 +2070,31 @@
     "ar": "إزالة الصفوف المحددة"
   },
   {
+    "id": "gc_btn_save",
+    "en": "Save results as view",
+    "ar": "حفظ النتائج كعرض"
+  },
+  {
+    "id": "gc_btn_clear",
+    "en": "Clear results",
+    "ar": "مسح النتائج"
+  },
+  {
+    "id": "gc_btn_back",
+    "en": "Back",
+    "ar": "رجوع"
+  },
+  {
+    "id": "gc_geocoder",
+    "en": "Geocoder",
+    "ar": "المُحوّل الجغرافي"
+  },
+  {
+    "id": "gc_search_placeholder",
+    "en": "Search place..",
+    "ar": "البحث عن مكان.."
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ar": "أدوات الهندسة: حدد طبقة المصدر"

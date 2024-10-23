@@ -2070,6 +2070,31 @@
     "de": "Ausgewählte Zeilen entfernen"
   },
   {
+    "id": "gc_btn_save",
+    "en": "Save results as view",
+    "de": "Ergebnisse als Ansicht speichern"
+  },
+  {
+    "id": "gc_btn_clear",
+    "en": "Clear results",
+    "de": "Ergebnisse löschen"
+  },
+  {
+    "id": "gc_btn_back",
+    "en": "Back",
+    "de": "Zurück"
+  },
+  {
+    "id": "gc_geocoder",
+    "en": "Geocoder",
+    "de": "Geocoder"
+  },
+  {
+    "id": "gc_search_placeholder",
+    "en": "Search place..",
+    "de": "Ort suchen.."
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "de": "Geometriewerkzeuge: Quellebene auswählen"

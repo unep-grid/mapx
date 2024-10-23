@@ -2070,6 +2070,31 @@
     "bn": "নির্বাচিত সারিগুলি মুছে ফেলুন"
   },
   {
+    "id": "gc_btn_save",
+    "en": "Save results as view",
+    "bn": "ফলাফল ভিউ হিসাবে সংরক্ষণ করুন"
+  },
+  {
+    "id": "gc_btn_clear",
+    "en": "Clear results",
+    "bn": "ফলাফল মুছুন"
+  },
+  {
+    "id": "gc_btn_back",
+    "en": "Back",
+    "bn": "পিছনে"
+  },
+  {
+    "id": "gc_geocoder",
+    "en": "Geocoder",
+    "bn": "ভূ-কোডার"
+  },
+  {
+    "id": "gc_search_placeholder",
+    "en": "Search place..",
+    "bn": "স্থান খুঁজুন.."
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "bn": "জ্যামিতি সরঞ্জাম: উৎস স্তর নির্বাচন করুন"

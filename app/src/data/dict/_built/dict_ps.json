@@ -2070,6 +2070,31 @@
     "ps": "ټاکل شوي قطارونه لرې کړئ"
   },
   {
+    "id": "gc_btn_save",
+    "en": "Save results as view",
+    "ps": "پایلې د لید په توګه خوندي کړئ"
+  },
+  {
+    "id": "gc_btn_clear",
+    "en": "Clear results",
+    "ps": "پایلې پاکې کړئ"
+  },
+  {
+    "id": "gc_btn_back",
+    "en": "Back",
+    "ps": "شاته"
+  },
+  {
+    "id": "gc_geocoder",
+    "en": "Geocoder",
+    "ps": "جغرافیایي کوډ جوړونکی"
+  },
+  {
+    "id": "gc_search_placeholder",
+    "en": "Search place..",
+    "ps": "ځای لټون.."
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ps": "د جیومیټري وسیلې: د سرچینې پرت غوره کړئ"
