@@ -1,5 +1,7 @@
 import mapboxgl from "mapbox-gl";
-import style from '!postcss-loader!less-loader?{"mimetype":"text/css"}!./style.less';
+//import style from '!postcss-loader!less-loader?{"mimetype":"text/css"}!./style.less';
+import style from './style.less';
+
 import { settings } from "./../settings";
 import { isFunction } from "../is_test";
 

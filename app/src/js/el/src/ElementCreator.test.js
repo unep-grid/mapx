@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { el, svg } from "../index.js";
-import { waitTimeoutAsync } from "../../../animation_frame/index.js";
+import { el, svg } from "./index.js";
+import { waitTimeoutAsync } from "../../animation_frame/index.js";
 
 const settings = {
   timeout: 10,

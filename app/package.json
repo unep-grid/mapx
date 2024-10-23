@@ -9,7 +9,8 @@
   },
   "browserslist": "last 2 years",
   "scripts": {
-    "test": "echo \"Error: use 'npm run test from /src/js/sdk'\" && exit 1",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
     "lint": "eslint ./src/js",
     "dev": "webpack --watch --config ./webpack/webpack.dev.js",
     "build": "webpack --config ./webpack/webpack.prod.js",
@@ -23,6 +24,7 @@
   "license": "GPLv3",
   "devDependencies": {
     "@google-cloud/translate": "^6.3.1",
+    "@vitest/browser": "^2.1.3",
     "ajv": "^6.12.6",
     "autoprefixer": "^9.8.8",
     "clean-css": "^4.2.4",
@@ -66,7 +68,7 @@
     "style-loader": "^0.23.1",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "url-loader": "^1.1.2",
-    "vitest": "^2.1.1",
+    "vitest": "^2.1.3",
     "watch": "^1.0.2",
     "watchfile-webpack-plugin": "0.0.4",
     "webfonts-loader": "^4.4.0",

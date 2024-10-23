@@ -66,7 +66,7 @@ import {
   xyToDegree,
   debounce,
   isShinyReady,
-  debouncePromise,
+  //debouncePromise,
 } from "./../mx_helper_misc.js";
 import {
   modal,
@@ -889,10 +889,10 @@ export function initListenersApp() {
 /**
  * Update element and button text that could not be translated automatically
  * after a settings change
+ *  ⚠️ debouncePromise call here made tests fail
+ ** export const updateUiSettings = debouncePromise(updateUiSettings_base);
  */
-export const updateUiSettings = debouncePromise(updateUiSettings_base);
-
-async function updateUiSettings_base() {
+async function updateUiSettings() {
   try {
     await waitTimeoutAsync(10);
 

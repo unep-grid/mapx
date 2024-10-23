@@ -8,12 +8,12 @@ import { isEmpty } from "../is_test";
 import { shake } from "../elshake";
 import { viewsListAddSingle } from "../views_list_manager";
 import { getDictItem } from "../language";
+import { isArrayOfNumber } from "../is_test";
 
 const def_conf = {
   url: new URL("https://photon.komoot.io/"),
   limit: 10,
   elTarget: null,
-  idTarget: null,
   map: null,
   proximity: false,
   reverse: false,
@@ -21,14 +21,17 @@ const def_conf = {
 };
 
 class MarkerLocation {
-  constructor(marker, feature) {
+  constructor(marker, feature, markers) {
     this.marker = marker;
     this.feature = feature;
+    this.markers = markers;
+    this.markers.add(this);
   }
 
   remove() {
     if (this.marker) {
       this.marker.remove();
+      this.markers.delete(this);
     }
   }
 
@@ -63,6 +66,18 @@ export class GeocoderModal {
   }
 }
 
+/**
+ * Geocoder widget using Photon API
+ * @class
+ * @param {Object} [config] - Configuration object
+ * @param {URL} [config.url=https://photon.komoot.io/] - Geocoding service URL
+ * @param {number} [config.limit=10] - Max results
+ * @param {HTMLElement} config.elTarget - Container element
+ * @param {Object} config.map - Mapbox map instance
+ * @param {boolean} [config.proximity=false] - Use map center for biasing results
+ * @param {boolean} [config.reverse=false] - Reverse geocoding mode
+ * @param {Function} [config.onLocationSelect] - Callback when location selected
+ */
 export class Geocoder {
   constructor() {
     this._markers = new Set();
@@ -77,11 +92,9 @@ export class Geocoder {
       ...def_conf,
       ...config,
     };
-    this._elTarget =
-      this.config.elTarget || document.getElementById(this.config.idTarget);
+    this._elTarget = this.config.elTarget;
     if (!this._elTarget) {
-      console.warn("Geocoder : no target");
-      return;
+      throw new Error("Geocoder : no target");
     }
     this._map = this.config.map;
     this._lastKnownLocation = null;
@@ -274,8 +287,11 @@ export class Geocoder {
       .setLngLat(result.feature.geometry.coordinates)
       .addTo(this._map);
 
-    const markerLocation = new MarkerLocation(marker, result.feature);
-    this._markers.add(markerLocation);
+    const markerLocation = new MarkerLocation(
+      marker,
+      result.feature,
+      this._markers,
+    );
 
     marker.getElement().addEventListener("click", () => {
       this._markers.delete(markerLocation);
@@ -429,25 +445,54 @@ export class Geocoder {
     }
   }
 
-  formatLocationString(location, options = {}) {
+  /**
+   * Formats a place object into a readable address string
+   * @param {Object} placeData - Object containing address components
+   * @param {Object} [options={}] - Formatting options
+   * @param {string} [options.separator=", "] - Separator between address components
+   * @param {boolean} [options.includePostcode=true] - Whether to include postal code
+   * @returns {string} Formatted address string
+   */
+  formatLocationString(placeData, options = {}) {
     const { separator = ", ", includePostcode = true } = options;
+
     const components = [];
 
-    if (location.name) components.push(location.name);
-    if (location.locality) components.push(location.locality);
-    else if (location.city) components.push(location.city);
-    if (location.county) components.push(location.county);
-    if (location.state) components.push(location.state);
-    if (includePostcode && location.postcode)
-      components.push(location.postcode);
-    if (location.country) components.push(location.country);
-    else if (location.countrycode) components.push(location.countrycode);
+    if (placeData.name) {
+      components.push(placeData.name);
+    }
+
+    if (placeData.locality) {
+      components.push(placeData.locality);
+    } else if (placeData.city) {
+      components.push(placeData.city);
+    }
+
+    if (placeData.county) {
+      components.push(placeData.county);
+    }
+
+    if (placeData.state) {
+      components.push(placeData.state);
+    }
+
+    if (includePostcode && placeData.postcode) {
+      components.push(placeData.postcode);
+    }
+
+    if (placeData.country) {
+      components.push(placeData.country);
+    } else if (placeData.countrycode) {
+      components.push(placeData.countrycode);
+    }
 
     return components.filter(Boolean).join(separator).trim();
   }
 
   goTo(loc) {
-    if (loc.length === 2) {
+    const isCoord = isArrayOfNumber(loc);
+
+    if (isCoord) {
       this._map.flyTo({
         center: { lng: loc[0], lat: loc[1] },
         zoom: 14,
