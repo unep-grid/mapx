@@ -1,3 +1,20 @@
+  - [1.13.12-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.12-alpha.1) 
+
+    - Contours #1023
+        - Added contour lines with labels
+        - Added font selection in theme editor
+        - Modified all themes + adapted theme validation
+
+    - Geocoder #1024
+        - Added new geocoding component
+        - Save search result as view 
+        - Added component tests
+        - Refactored CommonLoc module
+
+    - Development
+        - Moved echarts package to /app
+        - Added global vitest command
+
   - [1.13.11](https://github.com/unep-grid/mapx/tree/1.13.11) 
 
     - Removed 'share to project' when the view is temporary, as this feature is only available for project local views. Could be migrated to API. 
