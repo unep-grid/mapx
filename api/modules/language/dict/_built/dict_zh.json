@@ -6865,9 +6865,9 @@
     "zh": "控制面板 "
   },
   {
-    "id": "btn_bug_report",
-    "en": "Report a bug / feature request",
-    "zh": "报告错误/功能请求"
+    "id": "btn_source_code",
+    "en": "App source code",
+    "zh": "应用源代码"
   },
   {
     "id": "btn_report",

@@ -3,6 +3,7 @@
   "mapboxSprites": "mapbox://sprites/mapbox/bright-v8",
   "mapboxGlyphs": "mapbox://fonts/helsinki/{fontstack}/{range}.pbf",
   "repositoryIssues": "https://github.com/unep-grid/mapx/issues",
+  "repository": "https://github.com/unep-grid/mapx",
   "repositoryWiki": "https://github.com/unep-grid/mapx/wiki/",
   "repositoryWikiRaw": "https://raw.githubusercontent.com/wiki/unep-grid/mapx/",
   "doc_base": "https://docs.mapx.org",

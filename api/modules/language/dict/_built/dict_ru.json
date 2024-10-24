@@ -6865,9 +6865,9 @@
     "ru": "Панель управления "
   },
   {
-    "id": "btn_bug_report",
-    "en": "Report a bug / feature request",
-    "ru": "Сообщить об ошибке / запросе функции"
+    "id": "btn_source_code",
+    "en": "App source code",
+    "ru": "Исходный код приложения"
   },
   {
     "id": "btn_report",

@@ -6865,9 +6865,9 @@
     "fa": "پانل کنترل "
   },
   {
-    "id": "btn_bug_report",
-    "en": "Report a bug / feature request",
-    "fa": "گزارش یک اشکال / درخواست ویژگی"
+    "id": "btn_source_code",
+    "en": "App source code",
+    "fa": "کد منبع برنامه"
   },
   {
     "id": "btn_report",

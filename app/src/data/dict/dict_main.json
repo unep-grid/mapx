@@ -10362,17 +10362,17 @@
     "de": ""
   },
   {
-    "id": "btn_bug_report",
-    "en": "Report a bug / feature request",
-    "fr": "Signaler un bug / demande de fonctionnalité",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
+    "id": "btn_source_code",
+    "en": "App source code",
+    "fr": "Code source de l'app",
+    "es": "Código fuente de la aplicación",
+    "ru": "Исходный код приложения",
+    "zh": "应用源代码",
+    "ar": "كود مصدر التطبيق",
+    "fa": "کد منبع برنامه",
+    "ps": "د اپلیکیشن سرچینه کوډ",
+    "bn": "অ্যাপের সোর্স কোড",
+    "de": "Quellcode der App"
   },
   {
     "id": "btn_report",

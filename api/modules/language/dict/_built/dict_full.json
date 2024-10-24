@@ -17849,17 +17849,17 @@
     "de": "Bedienfeld "
   },
   {
-    "id": "btn_bug_report",
-    "en": "Report a bug / feature request",
-    "fr": "Signaler un bug / demande de fonctionnalité",
-    "es": "Informar de un error/solicitud de función",
-    "ru": "Сообщить об ошибке / запросе функции",
-    "zh": "报告错误/功能请求",
-    "ar": "الإبلاغ عن خطأ / طلب ميزة",
-    "fa": "گزارش یک اشکال / درخواست ویژگی",
-    "ps": "د بګ / فیچر غوښتنه راپور کړئ",
-    "bn": "একটি বাগ / বৈশিষ্ট্য অনুরোধ রিপোর্ট করুন",
-    "de": "Melden Sie einen Fehler / eine Feature-Anfrage"
+    "id": "btn_source_code",
+    "en": "App source code",
+    "fr": "Code source de l'app",
+    "es": "Código fuente de la aplicación",
+    "ru": "Исходный код приложения",
+    "zh": "应用源代码",
+    "ar": "كود مصدر التطبيق",
+    "fa": "کد منبع برنامه",
+    "ps": "د اپلیکیشن سرچینه کوډ",
+    "bn": "অ্যাপের সোর্স কোড",
+    "de": "Quellcode der App"
   },
   {
     "id": "btn_report",

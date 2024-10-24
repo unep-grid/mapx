@@ -6865,9 +6865,9 @@
     "ar": "لوحة تحكم "
   },
   {
-    "id": "btn_bug_report",
-    "en": "Report a bug / feature request",
-    "ar": "الإبلاغ عن خطأ / طلب ميزة"
+    "id": "btn_source_code",
+    "en": "App source code",
+    "ar": "كود مصدر التطبيق"
   },
   {
     "id": "btn_report",

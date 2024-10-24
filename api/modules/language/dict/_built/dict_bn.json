@@ -6865,9 +6865,9 @@
     "bn": "প্যানেল নিয়ন্ত্রণ করে "
   },
   {
-    "id": "btn_bug_report",
-    "en": "Report a bug / feature request",
-    "bn": "একটি বাগ / বৈশিষ্ট্য অনুরোধ রিপোর্ট করুন"
+    "id": "btn_source_code",
+    "en": "App source code",
+    "bn": "অ্যাপের সোর্স কোড"
   },
   {
     "id": "btn_report",

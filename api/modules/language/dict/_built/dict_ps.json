@@ -6865,9 +6865,9 @@
     "ps": "د کنټرول پینل "
   },
   {
-    "id": "btn_bug_report",
-    "en": "Report a bug / feature request",
-    "ps": "د بګ / فیچر غوښتنه راپور کړئ"
+    "id": "btn_source_code",
+    "en": "App source code",
+    "ps": "د اپلیکیشن سرچینه کوډ"
   },
   {
     "id": "btn_report",

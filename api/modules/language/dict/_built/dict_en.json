@@ -5492,8 +5492,8 @@
     "en": "Controls panel"
   },
   {
-    "id": "btn_bug_report",
-    "en": "Report a bug / feature request"
+    "id": "btn_source_code",
+    "en": "App source code"
   },
   {
     "id": "btn_report",

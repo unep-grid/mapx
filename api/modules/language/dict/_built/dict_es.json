@@ -6865,9 +6865,9 @@
     "es": "Panel de controles "
   },
   {
-    "id": "btn_bug_report",
-    "en": "Report a bug / feature request",
-    "es": "Informar de un error/solicitud de función"
+    "id": "btn_source_code",
+    "en": "App source code",
+    "es": "Código fuente de la aplicación"
   },
   {
     "id": "btn_report",

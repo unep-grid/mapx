@@ -6865,9 +6865,9 @@
     "de": "Bedienfeld "
   },
   {
-    "id": "btn_bug_report",
-    "en": "Report a bug / feature request",
-    "de": "Melden Sie einen Fehler / eine Feature-Anfrage"
+    "id": "btn_source_code",
+    "en": "App source code",
+    "de": "Quellcode der App"
   },
   {
     "id": "btn_report",

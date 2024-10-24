@@ -17,8 +17,7 @@ import { settings } from "./../settings";
 import { theme } from "./../mx.js";
 import { IssueReporterClient } from "../issue_reporter/index.js";
 import { modalIframe } from "../modal_iframe/index.js";
-import {GeocoderModal} from "../geocoder/index.js";
-
+import { GeocoderModal } from "../geocoder/index.js";
 
 export function generateButtons() {
   return [
@@ -85,11 +84,11 @@ export function generateButtons() {
     }),
     new Button({
       key: "gc_geocoder",
-      classesIcon: ["fa","fa-search"],
+      classesIcon: ["fa", "fa-search"],
       action: () => {
         const map = getMap();
         new GeocoderModal({
-           map : map
+          map: map,
         });
       },
     }),
@@ -208,13 +207,6 @@ export function generateButtons() {
       },
     }),
     new Button({
-      key: "btn_bug_report",
-      classesIcon: ["fa", "fa-bug"],
-      action: () => {
-        window.open(settings.links.repositoryIssues, "_blank");
-      },
-    }),
-    new Button({
       key: "btn_report",
       classesIcon: ["fa", "fa-flag"],
       action: async () => {
@@ -229,6 +221,13 @@ export function generateButtons() {
         return modalIframe({
           doc_id: "doc_home",
         });
+      },
+    }),
+    new Button({
+      key: "btn_source_code",
+      classesIcon: ["fa", "fa-github", "fa-2x"],
+      action: () => {
+        window.open(settings.links.repository, "_blank");
       },
     }),
   ];
