@@ -128,7 +128,8 @@
     },
     "mx_map_text_contour": {
       "visibility": "visible",
-      "color": "rgba(255,255,255,0.6)"
+      "color": "rgba(255,255,255,0.6)",
+      "font": "Noto Sans Light"
     },
     "mx_map_text_contour_outline": {
       "visibility": "visible",

@@ -9375,7 +9375,7 @@
     "zh": "地图：等高线文本"
   },
   {
-    "id": "mx_map_text_countour_outline",
+    "id": "mx_map_text_contour_outline",
     "en": "Map: contour text outline",
     "zh": "地图：等高线文本边框"
   },

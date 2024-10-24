@@ -715,7 +715,6 @@
     "bn": "মানচিত্র: জলাশয়ের পাঠ্য আউটলাইন",
     "de": "Karte: Umriss des Wassertextes"
   },
-
   {
     "id": "mx_map_contour_lines",
     "en": "Map: contour lines",
@@ -742,9 +741,8 @@
     "bn": "মানচিত্র: কনট্যুর পাঠ্য",
     "de": "Karte: Konturtext"
   },
-
   {
-    "id": "mx_map_text_countour_outline",
+    "id": "mx_map_text_contour_outline",
     "en": "Map: contour text outline",
     "fr": "Carte : bordure texte des courbes de niveau",
     "es": "Mapa: borde del texto de contorno",

@@ -9375,7 +9375,7 @@
     "fr": "Carte : texte des courbes de niveau"
   },
   {
-    "id": "mx_map_text_countour_outline",
+    "id": "mx_map_text_contour_outline",
     "en": "Map: contour text outline",
     "fr": "Carte : bordure texte des courbes de niveau"
   },

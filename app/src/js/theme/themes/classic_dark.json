@@ -151,13 +151,14 @@
       "color": "rgba(28,28,28,0.82)",
       "font": "Varela Round Regular"
     },
-  "mx_map_contour_lines": {
+    "mx_map_contour_lines": {
       "visibility": "visible",
       "color": "rgba(255,255,255,0.6)"
     },
     "mx_map_text_contour": {
       "visibility": "visible",
-      "color": "rgba(255,255,255,0.6)"
+      "color": "rgba(255,255,255,0.6)",
+      "font": "Noto Sans Light"
     },
     "mx_map_text_contour_outline": {
       "visibility": "visible",
