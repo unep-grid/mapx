@@ -872,9 +872,19 @@ export function debouncePromise(fn, delay = 200) {
   let pendingReject;
   let pendingPromise;
 
-  return function (...args) {
-    clearTimeout(timerId);
+  const cleanup = () => {
+    pendingPromise = null;
+    pendingResolve = null;
+    pendingReject = null;
+  };
 
+  return function (...args) {
+    // Clear existing timer
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+
+    // Create new promise if none exists
     if (!pendingPromise) {
       pendingPromise = new Promise((resolve, reject) => {
         pendingResolve = resolve;
@@ -885,11 +895,16 @@ export function debouncePromise(fn, delay = 200) {
     timerId = setTimeout(async () => {
       try {
         const result = await fn(...args);
-        pendingResolve(result);
+        if (pendingResolve) {
+          pendingResolve(result);
+        }
       } catch (error) {
-        pendingReject(error);
+        if (pendingReject) {
+          pendingReject(error);
+        }
       } finally {
-        pendingPromise = null;
+        cleanup();
+        timerId = null;
       }
     }, delay);
 

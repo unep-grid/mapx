@@ -107,7 +107,7 @@ describe("Geocoder", () => {
       });
 
       expect(geocoder.config.url.toString()).toBe("https://photon.komoot.io/");
-      expect(geocoder.config.limit).toBe(10);
+      expect(geocoder.config.limit).toBe(50);
       expect(geocoder._map).toBe(mockMap);
       expect(geocoder._elTarget).toBe(target);
       expect(geocoder._elTarget.contains(geocoder._elResultsList)).toBeTruthy();

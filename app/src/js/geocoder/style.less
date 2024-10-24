@@ -1,12 +1,17 @@
 .gcm_container {
   .panel {
     margin-bottom: 0;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
   }
-
+  .panel-body {
+    flex-shrink: 0; /* Prevents body from shrinking */
+  }
   .list-group {
-    max-height: 300px;
-    overflow-y: auto;
-    margin-bottom: 0;
+    flex: 1; /* Takes up remaining space */
+    overflow-y: auto; /* Enables scrolling */
+    min-height: 0; /* Required for Firefox */
   }
 
   .list-group-item {
@@ -16,5 +21,7 @@
   .panel-footer {
     background-color: var(--mx_ui_background);
     border-top: 1px solid var(--mx_ui_border);
+
+    flex-shrink: 0; /* Prevents footer from shrinking */
   }
 }

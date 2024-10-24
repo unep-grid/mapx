@@ -9,15 +9,19 @@ import { shake } from "../elshake";
 import { viewsListAddSingle } from "../views_list_manager";
 import { getDictItem } from "../language";
 import { isArrayOfNumber } from "../is_test";
+import { debouncePromise } from "../mx_helper_misc";
+import "./style.less";
 
 const def_conf = {
   url: new URL("https://photon.komoot.io/"),
-  limit: 10,
+  limit: 50,
   elTarget: null,
   map: null,
   proximity: false,
   reverse: false,
   onLocationSelect: null,
+  debounce_delay: 300,
+  timeout_duration: 10000,
 };
 
 class MarkerLocation {
@@ -26,6 +30,7 @@ class MarkerLocation {
     this.feature = feature;
     this.markers = markers;
     this.markers.add(this);
+    this.performSearch = debouncePromise(this.performSearch, 1000);
   }
 
   remove() {
@@ -120,10 +125,8 @@ export class Geocoder {
       placeholder: await getDictItem("gc_search_placeholder"),
       on: [
         "keypress",
-        (e) => {
-          if (e.key === "Enter") {
-            this.performSearch();
-          }
+        () => {
+          this.performSearch();
         },
       ],
     });
@@ -197,33 +200,152 @@ export class Geocoder {
     this.clearAllMarkers();
   }
 
-  async performSearch() {
-    const query = this._elInput.value.trim();
+  get query() {
+    return this._elInput.value.trim();
+  }
 
+  // Debounced search method
+  async performSearch() {
+    const query = this.query;
+
+    // Clear existing timer
+    if (this._debounceTimer) {
+      clearTimeout(this._debounceTimer);
+    }
+
+    // Handle empty query
     if (!query) {
       this._elResultsList.innerHTML = "";
       this.setResetButtonState(false);
       return;
     }
 
-    // Abort previous request if exists
-    if (this._abord_ctrl) {
-      this._abord_ctrl.abort("new query");
-    }
+    // Set up new debounced search
+    return new Promise((resolve) => {
+      this._debounceTimer = setTimeout(async () => {
+        try {
+          this.showLoading();
+          const results = await this._executeSearch(query);
+          this.displayResults(results);
+          resolve(results);
+        } catch (error) {
+          this.handleSearchError(error);
+          resolve(null);
+        } finally {
+          this.hideLoading();
+        }
+      }, this.config.debounce_delay);
+    });
+  }
 
-    this.showLoading();
+  // Main search execution
+  async _executeSearch(query) {
+    // Abort any pending requests
+    this.abortPendingRequest();
 
     try {
       const results = await this.fetchLocations(query);
-      this.displayResults(results);
-    } catch (err) {
-      if (err.name === "AbortError") {
-        return;
-      }
-      this.showError("Failed to fetch results. Please try again.");
-    } finally {
-      this.hideLoading();
+      return results;
+    } catch (error) {
+      throw error;
     }
+  }
+
+  async fetchLocations(query) {
+    try {
+      const fc = await this.fetchGeoJSON(query);
+      if (!fc) {
+        return [];
+      }
+      return fc.features.map((feature) => ({
+        feature,
+        display_name: this.formatLocationString(feature.properties),
+      }));
+    } catch (error) {
+      console.warn("Location fetch error:", error);
+      throw error;
+    }
+  }
+
+  async fetchGeoJSON(query) {
+    this._abortController = new AbortController();
+    const { signal } = this._abortController;
+
+    try {
+      const url = this.buildSearchURL(query);
+      const response = await this.makeRequest(url, signal);
+      return response;
+    } catch (error) {
+      this.handleNetworkError(error);
+    } finally {
+      this._abortController = null;
+    }
+  }
+
+  buildSearchURL(query) {
+    const url = new URL(this.config.url);
+    url.searchParams.set("q", query);
+    url.searchParams.set("lang", settings.language);
+    url.searchParams.set("limit", this.config.limit);
+    url.pathname = this.config.reverse ? "/reverse" : "/api";
+
+    if (this.config.proximity) {
+      const center = this._map.getCenter();
+      url.searchParams.set("lat", center.lat);
+      url.searchParams.set("lon", center.lng);
+    }
+
+    return url;
+  }
+
+  async makeRequest(url, signal) {
+    const timeoutId = setTimeout(() => {
+      if (this._abortController) {
+        this._abortController.abort("timeout");
+      }
+    }, this.config.timeout_duration);
+
+    try {
+      const response = await fetch(url, {
+        signal,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return response.json();
+    } finally {
+      clearTimeout(timeoutId);
+    }
+  }
+
+  abortPendingRequest() {
+    if (this._abortController) {
+      this._abortController.abort("new query");
+      this._abortController = null;
+    }
+  }
+
+  handleSearchError(error) {
+    if (error.name === "AbortError") {
+      return; // Silently handle aborted requests
+    }
+    this.showError("Failed to fetch results. Please try again.");
+    console.error("Search error:", error);
+  }
+
+  handleNetworkError(error) {
+    if (error.name === "AbortError") {
+      if (error.message === "timeout") {
+        throw new Error("Request timed out");
+      }
+      return null; // Return null for aborted requests
+    }
+    throw error;
   }
 
   displayResults(results) {
@@ -376,75 +498,6 @@ export class Geocoder {
     this._elResultsList.appendChild(errorEl);
   }
 
-  async fetchGeoJSON(query) {
-    const lang = settings.language;
-    const url = this.config.url;
-
-    if (this._abord_ctrl) {
-      this._abord_ctrl.abort("new query");
-    }
-
-    this._abord_ctrl = new AbortController();
-    const { signal } = this._abord_ctrl;
-
-    try {
-      url.searchParams.set("q", query);
-      url.searchParams.set("lang", lang);
-      url.searchParams.set("limit", this.config.limit);
-      url.pathname = this.config.reverse ? "/reverse" : "/api";
-
-      if (this.config.proximity) {
-        const center = this._map.getCenter();
-        url.searchParams.set("lat", center.lat);
-        url.searchParams.set("lon", center.lng);
-      }
-
-      const timeoutId = setTimeout(() => {
-        this._abord_ctrl.abort("timeout");
-      }, 10000);
-
-      const response = await fetch(url, {
-        signal,
-        headers: {
-          Accept: "application/json",
-        },
-      });
-
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      return response.json();
-    } catch (err) {
-      if (err === "new query") {
-        return null;
-      }
-      console.warn("Geocoder fetch error:", err);
-      throw new Error("Failed to fetch location data");
-    } finally {
-      this._abord_ctrl = null;
-    }
-  }
-
-  async fetchLocations(query) {
-    try {
-      const fc = await this.fetchGeoJSON(query);
-      if (!fc) {
-        return;
-      }
-      return fc.features.map((feature) => {
-        return {
-          feature: feature,
-          display_name: this.formatLocationString(feature.properties),
-        };
-      });
-    } catch (e) {
-      console.warn(e);
-    }
-  }
-
   /**
    * Formats a place object into a readable address string
    * @param {Object} placeData - Object containing address components
@@ -490,7 +543,7 @@ export class Geocoder {
   }
 
   goTo(loc) {
-    const isCoord = isArrayOfNumber(loc);
+    const isCoord = isArrayOfNumber(loc) && loc.length === 2;
 
     if (isCoord) {
       this._map.flyTo({
@@ -499,7 +552,7 @@ export class Geocoder {
       });
     } else {
       this._map.fitBounds(loc, {
-        padding: { top: 10, bottom: 25, left: 15, right: 5 },
+        padding: { top: 10, bottom: 10, left: 10, right: 10 },
         linear: false,
         duration: 2000,
       });

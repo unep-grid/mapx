@@ -76,6 +76,13 @@ export function generateButtons() {
         map.easeTo({ bearing: 0, pitch: 0 });
       },
     }),
+
+    new Button({
+      key: "btn_fullscreen",
+      classesIcon: ["fa", "fa-expand"],
+      classesButton: ["btn-ctrl--item-no-mobile"],
+      action: toggleFullScreen,
+    }),
     new Button({
       key: "gc_geocoder",
       classesIcon: ["fa","fa-search"],
@@ -85,12 +92,6 @@ export function generateButtons() {
            map : map
         });
       },
-    }),
-    new Button({
-      key: "btn_fullscreen",
-      classesIcon: ["fa", "fa-expand"],
-      classesButton: ["btn-ctrl--item-no-mobile"],
-      action: toggleFullScreen,
     }),
     new Button({
       key: "btn_toggle_theme_dark",
