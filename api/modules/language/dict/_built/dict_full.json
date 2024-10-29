@@ -24090,16 +24090,16 @@
   },
   {
     "id": "mx_map_boundary_un_3",
-    "en": "Map: Armistice or international boundary_unistrative line",
-    "fr": "Carte : Armistice ou ligne boundary_unistrative internationale",
-    "es": "Mapa: armisticio o línea internacional",
-    "ru": "Карта: перемирие или международная граница_унистративная линия ",
+    "en": "Map: Armistice or international boundary line",
+    "fr": "Carte : ligne d'armistice ou frontière internationale",
+    "es": "Mapa: línea de armisticio o frontera internacional",
+    "ru": "Карта: линия перемирия или международная граница",
     "zh": "地图：停战线或国际边界线",
-    "ar": "الخريطة: الهدنة أو خط الحدود الدولي الموحد ",
-    "fa": "نقشه: آتش بس یا خط بین المللی_محدوده بین المللی ",
-    "ps": "نقشه: آرمسټیس یا نړیوال حدود_اینسټریټ لاین ",
-    "bn": "মানচিত্র: আর্মিস্টাইস বা আন্তর্জাতিক সীমানা_অন্টিস্টেটিভ লাইন ",
-    "de": "Karte: Waffenstillstand oder internationale Grenzlinie "
+    "ar": "خريطة: خط هدنة أو حدود دولية",
+    "fa": "نقشه: خط آتش‌بس یا مرز بین‌المللی",
+    "ps": "نقشه: د اوربند یا نړيوال سرحد کرښه",
+    "bn": "মানচিত্র: যুদ্ধবিরতি বা আন্তর্জাতিক সীমারেখা",
+    "de": "Karte: Waffenstillstandslinie oder internationale Grenze"
   },
   {
     "id": "mx_map_boundary_un_4",
