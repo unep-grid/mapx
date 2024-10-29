@@ -39,7 +39,7 @@ export class IssueReporterClient {
   build() {
     const rc = this;
     rc._el_btn_submit = elButtonFa("btn_submit", {
-      icon: "envelop",
+      icon: "envelope",
       action: async () => {
         await rc.submit();
       },
@@ -54,8 +54,16 @@ export class IssueReporterClient {
     );
     rc._el_editor = el("div", { class: "jed-container" });
 
+    rc._el_btn_source = elButtonFa("btn_source_code", {
+      icon: "github",
+      action: () => {
+        window.open(settings.links.repository, "_blank");
+      },
+    });
+
     const elContent = el("div", [rc._elErrorContainer, rc._el_editor]);
-    const buttons = [this._el_btn_submit];
+
+    const buttons = [this._el_btn_submit, rc._el_btn_source];
 
     rc._modal = modalSimple({
       addBackground: false,
@@ -67,7 +75,6 @@ export class IssueReporterClient {
         rc.destroy("modal close");
       },
     });
-
 
     events.on(["view_added", "view_removed"], this.validate);
   }
