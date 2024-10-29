@@ -14,13 +14,13 @@ import { ProjectManager } from "./project/index.js";
 import { ButtonPanelManager } from "./button_panel/manager.js";
 import { ControlsPanel } from "./panel_controls/index.js";
 import { SpotlightManager } from "./pixop/spotlight_manager.js";
+import { MapxDraw } from "./draw/index.js";
 
 const panels = new ButtonPanelManager();
 const version = settings.version;
 
 const templates = {
   viewListOptions: require("../dot/view_list_options.dot.html"),
-  //viewListControls: require("../dot/view_list_controls.dot.html"),
   viewListFilters: require("../dot/view_list_filters.dot.html"),
 };
 
@@ -38,6 +38,7 @@ const initQueryParams = {}; // set in init_common.js
 const listeners = new ListenerStore();
 const events = new EventSimple();
 const controls = new ControlsPanel();
+const draw = new MapxDraw({ controls });
 const mg = new Magnifier(); // see demo.js in /magnifier package
 const hinthack = new HintHack();
 const project = new ProjectManager();
@@ -65,6 +66,7 @@ export {
   events,
   hinthack,
   theme,
+  draw,
   ws,
   nc,
   mg,

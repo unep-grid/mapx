@@ -9,6 +9,8 @@
   display: block;
   --animate-transition-ms: 350ms;
   --animate-transition-slow-ms: 500ms;
+  --animate-transition-very-slow-ms: 1000ms;
+
   .button-panel--container {
     pointer-events: none;
     position: absolute;
@@ -64,8 +66,8 @@
     &.button-panel--container-animate {
       pointer-events: none;
       transition:
-        width var(--animate-transition-ms) ease-in-out,
-        height var(--animate-transition-ms) linear;
+        width var(--animate-transition-ms) cubic-bezier(0.68, -0.6, 0.32, 1.6) 0s,
+        height var(--animate-transition-ms) cubic-bezier(0.68, -0.6, 0.32, 1.6) 0s;
     }
     .button-panel--btn {
       width: 40px;
@@ -146,7 +148,7 @@
         width: 100%;
         max-height: 100%;
         max-width: 100%;
-        overflow: auto;
+        /*overflow: auto; controls panel need visible overflow */
         border-radius: 10px;
         background: var(--mx_ui_background);
         &.button-panel--item-content-flex-col {

@@ -15,29 +15,24 @@ import "./style.less";
 
 const def = {};
 
-const store = {
+const local = {
   instance: null,
 };
 
 class MapxDraw extends EventSimple {
-  constructor(opt) {
+  constructor() {
     super();
-    const md = this;
-    md.opt = Object.assign({}, def, opt);
-    md._map = md.opt.map;
-    md._controls = md.opt.controls || controls;
-
-    md.init();
-    return md;
   }
 
   /**
    * Set up essential stuff.
-   * The draw module is loaded only if MapxDraw is enabled
    */
-
-  async init() {
+  async init(opt) {
     const md = this;
+    md._opt = Object.assign({}, def, opt);
+    md._map = md._opt.map;
+    md._controls = md._opt.controls || controls;
+
     if (md._init) {
       return;
     }
@@ -50,10 +45,16 @@ class MapxDraw extends EventSimple {
       );
     }
 
-    if (store.instance instanceof MapxDraw) {
-      store.instance.destroy();
+    if (local.instance instanceof MapxDraw) {
+      local.instance.destroy();
     }
-    store.instance = md;
+    local.instance = md;
+
+    /**
+     * Toggle button should exists in controls
+     * e.g. in panel_controls/mapx_buttons.js
+     */
+    md._btn_toggle = md._controls.get("draw_btn_toggle");
 
     /**
      * Binds all method at once
@@ -64,16 +65,6 @@ class MapxDraw extends EventSimple {
      * internal storage
      */
     md._buttons = [];
-
-    /**
-     * Add the main toggle button
-     */
-    md._btn_toggle = md.addButton({
-      key: "draw_btn_toggle",
-      classesIcon: "mx-draw--btn-edit",
-      classesButton: ["btn-ctrl--item-no-mobile"],
-      action: md.toggle,
-    });
   }
 
   destroy() {
@@ -86,7 +77,7 @@ class MapxDraw extends EventSimple {
     md.fire("destroy");
   }
 
-  async toggle() {
+  async toggle(e) {
     const md = this;
     if (md._enabled) {
       await md.disable();
@@ -142,7 +133,7 @@ class MapxDraw extends EventSimple {
     if (!conf.title) {
       conf.title = md._default_title();
     }
-    md.opt = Object.assign({}, md.opt, conf);
+    md._opt = Object.assign({}, md._opt, conf);
     md.initButtonsType();
     elBtn.classList.add("active");
     md._enabled = true;
@@ -202,7 +193,7 @@ class MapxDraw extends EventSimple {
     opt = Object.assign({}, { classesButton: ["mx-draw--btn"] }, opt);
     const btn = new Button(opt);
     md._buttons.push(btn);
-    md._controls.register(btn);
+    md._controls.register(btn, 14);
     return btn;
   }
 
@@ -251,7 +242,7 @@ class MapxDraw extends EventSimple {
   initButtonsType() {
     const md = this;
     md.clearButtonsType();
-    switch (md.opt.type) {
+    switch (md._opt.type) {
       case "point":
         md.addButton({
           key: "draw_btn_mode_point",
@@ -444,8 +435,8 @@ class MapxDraw extends EventSimple {
       const data = md.getData();
 
       const view = await spatialDataToView({
-        title: md.opt.title,
-        fileName: md.opt.title,
+        title: md._opt.title,
+        fileName: md._opt.title,
         fileType: "geojson",
         data: data,
         save: true,

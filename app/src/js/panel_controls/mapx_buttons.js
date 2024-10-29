@@ -15,6 +15,7 @@ import {
 import { modalMarkdown } from "../modal_markdown/index.js";
 import { settings } from "./../settings";
 import { theme } from "./../mx.js";
+import { draw } from "./../mx.js";
 import { IssueReporterClient } from "../issue_reporter/index.js";
 import { modalIframe } from "../modal_iframe/index.js";
 import { GeocoderModal } from "../geocoder/index.js";
@@ -190,13 +191,11 @@ export function generateButtons() {
       action: mapComposerModalAuto,
     }),
     new Button({
-      key: "btn_about",
-      classesIcon: ["fa", "fa-info"],
-      action: async () => {
-        return modalMarkdown({
-          title: "Disclaimer",
-          txt: await import("./../../md/disclaimer.md"),
-        });
+      key: "draw_btn_toggle",
+      classesIcon: "mx-draw--btn-edit",
+      classesButton: ["btn-ctrl--item-no-mobile"],
+      action: () => {
+        draw.toggle();
       },
     }),
     new Button({
@@ -228,6 +227,16 @@ export function generateButtons() {
       classesIcon: ["fa", "fa-github", "fa-2x"],
       action: () => {
         window.open(settings.links.repository, "_blank");
+      },
+    }),
+    new Button({
+      key: "btn_about",
+      classesIcon: ["fa", "fa-info"],
+      action: async () => {
+        return modalMarkdown({
+          title: "Disclaimer",
+          txt: await import("./../../md/disclaimer.md"),
+        });
       },
     }),
   ];

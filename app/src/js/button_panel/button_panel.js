@@ -735,6 +735,7 @@ export class ButtonPanel extends EventSimple {
     for (let s in panel.opt.container_style) {
       panel.elContainer.style[s] = panel.opt.container_style[s];
     }
+    panel.fire("reset-style");
   }
 
   isVisible() {

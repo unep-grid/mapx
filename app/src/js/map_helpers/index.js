@@ -6,6 +6,7 @@ import {
   data as mx_storage,
   listeners,
   theme,
+  draw,
   templates,
   mapboxgl,
   maps,
@@ -32,7 +33,6 @@ import {
   MapControlAttribution,
   MapControlScale,
 } from "./../map_controls";
-import { MapxDraw } from "./../draw";
 import { NotifCenter } from "./../notif_center/";
 import { cleanDiacritic } from "./../string_util/";
 import chroma from "chroma-js";
@@ -158,7 +158,6 @@ const mx_local = {
   views_active: new Set(),
   panel_main: null,
   button_filter: null,
-  draw: null,
   search: null,
 };
 
@@ -1305,17 +1304,17 @@ export async function initMapx(o) {
   /**
    * Add mapx draw handler
    */
-  mx_local.draw = new MapxDraw({
-    map: map,
+  await draw.init({
+    map,
     controls,
   });
-  mx_local.draw.on("enable", () => {
+  draw.on("enable", () => {
     setClickHandler({
       type: "draw",
       enable: true,
     });
   });
-  mx_local.draw.on("disable", () => {
+  draw.on("disable", () => {
     setClickHandler({
       type: "draw",
       enable: false,

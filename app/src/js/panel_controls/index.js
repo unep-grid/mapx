@@ -45,18 +45,24 @@ class ControlsPanel {
     cp.init();
   }
 
+  // Panel initialization
   init() {
     const cp = this;
     const buttons = generateButtons();
     cp.controls = new ButtonsControls(buttons);
     cp.panel = new ButtonPanel(cp.opt.panel);
     cp.panel.elPanelContent.appendChild(cp.controls.elGroup);
+
+    // Set up event listeners
     cp.panel.on("resize-end", cp.sizeOptimizer);
+    cp.panel.on("reset-style", cp.sizeOptimizer);
     cp.controls.on("register", cp.sizeOptimizer);
     cp.controls.on("unregister", cp.sizeOptimizer);
     window.addEventListener("resize", cp.sizeOptimizer);
-  }
 
+    // Run initial size optimization after setup
+    cp.sizeOptimizer();
+  }
   /**
    * Controls -> get control by id
    * @param {string} id  ctrl id
