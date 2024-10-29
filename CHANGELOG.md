@@ -1,3 +1,17 @@
+  - [1.13.12-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.12-alpha.2) 
+    
+    - Controls #1030
+        - Update layout
+        - Adapted draw tool init method to integrate the button with other controls, instead of append to control list
+    - Issue report tool #1030
+        - Button/link to source code
+        - Added requested test to description
+    - Panels
+        - Improve resize logic + trim unused code + improved maintenance 
+    - Geocoder 
+        - Improved input : instant search
+        - Solved the zoom to extent bug, using partial coordinates instead of the full extent
+
   - [1.13.12-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.12-alpha.1) 
 
     - Contours #1023
