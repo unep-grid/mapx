@@ -1,3 +1,9 @@
+  - [1.13.12-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.12-alpha.3) 
+
+    - Geocoder  
+        - Revert to non-instant search, seems to trigger throttling.
+        - Added OSM node type icons.
+
   - [1.13.12-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.12-alpha.2) 
     
     - Controls #1030
