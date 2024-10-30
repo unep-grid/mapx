@@ -24,4 +24,29 @@
 
     flex-shrink: 0; /* Prevents footer from shrinking */
   }
+
+  .gcm--icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    .gcm--node {
+      &:before {
+        content: "";
+        icon-font: url("./svg/node.svg");
+      }
+    }
+    .gcm--way {
+      &:before {
+        content: "";
+        icon-font: url("./svg/way.svg");
+      }
+    }
+    .gcm--relation {
+      &:before {
+        content: "";
+        icon-font: url("./svg/relation.svg");
+      }
+    }
+  }
 }

@@ -220,19 +220,19 @@ describe("Geocoder", () => {
 
     it("should show and hide loading state", () => {
       geocoder.showLoading();
-      expect(target.querySelector(".fa-spinner")).toBeTruthy();
+      expect(geocoder._elLoading).toBeTruthy();
 
       geocoder.hideLoading();
-      expect(target.querySelector(".fa-spinner")).toBeFalsy();
+      expect(geocoder._elLoading).toBeFalsy();
     });
 
     it("should show error messages", () => {
       const errorMessage = "Test error message";
       geocoder.showError(errorMessage);
 
-      const errorEl = target.querySelector(".text-danger");
-      expect(errorEl).toBeTruthy();
-      expect(errorEl.textContent).toBe(errorMessage);
+      const elError = target.querySelector(".text-danger");
+      expect(elError).toBeTruthy();
+      expect(elError.innerText).toBe(errorMessage);
     });
   });
 
@@ -274,7 +274,7 @@ describe("Geocoder", () => {
       ];
       geocoder.goTo(bounds);
       expect(mockMap.fitBounds).toHaveBeenCalledWith(bounds, {
-        padding: { top: 10, bottom: 25, left: 15, right: 5 },
+        padding: { top: 10, bottom: 10, left: 10, right: 10 },
         linear: false,
         duration: 2000,
       });

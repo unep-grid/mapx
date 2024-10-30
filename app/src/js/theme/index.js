@@ -89,7 +89,9 @@ class Theme extends EventSimple {
     const t = this;
     const s = inverseResolver(t.id());
     for (const k in s) {
-      t._btns[k].activate(s[k]);
+      if (t._btns[k]) {
+        t._btns[k].activate(s[k]);
+      }
     }
   }
 
@@ -98,7 +100,7 @@ class Theme extends EventSimple {
    */
   registerButton(btn, type) {
     const t = this;
-    if (!btn instanceof Button) {
+    if ((!btn) instanceof Button) {
       console.warn("registerButton expects a Button instance");
       return;
     }
@@ -211,7 +213,7 @@ class Theme extends EventSimple {
         save_url: false,
         update_buttons: true,
       },
-      opt
+      opt,
     );
     let { sound, save, save_url, update_buttons } = opt;
 
@@ -240,8 +242,8 @@ class Theme extends EventSimple {
           oldTheme.dark && !newTheme.dark
             ? "switch_on"
             : !oldTheme.dark && newTheme.dark
-            ? "switch_off"
-            : "click";
+              ? "switch_off"
+              : "click";
 
         await t.sound(idSound);
       }
@@ -357,7 +359,7 @@ class Theme extends EventSimple {
     const new_colors = Object.assign(
       {},
       default_theme.colors,
-      colors || t._opt.colors
+      colors || t._opt.colors,
     );
     const validColors = await t.validateColors(new_colors);
     if (!validColors) {
@@ -476,7 +478,7 @@ class Theme extends EventSimple {
         dataset: { lang_key: cid },
         "aria-label": cid,
       },
-      tt(cid)
+      tt(cid),
     );
 
     /**
@@ -518,8 +520,8 @@ class Theme extends EventSimple {
         elInput.value = isRange
           ? color.alpha()
           : isCheck
-          ? true
-          : color.hex("rgb");
+            ? true
+            : color.hex("rgb");
 
         if (isCheck) {
           elInput.checked = visible;
@@ -536,7 +538,7 @@ class Theme extends EventSimple {
             for: id,
             "aria-label": cid,
           },
-          tt(`mx_theme_input_${type}`)
+          tt(`mx_theme_input_${type}`),
         );
 
         /**
@@ -548,11 +550,11 @@ class Theme extends EventSimple {
             id: `${cid}_inputs_wrap_${type}`,
           },
           el("td", elLabel),
-          el("td", elInput)
+          el("td", elInput),
         );
 
         return elRow;
-      })
+      }),
     );
 
     /**
@@ -610,7 +612,7 @@ class Theme extends EventSimple {
         class: ["mx-theme--inputs"],
       },
       elLabel,
-      elInputTable
+      elInputTable,
     );
   }
 

@@ -9,7 +9,6 @@ import { shake } from "../elshake";
 import { viewsListAddSingle } from "../views_list_manager";
 import { getDictItem } from "../language";
 import { isArrayOfNumber } from "../is_test";
-import { debouncePromise } from "../mx_helper_misc";
 import "./style.less";
 
 const def_conf = {
@@ -20,8 +19,13 @@ const def_conf = {
   proximity: false,
   reverse: false,
   onLocationSelect: null,
-  debounce_delay: 300,
+  debounce_delay: 1000,
   timeout_duration: 10000,
+  errors: {
+    abord_new_query: "Abord query, new one requested",
+    abord_timeout: "Abord query, timeout",
+  },
+  fit_padding: { top: 10, bottom: 10, left: 10, right: 10 },
 };
 
 class MarkerLocation {
@@ -30,7 +34,6 @@ class MarkerLocation {
     this.feature = feature;
     this.markers = markers;
     this.markers.add(this);
-    this.performSearch = debouncePromise(this.performSearch, 1000);
   }
 
   remove() {
@@ -125,8 +128,10 @@ export class Geocoder {
       placeholder: await getDictItem("gc_search_placeholder"),
       on: [
         "keypress",
-        () => {
-          this.performSearch();
+        (e) => {
+          if (e.key === "Enter") {
+            this.performSearch();
+          }
         },
       ],
     });
@@ -206,42 +211,29 @@ export class Geocoder {
 
   // Debounced search method
   async performSearch() {
-    const query = this.query;
-
-    // Clear existing timer
-    if (this._debounceTimer) {
-      clearTimeout(this._debounceTimer);
-    }
+    const gc = this;
+    const query = gc.query;
 
     // Handle empty query
     if (!query) {
-      this._elResultsList.innerHTML = "";
-      this.setResetButtonState(false);
+      gc.clear();
       return;
     }
-
-    // Set up new debounced search
-    return new Promise((resolve) => {
-      this._debounceTimer = setTimeout(async () => {
-        try {
-          this.showLoading();
-          const results = await this._executeSearch(query);
-          this.displayResults(results);
-          resolve(results);
-        } catch (error) {
-          this.handleSearchError(error);
-          resolve(null);
-        } finally {
-          this.hideLoading();
-        }
-      }, this.config.debounce_delay);
-    });
+    try {
+      gc.showLoading();
+      const results = await gc._executeSearch(query);
+      gc.displayResults(results);
+    } catch (error) {
+      gc.handleSearchError(error);
+    } finally {
+      gc.hideLoading();
+    }
   }
 
   // Main search execution
   async _executeSearch(query) {
     // Abort any pending requests
-    this.abortPendingRequest();
+    this.abortPendingRequest("abord_new_query");
 
     try {
       const results = await this.fetchLocations(query);
@@ -252,19 +244,15 @@ export class Geocoder {
   }
 
   async fetchLocations(query) {
-    try {
-      const fc = await this.fetchGeoJSON(query);
-      if (!fc) {
-        return [];
-      }
-      return fc.features.map((feature) => ({
-        feature,
-        display_name: this.formatLocationString(feature.properties),
-      }));
-    } catch (error) {
-      console.warn("Location fetch error:", error);
-      throw error;
+    const fc = await this.fetchGeoJSON(query);
+    if (!fc) {
+      return [];
     }
+    return fc.features.map((feature) => ({
+      feature,
+      display_name: this.formatLocationString(feature.properties),
+      icon_class: this.osmNodeToIconClass(feature.properties),
+    }));
   }
 
   async fetchGeoJSON(query) {
@@ -300,9 +288,7 @@ export class Geocoder {
 
   async makeRequest(url, signal) {
     const timeoutId = setTimeout(() => {
-      if (this._abortController) {
-        this._abortController.abort("timeout");
-      }
+      this.abortPendingRequest("abord_timeout");
     }, this.config.timeout_duration);
 
     try {
@@ -323,18 +309,16 @@ export class Geocoder {
     }
   }
 
-  abortPendingRequest() {
+  abortPendingRequest(idMessage) {
     if (this._abortController) {
-      this._abortController.abort("new query");
+      this._abortController.abort(this.config.errors[idMessage] || "abord");
       this._abortController = null;
     }
   }
 
   handleSearchError(error) {
-    if (error.name === "AbortError") {
-      return; // Silently handle aborted requests
-    }
-    this.showError("Failed to fetch results. Please try again.");
+    const gc = this;
+    gc.showError("Failed to fetch results. Please try again.");
     console.error("Search error:", error);
   }
 
@@ -368,20 +352,27 @@ export class Geocoder {
   }
 
   createResultItem(result) {
-    const item = el("a", {
-      class: "list-group-item",
-      href: "#",
-      on: [
-        "click",
-        (e) => {
-          e.preventDefault();
-          this.handleLocationSelect(result);
-        },
-      ],
-    });
+    const elIcon = el("i", { class: result.icon_class });
+    const elItem = el(
+      "a",
+      {
+        class: "list-group-item",
+        href: "#",
+        on: [
+          "click",
+          (e) => {
+            e.preventDefault();
+            this.handleLocationSelect(result);
+          },
+        ],
+      },
+      el("div", { class: "gcm--icon-container" }, [
+        elIcon,
+        el("span", result.display_name),
+      ]),
+    );
 
-    item.textContent = result.display_name;
-    return item;
+    return elItem;
   }
 
   handleLocationSelect(result) {
@@ -467,7 +458,6 @@ export class Geocoder {
       open: true,
     });
 
-    console.log("Saved GeoJSON:", geojson);
     return geojson;
   }
 
@@ -476,26 +466,52 @@ export class Geocoder {
   }
 
   showLoading() {
+    this.enable(false);
     this._elResultsList.innerHTML = "";
-    const loadingEl = el("div", { class: "list-group-item text-center" });
-    loadingEl.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Searching...';
-    this._elResultsList.appendChild(loadingEl);
+    this._elLoading = el(
+      "div",
+      { class: "list-group-item text-center" },
+      el("span", "Searching"),
+    );
+    this._elResultsList.appendChild(this._elLoading);
+  }
+
+  enable(enable) {
+    this._elSearchBtn.disabled = !enable;
+    this._elInput.disabled = !enable;
   }
 
   hideLoading() {
-    const loadingEl = this._elResultsList.querySelector(".fa-spinner");
-    if (loadingEl) {
-      loadingEl.closest(".list-group-item").remove();
+    if (this._elLoading) {
+      this._elLoading.remove();
+      delete this._elLoading;
     }
+    this.enable(true);
   }
 
   showError(message) {
     this._elResultsList.innerHTML = "";
-    const errorEl = el("div", {
-      class: "list-group-item text-center text-danger",
-    });
-    errorEl.textContent = message;
+    const errorEl = el(
+      "div",
+      {
+        class: "list-group-item text-center text-danger",
+      },
+      message,
+    );
     this._elResultsList.appendChild(errorEl);
+  }
+
+  osmNodeToIconClass(data) {
+    switch (data.osm_type) {
+      case "N":
+        return "gcm--node";
+      case "R":
+        return "gcm--relation";
+      case "W":
+        return "gcm--way";
+      default:
+        return "gcm--way";
+    }
   }
 
   /**
@@ -552,7 +568,7 @@ export class Geocoder {
       });
     } else {
       this._map.fitBounds(loc, {
-        padding: { top: 10, bottom: 10, left: 10, right: 10 },
+        padding: this.config.fit_padding,
         linear: false,
         duration: 2000,
       });
