@@ -27,6 +27,7 @@ const tblLogs = sql.define({
     "is_guest",
     "is_static",
     "data",
+    "country_code"
   ],
 });
 
@@ -93,23 +94,16 @@ async function saveLogs(logs, ipGeo) {
  *   "id_project": "MX-A3M-LVK-V7S-XOT-J48",
  *   "side": "browser",
  *   "level": "USER_ACTION",
- *   "ip_user": "192.168.65.1"
+ *   "ip_user": "192.168.65.1",
+ *   "country_code": "CH"
  * }
  */
-function formatLogs(logs, ipGeo) {
-  const save_geo = ["session_start", "view_add"];
-  logs = logs || [];
-  const { ip } = ipGeo;
+function formatLogs(logs = [], ipGeo) {
+  const { ip, country } = ipGeo;
   for (const l of logs) {
-    const includeGeo = save_geo.includes(l.id_log);
     l.ip_user = ip;
+    l.country_code = country;
     l.date_modified = new Date(l.date_modified);
-    if (includeGeo) {
-      l.data = {
-        ...ipGeo,
-        ...l.data,
-      };
-    }
   }
   return logs;
 }
