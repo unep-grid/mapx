@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "title": "Report content or issues",
-  "description": "MapX reporting system allows you to send a message anonymously and directly to the right people. Any abuse of this tool could lead to a temporary ban of our IP and that's the only case where we would store identifiable data. For more details you can visit our GitHub repository",
+  "Description": "The MapX reporting system allows you to send anonymous messages directly to the relevant team members. Visit our GitHub repository for additional information and issue tracking.",
   "properties": {
     "type": {
       "type": "string",
