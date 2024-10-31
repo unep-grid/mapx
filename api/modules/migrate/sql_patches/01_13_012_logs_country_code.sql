@@ -25,7 +25,6 @@ FROM mx_logs l
 LEFT JOIN _ip_country ic ON l.ip_user = ic.ip_user;
 
 -- Step 3: Recreate primary key and indexes
-ALTER TABLE mx_logs_c ADD PRIMARY KEY (pid);
 CREATE INDEX mx_logs_c_id_log_data_date_idx 
     ON mx_logs_c (id_log, (data #>> '{id_view}'::text[]), date_modified);
 CREATE INDEX mx_logs_c_ip_user_idx ON mx_logs_c (ip_user);
