@@ -1,5 +1,4 @@
 import { el, elAuto, elPanel, elSpanTranslate, elWait } from "./../el_mapx";
-import { theme } from "./../mx";
 import { getViewAuto, viewLink } from "./../map_helpers";
 import { modal } from "./../mx_helper_modal.js";
 import { objectToArray, debounce } from "./../mx_helper_misc.js";
@@ -12,7 +11,7 @@ import {
   updateLanguageElements,
 } from "./../language";
 import { isLanguageObject, isEmpty, isViewId, isView } from "./../is_test_mapx";
-import { waitFrameAsync } from "../animation_frame";
+import { theme } from "./../mx.js";
 
 const def_opt = {
   add_menu: true,
@@ -206,16 +205,18 @@ async function metaCountByCountryToPlot(table, elPlot) {
     }
 
     const echarts = await moduleLoad("echarts");
-    const isDark = mx.theme.isDark();
-    const colors = mx.theme.colors();
+    const isDark = theme.isDark();
+    const colors = theme.colors();
     const nCountryMap = new Map();
 
     // Populate country map
-    table.forEach((t) => {
+    for (const t of table) {
       const countryCode = t.country || "?";
-      const countryName = t.country_name || countryCode || "Unknown";
+      const countryName = !t.country
+        ? "Unknown"
+        : await getDictItem(countryCode);
       nCountryMap.set(countryCode, countryName);
-    });
+    }
 
     // Prepare data
     const data = table.map((r) => ({

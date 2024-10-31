@@ -33,7 +33,8 @@ WITH
       ip_user,
       id_user,
       is_guest,
-      date_modified
+      date_modified,
+      NULLIF(NULLIF(country_code, ''), ' ') as country_code -- Convert empty strings and spaces to NULL
     FROM
       mx_logs
     WHERE
@@ -41,35 +42,16 @@ WITH
       AND id_log = 'view_add'
       AND date_modified > (CURRENT_DATE - $2::integer)
   ),
-  v_log_ip_country AS (
-    SELECT
-      v.pid,
-      v.id_user,
-      v.is_guest,
-      coalesce(m.country_name, 'unknown') country_name,
-      m.country_iso_code country
-    FROM
-      v_log v
-      LEFT JOIN mx_ip m ON v.ip_user <<= m.network
-    WHERE
-      v.date_modified > (CURRENT_DATE - 365::integer)
-  ),
   v_stat_add_count_by_country AS (
     SELECT
-      country,
-      country_name,
+      country_code as country,
       COUNT(*)
     FROM
-      v_log_ip_country
+      v_log
+    WHERE
+      date_modified > (CURRENT_DATE - 365::integer)
     GROUP BY
-      country,
-      country_name
-  ),
-  v_stat_add_count_by_country_order AS (
-    SELECT
-      *
-    FROM
-      v_stat_add_count_by_country
+      country_code
     ORDER BY
       count desc
   ),
@@ -77,7 +59,7 @@ WITH
     SELECT
       coalesce(json_agg(row_to_json(t)), '[]') tbl
     FROM
-      v_stat_add_count_by_country_order t
+      v_stat_add_count_by_country t
   ),
   v_stat_add_count_by_users AS (
     SELECT
@@ -138,7 +120,6 @@ WITH
       v_stat_add_count_by_distinct_users vs_add_by_distinct_users,
       v_stat_add_count_by_country_table vs_add_by_country
   )
-  
 SELECT
   *
 FROM

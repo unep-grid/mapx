@@ -19,6 +19,15 @@ import { LegendVt } from "../legend_vt";
 import { events, mapboxgl } from "../mx.js";
 
 /**
+ * Add synonyms
+ */
+import countries_syn from "./synonyms/countries.json";
+const syn = new Map();
+for (const country of countries_syn) {
+  syn.set(country.alt, country.id);
+}
+
+/**
  * Set current language ( for updating ui/views, use updateLanguage )
  * @param {String} lang Iso2 language code
  * @return {String} matched language
@@ -273,7 +282,7 @@ export async function updateLanguageElements(o) {
  * @param {string} lang  Two letters language code
  * @return {Promise<String|Array>} If key is an array, array of item, else string.
  */
-export async function getDictItem(key, lang, data) {
+export async function getDictItem(key, lang) {
   lang = lang || getLanguageCurrent();
 
   if (isEmpty(key)) {
@@ -299,7 +308,7 @@ export async function getDictItem(key, lang, data) {
   for (const k of keys) {
     let found = false;
     for (const d of dict) {
-      if (!found && d.id === k) {
+      if (!found && (d.id === k || d.id === syn.get(k))) {
         res.push(d[lang] || d[defaultLang] || k);
         found = true;
       }
