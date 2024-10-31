@@ -1,3 +1,12 @@
+  - [1.13.12-alpha.6](https://github.com/unep-grid/mapx/tree/1.13.12-alpha.6) 
+
+    - Issue reporter 
+        - better description wording
+
+    -  Migration script mx_logs : 
+        - duplicated pid key
+        - remove temp table
+
   - [1.13.12-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.12-alpha.5) 
 
     - Logs.#993 BREAKING CHANGE 
