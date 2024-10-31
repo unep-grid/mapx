@@ -652,8 +652,10 @@ export class Uploader {
       return;
     }
 
-    const promRegistered = [];
-
+    /**
+    * Sequencial approach required for multi files format, like 
+    * shapefile. If using Promise.all, file are not grouped correctly
+    */ 
     for (const file of files) {
       const item = new Item(file, up);
       if (!item.supported) {
@@ -661,9 +663,9 @@ export class Uploader {
         await up.message("up_issue_format_not_supported", { str: file.name });
         continue;
       }
-      promRegistered.push(item.register());
+      await item.register();
     }
-    return Promise.all(promRegistered);
+    return true;
   }
 
   /**

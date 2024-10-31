@@ -38,16 +38,16 @@ export class Item {
   constructor(file, up) {
     const it = this;
     it._up = up;
-    Object.assign(it, {
-      _format: null,
-      _format_valid: false,
-      _key: null,
-      _multiple: false,
-      _driver: null,
-      _exts: new Set(),
-      _files: new Set(),
-      _issues: new Set(),
-    });
+    it._format = null;
+    it._format_valid = false;
+    it._key = null;
+    it._multiple = false;
+    it._driver = null;
+    it._exts = new Set();
+    it._files = new Set();
+    it._issues = new Set();
+    it._ext = null;
+
     bindAll(it);
     const name = file.name.toLowerCase();
     const ext = getExtension(name);
@@ -207,7 +207,7 @@ export class Item {
 
   /**
    * Registers the item for upload.
-   * @returns {Promise<boolean>} registered 
+   * @returns {Promise<boolean>} registered
    */
   async register() {
     const it = this;
@@ -558,7 +558,7 @@ export class Item {
       it._el_form_wrapper,
     ]);
     it.up._el_container.appendChild(it._el_item);
-    
+
     return true;
   }
 
