@@ -2091,8 +2091,13 @@
   },
   {
     "id": "gc_search_placeholder",
-    "en": "Search place..",
-    "zh": "搜索地点.."
+    "en": "Search place, then hit 'Enter'",
+    "zh": "搜索地点，按 'Enter'"
+  },
+  {
+    "id": "gc_btn_search",
+    "en": "Search",
+    "zh": "搜索"
   },
   {
     "id": "geom_tools_modal_select_title",

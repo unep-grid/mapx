@@ -53,15 +53,28 @@
   },
   {
     "id": "gc_search_placeholder",
-    "en": "Search place..",
-    "fr": "Rechercher un lieu..",
-    "es": "Buscar lugar..",
-    "ru": "Поиск места..",
-    "zh": "搜索地点..",
-    "ar": "البحث عن مكان..",
-    "fa": "جستجوی مکان..",
-    "ps": "ځای لټون..",
-    "bn": "স্থান খুঁজুন..",
-    "de": "Ort suchen.."
+    "en": "Search place, then hit 'Enter'",
+    "fr": "Recherchez un lieu, puis pressez 'Entrée'",
+    "es": "Buscar lugar, luego 'Enter'",
+    "ru": "Поиск места, затем 'Enter'",
+    "zh": "搜索地点，按 'Enter'",
+    "ar": "ابحث عن مكان، ثم اضغط 'Enter'",
+    "fa": "جستجوی مکان، سپس 'Enter'",
+    "ps": "ځای ولټوئ، بیا 'Enter' کیکاږئ",
+    "bn": "স্থান খুঁজুন, তারপর 'Enter'",
+    "de": "Ort suchen, dann 'Enter'"
+  },
+  {
+    "id": "gc_btn_search",
+    "en": "Search",
+    "fr": "Recherche",
+    "es": "Buscar",
+    "ru": "Поиск",
+    "zh": "搜索",
+    "ar": "بحث",
+    "fa": "جستجو",
+    "ps": "لټون",
+    "bn": "অনুসন্ধান",
+    "de": "Suche"
   }
 ]

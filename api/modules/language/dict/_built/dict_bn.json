@@ -2091,8 +2091,13 @@
   },
   {
     "id": "gc_search_placeholder",
-    "en": "Search place..",
-    "bn": "স্থান খুঁজুন.."
+    "en": "Search place, then hit 'Enter'",
+    "bn": "স্থান খুঁজুন, তারপর 'Enter'"
+  },
+  {
+    "id": "gc_btn_search",
+    "en": "Search",
+    "bn": "অনুসন্ধান"
   },
   {
     "id": "geom_tools_modal_select_title",

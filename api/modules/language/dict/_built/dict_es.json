@@ -2091,8 +2091,13 @@
   },
   {
     "id": "gc_search_placeholder",
-    "en": "Search place..",
-    "es": "Buscar lugar.."
+    "en": "Search place, then hit 'Enter'",
+    "es": "Buscar lugar, luego 'Enter'"
+  },
+  {
+    "id": "gc_btn_search",
+    "en": "Search",
+    "es": "Buscar"
   },
   {
     "id": "geom_tools_modal_select_title",

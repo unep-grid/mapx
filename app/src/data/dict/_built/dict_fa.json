@@ -2091,8 +2091,13 @@
   },
   {
     "id": "gc_search_placeholder",
-    "en": "Search place..",
-    "fa": "جستجوی مکان.."
+    "en": "Search place, then hit 'Enter'",
+    "fa": "جستجوی مکان، سپس 'Enter'"
+  },
+  {
+    "id": "gc_btn_search",
+    "en": "Search",
+    "fa": "جستجو"
   },
   {
     "id": "geom_tools_modal_select_title",

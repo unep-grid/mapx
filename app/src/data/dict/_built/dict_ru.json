@@ -2091,8 +2091,13 @@
   },
   {
     "id": "gc_search_placeholder",
-    "en": "Search place..",
-    "ru": "Поиск места.."
+    "en": "Search place, then hit 'Enter'",
+    "ru": "Поиск места, затем 'Enter'"
+  },
+  {
+    "id": "gc_btn_search",
+    "en": "Search",
+    "ru": "Поиск"
   },
   {
     "id": "geom_tools_modal_select_title",
