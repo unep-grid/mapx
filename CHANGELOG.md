@@ -1,3 +1,13 @@
+  - [1.13.12-alpha.4](https://github.com/unep-grid/mapx/tree/1.13.12-alpha.4) 
+
+    - Geocoder
+        - improved placeholder 
+        - added search button tooltip translation
+    - Style
+        - Minor change in contours label
+    - Uploader
+        - #1031 Processing file registering in parallel did not allow grouping correctly multifiles format
+
   - [1.13.12-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.12-alpha.3) 
 
     - Geocoder  
