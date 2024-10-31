@@ -410,7 +410,7 @@
         "text-color": "hsl(0, 0%, 2%)",
         "text-halo-width": 1,
         "text-halo-color": "hsl(0, 0%, 90%)",
-        "text-opacity": 0.5
+        "text-opacity": 0.8
       }
     },
     {
