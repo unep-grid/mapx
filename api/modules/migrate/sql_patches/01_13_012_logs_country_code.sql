@@ -39,3 +39,5 @@ GRANT SELECT, INSERT ON TABLE mx_logs TO mapxw;
 
 ALTER TABLE mx_logs
 ALTER COLUMN pid SET DEFAULT nextval('mx_logs_pid_seq'::regclass);
+
+DROP TABLE _ip_country;
