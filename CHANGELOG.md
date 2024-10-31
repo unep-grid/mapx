@@ -1,3 +1,13 @@
+  - [1.13.12-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.12-alpha.5) 
+
+    - Logs.#993 BREAKING CHANGE 
+        - moved data-> country to `country_code`
+        - removed geo infos from data
+        - Added migration script 
+        - updated views stats SQL
+        - Added synonyms countries code : alpha2 -> alpha3 (iso3 code)
+        - updated view metadata module : stat visualizer 
+
   - [1.13.12-alpha.4](https://github.com/unep-grid/mapx/tree/1.13.12-alpha.4) 
 
     - Geocoder
