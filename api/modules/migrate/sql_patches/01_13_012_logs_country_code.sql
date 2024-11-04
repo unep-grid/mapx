@@ -114,12 +114,15 @@ BEGIN
     RAISE NOTICE 'Setting up sequence and permissions...';
 END $$;
 
+-- restart a sequence from scratch
 DROP SEQUENCE IF EXISTS mx_logs_pid_seq CASCADE;
 CREATE SEQUENCE mx_logs_pid_seq;
 SELECT SETVAL('mx_logs_pid_seq', (SELECT COALESCE(MAX(pid), 1) FROM mx_logs));
 ALTER TABLE mx_logs ALTER COLUMN pid SET DEFAULT nextval('mx_logs_pid_seq'::regclass);
 
 -- Set permissions
+ALTER TABLE mx_logs OWNER TO mapxw; -- matches other table
+ALTER SEQUENCE mx_logs_pid_seq OWNED BY mx_logs.pid;
 GRANT SELECT ON TABLE mx_logs TO mapxr;
 GRANT SELECT, INSERT ON TABLE mx_logs TO mapxw;
 
