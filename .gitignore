@@ -141,3 +141,5 @@ typings/
 .yarn-integrity
 
 
+.aider*
+.env
