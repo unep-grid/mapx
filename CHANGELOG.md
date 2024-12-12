@@ -1,3 +1,7 @@
+  - [1.13.12-beta.1](https://github.com/unep-grid/mapx/tree/1.13.12-beta.1) 
+    
+    - Improved migration script for mx_logs & country code
+
   - [1.13.12-alpha.6](https://github.com/unep-grid/mapx/tree/1.13.12-alpha.6) 
 
     - Issue reporter 
