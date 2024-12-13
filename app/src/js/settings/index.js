@@ -7,6 +7,7 @@ import { default as settings } from "./base.json";
 import { default as map } from "./map.json";
 import { default as paths } from "./paths.json";
 import { default as validation } from "./validation.json";
+import { default as services } from "./services.json";
 import { version } from "./../../../package.json";
 
 settings.api.routes = routes;
@@ -18,5 +19,6 @@ settings.map = map;
 settings.paths = paths;
 settings.validation = validation;
 settings.emails = emails;
+settings.services = services;
 
 export { settings };

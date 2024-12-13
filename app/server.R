@@ -40,6 +40,7 @@ server <- function(input, output, session) {
       api = .get(config, c("api")),
       search = .get(config, c("search")),
       map = .get(config, c("map")),
+      services = .get(config, c("services")),
       #
       # Languages, short version using code and array of code
       #

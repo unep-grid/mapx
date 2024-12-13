@@ -1,6 +1,7 @@
 import { el } from "../el_mapx";
 import { isObject } from "../is_test";
 import { getDictItem, updateLanguageElements } from "../language";
+import { settings } from "../settings";
 
 export function epsgBuildSearchBox(opt) {
   const selector = opt.selector;
@@ -173,10 +174,10 @@ export function epsgBuildSearchBox(opt) {
         const elRow = el(
           "div",
           el("button", {
-            innerText: r.name + " (" + r.code + ")",
+            innerText: r.name + " (" + r.code || r.id.code + ")",
             class: ["btn", "btn-default", "epsgio-btn-choose"],
             dataset: {
-              code: r.code,
+              code: r.id.code,
             },
           }),
         );
@@ -187,20 +188,38 @@ export function epsgBuildSearchBox(opt) {
 }
 
 /**
- * Search epsg.io database using string value
- * @param {String} str Any string, like country name, region, or code
- * @return {Promise<Array>} Array of match projection system
+ * Search MapTiler coordinate systems database
+ * @param {String} code - EPSG code, country name, or region
+ * @returns {Promise<Array>} Array of matching projection systems
+ * @throws {Error} If token is missing or API request fails
  */
-export async function epsgQuery(str) {
-  const url = `https://epsg.io/?q=${str}&format=json`;
-  const res = [];
+export async function epsgQuery(code) {
+  if (!settings?.services?.maptiler?.token) {
+    throw new Error("MapTiler API token is required");
+  }
+
+  const token = settings.services.maptiler.token;
+  const url = new URL(
+    `https://api.maptiler.com/coordinates/search/${encodeURIComponent(
+      code,
+    )}.json`,
+  );
+  url.searchParams.set("exports", "true");
+  url.searchParams.set("key", token);
 
   try {
-    const resFetch = await fetch(url);
-    const resJson = await resFetch.json();
-    res.push(...resJson.results);
-  } catch (e) {
-    console.warn(e);
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(
+        `MapTiler API error: ${response.status} ${response.statusText}`,
+      );
+    }
+
+    const data = await response.json();
+    return data.results || [];
+  } catch (error) {
+    console.warn("EPSG query failed:", error);
+    throw error; // Re-throw to let caller handle the error
   }
-  return res;
 }

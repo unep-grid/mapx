@@ -999,7 +999,7 @@ export async function initMapx(o) {
   /**
    * Set mapbox gl token
    */
-  mapboxgl.accessToken = o.token || settings.map.token;
+  mapboxgl.accessToken = settings.services.mapbox.token;
 
   /**
    * MapX map data : views, config, etc..
@@ -1015,9 +1015,10 @@ export async function initMapx(o) {
   /**
    * Set mode
    */
-  const storyAutoStart =
-    !o.modeStatic && getQueryParameter("storyAutoStart")[0];
-  settings.mode.static = !!o.modeStatic || settings.mode.storyAutoStart;
+  const storyAutoStart = !o.static && getQueryParameter("storyAutoStart")[0];
+
+  settings.mode.static = !!o.static || settings.mode.storyAutoStart;
+
   settings.mode.app = !settings.mode.static;
 
   if (storyAutoStart) {
@@ -3650,6 +3651,7 @@ async function viewRenderRt(o) {
   if (!hasLegendUrl) {
     onNextFrame(() => {
       new RasterMiniMap({
+        token: settings.services.mapbox.token,
         elContainer: elLegendImageBox,
         width: 40,
         height: 40,

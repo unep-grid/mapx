@@ -20,6 +20,7 @@ import {
   isBoolean,
   isNotEmpty,
 } from "./is_test";
+import { isEmpty } from "./is_test";
 
 const def = {
   idView: null,
@@ -218,136 +219,111 @@ export async function getSourceVtSummaryUI(opt) {
 }
 
 /**
- * Get raster (wms) source summary
+ * Get raster (WMS) source metadata including spatial extent
+ * @param {Object} view - View configuration object
+ * @param {Object} view.data.source - Source configuration
+ * @param {Array} view.data.source.tiles - WMS tile URLs
+ * @param {boolean} view.data.source.useMirror - Whether to use mirror server
+ * @returns {Object} Metadata including spatial extent in EPSG:4326
  */
 export async function getSourceRtSummary(view) {
-  const out = {};
-  const url = path(view, "data.source.tiles", []);
-  const useMirror = path(view, "data.source.useMirror", false);
-  if (url.length === 0) {
-    return out;
-  }
-  const urlQuery = url[0];
-  if (!isUrlValidWms(urlQuery)) {
-    return out;
-  }
-  const q = getQueryParametersAsObject(urlQuery);
+  const metadata = {};
 
-  if (!isArray(q.layers) && !isArray(q.LAYERS)) {
-    return out;
+  // Validate inputs
+  const tileUrls = path(view, "data.source.tiles", []);
+  if (tileUrls.length === 0) {
+    return metadata;
   }
 
-  if (q.LAYERS) {
-    q.layers = q.LAYERS;
+  const wmsUrl = tileUrls[0];
+  if (!isUrlValidWms(wmsUrl)) {
+    return metadata;
   }
 
-  const layerName = q.layers[0];
-  const endpoint = urlQuery.split("?")[0];
+  // Parse WMS parameters
+  const queryParams = getQueryParametersAsObject(wmsUrl);
+  const layers = queryParams.LAYERS || queryParams.layers;
+  if (!isArray(layers)) {
+    return metadata;
+  }
+
+  const layerName = layers[0];
+  const endpoint = wmsUrl.split("?")[0];
   const timeStamp = path(view, "date_modified", null);
+  const useMirror = path(view, "data.source.useMirror", false);
 
-  const layers = await wmsGetLayers(endpoint, {
+  // Fetch WMS capabilities
+  const layersList = await wmsGetLayers(endpoint, {
     optGetCapabilities: {
-      useMirror: useMirror,
-      searchParams: {
-        /**
-         * timestamp : Used to invalidate getCapabilities cache
-         */
-        timestamp: timeStamp,
-      },
+      useMirror,
+      searchParams: { timestamp: timeStamp },
     },
   });
 
-  const layer = layers.find((l) => {
-    const nameMatch = isString(l.Name) && l.Name === layerName;
-    if (nameMatch) {
-      return true;
-    }
-    /**
-     * Match layer name to.. title ?
-     */
-    const titleMatch = l.Title === layerName;
-    if (titleMatch) {
-      return true;
-    }
-    /**
-     * Match layer name to.. composite name ?
-     */
-    const nameComposite = l.Name.split(":");
-    if (nameComposite[1]) {
-      return nameComposite[1] === layerName;
-    }
-  });
-
-  const validBbox =
-    isObject(layer) &&
-    isArray(layer.BoundingBox) &&
-    layer.BoundingBox.length > 0;
-
-  if (!validBbox) {
-    console.warn("No valid BoundingBox found");
-  } else {
-    try {
-      let bbx;
-      /**
-       * lower left and upper right corners in a specified CRS
-       * minx miny maxx maxy
-       *
-       *  /°°°°°°°°(2,3)
-       *  |           |
-       *  |           |
-       *  (0,1)......./
-       */
-
-      bbx = layer.BoundingBox.find((b) => b.crs === "EPSG:4326");
-
-      if (isObject(bbx) && isArray(bbx.extent)) {
-        /**
-         *  SAMPLE FROM GEOSERVER
-         *"[
-         *  -180,
-         *  -90,
-         *  180,
-         *  90
-         * ]"
-         */
-        out.extent_sp = {
-          lng1: bbx.extent[0],
-          lat2: bbx.extent[1],
-          lng2: bbx.extent[2],
-          lat1: bbx.extent[3],
-        };
-      } else {
-        /**
-         * try reprojection
-         */
-        bbx = layer.BoundingBox[0];
-        const epsg = isString(bbx.crs) ? bbx.crs.split(":")[1] : null;
-
-        if (epsg) {
-          const proj4 = await moduleLoad("proj4");
-          const resEpsg = await epsgQuery(epsg);
-          const proj4from = resEpsg.find((r) => r.proj4).proj4;
-
-          const proj4to = "+proj=longlat +datum=WGS84 +no_defs";
-          const sw_o = { x: bbx.extent[0], y: bbx.extent[1] };
-          const ne_o = { x: bbx.extent[2], y: bbx.extent[3] };
-          const sw = proj4(proj4from, proj4to, sw_o);
-          const ne = proj4(proj4from, proj4to, ne_o);
-
-          out.extent_sp = {
-            lng1: sw.x,
-            lat2: sw.y,
-            lng2: ne.x,
-            lat1: ne.y,
-          };
-        }
-      }
-    } catch (e) {
-      console.warn(e);
-    }
+  const layer = findMatchingLayer(layersList, layerName);
+  if (!layer) {
+    return metadata;
   }
 
-  return out;
+  try {
+    metadata.extent_sp = await extractSpatialExtent(layer);
+  } catch (error) {
+    console.warn("Failed to extract spatial extent:", error);
+  }
+
+  return metadata;
+}
+
+function findMatchingLayer(layers, targetName) {
+  return layers.find((layer) => {
+    if (layer.Name === targetName) return true;
+    if (layer.Title === targetName) return true;
+    const [, compositeName] = layer.Name.split(":");
+    return compositeName === targetName;
+  });
+}
+
+async function extractSpatialExtent(layer) {
+  if (!isObject(layer?.BoundingBox?.[0])) {
+    throw new Error("No valid BoundingBox found");
+  }
+
+  const wgs84Bbox = layer.BoundingBox.find((bbox) => bbox.crs === "EPSG:4326");
+  if (wgs84Bbox?.extent) {
+    return {
+      lng1: wgs84Bbox.extent[0],
+      lat2: wgs84Bbox.extent[1],
+      lng2: wgs84Bbox.extent[2],
+      lat1: wgs84Bbox.extent[3],
+    };
+  }
+
+  // Fallback to projection conversion
+  return await reprojectBoundingBox(layer.BoundingBox[0]);
+}
+
+async function reprojectBoundingBox(bbox) {
+  const epsg = bbox.crs.split(":")[1];
+  const proj4 = await moduleLoad("proj4");
+  const [proj4Data] = await epsgQuery(epsg);
+
+  if (!proj4Data?.exports?.proj4) {
+    throw new Error(`Proj4 not found for ${epsg}`);
+  }
+
+  const fromProj = proj4Data.exports.proj4;
+  const toProj = "+proj=longlat +datum=WGS84 +no_defs";
+
+  const [minX, minY, maxX, maxY] = bbox.extent;
+  const sw = proj4(fromProj, toProj, { x: minX, y: minY });
+  const ne = proj4(fromProj, toProj, { x: maxX, y: maxY });
+
+  return {
+    lng1: sw.x,
+    lat2: sw.y,
+    lng2: ne.x,
+    lat1: ne.y,
+  };
 }
 
 export async function getSourceGjSummary(view) {

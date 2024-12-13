@@ -404,8 +404,8 @@ function findValues(obj, key) {
 /**
  * Get map config from client
  */
-function mwGetConfigMap(_, res) {
-  return sendJSON(res, settings.map);
+function mwGetConfigServices(_, res) {
+  return sendJSON(res, settings.services);
 }
 
 /**
@@ -621,7 +621,7 @@ export {
   /**
    * Middleware
    */
-  mwGetConfigMap,
+  mwGetConfigServices,
   mwGetConfigGeoServer,
   mwSetHeaders,
   /** probably not used **/

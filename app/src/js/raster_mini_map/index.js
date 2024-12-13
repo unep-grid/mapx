@@ -1,8 +1,6 @@
 import mapboxgl from "mapbox-gl";
 //import style from '!postcss-loader!less-loader?{"mimetype":"text/css"}!./style.less';
-import style from './style.less';
-
-import { settings } from "./../settings";
+import style from "./style.less";
 import { isFunction } from "../is_test";
 
 const def = {
@@ -16,6 +14,7 @@ const def = {
   mapSync: null,
   onAdded: null,
   onLoad: null,
+  token: null,
 };
 
 class RasterMiniMap {
@@ -117,7 +116,7 @@ class RasterMiniMap {
       mm.elMap = document.createElement("div");
       mm.el.appendChild(mm.elMap);
 
-      mapboxgl.accessToken = settings.map.token;
+      mapboxgl.accessToken = mm.opt.token;
 
       mm.map = new mapboxgl.Map({
         preserveDrawingBuffer: true,

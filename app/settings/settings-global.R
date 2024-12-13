@@ -19,6 +19,17 @@ config[["system"]] <- list(
   hostnameRemote = "map-x-full"
 )
 
+#
+# External services
+#
+config[["services"]] <- list(
+  maptiler = list(
+    token = "1234"
+  ),
+  mapbox = list(
+    token = "1234"
+  )
+)
 
 config[["brand"]] <- list(
   name = "MapX"

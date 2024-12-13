@@ -30,8 +30,9 @@ const settings = Object.assign({}, settings_global, {
     host_public: env.API_HOST_PUBLIC,
     port_public: env.API_PORT_PUBLIC,
   },
-  map: {
-    token: env.MAPX_MAPBOX_TOKEN,
+  services: {
+    mapbox: { token: env.MAPX_MAPBOX_TOKEN },
+    maptiler: { token: env.MAPTILER_TOKEN },
   },
   mirror: {
     rateLimit: env.MAPX_MIRROR_RATE_LIMIT,

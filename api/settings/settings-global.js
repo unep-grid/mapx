@@ -51,8 +51,9 @@ const settings_global = {
       ],
     },
   },
-  map: {
-    token: "",
+  services: {
+    mapbox: { token: 1234 },
+    maptiler: { token: 1234 },
   },
   mirror: {
     rateLimit: 2000,

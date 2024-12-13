@@ -35,7 +35,9 @@ usersCreateProject <- jsonlite::fromJSON(Sys.getenv("MAPX_PROJECT_CREATORS"))
 config[["project"]][["creation"]][["usersAllowed"]] <- usersCreateProject
 config[["root_mode"]][["members"]] <- usersRoot
 config[["dev"]][["members"]] <- usersDev
-config[["map"]][["token"]] <- Sys.getenv("MAPX_MAPBOX_TOKEN")
+
+config[["services"]][["maptiler"]][["token"]] <- Sys.getenv("MAPTILER_TOKEN") 
+config[["services"]][["mapbox"]][["token"]] <- Sys.getenv("MAPX_MAPBOX_TOKEN")
 
 config[["mode"]] <- Sys.getenv("MAPX_MODE")
 

@@ -15,13 +15,12 @@ async function loadStatic() {
     /**
      * Init static mode
      */
-    const urlConfig = getApiUrl("getConfigMap"); 
+    const urlConfig = getApiUrl("getConfigServices");
     const resp = await fetch(urlConfig);
-    const config = resp.ok ? await resp.json() : {};
-    settings.map.token = config.token;
+    const services = resp.ok ? await resp.json() : {};
+    Object.assign(settings.services, services);
     return initMapx({
-      token: config.token,
-      modeStatic: true,
+      static: true,
     });
   } catch (e) {
     console.error(e);
