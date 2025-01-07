@@ -1,3 +1,7 @@
+  - [1.13.13.1](https://github.com/unep-grid/mapx/tree/1.13.13.1) 
+
+    - Should fix perm issue in previous mx_logs migration patch + comments
+
   - [1.13.13](https://github.com/unep-grid/mapx/tree/1.13.13) 
     
     - Improvement of the migration script for mx_logs country code
