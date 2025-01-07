@@ -1,14 +1,20 @@
-ALTER TABLE mx_logs
-DROP COLUMN IF EXISTS country_code;
-
-DROP TABLE IF EXISTS mx_logs_cc CASCADE;
+DROP TABLE IF EXISTS mx_logs_cc;
 
 CREATE TABLE
   mx_logs_cc AS
 WITH
   cc AS (
     SELECT
-      *,
+      level,
+      side,
+      id_log,
+      id_user,
+      is_guest,
+      id_project,
+      date_modified,
+      data,
+      ip_user,
+      is_static,
       data #>> '{"country"}' AS country_code
     FROM
       mx_logs
@@ -28,7 +34,7 @@ SELECT
   data,
   ip_user,
   is_static,
-  NULLIF(country_code, '') AS country_code
+  NULLIF(country_code, '')::VARCHAR(2) AS country_code
 FROM
   cc
 ORDER BY
@@ -58,6 +64,8 @@ CREATE INDEX mx_logs_cc_ip_user_date_modified_idx ON mx_logs_cc (ip_user, date_m
 
 CREATE INDEX mx_logs_cc_id_log_idx ON mx_logs_cc (id_log);
 
+DROP TABLE IF EXISTS mx_logs_session_start;
+
 CREATE TABLE
   mx_logs_session_start AS (
     SELECT
@@ -74,6 +82,8 @@ CREATE TABLE
   );
 
 CREATE INDEX mx_logs_session_start_ip_user_date_modified_idx ON mx_logs_session_start (ip_user, date_modified);
+
+DROP TABLE IF EXISTS mx_logs_nearest_session_start;
 
 CREATE TABLE
   mx_logs_nearest_session_start AS (
@@ -128,8 +138,8 @@ CREATE INDEX mx_logs_cc_ip_user_idx ON mx_logs_cc (ip_user);
 
 CREATE INDEX mx_logs_cc_country_code_idx ON mx_logs_cc (country_code);
 
-DO $$ 
-DECLARE 
+DO $$
+DECLARE
   table_name text;
 BEGIN
   table_name := 'mx_logs_backup_' || TO_CHAR(NOW(), 'YYYYMMDD_HH24MI');
