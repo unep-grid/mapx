@@ -1,3 +1,7 @@
+  - [1.13.13](https://github.com/unep-grid/mapx/tree/1.13.13) 
+    
+    - Improvement of the migration script for mx_logs country code
+
   - [1.13.13-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.13-alpha.1) 
 
     - epsgi.io -> maptiler.com for epsg wkt/proj4 proj search #1034
