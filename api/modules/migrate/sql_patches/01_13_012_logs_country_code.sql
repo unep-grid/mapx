@@ -1,3 +1,8 @@
+/**
+ * This patch migrates historical log data by extracting country codes from existing logs and storing them directly.
+ * Part of a larger refactor to avoid costly IP-to-country lookups during statistics computation.
+ */
+
 DROP TABLE IF EXISTS mx_logs_cc;
 
 CREATE TABLE
