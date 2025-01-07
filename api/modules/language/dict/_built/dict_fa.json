@@ -5996,8 +5996,28 @@
   },
   {
     "id": "contact_address",
-    "en": "Contact address",
-    "fa": "آدرس مخاطب"
+    "en": "Address",
+    "fa": "آدرس"
+  },
+  {
+    "id": "contact_city",
+    "en": "City",
+    "fa": "شهر"
+  },
+  {
+    "id": "contact_state",
+    "en": "State",
+    "fa": "استان"
+  },
+  {
+    "id": "contact_postal_code",
+    "en": "Postal Code",
+    "fa": "کد پستی"
+  },
+  {
+    "id": "contact_country",
+    "en": "Country",
+    "fa": "کشور"
   },
   {
     "id": "contact_desc",
@@ -6020,9 +6040,69 @@
     "fa": "نام مخاطب عمل کننده، مثل مدیر، ناشر "
   },
   {
+    "id": "contact_function_author",
+    "en": "Author",
+    "fa": "نویسنده"
+  },
+  {
+    "id": "contact_function_custodian",
+    "en": "Custodian",
+    "fa": "نگهدارنده"
+  },
+  {
+    "id": "contact_function_distributor",
+    "en": "Distributor",
+    "fa": "توزیع‌کننده"
+  },
+  {
+    "id": "contact_function_originator",
+    "en": "Originator",
+    "fa": "ایجادگر"
+  },
+  {
+    "id": "contact_function_owner",
+    "en": "Owner",
+    "fa": "مالک"
+  },
+  {
+    "id": "contact_function_point_of_contact",
+    "en": "Point of contact",
+    "fa": "نقطه تماس"
+  },
+  {
+    "id": "contact_function_principal_investigator",
+    "en": "Principal investigator",
+    "fa": "محقق اصلی"
+  },
+  {
+    "id": "contact_function_processor",
+    "en": "Processor",
+    "fa": "پردازشگر"
+  },
+  {
+    "id": "contact_function_publisher",
+    "en": "Publisher",
+    "fa": "ناشر"
+  },
+  {
+    "id": "contact_function_resource_provider",
+    "en": "Resource provider",
+    "fa": "تأمین‌کننده منابع"
+  },
+  {
+    "id": "contact_function_user",
+    "en": "User",
+    "fa": "کاربر"
+  },
+  {
     "id": "contact_item_title",
     "en": "Contact",
     "fa": "مخاطب"
+  },
+  {
+    "id": "contact_org_name",
+    "en": "Organization name",
+    "fa": "نام سازمان"
   },
   {
     "id": "contact_list_title",

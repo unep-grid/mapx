@@ -5996,8 +5996,28 @@
   },
   {
     "id": "contact_address",
-    "en": "Contact address",
-    "bn": "যোগাযোগের ঠিকানা "
+    "en": "Address",
+    "bn": "ঠিকানা"
+  },
+  {
+    "id": "contact_city",
+    "en": "City",
+    "bn": "শহর"
+  },
+  {
+    "id": "contact_state",
+    "en": "State",
+    "bn": "রাষ্ট্র"
+  },
+  {
+    "id": "contact_postal_code",
+    "en": "Postal Code",
+    "bn": "পোস্টাল কোড"
+  },
+  {
+    "id": "contact_country",
+    "en": "Country",
+    "bn": "দেশ"
   },
   {
     "id": "contact_desc",
@@ -6020,9 +6040,69 @@
     "bn": "পরিচিতি ফাংশনের নাম, যেমন প্রশাসক, প্রকাশক "
   },
   {
+    "id": "contact_function_author",
+    "en": "Author",
+    "bn": "লেখক"
+  },
+  {
+    "id": "contact_function_custodian",
+    "en": "Custodian",
+    "bn": "রক্ষণাবেক্ষণকারী"
+  },
+  {
+    "id": "contact_function_distributor",
+    "en": "Distributor",
+    "bn": "বিতরণকারী"
+  },
+  {
+    "id": "contact_function_originator",
+    "en": "Originator",
+    "bn": "উদ্ভাবক"
+  },
+  {
+    "id": "contact_function_owner",
+    "en": "Owner",
+    "bn": "মালিক"
+  },
+  {
+    "id": "contact_function_point_of_contact",
+    "en": "Point of contact",
+    "bn": "যোগাযোগের পয়েন্ট"
+  },
+  {
+    "id": "contact_function_principal_investigator",
+    "en": "Principal investigator",
+    "bn": "প্রধান তদন্তকারী"
+  },
+  {
+    "id": "contact_function_processor",
+    "en": "Processor",
+    "bn": "প্রসেসর"
+  },
+  {
+    "id": "contact_function_publisher",
+    "en": "Publisher",
+    "bn": "প্রকাশক"
+  },
+  {
+    "id": "contact_function_resource_provider",
+    "en": "Resource provider",
+    "bn": "সম্পদ প্রদানকারী"
+  },
+  {
+    "id": "contact_function_user",
+    "en": "User",
+    "bn": "ব্যবহারকারী"
+  },
+  {
     "id": "contact_item_title",
     "en": "Contact",
     "bn": "যোগাযোগ "
+  },
+  {
+    "id": "contact_org_name",
+    "en": "Organization name",
+    "bn": "সংগঠনের নাম"
   },
   {
     "id": "contact_list_title",

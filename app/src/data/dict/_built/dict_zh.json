@@ -5996,8 +5996,28 @@
   },
   {
     "id": "contact_address",
-    "en": "Contact address",
-    "zh": "联系地址"
+    "en": "Address",
+    "zh": "地址"
+  },
+  {
+    "id": "contact_city",
+    "en": "City",
+    "zh": "城市"
+  },
+  {
+    "id": "contact_state",
+    "en": "State",
+    "zh": "州"
+  },
+  {
+    "id": "contact_postal_code",
+    "en": "Postal Code",
+    "zh": "邮政编码"
+  },
+  {
+    "id": "contact_country",
+    "en": "Country",
+    "zh": "国家"
   },
   {
     "id": "contact_desc",
@@ -6020,9 +6040,69 @@
     "zh": "联系人的职能名称，比如管理员、发布者"
   },
   {
+    "id": "contact_function_author",
+    "en": "Author",
+    "zh": "作者"
+  },
+  {
+    "id": "contact_function_custodian",
+    "en": "Custodian",
+    "zh": "监护人"
+  },
+  {
+    "id": "contact_function_distributor",
+    "en": "Distributor",
+    "zh": "分销商"
+  },
+  {
+    "id": "contact_function_originator",
+    "en": "Originator",
+    "zh": "创始人"
+  },
+  {
+    "id": "contact_function_owner",
+    "en": "Owner",
+    "zh": "所有者"
+  },
+  {
+    "id": "contact_function_point_of_contact",
+    "en": "Point of contact",
+    "zh": "联系人"
+  },
+  {
+    "id": "contact_function_principal_investigator",
+    "en": "Principal investigator",
+    "zh": "主要研究员"
+  },
+  {
+    "id": "contact_function_processor",
+    "en": "Processor",
+    "zh": "处理器"
+  },
+  {
+    "id": "contact_function_publisher",
+    "en": "Publisher",
+    "zh": "出版商"
+  },
+  {
+    "id": "contact_function_resource_provider",
+    "en": "Resource provider",
+    "zh": "资源提供者"
+  },
+  {
+    "id": "contact_function_user",
+    "en": "User",
+    "zh": "用户"
+  },
+  {
     "id": "contact_item_title",
     "en": "Contact",
     "zh": "联系人"
+  },
+  {
+    "id": "contact_org_name",
+    "en": "Organization name",
+    "zh": "组织名称"
   },
   {
     "id": "contact_list_title",

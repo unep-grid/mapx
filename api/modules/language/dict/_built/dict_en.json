@@ -4797,7 +4797,23 @@
   },
   {
     "id": "contact_address",
-    "en": "Contact address"
+    "en": "Address"
+  },
+  {
+    "id": "contact_city",
+    "en": "City"
+  },
+  {
+    "id": "contact_state",
+    "en": "State"
+  },
+  {
+    "id": "contact_postal_code",
+    "en": "Postal Code"
+  },
+  {
+    "id": "contact_country",
+    "en": "Country"
   },
   {
     "id": "contact_desc",
@@ -4816,8 +4832,56 @@
     "en": "Name of the contact function, e.g. Administrator, Publisher"
   },
   {
+    "id": "contact_function_author",
+    "en": "Author"
+  },
+  {
+    "id": "contact_function_custodian",
+    "en": "Custodian"
+  },
+  {
+    "id": "contact_function_distributor",
+    "en": "Distributor"
+  },
+  {
+    "id": "contact_function_originator",
+    "en": "Originator"
+  },
+  {
+    "id": "contact_function_owner",
+    "en": "Owner"
+  },
+  {
+    "id": "contact_function_point_of_contact",
+    "en": "Point of contact"
+  },
+  {
+    "id": "contact_function_principal_investigator",
+    "en": "Principal investigator"
+  },
+  {
+    "id": "contact_function_processor",
+    "en": "Processor"
+  },
+  {
+    "id": "contact_function_publisher",
+    "en": "Publisher"
+  },
+  {
+    "id": "contact_function_resource_provider",
+    "en": "Resource provider"
+  },
+  {
+    "id": "contact_function_user",
+    "en": "User"
+  },
+  {
     "id": "contact_item_title",
     "en": "Contact"
+  },
+  {
+    "id": "contact_org_name",
+    "en": "Organization name"
   },
   {
     "id": "contact_list_title",

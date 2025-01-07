@@ -5996,8 +5996,28 @@
   },
   {
     "id": "contact_address",
-    "en": "Contact address",
-    "de": "Kontakt Anschrift "
+    "en": "Address",
+    "de": "Adresse"
+  },
+  {
+    "id": "contact_city",
+    "en": "City",
+    "de": "Stadt"
+  },
+  {
+    "id": "contact_state",
+    "en": "State",
+    "de": "Bundesland"
+  },
+  {
+    "id": "contact_postal_code",
+    "en": "Postal Code",
+    "de": "Postleitzahl"
+  },
+  {
+    "id": "contact_country",
+    "en": "Country",
+    "de": "Land"
   },
   {
     "id": "contact_desc",
@@ -6020,9 +6040,69 @@
     "de": "Name der Kontaktfunktion, zB Administrator, Publisher "
   },
   {
+    "id": "contact_function_author",
+    "en": "Author",
+    "de": "Autor"
+  },
+  {
+    "id": "contact_function_custodian",
+    "en": "Custodian",
+    "de": "Wächter"
+  },
+  {
+    "id": "contact_function_distributor",
+    "en": "Distributor",
+    "de": "Verteiler"
+  },
+  {
+    "id": "contact_function_originator",
+    "en": "Originator",
+    "de": "Urheber"
+  },
+  {
+    "id": "contact_function_owner",
+    "en": "Owner",
+    "de": "Eigentümer"
+  },
+  {
+    "id": "contact_function_point_of_contact",
+    "en": "Point of contact",
+    "de": "Ansprechpartner"
+  },
+  {
+    "id": "contact_function_principal_investigator",
+    "en": "Principal investigator",
+    "de": "Hauptforscher"
+  },
+  {
+    "id": "contact_function_processor",
+    "en": "Processor",
+    "de": "Prozessor"
+  },
+  {
+    "id": "contact_function_publisher",
+    "en": "Publisher",
+    "de": "Verleger"
+  },
+  {
+    "id": "contact_function_resource_provider",
+    "en": "Resource provider",
+    "de": "Ressourcenanbieter"
+  },
+  {
+    "id": "contact_function_user",
+    "en": "User",
+    "de": "Benutzer"
+  },
+  {
     "id": "contact_item_title",
     "en": "Contact",
     "de": "Kontakt "
+  },
+  {
+    "id": "contact_org_name",
+    "en": "Organization name",
+    "de": "Organisationsname"
   },
   {
     "id": "contact_list_title",

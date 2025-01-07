@@ -5996,8 +5996,28 @@
   },
   {
     "id": "contact_address",
-    "en": "Contact address",
-    "ar": "عنوان الإتصال "
+    "en": "Address",
+    "ar": "العنوان"
+  },
+  {
+    "id": "contact_city",
+    "en": "City",
+    "ar": "المدينة"
+  },
+  {
+    "id": "contact_state",
+    "en": "State",
+    "ar": "الولاية"
+  },
+  {
+    "id": "contact_postal_code",
+    "en": "Postal Code",
+    "ar": "الرمز البريدي"
+  },
+  {
+    "id": "contact_country",
+    "en": "Country",
+    "ar": "الدولة"
   },
   {
     "id": "contact_desc",
@@ -6020,9 +6040,69 @@
     "ar": "اسم وظيفة الاتصال ، مثل المسؤول والناشر "
   },
   {
+    "id": "contact_function_author",
+    "en": "Author",
+    "ar": "مؤلف"
+  },
+  {
+    "id": "contact_function_custodian",
+    "en": "Custodian",
+    "ar": "القيم"
+  },
+  {
+    "id": "contact_function_distributor",
+    "en": "Distributor",
+    "ar": "الموزع"
+  },
+  {
+    "id": "contact_function_originator",
+    "en": "Originator",
+    "ar": "المبدع"
+  },
+  {
+    "id": "contact_function_owner",
+    "en": "Owner",
+    "ar": "المالك"
+  },
+  {
+    "id": "contact_function_point_of_contact",
+    "en": "Point of contact",
+    "ar": "نقطة اتصال"
+  },
+  {
+    "id": "contact_function_principal_investigator",
+    "en": "Principal investigator",
+    "ar": "الباحث الرئيسي"
+  },
+  {
+    "id": "contact_function_processor",
+    "en": "Processor",
+    "ar": "المعالج"
+  },
+  {
+    "id": "contact_function_publisher",
+    "en": "Publisher",
+    "ar": "الناشر"
+  },
+  {
+    "id": "contact_function_resource_provider",
+    "en": "Resource provider",
+    "ar": "مقدم الموارد"
+  },
+  {
+    "id": "contact_function_user",
+    "en": "User",
+    "ar": "المستخدم"
+  },
+  {
     "id": "contact_item_title",
     "en": "Contact",
     "ar": "اتصال "
+  },
+  {
+    "id": "contact_org_name",
+    "en": "Organization name",
+    "ar": "اسم المنظمة"
   },
   {
     "id": "contact_list_title",

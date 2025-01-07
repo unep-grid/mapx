@@ -3,7 +3,13 @@ import {
   getLanguageCurrent,
   updateLanguageElements,
 } from "./../language";
-import { isArray, isEmpty, isFunction, isNotEmpty, isObject } from "./../is_test_mapx";
+import {
+  isArray,
+  isEmpty,
+  isFunction,
+  isNotEmpty,
+  isObject,
+} from "./../is_test_mapx";
 
 import { el } from "../el/src/index.js";
 import {
@@ -41,14 +47,12 @@ window.jed = jed;
  * @param {Object} o.options JSONEditor options
  */
 export async function jedInit(o) {
-
   const dict = await getDictJsonEditorDict();
   const { JSONEditor } = await moduleLoad("json-editor");
   const id = o.id;
-  const schema = o.schema;
   const startValOrig = o.startVal;
   const options = o.options;
-
+  const schema = o.schema;
   const startVal = jsonSchemaArrayFixer(startValOrig, schema);
 
   if (dict) {

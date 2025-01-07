@@ -5996,8 +5996,28 @@
   },
   {
     "id": "contact_address",
-    "en": "Contact address",
-    "ps": "د مخاطب پته"
+    "en": "Address",
+    "ps": "پته"
+  },
+  {
+    "id": "contact_city",
+    "en": "City",
+    "ps": "ښار"
+  },
+  {
+    "id": "contact_state",
+    "en": "State",
+    "ps": "ایالت"
+  },
+  {
+    "id": "contact_postal_code",
+    "en": "Postal Code",
+    "ps": "پوستی کوډ"
+  },
+  {
+    "id": "contact_country",
+    "en": "Country",
+    "ps": "هېواد"
   },
   {
     "id": "contact_desc",
@@ -6020,9 +6040,69 @@
     "ps": "د فعایت کوونکو مخاطبینو نومونه، لکه: اداره کوونکی، خپروونکی"
   },
   {
+    "id": "contact_function_author",
+    "en": "Author",
+    "ps": "لیکوال"
+  },
+  {
+    "id": "contact_function_custodian",
+    "en": "Custodian",
+    "ps": "ساتونکی"
+  },
+  {
+    "id": "contact_function_distributor",
+    "en": "Distributor",
+    "ps": "ویشونکی"
+  },
+  {
+    "id": "contact_function_originator",
+    "en": "Originator",
+    "ps": "پیلونکی"
+  },
+  {
+    "id": "contact_function_owner",
+    "en": "Owner",
+    "ps": "مالک"
+  },
+  {
+    "id": "contact_function_point_of_contact",
+    "en": "Point of contact",
+    "ps": "د اړیکې ټکی"
+  },
+  {
+    "id": "contact_function_principal_investigator",
+    "en": "Principal investigator",
+    "ps": "مخکښ څیړونکی"
+  },
+  {
+    "id": "contact_function_processor",
+    "en": "Processor",
+    "ps": "پروسیسر"
+  },
+  {
+    "id": "contact_function_publisher",
+    "en": "Publisher",
+    "ps": "ناشر"
+  },
+  {
+    "id": "contact_function_resource_provider",
+    "en": "Resource provider",
+    "ps": "د سرچینې چمتو کونکی"
+  },
+  {
+    "id": "contact_function_user",
+    "en": "User",
+    "ps": "کارن"
+  },
+  {
     "id": "contact_item_title",
     "en": "Contact",
     "ps": "مخاطبین"
+  },
+  {
+    "id": "contact_org_name",
+    "en": "Organization name",
+    "ps": "د سازمان نوم"
   },
   {
     "id": "contact_list_title",

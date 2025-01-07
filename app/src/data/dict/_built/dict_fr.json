@@ -5996,8 +5996,28 @@
   },
   {
     "id": "contact_address",
-    "en": "Contact address",
-    "fr": "Addresse du contact"
+    "en": "Address",
+    "fr": "Adresse"
+  },
+  {
+    "id": "contact_city",
+    "en": "City",
+    "fr": "Ville"
+  },
+  {
+    "id": "contact_state",
+    "en": "State",
+    "fr": "État"
+  },
+  {
+    "id": "contact_postal_code",
+    "en": "Postal Code",
+    "fr": "Code postal"
+  },
+  {
+    "id": "contact_country",
+    "en": "Country",
+    "fr": "Pays"
   },
   {
     "id": "contact_desc",
@@ -6020,9 +6040,69 @@
     "fr": "Nom de la fonction du contact : par ex. Administrateur, Editeur"
   },
   {
+    "id": "contact_function_author",
+    "en": "Author",
+    "fr": "Auteur"
+  },
+  {
+    "id": "contact_function_custodian",
+    "en": "Custodian",
+    "fr": "Conservateur"
+  },
+  {
+    "id": "contact_function_distributor",
+    "en": "Distributor",
+    "fr": "Distributeur"
+  },
+  {
+    "id": "contact_function_originator",
+    "en": "Originator",
+    "fr": "Originateur"
+  },
+  {
+    "id": "contact_function_owner",
+    "en": "Owner",
+    "fr": "Propriétaire"
+  },
+  {
+    "id": "contact_function_point_of_contact",
+    "en": "Point of contact",
+    "fr": "Point de contact"
+  },
+  {
+    "id": "contact_function_principal_investigator",
+    "en": "Principal investigator",
+    "fr": "Investigateur principal"
+  },
+  {
+    "id": "contact_function_processor",
+    "en": "Processor",
+    "fr": "Processeur"
+  },
+  {
+    "id": "contact_function_publisher",
+    "en": "Publisher",
+    "fr": "Éditeur"
+  },
+  {
+    "id": "contact_function_resource_provider",
+    "en": "Resource provider",
+    "fr": "Fournisseur de ressources"
+  },
+  {
+    "id": "contact_function_user",
+    "en": "User",
+    "fr": "Utilisateur"
+  },
+  {
     "id": "contact_item_title",
     "en": "Contact",
     "fr": "Contact"
+  },
+  {
+    "id": "contact_org_name",
+    "en": "Organization name",
+    "fr": "Nom de l'organisation"
   },
   {
     "id": "contact_list_title",

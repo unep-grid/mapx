@@ -371,16 +371,66 @@ mxSchemaSourceMeta <- function(
               options = list(collapsed = TRUE),
               properties = list(
                 "function" = list(
-                  type = "string",
                   title = t("contact_function"),
-                  description = t("contact_function_desc")
+                  description = t("contact_function_desc"),
+                  default = "author",
+                  type = "string",
+                  minLength = 1,
+                  enum = list(
+                    "author",
+                    "custodian",
+                    "distributor",
+                    "originator",
+                    "owner",
+                    "point_of_contact",
+                    "principal_investigator",
+                    "processor",
+                    "publisher",
+                    "resource_provider",
+                    "user"
+                  ),
+                  options = list(
+                    enum_titles = list(
+                      t("contact_function_author"),
+                      t("contact_function_custodian"),
+                      t("contact_function_distributor"),
+                      t("contact_function_originator"),
+                      t("contact_function_owner"),
+                      t("contact_function_point_of_contact"),
+                      t("contact_function_principal_investigator"),
+                      t("contact_function_processor"),
+                      t("contact_function_publisher"),
+                      t("contact_function_resource_provider"),
+                      t("contact_function_user")
+                    )
+                  )
                 ),
                 name = list(
                   title = t("contact_name"),
                   type = "string"
                 ),
+                organisation_name = list(
+                  title = t("contact_org_name"),
+                  type = "string"
+                ),
                 address = list(
                   title = t("contact_address"),
+                  type = "string"
+                ),
+                city = list(
+                  title = t("contact_city"),
+                  type = "string"
+                ),
+                state = list(
+                  title = t("contact_state"),
+                  type = "string"
+                ),
+                postal_code = list(
+                  title = t("contact_postal_code"),
+                  type = "string"
+                ),
+                country = list(
+                  title = t("contact_country"),
                   type = "string"
                 ),
                 email = list(

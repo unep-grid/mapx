@@ -5996,8 +5996,28 @@
   },
   {
     "id": "contact_address",
-    "en": "Contact address",
-    "es": "Dirección de contacto"
+    "en": "Address",
+    "es": "Dirección"
+  },
+  {
+    "id": "contact_city",
+    "en": "City",
+    "es": "Ciudad"
+  },
+  {
+    "id": "contact_state",
+    "en": "State",
+    "es": "Estado"
+  },
+  {
+    "id": "contact_postal_code",
+    "en": "Postal Code",
+    "es": "Código postal"
+  },
+  {
+    "id": "contact_country",
+    "en": "Country",
+    "es": "País"
   },
   {
     "id": "contact_desc",
@@ -6020,9 +6040,69 @@
     "es": "Nombre de la función de contacto. Ej. Administrador"
   },
   {
+    "id": "contact_function_author",
+    "en": "Author",
+    "es": "Autor"
+  },
+  {
+    "id": "contact_function_custodian",
+    "en": "Custodian",
+    "es": "Custodio"
+  },
+  {
+    "id": "contact_function_distributor",
+    "en": "Distributor",
+    "es": "Distribuidor"
+  },
+  {
+    "id": "contact_function_originator",
+    "en": "Originator",
+    "es": "Originador"
+  },
+  {
+    "id": "contact_function_owner",
+    "en": "Owner",
+    "es": "Propietario"
+  },
+  {
+    "id": "contact_function_point_of_contact",
+    "en": "Point of contact",
+    "es": "Punto de contacto"
+  },
+  {
+    "id": "contact_function_principal_investigator",
+    "en": "Principal investigator",
+    "es": "Investigador principal"
+  },
+  {
+    "id": "contact_function_processor",
+    "en": "Processor",
+    "es": "Procesador"
+  },
+  {
+    "id": "contact_function_publisher",
+    "en": "Publisher",
+    "es": "Editor"
+  },
+  {
+    "id": "contact_function_resource_provider",
+    "en": "Resource provider",
+    "es": "Proveedor de recursos"
+  },
+  {
+    "id": "contact_function_user",
+    "en": "User",
+    "es": "Usuario"
+  },
+  {
     "id": "contact_item_title",
     "en": "Contact",
     "es": "Contacto"
+  },
+  {
+    "id": "contact_org_name",
+    "en": "Organization name",
+    "es": "Nombre de la organización"
   },
   {
     "id": "contact_list_title",

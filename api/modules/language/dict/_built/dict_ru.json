@@ -5996,8 +5996,28 @@
   },
   {
     "id": "contact_address",
-    "en": "Contact address",
-    "ru": "Контактный адрес "
+    "en": "Address",
+    "ru": "Адрес"
+  },
+  {
+    "id": "contact_city",
+    "en": "City",
+    "ru": "Город"
+  },
+  {
+    "id": "contact_state",
+    "en": "State",
+    "ru": "Штат"
+  },
+  {
+    "id": "contact_postal_code",
+    "en": "Postal Code",
+    "ru": "Почтовый индекс"
+  },
+  {
+    "id": "contact_country",
+    "en": "Country",
+    "ru": "Страна"
   },
   {
     "id": "contact_desc",
@@ -6020,9 +6040,69 @@
     "ru": "Имя контактного лица, например, администратор, издатель. "
   },
   {
+    "id": "contact_function_author",
+    "en": "Author",
+    "ru": "Автор"
+  },
+  {
+    "id": "contact_function_custodian",
+    "en": "Custodian",
+    "ru": "Хранитель"
+  },
+  {
+    "id": "contact_function_distributor",
+    "en": "Distributor",
+    "ru": "Дистрибьютор"
+  },
+  {
+    "id": "contact_function_originator",
+    "en": "Originator",
+    "ru": "Создатель"
+  },
+  {
+    "id": "contact_function_owner",
+    "en": "Owner",
+    "ru": "Владелец"
+  },
+  {
+    "id": "contact_function_point_of_contact",
+    "en": "Point of contact",
+    "ru": "Контактное лицо"
+  },
+  {
+    "id": "contact_function_principal_investigator",
+    "en": "Principal investigator",
+    "ru": "Главный исследователь"
+  },
+  {
+    "id": "contact_function_processor",
+    "en": "Processor",
+    "ru": "Процессор"
+  },
+  {
+    "id": "contact_function_publisher",
+    "en": "Publisher",
+    "ru": "Издатель"
+  },
+  {
+    "id": "contact_function_resource_provider",
+    "en": "Resource provider",
+    "ru": "Поставщик ресурсов"
+  },
+  {
+    "id": "contact_function_user",
+    "en": "User",
+    "ru": "Пользователь"
+  },
+  {
     "id": "contact_item_title",
     "en": "Contact",
     "ru": "Контакт "
+  },
+  {
+    "id": "contact_org_name",
+    "en": "Organization name",
+    "ru": "Название организации"
   },
   {
     "id": "contact_list_title",
