@@ -38,10 +38,29 @@ export function isNotEmpty(item) {
 export function isBbox(item) {
   return (
     isObject(item) &&
-    isNotEmpty(item.lat1) &&
-    isNotEmpty(item.lat2) &&
-    isNotEmpty(item.lng1) &&
-    isNotEmpty(item.lng2)
+    isNumericRange(item.lat1, -90, 90) &&
+    isNumericRange(item.lat2, -90, 90) &&
+    isNumericRange(item.lng1, -180, 180) &&
+    isNumericRange(item.lng2, -180, 180) &&
+    item.lat1 < item.lat2 &&
+    item.lng1 < item.lng2
+  );
+}
+
+/**
+ * Simple lat/lng bbox expected from source meta 
+ * @param {Object} item
+ * @return {Boolean} valid meta bbox
+ */
+export function isBboxMeta(item) {
+  return (
+    isObject(item) &&
+    isNumericRange(item.lat_min, -90, 90) &&
+    isNumericRange(item.lat_max, -90, 90) &&
+    isNumericRange(item.lng_min, -180, 180) &&
+    isNumericRange(item.lng_max, -180, 180) &&
+    item.lat_min < item.lat_max &&
+    item.lng_min < item.lng_max
   );
 }
 
@@ -176,7 +195,6 @@ export function isViewVtWithAttributeType(item, type = "string") {
 export function isViewRtWithLegend(item) {
   return isViewRt(item) && isUrl(item?.data?.source?.legend);
 }
-
 
 /**
  * Test if view rt has tiles
@@ -476,6 +494,16 @@ export function isUndefined(item) {
  */
 export function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+/**
+ * Test if entry is numeric and in range
+ * @param {String|Number} n string or number to test
+ * @param {Number} min Minumum
+ * @param {Number} max Maximum
+ */
+export function isNumericRange(n, min = 0, max = 100) {
+  return isNumeric(n) && n >= min && n <= max;
 }
 
 /**
