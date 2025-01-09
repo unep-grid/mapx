@@ -14,13 +14,11 @@ import {
   isUrlValidWms,
   isSourceId,
   isViewId,
-  isString,
   isObject,
   isArray,
   isBoolean,
   isNotEmpty,
 } from "./is_test";
-import { isEmpty } from "./is_test";
 
 const def = {
   idView: null,
@@ -261,6 +259,8 @@ export async function getSourceRtSummary(view) {
   });
 
   const layer = findMatchingLayer(layersList, layerName);
+
+
   if (!layer) {
     return metadata;
   }
@@ -276,10 +276,11 @@ export async function getSourceRtSummary(view) {
 
 function findMatchingLayer(layers, targetName) {
   return layers.find((layer) => {
-    if (layer.Name === targetName) return true;
-    if (layer.Title === targetName) return true;
+    // using == in case of type mismatch like '1' = 1
+    if (layer.Name == targetName) return true;
+    if (layer.Title == targetName) return true;
     const [, compositeName] = layer.Name.split(":");
-    return compositeName === targetName;
+    return compositeName == targetName;
   });
 }
 
@@ -289,12 +290,21 @@ async function extractSpatialExtent(layer) {
   }
 
   const wgs84Bbox = layer.BoundingBox.find((bbox) => bbox.crs === "EPSG:4326");
+
   if (wgs84Bbox?.extent) {
+
+    const bbox = {
+      lng1: Math.round(wgs84Bbox.extent[0]),
+      lat2: Math.round(wgs84Bbox.extent[1]),
+      lng2: Math.round(wgs84Bbox.extent[2]),
+      lat1: Math.round(wgs84Bbox.extent[3]),
+    };
+
     return {
-      lng1: wgs84Bbox.extent[0],
-      lat2: wgs84Bbox.extent[1],
-      lng2: wgs84Bbox.extent[2],
-      lat1: wgs84Bbox.extent[3],
+      lng1: Math.min(bbox.lng1, bbox.lng2),
+      lng2: Math.max(bbox.lng1, bbox.lng2),
+      lat1: Math.min(bbox.lat1, bbox.lat2),
+      lat2: Math.max(bbox.lat1, bbox.lat2),
     };
   }
 

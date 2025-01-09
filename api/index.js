@@ -34,6 +34,7 @@ import {
   ioViewSourceMetaGet,
   ioViewMetaGet,
   ioViewStatsGet,
+  ioViewUpdateExtent,
 } from "#mapx/view";
 import {
   ioDownloadSource,
@@ -118,6 +119,7 @@ io.use((socket, next) => {
   socket.on("/client/view/source/get/metadata", use(ioViewSourceMetaGet));
   socket.on("/client/view/get/metadata", use(ioViewMetaGet));
   socket.on("/client/view/get/stats", use(ioViewStatsGet));
+  socket.on("/client/view/update/extent", use(ioViewUpdateExtent));
   socket.on("/client/project/validate/name", use(ioProjectNameValidate));
   socket.on("/client/project/create", use(ioProjectCreate));
   socket.on("/client/issue/report", use(ioIssueReport));

@@ -655,7 +655,7 @@ async function getColumnsTypesSimple(
  * Get the latest timestamp from a source / layer / table
  * @param {String} idSource Id of the source
  * @param {pg.Client} [client=pgRead] - PostgreSQL client to be used for the query. Defaults to `pgRead` if not provided.
- * @return {Number} timetamp
+ * @return {Promise<Number>} timetamp
  */
 async function getSourceLastTimestamp(idSource, client = pgRead) {
   if (!isSourceId(idSource)) {

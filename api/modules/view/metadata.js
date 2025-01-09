@@ -1,8 +1,33 @@
-import { pgRead } from "#mapx/db";
+import { pgRead, pgWrite } from "#mapx/db";
 import { getView } from "#mapx/view";
 import { templates } from "#mapx/template";
-import { isView, isViewId, isSourceId } from "@fxi/mx_valid";
+import {
+  isView,
+  isViewId,
+  isSourceId,
+  isBboxMeta,
+  isBbox,
+} from "@fxi/mx_valid";
 import { getSourceMetadata } from "#mapx/source";
+
+export async function ioViewUpdateExtent(socket, config, cb) {
+  try {
+    const session = socket.session;
+
+    if (!session) {
+      throw new Error("Missing session");
+    }
+    const { idView, type, extent } = config;
+    const res = await updateViewSourceMetaBbox(idView, type, extent);
+    cb(res);
+  } catch (e) {
+    socket.notifyInfoError({
+      idGroup: config.id_request,
+      message: e?.message || e,
+    });
+  }
+  cb(false);
+}
 
 export async function ioViewSourceMetaGet(socket, config, cb) {
   try {
@@ -173,4 +198,99 @@ async function getViewSourceMetadataVt(view) {
   }
   const allMeta = await getSourceMetadata({ id: idSource });
   return allMeta;
+}
+
+export async function updateViewSourceMetaBbox(
+  idView,
+  type,
+  bbox,
+  client = pgWrite
+) {
+  // Validate bbox structure
+
+  const isBboxMetaOk = isBboxMeta(bbox);
+  const isBboxOk = isBbox(bbox);
+
+  if (!isBboxMetaOk && !isBboxOk) {
+    throw new Error("Invalid bbox format");
+  }
+  if (!isViewId(idView)) {
+    throw new Error("Invalid view");
+  }
+
+  if (isBbox) {
+    bbox = {
+      lat_min: Math.min(bbox.lat1, bbox.lat2),
+      lat_max: Math.max(bbox.lat1, bbox.lat2),
+      lng_min: Math.min(bbox.lng1, bbox.lng2),
+      lng_max: Math.max(bbox.lng1, bbox.lng2),
+    };
+  }
+
+  const bboxJson = JSON.stringify(bbox);
+  let query;
+  let params;
+
+  if (type === "vt") {
+    // Update source metadata for vt views
+    query = `
+      UPDATE mx_sources
+      SET data = jsonb_set(
+        data,
+        '{meta,spatial,bbox}',
+        $1::jsonb,
+        true
+      )
+      WHERE id = $2
+      RETURNING id;
+    `;
+
+    const view = await getView(idView);
+
+    const sourceId = view?.data?.source?.layerInfo?.name;
+    params = [bboxJson, sourceId];
+  } else if (type === "cc" || type === "rt") {
+    // Update view metadata directly for cc/rt views
+    query = `
+      WITH latest_view AS (
+        SELECT id, pid
+        FROM mx_views
+        WHERE id = $2
+        ORDER BY date_modified DESC
+        LIMIT 1
+      )
+      UPDATE mx_views v
+      SET data = jsonb_set(
+        data,
+        '{source,meta,spatial,bbox}',
+        $1::jsonb,
+        true
+      )
+      FROM latest_view lv
+      WHERE v.id = lv.id AND v.pid = lv.pid
+      RETURNING v.id, v.pid;
+    `;
+    params = [bboxJson, idView];
+  } else {
+    throw new Error(`Unsupported view type: ${type}`);
+  }
+
+  try {
+    await client.query("BEGIN");
+
+    const result = await client.query(query, params);
+
+    if (result.rowCount !== 1) {
+      await client.query("ROLLBACK");
+      throw new Error(
+        `Expected to update exactly 1 row, but updated ${result.rowCount} rows instead`
+      );
+    }
+
+    await client.query("COMMIT");
+    return result.rows[0];
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  }
 }

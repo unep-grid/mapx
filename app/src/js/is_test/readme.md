@@ -7,6 +7,9 @@ Simple validation tool for MapX specific values
 ## Constants
 
 <dl>
+<dt><a href="#isNodeEnv">isNodeEnv</a></dt>
+<dd><p>Check if the current environment is Node.js</p>
+</dd>
 <dt><a href="#regexUnsafeName">regexUnsafeName</a></dt>
 <dd><p>Test for special char : not allowed
 NOTES: if /g flag is set: inconsistant result:
@@ -30,6 +33,9 @@ Regex.lastIndex is not reseted between calls,
 <dt><a href="#isBbox">isBbox(item)</a> ⇒ <code>Boolean</code></dt>
 <dd><p>Simple lat/lng bbox expected from source summary</p>
 </dd>
+<dt><a href="#isBboxMeta">isBboxMeta(item)</a> ⇒ <code>Boolean</code></dt>
+<dd><p>Simple lat/lng bbox expected from source meta</p>
+</dd>
 <dt><a href="#isObject">isObject(item)</a></dt>
 <dd><p>Test if entry is an object</p>
 </dd>
@@ -48,11 +54,11 @@ Regex.lastIndex is not reseted between calls,
 <dt><a href="#isViewGj">isViewGj(item)</a></dt>
 <dd><p>Test if it&#39;s a MapX view of type gj</p>
 </dd>
+<dt><a href="#isViewSm">isViewSm(item)</a></dt>
+<dd><p>Test if it&#39;s a MapX view of type gj</p>
+</dd>
 <dt><a href="#isViewEditable">isViewEditable(item)</a></dt>
 <dd><p>Test if it&#39;s a MapX view is editable</p>
-</dd>
-<dt><a href="#isViewLocal">isViewLocal(item)</a></dt>
-<dd><p>Test if it&#39;s a MapX view is local</p>
 </dd>
 <dt><a href="#isViewVtWithRules">isViewVtWithRules(item)</a></dt>
 <dd><p>Test if view vt has style rules</p>
@@ -65,9 +71,6 @@ Regex.lastIndex is not reseted between calls,
 </dd>
 <dt><a href="#isViewRtWithLegend">isViewRtWithLegend(item)</a></dt>
 <dd><p>Test if view rt has legend url</p>
-</dd>
-<dt><a href="#isViewDownloadable">isViewDownloadable(item)</a></dt>
-<dd><p>Test if view is downloadable</p>
 </dd>
 <dt><a href="#isViewRtWithTiles">isViewRtWithTiles(item)</a></dt>
 <dd><p>Test if view rt has tiles</p>
@@ -108,7 +111,7 @@ Regex.lastIndex is not reseted between calls,
 <dt><a href="#isSourceId">isSourceId(id)</a> ⇒ <code>boolean</code></dt>
 <dd><p>Determines if the given ID is a valid MapX source ID.</p>
 <p>A valid MapX source ID starts with &#39;mx&#39;, followed optionally by &#39;<em>vector&#39;,
-and then by 5 to 7 segments of the pattern &#39;</em>[a-z0-9]{1,6}&#39;. The entire ID&#39;s 
+and then by 5 to 7 segments of the pattern &#39;</em>[a-z0-9]{1,6}&#39;. The entire ID&#39;s
 length should be within the range of 10 to 50 characters.</p>
 </dd>
 <dt><a href="#isArrayOfSourceId">isArrayOfSourceId(arr)</a></dt>
@@ -150,6 +153,9 @@ length should be within the range of 10 to 50 characters.</p>
 <dt><a href="#isNumeric">isNumeric(n)</a></dt>
 <dd><p>Test if entry is numeric</p>
 </dd>
+<dt><a href="#isNumericRange">isNumericRange(n, min, max)</a></dt>
+<dd><p>Test if entry is numeric and in range</p>
+</dd>
 <dt><a href="#isBoolean">isBoolean(b)</a></dt>
 <dd><p>Test if entry is boolean</p>
 </dd>
@@ -179,8 +185,8 @@ Use server side
 <dt><a href="#isValidType">isValidType(type, group)</a></dt>
 <dd><p>Quick type checker by group eg. image</p>
 </dd>
-<dt><a href="#isHTML">isHTML(n)</a></dt>
-<dd><p>Test if string contain HTML</p>
+<dt><a href="#isHTML">isHTML(str)</a> ⇒ <code>Boolean</code></dt>
+<dd><p>Test if a given string contains HTML.</p>
 </dd>
 <dt><a href="#isEmail">isEmail(email)</a></dt>
 <dd><p>Test if entry is an email</p>
@@ -224,6 +230,12 @@ and converting it to a number if it represents a valid number.</p>
 </dd>
 </dl>
 
+<a name="isNodeEnv"></a>
+
+## isNodeEnv
+Check if the current environment is Node.js
+
+**Kind**: global constant  
 <a name="regexUnsafeName"></a>
 
 ## regexUnsafeName
@@ -264,6 +276,18 @@ Simple lat/lng bbox expected from source summary
 **Kind**: global function  
 **Returns**: <code>Boolean</code> - Is lat/lng bbox object  
 **Note**: : currently match api/modules/template/sql/getSourceSummary_ext_sp.sql  
+
+| Param | Type |
+| --- | --- |
+| item | <code>Object</code> | 
+
+<a name="isBboxMeta"></a>
+
+## isBboxMeta(item) ⇒ <code>Boolean</code>
+Simple lat/lng bbox expected from source meta
+
+**Kind**: global function  
+**Returns**: <code>Boolean</code> - valid meta bbox  
 
 | Param | Type |
 | --- | --- |
@@ -337,10 +361,10 @@ Test if it's a MapX view of type gj
 | --- | --- | --- |
 | item | <code>Object</code> | to test |
 
-<a name="isViewEditable"></a>
+<a name="isViewSm"></a>
 
-## isViewEditable(item)
-Test if it's a MapX view is editable
+## isViewSm(item)
+Test if it's a MapX view of type gj
 
 **Kind**: global function  
 
@@ -348,10 +372,10 @@ Test if it's a MapX view is editable
 | --- | --- | --- |
 | item | <code>Object</code> | to test |
 
-<a name="isViewLocal"></a>
+<a name="isViewEditable"></a>
 
-## isViewLocal(item)
-Test if it's a MapX view is local
+## isViewEditable(item)
+Test if it's a MapX view is editable
 
 **Kind**: global function  
 
@@ -397,17 +421,6 @@ Test if view vt has specific attribute type r
 
 ## isViewRtWithLegend(item)
 Test if view rt has legend url
-
-**Kind**: global function  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| item | <code>Object</code> | to test |
-
-<a name="isViewDownloadable"></a>
-
-## isViewDownloadable(item)
-Test if view is downloadable
 
 **Kind**: global function  
 
@@ -560,7 +573,7 @@ Test for valid project id
 Determines if the given ID is a valid MapX source ID.
 
 A valid MapX source ID starts with 'mx', followed optionally by '_vector',
-and then by 5 to 7 segments of the pattern '_[a-z0-9]{1,6}'. The entire ID's 
+and then by 5 to 7 segments of the pattern '_[a-z0-9]{1,6}'. The entire ID's
 length should be within the range of 10 to 50 characters.
 
 **Kind**: global function  
@@ -713,6 +726,19 @@ Test if entry is numeric
 | --- | --- | --- |
 | n | <code>String</code> \| <code>Number</code> | string or number to test |
 
+<a name="isNumericRange"></a>
+
+## isNumericRange(n, min, max)
+Test if entry is numeric and in range
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| n | <code>String</code> \| <code>Number</code> | string or number to test |
+| min | <code>Number</code> | Minumum |
+| max | <code>Number</code> | Maximum |
+
 <a name="isBoolean"></a>
 
 ## isBoolean(b)
@@ -823,15 +849,15 @@ Quick type checker by group eg. image
 
 <a name="isHTML"></a>
 
-## isHTML(n)
-Test if string contain HTML
+## isHTML(str) ⇒ <code>Boolean</code>
+Test if a given string contains HTML.
 
 **Kind**: global function  
-**Note**: https://stackoverflow.com/questions/15458876/check-if-a-string-is-html-or-not#answer-36773193  
+**Returns**: <code>Boolean</code> - True if the string contains HTML, otherwise false.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| n | <code>String</code> | string to test |
+| str | <code>String</code> | The string to test. |
 
 <a name="isEmail"></a>
 

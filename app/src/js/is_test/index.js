@@ -41,14 +41,12 @@ export function isBbox(item) {
     isNumericRange(item.lat1, -90, 90) &&
     isNumericRange(item.lat2, -90, 90) &&
     isNumericRange(item.lng1, -180, 180) &&
-    isNumericRange(item.lng2, -180, 180) &&
-    item.lat1 < item.lat2 &&
-    item.lng1 < item.lng2
+    isNumericRange(item.lng2, -180, 180)
   );
 }
 
 /**
- * Simple lat/lng bbox expected from source meta 
+ * Simple lat/lng bbox expected from source meta
  * @param {Object} item
  * @return {Boolean} valid meta bbox
  */

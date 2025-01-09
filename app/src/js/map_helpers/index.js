@@ -85,7 +85,6 @@ import {
   getQueryParametersAsObject,
   getQueryParameterInit,
   getQueryParameter,
-  getQueryInit,
   setQueryParameters,
   cleanTemporaryQueryParameters,
   getQueryParametersInit,
@@ -110,7 +109,6 @@ import {
   isArrayOf,
   isUrlValidWms,
   isObject,
-  isBbox,
   isMap,
   isEmpty,
   isViewId,
@@ -138,6 +136,8 @@ import {
   isSourceId,
   isProjectId,
   isViewInstance,
+  isBboxMeta,
+  isBbox,
 } from "./../is_test_mapx/index.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { viewFiltersInit } from "./view_filters.js";
@@ -145,6 +145,7 @@ import { ButtonPanelLegend } from "../panel_legend/index.js";
 import { createViewControls } from "../views_builder/view_controls.js";
 import { ButtonFilter } from "../button_filter/index.js";
 import { ViewsUpdateHelper } from "../views_list_update/index.js";
+import { getViewSourceMetadata } from "../metadata/utils.js";
 export * from "./view_filters.js";
 
 /**
@@ -4435,6 +4436,8 @@ export async function zoomToViewId(o) {
       [ext.lng2, ext.lat1],
     );
 
+    debugger;
+
     const done = fitMaxBounds(llb);
 
     return done;
@@ -4475,28 +4478,63 @@ export async function getViewExtent(view) {
   }
 
   async function getExtent() {
-    const summaryCache = await getViewSourceSummary(view, { useCache: true });
+    const extentMeta = await getViewSourceMetadataExtent(view);
 
-    const extent = path(summaryCache, "extent_sp", null);
+    const hasExtent = isBbox(extentMeta);
 
+    // to remove when working debugger
+    if (0 && hasExtent) {
+      return extentMeta;
+    }
+
+    /**
+     * Use source summary
+     * - raster => client wms query
+     * - geojson => client extent set during upload
+     * - vector =>  server node process
+     */
+    const summary = await getViewSourceSummary(view, { useCache: false });
+    const extent = path(summary, "extent_sp", {});
     if (cancelByTimeout) {
+      console.warn(`getViewExtent timeout for ${view.id}`);
+      return;
+    }
+    if (!isBbox(extent)) {
+      console.warn(`getViewExtent no valid extent found for ${view.id}`);
       return;
     }
 
-    if (isBbox(extent)) {
-      return extent;
+    if (isViewRt(view) || isViewVt(view)) {
+      await updateViewExtentMeta(view, extent);
     }
-    const summaryRemote = await getViewSourceSummary(view, { useCache: false });
-    const extentRemote = path(summaryRemote, "extent_sp", null);
-    if (cancelByTimeout) {
-      return;
-    }
-    if (!isBbox(extentRemote)) {
-      console.warn(`zoomToViewId no extent found for ${view.id}`);
-      return;
-    }
-    return extentRemote;
+
+    return extent;
   }
+}
+
+async function getViewSourceMetadataExtent(view) {
+  const meta = await getViewSourceMetadata(view);
+  const bbox = meta?.[0]?.spatial?.bbox;
+
+  if (!isBboxMeta(bbox)) {
+    return false;
+  }
+
+  return {
+    lat1: bbox.lat_min,
+    lat2: bbox.lat_max,
+    lng1: bbox.lng_min,
+    lng2: bbox.lng_max,
+  };
+}
+
+async function updateViewExtentMeta(view, extent) {
+  const res = await ws.emitAsync(
+    "/client/view/update/extent",
+    { extent, idView: view.id, type: view.type },
+    1e3,
+  );
+  return res;
 }
 
 /**
