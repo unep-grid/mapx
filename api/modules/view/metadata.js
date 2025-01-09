@@ -4,21 +4,28 @@ import { templates } from "#mapx/template";
 import {
   isView,
   isViewId,
+  isEmpty,
+  isArray,
   isSourceId,
   isBboxMeta,
   isBbox,
 } from "@fxi/mx_valid";
 import { getSourceMetadata } from "#mapx/source";
 
-export async function ioViewUpdateExtent(socket, config, cb) {
+export async function ioSetViewSourceMetaBbox(socket, config, cb) {
   try {
     const session = socket.session;
 
     if (!session) {
       throw new Error("Missing session");
     }
-    const { idView, type, extent } = config;
-    const res = await updateViewSourceMetaBbox(idView, type, extent);
+    const { idView, type, extent, overwrite = false } = config;
+
+    if (overwrite && !session.user_roles.publisher) {
+      throw new Error("Not allowed");
+    }
+
+    const res = await setViewSourceMetaBbox(idView, type, extent, overwrite);
     cb(res);
   } catch (e) {
     socket.notifyInfoError({
@@ -200,25 +207,64 @@ async function getViewSourceMetadataVt(view) {
   return allMeta;
 }
 
-export async function updateViewSourceMetaBbox(
+export async function getViewSourceMetadataExtent(idView) {
+  try {
+    const meta = await getViewSourceMetadata(idView);
+    // Check if meta exists and is an array with at least one element
+    if (isEmpty(meta) || !isArray(meta)) {
+      return false;
+    }
+
+    const bbox = meta[0]?.spatial?.bbox ?? null;
+
+    if (isBboxMeta(bbox)) {
+      return bbox;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error("Error getting metadata extent:", error);
+    return null;
+  }
+}
+
+/**
+ * Client requested a bbox update : missing or wrong stored bbox
+ * - This is just there to 'fix' a wrong / missing bbox automatically.
+ * - BBbox should be defined at upload / creation or trigger.
+ * - It will do nothing if an existing, valid meta bbox is found
+ */
+export async function setViewSourceMetaBbox(
   idView,
   type,
   bbox,
+  overwrite = false,
   client = pgWrite
 ) {
-  // Validate bbox structure
+  if (!isViewId(idView)) {
+    throw new Error("Invalid view");
+  }
+  /**
+   * If overwrite not allowed and meta bbox exists stop
+   */
+  if (!overwrite) {
+    const bboxCurrent = await getViewSourceMetadataExtent(idView);
+    if (isBboxMeta(bboxCurrent)) {
+      throw new Error("Can't update meta bbox if one already set and valid");
+    }
+  }
 
+  /**
+   *  Proceed with fix / update
+   */
   const isBboxMetaOk = isBboxMeta(bbox);
   const isBboxOk = isBbox(bbox);
 
   if (!isBboxMetaOk && !isBboxOk) {
     throw new Error("Invalid bbox format");
   }
-  if (!isViewId(idView)) {
-    throw new Error("Invalid view");
-  }
 
-  if (isBbox) {
+  if (isBboxOk) {
     bbox = {
       lat_min: Math.min(bbox.lat1, bbox.lat2),
       lat_max: Math.max(bbox.lat1, bbox.lat2),

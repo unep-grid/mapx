@@ -13,7 +13,7 @@ import {
 } from "@fxi/mx_valid";
 import { isLayerValid, areLayersValid } from "./geom_validation.js";
 import { insertRow } from "./insert.js";
-import { hasSourceDependencies } from "#mapx/source";
+import { getSourceSummary, hasSourceDependencies } from "#mapx/source";
 export * from "./metadata.js";
 
 /**
@@ -323,11 +323,15 @@ async function registerSource(options, client = pgWrite) {
 
   titleLanguage[language] = title;
 
-  // Insert
+  const extent = await getLayerExtent(idSource);
+
   const meta = {
     meta: {
       text: {
         title: titleLanguage,
+      },
+      spatial: {
+        bbox: extent,
       },
     },
   };
@@ -446,6 +450,26 @@ FROM mx_sources
 WHERE id = '${idSource}'
 LIMIT 1`);
   return res.rows?.[0]?.value;
+}
+
+/**
+ * Get layer extent as bounding box
+ * @param {string|number} idSource Layer ID
+ * @returns {Promise<Object>} Bounding box object
+ * @returns {number} .lat_min Minimum latitude
+ * @returns {number} .lng_min Minimum longitude
+ * @returns {number} .lat_max Maximum latitude
+ * @returns {number} .lng_max Maximum longitude
+ * @description Returns world bounds (-180,-90,180,90) if:
+ * - Layer has no geometry column
+ * - Layer table statistics are not available
+ */
+export async function getLayerExtent(idSource) {
+  const sqlExtent = parseTemplate(templates.getLayerExtent, {
+    idSource,
+  });
+  const res = await pgRead.query(sqlExtent);
+  return res.rows?.[0]?.bbox;
 }
 
 /**

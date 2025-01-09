@@ -31,13 +31,13 @@ WITH
         'extent_sp',
         json_build_object(
           'lat1',
-          ST_Ymin (bbox.extent),
+          GREATEST(-90, ST_YMin (bbox.extent)),
           'lng1',
-          ST_Xmin (bbox.extent),
+          GREATEST(-180, ST_XMin (bbox.extent)),
           'lat2',
-          ST_Ymax (bbox.extent),
+          LEAST(90, ST_YMax (bbox.extent)),
           'lng2',
-          ST_Xmax (bbox.extent)
+          LEAST(180, ST_XMax (bbox.extent))
         )
       ) as extent
     FROM

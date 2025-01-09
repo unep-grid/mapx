@@ -138,6 +138,7 @@ import {
   isViewInstance,
   isBboxMeta,
   isBbox,
+  isViewGj,
 } from "./../is_test_mapx/index.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { viewFiltersInit } from "./view_filters.js";
@@ -4436,8 +4437,6 @@ export async function zoomToViewId(o) {
       [ext.lng2, ext.lat1],
     );
 
-    debugger;
-
     const done = fitMaxBounds(llb);
 
     return done;
@@ -4478,19 +4477,26 @@ export async function getViewExtent(view) {
   }
 
   async function getExtent() {
-    const extentMeta = await getViewSourceMetadataExtent(view);
+    /*
+     * If it's a self contained geojson view, use the pre-computed extent
+     */
+    if (isViewGj(view)) {
+      return view.data?.geometry?.extent;
+    }
 
+    /*
+     * Use the metadata version for saved view
+     */
+    const extentMeta = await getViewSourceMetadataExtent(view);
     const hasExtent = isBbox(extentMeta);
 
-    // to remove when working debugger
-    if (0 && hasExtent) {
+    if (hasExtent) {
       return extentMeta;
     }
 
     /**
      * Use source summary
      * - raster => client wms query
-     * - geojson => client extent set during upload
      * - vector =>  server node process
      */
     const summary = await getViewSourceSummary(view, { useCache: false });
@@ -4505,6 +4511,10 @@ export async function getViewExtent(view) {
     }
 
     if (isViewRt(view) || isViewVt(view)) {
+      /*
+       * make sure to save into metadata to avoid further non cached lookup
+       * - will not alter anything if a valid bbox is already set
+       */
       await updateViewExtentMeta(view, extent);
     }
 
