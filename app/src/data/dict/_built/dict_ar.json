@@ -2945,6 +2945,11 @@
     "ar": "أضف طبقة مصدر "
   },
   {
+    "id": "btn_update_bbox",
+    "en": "Update values from source",
+    "ar": "تحديث القيم من المصدر"
+  },
+  {
     "id": "btn_update_geoserver",
     "en": "Update geoserver : rebuild DB",
     "ar": "تحديث الخادم الجغرافي: إعادة بناء قاعدة البيانات"

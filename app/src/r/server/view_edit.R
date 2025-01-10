@@ -746,7 +746,8 @@ observeEvent(input$viewSourceMetadata_init, {
 
   schemaMeta <- mxSchemaSourceMeta(
     language = language,
-    noAttributes = TRUE
+    noAttributes = TRUE,
+    idView = view$id 
   )
 
   #

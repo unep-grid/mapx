@@ -2945,6 +2945,11 @@
     "bn": "একটি উত্স স্তর যোগ করুন "
   },
   {
+    "id": "btn_update_bbox",
+    "en": "Update values from source",
+    "bn": "উৎস থেকে মান আপডেট করুন"
+  },
+  {
     "id": "btn_update_geoserver",
     "en": "Update geoserver : rebuild DB",
     "bn": "জিওসার্ভার আপডেট করুন: ডিবি পুনর্নির্মাণ করুন"

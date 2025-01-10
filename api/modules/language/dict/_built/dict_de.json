@@ -2945,6 +2945,11 @@
     "de": "Fügen Sie eine Quellenebene hinzu "
   },
   {
+    "id": "btn_update_bbox",
+    "en": "Update values from source",
+    "de": "Werte aus Quelle aktualisieren"
+  },
+  {
     "id": "btn_update_geoserver",
     "en": "Update geoserver : rebuild DB",
     "de": "Geoserver aktualisieren: DB neu aufbauen"

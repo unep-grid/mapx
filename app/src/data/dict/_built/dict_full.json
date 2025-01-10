@@ -7657,6 +7657,19 @@
     "de": "Fügen Sie eine Quellenebene hinzu "
   },
   {
+    "id": "btn_update_bbox",
+    "en": "Update values from source",
+    "fr": "Mettre à jour depuis la source",
+    "es": "Actualizar desde la fuente",
+    "ru": "Обновить из источника",
+    "zh": "从来源更新值",
+    "ar": "تحديث القيم من المصدر",
+    "fa": "به‌روزرسانی مقادیر از منبع",
+    "ps": "ارزښتونه له سرچینې تازه کړئ",
+    "bn": "উৎস থেকে মান আপডেট করুন",
+    "de": "Werte aus Quelle aktualisieren"
+  },
+  {
     "id": "btn_update_geoserver",
     "en": "Update geoserver : rebuild DB",
     "fr": "Mettre à jour le géoserveur : reconstruire la base de données",

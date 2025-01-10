@@ -147,6 +147,7 @@ async function loadJsonEditor() {
     import("./../json_editor/validators/validation.js"),
     import("./../json_editor/editors/number_na.js"),
     import("./../json_editor/editors/position.js"),
+    import("./../json_editor/editors/meta_bbox.js"),
     import("./../json_editor/editors/array_confirm_delete"),
     import("./../json_editor/editors/monaco.js"),
     import("./../json_editor/editors/table_source_stat.js"),

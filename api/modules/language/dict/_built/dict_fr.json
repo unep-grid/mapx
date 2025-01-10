@@ -2945,6 +2945,11 @@
     "fr": "Ajouter une couche source"
   },
   {
+    "id": "btn_update_bbox",
+    "en": "Update values from source",
+    "fr": "Mettre à jour depuis la source"
+  },
+  {
     "id": "btn_update_geoserver",
     "en": "Update geoserver : rebuild DB",
     "fr": "Mettre à jour le géoserveur : reconstruire la base de données"

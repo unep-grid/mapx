@@ -2945,6 +2945,11 @@
     "zh": "添加源图层"
   },
   {
+    "id": "btn_update_bbox",
+    "en": "Update values from source",
+    "zh": "从来源更新值"
+  },
+  {
     "id": "btn_update_geoserver",
     "en": "Update geoserver : rebuild DB",
     "zh": "更新地理服务器：重建数据库"

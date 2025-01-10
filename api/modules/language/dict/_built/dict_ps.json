@@ -2945,6 +2945,11 @@
     "ps": "د سرچینې لایه اضافه کړئ"
   },
   {
+    "id": "btn_update_bbox",
+    "en": "Update values from source",
+    "ps": "ارزښتونه له سرچینې تازه کړئ"
+  },
+  {
     "id": "btn_update_geoserver",
     "en": "Update geoserver : rebuild DB",
     "ps": "جیوسرور تازه کړئ: د DB بیا جوړ کړئ"

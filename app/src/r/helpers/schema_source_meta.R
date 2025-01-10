@@ -6,6 +6,7 @@
 #' @param abstract {Character} Default abstract
 #' @param notes {Character} Default notes
 #' @param noAttributes {Logical} Do not output schema for attributes and attributes alias.
+#' @param idSource Used to create an bounding box editor
 #' @return Ready to parse JSON schema
 mxSchemaSourceMeta <- function(
   language = NULL,
@@ -13,7 +14,9 @@ mxSchemaSourceMeta <- function(
   title = "",
   abstract = "",
   notes = "",
-  noAttributes = FALSE
+  noAttributes = FALSE,
+  idSource = NULL,
+  idView = NULL
 ) {
   #
   #
@@ -318,7 +321,12 @@ mxSchemaSourceMeta <- function(
             title = t("spatial_bbx_title"),
             description = t("spatial_bbx_desc"),
             type = "object",
-            options = list(collapsed = TRUE),
+            format = "meta_bbox",
+            options = list(
+              collapsed = TRUE,
+              idSource = idSource,
+              idView = idView 
+              ),
             required = c(),
             properties = list(
               lng_min = list(

@@ -72,6 +72,11 @@ observeEvent(reactData$triggerSourceMetadata, {
       hasJoin <- isNotEmpty(meta$join)
 
       if (isEmpty(.get(meta, c("spatial", "bbox"), list()))) {
+        #
+        # This is also performed if the user request a zoom to all features 
+        # client side and not valid bbox  is found, we updated that
+        # -> see api/modules/view/metadata.js
+        #
         extent <- mxDbGetLayerExtent(layer)
         bbox <- list(
           lng_min  = .get(extent, "lng1", -180),
@@ -110,7 +115,8 @@ observeEvent(reactData$triggerSourceMetadata, {
       schema <- mxSchemaSourceMeta(
         language = language,
         attributesNames = attributesNames,
-        noAttributes = hasJoin
+        noAttributes = hasJoin,
+        idSource = layer
       )
 
       sourceTimeLastModified <- mxDbGetSourceLastDateModified(layer)

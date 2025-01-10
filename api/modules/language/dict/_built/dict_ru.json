@@ -2945,6 +2945,11 @@
     "ru": "Добавить исходный слой "
   },
   {
+    "id": "btn_update_bbox",
+    "en": "Update values from source",
+    "ru": "Обновить из источника"
+  },
+  {
     "id": "btn_update_geoserver",
     "en": "Update geoserver : rebuild DB",
     "ru": "Обновить геосервер: перестроить БД"

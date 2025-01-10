@@ -2945,6 +2945,11 @@
     "fa": "افزودن لایه اصلی"
   },
   {
+    "id": "btn_update_bbox",
+    "en": "Update values from source",
+    "fa": "به‌روزرسانی مقادیر از منبع"
+  },
+  {
     "id": "btn_update_geoserver",
     "en": "Update geoserver : rebuild DB",
     "fa": "به روز رسانی geoserver: بازسازی DB"

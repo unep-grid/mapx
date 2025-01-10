@@ -2945,6 +2945,11 @@
     "es": "Añadir una capa fuente"
   },
   {
+    "id": "btn_update_bbox",
+    "en": "Update values from source",
+    "es": "Actualizar desde la fuente"
+  },
+  {
     "id": "btn_update_geoserver",
     "en": "Update geoserver : rebuild DB",
     "es": "Actualizar geoservidor: reconstruir DB"

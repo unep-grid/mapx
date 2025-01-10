@@ -260,7 +260,6 @@ export async function getSourceRtSummary(view) {
 
   const layer = findMatchingLayer(layersList, layerName);
 
-
   if (!layer) {
     return metadata;
   }
@@ -292,7 +291,6 @@ async function extractSpatialExtent(layer) {
   const wgs84Bbox = layer.BoundingBox.find((bbox) => bbox.crs === "EPSG:4326");
 
   if (wgs84Bbox?.extent) {
-
     const bbox = {
       lng1: Math.round(wgs84Bbox.extent[0]),
       lat2: Math.round(wgs84Bbox.extent[1]),
@@ -342,4 +340,13 @@ export async function getSourceGjSummary(view) {
     out.extent_sp = path(view, "data.geometry.extent", {});
   }
   return out;
+}
+
+export function bboxToBboxMeta(bbox) {
+  return {
+    lat_min: Math.min(bbox.lat1, bbox.lat2),
+    lat_max: Math.max(bbox.lat1, bbox.lat2),
+    lng_min: Math.min(bbox.lng1, bbox.lng2),
+    lng_max: Math.max(bbox.lng1, bbox.lng2),
+  };
 }
