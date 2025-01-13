@@ -10,6 +10,7 @@ import {
   isArray,
   isSourceId,
   isProjectId,
+  isBboxMeta,
 } from "@fxi/mx_valid";
 import { isLayerValid, areLayersValid } from "./geom_validation.js";
 import { insertRow } from "./insert.js";
@@ -455,6 +456,8 @@ LIMIT 1`);
 /**
  * Get layer extent as bounding box
  * @param {string|number} idSource Layer ID
+ * @param {boolean} recalc Vacuum analyse before
+ * @param {PgClient} client Postgres client
  * @returns {Promise<Object>} Bounding box object
  * @returns {number} .lat_min Minimum latitude
  * @returns {number} .lng_min Minimum longitude
@@ -464,12 +467,86 @@ LIMIT 1`);
  * - Layer has no geometry column
  * - Layer table statistics are not available
  */
-export async function getLayerExtent(idSource) {
+export async function getLayerExtent(
+  idSource,
+  recalc = false,
+  client = pgWrite
+) {
+  if (!isSourceId(idSource)) {
+    throw new Error(`Invalid source ${idSource}`);
+  }
+
+  if (recalc) {
+    // update geom stat
+    await client.query(`
+    VACUUM ANALYZE ${idSource}(geom);
+      `);
+  }
   const sqlExtent = parseTemplate(templates.getLayerExtent, {
     idSource,
   });
-  const res = await pgRead.query(sqlExtent);
+  const res = await client.query(sqlExtent);
+
   return res.rows?.[0]?.bbox;
+}
+
+/**
+ * Updates the spatial bounding box metadata for a layer in the mx_sources table
+ * @param {string|number} idSource Layer ID to update
+ * @param {pg.Client} [client=pgWrite] PostgreSQL client instance
+ * @returns {Promise<Object|false>} Returns the updated source row if successful, false if bbox validation fails
+ * @throws {Error} Throws if source ID is invalid, exactly one row is not updated, or if database operations fail
+ * @example
+ * // Update bbox for source id 123
+ * const result = await updateLayerExtentMeta(123);
+ * if (!result) {
+ *   console.error('Invalid bbox metadata');
+ * }
+ */
+export async function updateLayerExtentMeta(idSource, client = pgWrite) {
+  if (!isSourceId(idSource)) {
+    throw new Error(`Invalid source id: ${idSource}`);
+  }
+
+  const ext = await getLayerExtent(idSource, true);
+
+  if (!isBboxMeta(ext)) {
+    throw new Error(`Invalid layer / with no extent ${idSource}`);
+  }
+
+  const extJson = JSON.stringify(ext);
+
+  try {
+    await client.query("BEGIN");
+
+    // Update source metadata for vt views
+    const query = `
+      UPDATE mx_sources
+      SET data = jsonb_set(
+        data,
+        '{meta,spatial,bbox}',
+        $1::jsonb,
+        true
+      )
+      WHERE id = $2
+      RETURNING id;
+    `;
+
+    const result = await client.query(query, [extJson, idSource]);
+
+    if (result.rowCount !== 1) {
+      await client.query("ROLLBACK");
+      throw new Error(
+        `Expected to update exactly 1 row, but updated ${result.rowCount} rows instead`
+      );
+    }
+
+    await client.query("COMMIT");
+    return result.rows[0];
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  }
 }
 
 /**

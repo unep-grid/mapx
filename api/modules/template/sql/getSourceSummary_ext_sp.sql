@@ -1,3 +1,4 @@
+
 WITH
   id_source AS (
     SELECT

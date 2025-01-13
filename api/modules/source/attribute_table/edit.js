@@ -23,6 +23,7 @@ import {
   updateTableCellByGid,
   updateViewsAttributeBatch,
   deleteRowByGid,
+  updateLayerExtentMeta,
 } from "#mapx/db_utils";
 import {
   getSourceAttributeTable,
@@ -834,6 +835,7 @@ class EditTableSession {
             {
               const { id_rows } = update;
               await deleteRowByGid(id_table, id_rows);
+              await updateLayerExtentMeta(id_table); 
               tables_update.add(id_table);
             }
             break;
