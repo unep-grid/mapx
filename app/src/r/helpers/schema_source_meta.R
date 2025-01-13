@@ -115,6 +115,60 @@ mxSchemaSourceMeta <- function(
                 items = list(
                   type = "string"
                 )
+              ),
+              keys_topic = list(
+                title = "Topic",
+                description = "Topic of the data",
+                type = "array",
+                format = "select_tom_simple",
+                uniqueItems = TRUE,
+                items = list(
+                  type = "string",
+                  enum = c(
+                    "biota",
+                    "boundaries",
+                    "farming",
+                    "climatologyMeteorologyAtmosphere",
+                    "economy",
+                    "elevation",
+                    "environment",
+                    "geoscientificInformation",
+                    "health",
+                    "imageryBaseMapsEarthCover",
+                    "intelligenceMilitary",
+                    "inlandWaters",
+                    "location",
+                    "oceans",
+                    "planningCadastre",
+                    "society",
+                    "structure",
+                    "transportation",
+                    "utilitiesCommunication"
+                  ),
+                  options = list(
+                    enum_titles = c(
+                      "biota",
+                      "boundaries",
+                      "farming",
+                      "climatology meteorology atmosphere",
+                      "economy",
+                      "elevation",
+                      "environment",
+                      "geoscientific information",
+                      "health",
+                      "imagery base maps earth cover",
+                      "intelligence military",
+                      "inland waters",
+                      "location",
+                      "oceans",
+                      "planning cadastre",
+                      "society",
+                      "structure",
+                      "transportation",
+                      "utilities communication"
+                    )
+                  )
+                )
               )
             )
           ),
@@ -325,8 +379,8 @@ mxSchemaSourceMeta <- function(
             options = list(
               collapsed = TRUE,
               idSource = idSource,
-              idView = idView 
-              ),
+              idView = idView
+            ),
             required = c(),
             properties = list(
               lng_min = list(

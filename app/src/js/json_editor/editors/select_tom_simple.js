@@ -3,18 +3,19 @@ import TomSelect from "tom-select";
 import { el } from "./../../el_mapx/index.js";
 
 JSONEditor.defaults.resolvers.unshift(function (schema) {
-  if (schema.type === "string" && schema.format === "selectizeSingle") {
-    return "selectizeSingle";
+  // Handle both string and array types with select_tom_simple format
+  if (
+    (schema.type === "string" && schema.format === "select_tom_simple") ||
+    (schema.type === "array" && schema.format === "select_tom_simple" && schema.items?.type === "string")
+  ) {
+    return "select_tom_simple";
   }
 });
 
 /**
- * Generic input with group + async translation
+ * Custom editor supporting both single string and array of strings
  */
-
-JSONEditor.defaults.editors.selectizeSingle = class mxeditors extends (
-  JSONEditor.AbstractEditor
-) {
+JSONEditor.defaults.editors.select_tom_simple = class mxeditors extends JSONEditor.AbstractEditor {
   build() {
     const editor = this;
 
@@ -24,9 +25,7 @@ JSONEditor.defaults.editors.selectizeSingle = class mxeditors extends (
     editor.error_holder = document.createElement("div");
 
     if (editor.schema.description) {
-      editor.description = editor.theme.getDescription(
-        editor.schema.description,
-      );
+      editor.description = editor.theme.getDescription(editor.schema.description);
     }
 
     editor.input = el("input", { type: "text" });
@@ -34,37 +33,48 @@ JSONEditor.defaults.editors.selectizeSingle = class mxeditors extends (
     const group = editor.theme.getFormControl(
       editor.title,
       editor.input,
-      editor.description,
+      editor.description
     );
 
     editor.container.appendChild(group);
     editor.container.appendChild(editor.error_holder);
 
-    const values = editor.schema.enum;
-    const titles = editor.schema.options.enum_titles;
+    // Handle both array and string schema types
+    const isArray = editor.schema.type === "array";
+    const enumValues = isArray ? editor.schema.items.enum : editor.schema.enum;
+    const enumTitles = isArray 
+      ? editor.schema.items.options?.enum_titles || enumValues
+      : editor.schema.options?.enum_titles || enumValues;
 
-    const options = values.map((v, i) => {
-      return { value: v, text: titles[i] };
+    const options = enumValues.map((v, i) => {
+      return { value: v, text: enumTitles[i] };
     });
 
-    editor.input.selectize = new TomSelect(editor.input, {
+    editor.input.ts = new TomSelect(editor.input, {
       options,
       delimiter: ",",
       createOnBlur: false,
       create: false,
       showAddOptionOnCreate: false,
       searchField: ["text", "value"],
-      maxItems: 1,
+      maxItems: isArray ? null : 1, // null means unlimited for arrays
+      plugins: isArray ? ['remove_button'] : [], // Add remove button for array mode
+      persist: false,
+      // Handle unique items constraint
+      duplicates: !(isArray && editor.schema.uniqueItems === true)
     });
+
     editor.refreshValue();
   }
+
   postBuild() {
     const editor = this;
-    editor.input.selectize.on("change", function () {
+    editor.input.ts.on("change", function () {
       editor.refreshValue();
       editor.onChange(true);
     });
   }
+
   destroy() {
     const editor = this;
     editor.empty(true);
@@ -75,20 +85,38 @@ JSONEditor.defaults.editors.selectizeSingle = class mxeditors extends (
       editor.description.parentNode.removeChild(editor.description);
     }
     if (editor.input && editor.input.parentNode) {
+      editor.input.ts.destroy();
       editor.input.parentNode.removeChild(editor.input);
     }
     super.destroy();
   }
+
   empty() {}
+
   setValue(value) {
     const editor = this;
-    const selectize = editor.input.selectize;
-    selectize.clear(true);
-    editor.input.selectize.setValue(value);
+    const ts = editor.input.ts;
+    ts.clear(true);
+    
+    // Handle both string and array values
+    if (Array.isArray(value)) {
+      value.forEach(v => ts.addItem(v));
+    } else if (value !== undefined && value !== null) {
+      ts.addItem(value);
+    }
+    
     editor.refreshValue();
   }
+
   refreshValue() {
     const editor = this;
-    editor.value = editor.input.selectize.getValue();
+    const value = editor.input.ts.getValue();
+    
+    // Convert value based on schema type
+    if (editor.schema.type === "array") {
+      editor.value = value ? value.split(",") : [];
+    } else {
+      editor.value = value || "";
+    }
   }
 };
