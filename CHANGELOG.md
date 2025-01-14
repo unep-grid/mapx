@@ -1,3 +1,8 @@
+  - [1.13.14-alpha.4](https://github.com/unep-grid/mapx/tree/1.13.14-alpha.4) 
+    
+    - Implemented #921
+    - Updated base image for app
+
   - [1.13.13.1](https://github.com/unep-grid/mapx/tree/1.13.13.1) 
 
     - Should fix perm issue in previous mx_logs migration patch + comments
