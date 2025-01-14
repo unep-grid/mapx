@@ -73,7 +73,7 @@ observeEvent(reactData$triggerSourceMetadata, {
 
       if (isEmpty(.get(meta, c("spatial", "bbox"), list()))) {
         #
-        # This is also performed if the user request a zoom to all features 
+        # This is also performed if the user request a zoom to all features
         # client side and not valid bbox  is found, we updated that
         # -> see api/modules/view/metadata.js
         #
@@ -137,7 +137,8 @@ observeEvent(reactData$triggerSourceMetadata, {
           disableSelectize = FALSE,
           draftAutoSaveId = layer,
           draftAutoSaveDbTimestamp = sourceTimeStamp,
-          getValidationOnChange = TRUE
+          getValidationOnChange = TRUE,
+          addSearch = TRUE
         )
       )
     }

@@ -6,6 +6,7 @@
   backdrop-filter: blur(3px);
   border: 1px solid var(--mx_ui_border);
   border-radius: 10px;
+  z-index: 1000;
 }
 .txt-filter--box {
   border-bottom: 1px solid var(--mx_ui_input_accent);

@@ -14,7 +14,6 @@ observe({
     }
 
     isolate({
-
       isGuest <- isGuestUser()
       userData <- reactUser$data
       idUser <- userData$id
@@ -598,7 +597,6 @@ observe({
               textCloseButton = d("btn_close", language),
               removeCloseButton = TRUE
             )
-
           },
           "btn_opt_edit_style" = {
             if (!viewIsEditable) {
@@ -719,7 +717,7 @@ observeEvent(input$viewRasterLegendTitles_init, {
     startVal = legendTitles,
     options = list(
       getValidationOnChange = TRUE,
-      getValuesOnChange = TRUE
+      getValuesOnChange = TRUE,
     )
   )
 })
@@ -747,7 +745,7 @@ observeEvent(input$viewSourceMetadata_init, {
   schemaMeta <- mxSchemaSourceMeta(
     language = language,
     noAttributes = TRUE,
-    idView = view$id 
+    idView = view$id
   )
 
   #
@@ -788,7 +786,8 @@ observeEvent(input$viewSourceMetadata_init, {
     startVal = viewSourceMetadata,
     options = list(
       getValidationOnChange = TRUE,
-      getValuesOnChange = TRUE
+      getValuesOnChange = TRUE,
+      addSearch = TRUE
     )
   )
 })

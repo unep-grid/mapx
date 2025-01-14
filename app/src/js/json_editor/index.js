@@ -24,12 +24,14 @@ import { settings, data as mx_storage } from "./../mx.js";
 import { moduleLoad } from "../modules_loader_async";
 import { modalSimple } from "../mx_helper_modal";
 import { jsonDiff } from "../mx_helper_utils_json";
+import { TextFilter } from "../text_filter_simple";
 import "./style.less";
 import "./../../css/mx_tom_select.css";
 
 export const jed = {
   editors: {},
   helper: {},
+  search: {},
   monacoEditors: [],
   extend: {
     position: {},
@@ -78,7 +80,8 @@ export async function jedInit(o) {
     ajax: true,
     theme: "bootstrap3",
     iconlib: "bootstrap3",
-    disable_collapse: false,
+    //disable_collapse: true,
+    collapsed : false,
     disable_properties: true,
     disable_edit_json: false,
     required_by_default: true,
@@ -87,12 +90,14 @@ export async function jedInit(o) {
     prompt_before_delete: false,
     schema: schema,
     startval: startVal,
+    /* mapx options */
     draftAutoSaveEnable: false,
     draftAutoSaveId: null,
     draftTimestamp: null,
     getValidationOnChange: false,
     getValuesOnChange: false,
     hooksOnGet: [],
+    addSearch: false,
   };
 
   Object.assign(opt_final, opt, options);
@@ -158,6 +163,27 @@ export async function jedInit(o) {
         throw new Error(e);
       }
     }
+
+    /**
+     * Add search item
+     */
+    if (opt_final.addSearch) {
+      const elInput = el("input", {
+        type: "text",
+        class: ["form-control"],
+        placeholder: "Search",
+      });
+
+      jed.search[id] = new TextFilter({
+        selector: "[data-schematype=object]",
+        elInput: elInput,
+        elContent: elJed,
+        elContainer: elJed.parentElement,
+        timeout: 50,
+      });
+
+    }
+
     /**
      * Report ready state to shiny
      */
