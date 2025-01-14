@@ -245,6 +245,16 @@ mxSchemaSourceMeta <- function(
                 )
               )
             )
+          ),
+          data_attribution = list(
+            title = t("textual_data_attribution"),
+            description = t("textual_data_attribution_desc"),
+            type = "string"
+          ),
+          citation = list(
+            title = t("textual_citation"),
+            description = t("textual_citation_desc"),
+            type = "string"
           )
         )
       ),

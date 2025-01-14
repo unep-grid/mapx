@@ -6560,6 +6560,26 @@
     "bn": "অতিরিক্ত নোট "
   },
   {
+    "id": "textual_data_attribution",
+    "en": "Attribution",
+    "bn": "অনুমতি"
+  },
+  {
+    "id": "textual_citation",
+    "en": "Citation",
+    "bn": "উদ্ধৃতি"
+  },
+  {
+    "id": "textual_data_attribution_desc",
+    "en": "Provider recommended data attribution",
+    "bn": "প্রদানকারী সুপারিশকৃত তথ্য অনুমতি"
+  },
+  {
+    "id": "textual_citation_desc",
+    "en": "Provider recommended citation. e.g. bibtex entry",
+    "bn": "প্রদানকারী সুপারিশকৃত উদ্ধৃতি। উদাহরণস্বরূপ, bibtex এন্ট্রি"
+  },
+  {
     "id": "textual_desc_abstract",
     "en": "Abstract",
     "bn": "বিমূর্ত "

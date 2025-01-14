@@ -6560,6 +6560,26 @@
     "ps": "اضافي یادونې "
   },
   {
+    "id": "textual_data_attribution",
+    "en": "Attribution",
+    "ps": "اتريبيوشن"
+  },
+  {
+    "id": "textual_citation",
+    "en": "Citation",
+    "ps": "حواله"
+  },
+  {
+    "id": "textual_data_attribution_desc",
+    "en": "Provider recommended data attribution",
+    "ps": "د عرضه کونکي لخوا وړاندیز شوې د معلوماتو انتساب"
+  },
+  {
+    "id": "textual_citation_desc",
+    "en": "Provider recommended citation. e.g. bibtex entry",
+    "ps": "د عرضه کونکي لخوا وړاندیز شوې حواله. د بېلګې په توګه، bibtex داخله"
+  },
+  {
     "id": "textual_desc_abstract",
     "en": "Abstract",
     "ps": "خلاصول "

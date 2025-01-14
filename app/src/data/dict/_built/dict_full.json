@@ -17056,6 +17056,58 @@
     "de": "Zusätzliche Bemerkungen "
   },
   {
+    "id": "textual_data_attribution",
+    "en": "Attribution",
+    "fr": "Attribution",
+    "es": "Atribución",
+    "ru": "Атрибуция",
+    "zh": "作者信息",
+    "ar": "نسب",
+    "fa": "انسباب",
+    "ps": "اتريبيوشن",
+    "bn": "অনুমতি",
+    "de": "Zuschreibung"
+  },
+  {
+    "id": "textual_citation",
+    "en": "Citation",
+    "fr": "Citation",
+    "es": "Cita",
+    "ru": "Ссылка",
+    "zh": "引用",
+    "ar": "اقتباس",
+    "fa": "نقل قول",
+    "ps": "حواله",
+    "bn": "উদ্ধৃতি",
+    "de": "Zitat"
+  },
+  {
+    "id": "textual_data_attribution_desc",
+    "en": "Provider recommended data attribution",
+    "fr": "Attribution de données recommandée par le fournisseur",
+    "es": "Atribución de datos recomendada por el proveedor",
+    "ru": "Рекомендуемая атрибуция данных от поставщика",
+    "zh": "提供者推荐的数据归因",
+    "ar": "نسب البيانات الموصى بها من قبل المزود",
+    "fa": "انتساب داده‌های توصیه‌شده توسط ارائه‌دهنده",
+    "ps": "د عرضه کونکي لخوا وړاندیز شوې د معلوماتو انتساب",
+    "bn": "প্রদানকারী সুপারিশকৃত তথ্য অনুমতি",
+    "de": "Vom Anbieter empfohlene Datenzuschreibung"
+  },
+  {
+    "id": "textual_citation_desc",
+    "en": "Provider recommended citation. e.g. bibtex entry",
+    "fr": "Citation recommandée par le fournisseur. par exemple, entrée bibtex",
+    "es": "Cita recomendada por el proveedor. por ejemplo, entrada bibtex",
+    "ru": "Рекомендуемая ссылка от поставщика. например, запись bibtex",
+    "zh": "提供者推荐的引用。例如，bibtex条目",
+    "ar": "اقتباس موصى به من قبل المزود. على سبيل المثال، إدخال bibtex",
+    "fa": "ارجاع توصیه‌شده توسط ارائه‌دهنده. مثلاً ورود bibtex",
+    "ps": "د عرضه کونکي لخوا وړاندیز شوې حواله. د بېلګې په توګه، bibtex داخله",
+    "bn": "প্রদানকারী সুপারিশকৃত উদ্ধৃতি। উদাহরণস্বরূপ, bibtex এন্ট্রি",
+    "de": "Vom Anbieter empfohlene Zitierung. z. B. bibtex-Eintrag"
+  },
+  {
     "id": "textual_desc_abstract",
     "en": "Abstract",
     "fr": "Résumé",

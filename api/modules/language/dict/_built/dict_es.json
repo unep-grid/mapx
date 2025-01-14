@@ -6560,6 +6560,26 @@
     "es": "Notas adicionales"
   },
   {
+    "id": "textual_data_attribution",
+    "en": "Attribution",
+    "es": "Atribución"
+  },
+  {
+    "id": "textual_citation",
+    "en": "Citation",
+    "es": "Cita"
+  },
+  {
+    "id": "textual_data_attribution_desc",
+    "en": "Provider recommended data attribution",
+    "es": "Atribución de datos recomendada por el proveedor"
+  },
+  {
+    "id": "textual_citation_desc",
+    "en": "Provider recommended citation. e.g. bibtex entry",
+    "es": "Cita recomendada por el proveedor. por ejemplo, entrada bibtex"
+  },
+  {
     "id": "textual_desc_abstract",
     "en": "Abstract",
     "es": "Resumen"

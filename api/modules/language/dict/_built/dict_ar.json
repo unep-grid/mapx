@@ -6560,6 +6560,26 @@
     "ar": "ملاحظات إضافية "
   },
   {
+    "id": "textual_data_attribution",
+    "en": "Attribution",
+    "ar": "نسب"
+  },
+  {
+    "id": "textual_citation",
+    "en": "Citation",
+    "ar": "اقتباس"
+  },
+  {
+    "id": "textual_data_attribution_desc",
+    "en": "Provider recommended data attribution",
+    "ar": "نسب البيانات الموصى بها من قبل المزود"
+  },
+  {
+    "id": "textual_citation_desc",
+    "en": "Provider recommended citation. e.g. bibtex entry",
+    "ar": "اقتباس موصى به من قبل المزود. على سبيل المثال، إدخال bibtex"
+  },
+  {
     "id": "textual_desc_abstract",
     "en": "Abstract",
     "ar": "خلاصة "

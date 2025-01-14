@@ -6560,6 +6560,26 @@
     "zh": "附加注释"
   },
   {
+    "id": "textual_data_attribution",
+    "en": "Attribution",
+    "zh": "作者信息"
+  },
+  {
+    "id": "textual_citation",
+    "en": "Citation",
+    "zh": "引用"
+  },
+  {
+    "id": "textual_data_attribution_desc",
+    "en": "Provider recommended data attribution",
+    "zh": "提供者推荐的数据归因"
+  },
+  {
+    "id": "textual_citation_desc",
+    "en": "Provider recommended citation. e.g. bibtex entry",
+    "zh": "提供者推荐的引用。例如，bibtex条目"
+  },
+  {
     "id": "textual_desc_abstract",
     "en": "Abstract",
     "zh": "摘要"
