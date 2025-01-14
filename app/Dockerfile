@@ -77,7 +77,7 @@ RUN apt-get update && \
 #
 # Final stage
 #
-FROM r-base:${R_VERSION} AS final
+FROM scratch AS final
 
 ARG MAPX_HOME
 ARG R_LIBS
