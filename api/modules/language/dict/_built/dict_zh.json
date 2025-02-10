@@ -7960,6 +7960,21 @@
     "zh": "使用默认调色板"
   },
   {
+    "id": "privacy_notice_title",
+    "en": "Privacy Notice",
+    "zh": "隐私声明"
+  },
+  {
+    "id": "privacy_notice_html",
+    "en": "<div class='privacy-notice'><p>MapX data handling:<ul><li>May collect usage logs and browser fingerprint for security when using authentication features</li><li>Stores email for authenticated sessions only</li><li>Uses browser cache for performance</li><li>Never shares data for commercial purposes</li></ul><p>Note: Third-party visualization tools may set additional cookies when displaying external data.</p></div>",
+    "zh": "<div class='privacy-notice'><p>MapX数据处理：<ul><li>使用身份验证功能时可能收集使用日志和浏览器指纹以确保安全</li><li>仅在认证会话期间存储电子邮件</li><li>使用浏览器缓存以提高性能</li><li>绝不会将数据用于商业目的</li></ul><p>注意：第三方可视化工具在显示外部数据时可能设置额外的cookies。</p></div>"
+  },
+  {
+    "id": "privacy_consent",
+    "en": "I've read and consent to the <a href={{privacy_link}} target=\"_blank\">privacy policy</a> and the <a href={{tou_link}} target=\"_blank\">terms of use</a>",
+    "zh": "我已阅读并同意<a href={{privacy_link}} target=\"_blank\">隐私政策</a>和<a href={{tou_link}} target=\"_blank\">使用条款</a>"
+  },
+  {
     "id": "proj_manage_load_title",
     "en": "Load new project ?",
     "zh": "加载新项目？"

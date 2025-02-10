@@ -7960,6 +7960,21 @@
     "ru": "Использовать палитру по умолчанию "
   },
   {
+    "id": "privacy_notice_title",
+    "en": "Privacy Notice",
+    "ru": "Уведомление о конфиденциальности"
+  },
+  {
+    "id": "privacy_notice_html",
+    "en": "<div class='privacy-notice'><p>MapX data handling:<ul><li>May collect usage logs and browser fingerprint for security when using authentication features</li><li>Stores email for authenticated sessions only</li><li>Uses browser cache for performance</li><li>Never shares data for commercial purposes</li></ul><p>Note: Third-party visualization tools may set additional cookies when displaying external data.</p></div>",
+    "ru": "<div class='privacy-notice'><p>Обработка данных MapX:<ul><li>Может собирать журналы использования и отпечаток браузера для безопасности при использовании функций аутентификации</li><li>Хранит email только для аутентифицированных сессий</li><li>Использует кэш браузера для производительности</li><li>Никогда не передает данные в коммерческих целях</li></ul><p>Примечание: Сторонние инструменты визуализации могут устанавливать дополнительные файлы cookie при отображении внешних данных.</p></div>"
+  },
+  {
+    "id": "privacy_consent",
+    "en": "I've read and consent to the <a href={{privacy_link}} target=\"_blank\">privacy policy</a> and the <a href={{tou_link}} target=\"_blank\">terms of use</a>",
+    "ru": "Я прочитал(а) и соглашаюсь с <a href={{privacy_link}} target=\"_blank\">политикой конфиденциальности</a> и <a href={{tou_link}} target=\"_blank\">условиями использования</a>"
+  },
+  {
     "id": "proj_manage_load_title",
     "en": "Load new project ?",
     "ru": "Загрузить новый проект?"

@@ -12,10 +12,23 @@
       "default": true,
       "enum": [true, false]
     },
-    "pref_show_edit_table_warning_2": {
-      "type": "boolean",
-      "default": true,
-      "enum": [true, false]
+    "pref_privacy_001": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "number",
+          "description": "POSIX timestamp"
+        },
+        "accepted": {
+          "type": "boolean"
+        }
+      },
+      "required": ["date", "accepted"],
+      "additionalProperties": false,
+      "default": {
+        "date": 0,
+        "accepted": false
+      }
     }
   }
 }

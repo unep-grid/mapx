@@ -609,7 +609,9 @@ export function modalDialog(opt) {
 export function modalConfirm(opt) {
   let elModal;
   return new Promise((resolve) => {
-    const elContent = el("div", opt.content);
+    const elContent = isElement(opt.content)
+      ? opt.content
+      : el("div", opt.content);
     const hasCbData = isFunction(opt.cbData);
     const hasOnClose = isFunction(opt.onClose);
     const hasCbInit = isFunction(opt.cbInit);
@@ -649,6 +651,9 @@ export function modalConfirm(opt) {
     );
 
     elModal = modal({
+      // Set base modal options
+      ...opt,
+      // with priority on those
       noShinyBinding: true,
       addSelectize: false,
       removeCloseButton: true,
@@ -695,6 +700,7 @@ export async function modalPrompt(opt) {
     },
     inputChildren: [],
     selectAutoOptions: null,
+    removeCancelButton: false,
   };
 
   opt.inputOptions = Object.assign({}, def.inputOptions, opt.inputOptions);
@@ -750,7 +756,11 @@ export async function modalPrompt(opt) {
         minHeight: "20px",
       },
     });
-    const elContent = el("div", [elInputGroup, elMessage]);
+    const elContent = el("div", [
+      opt.content ? opt.content : null,
+      elInputGroup,
+      elMessage,
+    ]);
     const elBtnCancel = el(
       "button",
       {
@@ -822,7 +832,7 @@ export async function modalPrompt(opt) {
       removeCloseButton: true,
       title: opt.title,
       content: elContent,
-      buttons: [elBtnConfirm, elBtnCancel],
+      buttons: [elBtnConfirm, opt.removeCancelButton ? null : elBtnCancel],
       addBackground: true,
       onClose: () => {
         if (isFunction(opt.onClose)) {

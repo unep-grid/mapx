@@ -7960,6 +7960,21 @@
     "bn": "ডিফল্ট প্যালেট ব্যবহার করুন "
   },
   {
+    "id": "privacy_notice_title",
+    "en": "Privacy Notice",
+    "bn": "গোপনীয়তা বিজ্ঞপ্তি"
+  },
+  {
+    "id": "privacy_notice_html",
+    "en": "<div class='privacy-notice'><p>MapX data handling:<ul><li>May collect usage logs and browser fingerprint for security when using authentication features</li><li>Stores email for authenticated sessions only</li><li>Uses browser cache for performance</li><li>Never shares data for commercial purposes</li></ul><p>Note: Third-party visualization tools may set additional cookies when displaying external data.</p></div>",
+    "bn": "<div class='privacy-notice'><p>MapX ডেটা পরিচালনা:<ul><li>প্রমাণীকরণ বৈশিষ্ট্য ব্যবহার করার সময় নিরাপত্তার জন্য ব্যবহারের লগ এবং ব্রাউজার ফিঙ্গারপ্রিন্ট সংগ্রহ করতে পারে</li><li>শুধুমাত্র প্রমাণীকৃত সেশনের জন্য ইমেইল সংরক্ষণ করে</li><li>কর্মক্ষমতার জন্য ব্রাউজার ক্যাশে ব্যবহার করে</li><li>কখনও বাণিজ্যিক উদ্দেশ্যে ডেটা শেয়ার করে না</li></ul><p>দ্রষ্টব্য: বাহ্যিক ডেটা প্রদর্শনের সময় তৃতীয় পক্ষের ভিজ্যুয়ালাইজেশন টুল অতিরিক্ত কুকিজ সেট করতে পারে।</p></div>"
+  },
+  {
+    "id": "privacy_consent",
+    "en": "I've read and consent to the <a href={{privacy_link}} target=\"_blank\">privacy policy</a> and the <a href={{tou_link}} target=\"_blank\">terms of use</a>",
+    "bn": "আমি <a href={{privacy_link}} target=\"_blank\">গোপনীয়তা নীতি</a> এবং <a href={{tou_link}} target=\"_blank\">ব্যবহারের শর্তাবলী</a> পড়েছি এবং সম্মত আছি"
+  },
+  {
     "id": "proj_manage_load_title",
     "en": "Load new project ?",
     "bn": "নতুন প্রকল্প লোড?"

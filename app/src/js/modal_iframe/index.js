@@ -1,4 +1,4 @@
-import { modalDialog } from "./../mx_helper_modal.js";
+import { modalConfirm, modalDialog } from "./../mx_helper_modal.js";
 import { isUrl } from "./../is_test";
 import { el, elButtonFa } from "../el_mapx";
 import { settings } from "../settings";
@@ -7,10 +7,10 @@ import { theme } from "../init_theme.js";
 import { makeId } from "../mx_helper_misc.js";
 
 const def = {
+  title: null,
   url: null,
   link_id: null,
   doc_id: null,
-  title: null,
   id_scroll: null,
 };
 
@@ -80,7 +80,7 @@ export async function modalIframe(options) {
     ...opt.opt_modal,
   };
 
-  await modalDialog(opt_modal);
+  return await modalDialog(opt_modal);
 
   function init() {
     window.addEventListener("message", handleMessage);

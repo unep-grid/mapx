@@ -262,7 +262,7 @@ export class EditTableSessionClient extends EditTableBase {
     if (et._config.test_mode) {
       return;
     }
-    const showWarning = await prefGet("pref_show_edit_table_warning_2");
+    const showWarning = await prefGet("pref_show_edit_table_warning");
     if (showWarning === null || showWarning === true) {
       const keepShowing = await modalConfirm({
         title: getDictItem("edit_table_modal_warning_title"),

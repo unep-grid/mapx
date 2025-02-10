@@ -7960,6 +7960,21 @@
     "ar": "استخدم اللوحة الافتراضية "
   },
   {
+    "id": "privacy_notice_title",
+    "en": "Privacy Notice",
+    "ar": "إشعار الخصوصية"
+  },
+  {
+    "id": "privacy_notice_html",
+    "en": "<div class='privacy-notice'><p>MapX data handling:<ul><li>May collect usage logs and browser fingerprint for security when using authentication features</li><li>Stores email for authenticated sessions only</li><li>Uses browser cache for performance</li><li>Never shares data for commercial purposes</li></ul><p>Note: Third-party visualization tools may set additional cookies when displaying external data.</p></div>",
+    "ar": "<div class='privacy-notice' dir='rtl'><p>معالجة البيانات في MapX:<ul><li>قد يجمع سجلات الاستخدام وبصمة المتصفح للأمان عند استخدام ميزات المصادقة</li><li>يخزن البريد الإلكتروني للجلسات المصادق عليها فقط</li><li>يستخدم ذاكرة التخزين المؤقت للمتصفح لتحسين الأداء</li><li>لا يشارك البيانات أبداً لأغراض تجارية</li></ul><p>ملاحظة: قد تقوم أدوات العرض المرئي من جهات خارجية بتعيين ملفات تعريف ارتباط إضافية عند عرض البيانات الخارجية.</p></div>"
+  },
+  {
+    "id": "privacy_consent",
+    "en": "I've read and consent to the <a href={{privacy_link}} target=\"_blank\">privacy policy</a> and the <a href={{tou_link}} target=\"_blank\">terms of use</a>",
+    "ar": "لقد قرأت وأوافق على <a href={{privacy_link}} target=\"_blank\">سياسة الخصوصية</a> و<a href={{tou_link}} target=\"_blank\">شروط الاستخدام</a>"
+  },
+  {
     "id": "proj_manage_load_title",
     "en": "Load new project ?",
     "ar": "تحميل مشروع جديد؟"

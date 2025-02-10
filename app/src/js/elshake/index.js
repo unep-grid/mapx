@@ -1,21 +1,30 @@
-import './style.less';
+import "./style.less";
+const types = ["no_way", "look_at_me"];
+const DURATION = 820;
 
-const types = ['no_way', 'look_at_me'];
+export async function shake(element, options = {}) {
+  if (!element) throw new Error("Element required");
 
-const def = {
-  type: types[0]
-};
+  const settings = {
+    type: types[0],
+    ...options,
+  };
 
-export function shake(el, opt) {
-  const settings = Object.assign({}, def, opt);
   if (!types.includes(settings.type)) {
     settings.type = types[0];
   }
-  el.classList.add('el_shake');
-  el.classList.add(settings.type);
-  clearTimeout(el._timeout_shake);
-  el._timeout_shake = setTimeout(() => {
-    el.classList.remove('el_shake');
-    el.classList.remove(settings.type);
-  }, 820);
+
+  return new Promise((resolve, reject) => {
+    try {
+      element.classList.add("el_shake", settings.type);
+      const timeout = setTimeout(() => {
+        element.classList.remove("el_shake", settings.type);
+        resolve(true);
+      }, DURATION);
+
+      element.dataset.shakeTimeout = timeout;
+    } catch (err) {
+      reject(err);
+    }
+  });
 }

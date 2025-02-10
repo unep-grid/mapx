@@ -7960,6 +7960,21 @@
     "de": "Verwenden Sie die Standardpalette "
   },
   {
+    "id": "privacy_notice_title",
+    "en": "Privacy Notice",
+    "de": "Datenschutzhinweis"
+  },
+  {
+    "id": "privacy_notice_html",
+    "en": "<div class='privacy-notice'><p>MapX data handling:<ul><li>May collect usage logs and browser fingerprint for security when using authentication features</li><li>Stores email for authenticated sessions only</li><li>Uses browser cache for performance</li><li>Never shares data for commercial purposes</li></ul><p>Note: Third-party visualization tools may set additional cookies when displaying external data.</p></div>",
+    "de": "<div class='privacy-notice'><p>MapX Datenverarbeitung:<ul><li>Kann Nutzungsprotokolle und Browser-Fingerprint für die Sicherheit sammeln, wenn Authentifizierungsfunktionen verwendet werden</li><li>Speichert E-Mail nur für authentifizierte Sitzungen</li><li>Nutzt Browser-Cache für die Leistung</li><li>Teilt niemals Daten für kommerzielle Zwecke</li></ul><p>Hinweis: Visualisierungstools von Drittanbietern können zusätzliche Cookies setzen, wenn externe Daten angezeigt werden.</p></div>"
+  },
+  {
+    "id": "privacy_consent",
+    "en": "I've read and consent to the <a href={{privacy_link}} target=\"_blank\">privacy policy</a> and the <a href={{tou_link}} target=\"_blank\">terms of use</a>",
+    "de": "Ich habe die <a href={{privacy_link}} target=\"_blank\">Datenschutzerklärung</a> und die <a href={{tou_link}} target=\"_blank\">Nutzungsbedingungen</a> gelesen und stimme ihnen zu"
+  },
+  {
     "id": "proj_manage_load_title",
     "en": "Load new project ?",
     "de": "Neues Projekt laden?"

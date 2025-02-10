@@ -7960,6 +7960,21 @@
     "fa": "از پالت پیش فرض استفاده کنید "
   },
   {
+    "id": "privacy_notice_title",
+    "en": "Privacy Notice",
+    "fa": "اطلاعیه حریم خصوصی"
+  },
+  {
+    "id": "privacy_notice_html",
+    "en": "<div class='privacy-notice'><p>MapX data handling:<ul><li>May collect usage logs and browser fingerprint for security when using authentication features</li><li>Stores email for authenticated sessions only</li><li>Uses browser cache for performance</li><li>Never shares data for commercial purposes</li></ul><p>Note: Third-party visualization tools may set additional cookies when displaying external data.</p></div>",
+    "fa": "<div class='privacy-notice' dir='rtl'><p>نحوه مدیریت داده‌ها در MapX:<ul><li>ممکن است هنگام استفاده از ویژگی‌های احراز هویت، گزارش‌های استفاده و اثر انگشت مرورگر را برای امنیت جمع‌آوری کند</li><li>ایمیل را فقط برای جلسات احراز هویت شده ذخیره می‌کند</li><li>از حافظه پنهان مرورگر برای بهبود عملکرد استفاده می‌کند</li><li>هرگز داده‌ها را برای اهداف تجاری به اشتراک نمی‌گذارد</li></ul><p>توجه: ابزارهای تجسم داده‌های شخص ثالث ممکن است هنگام نمایش داده‌های خارجی، کوکی‌های اضافی تنظیم کنند.</p></div>"
+  },
+  {
+    "id": "privacy_consent",
+    "en": "I've read and consent to the <a href={{privacy_link}} target=\"_blank\">privacy policy</a> and the <a href={{tou_link}} target=\"_blank\">terms of use</a>",
+    "fa": "من <a href={{privacy_link}} target=\"_blank\">سیاست حفظ حریم خصوصی</a> و <a href={{tou_link}} target=\"_blank\">شرایط استفاده</a> را خوانده و می‌پذیرم"
+  },
+  {
     "id": "proj_manage_load_title",
     "en": "Load new project ?",
     "fa": "پروژه جدید بارگیری شود؟"
