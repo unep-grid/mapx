@@ -114,6 +114,36 @@ describe("ElementCreator", () => {
   });
 
   describe("Content Setting", () => {
+    
+  describe("XSS Prevention", () => {
+    it("should sanitize HTML content with script tags", () => {
+      const maliciousContent = '<div>Hello</div><script>alert("xss")</script>';
+      const div = el("div", maliciousContent);
+      expect(div.innerHTML).not.toContain("<script>");
+      expect(div.innerHTML).toContain("<div>Hello</div>");
+    });
+
+    it("should sanitize HTML content with onclick attributes", () => {
+      const maliciousContent = '<div onclick="alert(\'xss\')">Click me</div>';
+      const div = el("div", maliciousContent);
+      expect(div.innerHTML).not.toContain("onclick");
+      expect(div.innerHTML).toContain("<div>Click me</div>");
+    });
+
+    it("should sanitize HTML content with onerror in img tag", () => {
+      const maliciousContent = '<img src="invalid.jpg" onerror="alert(\'xss\')" />';
+      const div = el("div", maliciousContent);
+      expect(div.innerHTML).not.toContain("onerror");
+      expect(div.innerHTML.toLowerCase()).toContain('<img src="invalid.jpg"');
+    });
+
+    it("should not affect regular text content inc. special chars", () => {
+      const textContent = "Hello World & Special chars: < > &";
+      const div = el("div", textContent);
+      expect(div.innerText).toBe(textContent);
+    });
+  });
+
     it("should handle elements", () => {
       const childEl = el("span");
       const divWithChild = el("div", childEl);

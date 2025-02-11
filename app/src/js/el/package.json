@@ -1,6 +1,6 @@
 {
   "name": "@fxi/el",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./dist/el.cjs",
   "module": "./dist/el.module.js",
   "unpkg": "./dist/el.umd.js",
@@ -17,6 +17,7 @@
   "description": "Quick DOM elements creation in js.",
   "scripts": {
     "test": "vitest",
+    "test:ci": "vitest run",
     "test-debug": "node --inspect-brk ./node_modules/.bin/vitest",
     "inspect": "node inspect 127.0.0.1:9229",
     "dev": "microbundle watch -o dist",
@@ -49,5 +50,9 @@
   "homepage": "https://github.com/unep-grid/mapx/tree/master/app/src/js/el",
   "directories": {
     "lib": "lib"
+  },
+  "dependencies": {
+    "@types/dompurify": "^3.2.0",
+    "dompurify": "^3.2.4"
   }
 }

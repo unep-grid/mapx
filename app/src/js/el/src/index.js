@@ -10,6 +10,7 @@ import {
   isElement,
   isPromise,
 } from "../../is_test";
+import DOMPurify from 'dompurify';
 
 /**
  * Class representing an element creator which facilitates the creation
@@ -242,9 +243,10 @@ export class ElementCreator {
       elOut.value = content.toString();
     } else if (typeHTML) {
       /**
-       * HTML
+       * HTML - Sanitized with DOMPurify
        */
-      elOut.innerHTML = content;
+      
+      elOut.innerHTML = DOMPurify.sanitize(content);
     } else if (typeString) {
       /**
        * String
