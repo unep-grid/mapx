@@ -1,3 +1,7 @@
+  - [1.13.14-alpha.7](https://github.com/unep-grid/mapx/tree/1.13.14-alpha.7) 
+
+    - Added privacy message + save preference 
+
   - [1.13.14-alpha.6](https://github.com/unep-grid/mapx/tree/1.13.14-alpha.6) 
 
   - [1.13.14-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.14-alpha.5) 
