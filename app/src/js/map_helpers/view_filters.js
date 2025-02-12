@@ -413,7 +413,9 @@ export async function viewFilterToolsInit(id, opt) {
     proms.push(makeTransparencySlider({ view: view, idMap: idMap }));
     proms.push(makeNumericSlider({ view: view, idMap: idMap }));
     proms.push(makeTimeSlider({ view: view, idMap: idMap }));
+
     await Promise.all(proms);
+    console.log(proms)
   } catch (e) {
     throw new Error(e);
   }

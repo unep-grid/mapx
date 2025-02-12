@@ -1,5 +1,4 @@
 import {
-  isBoolean,
   isString,
   isArray,
   isObject,
@@ -10,7 +9,7 @@ import {
   isElement,
   isPromise,
 } from "../../is_test";
-import DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 
 /**
  * Class representing an element creator which facilitates the creation
@@ -245,8 +244,8 @@ export class ElementCreator {
       /**
        * HTML - Sanitized with DOMPurify
        */
-      
-      elOut.innerHTML = DOMPurify.sanitize(content);
+
+      elOut.innerHTML = this.sanitize(content);
     } else if (typeString) {
       /**
        * String
@@ -259,6 +258,13 @@ export class ElementCreator {
       }
     }
     return elOut;
+  }
+
+  /**
+   * Sanitize for innerHTML
+   */
+  sanitize(string) {
+    return DOMPurify.sanitize(string);
   }
 
   /**
@@ -310,4 +316,4 @@ export class ElementCreator {
   }
 }
 
-export const { el, svg } = new ElementCreator();
+export const { el, svg, sanitize } = new ElementCreator();

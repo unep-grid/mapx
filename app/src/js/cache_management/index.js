@@ -1,6 +1,7 @@
 import { formatByteSize } from "./../mx_helper_misc";
 import { miniCacheClear } from "./../minicache";
 import { nc, data as mx_storage } from "./../mx.js";
+import { prefReset } from "../user_pref";
 
 /**
  * Remove all accessible caches
@@ -32,21 +33,14 @@ export async function getStorageEstimate(opt) {
 }
 
 /**
- * Clear Mapx DB
+ * Clear MapX local data
  */
 export async function clearForageCache() {
-  if (mx) {
-    if (mx?.data?.draft) {
-      await mx_storage.draft.dropInstance();
-    }
-    if (mx?.data?.geojson) {
-      await mx_storage.geojson.dropInstance();
-    }
-    if (mx?.nc) {
-      nc.clearHistory();
-    }
-  }
+  await mx_storage.draft.dropInstance();
+  await mx_storage.geojson.dropInstance();
+  await prefReset();
   await miniCacheClear();
+  nc.clearHistory();
   return true;
 }
 /**

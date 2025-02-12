@@ -7,7 +7,6 @@ import {
   listeners,
   theme,
   draw,
-  templates,
   mapboxgl,
   maps,
   highlighter,
@@ -141,7 +140,9 @@ import {
   isViewGj,
 } from "./../is_test_mapx/index.js";
 import { FlashItem } from "../icon_flash/index.js";
+import { elViewListOption } from "./view_list_options.js";
 import { viewFiltersInit } from "./view_filters.js";
+import { elViewListFilters } from "./view_list_filters.js";
 import { ButtonPanelLegend } from "../panel_legend/index.js";
 import { createViewControls } from "../views_builder/view_controls.js";
 import { ButtonFilter } from "../button_filter/index.js";
@@ -3916,7 +3917,7 @@ export async function viewUiContent(id) {
     `[data-view_options_for='${view.id}']`,
   );
   if (elOptions) {
-    elOptions.innerHTML = templates.viewListOptions(view);
+    elOptions.replaceChildren(elViewListOption(view));
   }
 
   /**
@@ -3926,12 +3927,10 @@ export async function viewUiContent(id) {
   const elFilters = elView.querySelector(`#view_filters_container_${view.id}`);
 
   if (elControls) {
-    elControls.innerHTML = "";
-    const elControlsList = await createViewControls(view);
-    elControls.appendChild(elControlsList);
+    elControls.replaceChildren(await createViewControls(view));
   }
   if (elFilters) {
-    elFilters.innerHTML = templates.viewListFilters(view);
+    elFilters.replaceChildren(elViewListFilters(view));
   }
   return true;
 }

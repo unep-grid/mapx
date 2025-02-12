@@ -23,7 +23,6 @@ import {
   buttonToggle,
   getBrowserData,
   hide,
-  injectHead,
   itemFlash,
   jsDebugMsg,
   jsonToObj,
@@ -102,7 +101,6 @@ function mapxBindings() {
   bind("mxJsonToHtml", objectToHTML);
   bind("mxProgress", progressScreen);
   bind("mxRenderUserProjectsList", renderUserProjectsList);
-  bind("mxInjectHead", injectHead);
   bind("mxUpdateSelectizeItems", updateSelectizeItems);
   bind("mxInitSelectizeAll", initSelectizeAll);
   bind("mxFlashIcon", itemFlash);

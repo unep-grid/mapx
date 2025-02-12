@@ -2404,35 +2404,6 @@ export function htmlToData(o) {
   });
 }
 
-export function injectHead(items) {
-  var s = items.scripts || [];
-  var c = items.css || [];
-
-  if (!mx_storage.headItems) {
-    mx_storage.headItems = {};
-  }
-
-  s.forEach(function (i) {
-    if (!mx_storage.headItems[i]) {
-      mx_storage.headItems[i] = true;
-      var script = document.createElement("script");
-      script.src = i;
-      script.async = false;
-      document.head.appendChild(script);
-    }
-  });
-
-  c.forEach(function (i) {
-    if (!mx_storage.headItems[i]) {
-      mx_storage.headItems[i] = true;
-      var link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.type = "text/css";
-      link.href = i;
-      document.head.appendChild(link);
-    }
-  });
-}
 
 export function getBrowserData() {
   const userAgentData = new UAParser().getResult();
