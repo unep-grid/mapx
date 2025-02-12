@@ -667,6 +667,8 @@ export async function makeTransparencySlider(o) {
 export async function makeSearchBox(o) {
   const view = o.view;
   const el = document.querySelector(`[data-search_box_for='${view.id}']`);
+
+  debugger;
   if (!el) {
     return;
   }

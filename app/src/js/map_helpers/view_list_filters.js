@@ -8,21 +8,17 @@ import { path, hasIndex } from "./../mx_helper_misc.js";
  */
 export function elViewListFilters(view) {
   // Type checks
-  const isSm = view.type === "sm";
-  const isCc = view.type === "cc";
   const isVt = view.type === "vt";
-  const isRt = view.type === "rt";
   const isGj = view.type === "gj";
   const isVtWithAttr = isVt && path(view, "data.attribute.name");
   const isVtGjWithString =
     (isVt || isGj) && path(view, "data.attribute.type") == "string";
   const isVtGjWithNumber =
     (isVt || isGj) && path(view, "data.attribute.type") == "number";
-  const isRtWithDownload = isRt && path(view, "data.source.urlDownload", false);
-  const uIsPublisher = path(mx, "settings.user.roles.publisher");
-  const uIsAdmin = path(mx, "settings.user.roles.admin");
   const vtProps = isVtWithAttr ? path(view, "data.attribute.names", []) : [];
   const isVtTemporal = hasIndex(vtProps, "mx_t0");
+
+  debugger;
 
   return el(
     "div",

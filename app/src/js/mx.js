@@ -20,11 +20,6 @@ import "./privacy/index.js";
 const panels = new ButtonPanelManager();
 const version = settings.version;
 
-const templates = {
-  viewListOptions: require("../dot/view_list_options.dot.html"),
-  viewListFilters: require("../dot/view_list_filters.dot.html"),
-};
-
 const maps = {};
 const data = {
   geojson: localforage.createInstance({
@@ -74,7 +69,6 @@ export {
   highlighter,
   spotlight,
   initQueryParams,
-  templates,
   maps,
   data,
   info,

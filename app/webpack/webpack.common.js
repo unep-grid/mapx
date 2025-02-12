@@ -121,8 +121,6 @@ module.exports = {
           target: "es2015",
         },
       },
-      { test: /\.dot.html$/, loader: "dot-loader", options: {} },
-      { test: /\.html$/, loader: "html-loader", options: {} },
       {
         test: /\.coffee$/,
         use: "coffee-loader", //used mainly to extend ContentTools
