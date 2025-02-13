@@ -8,20 +8,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: ci  # This is important!
+    environment: ci
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install semantic-release
-        run: npm install -g semantic-release @semantic-release/git @semantic-release/changelog
 
       - name: Docker Login
         uses: docker/login-action@v3
@@ -32,22 +24,13 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Generate Version
-        id: semantic
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          VERSION=$(semantic-release --dry-run --no-ci | grep -oP 'The next release version is \K[0-9]+\.[0-9]+\.[0-9]+')
-          echo "NEW_VERSION=$VERSION" >> $GITHUB_ENV
-          echo $VERSION > version.txt
-
       - name: Build and Push API Image
         uses: docker/build-push-action@v5
         with:
           context: ./api
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: fredmoser/mapx_api:${{ env.NEW_VERSION }}
+          tags: fredmoser/mapx_api:${{ github.ref_name }}
           cache-from: type=registry,ref=fredmoser/mapx_api:staging
           cache-to: type=inline
 
@@ -57,11 +40,6 @@ jobs:
           context: ./app
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: fredmoser/mapx_app:${{ env.NEW_VERSION }}
+          tags: fredmoser/mapx_app:${{ github.ref_name }}
           cache-from: type=registry,ref=fredmoser/mapx_app:staging
           cache-to: type=inline
-
-      - name: Create Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: semantic-release
