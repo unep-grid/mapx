@@ -1,0 +1,21 @@
+{
+  "git": {
+    "commitMessage": "chore: release v${version}",
+    "tagName": "${version}"
+  },
+  "npm": {
+    "publish": false
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": "angular",
+      "infile": "CHANGELOG.md"
+    }
+  },
+  "hooks": {
+    "before:bump": [
+      "node -e \"let pkg = require('./app/package.json'); pkg.version = '${version}'; require('fs').writeFileSync('./app/package.json', JSON.stringify(pkg, null, 2) + '\\n')\"",
+      "node -e \"let pkg = require('./api/package.json'); pkg.version = '${version}'; require('fs').writeFileSync('./api/package.json', JSON.stringify(pkg, null, 2) + '\\n')\""
+    ]
+  }
+}
