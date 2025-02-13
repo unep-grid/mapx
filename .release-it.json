@@ -21,6 +21,11 @@
         {"type": "refactor", "section": "Refactoring"},
         {"type": "perf", "section": "Performance"},
         {"type": "test", "section": "Testing"}
+      ],
+      "releaseRules": [
+        {"type": "feat", "release": "minor"},
+        {"type": "fix", "release": "patch"},
+        {"type": "perf", "release": "patch"}
       ]
     }
   },
