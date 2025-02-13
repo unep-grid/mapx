@@ -7966,8 +7966,8 @@
   },
   {
     "id": "privacy_notice_html",
-    "en": "<div class='privacy-notice'><p>MapX data handling:<ul><li>May collect usage logs and browser fingerprint for security when using authentication features</li><li>Stores email for authenticated sessions only</li><li>Uses browser cache for performance</li><li>Never shares data for commercial purposes</li></ul><p>Note: Third-party visualization tools may set additional cookies when displaying external data.</p></div>",
-    "zh": "<div class='privacy-notice'><p>MapX数据处理：<ul><li>使用身份验证功能时可能收集使用日志和浏览器指纹以确保安全</li><li>仅在认证会话期间存储电子邮件</li><li>使用浏览器缓存以提高性能</li><li>绝不会将数据用于商业目的</li></ul><p>注意：第三方可视化工具在显示外部数据时可能设置额外的cookies。</p></div>"
+    "en": "<div class='privacy-notice'><p>MapX data handling:<ul><li>Collects usage logs for project statistics</li><li>Does not share data with third-party organizations</li><li>Stores email addresses only for authenticated sessions</li><li>Uses one-time passwords, which are never stored in the database</li><li>Relies on browser cache for performance optimization</li><li>Allows users to log out and clear cache, session data, and other stored information from the settings panel</li><li>Third-party visualization tools may set additional cookies when displaying external data</li></ul></p></div>",
+    "zh": "<div class='privacy-notice'><p>MapX数据处理：<ul><li>收集使用日志用于项目统计</li><li>不与第三方组织共享数据</li><li>仅在认证会话期间存储电子邮件地址</li><li>使用一次性密码，从不存储在数据库中</li><li>依靠浏览器缓存进行性能优化</li><li>允许用户从设置面板注销并清除缓存、会话数据和其他存储的信息</li><li>第三方可视化工具在显示外部数据时可能设置额外的cookies</li></ul></p></div>"
   },
   {
     "id": "privacy_consent",

@@ -7966,8 +7966,8 @@
   },
   {
     "id": "privacy_notice_html",
-    "en": "<div class='privacy-notice'><p>MapX data handling:<ul><li>May collect usage logs and browser fingerprint for security when using authentication features</li><li>Stores email for authenticated sessions only</li><li>Uses browser cache for performance</li><li>Never shares data for commercial purposes</li></ul><p>Note: Third-party visualization tools may set additional cookies when displaying external data.</p></div>",
-    "ps": "<div class='privacy-notice' dir='rtl'><p>په MapX کې د معلوماتو اداره کول:<ul><li>د تصدیق ځانګړتیاوو کارولو پر مهال ممکن د کارولو ریکارډونه او د براوزر نښه د امنیت لپاره راټول کړي</li><li>یوازې د تصدیق شویو غونډو لپاره بریښنالیک ساتي</li><li>د کړنې لپاره د براوزر کیش کاروي</li><li>هیڅکله معلومات د سوداګریزو موخو لپاره نه شریکوي</li></ul><p>یادونه: د بهرنیو معلوماتو ښودلو پر مهال د دریم اړخ لیدنې وسیلې ممکن اضافي کوکیز تنظیم کړي.</p></div>"
+    "en": "<div class='privacy-notice'><p>MapX data handling:<ul><li>Collects usage logs for project statistics</li><li>Does not share data with third-party organizations</li><li>Stores email addresses only for authenticated sessions</li><li>Uses one-time passwords, which are never stored in the database</li><li>Relies on browser cache for performance optimization</li><li>Allows users to log out and clear cache, session data, and other stored information from the settings panel</li><li>Third-party visualization tools may set additional cookies when displaying external data</li></ul></p></div>",
+    "ps": "<div class='privacy-notice' dir='rtl'><p>د MapX د معلوماتو اداره کول:<ul><li>د پروژې د احصایو لپاره د کارولو ریکارډونه راټولوي</li><li>له دریمګړو سازمانونو سره معلومات نه شریکوي</li><li>یوازې د تصدیق شویو غونډو لپاره بریښنالیک پتې ساتي</li><li>د یو ځل کارولو پټنومونه کاروي، چې هیڅکله په ډاټابیس کې نه ساتل کیږي</li><li>د کړنې غوره کولو لپاره د براوزر کیش کاروي</li><li>کارونکو ته اجازه ورکوي چې د تنظیماتو پینل څخه وتل، کیش پاکول، د غونډې معلومات او نور ساتل شوي معلومات پاک کړي</li><li>د بهرنیو معلوماتو ښودلو پر مهال د دریم اړخ لیدنې وسیلې ممکن اضافي کوکیز تنظیم کړي</li></ul></p></div>"
   },
   {
     "id": "privacy_consent",
