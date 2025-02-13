@@ -1467,13 +1467,15 @@ function handleDrag(evt) {
   const elTarget = li.getTarget(evt.target);
   const isHandle = li.isDragHandle(evt.target);
 
-  if (!isHandle) {
-    return;
-  }
   /**
    * Case when drag was not properly finished
    */
   li.setDragClean();
+
+  if (!isHandle) {
+    return;
+  }
+
   /**
    * Prepare the UI for global change : style, cursore,
    * temporary register of drag item...
