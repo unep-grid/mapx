@@ -76,11 +76,21 @@ The application should be available at <http://app.mapx.localhost:8880/> (curl -
 An admin user is available as `admin@localhost` which can be used to login; get the password by browsing the web mail at <http://mail.mapx.localhost:8880/.>
 
 
-### Docker : build for prod  
+### Build Process
 
+The build process has been automated using GitHub Actions and follows these steps:
+
+1. Commits to the `staging` branch trigger the build pipeline
+2. Version is automatically determined based on conventional commits
+3. Docker images are built for both API and APP components
+4. Images are pushed to Docker Hub with proper versioning
+
+To create properly formatted commit messages, use:
 ```sh
-./build.sh -v <version>
+npm run commit
 ```
+
+This ensures commits follow the [Conventional Commits](https://www.conventionalcommits.org/) specification, which helps in automatic versioning and changelog generation.
 
 ### Docker : re-build individual docker images for local dev 
 
@@ -284,7 +294,7 @@ You are free to modify and/or adapt any Data provided for your own use, reproduc
 
 ## Disclaimer
 
-Due to the generalization process, the administrative boundaries of the countries have been modified. Therefore, this dataset can only be used for unofficial cartographic purposes for global mapping using a scale not higher than 1:25 million. It should not be used in any way as a reference for national boundaries. Territorial information from this dataset do not imply the expression of any opinion whatsoever on the part of the UNEP/GRID-Geneva concerning the legal status of any country, territory, city or area, or of its authorities, or concerning the delimitation of its frontiers or boundaries. The Data is being delivered to you “AS IS” and UNEP/GRID-Geneva makes no warranty as to its use or performance.
+Due to the generalization process, the administrative boundaries of the countries have been modified. Therefore, this dataset can only be used for unofficial cartographic purposes for global mapping using a scale not higher than 1:25 million. It should not be used in any way as a reference for national boundaries. Territorial information from this dataset do not imply the expression of any opinion whatsoever on the part of the UNEP/GRID-Geneva concerning the legal status of any country, territory, city or area, or of its authorities, or concerning the delimitation of its frontiers or boundaries. The Data is being delivered to you "AS IS" and UNEP/GRID-Geneva makes no warranty as to its use or performance.
 
 UNEP/GRID-Geneva cannot be held responsible for a misuse of this file and its consequences.
 
