@@ -15,6 +15,25 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Build SDK
+      - name: Install SDK dependencies
+        run: cd app/src/js/sdk && npm install
+
+      - name: Build SDK
+        run: cd app/src/js/sdk && npm run build
+
+      # Build App
+      - name: Install App dependencies
+        run: cd app && npm install
+
+      - name: Build App
+        run: cd app && npm run prod
+
       - name: Docker Login
         uses: docker/login-action@v3
         with:
