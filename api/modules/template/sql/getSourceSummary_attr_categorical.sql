@@ -9,11 +9,21 @@ null_value as (
     '{{nullValue}}'
    END as val
 ),
+-- First check the type once
+attr_type AS (
+  SELECT pg_typeof("{{idAttr}}")::text LIKE '%[]' as is_array 
+  FROM {{idSource}} 
+  LIMIT 1
+),
+-- Then use this information to avoid checking type for each row
 attr_as_text AS (
   SELECT
-  "{{idAttr}}"::TEXT as value
-  FROM
-  {{idSource}}
+    CASE
+      WHEN (SELECT is_array FROM attr_type) THEN to_jsonb("{{idAttr}}")::text
+      ELSE "{{idAttr}}"::text
+    END AS value
+  FROM {{idSource}}
+  ORDER BY "{{idAttr}}"
 ),
 attr_without_null as (
   SELECT
@@ -41,7 +51,7 @@ attr_freq_table as (
   attr_without_null
   GROUP BY
   value
-  ORDER BY count desc, value asc
+  ORDER BY count desc
 ),
 attr_freq_table_limited as (
   SELECT * 

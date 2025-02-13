@@ -415,7 +415,7 @@ export async function viewFilterToolsInit(id, opt) {
     proms.push(makeTimeSlider({ view: view, idMap: idMap }));
 
     await Promise.all(proms);
-    console.log(proms)
+    console.log(proms);
   } catch (e) {
     throw new Error(e);
   }
@@ -668,7 +668,6 @@ export async function makeSearchBox(o) {
   const view = o.view;
   const el = document.querySelector(`[data-search_box_for='${view.id}']`);
 
-  debugger;
   if (!el) {
     return;
   }

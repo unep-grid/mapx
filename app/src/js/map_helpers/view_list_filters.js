@@ -1,6 +1,16 @@
 import { el } from "./../el_mapx/index.js";
 import { path, hasIndex } from "./../mx_helper_misc.js";
 
+const typesSearch = [
+  "string",
+  "array",
+  "ARRAY",
+  "character varying",
+  "boolean",
+  "timestamp*",
+];
+const typesNumeric = ["number", "double precision", "integer", "bigint"];
+
 /**
  * Create view list filters element
  * @param {Object} view View object
@@ -11,14 +21,11 @@ export function elViewListFilters(view) {
   const isVt = view.type === "vt";
   const isGj = view.type === "gj";
   const isVtWithAttr = isVt && path(view, "data.attribute.name");
-  const isVtGjWithString =
-    (isVt || isGj) && path(view, "data.attribute.type") == "string";
-  const isVtGjWithNumber =
-    (isVt || isGj) && path(view, "data.attribute.type") == "number";
+  const dataType = path(view, "data.attribute.type");
+  const isVtGjWithString = (isVt || isGj) && typesSearch.includes(dataType);
+  const isVtGjWithNumber = (isVt || isGj) && typesNumeric.includes(dataType);
   const vtProps = isVtWithAttr ? path(view, "data.attribute.names", []) : [];
   const isVtTemporal = hasIndex(vtProps, "mx_t0");
-
-  debugger;
 
   return el(
     "div",

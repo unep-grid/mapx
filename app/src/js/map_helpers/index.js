@@ -3931,7 +3931,6 @@ export async function viewUiContent(id) {
   }
   if (elFilters) {
     elFilters.replaceChildren(elViewListFilters(view));
-    debugger;
   }
   return true;
 }

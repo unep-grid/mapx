@@ -39,7 +39,7 @@ const def = {
  * @param {Boolean} opt.useCache Use local cache
  * @return {Object} source summary
  */
-export async function getViewSourceSummary(view, opt = { useCache: true }) {
+export async function getViewSourceSummary(view, opt = { useCache: false }) {
   view = getView(view);
 
   opt = Object.assign(
