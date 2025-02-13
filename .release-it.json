@@ -2,7 +2,7 @@
   "git": {
     "commitMessage": "chore: release v${version}",
     "tagName": "${version}",
-    "remote": "github"
+    "pushRepo": "github"
   },
   "npm": {
     "publish": false
