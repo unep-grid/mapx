@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: ci  # This is important!
     steps:
       - name: Checkout
         uses: actions/checkout@v4
