@@ -415,7 +415,6 @@ export async function viewFilterToolsInit(id, opt) {
     proms.push(makeTimeSlider({ view: view, idMap: idMap }));
 
     await Promise.all(proms);
-    console.log(proms);
   } catch (e) {
     throw new Error(e);
   }
