@@ -8,6 +8,12 @@
   "npm": {
     "publish": false
   },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": "angular",
+      "infile": "CHANGELOG.md"
+    }
+  },
   "hooks": {
     "before:init": [
       "npm run lint --prefix ./app",
