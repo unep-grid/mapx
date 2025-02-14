@@ -24,9 +24,9 @@
       "yq -o='yaml' -i '.services.api_dev.image=\"fredmoser/mapx_api:${version}\"' docker-compose.yml"
     ],
     "after:bump": [
-      "cd ./app/src/js/sdk && npm run prod",
       "cd ./app && npm run prod",
-      "cd ./api && npm run prod"
+      "cd ./api && npm run prod",
+      "cd ./app/src/js/sdk && npm run prod"
     ]
   }
 }

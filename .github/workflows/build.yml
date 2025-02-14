@@ -18,14 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-
-      # Build SDK
-      - name: Install SDK dependencies
-        run: cd app/src/js/sdk && npm install
-
-      - name: Build SDK
-        run: cd app/src/js/sdk && npm run build
+          node-version: '16'
 
       # Build App
       - name: Install App dependencies
