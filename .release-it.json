@@ -8,61 +8,10 @@
   "npm": {
     "publish": false
   },
-  "increment": "prerelease",
-  "preReleaseId": "alpha",
   "plugins": {
     "@release-it/conventional-changelog": {
-      "whatBump": "conventional:bump",
       "preset": "angular",
-      "infile": "CHANGELOG.md",
-      "types": [
-        {
-          "type": "feat",
-          "section": "Features"
-        },
-        {
-          "type": "fix",
-          "section": "Bug Fixes"
-        },
-        {
-          "type": "chore",
-          "section": "Maintenance"
-        },
-        {
-          "type": "docs",
-          "section": "Documentation"
-        },
-        {
-          "type": "style",
-          "section": "Styling"
-        },
-        {
-          "type": "refactor",
-          "section": "Refactoring"
-        },
-        {
-          "type": "perf",
-          "section": "Performance"
-        },
-        {
-          "type": "test",
-          "section": "Testing"
-        }
-      ],
-      "releaseRules": [
-        {
-          "type": "feat",
-          "release": "minor"
-        },
-        {
-          "type": "fix",
-          "release": "patch"
-        },
-        {
-          "type": "perf",
-          "release": "patch"
-        }
-      ]
+      "infile": "CHANGELOG.md"
     }
   },
   "hooks": {
