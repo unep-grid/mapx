@@ -17,7 +17,8 @@
     "commit": "cz",
     "release": "release-it",
     "release:alpha": "release-it --preRelease=alpha",
-    "release:beta": "release-it --preRelease=beta"
+    "release:beta": "release-it --preRelease=beta",
+    "build:app" :"cd ./app && npm run prod"
   },
   "config": {
     "commitizen": {

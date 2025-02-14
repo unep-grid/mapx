@@ -71,7 +71,7 @@ module.exports = {
     new MonacoWebpackPlugin({
       publicPath: "/",
       filename: "[name].worker.js",
-      // see app/node_modules/monaco-editor/esm/vs/language/ 
+      // see app/node_modules/monaco-editor/esm/vs/language/
       //             and basic-languages for a list
       languages: ["typescript", "html", "json", "javascript"],
     }),
@@ -121,6 +121,7 @@ module.exports = {
           target: "es2015",
         },
       },
+      { test: /\.html$/, loader: "html-loader", options: {} },
       {
         test: /\.coffee$/,
         use: "coffee-loader", //used mainly to extend ContentTools
