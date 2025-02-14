@@ -11,14 +11,14 @@
     "husky": "^9.1.7",
     "release-it": "^18.1.2"
   },
-  "version": "1.13.14-alpha.8",
+  "version": "1.13.14-alpha.9",
   "scripts": {
     "prepare": "husky",
     "commit": "cz",
     "release": "release-it",
     "release:alpha": "release-it --preRelease=alpha",
     "release:beta": "release-it --preRelease=beta",
-    "build:app" :"cd ./app && npm run prod"
+    "build:app": "cd ./app && npm run prod"
   },
   "config": {
     "commitizen": {
