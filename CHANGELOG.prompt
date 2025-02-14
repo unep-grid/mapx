@@ -1,0 +1,47 @@
+# Changelog Generation Instructions
+
+Given a list of git commits since the last version tag, generate a changelog entry in the following format:
+
+```
+  - [version] (e.g., 1.13.14-alpha.8)
+
+    - Group changes by type:
+      - Features
+      - Bug fixes
+      - Improvements
+      - Breaking changes
+      - Other changes
+
+    - Each entry should:
+      - Be clear and concise
+      - Use present tense
+      - Start with a verb when possible
+      - Include relevant issue numbers if available
+      - Preserve technical details when important
+```
+
+Example:
+```
+  - [1.13.14-alpha.8]
+
+    - Features
+      - Add support for custom themes (#123)
+      - Implement new data validation system
+
+    - Bug fixes
+      - Fix issue with map layer ordering
+      - Resolve memory leak in dashboard rendering
+
+    - Improvements
+      - Optimize database queries for better performance
+      - Update dependencies to latest versions
+
+    - Breaking changes
+      - Remove deprecated API endpoints
+      - Change configuration file format
+```
+
+To get commits since last tag:
+```bash
+git describe --tags --abbrev=0  # Get latest tag
+git log <latest-tag>..HEAD --pretty=format:"* %s (%h)"  # Get commits since tag
