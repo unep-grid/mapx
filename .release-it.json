@@ -12,7 +12,7 @@
   "preReleaseId": "alpha",
   "plugins": {
     "@release-it/conventional-changelog": {
-      "whatBump": false,
+      "whatBump": "conventional:bump",
       "preset": "angular",
       "infile": "CHANGELOG.md",
       "types": [
