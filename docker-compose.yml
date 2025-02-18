@@ -43,7 +43,7 @@ services:
       traefik.http.routers.search.entrypoints: web
       traefik.http.services.search.loadbalancer.server.port: 7700
   app:
-    image: fredmoser/mapx_app:1.13.14-alpha.11
+    image: fredmoser/mapx_app:1.13.14-alpha.12
     restart: on-failure
     depends_on:
       - api
@@ -73,7 +73,7 @@ services:
       traefik.http.routers.app.middlewares: cors,nocache
       traefik.http.services.app.loadbalancer.server.port: 3838
   app_dev:
-    image: fredmoser/mapx_app:1.13.14-alpha.11
+    image: fredmoser/mapx_app:1.13.14-alpha.12
     restart: on-failure
     depends_on:
       - pg
@@ -105,7 +105,7 @@ services:
       traefik.http.routers.dev.middlewares: cors,nocache
       traefik.http.services.dev.loadbalancer.server.port: 3434
   api:
-    image: fredmoser/mapx_api:1.13.14-alpha.11
+    image: fredmoser/mapx_api:1.13.14-alpha.12
     restart: on-failure
     depends_on:
       - pg
@@ -133,7 +133,7 @@ services:
       traefik.http.routers.api.middlewares: wcompress,nocache
       traefik.http.services.api.loadbalancer.server.port: 3030
   api_dev:
-    image: fredmoser/mapx_api:1.13.14-alpha.11
+    image: fredmoser/mapx_api:1.13.14-alpha.12
     restart: on-failure
     depends_on:
       - pg
