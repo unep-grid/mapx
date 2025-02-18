@@ -1,20 +1,14 @@
-#!/bin/bash 
-#------------------------------------------------------------------------------#
-#
-#  Build Meili image 
-#  (c) unige.ch 
-#  
-#------------------------------------------------------------------------------#
+#!/bin/bash
 set -e
-source ./../sh/build_docker_multiarch.sh 
 
-MEILI_VERSION=0.20.0
+VERSION=${1:-"0.20.0"}
 
-NAME="meili"
-REPO="fredmoser"
-TAG="${REPO}/${NAME}:${MEILI_VERSION}-alpine"
+echo "Building search image with version: $VERSION"
 
-build \
-  $@ \
-  -t $TAG \
-  -b MEILI_VERSION=$MEILI_VERSION 
+docker build \
+  --progress plain \
+  --build-arg VERSION=$VERSION \
+  --tag fredmoser/mapx_search:$VERSION \
+  .
+
+echo "Build complete. Image: fredmoser/mapx_search:$VERSION"

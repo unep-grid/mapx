@@ -1,19 +1,14 @@
-#!/bin/bash 
-#------------------------------------------------------------------------------#
-#
-#  Build MapX geoserver image 
-#  (c) unige.ch 
-#  
-#------------------------------------------------------------------------------#
+#!/bin/bash
 set -e
-source ./../sh/build_docker_multiarch.sh 
 
-GEOSERVER_VERSION=2.22.2
-NAME="geoserver"
-REPO="fredmoser"
-TAG="${REPO}/${NAME}:${GEOSERVER_VERSION}"
+VERSION=${1:-"2.22.2"}
 
-build \
-  $@ \
-  -t $TAG \
-  -b GEOSERVER_VERSION=$GEOSERVER_VERSION 
+echo "Building geoserver image with version: $VERSION"
+
+docker build \
+  --progress plain \
+  --build-arg GEOSERVER_VERSION=$VERSION \
+  --tag fredmoser/mapx_geoserver:$VERSION \
+  .
+
+echo "Build complete. Image: fredmoser/mapx_geoserver:$VERSION"

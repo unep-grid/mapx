@@ -1,0 +1,69 @@
+name: Build Support Services
+
+on:
+  workflow_dispatch:
+    inputs:
+      service:
+        description: 'Service to build'
+        required: true
+        type: choice
+        options:
+          - geoserver
+          - meili
+      push_images:
+        description: 'Push images to registry'
+        required: true
+        type: boolean
+        default: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: ci
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Docker Login
+        if: inputs.push_images
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Get version from package.json for Docker tags
+      - name: Get version
+        id: version
+        run: echo "version=$(node -p "require('./app/package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Build Geoserver Image
+        if: inputs.service == 'geoserver'
+        uses: docker/build-push-action@v5
+        with:
+          context: ./geoserver
+          platforms: linux/amd64,linux/arm64
+          push: ${{ inputs.push_images }}
+          tags: |
+            fredmoser/mapx_geoserver:${{ steps.version.outputs.version }}
+            ${{ inputs.push_images && 'fredmoser/mapx_geoserver:latest' || '' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build Search Image
+        if: inputs.service == 'meili'
+        uses: docker/build-push-action@v5
+        with:
+          context: ./meili
+          platforms: linux/amd64,linux/arm64
+          push: ${{ inputs.push_images }}
+          tags: |
+            fredmoser/mapx_search:${{ steps.version.outputs.version }}
+            ${{ inputs.push_images && 'fredmoser/mapx_search:latest' || '' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

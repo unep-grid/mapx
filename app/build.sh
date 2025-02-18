@@ -1,25 +1,15 @@
-#!/bin/bash 
-#------------------------------------------------------------------------------#
-#
-#  Build MapX Docker image 
-#  (c) unige.ch 
-#  
-#------------------------------------------------------------------------------#
+#!/bin/bash
 set -e
-source ./../sh/build_docker_multiarch.sh 
 
-MAPX_VERSION=$(cat ./../version.txt)
-R_VERSION=4.4.2
-R_DATE=2024-12-10
+# Get version from package.json
+VERSION=$(node -p "require('./package.json').version")
+TAG=${1:-$VERSION}
 
+echo "Building app image with tag: $TAG"
 
-NAME="mapx_app"
-REPO="fredmoser"
-TAG="${REPO}/${NAME}:${MAPX_VERSION}"
+docker build \
+  --progress plain \
+  --tag fredmoser/mapx_app:$TAG \
+  .
 
-build \
-  $@ \
-  -t $TAG \
-  -b R_VERSION=$R_VERSION \
-  -b R_DATE=$R_DATE
-
+echo "Build complete. Image: fredmoser/mapx_app:$TAG"

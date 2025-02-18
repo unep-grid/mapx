@@ -78,12 +78,26 @@ An admin user is available as `admin@localhost` which can be used to login; get 
 
 ### Build Process
 
-The build process has been automated using GitHub Actions and follows these steps:
+The build process has been automated using GitHub Actions and follows three main workflows:
 
-1. Commits to the `staging` branch trigger the build pipeline
-2. Version is automatically determined based on conventional commits
-3. Docker images are built for both API and APP components
-4. Images are pushed to Docker Hub with proper versioning
+1. **Push-based Builds** (Staging)
+   - Triggered by commits to the `staging` branch
+   - Runs full CI process (lint, test, build)
+   - Builds and pushes Docker images with version tags
+   - Uses GitHub Actions cache for faster builds
+   - Images tagged with both version and 'latest'
+
+2. **Manual Builds** (workflow_dispatch)
+   - Can be triggered manually through GitHub Actions
+   - Identical process to push-based builds
+   - Useful for testing or rebuilding without code changes
+
+3. **Scheduled Builds** (Weekly)
+   - Runs automatically every Monday at 7 AM UTC
+   - Performs full build process without pushing images
+   - Validates build integrity with fresh dependencies
+   - Creates GitHub issues for any failures
+   - Ensures long-term reliability
 
 To create properly formatted commit messages, use:
 ```sh
@@ -92,39 +106,61 @@ npm run commit
 
 This ensures commits follow the [Conventional Commits](https://www.conventionalcommits.org/) specification, which helps in automatic versioning and changelog generation.
 
-### Docker : re-build individual docker images for local dev 
+The build process uses GitHub Actions cache (type=gha) for efficient builds while ensuring weekly scheduled builds can catch any potential issues with dependencies or base images.
 
-*app*
+### Docker Build Process
 
-```sh
-# Build app js code, update docker image
-cd /app/ 
-npm run docker 
+MapX uses different Docker build approaches for development and production:
+
+#### Local Development
+
+Local builds use standard `docker build` for simplicity and efficiency:
+
+```bash
+# Build app image (uses package.json version)
+cd app
+./build.sh [version]
+
+# Build api image (uses package.json version)
+cd api
+./build.sh [version]
+
+# Build geoserver image (version required)
+cd geoserver
+./build.sh <version>
+
+# Build search image (version required)
+cd meili
+./build.sh <version>
 ```
 
-*api/express*
+Benefits:
+- Automatic layer caching
+- Images immediately available in local Docker daemon
+- Faster builds for single architecture
 
-```sh
-# Build api js code, update docker image
-cd /api/
-npm run docker 
-```
+#### Production Builds
 
-*geoserver*
+Production builds are handled by GitHub Actions using `docker buildx`:
+- Automated builds triggered by:
+  - Push to staging branch
+  - Manual workflow dispatch
+  - Weekly scheduled builds (Mondays 7 AM UTC)
+- Multi-architecture support (amd64, arm64)
+- GitHub Actions cache for efficient builds
+- Automated testing and validation
 
-```sh
-# Update geoserver docker image 
-cd /geoserver/
-./build -a
-```
+##### Manual Builds
 
-*meili search*
+To trigger a manual build:
+1. Go to GitHub Actions
+2. Select the appropriate workflow:
+   - "MapX CI/CD" for app/api
+   - "Build Support Services" for geoserver/search
+3. Click "Run workflow"
+4. Select options and trigger build
 
-```sh
-# Update meili docker image 
-cd /meili/
-./build -a
-```
+For reference, the equivalent manual multi-arch build commands are preserved in `docs/docker-builds.md`.
 
 #### Known issues
 
@@ -136,30 +172,8 @@ Postgis: `OperationalError: could not access file "$libdir/postgis-X.X` _Solutio
 Install all modules listed as dependencies in `package.json` for the `app` service, the `sdk` and the websocket handler `ws_handler` :
 
 ```sh
-cd ./app
-npm install
-
-cd ./app/src/js/sdk/
-npm install
-
-cd ./app/src/js/ws_handler/
-npm install
+npm run init
 ```
-
-Optionally, if you want to develop submodules as `el`, `mx_valid` or rebuilding `sprites`: 
-
-```sh 
-cd ./app/src/js/el/
-npm install
-
-cd ./app/src/js/is_test/
-npm install
-
-# Note: could requires specific version of node
-cd ./app/sprites/
-npm install 
-```
-
 Start a development session for the `app` service:
 
 - Automatically build all client side dependencies, included dictionaries and translation ( which needs some config, see below )
@@ -224,30 +238,31 @@ API_HOST_PUBLIC=api.mapx.localhost
 API_HOST_PUBLIC_DEV=api.mapx.localhost
 ```
 
+### Development session for the `routines` service
+
+```sh
+docker compose exec routines node inspect routines.js
+debug> c
+```
+
+
+
 ### `app` end-to-end tests 
 
 Mapx use a custom end-to-end testing tool, which features the mapx's `sdk`. The testing coverage is partial, but should cover the largest part of all MapX features, while also tesing the `sdk`, as a all tests are written using common `sdk` async methods.  
 
 
 ```sh
-cd app/src/js/sdk
-npn run tests 
+cd app && npm run test:sdk
 ```
 
 #### `api` tests
 
-Run tests within the development container:
+Run tests within the development container (currently disabled):
 
 ```sh
 docker compose exec api sh
 npm run test
-```
-
-### Development session for the `routines` service
-
-```sh
-docker compose exec routines node inspect routines.js
-debug> c
 ```
 
 # Countries boundaries layer

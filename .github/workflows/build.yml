@@ -1,15 +1,22 @@
-name: Build and Deploy
+name: MapX CI/CD
 
 on:
   push:
     branches:
       - staging
   workflow_dispatch:
+  schedule:
+    - cron: '0 7 * * 1'  # Monday 7 AM UTC
 
 jobs:
   build:
     runs-on: ubuntu-latest
     environment: ci
+
+    env:
+      SCHEDULED_BUILD: ${{ github.event_name == 'schedule' }}
+      PUSH_ENABLED: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,7 +35,9 @@ jobs:
       - name: Run CI process
         run: cd app && npm run ci
 
+      # Docker setup (only if needed)
       - name: Docker Login
+        if: env.PUSH_ENABLED == 'true'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -37,22 +46,50 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and Push API Image
+      # Get version from package.json for Docker tags
+      - name: Get version
+        id: version
+        run: echo "version=$(node -p "require('./app/package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Build API Image
         uses: docker/build-push-action@v5
         with:
           context: ./api
           platforms: linux/amd64,linux/arm64
-          push: true
-          tags: fredmoser/mapx_api:${{ github.ref_name }}
-          cache-from: type=registry,ref=fredmoser/mapx_api:staging
-          cache-to: type=inline
+          push: ${{ env.PUSH_ENABLED == 'true' }}
+          tags: |
+            fredmoser/mapx_api:${{ steps.version.outputs.version }}
+            ${{ env.PUSH_ENABLED == 'true' && 'fredmoser/mapx_api:latest' || '' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-      - name: Build and Push APP Image
+      - name: Build APP Image
         uses: docker/build-push-action@v5
         with:
           context: ./app
           platforms: linux/amd64,linux/arm64
-          push: true
-          tags: fredmoser/mapx_app:${{ github.ref_name }}
-          cache-from: type=registry,ref=fredmoser/mapx_app:staging
-          cache-to: type=inline
+          push: ${{ env.PUSH_ENABLED == 'true' }}
+          tags: |
+            fredmoser/mapx_app:${{ steps.version.outputs.version }}
+            ${{ env.PUSH_ENABLED == 'true' && 'fredmoser/mapx_app:latest' || '' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Create issue on scheduled build failure
+      - name: Create Issue on Failure
+        if: failure() && env.SCHEDULED_BUILD == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const version = process.env.VERSION;
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Scheduled Build Failed - ${new Date().toISOString().split('T')[0]}`,
+              body: `The scheduled build for MapX has failed.
+
+              - Version: ${version}
+              - Workflow Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
+              
+              Please check the workflow logs for more details.`
+            });

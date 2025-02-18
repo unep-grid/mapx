@@ -11,15 +11,17 @@
     "husky": "^9.1.7",
     "release-it": "^18.1.2"
   },
-  "version": "1.13.14-alpha.10",
+  "version": "1.13.14-alpha.11",
   "scripts": {
-    "test": "cd app && npm run test",
     "prepare": "husky",
     "commit": "cz",
     "release": "release-it",
     "release:alpha": "release-it --preRelease=alpha",
     "release:beta": "release-it --preRelease=beta",
-    "ci:app": "cd app && npm run ci"
+    "test:app": "cd app && npm run test",
+    "ci:app": "cd app && npm run ci",
+    "init:app": "npm install && cd app && npm run init:all",
+    "init": "npm run init:app"
   },
   "config": {
     "commitizen": {
@@ -27,3 +29,4 @@
     }
   }
 }
+
