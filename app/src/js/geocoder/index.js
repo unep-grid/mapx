@@ -1,12 +1,8 @@
 import { el, elButtonFa } from "../el_mapx";
-import { settings } from "../settings";
 import { mapboxgl } from "../mx";
-import { getMap } from "../map_helpers";
 import { modal } from "../mx_helper_modal";
-import { spatialDataToView } from "../mx_helper_map_dragdrop";
 import { isEmpty } from "../is_test";
 import { shake } from "../elshake";
-import { viewsListAddSingle } from "../views_list_manager";
 import { getDictItem } from "../language";
 import { isArrayOfNumber } from "../is_test";
 import "./style.less";
@@ -17,8 +13,10 @@ const def_conf = {
   elTarget: null,
   map: null,
   proximity: false,
+  language: "en",
   reverse: false,
   onLocationSelect: null,
+  onGeoJSONSave: null,
   debounce_delay: 1000,
   timeout_duration: 10000,
   errors: {
@@ -49,28 +47,28 @@ class MarkerLocation {
 }
 
 export class GeocoderModal {
-  constructor() {
+  constructor(config = {}) {
+    this._config = {
+      ...def_conf,
+      ...config,
+    };
     this.build().catch(console.warn);
   }
 
   async build() {
     const gcm = this;
-    const elTarget = el("div");
-    const map = getMap();
+    gcm._config.elTarget = el("div");
     gcm._gc = new Geocoder();
 
     gcm._modal = modal({
       title: getDictItem("gc_geocoder"),
-      content: elTarget,
+      content: gcm._config.elTarget,
       onClose: () => {
         gcm._gc.destroy();
       },
     });
 
-    await gcm._gc.init({
-      map: map,
-      elTarget: elTarget,
-    });
+    await gcm._gc.init(gcm._config);
   }
 }
 
@@ -85,6 +83,7 @@ export class GeocoderModal {
  * @param {boolean} [config.proximity=false] - Use map center for biasing results
  * @param {boolean} [config.reverse=false] - Reverse geocoding mode
  * @param {Function} [config.onLocationSelect] - Callback when location selected
+ * @param {Function} [config.onGeoJSONSave] - Callback when GeoJSON is saved
  */
 export class Geocoder {
   constructor() {
@@ -202,7 +201,7 @@ export class Geocoder {
     if (this._abord_ctrl) {
       this._abord_ctrl.abort();
     }
-    this.clearAllMarkers();
+    this.clear();
   }
 
   get query() {
@@ -273,7 +272,7 @@ export class Geocoder {
   buildSearchURL(query) {
     const url = new URL(this.config.url);
     url.searchParams.set("q", query);
-    url.searchParams.set("lang", settings.language);
+    url.searchParams.set("lang", this.config.language);
     url.searchParams.set("limit", this.config.limit);
     url.pathname = this.config.reverse ? "/reverse" : "/api";
 
@@ -353,6 +352,11 @@ export class Geocoder {
 
   createResultItem(result) {
     const elIcon = el("i", { class: result.icon_class });
+    const elText = el("span", `${result.display_name}`);
+    const elLabel = el("div", { class: "gcm--icon-container" }, [
+      elIcon,
+      elText,
+    ]);
     const elItem = el(
       "a",
       {
@@ -366,10 +370,7 @@ export class Geocoder {
           },
         ],
       },
-      el("div", { class: "gcm--icon-container" }, [
-        elIcon,
-        el("span", result.display_name),
-      ]),
+      elLabel,
     );
 
     return elItem;
@@ -446,17 +447,9 @@ export class Geocoder {
       features: features,
     };
 
-    const view = await spatialDataToView({
-      title: `Geocode Result ${new Date().toLocaleDateString()}`,
-      fileName: "geocode_result",
-      fileType: "geojson",
-      data: geojson,
-      save: true,
-    });
-
-    await viewsListAddSingle(view, {
-      open: true,
-    });
+    if (this.config.onGeoJSONSave) {
+      await this.config.onGeoJSONSave(geojson);
+    }
 
     return geojson;
   }
