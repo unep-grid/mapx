@@ -1,6 +1,6 @@
 import { DateTime, Duration, Interval } from "luxon";
 
-import { el } from "../../el";
+import { el } from "../../el_mapx";
 import flatpickr from "flatpickr";
 import "../../search/style_flatpickr.less";
 import { isNotEmpty } from "../../is_test";
