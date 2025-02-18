@@ -3,27 +3,31 @@ import fs from "fs/promises";
 import glob from "glob";
 import path from "path";
 import SVGO from "svgo";
-const config = JSON.parse(fs.readFileSync("config.json"));
+let config;
+let dirOut, dirOutSvg, dirOutFonts, dirOutSprites, dirOutFontSvg;
+let svgs;
 
-const dirOut = path.resolve(process.cwd(), config.out);
-const dirOutSvg = path.join(dirOut, "svg");
-const dirOutFonts = path.join(dirOut, "fontstack");
-const dirOutSprites = path.join(dirOut, "sprites");
-const dirOutFontSvg = path.join(dirOutFonts, config.fontNameSvg);
+init().catch((e) => console.error(e));
 
-convert().catch((e) => console.error(e));
+async function init() {
+  const configData = await fs.readFile("config.json", 'utf8');
+  config = JSON.parse(configData);
 
-async function convert() {
-  await init();
+  dirOut = path.resolve(process.cwd(), config.out);
+  dirOutSvg = path.join(dirOut, "svg");
+  dirOutFonts = path.join(dirOut, "fontstack");
+  dirOutSprites = path.join(dirOut, "sprites");
+  dirOutFontSvg = path.join(dirOutFonts, config.fontNameSvg);
+
+  await initDirs(dirOutSvg, dirOutFonts, dirOutSprites, dirOutFontSvg);
   await optimizeSvg();
   await makeSprites();
 }
 
-async function init() {
-  await mkdirSync(dirOutSvg);
-  await mkdirSync(dirOutFonts);
-  await mkdirSync(dirOutSprites);
-  await mkdirSync(dirOutFontSvg);
+async function initDirs(...dirs) {
+  for (const dir of dirs) {
+    await mkdirSync(dir);
+  }
 }
 
 async function optimizeSvg() {
@@ -32,13 +36,15 @@ async function optimizeSvg() {
   /**
    * SVG optimisation
    */
-  const svgs = glob.sync(config.svgs).map((f) => {
+  const svgFiles = glob.sync(config.svgs);
+  svgs = await Promise.all(svgFiles.map(async (f) => {
+    const svg = await fs.readFile(f);
     return {
-      svg: fs.readFileSync(f),
+      svg,
       id: path.basename(f).replace(".svg", ""),
       name: path.basename(f),
     };
-  });
+  }));
 
   for (const svg of svgs) {
     const r = await svgo.optimize(svg.svg);
