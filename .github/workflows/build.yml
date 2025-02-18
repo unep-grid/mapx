@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - staging
+  workflow_dispatch:
 
 jobs:
   build:
@@ -18,14 +19,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '22'
 
-      # Build App
-      - name: Install App dependencies
-        run: cd app && npm install
+      # Initialize and build all components
+      - name: Install root dependencies
+        run: npm install
 
-      - name: Build App
-        run: cd app && npm run prod
+      - name: Run CI process
+        run: cd app && npm run ci
 
       - name: Docker Login
         uses: docker/login-action@v3

@@ -13,11 +13,13 @@
   },
   "version": "1.13.14-alpha.10",
   "scripts": {
+    "test": "cd app && npm run test",
     "prepare": "husky",
     "commit": "cz",
     "release": "release-it",
     "release:alpha": "release-it --preRelease=alpha",
-    "release:beta": "release-it --preRelease=beta"
+    "release:beta": "release-it --preRelease=beta",
+    "ci:app": "cd app && npm run ci"
   },
   "config": {
     "commitizen": {
