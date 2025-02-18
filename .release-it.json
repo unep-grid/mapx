@@ -10,7 +10,7 @@
   },
   "hooks": {
     "before:init": [
-      "npm run ci:app"
+      "npm run test:app"
     ],
     "before:bump": [
       "node -e \"let pkg = require('./app/package.json'); pkg.version = '${version}'; require('fs').writeFileSync('./app/package.json', JSON.stringify(pkg, null, 2) + '\\n')\"",
