@@ -58,15 +58,19 @@ RUN \
   # https://github.com/gliderlabs/docker-alpine/issues/30
   # issue with update-ca-certificates failing:
   update-ca-certificates && \
-  # Set optimization level based on platform
-  OPTIM_FLAGS="" && \
+  # Set compilation flags based on platform
   if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-    OPTIM_FLAGS="-O0 -fstack-protector-strong"; \
+    # ARM64: Disable optimizations completely and add memory-related flags
+    export CXXFLAGS="-fPIC -pipe -fpermissive -O0 -fstack-protector-all -fno-ipa-cp-clone -fno-strict-aliasing" && \
+    export CFLAGS="-fPIC -pipe -O0 -fstack-protector-all -fno-ipa-cp-clone -fno-strict-aliasing" && \
+    export LDFLAGS="-Wl,-z,notext" && \
+    export MAKEFLAGS="-j1"; \
   else \
-    OPTIM_FLAGS="-O1 -fstack-protector-strong"; \
+    # Other platforms: Normal optimization
+    export CXXFLAGS="-fPIC -pipe -fpermissive -O1 -fstack-protector-strong" && \
+    export CFLAGS="-fPIC -pipe -O1 -fstack-protector-strong" && \
+    export MAKEFLAGS="-j1"; \
   fi && \
-  export CXXFLAGS="-fPIC -pipe -fpermissive ${OPTIM_FLAGS}" && \
-  export CFLAGS="-fPIC -pipe ${OPTIM_FLAGS}" && \
   #
   # gdal
   # see option in configure (https://raw.githubusercontent.com/OSGeo/gdal/master/gdal/configure)
