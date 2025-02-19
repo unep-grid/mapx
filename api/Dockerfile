@@ -1,12 +1,10 @@
 ARG GDAL_VERSION=3.6.4
-ARG LIBKML_VERSION=1.3.0
 ARG NODE_VERSION=22.14.0
 ARG ALPINE_VERSION=3.21
 
 FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} as builder
 
 ARG GDAL_VERSION
-ARG LIBKML_VERSION
 # TARGETPLATFORM is set by buildx when using --platform flag
 # e.g. docker buildx build --platform linux/amd64,linux/arm64 .
 ARG TARGETPLATFORM
@@ -22,28 +20,21 @@ ENV GDAL_DEPS_DEV='\
     proj-dev \
     geos-dev \
     expat-dev \
-    minizip-dev \
-    uriparser-dev \
     zlib-dev \
+    curl-dev \
+    libkml-dev \
     ca-certificates'
 
 ENV GDAL_DEPS_RUN='\
-    # kml deps
-    expat \
-    minizip \
-    uriparser \
-    zlib \
-    # gdal deps
     curl \
     expat \
     geos \
     libpq \
     libxml2 \
-    libxslt \
     sqlite-libs \
-    tiff \
     zlib \
-    proj\
+    proj \
+    libkml \
     '
 
 ENV DEPS_RUN='\
@@ -52,13 +43,12 @@ ENV DEPS_RUN='\
 
 WORKDIR /build
 #
-# Download stuff
+# Download GDAL
 #
-RUN wget -O libkml.tar.gz "https://github.com/libkml/libkml/archive/${LIBKML_VERSION}.tar.gz"
 RUN wget -O gdal.tar.gz "https://github.com/OSGeo/gdal/archive/v${GDAL_VERSION}.tar.gz"
 
 #
-# GDAL
+# Build GDAL
 #
 RUN \  
   echo "http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
@@ -68,11 +58,6 @@ RUN \
   # https://github.com/gliderlabs/docker-alpine/issues/30
   # issue with update-ca-certificates failing:
   update-ca-certificates && \
-  #
-  # Build KML
-  # 
-  tar --extract --file libkml.tar.gz && \
-  cd libkml-${LIBKML_VERSION} && \
   # Set optimization level based on platform
   OPTIM_FLAGS="" && \
   if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
@@ -82,14 +67,6 @@ RUN \
   fi && \
   export CXXFLAGS="-fPIC -pipe -fpermissive ${OPTIM_FLAGS}" && \
   export CFLAGS="-fPIC -pipe ${OPTIM_FLAGS}" && \
-  mkdir buildkml && \
-  cd buildkml && \
-  cmake .. \
-    -DCMAKE_BUILD_TYPE=MinSizeRel \
-    -DCMAKE_CXX_FLAGS="${CXXFLAGS}" \
-    -DCMAKE_C_FLAGS="${CFLAGS}" && \
-  make && \
-  make install && \
   #
   # gdal
   # see option in configure (https://raw.githubusercontent.com/OSGeo/gdal/master/gdal/configure)
@@ -105,20 +82,36 @@ RUN \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_CXX_FLAGS="-D__MUSL__ ${CXXFLAGS}" \
     -DCMAKE_C_FLAGS="${CFLAGS}" \
-    -DGDAL_BUILD_OPTIONAL_DRIVERS=OFF \
-    -DGDAL_ENABLE_DRIVER_SHAPE=ON \
-    -DGDAL_ENABLE_DRIVER_GPKG=ON \
-    -DGDAL_ENABLE_DRIVER_GML=ON \
-    -DGDAL_ENABLE_DRIVER_GPX=ON \
-    -DGDAL_ENABLE_DRIVER_CSV=ON \
-    -DGDAL_ENABLE_DRIVER_PGDUMP=ON \
     -DBUILD_PYTHON_BINDINGS=OFF \
     -DBUILD_DOCS=OFF \
     -DBUILD_TESTING=OFF \
-    -DGDAL_USE_INTERNAL_LIBS=ON \
+    # Core dependencies
+    -DGDAL_USE_ZLIB=ON \
+    -DGDAL_USE_CURL=ON \
+    -DGDAL_USE_GEOS=ON \
+    -DGDAL_USE_EXPAT=ON \
+    -DGDAL_USE_POSTGRESQL=ON \
+    -DGDAL_USE_SQLITE3=ON \
+    -DGDAL_USE_LIBKML=ON \
+    # Disable unnecessary formats
     -DGDAL_USE_JPEG=OFF \
     -DGDAL_USE_PNG=OFF \
-    -DGDAL_USE_GIF=OFF && \
+    -DGDAL_USE_GIF=OFF \
+    -DGDAL_USE_LIBTIFF_INTERNAL=OFF \
+    # Required raster formats
+    -DGDAL_ENABLE_DRIVER_MEM=ON \
+    -DGDAL_ENABLE_DRIVER_VRT=ON \
+    # Required vector formats
+    -DOGR_ENABLE_DRIVER_CSV=ON \
+    -DOGR_ENABLE_DRIVER_GEOJSON=ON \
+    -DOGR_ENABLE_DRIVER_MEM=ON \
+    -DOGR_ENABLE_DRIVER_VRT=ON \
+    -DOGR_ENABLE_DRIVER_GPX=ON \
+    -DOGR_ENABLE_DRIVER_SHAPE=ON \
+    -DOGR_ENABLE_DRIVER_PG=ON \
+    -DOGR_ENABLE_DRIVER_SQLITE=ON \
+    -DOGR_ENABLE_DRIVER_GML=ON \
+    -DOGR_ENABLE_DRIVER_KML=ON && \
   cmake --build . -j1 && \
   cmake --build . --target install && \
   #
