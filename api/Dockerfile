@@ -73,9 +73,21 @@ RUN \
   # 
   tar --extract --file libkml.tar.gz && \
   cd libkml-${LIBKML_VERSION} && \
+  # Set optimization level based on platform
+  OPTIM_FLAGS="" && \
+  if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
+    OPTIM_FLAGS="-O0 -fstack-protector-strong"; \
+  else \
+    OPTIM_FLAGS="-O1 -fstack-protector-strong"; \
+  fi && \
+  export CXXFLAGS="-fPIC -pipe -fpermissive ${OPTIM_FLAGS}" && \
+  export CFLAGS="-fPIC -pipe ${OPTIM_FLAGS}" && \
   mkdir buildkml && \
   cd buildkml && \
-  cmake .. && \
+  cmake .. \
+    -DCMAKE_BUILD_TYPE=MinSizeRel \
+    -DCMAKE_CXX_FLAGS="${CXXFLAGS}" \
+    -DCMAKE_C_FLAGS="${CFLAGS}" && \
   make && \
   make install && \
   #
@@ -87,19 +99,12 @@ RUN \
   cd gdal-${GDAL_VERSION} && \
   mkdir build && \
   cd build && \
-  # Set optimization level based on platform
-  # TARGETPLATFORM is set by buildx (e.g., linux/amd64, linux/arm64)
-  OPTIM_FLAGS="" && \
-  if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then \
-    OPTIM_FLAGS="-O0 -march=armv8-a"; \
-  else \
-    OPTIM_FLAGS="-O1"; \
-  fi && \
+  # Reuse the same optimization flags for GDAL
   cmake .. \
     -DCMAKE_BUILD_TYPE=MinSizeRel \
     -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_CXX_FLAGS="-D__MUSL__ -fPIC -pipe -fpermissive -fstack-protector-strong ${OPTIM_FLAGS}" \
-    -DCMAKE_C_FLAGS="-fPIC -pipe -fstack-protector-strong ${OPTIM_FLAGS}" \
+    -DCMAKE_CXX_FLAGS="-D__MUSL__ ${CXXFLAGS}" \
+    -DCMAKE_C_FLAGS="${CFLAGS}" \
     -DGDAL_BUILD_OPTIONAL_DRIVERS=OFF \
     -DGDAL_ENABLE_DRIVER_SHAPE=ON \
     -DGDAL_ENABLE_DRIVER_GPKG=ON \
