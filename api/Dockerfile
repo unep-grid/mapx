@@ -91,7 +91,7 @@ RUN \
   cd /build && \
   tar --extract --file gdal.tar.gz --strip-components 1 && \
   cd gdal && \
-  CXXFLAGS="-D__MUSL__ -Os" CFLAGS="-march=native -mtune=native -Os" LDFLAGS="-s" && \
+  CXXFLAGS="-D__MUSL__ -Os --param ggc-min-expand=1 --param ggc-min-heapsize=32768" CFLAGS="-Os --param ggc-min-expand=1 --param ggc-min-heapsize=32768" LDFLAGS="-s" && \
   ./configure \
     --prefix=/usr \
     --without-libtool \
