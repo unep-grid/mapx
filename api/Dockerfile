@@ -7,6 +7,9 @@ FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} as builder
 
 ARG GDAL_VERSION
 ARG LIBKML_VERSION
+# TARGETPLATFORM is set by buildx when using --platform flag
+# e.g. docker buildx build --platform linux/amd64,linux/arm64 .
+ARG TARGETPLATFORM
 
 ENV GDAL_DEPS_DEV='\
     build-base \
@@ -84,11 +87,19 @@ RUN \
   cd gdal-${GDAL_VERSION} && \
   mkdir build && \
   cd build && \
+  # Set optimization level based on platform
+  # TARGETPLATFORM is set by buildx (e.g., linux/amd64, linux/arm64)
+  OPTIM_FLAGS="" && \
+  if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then \
+    OPTIM_FLAGS="-O0 -march=armv8-a"; \
+  else \
+    OPTIM_FLAGS="-O1"; \
+  fi && \
   cmake .. \
-    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_BUILD_TYPE=MinSizeRel \
     -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_CXX_FLAGS="-D__MUSL__ -O1 -fPIC -pipe -fpermissive" \
-    -DCMAKE_C_FLAGS="-O1 -fPIC -pipe" \
+    -DCMAKE_CXX_FLAGS="-D__MUSL__ -fPIC -pipe -fpermissive -fstack-protector-strong ${OPTIM_FLAGS}" \
+    -DCMAKE_C_FLAGS="-fPIC -pipe -fstack-protector-strong ${OPTIM_FLAGS}" \
     -DGDAL_BUILD_OPTIONAL_DRIVERS=OFF \
     -DGDAL_ENABLE_DRIVER_SHAPE=ON \
     -DGDAL_ENABLE_DRIVER_GPKG=ON \
