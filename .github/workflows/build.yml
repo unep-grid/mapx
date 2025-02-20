@@ -32,7 +32,12 @@ jobs:
 
       # Initialize and build all components
       - name: Run CI process
-        run: npm run ci
+        run: |
+          echo "SDK directory contents:"
+          ls -la app/src/js/sdk/src
+          echo "Running as user:"
+          whoami
+          npm run ci
 
       # Docker setup (only if needed)
       - name: Docker Login
