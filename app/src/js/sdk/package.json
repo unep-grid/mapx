@@ -27,7 +27,7 @@
     "examples-lint": "eslint examples/",
     "build": "microbundle --external none -o dist && npm run jsdoc",
     "prod": "npm run build && npm publish",
-    "jsdoc": "jsdoc2md --heading-depth 3 --template ./readme.hbs --files ./src/mapx_resolvers/index.js ./src/mapx_resolvers/panels.js ./src/mapx_resolvers/base.js ./src/mapx_resolvers/static.js ./src/mapx_resolvers/app.js > README.md",
+    "jsdoc": "jsdoc2md --heading-depth 3 --template ./readme.hbs --files ./src/**/*.js > README.md",
     "paper": "sh ./paper.sh"
   },
   "repository": {
@@ -51,7 +51,7 @@
     "core-js": "^3.19.1",
     "eslint": "^8.8.0",
     "eslint-plugin-react": "^7.27.1",
-    "jsdoc-to-markdown": "^7.1.0",
+    "jsdoc-to-markdown": "^9.1.1",
     "live-server": "^1.1.0",
     "microbundle": "^0.14.2"
   }
