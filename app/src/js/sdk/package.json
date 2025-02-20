@@ -27,7 +27,7 @@
     "examples-lint": "eslint examples/",
     "build": "microbundle --external none -o dist && npm run jsdoc",
     "prod": "npm run build && npm publish",
-    "jsdoc": "jsdoc2md --heading-depth 3 --template ./readme.hbs --files ./src/mapx_resolvers/*.js > README.md",
+    "jsdoc": "jsdoc2md --heading-depth 3 -t ./readme.hbs ./src/mapx_resolvers/*.js > README.md",
     "paper": "sh ./paper.sh"
   },
   "repository": {
