@@ -27,7 +27,7 @@
     "init:all": "npm run init:base && npm run init:el && npm run init:sdk && npm run init:search && npm run init:ws && npm run init:event && npm run init:is-test",
     "build:app": "webpack --config ./webpack/webpack.prod.js",
     "build:dict": "node ./src/node/build_dict.js dict.config.json",
-    "build:sdk": "npm run init:sdk && npm run build",
+    "build:sdk": "npm run init:sdk && cd src/js/sdk && npm run build",
     "build:all": "npm run build:sdk && npm run build:dict && npm run build:app",
     "ci": "npm run init:all && npm run build:all && npm run test:build"
   },
