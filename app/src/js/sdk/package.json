@@ -25,8 +25,8 @@
     "build-serve": "npm run build && live-server dev --mount=/dist:dist",
     "examples": "microbundle --external none -o dist --no-compress && live-server examples --mount=/dist:dist",
     "examples-lint": "eslint examples/",
-    "build": "microbundle --external none -o dist && npm run jsdoc",
-    "prod": "npm run build && npm publish",
+    "build": "microbundle --external none -o dist",
+    "prod": "npm run build && npm run jsdoc &&  npm publish",
     "jsdoc": "jsdoc2md --heading-depth 3 -t ./readme.hbs ./src/mapx_resolvers/*.js > README.md",
     "paper": "sh ./paper.sh"
   },
