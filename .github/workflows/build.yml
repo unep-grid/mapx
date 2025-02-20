@@ -34,7 +34,7 @@ jobs:
       - name: Run CI process
         run: |
           echo "SDK directory contents:"
-          ls -la app/src/js/sdk/src
+          ls -la app/src/js/sdk/src/mapx_resolvers
           echo "Running as user:"
           whoami
           npm run ci
