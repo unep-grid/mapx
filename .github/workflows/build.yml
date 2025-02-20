@@ -15,6 +15,7 @@ defaults:
 jobs:
   build:
     runs-on: bigproc
+    environment : ci
     env:
       SCHEDULED_BUILD: ${{ github.event_name == 'schedule' }}
       PUSH_ENABLED: ${{ github.event_name == 'push' }}
