@@ -31,8 +31,29 @@ jobs:
       - name: Install root dependencies
         run: npm install
 
+      - name: Debug Environment
+        run: |
+          pwd
+          ls -la
+          echo "Node version: $(node -v)"
+          echo "NPM version: $(npm -v)"
+          which jsdoc2md
+
       - name: Run CI process
-        run: cd app && npm run ci
+        run: |
+          cd app
+          npm run init:all
+          cd src/js/sdk
+          echo "SDK directory contents:"
+          ls -la
+          echo "mapx_resolvers contents:"
+          ls -la src/mapx_resolvers/
+          echo "Running jsdoc2md directly:"
+          FILES=$(find ./src/mapx_resolvers -name "*.js" -type f)
+          echo "Found files: $FILES"
+          DEBUG=jsdoc2md* ./node_modules/.bin/jsdoc2md --heading-depth 3 --template readme.hbs --files $FILES
+          echo "Now running npm build:"
+          npm run build
 
       # Docker setup (only if needed)
       - name: Docker Login
