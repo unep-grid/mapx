@@ -4,7 +4,7 @@
 # ⚠️  Versions overwritten by the build script 
 #
 ARG R_VERSION=4.4.2
-ARG R_DATE=2024-12-10
+ARG R_DATE=2025-02-10
 
 ARG MAPX_HOME=/app
 ARG R_LIBS="/usr/local/R/library"
@@ -50,7 +50,7 @@ options(Ncpus = as.numeric(system("nproc --all", intern=TRUE))); \
 options(repos = rep)' > .Rprofile
 
 # Install R packages with error handling
-RUN Rscript -e 'install.packages("pak"); if (!require("pak")) quit(status=1); \
+RUN Rscript -e 'install.packages("pak", type = "source"); \
 tryCatch({ \
     pak::pkg_install(c( \
         "shiny", \
