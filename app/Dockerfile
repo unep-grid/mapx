@@ -50,7 +50,7 @@ RUN Rscript -e 'install.packages("pak", repos = sprintf("https://r-lib.github.io
 # Configure R repository
 RUN echo 'rep <- getOption("repos"); \
     rep["CRAN"] <- "https://packagemanager.posit.co/cran/'$R_DATE'"; \
-    options(Ncpus = as.numeric(system("nproc --all", intern=TRUE))); \
+    options(Ncpus = 4); \
     options(repos = rep)' > .Rprofile
 
 # Install R packages individually for better error handling and caching
