@@ -53,22 +53,15 @@ RUN echo 'rep <- getOption("repos"); \
     options(Ncpus = as.numeric(system("nproc --all", intern=TRUE))); \
     options(repos = rep)' > .Rprofile
 
-# Install R packages with error handling
-RUN Rscript -e '\
-    tryCatch({ \
-    pak::pkg_install(c( \
-    "shiny", \
-    "xml2", \
-    "curl", \
-    "pool", \
-    "RPostgreSQL", \
-    "memoise", \
-    "magrittr" \
-    )) \
-    }, error = function(e) { \
-    message("Error installing packages: ", e$message); \
-    quit(status = 1) \
-    })'
+# Install R packages individually for better error handling and caching
+RUN Rscript -e 'pak::pkg_install("shiny")'
+RUN Rscript -e 'pak::pkg_install("xml2")'
+RUN Rscript -e 'pak::pkg_install("curl")'
+RUN Rscript -e 'pak::pkg_install("pool")'
+RUN Rscript -e 'pak::pkg_install("RPostgreSQL")'
+RUN Rscript -e 'pak::pkg_install("memoise")'
+RUN Rscript -e 'pak::pkg_install("magrittr")'
+
 
 # Cleanup development dependencies
 RUN apt-get update && \
