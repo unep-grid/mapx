@@ -50,9 +50,8 @@ options(Ncpus = as.numeric(system("nproc --all", intern=TRUE))); \
 options(repos = rep)' > .Rprofile
 
 # Install R packages with error handling
-RUN Rscript -e 'install.packages("pak")' || exit 1
-
-RUN Rscript -e 'tryCatch({ \
+RUN Rscript -e 'install.packages("pak"); if (!require("pak")) quit(status=1) \
+tryCatch({ \
     pak::pkg_install(c( \
         "shiny", \
         "xml2", \
