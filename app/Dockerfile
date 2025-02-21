@@ -54,13 +54,13 @@ RUN echo 'rep <- getOption("repos"); \
     options(repos = rep)' > .Rprofile
 
 # Install R packages individually for better error handling and caching
-RUN Rscript -e 'pak::pkg_install("shiny")'
 RUN Rscript -e 'pak::pkg_install("xml2")'
 RUN Rscript -e 'pak::pkg_install("curl")'
 RUN Rscript -e 'pak::pkg_install("pool")'
 RUN Rscript -e 'pak::pkg_install("RPostgreSQL")'
 RUN Rscript -e 'pak::pkg_install("memoise")'
 RUN Rscript -e 'pak::pkg_install("magrittr")'
+RUN Rscript -e 'pak::pkg_install("shiny")'
 
 
 # Cleanup development dependencies
