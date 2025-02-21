@@ -43,28 +43,32 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends $r_deps_dev && \
     rm -rf /var/lib/apt/lists/*
 
+
+# install pak
+RUN Rscript -e 'install.packages("pak", repos = sprintf("https://r-lib.github.io/p/pak/stable/%s/%s/%s", .Platform$pkgType, R.Version()$os, R.Version()$arch))'
+
 # Configure R repository
 RUN echo 'rep <- getOption("repos"); \
-rep["CRAN"] <- "https://packagemanager.posit.co/cran/'$R_DATE'"; \
-options(Ncpus = as.numeric(system("nproc --all", intern=TRUE))); \
-options(repos = rep)' > .Rprofile
+    rep["CRAN"] <- "https://packagemanager.posit.co/cran/'$R_DATE'"; \
+    options(Ncpus = as.numeric(system("nproc --all", intern=TRUE))); \
+    options(repos = rep)' > .Rprofile
 
 # Install R packages with error handling
-RUN Rscript -e 'install.packages("pak", repos = sprintf("https://r-lib.github.io/p/pak/stable/%s/%s/%s", .Platform$pkgType, R.Version()$os, R.Version()$arch)); \
-tryCatch({ \
+RUN Rscript -e '\
+    tryCatch({ \
     pak::pkg_install(c( \
-        "shiny", \
-        "xml2", \
-        "curl", \
-        "pool", \
-        "RPostgreSQL", \
-        "memoise", \
-        "magrittr" \
+    "shiny", \
+    "xml2", \
+    "curl", \
+    "pool", \
+    "RPostgreSQL", \
+    "memoise", \
+    "magrittr" \
     )) \
-}, error = function(e) { \
+    }, error = function(e) { \
     message("Error installing packages: ", e$message); \
     quit(status = 1) \
-})'
+    })'
 
 # Cleanup development dependencies
 RUN apt-get update && \

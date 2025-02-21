@@ -56,8 +56,14 @@ jobs:
         id: version
         run: echo "version=$(node -p "require('./app/package.json').version")" >> $GITHUB_OUTPUT
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Build API Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./api
           platforms: linux/amd64,linux/arm64
@@ -69,7 +75,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build APP Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./app
           platforms: linux/amd64,linux/arm64
