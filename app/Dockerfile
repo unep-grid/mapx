@@ -46,6 +46,7 @@ RUN apt-get update && \
 
 # install pak
 RUN Rscript -e 'install.packages("pak", repos = sprintf("https://r-lib.github.io/p/pak/stable/%s/%s/%s", .Platform$pkgType, R.Version()$os, R.Version()$arch))'
+RUN Rscript -e 'pak::pkg_install("xml2")'
 
 # Configure R repository
 RUN echo 'rep <- getOption("repos"); \
@@ -54,7 +55,6 @@ RUN echo 'rep <- getOption("repos"); \
     options(repos = rep)' > .Rprofile
 
 # Install R packages individually for better error handling and caching
-RUN Rscript -e 'pak::pkg_install("xml2")'
 RUN Rscript -e 'pak::pkg_install("curl")'
 RUN Rscript -e 'pak::pkg_install("pool")'
 RUN Rscript -e 'pak::pkg_install("RPostgreSQL")'
