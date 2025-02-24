@@ -9,7 +9,7 @@ import "./style.less";
 
 const def_conf = {
   url: new URL("https://photon.komoot.io/"),
-  limit: 50,
+  limit: 10,
   elTarget: null,
   map: null,
   proximity: false,
@@ -302,7 +302,7 @@ export class Geocoder {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      return response.json();
+      return await response.json();
     } finally {
       clearTimeout(timeoutId);
     }
