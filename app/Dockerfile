@@ -46,15 +46,29 @@ RUN apt-get update && \
 
 # install pak
 RUN Rscript -e 'install.packages("pak", repos = sprintf("https://r-lib.github.io/p/pak/stable/%s/%s/%s", .Platform$pkgType, R.Version()$os, R.Version()$arch))'
-RUN Rscript -e 'pak::pkg_install("xml2")'
 
 # Configure R repository
 RUN echo 'rep <- getOption("repos"); \
     rep["CRAN"] <- "https://packagemanager.posit.co/cran/'$R_DATE'"; \
     options(Ncpus = 1); \
     options(repos = rep)' > .Rprofile
+# Set environment variables for pak subprocess
+
+# Configure pak environment
+ENV PKG_SUBPROCESS_TIMEOUT=15000 \
+    PKG_NCPUS=1 \
+    PKG_SYSREQS_VERBOSE=TRUE \
+    PKG_DEBUG=TRUE \
+    PKG_CACHE_DIR=/tmp/pkg-cache \
+    PKG_METADATA_CACHE_DIR=/tmp/pkg-metadata \
+    PKG_PACKAGE_CACHE_DIR=/tmp/pkg-packages
+
+# Create cache directories with proper permissions
+RUN mkdir -p /tmp/pkg-cache /tmp/pkg-metadata /tmp/pkg-packages && \
+    chmod 777 /tmp/pkg-cache /tmp/pkg-metadata /tmp/pkg-packages
 
 # Install R packages individually for better error handling and caching
+RUN Rscript -e 'pak::pkg_install("xml2")'
 RUN Rscript -e 'pak::pkg_install("curl")'
 RUN Rscript -e 'pak::pkg_install("pool")'
 RUN Rscript -e 'pak::pkg_install("RPostgreSQL")'
