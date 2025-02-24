@@ -47,7 +47,7 @@ RUN apt-get update && \
 # Configure R repository
 RUN echo 'rep <- getOption("repos"); \
     rep["CRAN"] <- "https://packagemanager.posit.co/cran/'$R_DATE'"; \
-    options(Ncpus = $(nproc --all));\
+    options(Ncpus = 4);\
     options(repos = rep)' > .Rprofile
 
 # install pak
