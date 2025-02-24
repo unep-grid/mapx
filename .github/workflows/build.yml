@@ -14,7 +14,7 @@ defaults:
 
 jobs:
   build:
-    runs-on: bigproc
+    runs-on: ubuntu-latest
     environment : ci
     env:
       SCHEDULED_BUILD: ${{ github.event_name == 'schedule' }}

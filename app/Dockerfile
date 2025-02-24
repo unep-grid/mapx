@@ -44,29 +44,14 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 
-# install pak
-RUN Rscript -e 'install.packages("pak", repos = sprintf("https://r-lib.github.io/p/pak/stable/%s/%s/%s", .Platform$pkgType, R.Version()$os, R.Version()$arch))'
-
 # Configure R repository
 RUN echo 'rep <- getOption("repos"); \
     rep["CRAN"] <- "https://packagemanager.posit.co/cran/'$R_DATE'"; \
-    options(Ncpus = 4); \
+    options(Ncpus = $(nproc --all));\
     options(repos = rep)' > .Rprofile
 
-# Configure pak environment
-# Required on big-proc runner, for some reasons
-ENV PKG_SUBPROCESS_TIMEOUT=15000 \
-    PKG_NCPUS=4 \
-    PKG_CACHE_DIR=/tmp/pkg-cache \
-    PKG_METADATA_CACHE_DIR=/tmp/pkg-metadata \
-    PKG_PACKAGE_CACHE_DIR=/tmp/pkg-packages
-# Also, useful for debugging:
-# PKG_SYSREQS_VERBOSE=TRUE \
-# PKG_DEBUG=TRUE \
-
-# Create cache directories with proper permissions
-RUN mkdir -p /tmp/pkg-cache /tmp/pkg-metadata /tmp/pkg-packages && \
-    chmod 777 /tmp/pkg-cache /tmp/pkg-metadata /tmp/pkg-packages
+# install pak
+RUN Rscript -e 'install.packages("pak")';
 
 # Install R packages individually for better error handling and caching
 RUN Rscript -e 'pak::pkg_install("xml2")'
@@ -76,7 +61,6 @@ RUN Rscript -e 'pak::pkg_install("RPostgreSQL")'
 RUN Rscript -e 'pak::pkg_install("memoise")'
 RUN Rscript -e 'pak::pkg_install("magrittr")'
 RUN Rscript -e 'pak::pkg_install("shiny")'
-
 
 # Cleanup development dependencies
 RUN apt-get update && \
