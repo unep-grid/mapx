@@ -3,7 +3,7 @@
  */
 import { redisGet, redisSet, pgRead } from "#mapx/db";
 import { parseTemplate, attrToPgCol, asArray } from "#mapx/helpers";
-import { isSourceId, isEmpty, isBoolean } from "@fxi/mx_valid";
+import { isSourceId, isViewId, isEmpty, isBoolean } from "@fxi/mx_valid";
 import { templates } from "#mapx/template";
 import { getSourceLastTimestamp } from "#mapx/db_utils";
 import { getParamsValidator } from "#mapx/route_validation";
@@ -18,8 +18,16 @@ const gzip = util.promisify(zlib.gzip);
  * Get tile
  */
 const validateParamsHandlerText = getParamsValidator({
-  required: ["idView"],
-  expected: ["timestamp", "skipCache", "usePostgisTiles"],
+  required: [],
+  expected: [
+    "idView",
+    "timestamp",
+    "skipCache",
+    "usePostgisTiles",
+    "idSource",
+    "attribute",
+    "attributes",
+  ],
 });
 
 export const mwGet = [validateParamsHandlerText, handlerTile];
@@ -29,14 +37,24 @@ export default { mwGet };
 export async function handlerTile(req, res) {
   try {
     const data = req.query;
-    const sqlViewInfo = templates.getViewSourceAndAttributes;
-    const resultView = await pgRead.query(sqlViewInfo, [data.idView]);
+    const modeView = isViewId(data.idView);
 
-    if (resultView.rowCount !== 1) {
-      throw Error("Error fetching view source and attribute");
+    if (modeView) {
+      const sqlViewInfo = templates.getViewSourceAndAttributes;
+      const resultView = await pgRead.query(sqlViewInfo, [data.idView]);
+
+      if (resultView.rowCount !== 1) {
+        throw Error("Error fetching view source and attribute");
+      }
+
+      const [viewSrcConfig] = resultView.rows;
+
+      Object.assign(data, viewSrcConfig);
+    } else {
+      if (isSourceId(data.idSource)) {
+        data.layer = data.idSource;
+      }
     }
-
-    const [viewSrcConfig] = resultView.rows;
 
     /*
      * viewSrcAttr attributes:
@@ -46,7 +64,6 @@ export async function handlerTile(req, res) {
      * mask (optional) : secondary source to use as mask
      * usePostgisTiles
      */
-    Object.assign(data, viewSrcConfig);
 
     data.geom = "geom";
     /*

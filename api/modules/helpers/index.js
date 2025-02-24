@@ -1,4 +1,4 @@
-import { isArray, isString, isEmpty } from "@fxi/mx_valid";
+import { isArray, isString, isEmpty, isNotEmpty } from "@fxi/mx_valid";
 import path from "path";
 import fs from "fs";
 import zlib from "zlib";
@@ -285,6 +285,7 @@ function attrToPgCol(attribute = "gid", attributes = [], opt) {
     attributes.push("gid");
   }
 
+  attributes = attributes.filter(isNotEmpty);
   return toPgColumn(getDistinct(attributes));
 }
 
