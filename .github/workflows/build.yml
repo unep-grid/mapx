@@ -66,7 +66,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./api
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: ${{ env.PUSH_ENABLED == 'true' }}
           tags: |
             fredmoser/mapx_api:${{ steps.version.outputs.version }}
@@ -78,7 +78,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./app
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: ${{ env.PUSH_ENABLED == 'true' }}
           tags: |
             fredmoser/mapx_app:${{ steps.version.outputs.version }}
