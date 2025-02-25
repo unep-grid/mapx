@@ -1,11 +1,13 @@
 import { el, elSpanTranslate } from "../el_mapx/index.js";
 import { shake } from "../elshake/index.js";
-import { isTrue, isObject } from "../is_test/index.js";
+import { isTrue } from "../is_test/index.js";
 import { events } from "../mx";
 import { modalPrompt } from "../mx_helper_modal.js";
 import { prefGet, prefSet } from "../user_pref";
+import { settings } from "../settings";
 
 const ID_PRIVACY = "pref_privacy_001";
+const DISABLED = true;
 
 window.addEventListener("load", () => {
   events.once({
@@ -17,13 +19,12 @@ window.addEventListener("load", () => {
 
 export async function privacy_test(force = false) {
   const prefGdpr = await prefGet(ID_PRIVACY);
-  const ignore = isObject(prefGdpr) && isTrue(prefGdpr.accepted);
+  const ignore = DISABLED || (prefGdpr && isTrue(prefGdpr.accepted));
 
   if (ignore && !force) {
-    return;
+    //return;
   }
-
-  const links = mx.settings.links;
+  const { links } = settings;
   const doc = links.doc_base;
   const tou = doc + links.doc_terms_of_use;
   const priv = doc + links.doc_privacy;

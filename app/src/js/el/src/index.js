@@ -244,7 +244,6 @@ export class ElementCreator {
       /**
        * HTML - Sanitized with DOMPurify
        */
-
       elOut.innerHTML = this.sanitize(content);
     } else if (typeString) {
       /**
@@ -262,9 +261,10 @@ export class ElementCreator {
 
   /**
    * Sanitize for innerHTML
+   * - keep target, e.g target=_blank
    */
   sanitize(string) {
-    return DOMPurify.sanitize(string);
+    return DOMPurify.sanitize(string, { ADD_ATTR: ["target"] });
   }
 
   /**
