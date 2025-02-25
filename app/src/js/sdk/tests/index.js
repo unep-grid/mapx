@@ -91,6 +91,25 @@ mapx.once("ready", async () => {
     ],
   });
 
+  t.check("Geocoder modal", {
+    tests: [
+      {
+        name: "geocoder is displayed",
+        test: async () => {
+          await mapx.ask("show_modal_geocoder");
+          return mapx.ask("is_geocoder_visble");
+        },
+      },
+      {
+        name: "geocoder is removed",
+        test: async () => {
+          await mapx.ask("close_modal_geocoder");
+          return ! await mapx.ask("is_geocoder_visble");
+        },
+      },
+    ],
+  });
+
   t.check("Chaos views display 1", {
     tests: [
       {
@@ -1256,7 +1275,7 @@ mapx.once("ready", async () => {
             "table_changes_editors",
             "table_editors",
             "table_readers",
-            "meta",// Required by some tools : duplicate meta
+            "meta", // Required by some tools : duplicate meta
           ];
           const keysMeta = Object.keys(r);
 

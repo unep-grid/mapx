@@ -18,9 +18,7 @@ import { theme } from "./../mx.js";
 import { draw } from "./../mx.js";
 import { IssueReporterClient } from "../issue_reporter/index.js";
 import { modalIframe } from "../modal_iframe/index.js";
-import { GeocoderModal } from "../geocoder/index.js";
-import { spatialDataToView } from "../mx_helper_map_dragdrop.js";
-import { viewsListAddSingle } from "../views_list_manager/helper.js";
+import { GeocoderModal } from "../geocoder/modal.js";
 
 export function generateButtons() {
   return [
@@ -88,25 +86,9 @@ export function generateButtons() {
     new Button({
       key: "gc_geocoder",
       classesIcon: ["fa", "fa-search"],
-      action: () => {
-        const map = getMap();
-
-        new GeocoderModal({
-          map: map,
-          language: settings.language,
-          onGeoJSONSave: async function (geojson) {
-            const view = await spatialDataToView({
-              title: `Geocode Result ${new Date().toLocaleDateString()}`,
-              fileName: "geocode_result",
-              fileType: "geojson",
-              data: geojson,
-              save: true,
-            });
-            await viewsListAddSingle(view, {
-              open: true,
-            });
-          },
-        });
+      action: async () => {
+        const gcm = new GeocoderModal();
+        await gcm.init();
       },
     }),
     new Button({

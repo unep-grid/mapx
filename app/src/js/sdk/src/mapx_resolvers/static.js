@@ -80,6 +80,11 @@ import {
   getViewLegendValues,
   setViewLegendState,
 } from "../../../legend_vt/helpers.js";
+import { GeocoderModal } from "../../../geocoder/modal.js";
+
+const rslv_local = {
+  geocoder: null,
+};
 
 /**
  * MapX resolvers available in static and app
@@ -175,6 +180,44 @@ export class MapxResolversStatic extends MapxResolversPanels {
     if (ctrl && ctrl.action) {
       ctrl.action(opt.action);
     }
+  }
+
+  /**
+   * Show geocoder
+   * Display the geocoder tool
+   *
+   */
+  async show_modal_geocoder() {
+    const gcm = new GeocoderModal();
+
+    if (rslv_local.geocoder) {
+      rslv_local.geocoder.close();
+    }
+
+    rslv_local.geocoder = gcm;
+    await gcm.init({
+      onClose: () => {
+        rslv_local.geocoder = null;
+      },
+    });
+  }
+
+  /**
+   * Close geocoder
+   * Close the geocoder tool
+   *
+   */
+  async close_modal_geocoder() {
+    if (rslv_local.geocoder) {
+      rslv_local.geocoder.close();
+    }
+  }
+
+  /**
+   * Test if geocoder is visible
+   */
+  is_geocoder_visble() {
+    return document.body.contains(rslv_local.geocoder?.config?.elTarget);
   }
 
   /**

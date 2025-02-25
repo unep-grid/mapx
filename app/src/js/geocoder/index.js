@@ -1,11 +1,11 @@
 import { el, elButtonFa } from "../el_mapx";
 import { mapboxgl } from "../mx";
-import { modal } from "../mx_helper_modal";
 import { isEmpty } from "../is_test";
 import { shake } from "../elshake";
 import { getDictItem } from "../language";
 import { isArrayOfNumber } from "../is_test";
 import "./style.less";
+import { isFunction } from "../is_test";
 
 const def_conf = {
   url: new URL("https://photon.komoot.io/"),
@@ -43,32 +43,6 @@ class MarkerLocation {
 
   toGeoJSON() {
     return this.feature;
-  }
-}
-
-export class GeocoderModal {
-  constructor(config = {}) {
-    this._config = {
-      ...def_conf,
-      ...config,
-    };
-    this.build().catch(console.warn);
-  }
-
-  async build() {
-    const gcm = this;
-    gcm._config.elTarget = el("div");
-    gcm._gc = new Geocoder();
-
-    gcm._modal = modal({
-      title: getDictItem("gc_geocoder"),
-      content: gcm._config.elTarget,
-      onClose: () => {
-        gcm._gc.destroy();
-      },
-    });
-
-    await gcm._gc.init(gcm._config);
   }
 }
 
@@ -111,6 +85,8 @@ export class Geocoder {
   }
 
   async initUI() {
+    const addSaveButton = isFunction(this.config.onGeoJSONSave);
+
     this._elTarget.classList.add("gcm_container");
     // Create search container
     this._elSearchContainer = el("div", { class: "panel panel-default" });
@@ -186,7 +162,9 @@ export class Geocoder {
     this._elButtonBack.disabled = true;
 
     buttonsContainer.appendChild(this._elButtonClear);
-    buttonsContainer.appendChild(this._elButtonSave);
+    if (addSaveButton) {
+      buttonsContainer.appendChild(this._elButtonSave);
+    }
     buttonsContainer.appendChild(this._elButtonBack);
 
     // Assemble the components
