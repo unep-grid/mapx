@@ -72,7 +72,7 @@ describe('Geocoder', () => {
 
       expect(geocoder.config).toBeDefined();
       expect(geocoder.config.language).toBe('en');
-      expect(geocoder.config.limit).toBe(50);
+      expect(geocoder.config.limit).toBe(10);
     });
 
     it('should throw error when initialized without target element', async () => {
@@ -96,7 +96,7 @@ describe('Geocoder', () => {
       expect(url.toString()).toContain('https://photon.komoot.io/');
       expect(url.searchParams.get('q')).toBe('Paris');
       expect(url.searchParams.get('lang')).toBe('fr');
-      expect(url.searchParams.get('limit')).toBe('50');
+      expect(url.searchParams.get('limit')).toBe('10');
     });
 
     it('should include proximity parameters when enabled', async () => {
