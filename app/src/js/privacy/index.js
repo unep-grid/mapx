@@ -22,7 +22,7 @@ export async function privacy_test(force = false) {
   const ignore = DISABLED || (prefGdpr && isTrue(prefGdpr.accepted));
 
   if (ignore && !force) {
-    //return;
+    return;
   }
   const { links } = settings;
   const doc = links.doc_base;
