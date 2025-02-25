@@ -9,19 +9,8 @@
     "publish": false
   },
   "hooks": {
-    "before:init": [
-      "npm run test:app"
-    ],
-    "before:bump": [
-      "node -e \"let pkg = require('./app/package.json'); pkg.version = '${version}'; require('fs').writeFileSync('./app/package.json', JSON.stringify(pkg, null, 2) + '\\n')\"",
-      "node -e \"let pkg = require('./api/package.json'); pkg.version = '${version}'; require('fs').writeFileSync('./api/package.json', JSON.stringify(pkg, null, 2) + '\\n')\"",
-      "node -e \"let pkg = require('./app/src/js/sdk/package.json'); pkg.version = '${version}'; require('fs').writeFileSync('./app/src/js/sdk/package.json', JSON.stringify(pkg, null, 2) + '\\n')\"",
-      "echo '${version}' > version.txt",
-      "yq -o='yaml' -i '.services.app.image=\"fredmoser/mapx_app:${version}\"' docker-compose.yml",
-      "yq -o='yaml' -i '.services.app_dev.image=\"fredmoser/mapx_app:${version}\"' docker-compose.yml",
-      "yq -o='yaml' -i '.services.api.image=\"fredmoser/mapx_api:${version}\"' docker-compose.yml",
-      "yq -o='yaml' -i '.services.api_dev.image=\"fredmoser/mapx_api:${version}\"' docker-compose.yml"
-    ],
+    "before:init": ["npm run test:app"],
+    "before:bump": ["./update-versions.sh ${version}"],
     "after:bump": []
   }
 }
