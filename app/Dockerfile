@@ -1,9 +1,7 @@
 #
 # MapX base image, without code
 #
-# ⚠️  Versions overwritten by the build script 
-#
-ARG R_VERSION=4.4.2
+ARG R_VERSION=4.4.1
 ARG R_DATE=2025-02-10
 
 ARG MAPX_HOME=/app
