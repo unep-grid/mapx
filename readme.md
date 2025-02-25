@@ -134,11 +134,6 @@ cd meili
 ./build.sh <version>
 ```
 
-Benefits:
-- Automatic layer caching
-- Images immediately available in local Docker daemon
-- Faster builds for single architecture
-
 #### Production Builds
 
 Production builds are handled by GitHub Actions using `docker buildx`:
@@ -146,7 +141,7 @@ Production builds are handled by GitHub Actions using `docker buildx`:
   - Push to staging branch
   - Manual workflow dispatch
   - Weekly scheduled builds (Mondays 7 AM UTC)
-- Multi-architecture support (amd64, arm64)
+- ~Multi-architecture support (amd64, arm64)~
 - GitHub Actions cache for efficient builds
 - Automated testing and validation
 
