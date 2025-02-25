@@ -15,7 +15,8 @@
   "type": "module",
   "imports": {
     "#root/*": "./*/index.js",
-    "#mapx/*": "./modules/*/index.js"
+    "#mapx/*": "./modules/*/index.js",
+    "#mapx/*/": "./modules/*/index.js"
   },
   "dependencies": {
     "@fxi/mx_valid": "^0.0.23",

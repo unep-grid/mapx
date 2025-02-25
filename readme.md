@@ -114,25 +114,39 @@ MapX uses different Docker build approaches for development and production:
 
 #### Local Development
 
-Local builds use standard `docker build` for simplicity and efficiency:
+Local builds use standard `docker build` for simplicity and efficiency. The image has to be built locally, as buildx failed to build multi-platform api/app images reliably on x86. 
 
 ```bash
-# Build app image (uses package.json version)
+# Build both app and api images with local tag
+npm run build:local
+
+# Or build them individually
+npm run build:app_local
+npm run build:api_local
+
+# You can also build directly from the service directories
 cd app
-./build.sh [version]
+./build.sh
 
-# Build api image (uses package.json version)
 cd api
-./build.sh [version]
+./build.sh
 
-# Build geoserver image (version required)
+# Or specify a specific version tag if needed
+cd app
+./build.sh 1.13.14
+
+# Build geoserver image with multi-platform support
 cd geoserver
-./build.sh <version>
+./build.sh <version> [platforms]  # Default platforms: linux/amd64,linux/arm64
 
-# Build search image (version required)
+# Build search image with multi-platform support
 cd meili
-./build.sh <version>
+./build.sh <version> [platforms]  # Default platforms: linux/amd64,linux/arm64
 ```
+
+The docker-compose.yml file is configured to use the `:local` tag for app and api services, which allows for efficient local development on any platform (ARM or x86) while maintaining compatibility with our CI/CD pipeline.
+
+This approach solves platform mismatch issues when developing on ARM machines (like M1/M2 Macs) while the remote images are built for x86 only.
 
 #### Production Builds
 

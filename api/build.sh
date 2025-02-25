@@ -3,7 +3,7 @@ set -e
 
 # Get version from package.json
 VERSION=$(node -p "require('./package.json').version")
-TAG=${1:-$VERSION}
+TAG=${1:-local}  # Default to 'local' instead of VERSION
 
 echo "Building api image with tag: $TAG"
 

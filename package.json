@@ -21,7 +21,10 @@
     "test:app": "cd app && npm run test",
     "ci:app": "cd app && npm run ci",
     "init:app": "cd app && npm run init:all",
-    "init": "npm install && npm run init:app",
+    "build:app_local": "cd app && ./build.sh local",
+    "build:api_local": "cd api && ./build.sh local",
+    "build:local": "npm run build:app_local && npm run build:api_local",
+    "init": "npm install && npm run init:app && npm run build:local",
     "ci": "npm run init && npm run ci:app"
   },
   "config": {

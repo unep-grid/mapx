@@ -42,21 +42,7 @@ update_package_json "./app/src/js/sdk/package.json"
 echo "$VERSION" > version.txt
 echo "Updated version.txt to $VERSION"
 
-# Update docker-compose.yml for each service using yq
-update_docker_compose() {
-  local service=$1
-  local base_service=${service/_dev/}
-  
-  # Use yq to update image version
-  yq -i ".services.$service.image = \"fredmoser/mapx_$base_service:$VERSION\"" docker-compose.yml
-  
-  echo "Updated $service image in docker-compose.yml to version $VERSION"
-}
-
-# Update docker-compose.yml for each service
-update_docker_compose "app"
-update_docker_compose "app_dev"
-update_docker_compose "api"
-update_docker_compose "api_dev"
+# Note: Docker Compose image tags are no longer updated here
+# Local development now uses the 'local' tag for app and api images
 
 echo "All version updates completed successfully"

@@ -1,5 +1,5 @@
 import multer from "multer";
-import { ioAddViewVt } from "#mapx/view/";
+import { ioAddViewVt } from "#mapx/view";
 import { access, unlink } from "fs/promises";
 import { constants } from "fs";
 import { spawn } from "child_process";
