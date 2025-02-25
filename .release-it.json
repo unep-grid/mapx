@@ -10,7 +10,7 @@
   },
   "hooks": {
     "before:init": ["npm run test:app"],
-    "before:bump": ["./update-versions.sh ${version}"],
+    "before:bump": ["./update_versions.sh ${version}"],
     "after:bump": []
   }
 }
