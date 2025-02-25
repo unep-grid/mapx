@@ -25,7 +25,7 @@ update_package_json() {
   local file=$1
   if [ -f "$file" ]; then
     # Use yq with JSON parser to update version
-    yq -p=json -i ".version = \"$VERSION\"" "$file"
+    yq -pj -oj -i ".version = \"$VERSION\"" "$file"
     echo "Updated version in $file to $VERSION"
   else
     echo "Error: File $file not found"
