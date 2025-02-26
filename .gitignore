@@ -141,5 +141,6 @@ typings/
 .yarn-integrity
 
 
+CLAUDE.md
 .aider*
 .env

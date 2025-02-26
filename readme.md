@@ -1,5 +1,7 @@
 # [MapX](https://app.mapx.org/)
 
+![MapX CI/CD](https://github.com/unep-grid/mapx/actions/workflows/build.yml/badge.svg)
+
 [MapX](https://app.mapx.org/) is an online platform for managing geospatial data on natural resources, developed by [UNEP/GRID-Geneva](https://unepgrid.ch/en) - a data centre resulting from the partnership between
 [UN Environment Programme](https://www.unep.org/), the Swiss [Federal Office for the Environment](https://www.bafu.admin.ch/) and the [University of Geneva](https://unige.ch/).
 
