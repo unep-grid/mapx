@@ -15,8 +15,6 @@
     "test:sdk": "cd ./src/js/sdk && npm run test",
     "lint": "eslint ./src/js",
     "dev": "webpack --watch --config ./webpack/webpack.dev.js",
-    "build:docker": "./build.sh -ap",
-    "build:docker:local": "./build.sh -a",
     "init:base": "npm install",
     "init:el": "cd src/js/el && npm install",
     "init:sdk": "cd src/js/sdk && npm install",
@@ -29,7 +27,7 @@
     "build:dict": "node ./src/node/build_dict.js dict.config.json",
     "build:sdk": "npm run init:sdk && cd src/js/sdk && npm run build",
     "build:all": "npm run build:sdk && npm run build:dict && npm run build:app",
-    "ci": "npm run init:all && npm run build:all && npm run test:build"
+    "ci": "npm run init:all && npm run build:all && npm run test && npm run test:build"
   },
   "author": "unepgrid.ch",
   "license": "GPLv3",

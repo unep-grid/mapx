@@ -6,9 +6,7 @@
   "scripts": {
     "test": "echo 'test disabled' && exit 1",
     "lint": "eslint ./index.js && eslint ./routines.js",
-    "docker": "npm run lint && ./build.sh -a",
-    "prod": "npm run lint",
-    "prod_docker": "npm run prod && ./build.sh -ap"
+    "ci": "npm install && npm run lint && echo 'missing tests'"
   },
   "author": "unepgrid.ch",
   "license": "MIT",

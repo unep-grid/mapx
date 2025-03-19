@@ -19,13 +19,14 @@
     "release:alpha": "release-it --preRelease=alpha",
     "release:beta": "release-it --preRelease=beta",
     "test:app": "cd app && npm run test",
-    "ci:app": "cd app && npm run ci",
-    "init:app": "cd app && npm run init:all",
     "build:app_local": "cd app && ./build.sh local",
     "build:api_local": "cd api && ./build.sh local",
     "build:local": "npm run build:app_local && npm run build:api_local",
     "init": "npm install && npm run init:app && npm run build:local",
-    "ci": "npm run init && npm run ci:app"
+    "init:app": "cd app && npm run init:all",
+    "ci": "npm install && npm run ci:app && npm run ci:api",
+    "ci:app": "cd app && npm run ci",
+    "ci:api": "cd api && npm run ci"
   },
   "config": {
     "commitizen": {

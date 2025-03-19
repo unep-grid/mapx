@@ -196,7 +196,6 @@ Production builds are handled by GitHub Actions using `docker buildx`:
   - Push to staging branch
   - Manual workflow dispatch
   - Weekly scheduled builds (Mondays 7 AM UTC)
-- ~Multi-architecture support (amd64, arm64)~
 - GitHub Actions cache for efficient builds
 - Automated testing and validation
 
@@ -210,7 +209,6 @@ To trigger a manual build:
 3. Click "Run workflow"
 4. Select options and trigger build
 
-For reference, the equivalent manual multi-arch build commands are preserved in `docs/docker-builds.md`.
 
 #### Known issues
 
