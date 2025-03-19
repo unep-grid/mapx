@@ -1,3 +1,12 @@
+  - [1.13.14-beta.2](https://github.com/unep-grid/mapx/tree/1.13.14-beta.2) 
+
+    - chore: update changelog script, removed editor step
+    - chore: updated release it config
+    - ci: re-created changelog update script
+    - chore: removed todo file
+    - ci: optimize GitHub workflow for better clarity and reliability
+
+
   - [1.13.14-alpha.7](https://github.com/unep-grid/mapx/tree/1.13.14-alpha.7) 
 
     - Added privacy message + save preference 
