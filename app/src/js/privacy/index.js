@@ -7,7 +7,7 @@ import { prefGet, prefSet } from "../user_pref";
 import { settings } from "../settings";
 
 const ID_PRIVACY = "pref_privacy_001";
-const DISABLED = true;
+const DISABLED = false;
 
 window.addEventListener("load", () => {
   events.once({
