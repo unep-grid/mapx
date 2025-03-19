@@ -15,10 +15,13 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment : ci
+    environment: ci
     env:
       SCHEDULED_BUILD: ${{ github.event_name == 'schedule' }}
-      PUSH_ENABLED: ${{ github.event_name == 'push' }}
+      PUSH_ENABLED: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+      DOCKER_REGISTRY: fredmoser
+      DOCKER_API_IMAGE: mapx_api
+      DOCKER_APP_IMAGE: mapx_app
 
     steps:
       - name: Checkout
@@ -30,17 +33,38 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'npm'
 
       # Initialize and build all components
       - name: Run CI process
-        run: |
-          echo "SDK directory contents:"
-          ls -la app/src/js/sdk/src/mapx_resolvers
-          echo "Running as user:"
-          whoami
-          npm run ci
+        run: npm run ci
 
-      # Docker setup (only if needed)
+      # Extract version from package.json using jq
+      - name: Get version
+        id: version
+        run: echo "version=$(jq -r '.version' ./app/package.json)" >> $GITHUB_ENV
+
+      # Log version for debugging
+      - name: Log version
+        run: echo "Building version ${{ env.version }}"
+
+      # Set up Docker tags as environment variables
+      - name: Set Docker tags
+        run: |
+          # Set base tags
+          API_TAGS="${DOCKER_REGISTRY}/${DOCKER_API_IMAGE}:${version}"
+          APP_TAGS="${DOCKER_REGISTRY}/${DOCKER_APP_IMAGE}:${version}"
+          
+          # Add latest tag for non-scheduled builds
+          if [[ "$PUSH_ENABLED" == "true" ]]; then
+            API_TAGS="${API_TAGS},${DOCKER_REGISTRY}/${DOCKER_API_IMAGE}:latest"
+            APP_TAGS="${APP_TAGS},${DOCKER_REGISTRY}/${DOCKER_APP_IMAGE}:latest"
+          fi
+          
+          echo "API_TAGS=${API_TAGS}" >> $GITHUB_ENV
+          echo "APP_TAGS=${APP_TAGS}" >> $GITHUB_ENV
+
+      # Docker login only if pushing
       - name: Docker Login
         if: env.PUSH_ENABLED == 'true'
         uses: docker/login-action@v3
@@ -48,58 +72,45 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      # Single Docker Buildx setup
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Get version from package.json for Docker tags
-      - name: Get version
-        id: version
-        run: echo "version=$(node -p "require('./app/package.json').version")" >> $GITHUB_OUTPUT
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
+      # Build API Image with simplified tags reference
       - name: Build API Image
         uses: docker/build-push-action@v6
         with:
           context: ./api
           platforms: linux/amd64
           push: ${{ env.PUSH_ENABLED == 'true' }}
-          tags: |
-            fredmoser/mapx_api:${{ steps.version.outputs.version }}
-            ${{ env.PUSH_ENABLED == 'true' && 'fredmoser/mapx_api:latest' || '' }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: ${{ env.API_TAGS }}
+          cache-from: type=gha,scope=api-build
+          cache-to: type=gha,mode=max,scope=api-build
 
+      # Build APP Image with simplified tags reference
       - name: Build APP Image
         uses: docker/build-push-action@v6
         with:
           context: ./app
           platforms: linux/amd64
           push: ${{ env.PUSH_ENABLED == 'true' }}
-          tags: |
-            fredmoser/mapx_app:${{ steps.version.outputs.version }}
-            ${{ env.PUSH_ENABLED == 'true' && 'fredmoser/mapx_app:latest' || '' }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: ${{ env.APP_TAGS }}
+          cache-from: type=gha,scope=app-build
+          cache-to: type=gha,mode=max,scope=app-build
 
-      # Create issue on scheduled build failure
+      # Create issue on scheduled build failure with proper version reference
       - name: Create Issue on Failure
         if: failure() && env.SCHEDULED_BUILD == 'true'
         uses: actions/github-script@v7
         with:
           script: |
-            const version = process.env.VERSION;
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: `🚨 Scheduled Build Failed - ${new Date().toISOString().split('T')[0]}`,
               body: `The scheduled build for MapX has failed.
 
-              - Version: ${version}
+              - Version: ${{ env.version }}
               - Workflow Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
               
               Please check the workflow logs for more details.`
