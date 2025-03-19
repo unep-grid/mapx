@@ -44,14 +44,6 @@ else
   mv "$CHANGELOG_FILE.new" "$CHANGELOG_FILE"
 fi
 
-# Open in editor for manual adjustments, if available
-if [ -n "$EDITOR" ]; then
-  $EDITOR "$CHANGELOG_FILE"
-  echo "Changelog updated and opened in editor for review."
-else
-  echo "No editor found. Please edit $CHANGELOG_FILE manually if needed."
-fi
-
 # Clean up
 rm "$TEMP_FILE"
 
