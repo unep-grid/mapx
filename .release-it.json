@@ -11,6 +11,6 @@
   "hooks": {
     "before:init": ["npm run test:app"],
     "before:bump": ["./release_scripts/update_versions.sh ${version}"],
-    "after:bump": []
+    "after:bump": ["./release_scripts/update_changelog.sh ${version}"]
   }
 }
