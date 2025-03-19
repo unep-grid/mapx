@@ -110,6 +110,45 @@ This ensures commits follow the [Conventional Commits](https://www.conventionalc
 
 The build process uses GitHub Actions cache (type=gha) for efficient builds while ensuring weekly scheduled builds can catch any potential issues with dependencies or base images.
 
+### Version Management
+
+MapX uses [release-it](https://github.com/release-it/release-it) to manage versions across the entire project. This automatically:
+- Runs tests to verify the build is stable
+- Updates version numbers in all package.json files and version.txt
+- Creates proper git commits and tags
+- (Optional) Pushes changes to GitHub
+
+#### Creating a New Version
+
+To create a new version, use one of the following npm scripts:
+
+```bash
+# Regular release (e.g., 1.13.15)
+npm run release
+
+# Alpha release (e.g., 1.13.15-alpha.0)
+npm run release:alpha
+
+# Beta release (e.g., 1.13.15-beta.0)
+npm run release:beta
+```
+
+**IMPORTANT:** Do not manually edit version numbers or run update scripts directly. The version update scripts are automatically invoked by the release-it process.
+
+#### After Version Update
+
+After creating a new version:
+
+1. Push the changes and tags to GitHub:
+   ```bash
+   git push origin staging --tags
+   ```
+
+2. This will trigger the CI/CD pipeline which will:
+   - Build the Docker images
+   - Tag them with the new version number
+   - Push them to Docker Hub (for production deployment)
+
 ### Docker Build Process
 
 MapX uses different Docker build approaches for development and production:
