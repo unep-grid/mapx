@@ -18,7 +18,7 @@ module.exports = merge(common, {
   plugins: [
     new WatchFolderPlugin({
       folder: './src/data/dict',
-      script: 'npm run build_dict'
+      script: 'npm run build:dict'
     }),
     new HtmlWebpackPlugin({
       meta : meta,

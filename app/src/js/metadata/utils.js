@@ -1,20 +1,12 @@
 import { getGemetConcept, getGemetConceptLink } from "./../gemet_util/index.js";
-import {
-  el,
-  elAuto,
-  elButtonFa,
-  elPanel,
-  elSpanTranslate,
-  elWait,
-} from "./../el_mapx";
+import { el, elAuto, elPanel, elSpanTranslate, elWait } from "./../el_mapx";
 import {
   downloadViewVector,
   getView,
   getViewAuto,
-  getViewExtent,
   viewLink,
 } from "./../map_helpers";
-import { modal, modalDialog } from "./../mx_helper_modal.js";
+import { modal } from "./../mx_helper_modal.js";
 import { path, objectToArray, parseTemplate } from "./../mx_helper_misc.js";
 import { MenuBuilder } from "./menu.js";
 import { ws, settings } from "./../mx.js";
@@ -38,6 +30,7 @@ import {
 } from "./../is_test_mapx";
 import { getArrayDistinct } from "../array_stat/index.js";
 import { viewOgcDoc } from "../geoserver/index.js";
+import PostalAddress from "i18n-postal-address";
 
 /**
  * Get source metadata
@@ -376,7 +369,6 @@ async function buildViewMetaUi(meta) {
             ? getLanguageItem(row.value)
             : row.value,
         );
-
       }
 
       /**
@@ -678,6 +670,8 @@ function buildSourceMetaUi(meta, prefix) {
   const elTitle = el("span", { class: "panel-title" }, l("text.title"));
   const elAbstract = el("p", l("text.abstract", "-"));
   const elNotes = el("p", l("text.notes", "-"));
+  const elDataAttribution = el("p", l("text.data_attribution", "-"));
+  const elCitation = el("p", l("text.citation", "-"));
   const elKeywords = elAuto("array_string", p("text.keywords.keys", ["-"]));
   const elLicenses = el(
     "ul",
@@ -695,6 +689,14 @@ function buildSourceMetaUi(meta, prefix) {
 
   gemetLiUpdate(p("text.keywords.keys_gemet", []), elKeywordsGemet);
 
+  // New Topic keywords
+  const elKeywordsTopic = el(
+    "ul",
+    p("text.keywords.keys_topic", []).map((k) =>
+      el("li", getDictItem(`topic_${k}`)),
+    ),
+  );
+
   const elLanguages = elAuto(
     "array_string",
     p("text.language.codes", []).map((l) => l.code),
@@ -706,6 +708,18 @@ function buildSourceMetaUi(meta, prefix) {
   const elContacts = el(
     "ul",
     p("contact.contacts", []).map((c) => {
+      // Format the function as a translated value if possible
+      const elFunction = c.function
+        ? el("span", [
+            el("span", " ("),
+            el(
+              "span",
+              getDictItem(`contact_function_${c.function}`, c.function),
+            ),
+            el("span", ")"),
+          ])
+        : null;
+
       return el(
         "li",
         el(
@@ -713,20 +727,10 @@ function buildSourceMetaUi(meta, prefix) {
           {
             href: "mailto:" + c.email,
           },
-          el(
-            "span",
-            (c.name || c.email) +
-              (c.function ? " ( " + c.function + " ) " : ""),
-          ),
+          [el("span", c.name), elFunction],
         ),
         el("br"),
-        el(
-          "span",
-          {
-            class: "text-muted",
-          },
-          c.address,
-        ),
+        el("address", formatAddress(c)),
       );
     }),
   );
@@ -756,9 +760,12 @@ function buildSourceMetaUi(meta, prefix) {
       id: elId,
       abstract: elAbstract,
       notes: elNotes,
+      data_attribution: elDataAttribution,
+      citation: elCitation,
       keywords: elKeywords,
       keywords_m49: elKeywordsM49,
       keywords_gemet: elKeywordsGemet,
+      keywords_topic: elKeywordsTopic,
       languages: elLanguages,
       contacts: elContacts,
       licenses: elLicenses,
@@ -788,6 +795,33 @@ function buildSourceMetaUi(meta, prefix) {
   const elMeta = el("div", elTblSummary, elTblAttributes);
 
   return elMeta;
+}
+
+async function formatAddress(data) {
+  const address = new PostalAddress();
+  const functionText = await getDictItem(
+    data.function,
+    settings.language,
+    data.function,
+  );
+
+  address
+    .setCompanyName(data.organisation_name)
+    .setJobTitle(functionText)
+    .setAddress1(data.address)
+    .setCity(data.city)
+    .setCountry(data.country)
+    .setState(data.state)
+    .setFirstName(data.name)
+    .setHonorific(data.honorific)
+    .setPostalCode(data.postal_code)
+    .setFormat({
+      type: "business",
+      country : 'FR',
+      useTransform: true,
+    });
+
+  return el("span", { class: "text-muted" }, address.toString());
 }
 
 /**

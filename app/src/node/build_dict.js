@@ -115,12 +115,15 @@ async function update(confFile) {
         }
         if (job.id.length > 0) {
           console.log(
-            `Translate job sent ( ${job.id.length} items) for language ${job.to}`
+            `Translate job sent ( ${job.id.length} items) for language ${job.to}`,
           );
           let res = await translate(job);
-          for (let translated of res) {
-            let item = items.find((c) => c.id === translated.id);
-            item[language] = `${translated[language]}`;
+
+          if (Array.isArray(res)) {
+            for (let translated of res) {
+              let item = items.find((c) => c.id === translated.id);
+              item[language] = `${translated[language]}`;
+            }
           }
         }
       }
@@ -321,7 +324,7 @@ function gTradUnescape(str) {
   //const elsDblQuote = elBody.querySelectorAll('[type="escape_dbl_quote"]');
   const elsNewLine = elBody.querySelectorAll('[type="escape_new_line"]');
   const elsEscNewLine = elBody.querySelectorAll(
-    '[type="escape_escaped_new_line"]'
+    '[type="escape_escaped_new_line"]',
   );
   const elsEscSprintf = elBody.querySelectorAll('[type="escape_sprintf"]');
 

@@ -477,6 +477,10 @@ mxSchemaSourceMeta <- function(
                     )
                   )
                 ),
+                honorific = list(
+                  title = t("contact_honorific"),
+                  type = "string"
+                ),
                 name = list(
                   title = t("contact_name"),
                   type = "string"
