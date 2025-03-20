@@ -6342,7 +6342,7 @@
   {
     "id": "schema_title",
     "en": "Source metadata",
-    "ar": "مصدر البيانات الوصفية "
+    "ar": ""
   },
   {
     "id": "schema_desc",
@@ -7637,7 +7637,22 @@
   {
     "id": "meta_source_keywords_gemet",
     "en": "GEMET keywords",
-    "ar": "كلمات GEMET"
+    "ar": "الكلمات المفتاحية لـ GEMET"
+  },
+  {
+    "id": "meta_source_data_attribution",
+    "en": "Attribution",
+    "ar": "الإسناد"
+  },
+  {
+    "id": "meta_source_citation",
+    "en": "Citation",
+    "ar": "الاستشهاد"
+  },
+  {
+    "id": "meta_source_keywords_topic",
+    "en": "Topic",
+    "ar": "الموضوع"
   },
   {
     "id": "meta_source_keywords_m49",

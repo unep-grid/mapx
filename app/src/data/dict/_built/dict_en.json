@@ -6112,6 +6112,18 @@
     "en": "GEMET keywords"
   },
   {
+    "id": "meta_source_data_attribution",
+    "en": "Attribution"
+  },
+  {
+    "id": "meta_source_citation",
+    "en": "Citation"
+  },
+  {
+    "id": "meta_source_keywords_topic",
+    "en": "Topic"
+  },
+  {
     "id": "meta_source_keywords_m49",
     "en": "Geographic Keywords"
   },

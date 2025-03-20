@@ -6342,7 +6342,7 @@
   {
     "id": "schema_title",
     "en": "Source metadata",
-    "fa": "فراداده منبع "
+    "fa": ""
   },
   {
     "id": "schema_desc",
@@ -7637,7 +7637,22 @@
   {
     "id": "meta_source_keywords_gemet",
     "en": "GEMET keywords",
-    "fa": "کلمات کلیدی GEMET"
+    "fa": "کلیدواژه‌های GEMET"
+  },
+  {
+    "id": "meta_source_data_attribution",
+    "en": "Attribution",
+    "fa": "انتساب"
+  },
+  {
+    "id": "meta_source_citation",
+    "en": "Citation",
+    "fa": "استناد"
+  },
+  {
+    "id": "meta_source_keywords_topic",
+    "en": "Topic",
+    "fa": "موضوع"
   },
   {
     "id": "meta_source_keywords_m49",

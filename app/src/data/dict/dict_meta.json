@@ -380,14 +380,53 @@
     "id": "meta_source_keywords_gemet",
     "en": "GEMET keywords",
     "fr": "Mots-clés GEMET",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
+    "es": "Palabras clave GEMET",
+    "ru": "Ключевые слова GEMET",
+    "zh": "GEMET 关键词",
+    "ar": "الكلمات المفتاحية لـ GEMET",
+    "fa": "کلیدواژه‌های GEMET",
+    "ps": "د GEMET کلیدي ټکي",
+    "bn": "GEMET কীওয়ার্ড",
+    "de": "GEMET-Schlüsselwörter"
+  },
+  {
+    "id": "meta_source_data_attribution",
+    "en": "Attribution",
+    "fr": "Attribution",
+    "es": "Atribución",
+    "ru": "Атрибуция",
+    "zh": "归因",
+    "ar": "الإسناد",
+    "fa": "انتساب",
+    "ps": "منسوب کول",
+    "bn": "অ্যাট্রিবিউশন",
+    "de": "Zuschreibung"
+  },
+  {
+    "id": "meta_source_citation",
+    "en": "Citation",
+    "fr": "Citation",
+    "es": "Citación",
+    "ru": "Цитирование",
+    "zh": "引用",
+    "ar": "الاستشهاد",
+    "fa": "استناد",
+    "ps": "اقتباس",
+    "bn": "উদ্ধৃতি",
+    "de": "Zitat"
+  },
+  {
+    "id": "meta_source_keywords_topic",
+    "en": "Topic",
+    "fr": "Sujet",
+    "es": "Tema",
+    "ru": "Тема",
+    "zh": "主题",
+    "ar": "الموضوع",
+    "fa": "موضوع",
+    "ps": "موضوع",
+    "bn": "বিষয়",
+    "de": "Thema"
   },
   {
     "id": "meta_source_keywords_m49",
@@ -845,4 +884,3 @@
     "de": "Aktivierte Dienste"
   }
 ]
-

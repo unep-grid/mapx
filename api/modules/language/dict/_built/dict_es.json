@@ -7640,6 +7640,21 @@
     "es": "Palabras clave GEMET"
   },
   {
+    "id": "meta_source_data_attribution",
+    "en": "Attribution",
+    "es": "Atribución"
+  },
+  {
+    "id": "meta_source_citation",
+    "en": "Citation",
+    "es": "Citación"
+  },
+  {
+    "id": "meta_source_keywords_topic",
+    "en": "Topic",
+    "es": "Tema"
+  },
+  {
     "id": "meta_source_keywords_m49",
     "en": "Geographic Keywords",
     "es": "Palabras clave geográficas"

@@ -6342,7 +6342,7 @@
   {
     "id": "schema_title",
     "en": "Source metadata",
-    "ps": "سرچینه میډیټا "
+    "ps": ""
   },
   {
     "id": "schema_desc",
@@ -7637,7 +7637,22 @@
   {
     "id": "meta_source_keywords_gemet",
     "en": "GEMET keywords",
-    "ps": "د GEET ټکي"
+    "ps": "د GEMET کلیدي ټکي"
+  },
+  {
+    "id": "meta_source_data_attribution",
+    "en": "Attribution",
+    "ps": "منسوب کول"
+  },
+  {
+    "id": "meta_source_citation",
+    "en": "Citation",
+    "ps": "اقتباس"
+  },
+  {
+    "id": "meta_source_keywords_topic",
+    "en": "Topic",
+    "ps": "موضوع"
   },
   {
     "id": "meta_source_keywords_m49",

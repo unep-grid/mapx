@@ -6342,7 +6342,7 @@
   {
     "id": "schema_title",
     "en": "Source metadata",
-    "ru": "Исходные метаданные "
+    "ru": ""
   },
   {
     "id": "schema_desc",
@@ -7637,7 +7637,22 @@
   {
     "id": "meta_source_keywords_gemet",
     "en": "GEMET keywords",
-    "ru": "GEMET ключевые слова"
+    "ru": "Ключевые слова GEMET"
+  },
+  {
+    "id": "meta_source_data_attribution",
+    "en": "Attribution",
+    "ru": "Атрибуция"
+  },
+  {
+    "id": "meta_source_citation",
+    "en": "Citation",
+    "ru": "Цитирование"
+  },
+  {
+    "id": "meta_source_keywords_topic",
+    "en": "Topic",
+    "ru": "Тема"
   },
   {
     "id": "meta_source_keywords_m49",

@@ -7637,7 +7637,22 @@
   {
     "id": "meta_source_keywords_gemet",
     "en": "GEMET keywords",
-    "zh": "GEMET关键词"
+    "zh": "GEMET 关键词"
+  },
+  {
+    "id": "meta_source_data_attribution",
+    "en": "Attribution",
+    "zh": "归因"
+  },
+  {
+    "id": "meta_source_citation",
+    "en": "Citation",
+    "zh": "引用"
+  },
+  {
+    "id": "meta_source_keywords_topic",
+    "en": "Topic",
+    "zh": "主题"
   },
   {
     "id": "meta_source_keywords_m49",

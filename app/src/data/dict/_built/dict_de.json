@@ -6342,7 +6342,7 @@
   {
     "id": "schema_title",
     "en": "Source metadata",
-    "de": "Quellmetadaten "
+    "de": ""
   },
   {
     "id": "schema_desc",
@@ -7638,6 +7638,21 @@
     "id": "meta_source_keywords_gemet",
     "en": "GEMET keywords",
     "de": "GEMET-Schlüsselwörter"
+  },
+  {
+    "id": "meta_source_data_attribution",
+    "en": "Attribution",
+    "de": "Zuschreibung"
+  },
+  {
+    "id": "meta_source_citation",
+    "en": "Citation",
+    "de": "Zitat"
+  },
+  {
+    "id": "meta_source_keywords_topic",
+    "en": "Topic",
+    "de": "Thema"
   },
   {
     "id": "meta_source_keywords_m49",

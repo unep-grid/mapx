@@ -7640,6 +7640,21 @@
     "fr": "Mots-clés GEMET"
   },
   {
+    "id": "meta_source_data_attribution",
+    "en": "Attribution",
+    "fr": "Attribution"
+  },
+  {
+    "id": "meta_source_citation",
+    "en": "Citation",
+    "fr": "Citation"
+  },
+  {
+    "id": "meta_source_keywords_topic",
+    "en": "Topic",
+    "fr": "Sujet"
+  },
+  {
     "id": "meta_source_keywords_m49",
     "en": "Geographic Keywords",
     "fr": "Mots-clés géographiques"

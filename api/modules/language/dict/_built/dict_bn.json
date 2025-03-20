@@ -6342,7 +6342,7 @@
   {
     "id": "schema_title",
     "en": "Source metadata",
-    "bn": "উত্স মেটাডেটা "
+    "bn": ""
   },
   {
     "id": "schema_desc",
@@ -7637,7 +7637,22 @@
   {
     "id": "meta_source_keywords_gemet",
     "en": "GEMET keywords",
-    "bn": "গেমেট কীওয়ার্ড"
+    "bn": "GEMET কীওয়ার্ড"
+  },
+  {
+    "id": "meta_source_data_attribution",
+    "en": "Attribution",
+    "bn": "অ্যাট্রিবিউশন"
+  },
+  {
+    "id": "meta_source_citation",
+    "en": "Citation",
+    "bn": "উদ্ধৃতি"
+  },
+  {
+    "id": "meta_source_keywords_topic",
+    "en": "Topic",
+    "bn": "বিষয়"
   },
   {
     "id": "meta_source_keywords_m49",
