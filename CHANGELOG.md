@@ -1,3 +1,10 @@
+  - [1.13.14-beta.3](https://github.com/unep-grid/mapx/tree/1.13.14-beta.3) 
+
+    - fix(metadata): added missing items in the metadata UI panel #921
+    - chore: dictionnary items update for #921
+    - ci: update ci script to avoid building docker images
+
+
   - [1.13.14-beta.2](https://github.com/unep-grid/mapx/tree/1.13.14-beta.2) 
 
     - chore: update changelog script, removed editor step
