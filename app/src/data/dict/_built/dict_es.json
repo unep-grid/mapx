@@ -6110,6 +6110,11 @@
     "es": "Nombre de la organización"
   },
   {
+    "id": "contact_honorific",
+    "en": "Honorific",
+    "es": "Tratamiento"
+  },
+  {
     "id": "contact_list_title",
     "en": "List of contacts",
     "es": "Listado de contactos"

@@ -15886,6 +15886,19 @@
     "de": "Organisationsname"
   },
   {
+    "id": "contact_honorific",
+    "en": "Honorific",
+    "fr": "Civilité",
+    "es": "Tratamiento",
+    "ru": "Титул",
+    "zh": "敬称",
+    "ar": "اللقب التشريفي",
+    "fa": "عنوان احترام‌آمیز",
+    "ps": "درناوی عنوان",
+    "bn": "সম্মানসূচক উপাধি",
+    "de": "Anrede"
+  },
+  {
     "id": "contact_list_title",
     "en": "List of contacts",
     "fr": "Liste des contacts",

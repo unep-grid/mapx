@@ -6110,6 +6110,11 @@
     "ar": "اسم المنظمة"
   },
   {
+    "id": "contact_honorific",
+    "en": "Honorific",
+    "ar": "اللقب التشريفي"
+  },
+  {
     "id": "contact_list_title",
     "en": "List of contacts",
     "ar": "قائمة الاتصالات "

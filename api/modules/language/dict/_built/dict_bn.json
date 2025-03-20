@@ -6110,6 +6110,11 @@
     "bn": "সংগঠনের নাম"
   },
   {
+    "id": "contact_honorific",
+    "en": "Honorific",
+    "bn": "সম্মানসূচক উপাধি"
+  },
+  {
     "id": "contact_list_title",
     "en": "List of contacts",
     "bn": "যোগাযোগের তালিকা "

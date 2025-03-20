@@ -6110,6 +6110,11 @@
     "ps": "د سازمان نوم"
   },
   {
+    "id": "contact_honorific",
+    "en": "Honorific",
+    "ps": "درناوی عنوان"
+  },
+  {
     "id": "contact_list_title",
     "en": "List of contacts",
     "ps": "د مخاطبینو نوملړ"

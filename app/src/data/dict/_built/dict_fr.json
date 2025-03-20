@@ -6110,6 +6110,11 @@
     "fr": "Nom de l'organisation"
   },
   {
+    "id": "contact_honorific",
+    "en": "Honorific",
+    "fr": "Civilité"
+  },
+  {
     "id": "contact_list_title",
     "en": "List of contacts",
     "fr": "Liste des contacts"
