@@ -231,9 +231,9 @@ export function generateButtons() {
       key: "btn_about",
       classesIcon: ["fa", "fa-info"],
       action: async () => {
-        return modalMarkdown({
-          title: "Disclaimer",
-          txt: await import("./../../md/disclaimer.md"),
+        // replace ./../../md/disclaimer.md
+        return modalIframe({
+          doc_id: "doc_legal_notice",
         });
       },
     }),

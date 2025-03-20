@@ -15,5 +15,6 @@
   "doc_sharing_manager": "/docs/user-interface/sharing-manager.html",
   "doc_draw_tool": "/docs/user-interface/draw-tool.html",
   "doc_privacy": "/docs/legal-notices/privacy-policy.html",
-  "doc_terms_of_use": "/docs/legal-notices/terms-of-use.html"
+  "doc_terms_of_use": "/docs/legal-notices/terms-of-use.html",
+  "doc_legal_notice": "/docs/legal-notices/index.html"
 }
