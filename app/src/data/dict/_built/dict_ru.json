@@ -3981,8 +3981,8 @@
   },
   {
     "id": "login_pwd_mail_sent_error",
-    "en": "An error occuried, we were not able to send you the single usage password. Please try again later.",
-    "ru": "Произошла ошибка, мы не смогли отправить вам пароль для однократного использования. Пожалуйста, повторите попытку позже. "
+    "en": "An error has occurred, we were not able to send you the single usage password. Please try again later.",
+    "ru": "Произошла ошибка, мы не смогли отправить вам одноразовый пароль. Попробуйте еще раз позже."
   },
   {
     "id": "login_project",
@@ -4246,8 +4246,8 @@
   },
   {
     "id": "email_manager_sent_error_generic",
-    "en": "An error occuried, the email has not been sent to {{email}}",
-    "ru": "Произошла ошибка, письмо не было отправлено на {{email}} "
+    "en": "An error has occurred, the email has not been sent to {{email}}. Please check the validity of the email.",
+    "ru": "Произошла ошибка, письмо не было отправлено {{email}} . Проверьте правильность адреса электронной почты."
   },
   {
     "id": "invite_member_email",
@@ -6347,7 +6347,7 @@
   {
     "id": "schema_title",
     "en": "Source metadata",
-    "ru": ""
+    "ru": "Исходные метаданные"
   },
   {
     "id": "schema_desc",
@@ -6896,13 +6896,13 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process",
-    "ru": "Электронное письмо будет отправлено на<a href=\"mailto:{{email}}\" target=\"_blank\"> {{email}}</a> . <a download=\"\" href=\"{{url}}\" target=\"_blank\">Ссылка</a> для скачивания будет активирована в конце процесса"
+    "en": "Downloading layer {{title}}. The process could take a while. An email will be sent to {{email}} and the download link will be activated at the end of the process",
+    "ru": "Загрузка слоя {{title}} . Процесс может занять некоторое время. Письмо будет отправлено на адрес {{email}} и ссылка для скачивания будет активирована в конце процесса"
   },
   {
     "id": "get_source_extraction_wait",
-    "en": "Starting data conversion. This could take a while, please wait",
-    "ru": "Запуск конвертации данных. Это может занять некоторое время, пожалуйста, подождите "
+    "en": "Data conversion : please wait ...",
+    "ru": "Конвертация данных: пожалуйста, подождите..."
   },
   {
     "id": "get_source_conversion_progress",
@@ -9581,8 +9581,8 @@
   },
   {
     "id": "upl_shapefile_warning",
-    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
-    "ru": "MapX не рекомендует шейп-файлы, так как не существует способов указать набор символов, что может вызвать проблемы при отображении и анализе."
+    "en": "Shapefiles are not the preferred format for MapX due to technical limitations. We recommend using GeoPackages (GPKG) instead.",
+    "ru": "Форматы шейп-файлов не являются предпочтительным форматом для MapX из-за технических ограничений. Вместо этого мы рекомендуем использовать GeoPackages (GPKG)."
   },
   {
     "id": "upl_title",
@@ -9647,7 +9647,7 @@
   {
     "id": "upl_api_save_failed_title",
     "en": "Upload of '{{filename}}' failed.",
-    "ru": "Загрузка ' {{filename}} ' не удалось."
+    "ru": "Загрузить ' {{filename}} ' неуспешный."
   },
   {
     "id": "upl_api_save_failed",
@@ -9656,8 +9656,8 @@
   },
   {
     "id": "upl_api_save_success_title",
-    "en": "Upload of '{{filename}}' done.",
-    "ru": "Загрузка ' {{filename}} ' Выполнено."
+    "en": "Upload of {{filename}} done. New source created: {{title}} (id: {{idSource}})",
+    "ru": "Загрузить {{filename}} сделано. Создан новый источник: {{title}} (идентификатор: {{idSource}} )"
   },
   {
     "id": "upl_api_save_success",

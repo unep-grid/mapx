@@ -204,13 +204,13 @@ class EditTableSession {
     const dim = await getTableDimension(et._id_table);
 
     if (dim.nrow > def.max_rows) {
-      et.error(`Full table: too much rows. ${dim.nrow} > ${def.max_rows} `);
+      et.error(`Full table: too many rows. ${dim.nrow} > ${def.max_rows} `);
       return;
     }
 
     if (dim.ncol > def.max_columns) {
       et.error(
-        `Full table: too much columns. ${dim.ncol} > ${def.max_columns} `
+        `Full table: too many columns. ${dim.ncol} > ${def.max_columns} `
       );
       return;
     }

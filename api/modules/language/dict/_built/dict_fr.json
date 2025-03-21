@@ -3981,8 +3981,8 @@
   },
   {
     "id": "login_pwd_mail_sent_error",
-    "en": "An error occuried, we were not able to send you the single usage password. Please try again later.",
-    "fr": "Une erreur est survenue, nous ne sommes pas en mesure de vous envoyer le mot de passe à usage unique. Merci d'essayer ultérieurement."
+    "en": "An error has occurred, we were not able to send you the single usage password. Please try again later.",
+    "fr": "Une erreur s'est produite. Nous n'avons pas pu vous envoyer le mot de passe à usage unique. Veuillez réessayer ultérieurement."
   },
   {
     "id": "login_project",
@@ -4246,8 +4246,8 @@
   },
   {
     "id": "email_manager_sent_error_generic",
-    "en": "An error occuried, the email has not been sent to {{email}}",
-    "fr": "Une erreur est survenue, le mail ne peut pas être envoyé à {{email}}"
+    "en": "An error has occurred, the email has not been sent to {{email}}. Please check the validity of the email.",
+    "fr": "Une erreur s'est produite, l'e-mail n'a pas été envoyé à {{email}} . Veuillez vérifier la validité de l'email."
   },
   {
     "id": "invite_member_email",
@@ -6896,13 +6896,13 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process",
-    "fr": "Un email sera envoyé à<a href=\"mailto:{{email}}\" target=\"_blank\"> {{email}}</a> . Le <a download=\"\" href=\"{{url}}\" target=\"_blank\">lien</a> de téléchargement sera activé à la fin du processus"
+    "en": "Downloading layer {{title}}. The process could take a while. An email will be sent to {{email}} and the download link will be activated at the end of the process",
+    "fr": "Téléchargement de la couche {{title}} Le processus peut prendre un certain temps. Un courriel sera envoyé à {{email}} et le lien de téléchargement sera activé à la fin du processus"
   },
   {
     "id": "get_source_extraction_wait",
-    "en": "Starting data conversion. This could take a while, please wait",
-    "fr": "Démarrage de la conversion des données. Cela peut prendre un certain temps, veuillez patienter "
+    "en": "Data conversion : please wait ...",
+    "fr": "Conversion de données : veuillez patienter ..."
   },
   {
     "id": "get_source_conversion_progress",
@@ -9581,8 +9581,8 @@
   },
   {
     "id": "upl_shapefile_warning",
-    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
-    "fr": "MapX ne recommande pas les fichiers de formes, car il n'existe aucune méthode pour spécifier le jeu de caractères, ce qui peut entraîner des problèmes lors de l'affichage et de l'analyse."
+    "en": "Shapefiles are not the preferred format for MapX due to technical limitations. We recommend using GeoPackages (GPKG) instead.",
+    "fr": "Les fichiers Shapefiles ne sont pas le format privilégié pour MapX en raison de limitations techniques. Nous recommandons plutôt l'utilisation de GeoPackages (GPKG)."
   },
   {
     "id": "upl_title",
@@ -9647,7 +9647,7 @@
   {
     "id": "upl_api_save_failed_title",
     "en": "Upload of '{{filename}}' failed.",
-    "fr": "Téléchargement de ' {{filename}} ' manqué."
+    "fr": "Téléchargement de ' {{filename}} ' échoué."
   },
   {
     "id": "upl_api_save_failed",
@@ -9656,8 +9656,8 @@
   },
   {
     "id": "upl_api_save_success_title",
-    "en": "Upload of '{{filename}}' done.",
-    "fr": "Téléchargement de ' {{filename}} ' Fini."
+    "en": "Upload of {{filename}} done. New source created: {{title}} (id: {{idSource}})",
+    "fr": "Téléchargement de {{filename}} terminé. Nouvelle source créée : {{title}} (identifiant: {{idSource}} )"
   },
   {
     "id": "upl_api_save_success",

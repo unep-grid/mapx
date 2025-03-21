@@ -63,7 +63,7 @@ async function handlerViewAdd(message, cb) {
     await viewsListAddSingle(view);
   } catch (e) {
     console.error(e);
-    message.error = `Error processing view add: ${e.message}`;
+    message.error = `Adding the view has caused an error: ${e.message}`;
   }
   cb(message);
 }

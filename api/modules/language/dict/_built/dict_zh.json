@@ -3981,8 +3981,8 @@
   },
   {
     "id": "login_pwd_mail_sent_error",
-    "en": "An error occuried, we were not able to send you the single usage password. Please try again later.",
-    "zh": "发生错误，我们无法向你发送一次性密码。请稍后再试。"
+    "en": "An error has occurred, we were not able to send you the single usage password. Please try again later.",
+    "zh": "发生错误，我们无法向您发送一次性密码。请稍后重试。"
   },
   {
     "id": "login_project",
@@ -4246,8 +4246,8 @@
   },
   {
     "id": "email_manager_sent_error_generic",
-    "en": "An error occuried, the email has not been sent to {{email}}",
-    "zh": "发生错误，电子邮件尚未发送至 {{email}} "
+    "en": "An error has occurred, the email has not been sent to {{email}}. Please check the validity of the email.",
+    "zh": "发生错误，电子邮件尚未发送至 {{email}}。请检查电子邮件的有效性。"
   },
   {
     "id": "invite_member_email",
@@ -6896,13 +6896,13 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process",
-    "zh": "一封电子邮件将发送至<a href=\"mailto:{{email}}\" target=\"_blank\"> {{email}}</a>.下载<a download=\"\" href=\"{{url}}\" target=\"_blank\">链接</a>将在过程结束时激活"
+    "en": "Downloading layer {{title}}. The process could take a while. An email will be sent to {{email}} and the download link will be activated at the end of the process",
+    "zh": "下载层 {{title}}。该过程可能需要一段时间。电子邮件将发送至 {{email}}下载链接将在流程结束时激活"
   },
   {
     "id": "get_source_extraction_wait",
-    "en": "Starting data conversion. This could take a while, please wait",
-    "zh": "开始数据转换。这可能需要一段时间，请稍候 "
+    "en": "Data conversion : please wait ...",
+    "zh": "数据转换：请等待..."
   },
   {
     "id": "get_source_conversion_progress",
@@ -9581,8 +9581,8 @@
   },
   {
     "id": "upl_shapefile_warning",
-    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
-    "zh": "MapX 不推荐 Shapefile，因为没有指定字符集的方法，这会在显示和分析过程中产生问题"
+    "en": "Shapefiles are not the preferred format for MapX due to technical limitations. We recommend using GeoPackages (GPKG) instead.",
+    "zh": "由于技术限制，Shapefile 不是 MapX 的首选格式。我们建议改用 GeoPackages (GPKG)。"
   },
   {
     "id": "upl_title",
@@ -9656,8 +9656,8 @@
   },
   {
     "id": "upl_api_save_success_title",
-    "en": "Upload of '{{filename}}' done.",
-    "zh": "上传' {{filename}} ' 完毕。"
+    "en": "Upload of {{filename}} done. New source created: {{title}} (id: {{idSource}})",
+    "zh": "上传 {{filename}}完成。新源已创建： {{title}} （ID： {{idSource}} ）"
   },
   {
     "id": "upl_api_save_success",

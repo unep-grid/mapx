@@ -1,5 +1,5 @@
 {
-  "dict_dir": "./src/data/dict",
+  "dict_dir": "./src/data/dict/",
   "dict_dir_out": [
     "./src/data/dict/_built/",
     "../api/modules/language/dict/_built/"

@@ -293,7 +293,7 @@ async function ioAddSource(socket, config) {
 
   if (!reg.registered) {
     throw Error(
-      "The can't be registered, check if table has at least one row with valid values"
+      "The layer can't be registered, check if the table has at least one row with valid values"
     );
   }
 
@@ -329,13 +329,15 @@ async function ioAddSource(socket, config) {
 
   const isValid = validationResult.valid;
 
-  await socket.notifyInfo({
-    type: isValid ? "info" : "warning",
-    idGroup: id_request,
-    message: t("upl_api_save_validation_geom_count", config.language, {
-      count: validationResult.stat.invalid,
-    }),
-  });
+  if (!isValid) {
+    await socket.notifyInfo({
+      type: "warning",
+      idGroup: id_request,
+      message: t("upl_api_save_validation_geom_count", config.language, {
+        count: validationResult.stat.invalid,
+      }),
+    });
+  }
 
   /**
    * Trigger source reload in shiny
@@ -460,7 +462,7 @@ export async function fileToPostgres(config) {
      */
     ogr.stderr.on("data", (data) => {
       data = data.toString("utf8");
-      onWarning(handleErrorText(data));
+      onVerbose(handleErrorText(data));
     });
 
     /*

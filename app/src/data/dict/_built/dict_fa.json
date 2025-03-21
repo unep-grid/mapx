@@ -3981,8 +3981,8 @@
   },
   {
     "id": "login_pwd_mail_sent_error",
-    "en": "An error occuried, we were not able to send you the single usage password. Please try again later.",
-    "fa": "خطایی رخ داد ، ما نتوانستیم رمز عبور یکبار مصرف را برای شما ارسال کنیم. لطفاً بعداً دوباره امتحان کنید. "
+    "en": "An error has occurred, we were not able to send you the single usage password. Please try again later.",
+    "fa": "خطایی روی داده است، ما نتوانستیم رمز عبور تک استفاده را برای شما ارسال کنیم. لطفاً بعداً دوباره امتحان کنید."
   },
   {
     "id": "login_project",
@@ -4246,8 +4246,8 @@
   },
   {
     "id": "email_manager_sent_error_generic",
-    "en": "An error occuried, the email has not been sent to {{email}}",
-    "fa": "خطایی رخ داد ، ایمیل به آن ارسال نشده است {{email}} "
+    "en": "An error has occurred, the email has not been sent to {{email}}. Please check the validity of the email.",
+    "fa": "خطایی رخ داده است، ایمیل به آن ارسال نشده است {{email}} . لطفا اعتبار ایمیل را بررسی کنید."
   },
   {
     "id": "invite_member_email",
@@ -6347,7 +6347,7 @@
   {
     "id": "schema_title",
     "en": "Source metadata",
-    "fa": ""
+    "fa": "ابرداده منبع"
   },
   {
     "id": "schema_desc",
@@ -6896,13 +6896,13 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process",
-    "fa": "یک ایمیل به<a href=\"mailto:{{email}}\" target=\"_blank\"> {{email}}</a> . <a download=\"\" href=\"{{url}}\" target=\"_blank\">لینک</a> دانلود در پایان مراحل فعال خواهد شد"
+    "en": "Downloading layer {{title}}. The process could take a while. An email will be sent to {{email}} and the download link will be activated at the end of the process",
+    "fa": "لایه دانلود {{title}} . این روند ممکن است کمی طول بکشد. یک ایمیل به {{email}} و در پایان مراحل لینک دانلود فعال خواهد شد"
   },
   {
     "id": "get_source_extraction_wait",
-    "en": "Starting data conversion. This could take a while, please wait",
-    "fa": "شروع تبدیل داده این ممکن است مدتی طول بکشد ، لطفا صبر کنید "
+    "en": "Data conversion : please wait ...",
+    "fa": "تبدیل داده ها: لطفا صبر کنید..."
   },
   {
     "id": "get_source_conversion_progress",
@@ -9581,8 +9581,8 @@
   },
   {
     "id": "upl_shapefile_warning",
-    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
-    "fa": "MapX Shapefiles را توصیه نمی کند، زیرا هیچ روشی برای تعیین مجموعه کاراکترها وجود ندارد، که می تواند مشکلاتی را در حین نمایش و تجزیه و تحلیل ایجاد کند."
+    "en": "Shapefiles are not the preferred format for MapX due to technical limitations. We recommend using GeoPackages (GPKG) instead.",
+    "fa": "Shapefiles به دلیل محدودیت های فنی، فرمت ترجیحی برای MapX نیست. توصیه می کنیم به جای آن از GeoPackages (GPKG) استفاده کنید."
   },
   {
     "id": "upl_title",
@@ -9647,7 +9647,7 @@
   {
     "id": "upl_api_save_failed_title",
     "en": "Upload of '{{filename}}' failed.",
-    "fa": "آپلود از ' {{filename}} ' ناموفق."
+    "fa": "آپلود از ' {{filename}} شکست خورد."
   },
   {
     "id": "upl_api_save_failed",
@@ -9656,8 +9656,8 @@
   },
   {
     "id": "upl_api_save_success_title",
-    "en": "Upload of '{{filename}}' done.",
-    "fa": "آپلود از ' {{filename}} ' انجام شده."
+    "en": "Upload of {{filename}} done. New source created: {{title}} (id: {{idSource}})",
+    "fa": "آپلود از {{filename}} انجام شد. منبع جدید ایجاد شد: {{title}} (ID: {{idSource}} )"
   },
   {
     "id": "upl_api_save_success",

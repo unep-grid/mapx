@@ -3981,8 +3981,8 @@
   },
   {
     "id": "login_pwd_mail_sent_error",
-    "en": "An error occuried, we were not able to send you the single usage password. Please try again later.",
-    "ps": "یوه تیروتنه وشوه ، موږ نشو کوالی تاسو ته د کاروونې یوازیني شفر در ولېږو. مهرباني وکړئ وروسته بیا هڅه وکړئ "
+    "en": "An error has occurred, we were not able to send you the single usage password. Please try again later.",
+    "ps": "یوه تېروتنه رامنځته شوه، موږ نشو کولی تاسو ته د یو ځل کارولو پټنوم واستوو. مهرباني وکړئ وروسته بیا هڅه وکړئ."
   },
   {
     "id": "login_project",
@@ -4246,8 +4246,8 @@
   },
   {
     "id": "email_manager_sent_error_generic",
-    "en": "An error occuried, the email has not been sent to {{email}}",
-    "ps": "یوه تیروتنه وشوه ، بریښنالیک ته نه لیږل شوی {{email}} "
+    "en": "An error has occurred, the email has not been sent to {{email}}. Please check the validity of the email.",
+    "ps": "یوه تېروتنه رامنځته شوه، برېښنالیک نه دی لیږل شوی {{email}} مهرباني وکړئ د برېښنالیک اعتبار وګورئ."
   },
   {
     "id": "invite_member_email",
@@ -6347,7 +6347,7 @@
   {
     "id": "schema_title",
     "en": "Source metadata",
-    "ps": ""
+    "ps": "د سرچینې میټاډاټا"
   },
   {
     "id": "schema_desc",
@@ -6896,13 +6896,13 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process",
-    "ps": "یو بریښنالیک به لیږل کیږي<a href=\"mailto:{{email}}\" target=\"_blank\"> {{email}}</a> . د ډاونلوډ <a download=\"\" href=\"{{url}}\" target=\"_blank\">لینک</a> به د پروسې په پای کې فعال شي"
+    "en": "Downloading layer {{title}}. The process could take a while. An email will be sent to {{email}} and the download link will be activated at the end of the process",
+    "ps": "طبقه ډاونلوډ کول {{title}} . پروسه ممکن یو څه وخت ونیسي. یو بریښنالیک به واستول شي {{email}} او د ډاونلوډ لینک به د پروسې په پای کې فعال شي"
   },
   {
     "id": "get_source_extraction_wait",
-    "en": "Starting data conversion. This could take a while, please wait",
-    "ps": "د معلوماتو د تبادلې پیل. دا به یو څه وخت ونیسي ، مهرباني وکړئ انتظار وکړئ "
+    "en": "Data conversion : please wait ...",
+    "ps": "د معلوماتو بدلون: مهرباني وکړئ انتظار وکړئ ..."
   },
   {
     "id": "get_source_conversion_progress",
@@ -9581,8 +9581,8 @@
   },
   {
     "id": "upl_shapefile_warning",
-    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
-    "ps": "MapX د شکل فایلونو سپارښتنه نه کوي، ځکه چې د کرکټرونو ټاکلو لپاره هیڅ میتود شتون نلري، کوم چې کولی شي د ښودلو او تحلیل په جریان کې ستونزې رامینځته کړي."
+    "en": "Shapefiles are not the preferred format for MapX due to technical limitations. We recommend using GeoPackages (GPKG) instead.",
+    "ps": "د تخنیکي محدودیتونو له امله د MapX لپاره شکل فایلونه غوره بڼه نه ده. موږ د دې پرځای د جیو پیکجونو (GPKG) کارولو وړاندیز کوو."
   },
   {
     "id": "upl_title",
@@ -9647,7 +9647,7 @@
   {
     "id": "upl_api_save_failed_title",
     "en": "Upload of '{{filename}}' failed.",
-    "ps": "پورته کول {{filename}} ناکام شو."
+    "ps": "د ' پورته کول {{filename}} 'ناکام شو.'"
   },
   {
     "id": "upl_api_save_failed",
@@ -9656,8 +9656,8 @@
   },
   {
     "id": "upl_api_save_success_title",
-    "en": "Upload of '{{filename}}' done.",
-    "ps": "پورته کول {{filename}} ترسره شو."
+    "en": "Upload of {{filename}} done. New source created: {{title}} (id: {{idSource}})",
+    "ps": "د پورته کولو {{filename}} بشپړ شوی. نوې سرچینه جوړه شوه: {{title}} (پېژندګلوي: {{idSource}} )"
   },
   {
     "id": "upl_api_save_success",

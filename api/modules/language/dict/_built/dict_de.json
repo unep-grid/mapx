@@ -3981,8 +3981,8 @@
   },
   {
     "id": "login_pwd_mail_sent_error",
-    "en": "An error occuried, we were not able to send you the single usage password. Please try again later.",
-    "de": "Es ist ein Fehler aufgetreten. Wir konnten Ihnen das Kennwort für die einmalige Verwendung nicht senden. Bitte versuchen Sie es später noch einmal. "
+    "en": "An error has occurred, we were not able to send you the single usage password. Please try again later.",
+    "de": "Es ist ein Fehler aufgetreten. Wir konnten Ihnen das Einmalkennwort nicht zusenden. Bitte versuchen Sie es später erneut."
   },
   {
     "id": "login_project",
@@ -4246,8 +4246,8 @@
   },
   {
     "id": "email_manager_sent_error_generic",
-    "en": "An error occuried, the email has not been sent to {{email}}",
-    "de": "Es ist ein Fehler aufgetreten, an den die E-Mail nicht gesendet wurde {{email}} "
+    "en": "An error has occurred, the email has not been sent to {{email}}. Please check the validity of the email.",
+    "de": "Es ist ein Fehler aufgetreten, die E-Mail wurde nicht gesendet an {{email}} . Bitte überprüfen Sie die Gültigkeit der E-Mail."
   },
   {
     "id": "invite_member_email",
@@ -6347,7 +6347,7 @@
   {
     "id": "schema_title",
     "en": "Source metadata",
-    "de": ""
+    "de": "Quellmetadaten"
   },
   {
     "id": "schema_desc",
@@ -6896,13 +6896,13 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process",
-    "de": "Es wird eine E-Mail an gesendet<a href=\"mailto:{{email}}\" target=\"_blank\"> {{email}}</a> . Der Download- <a download=\"\" href=\"{{url}}\" target=\"_blank\">Link</a> wird am Ende des Vorgangs aktiviert"
+    "en": "Downloading layer {{title}}. The process could take a while. An email will be sent to {{email}} and the download link will be activated at the end of the process",
+    "de": "Layer wird heruntergeladen {{title}} Der Vorgang kann eine Weile dauern. Eine E-Mail wird gesendet an {{email}} und der Download-Link wird am Ende des Vorgangs aktiviert"
   },
   {
     "id": "get_source_extraction_wait",
-    "en": "Starting data conversion. This could take a while, please wait",
-    "de": "Starten der Datenkonvertierung. Dies kann eine Weile dauern, bitte warten Sie "
+    "en": "Data conversion : please wait ...",
+    "de": "Datenkonvertierung: bitte warten ..."
   },
   {
     "id": "get_source_conversion_progress",
@@ -9581,8 +9581,8 @@
   },
   {
     "id": "upl_shapefile_warning",
-    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
-    "de": "MapX empfiehlt Shapefiles nicht, da es keine Methoden zum Angeben des Zeichensatzes gibt, was zu Problemen bei der Anzeige und Analyse führen kann"
+    "en": "Shapefiles are not the preferred format for MapX due to technical limitations. We recommend using GeoPackages (GPKG) instead.",
+    "de": "Shapefiles sind aufgrund technischer Einschränkungen nicht das bevorzugte Format für MapX. Wir empfehlen stattdessen die Verwendung von GeoPackages (GPKG)."
   },
   {
     "id": "upl_title",
@@ -9647,7 +9647,7 @@
   {
     "id": "upl_api_save_failed_title",
     "en": "Upload of '{{filename}}' failed.",
-    "de": "Hochladen von ' {{filename}} ' gescheitert."
+    "de": "Hochladen von ' {{filename}} ' fehlgeschlagen."
   },
   {
     "id": "upl_api_save_failed",
@@ -9656,8 +9656,8 @@
   },
   {
     "id": "upl_api_save_success_title",
-    "en": "Upload of '{{filename}}' done.",
-    "de": "Hochladen von ' {{filename}} ' erledigt."
+    "en": "Upload of {{filename}} done. New source created: {{title}} (id: {{idSource}})",
+    "de": "Hochladen von {{filename}} erledigt. Neue Quelle erstellt: {{title}} (Ausweis: {{idSource}} )"
   },
   {
     "id": "upl_api_save_success",
