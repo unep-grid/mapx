@@ -1,3 +1,10 @@
+  - [1.13.14-beta.4](https://github.com/unep-grid/mapx/tree/1.13.14-beta.4) 
+
+    - fix(notif): issue #938
+    - refactor(i button): point to legal notices page instead of md/disclaimer
+    - fix(metadata): missing translation for honorfic
+
+
   - [1.13.14-beta.3](https://github.com/unep-grid/mapx/tree/1.13.14-beta.3) 
 
     - fix(metadata): added missing items in the metadata UI panel #921
