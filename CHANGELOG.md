@@ -1,3 +1,9 @@
+  - [1.13.14-beta.6](https://github.com/unep-grid/mapx/tree/1.13.14-beta.6) 
+
+    - fix(metadata): contact, set the correct defaut contact function
+    - fix(language): missing default language in updateLanguageElement
+
+
   - [1.13.14-beta.5](https://github.com/unep-grid/mapx/tree/1.13.14-beta.5) 
 
     - fix(metadata): attribute alias set to 50char, translated topic, fixed issue with periodicity labels
