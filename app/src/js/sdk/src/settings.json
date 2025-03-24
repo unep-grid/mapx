@@ -20,7 +20,8 @@
     "lng": null,
     "zoom": null,
     "language": null,
-    "sdkToken": null
+    "sdkToken": null,
+    "hidePrivacyModal": false
   },
   "container": "body",
   "style": {
