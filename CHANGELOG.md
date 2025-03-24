@@ -1,3 +1,10 @@
+  - [1.13.14-beta.5](https://github.com/unep-grid/mapx/tree/1.13.14-beta.5) 
+
+    - fix(metadata): attribute alias set to 50char, translated topic, fixed issue with periodicity labels
+    - fix(metadata): wrong path function
+    - fix(raster view): typo
+
+
   - [1.13.14-beta.4](https://github.com/unep-grid/mapx/tree/1.13.14-beta.4) 
 
     - fix(notif): issue #938
