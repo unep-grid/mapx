@@ -670,8 +670,8 @@ function buildSourceMetaUi(meta, prefix) {
   const elTitle = el("span", { class: "panel-title" }, l("text.title"));
   const elAbstract = el("p", l("text.abstract", "-"));
   const elNotes = el("p", l("text.notes", "-"));
-  const elDataAttribution = el("p", l("text.data_attribution", "-"));
-  const elCitation = el("p", l("text.citation", "-"));
+  const elDataAttribution = el("p", p("text.data_attribution", "-"));
+  const elCitation = el("p", p("text.citation", "-"));
   const elKeywords = elAuto("array_string", p("text.keywords.keys", ["-"]));
   const elLicenses = el(
     "ul",
