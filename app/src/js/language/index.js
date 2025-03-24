@@ -187,6 +187,7 @@ export async function getDict(lang) {
 export async function updateLanguageElements(o) {
   o = Object.assign({}, o);
   o.lang = o.lang || getLanguageCurrent();
+  const langDefault = getLanguageDefault();
   let els, el, doc, label, found, type, id, data;
   let i, iL, j, jL;
   let changes = [];
@@ -471,7 +472,7 @@ export async function updateLanguageViewsList(o) {
   o = Object.assign({}, o);
   const lang = o.lang || getLanguageCurrent() || getLanguageDefault();
   const views = getViews();
-  const isModeStatic = path(mx, "settings.mode.static") === true;
+  const isModeStatic = settings.mode.static === true;
   if (isModeStatic) {
     return false;
   }
