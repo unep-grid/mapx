@@ -444,7 +444,7 @@ mxSchemaSourceMeta <- function(
                 "function" = list(
                   title = t("contact_function"),
                   description = t("contact_function_desc"),
-                  default = "author",
+                  default = "point_of_contact",
                   type = "string",
                   minLength = 1,
                   enum = list(
