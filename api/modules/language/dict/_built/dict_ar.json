@@ -9580,6 +9580,101 @@
     "ar": "يستورد"
   },
   {
+    "id": "topic_biota",
+    "en": "Biota",
+    "ar": "الكائنات الحية"
+  },
+  {
+    "id": "topic_boundaries",
+    "en": "Boundaries",
+    "ar": "الحدود"
+  },
+  {
+    "id": "topic_farming",
+    "en": "Farming",
+    "ar": "الزراعة"
+  },
+  {
+    "id": "topic_climatologyMeteorologyAtmosphere",
+    "en": "Climatology, Meteorology and Atmosphere",
+    "ar": "علم المناخ والأرصاد الجوية والغلاف الجوي"
+  },
+  {
+    "id": "topic_economy",
+    "en": "Economy",
+    "ar": "الاقتصاد"
+  },
+  {
+    "id": "topic_elevation",
+    "en": "Elevation",
+    "ar": "الارتفاع"
+  },
+  {
+    "id": "topic_environment",
+    "en": "Environment",
+    "ar": "البيئة"
+  },
+  {
+    "id": "topic_geoscientificInformation",
+    "en": "Geoscientific Information",
+    "ar": "المعلومات الجيوعلمية"
+  },
+  {
+    "id": "topic_health",
+    "en": "Health",
+    "ar": "الصحة"
+  },
+  {
+    "id": "topic_imageryBaseMapsEarthCover",
+    "en": "Imagery, Base Maps and Earth Cover",
+    "ar": "الصور والخرائط الأساسية والغطاء الأرضي"
+  },
+  {
+    "id": "topic_intelligenceMilitary",
+    "en": "Intelligence and Military",
+    "ar": "الاستخبارات والعسكرية"
+  },
+  {
+    "id": "topic_inlandWaters",
+    "en": "Inland Waters",
+    "ar": "المياه الداخلية"
+  },
+  {
+    "id": "topic_location",
+    "en": "Location",
+    "ar": "الموقع"
+  },
+  {
+    "id": "topic_oceans",
+    "en": "Oceans",
+    "ar": "المحيطات"
+  },
+  {
+    "id": "topic_planningCadastre",
+    "en": "Planning and Cadastre",
+    "ar": "التخطيط والسجل العقاري"
+  },
+  {
+    "id": "topic_society",
+    "en": "Society",
+    "ar": "المجتمع"
+  },
+  {
+    "id": "topic_structure",
+    "en": "Structure",
+    "ar": "البنية"
+  },
+  {
+    "id": "topic_transportation",
+    "en": "Transportation",
+    "ar": "النقل"
+  },
+  {
+    "id": "topic_utilitiesCommunication",
+    "en": "Utilities and Communication",
+    "ar": "المرافق والاتصالات"
+  },
+  {
     "id": "upl_shapefile_warning",
     "en": "Shapefiles are not the preferred format for MapX due to technical limitations. We recommend using GeoPackages (GPKG) instead.",
     "ar": "ملفات الأشكال ليست التنسيق المفضل لـ MapX نظرًا للقيود التقنية. نوصي باستخدام GeoPackages (GPKG) بدلاً منها."

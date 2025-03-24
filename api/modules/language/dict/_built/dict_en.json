@@ -7664,6 +7664,82 @@
     "en": "Import"
   },
   {
+    "id": "topic_biota",
+    "en": "Biota"
+  },
+  {
+    "id": "topic_boundaries",
+    "en": "Boundaries"
+  },
+  {
+    "id": "topic_farming",
+    "en": "Farming"
+  },
+  {
+    "id": "topic_climatologyMeteorologyAtmosphere",
+    "en": "Climatology, Meteorology and Atmosphere"
+  },
+  {
+    "id": "topic_economy",
+    "en": "Economy"
+  },
+  {
+    "id": "topic_elevation",
+    "en": "Elevation"
+  },
+  {
+    "id": "topic_environment",
+    "en": "Environment"
+  },
+  {
+    "id": "topic_geoscientificInformation",
+    "en": "Geoscientific Information"
+  },
+  {
+    "id": "topic_health",
+    "en": "Health"
+  },
+  {
+    "id": "topic_imageryBaseMapsEarthCover",
+    "en": "Imagery, Base Maps and Earth Cover"
+  },
+  {
+    "id": "topic_intelligenceMilitary",
+    "en": "Intelligence and Military"
+  },
+  {
+    "id": "topic_inlandWaters",
+    "en": "Inland Waters"
+  },
+  {
+    "id": "topic_location",
+    "en": "Location"
+  },
+  {
+    "id": "topic_oceans",
+    "en": "Oceans"
+  },
+  {
+    "id": "topic_planningCadastre",
+    "en": "Planning and Cadastre"
+  },
+  {
+    "id": "topic_society",
+    "en": "Society"
+  },
+  {
+    "id": "topic_structure",
+    "en": "Structure"
+  },
+  {
+    "id": "topic_transportation",
+    "en": "Transportation"
+  },
+  {
+    "id": "topic_utilitiesCommunication",
+    "en": "Utilities and Communication"
+  },
+  {
     "id": "upl_shapefile_warning",
     "en": "Shapefiles are not the preferred format for MapX due to technical limitations. We recommend using GeoPackages (GPKG) instead."
   },

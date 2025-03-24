@@ -9580,6 +9580,101 @@
     "ps": "واردول"
   },
   {
+    "id": "topic_biota",
+    "en": "Biota",
+    "ps": "ژوندي موجودات"
+  },
+  {
+    "id": "topic_boundaries",
+    "en": "Boundaries",
+    "ps": "سرحدونه"
+  },
+  {
+    "id": "topic_farming",
+    "en": "Farming",
+    "ps": "کرنه"
+  },
+  {
+    "id": "topic_climatologyMeteorologyAtmosphere",
+    "en": "Climatology, Meteorology and Atmosphere",
+    "ps": "اقلیم پوهنه، هوا پوهنه او اتموسفیر"
+  },
+  {
+    "id": "topic_economy",
+    "en": "Economy",
+    "ps": "اقتصاد"
+  },
+  {
+    "id": "topic_elevation",
+    "en": "Elevation",
+    "ps": "لوړوالی"
+  },
+  {
+    "id": "topic_environment",
+    "en": "Environment",
+    "ps": "چاپېریال"
+  },
+  {
+    "id": "topic_geoscientificInformation",
+    "en": "Geoscientific Information",
+    "ps": "جیوساینسي معلومات"
+  },
+  {
+    "id": "topic_health",
+    "en": "Health",
+    "ps": "روغتیا"
+  },
+  {
+    "id": "topic_imageryBaseMapsEarthCover",
+    "en": "Imagery, Base Maps and Earth Cover",
+    "ps": "انځورونه، اساسي نقشې او د ځمکې پوښښ"
+  },
+  {
+    "id": "topic_intelligenceMilitary",
+    "en": "Intelligence and Military",
+    "ps": "استخبارات او پوځي"
+  },
+  {
+    "id": "topic_inlandWaters",
+    "en": "Inland Waters",
+    "ps": "داخلي اوبه"
+  },
+  {
+    "id": "topic_location",
+    "en": "Location",
+    "ps": "موقعیت"
+  },
+  {
+    "id": "topic_oceans",
+    "en": "Oceans",
+    "ps": "سمندرونه"
+  },
+  {
+    "id": "topic_planningCadastre",
+    "en": "Planning and Cadastre",
+    "ps": "پلان جوړونه او کاډستر"
+  },
+  {
+    "id": "topic_society",
+    "en": "Society",
+    "ps": "ټولنه"
+  },
+  {
+    "id": "topic_structure",
+    "en": "Structure",
+    "ps": "جوړښت"
+  },
+  {
+    "id": "topic_transportation",
+    "en": "Transportation",
+    "ps": "ترانسپورت"
+  },
+  {
+    "id": "topic_utilitiesCommunication",
+    "en": "Utilities and Communication",
+    "ps": "خدمتونه او مخابرات"
+  },
+  {
     "id": "upl_shapefile_warning",
     "en": "Shapefiles are not the preferred format for MapX due to technical limitations. We recommend using GeoPackages (GPKG) instead.",
     "ps": "د تخنیکي محدودیتونو له امله د MapX لپاره شکل فایلونه غوره بڼه نه ده. موږ د دې پرځای د جیو پیکجونو (GPKG) کارولو وړاندیز کوو."

@@ -9580,6 +9580,101 @@
     "fa": "وارد كردن"
   },
   {
+    "id": "topic_biota",
+    "en": "Biota",
+    "fa": "زیست‌بوم"
+  },
+  {
+    "id": "topic_boundaries",
+    "en": "Boundaries",
+    "fa": "مرزها"
+  },
+  {
+    "id": "topic_farming",
+    "en": "Farming",
+    "fa": "کشاورزی"
+  },
+  {
+    "id": "topic_climatologyMeteorologyAtmosphere",
+    "en": "Climatology, Meteorology and Atmosphere",
+    "fa": "اقلیم‌شناسی، هواشناسی و جو"
+  },
+  {
+    "id": "topic_economy",
+    "en": "Economy",
+    "fa": "اقتصاد"
+  },
+  {
+    "id": "topic_elevation",
+    "en": "Elevation",
+    "fa": "ارتفاع"
+  },
+  {
+    "id": "topic_environment",
+    "en": "Environment",
+    "fa": "محیط زیست"
+  },
+  {
+    "id": "topic_geoscientificInformation",
+    "en": "Geoscientific Information",
+    "fa": "اطلاعات زمین‌شناسی"
+  },
+  {
+    "id": "topic_health",
+    "en": "Health",
+    "fa": "سلامت"
+  },
+  {
+    "id": "topic_imageryBaseMapsEarthCover",
+    "en": "Imagery, Base Maps and Earth Cover",
+    "fa": "تصاویر، نقشه‌های پایه و پوشش زمین"
+  },
+  {
+    "id": "topic_intelligenceMilitary",
+    "en": "Intelligence and Military",
+    "fa": "اطلاعات و نظامی"
+  },
+  {
+    "id": "topic_inlandWaters",
+    "en": "Inland Waters",
+    "fa": "آب‌های داخلی"
+  },
+  {
+    "id": "topic_location",
+    "en": "Location",
+    "fa": "موقعیت"
+  },
+  {
+    "id": "topic_oceans",
+    "en": "Oceans",
+    "fa": "اقیانوس‌ها"
+  },
+  {
+    "id": "topic_planningCadastre",
+    "en": "Planning and Cadastre",
+    "fa": "برنامه‌ریزی و کاداستر"
+  },
+  {
+    "id": "topic_society",
+    "en": "Society",
+    "fa": "جامعه"
+  },
+  {
+    "id": "topic_structure",
+    "en": "Structure",
+    "fa": "ساختار"
+  },
+  {
+    "id": "topic_transportation",
+    "en": "Transportation",
+    "fa": "حمل و نقل"
+  },
+  {
+    "id": "topic_utilitiesCommunication",
+    "en": "Utilities and Communication",
+    "fa": "خدمات رفاهی و ارتباطات"
+  },
+  {
     "id": "upl_shapefile_warning",
     "en": "Shapefiles are not the preferred format for MapX due to technical limitations. We recommend using GeoPackages (GPKG) instead.",
     "fa": "Shapefiles به دلیل محدودیت های فنی، فرمت ترجیحی برای MapX نیست. توصیه می کنیم به جای آن از GeoPackages (GPKG) استفاده کنید."

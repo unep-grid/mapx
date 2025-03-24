@@ -66,8 +66,10 @@
     &.button-panel--container-animate {
       pointer-events: none;
       transition:
-        width var(--animate-transition-ms) cubic-bezier(0.68, -0.6, 0.32, 1.6) 0s,
-        height var(--animate-transition-ms) cubic-bezier(0.68, -0.6, 0.32, 1.6) 0s;
+        width var(--animate-transition-ms) cubic-bezier(0.68, -0.6, 0.32, 1.6)
+          0s,
+        height var(--animate-transition-ms) cubic-bezier(0.68, -0.6, 0.32, 1.6)
+          0s;
     }
     .button-panel--btn {
       width: 40px;
@@ -151,6 +153,7 @@
         /*overflow: auto; controls panel need visible overflow */
         border-radius: 10px;
         background: var(--mx_ui_background);
+        overflow: hidden;
         &.button-panel--item-content-flex-col {
           display: flex;
           flex-direction: column;

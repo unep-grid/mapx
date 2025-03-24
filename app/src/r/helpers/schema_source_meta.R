@@ -40,7 +40,6 @@ mxSchemaSourceMeta <- function(
 
   m49Options <- mxGetM49Options(language)
 
-
   #
   # Final object
   #
@@ -291,7 +290,7 @@ mxSchemaSourceMeta <- function(
                 ),
                 options = list(
                   enum_titles =
-                    names(t(c(
+                    t(c(
                       "continual",
                       "daily",
                       "weekly",
@@ -304,7 +303,7 @@ mxSchemaSourceMeta <- function(
                       "irregular",
                       "not_planned",
                       "unknown"
-                    )))
+                    ))
                 )
               ),
               released_at = list(
@@ -449,12 +448,12 @@ mxSchemaSourceMeta <- function(
                   type = "string",
                   minLength = 1,
                   enum = list(
+                    "point_of_contact",
                     "author",
                     "custodian",
                     "distributor",
                     "originator",
                     "owner",
-                    "point_of_contact",
                     "principal_investigator",
                     "processor",
                     "publisher",
@@ -463,12 +462,12 @@ mxSchemaSourceMeta <- function(
                   ),
                   options = list(
                     enum_titles = list(
+                      t("contact_function_point_of_contact"),
                       t("contact_function_author"),
                       t("contact_function_custodian"),
                       t("contact_function_distributor"),
                       t("contact_function_originator"),
                       t("contact_function_owner"),
-                      t("contact_function_point_of_contact"),
                       t("contact_function_principal_investigator"),
                       t("contact_function_processor"),
                       t("contact_function_publisher"),

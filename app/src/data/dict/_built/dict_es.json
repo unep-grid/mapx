@@ -9580,6 +9580,101 @@
     "es": "Importar"
   },
   {
+    "id": "topic_biota",
+    "en": "Biota",
+    "es": "Biota"
+  },
+  {
+    "id": "topic_boundaries",
+    "en": "Boundaries",
+    "es": "Límites"
+  },
+  {
+    "id": "topic_farming",
+    "en": "Farming",
+    "es": "Agricultura"
+  },
+  {
+    "id": "topic_climatologyMeteorologyAtmosphere",
+    "en": "Climatology, Meteorology and Atmosphere",
+    "es": "Climatología, meteorología y atmósfera"
+  },
+  {
+    "id": "topic_economy",
+    "en": "Economy",
+    "es": "Economía"
+  },
+  {
+    "id": "topic_elevation",
+    "en": "Elevation",
+    "es": "Elevación"
+  },
+  {
+    "id": "topic_environment",
+    "en": "Environment",
+    "es": "Medio ambiente"
+  },
+  {
+    "id": "topic_geoscientificInformation",
+    "en": "Geoscientific Information",
+    "es": "Información geocientífica"
+  },
+  {
+    "id": "topic_health",
+    "en": "Health",
+    "es": "Salud"
+  },
+  {
+    "id": "topic_imageryBaseMapsEarthCover",
+    "en": "Imagery, Base Maps and Earth Cover",
+    "es": "Imágenes, mapas base y cobertura terrestre"
+  },
+  {
+    "id": "topic_intelligenceMilitary",
+    "en": "Intelligence and Military",
+    "es": "Inteligencia y militar"
+  },
+  {
+    "id": "topic_inlandWaters",
+    "en": "Inland Waters",
+    "es": "Aguas interiores"
+  },
+  {
+    "id": "topic_location",
+    "en": "Location",
+    "es": "Ubicación"
+  },
+  {
+    "id": "topic_oceans",
+    "en": "Oceans",
+    "es": "Océanos"
+  },
+  {
+    "id": "topic_planningCadastre",
+    "en": "Planning and Cadastre",
+    "es": "Planificación y catastro"
+  },
+  {
+    "id": "topic_society",
+    "en": "Society",
+    "es": "Sociedad"
+  },
+  {
+    "id": "topic_structure",
+    "en": "Structure",
+    "es": "Estructura"
+  },
+  {
+    "id": "topic_transportation",
+    "en": "Transportation",
+    "es": "Transporte"
+  },
+  {
+    "id": "topic_utilitiesCommunication",
+    "en": "Utilities and Communication",
+    "es": "Servicios públicos y comunicación"
+  },
+  {
     "id": "upl_shapefile_warning",
     "en": "Shapefiles are not the preferred format for MapX due to technical limitations. We recommend using GeoPackages (GPKG) instead.",
     "es": "Los shapefiles no son el formato preferido para MapX debido a limitaciones técnicas. Recomendamos usar GeoPackages (GPKG)."

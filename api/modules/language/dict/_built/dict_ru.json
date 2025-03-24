@@ -9580,6 +9580,101 @@
     "ru": "Импортировать"
   },
   {
+    "id": "topic_biota",
+    "en": "Biota",
+    "ru": "Биота"
+  },
+  {
+    "id": "topic_boundaries",
+    "en": "Boundaries",
+    "ru": "Границы"
+  },
+  {
+    "id": "topic_farming",
+    "en": "Farming",
+    "ru": "Сельское хозяйство"
+  },
+  {
+    "id": "topic_climatologyMeteorologyAtmosphere",
+    "en": "Climatology, Meteorology and Atmosphere",
+    "ru": "Климатология, метеорология и атмосфера"
+  },
+  {
+    "id": "topic_economy",
+    "en": "Economy",
+    "ru": "Экономика"
+  },
+  {
+    "id": "topic_elevation",
+    "en": "Elevation",
+    "ru": "Высота"
+  },
+  {
+    "id": "topic_environment",
+    "en": "Environment",
+    "ru": "Окружающая среда"
+  },
+  {
+    "id": "topic_geoscientificInformation",
+    "en": "Geoscientific Information",
+    "ru": "Геонаучная информация"
+  },
+  {
+    "id": "topic_health",
+    "en": "Health",
+    "ru": "Здоровье"
+  },
+  {
+    "id": "topic_imageryBaseMapsEarthCover",
+    "en": "Imagery, Base Maps and Earth Cover",
+    "ru": "Изображения, базовые карты и покрытие Земли"
+  },
+  {
+    "id": "topic_intelligenceMilitary",
+    "en": "Intelligence and Military",
+    "ru": "Разведка и военное дело"
+  },
+  {
+    "id": "topic_inlandWaters",
+    "en": "Inland Waters",
+    "ru": "Внутренние воды"
+  },
+  {
+    "id": "topic_location",
+    "en": "Location",
+    "ru": "Местоположение"
+  },
+  {
+    "id": "topic_oceans",
+    "en": "Oceans",
+    "ru": "Океаны"
+  },
+  {
+    "id": "topic_planningCadastre",
+    "en": "Planning and Cadastre",
+    "ru": "Планирование и кадастр"
+  },
+  {
+    "id": "topic_society",
+    "en": "Society",
+    "ru": "Общество"
+  },
+  {
+    "id": "topic_structure",
+    "en": "Structure",
+    "ru": "Структура"
+  },
+  {
+    "id": "topic_transportation",
+    "en": "Transportation",
+    "ru": "Транспорт"
+  },
+  {
+    "id": "topic_utilitiesCommunication",
+    "en": "Utilities and Communication",
+    "ru": "Коммунальные услуги и связь"
+  },
+  {
     "id": "upl_shapefile_warning",
     "en": "Shapefiles are not the preferred format for MapX due to technical limitations. We recommend using GeoPackages (GPKG) instead.",
     "ru": "Форматы шейп-файлов не являются предпочтительным форматом для MapX из-за технических ограничений. Вместо этого мы рекомендуем использовать GeoPackages (GPKG)."

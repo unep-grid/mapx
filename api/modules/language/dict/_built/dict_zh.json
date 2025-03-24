@@ -9580,6 +9580,101 @@
     "zh": "进口"
   },
   {
+    "id": "topic_biota",
+    "en": "Biota",
+    "zh": "生物群"
+  },
+  {
+    "id": "topic_boundaries",
+    "en": "Boundaries",
+    "zh": "边界"
+  },
+  {
+    "id": "topic_farming",
+    "en": "Farming",
+    "zh": "农业"
+  },
+  {
+    "id": "topic_climatologyMeteorologyAtmosphere",
+    "en": "Climatology, Meteorology and Atmosphere",
+    "zh": "气候学、气象学和大气"
+  },
+  {
+    "id": "topic_economy",
+    "en": "Economy",
+    "zh": "经济"
+  },
+  {
+    "id": "topic_elevation",
+    "en": "Elevation",
+    "zh": "高程"
+  },
+  {
+    "id": "topic_environment",
+    "en": "Environment",
+    "zh": "环境"
+  },
+  {
+    "id": "topic_geoscientificInformation",
+    "en": "Geoscientific Information",
+    "zh": "地球科学信息"
+  },
+  {
+    "id": "topic_health",
+    "en": "Health",
+    "zh": "健康"
+  },
+  {
+    "id": "topic_imageryBaseMapsEarthCover",
+    "en": "Imagery, Base Maps and Earth Cover",
+    "zh": "影像、底图和地表覆盖"
+  },
+  {
+    "id": "topic_intelligenceMilitary",
+    "en": "Intelligence and Military",
+    "zh": "情报和军事"
+  },
+  {
+    "id": "topic_inlandWaters",
+    "en": "Inland Waters",
+    "zh": "内陆水域"
+  },
+  {
+    "id": "topic_location",
+    "en": "Location",
+    "zh": "位置"
+  },
+  {
+    "id": "topic_oceans",
+    "en": "Oceans",
+    "zh": "海洋"
+  },
+  {
+    "id": "topic_planningCadastre",
+    "en": "Planning and Cadastre",
+    "zh": "规划和地籍"
+  },
+  {
+    "id": "topic_society",
+    "en": "Society",
+    "zh": "社会"
+  },
+  {
+    "id": "topic_structure",
+    "en": "Structure",
+    "zh": "结构"
+  },
+  {
+    "id": "topic_transportation",
+    "en": "Transportation",
+    "zh": "交通运输"
+  },
+  {
+    "id": "topic_utilitiesCommunication",
+    "en": "Utilities and Communication",
+    "zh": "公用事业和通信"
+  },
+  {
     "id": "upl_shapefile_warning",
     "en": "Shapefiles are not the preferred format for MapX due to technical limitations. We recommend using GeoPackages (GPKG) instead.",
     "zh": "由于技术限制，Shapefile 不是 MapX 的首选格式。我们建议改用 GeoPackages (GPKG)。"

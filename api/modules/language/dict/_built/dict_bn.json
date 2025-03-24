@@ -9580,6 +9580,101 @@
     "bn": "আমদানি"
   },
   {
+    "id": "topic_biota",
+    "en": "Biota",
+    "bn": "জীবজগৎ"
+  },
+  {
+    "id": "topic_boundaries",
+    "en": "Boundaries",
+    "bn": "সীমানা"
+  },
+  {
+    "id": "topic_farming",
+    "en": "Farming",
+    "bn": "কৃষি"
+  },
+  {
+    "id": "topic_climatologyMeteorologyAtmosphere",
+    "en": "Climatology, Meteorology and Atmosphere",
+    "bn": "জলবায়ু বিজ্ঞান, আবহাওয়া বিজ্ঞান এবং বায়ুমণ্ডল"
+  },
+  {
+    "id": "topic_economy",
+    "en": "Economy",
+    "bn": "অর্থনীতি"
+  },
+  {
+    "id": "topic_elevation",
+    "en": "Elevation",
+    "bn": "উচ্চতা"
+  },
+  {
+    "id": "topic_environment",
+    "en": "Environment",
+    "bn": "পরিবেশ"
+  },
+  {
+    "id": "topic_geoscientificInformation",
+    "en": "Geoscientific Information",
+    "bn": "ভূ-বৈজ্ঞানিক তথ্য"
+  },
+  {
+    "id": "topic_health",
+    "en": "Health",
+    "bn": "স্বাস্থ্য"
+  },
+  {
+    "id": "topic_imageryBaseMapsEarthCover",
+    "en": "Imagery, Base Maps and Earth Cover",
+    "bn": "ইমেজারি, বেস ম্যাপস এবং পৃথিবীর আবরণ"
+  },
+  {
+    "id": "topic_intelligenceMilitary",
+    "en": "Intelligence and Military",
+    "bn": "গোয়েন্দা ও সামরিক"
+  },
+  {
+    "id": "topic_inlandWaters",
+    "en": "Inland Waters",
+    "bn": "অভ্যন্তরীণ জলাশয়"
+  },
+  {
+    "id": "topic_location",
+    "en": "Location",
+    "bn": "অবস্থান"
+  },
+  {
+    "id": "topic_oceans",
+    "en": "Oceans",
+    "bn": "মহাসাগর"
+  },
+  {
+    "id": "topic_planningCadastre",
+    "en": "Planning and Cadastre",
+    "bn": "পরিকল্পনা ও ক্যাডাস্টার"
+  },
+  {
+    "id": "topic_society",
+    "en": "Society",
+    "bn": "সমাজ"
+  },
+  {
+    "id": "topic_structure",
+    "en": "Structure",
+    "bn": "কাঠামো"
+  },
+  {
+    "id": "topic_transportation",
+    "en": "Transportation",
+    "bn": "পরিবহন"
+  },
+  {
+    "id": "topic_utilitiesCommunication",
+    "en": "Utilities and Communication",
+    "bn": "যোগাযোগ ও যোগাযোগ ব্যবস্থা"
+  },
+  {
     "id": "upl_shapefile_warning",
     "en": "Shapefiles are not the preferred format for MapX due to technical limitations. We recommend using GeoPackages (GPKG) instead.",
     "bn": "প্রযুক্তিগত সীমাবদ্ধতার কারণে MapX-এর জন্য শেপফাইলগুলি পছন্দের ফর্ম্যাট নয়। আমরা এর পরিবর্তে GeoPackages (GPKG) ব্যবহার করার পরামর্শ দিচ্ছি।"
