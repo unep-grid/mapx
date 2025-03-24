@@ -1,5 +1,3 @@
-
-
 #' Shiny bindings for jed
 #'
 #' Output and render functions for using jed within Shiny  applications and interactive Rmd documents.

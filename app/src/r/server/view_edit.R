@@ -717,7 +717,7 @@ observeEvent(input$viewRasterLegendTitles_init, {
     startVal = legendTitles,
     options = list(
       getValidationOnChange = TRUE,
-      getValuesOnChange = TRUE,
+      getValuesOnChange = TRUE
     )
   )
 })
