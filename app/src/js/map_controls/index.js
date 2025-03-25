@@ -2,7 +2,7 @@ import { el } from "./../el/src/index.js";
 import { formatZeros, path } from "./../mx_helpers.js";
 import mapxlogo from "./../../svg/map-x-logo-full.svg";
 import { isElement } from "../is_test/index.js";
-import { modalMarkdown } from "../modal_markdown/index.js";
+import { modalIframe } from "../modal_iframe/index.js";
 import { bindAll } from "../bind_class_methods/index.js";
 /**
  * Control for live coordinate
@@ -75,9 +75,8 @@ class MapControlAttribution {
             on: [
               "click",
               async () => {
-                return modalMarkdown({
-                  title: "Disclaimer",
-                  txt: await import("./../../md/disclaimer.md"),
+                return modalIframe({
+                  doc_id: "doc_legal_notice",
                 });
               },
             ],

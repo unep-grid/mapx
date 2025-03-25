@@ -12,7 +12,6 @@ import {
   storyClose,
   isStoryPlaying,
 } from "./../story_map/index.js";
-import { modalMarkdown } from "../modal_markdown/index.js";
 import { settings } from "./../settings";
 import { theme } from "./../mx.js";
 import { draw } from "./../mx.js";
