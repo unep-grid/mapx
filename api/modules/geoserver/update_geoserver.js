@@ -9,7 +9,7 @@ import { settings } from "#root/settings";
 import { getProjectsIdAll } from "#mapx/project";
 import { getViewsGeoserver } from "#mapx/view";
 import { timeStep, randomString } from "#mapx/helpers";
-import { isNotEmpty } from "@fxi/mx_valid";
+import { isNotEmpty, isNumericRange, isObject } from "@fxi/mx_valid";
 import { ioUpdateDbViewAltStyle } from "#mapx/view";
 import { geoserver as grc } from "#mapx/db";
 import { mwNotify } from "#mapx/io";
@@ -266,6 +266,16 @@ async function rebuild(socket, options) {
   return out;
 }
 
+function isBboxGeoserver(item) {
+  return (
+    isObject(item) &&
+    isNumericRange(item.lat1, -90, 90) &&
+    isNumericRange(item.lat2, -90, 90) &&
+    isNumericRange(item.lng1, -180, 180) &&
+    isNumericRange(item.lng2, -180, 180)
+  );
+}
+
 /**
  * Helpers
  */
@@ -274,6 +284,16 @@ async function createLayer(socket, layer, clientStyle, idGroup, idProgress) {
   const ds = `PG_${ws}`;
   const idStyle = layer.id;
   const wsStyle = ws;
+
+  if (!isBboxGeoserver(layer.bbox_source)) {
+    layer.bbox_source = {
+      minx: -180,
+      miny: -90,
+      maxx: 180,
+      maxy: 90,
+      crs: { "@class": "projected", $: "EPSG:4326" },
+    };
+  }
 
   await grc.layers.publishFeatureType(
     ws,
