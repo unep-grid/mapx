@@ -1,3 +1,12 @@
+  - [1.13.14-beta.7](https://github.com/unep-grid/mapx/tree/1.13.14-beta.7) 
+
+    - docs(attribution): improve format and consolidate legal information
+    - fix(code integration): update MapLibre GL JS version from 1.15.2 to 5.2.0
+    - fix(package): missing test script
+    - fix(ui): improve attribution and legend styling in static mode
+    - feat(sdk/privacy): add support for hidePrivacyModal=true in url/sdk
+
+
   - [1.13.14-beta.6](https://github.com/unep-grid/mapx/tree/1.13.14-beta.6) 
 
     - fix(metadata): contact, set the correct defaut contact function
