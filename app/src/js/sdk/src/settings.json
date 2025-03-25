@@ -21,7 +21,7 @@
     "zoom": null,
     "language": null,
     "sdkToken": null,
-    "hidePrivacyModal": false
+    "hidePrivacyModal": true
   },
   "container": "body",
   "style": {
