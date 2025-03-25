@@ -7,9 +7,11 @@
 .button-panel--legends {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(17em, 1fr));
+  grid-auto-rows: minmax(min-content, max-content);
   grid-gap: 20px;
   padding: 20px;
-
+  overflow-y: auto !important;
+  
   // For legend in button panel without wrapper
   > .mx-view-legend-group {
     padding: 20px;

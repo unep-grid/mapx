@@ -2138,10 +2138,20 @@ export function flattenBlockElements(element) {
  *
  * @param {Element} elOrig - The div element to measure.
  * @param {Boolean} inBody - Measure in body instead of parent
+ * @param {Boolean} includePadding - Include style padding in the dimension
+ * @param {Boolean} debug - Show the cloned element during measurement
  * @returns {Object} An object containing the width and height of the content.
  */
-export function getContentSize(elOrig, inBody = true, debug = false) {
+export function getContentSize(
+  elOrig,
+  inBody = true,
+  includePadding = true,
+  debug = false,
+) {
+  // Create a clone with all nested content
   const elClone = elOrig.cloneNode(true);
+
+  // Apply measurement styles
   Object.assign(elClone.style, {
     visibility: debug ? "visible" : "hidden",
     position: "absolute",
@@ -2151,44 +2161,66 @@ export function getContentSize(elOrig, inBody = true, debug = false) {
     height: "fit-content",
     overflow: "visible",
     zIndex: 1000,
+    // Adding max-width/height constraints to prevent any potential layout issues
+    maxWidth: "none",
+    maxHeight: "none",
   });
-  if (inBody) {
-    document.body.appendChild(elClone);
-  } else {
-    elOrig.appendChild(elClone);
+
+  // Cache the parent before appending
+  const parent = inBody ? document.body : elOrig;
+
+  // Append to the DOM to get measurements
+  parent.appendChild(elClone);
+
+  // Use a try/finally block to ensure cleanup even if measurement fails
+  try {
+    const rect = getInnerContentRect(elClone);
+    if (includePadding) {
+      const padding = getPadding(elClone);
+      return {
+        width: rect.width + padding.right + padding.left,
+        height: rect.height + padding.top + padding.bottom,
+      };
+    } else {
+      return { width: rect.width, height: rect.height };
+    }
+  } finally {
+    // Always clean up the DOM
+
+    parent.removeChild(elClone);
   }
-  const { width, height } = getInnerContentRect(elClone);
-  if (inBody) {
-    document.body.removeChild(elClone);
-  } else {
-    elOrig.removeChild(elClone);
-  }
-  return { width, height };
 }
 
 /**
  * Calculates the total bounding rectangle for all child elements of an element.
  *
- * @param {Element} parentElement
- * @returns {Object|null} inner content rect
+ * @param {Element} parentElement - The parent element whose content to measure
+ * @returns {DOMRect} inner content rect
  */
 export function getInnerContentRect(parentElement) {
   const children = parentElement.children;
-  let totalRect = {};
 
-  if (isEmpty(children)) {
+  // If no children, return the parent's rect
+  if (!children || children.length === 0) {
     return parentElement.getBoundingClientRect();
   }
+
+  // Start with the first child as a baseline
+  let totalRect = null;
 
   for (const child of children) {
     const rect = child.getBoundingClientRect();
 
-    if (isEmpty(totalRect)) {
-      for (const k in rect) {
-        // spread, assign, clone won't work with DOMRect...
-        totalRect[k] = rect[k];
-      }
+    if (!totalRect) {
+      // For the first child, use its rect as the initial bounds
+      totalRect = {
+        left: rect.left,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+      };
     } else {
+      // Expand the bounds to include this child
       totalRect.left = Math.min(totalRect.left, rect.left);
       totalRect.top = Math.min(totalRect.top, rect.top);
       totalRect.right = Math.max(totalRect.right, rect.right);
@@ -2196,11 +2228,20 @@ export function getInnerContentRect(parentElement) {
     }
   }
 
+  // If we still don't have a rect (could happen with hidden/zero-sized children)
+  if (!totalRect) {
+    return parentElement.getBoundingClientRect();
+  }
+
   return {
     left: totalRect.left,
     top: totalRect.top,
+    right: totalRect.right,
+    bottom: totalRect.bottom,
     width: totalRect.right - totalRect.left,
     height: totalRect.bottom - totalRect.top,
+    x: totalRect.left,
+    y: totalRect.top,
   };
 }
 
@@ -2403,7 +2444,6 @@ export function htmlToData(o) {
     }
   });
 }
-
 
 export function getBrowserData() {
   const userAgentData = new UAParser().getResult();

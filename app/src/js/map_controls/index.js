@@ -24,7 +24,7 @@ class MapControlLiveCoord {
       {
         class: ["mapboxgl-ctrl", "mapboxgl-ctrl-attrib"],
       },
-      coord
+      coord,
     );
     return mlc.elContainer;
   }
@@ -52,17 +52,22 @@ class MapControlAttribution {
         class: ["mapboxgl-ctrl", "mapboxgl-ctrl-attrib"],
       },
       [
-        el("span", " © "),
         el(
           "a",
           {
             target: "_blank",
             href: "https://www.openstreetmap.org/copyright",
           },
-          "OpenStreetMap"
+          " © OpenStreetMap",
         ),
-        el("span", " and contributors; "),
-        el("span", " © "),
+        el(
+          "a",
+          {
+            target: "_blank",
+            href: "https://mapbox.com/",
+          },
+          " © Mapbox",
+        ),
         el(
           "a",
           {
@@ -77,9 +82,9 @@ class MapControlAttribution {
               },
             ],
           },
-          "MapX"
+          " © MapX",
         ),
-      ]
+      ],
     );
     return mla.elContainer;
   }
@@ -110,7 +115,7 @@ class MapxLogo {
           fontSize: "0em",
         },
       },
-      "Main project page"
+      "Main project page",
     );
     ml.elContainer = el(
       "div",
@@ -121,7 +126,7 @@ class MapxLogo {
           float: "none",
         },
       },
-      elLogo
+      elLogo,
     );
     return ml.elContainer;
   }
@@ -159,7 +164,7 @@ class MapControlScale {
       {
         class: ["mapboxgl-ctrl", "mapboxgl-ctrl-attrib"],
       },
-      mcs.elScale
+      mcs.elScale,
     );
 
     if (mcs._config.mode === "mouse") {
@@ -197,7 +202,7 @@ class MapControlScale {
     let maxWidth = 100;
     let maxMeters = getDistance(
       mcs.map.unproject([0, y]),
-      mcs.map.unproject([maxWidth, y])
+      mcs.map.unproject([maxWidth, y]),
     );
     let distance = getRoundNum(maxMeters);
     let ratio = distance / maxMeters;

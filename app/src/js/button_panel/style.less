@@ -14,7 +14,7 @@
   .button-panel--container {
     pointer-events: none;
     position: absolute;
-    margin: 5px;
+    margin: 5px 5px 15px 5px;
     min-height: 0px;
     min-width: 0px;
     max-width: calc(100vw - 75px);
@@ -356,17 +356,7 @@
         }
       }
       .button-panel--btn {
-        height: 35px;
-        width: 35px;
-        margin: 2px;
-        border-radius: 50%;
-        opacity: 0.7;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        .button-panel--btn-icon {
-          font-size: 15px;
-        }
+        margin: 5px;
       }
     }
   }
@@ -385,7 +375,7 @@
     }
   }
 }
-@media (max-height: 640px) {
+@media (max-height: 350px) {
   .button-panel--main {
     .button-panel--container:not(.button-panel--container-no-full-height) {
       min-height: 100vh !important;

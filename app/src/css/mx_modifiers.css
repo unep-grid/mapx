@@ -326,25 +326,7 @@ span.mx-badge-role {
   background: var(--mx_ui_background);
 }
 
-/**
-* controls
-*/
-.mx .mx-scale-text,
-.mx .mapboxgl-ctrl-attrib * {
-  text-align: center;
-  color: var(--mx_ui_text);
-}
 
-.mapboxgl-ctrl.mapboxgl-ctrl-attrib {
-  background-color: var(--mx_ui_background_transparent);
-}
-
-.mx .mx-scale-box {
-  width: 78.0685px;
-  border-bottom: 1px solid var(--mx_ui_text);
-  border-left: 1px solid var(--mx_ui_text);
-  border-right: 1px solid var(--mx_ui_text);
-}
 
 /*.mx-view-item {*/
 /*background-color: var(--mx_ui_background);*/

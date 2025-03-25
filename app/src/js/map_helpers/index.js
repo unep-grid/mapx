@@ -1336,8 +1336,8 @@ export async function initMapx(o) {
    * Add controls
    */
   map.addControl(new MapControlAttribution(), "bottom-right");
-  map.addControl(new MapControlLiveCoord(), "bottom-right");
-  map.addControl(new MapControlScale(), "bottom-right");
+  //map.addControl(new MapControlLiveCoord(), "bottom-right");
+  //map.addControl(new MapControlScale(), "bottom-right");
   map.addControl(new MapxLogo(), "bottom-left");
 
   /**

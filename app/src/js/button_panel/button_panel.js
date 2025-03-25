@@ -119,12 +119,6 @@ export class ButtonPanel extends EventSimple {
     panel.fire("destroy");
   }
 
-  setAnimmateDuration(ms) {
-    const panel = this;
-    ms = typeof ms === "undefined" ? panel.opt.animate_duration : ms;
-    panel.elMain.style.setProperty("--animate-transition-ms", `${ms}ms`);
-  }
-
   saveSize() {
     const panel = this;
     const id = panel.opt.id;
@@ -675,7 +669,7 @@ export class ButtonPanel extends EventSimple {
     return this.elPanel.getBoundingClientRect();
   }
   get rectInnerContent() {
-    return getContentSize(this.elPanelContent);
+    return getContentSize(this.elPanelContent, true);
   }
   get rectInnerContentParent() {
     return getContentSize(this.elPanelContent, false);

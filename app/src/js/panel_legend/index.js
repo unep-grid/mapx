@@ -1,6 +1,5 @@
 import { bindAll } from "../bind_class_methods";
 import { ButtonPanel } from "../button_panel";
-import { el } from "../el_mapx";
 import { patchObject } from "../mx_helper_misc";
 import "./style.less";
 
@@ -19,7 +18,7 @@ const settings = {
     minWidth: "100px",
     minHeight: "100px",
     maxWidth: "50%",
-    maxHeight: "calc(100% - 50px)",
+    maxHeight: "calc(100% - 60px)",
   },
   save_size_on_resize: false,
 };
@@ -34,11 +33,10 @@ export class ButtonPanelLegend extends ButtonPanel {
   }
 
   buildContent() {
-    this._el_container = el("div", { class: "button-panel--legends" });
-    this.elPanelContent.appendChild(this._el_container);
+    this.elPanelContent.classList.add("button-panel--legends");
   }
 
   getContainer() {
-    return this._el_container;
+    return this.elPanelContent;
   }
 }
