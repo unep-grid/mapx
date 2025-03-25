@@ -260,8 +260,14 @@ export async function setViewSourceMetaBbox(
   const isBboxMetaOk = isBboxMeta(bbox);
   const isBboxOk = isBbox(bbox);
 
+  // Fallback to full extent
   if (!isBboxMetaOk && !isBboxOk) {
-    throw new Error("Invalid bbox format");
+    bbox = {
+      lat_min: -90,
+      lat_max: 90,
+      lng_min: -180,
+      lng_max: 180,
+    };
   }
 
   if (isBboxOk) {
@@ -276,6 +282,7 @@ export async function setViewSourceMetaBbox(
   const bboxJson = JSON.stringify(bbox);
   let query;
   let params;
+
 
   if (type === "vt") {
     // Update source metadata for vt views
