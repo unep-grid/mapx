@@ -1,3 +1,12 @@
+  - [1.13.14-beta.8](https://github.com/unep-grid/mapx/tree/1.13.14-beta.8) 
+
+    - fix(view-metadata): use default world extent instead of error for invalid bbox
+    - fix(geoserver): handle invalid bounding box values to prevent NumberFormatException
+    - fix(legal): replace markdown modals with iframe for legal notices in map attribution
+    - fix(pref): wrong key pref_show_edit_table_warning_2 updated
+    - fix(privacy): hidePrivacyModal parameter should be permanant
+
+
   - [1.13.14-beta.7](https://github.com/unep-grid/mapx/tree/1.13.14-beta.7) 
 
     - docs(attribution): improve format and consolidate legal information
