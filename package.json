@@ -18,6 +18,7 @@
     "release": "release-it",
     "release:alpha": "release-it --preRelease=alpha",
     "release:beta": "release-it --preRelease=beta",
+    "test": "npm run test:app",
     "test:app": "cd app && npm run test",
     "build:app_local": "cd app && ./build.sh local",
     "build:api_local": "cd api && ./build.sh local",
