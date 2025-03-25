@@ -270,7 +270,7 @@ export class EditTableSessionClient extends EditTableBase {
         cancel: getDictItem("edit_table_modal_warning_ok_no_more"),
         confirm: getDictItem("edit_table_modal_warning_ok"),
       });
-      await prefSet("pref_show_edit_table_warning_2", keepShowing);
+      await prefSet("pref_show_edit_table_warning", keepShowing);
     }
   }
 
