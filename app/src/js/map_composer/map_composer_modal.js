@@ -135,13 +135,6 @@ export class MapComposerModal {
     /**
      * Add disclaimer and atribution
      */
-    const { default: disclaimer } = await import("./../../md/disclaimer.md");
-    config.files.push({
-      type: "file",
-      content: new Blob([disclaimer], { type: "text/markdown" }),
-      name: "disclaimer.md",
-    });
-
     const { default: attribution } = await import("./../../md/attribution.md");
     config.files.push({
       type: "file",
