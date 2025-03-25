@@ -242,7 +242,7 @@ export class ModalCodeIntegration {
         out.str = parseTemplate(template_maplibre_simple, {
           title: style.name,
           style: JSON.stringify(style, 0, 2),
-          version: "1.15.2",
+          version: "5.2.0",
           bounds: JSON.stringify(bounds || [-180, 90, 180, -90]),
         });
         out.str = out.str;
