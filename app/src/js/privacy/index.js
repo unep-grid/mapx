@@ -5,7 +5,7 @@ import { events } from "../mx";
 import { modalPrompt } from "../mx_helper_modal.js";
 import { prefGet, prefSet } from "../user_pref";
 import { settings } from "../settings";
-import { getQueryParameterInit } from "../url_utils/url_utils.js";
+import { getQueryParameter } from "../url_utils/url_utils.js";
 
 const ID_PRIVACY = "pref_privacy_001";
 const DISABLED = false;
@@ -20,7 +20,8 @@ window.addEventListener("load", () => {
 
 export async function privacy_test(force = false) {
   const prefGdpr = await prefGet(ID_PRIVACY);
-  const hidePrivacy = getQueryParameterInit("hidePrivacyModal", [false])[0];
+  const hidePrivacy = getQueryParameter("hidePrivacyModal", [false])[0];
+  console.log('hidePrivacy',hidePrivacy);
   const accepted = prefGdpr && isTrue(prefGdpr.accepted);
   const ignore = DISABLED || accepted || hidePrivacy;
 

@@ -69,7 +69,8 @@
     "style",
     "theme",
     "colors",
-    "sdkToken"
+    "sdkToken",
+    "hidePrivacyModal"
   ],
   "mode": {
     "static": false,
