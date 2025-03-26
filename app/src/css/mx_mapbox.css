@@ -29,7 +29,7 @@
   color: var(--mx_ui_text);
 }
 .mx .mapboxgl-control-container .mapboxgl-ctrl-attrib a {
-  color: var(--mx_ui_text);
+  color: #fff;
   opacity: 0.68;
 }
 .mx .mapboxgl-control-container .mapboxgl-ctrl-attrib a:hover {
@@ -40,8 +40,23 @@
   left: 50px;
 }
 
-.mapboxgl-ctrl.mapboxgl-ctrl-attrib {
-  background-color: var(--mx_ui_background_transparent);
+.mx .mapboxgl-ctrl.mapboxgl-ctrl-attrib {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  margin: 3px;
+}
+
+@media (max-width: 640px) {
+  .mx .mapboxgl-ctrl.mapboxgl-ctrl-attrib {
+    width: 100vw;
+    margin: 0px;
+    border-radius: 0px;
+    text-align: center;
+  }
+
+  .mx .mapboxgl-ctrl-bottom-left {
+    display: none;
+  }
 }
 
 .mx .mx-scale-box {

@@ -108,9 +108,6 @@ class Dashboard extends EventSimple {
 
     d.panel = new ButtonPanel(d.opt.panel);
 
-    if (d.panel.isMediaSmallHeight()) {
-      d.setHeight("50vh");
-    }
     d.panel.elPanelContent.appendChild(d.elDashboard);
 
     /**
@@ -339,6 +336,11 @@ class Dashboard extends EventSimple {
 
   setPanelLayout(type) {
     const d = this;
+
+    if (!d.panel) {
+      console.warn("Panel not ready");
+      return;
+    }
     switch (type) {
       case "fit":
         d.fitPanelToWidgets();
@@ -398,15 +400,27 @@ class Dashboard extends EventSimple {
     return this.panel.height;
   }
 
+  get small_width() {
+    const d = this;
+    return d?.panel?.isMediaSmallWidth();
+  }
+
+  get small_height() {
+    const d = this;
+    return d?.panel?.isMediaSmallWidth();
+  }
+  get small() {
+    const d = this;
+    return d?.panel?.isMediaSmall();
+  }
+
   /**
    * Updates the panel: size to the widest widget
    * @returns void
    */
   fitPanelToWidgetsWidth() {
     const d = this;
-    if (d.panel.isMediaSmallWidth()) {
-      return;
-    }
+   
     const m = d.opt.dashboard.marginWidth;
     const wmax = d.widgets.reduce((a, w) => {
       const ww = w.width;
@@ -420,9 +434,6 @@ class Dashboard extends EventSimple {
    */
   fitPanelToWidgetsHeight() {
     const d = this;
-    if (d.panel.isMediaSmallHeight()) {
-      return;
-    }
     const m = d.opt.dashboard.marginHeight;
     const hmax = d.widgets.reduce((a, w) => {
       const hw = w.height;
@@ -436,9 +447,6 @@ class Dashboard extends EventSimple {
    */
   fitPanelToWidgetsAuto() {
     const d = this;
-    if (d.panel.isMediaSmall()) {
-      return;
-    }
     const mh = d.opt.dashboard.marginHeight;
     const mw = d.opt.dashboard.marginWidth;
 

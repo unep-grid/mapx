@@ -832,6 +832,10 @@ export class ButtonPanel extends EventSimple {
     const panel = this;
     panel.exclusiveMode =
       typeof enable === "boolean" ? enable : panel.isMediaSmallWidth();
+
+    if(panel.exclusiveMode){
+      panel.resizeAuto('content')
+    }
   }
 }
 
