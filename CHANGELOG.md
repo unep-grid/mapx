@@ -1,3 +1,10 @@
+  - [1.13.14-beta.9](https://github.com/unep-grid/mapx/tree/1.13.14-beta.9) 
+
+    - feat(metadata): update and add textual topics, descriptions, and translations
+    - fix(ui): small screen <640px conflicts, dashboards, texts
+    - fix(privacy SDK): hide the panel by default
+
+
   - [1.13.14-beta.8](https://github.com/unep-grid/mapx/tree/1.13.14-beta.8) 
 
     - fix(view-metadata): use default world extent instead of error for invalid bbox
