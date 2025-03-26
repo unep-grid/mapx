@@ -1,3 +1,9 @@
+  - [1.13.14-beta.10](https://github.com/unep-grid/mapx/tree/1.13.14-beta.10) 
+
+    - fix(privacy): fix hidePrivacyModal parameter handling in SDK context
+    - fix(ui): improve button panels and modal interfaces for mobile devices
+
+
   - [1.13.14-beta.9](https://github.com/unep-grid/mapx/tree/1.13.14-beta.9) 
 
     - feat(metadata): update and add textual topics, descriptions, and translations
