@@ -1,7 +1,7 @@
 import { el } from "./../el/src/index.js";
 import { ListenerStore } from "../listener_store";
 import { EventSimple } from "../event_simple";
-import { isNotEmpty, isNumeric } from "../is_test/index.js";
+import { isNotEmpty, isNumeric, isTrue } from "../is_test/index.js";
 import { shake } from "../elshake";
 import "./style.less";
 import { ButtonPanelManager } from "./manager.js";
@@ -11,6 +11,7 @@ import { getContentSize, patchObject } from "../mx_helper_misc.js";
 const settings = {
   id: "panel",
   elContainer: document.body,
+  useCompact: false,
   button_text: "Toggle",
   button_lang_key: null,
   button_classes: ["fa", "fa-list-ul"],
@@ -23,6 +24,7 @@ const settings = {
   panel_style: {},
   add: true,
   add_footer: false,
+  resize_on_exclusive: true,
   handles: ["free", "resize"],
   animate_duration: 200,
   save_size_on_resize: true,
@@ -299,10 +301,7 @@ export class ButtonPanel extends EventSimple {
             }
           },
         ],
-        class: [
-          "button-panel--item",
-          panel.opt.panelFull ? "button-panel--item-full" : null,
-        ],
+        class: ["button-panel--item"],
         style: panel.opt.panel_style,
       },
       panel.elPanelContent,
@@ -319,6 +318,7 @@ export class ButtonPanel extends EventSimple {
         class: [
           "button-panel--container",
           `button-panel--${panel.opt.position}`,
+          panel.opt.useCompact ? "button-panel--container-compact" : null,
           ...panel.opt.container_classes,
         ],
         style: panel.opt.container_style,
@@ -830,11 +830,9 @@ export class ButtonPanel extends EventSimple {
 
   setExclusiveMode(enable) {
     const panel = this;
-    panel.exclusiveMode =
-      typeof enable === "boolean" ? enable : panel.isMediaSmallWidth();
-
-    if(panel.exclusiveMode){
-      panel.resizeAuto('content')
+    panel.exclusiveMode = isTrue(enable) || panel.isMediaSmallWidth();
+    if (panel.exclusiveMode && panel.opt.resize_on_exclusive) {
+      panel.resizeAuto("content");
     }
   }
 }

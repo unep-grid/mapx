@@ -10,6 +10,7 @@ import "./style.less";
 const settings = {
   controls: {},
   panel: {
+    useCompact: false,
     id: "controls_panel",
     elContainer: document.body,
     position: "top-right",
@@ -17,6 +18,8 @@ const settings = {
     button_text: "btn_panel_controls",
     button_lang_key: "btn_panel_controls",
     tooltip_position: "bottom-left",
+    save_size_on_resize: false,
+    resize_on_exclusive: false,
     handles: ["free"],
     container_classes: [
       "button-panel--container-no-full-width",

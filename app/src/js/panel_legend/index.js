@@ -6,7 +6,7 @@ import "./style.less";
 const settings = {
   id: "button_panel_legend_default",
   elContainer: document.body,
-  panelFull: true,
+  useCompact: true,
   position: "bottom-left",
   tooltip_position: "right",
   button_lang_key: "button_legend_button",

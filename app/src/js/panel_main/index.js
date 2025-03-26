@@ -19,6 +19,7 @@ const settings = {
     version: "",
   },
   panel: {
+    useCompact: true,
     elContainer: document.body,
     position: "top-left",
     title_text: "Hello",

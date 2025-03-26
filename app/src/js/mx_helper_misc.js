@@ -2185,8 +2185,6 @@ export function getContentSize(
       return { width: rect.width, height: rect.height };
     }
   } finally {
-    // Always clean up the DOM
-
     parent.removeChild(elClone);
   }
 }

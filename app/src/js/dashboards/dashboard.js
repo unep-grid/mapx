@@ -31,7 +31,7 @@ const defaults = {
   },
   panel: {
     id: "dashboard_panel",
-    panelFull: true,
+    useCompact: true,
     elContainer: document.body,
     title_text: "",
     title_lang_key: "",
@@ -39,7 +39,6 @@ const defaults = {
     button_lang_key: "button_dashboard_panel",
     button_classes: ["fa", "fa-pie-chart"],
     tooltip_position: "top-left",
-    container_classes: ["button-panel--container-no-full-height"],
     //handles: ["free"],
     /*
      * Close those panels when this one is open
@@ -420,7 +419,7 @@ class Dashboard extends EventSimple {
    */
   fitPanelToWidgetsWidth() {
     const d = this;
-   
+
     const m = d.opt.dashboard.marginWidth;
     const wmax = d.widgets.reduce((a, w) => {
       const ww = w.width;

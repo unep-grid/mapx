@@ -56,9 +56,12 @@
         }
       }
       > .button-panel--item {
-        pointer-events: auto;
         transform: translateX(0);
+        .button-panel--item-content {
+          pointer-events: auto;
+        }
       }
+
       .button-panel--item-handles {
         display: block;
       }
@@ -66,9 +69,9 @@
     &.button-panel--container-animate {
       pointer-events: none;
       transition:
-        width var(--animate-transition-ms) cubic-bezier(0.68, -0.6, 0.32, 1.6)
+        width var(--animate-transition-ms) ease-in-out
           0s,
-        height var(--animate-transition-ms) cubic-bezier(0.68, -0.6, 0.32, 1.6)
+        height var(--animate-transition-ms) ease-in-out
           0s;
     }
     .button-panel--btn {
@@ -129,7 +132,7 @@
       width: 100%;
       z-index: 0;
       padding: 0px;
-      transition: transform cubic-bezier(0.68, -0.6, 0.32, 1.6)
+      transition: transform ease-in-out
         var(--animate-transition-slow-ms);
       pointer-events: none;
       container-type: inline-size;
@@ -347,41 +350,43 @@
     right: 0px;
     .button-panel--container {
       margin: 0px;
+      .button-panel--btn {
+        margin: 5px;
+      }
+    }
+    .button-panel--container.button-panel--container-compact {
       .button-panel--item {
         .button-panel--item-handles {
           display: none;
         }
-        .button-panel--item-content {
-          border-radius: 0px;
-        }
-      }
-      .button-panel--btn {
-        margin: 5px;
       }
     }
   }
 }
 @media (max-width: 640px) {
   .button-panel--main {
-    .button-panel--container:not(.button-panel--container-no-full-width) {
+    .button-panel--container.button-panel--container-compact {
       min-width: 100% !important;
-      max-width: 100% !important;
-      .button-panel--item {
-        margin: 0px !important;
+      &.button-panel--bottom-right,
+      &.button-panel--bottom-left {
+        .button-panel--item-content {
+          max-height: calc(100vh * 0.70);
+          bottom: 0px;
+          border-radius: 10px 10px 0px 0px;
+        }
+      }
+      &.button-panel--top-left,
+      &.button-panel--top-right {
+        .button-panel--item-content {
+          max-height: calc(100vh * 0.70);
+          top: 0px;
+          border-radius: 0px 0px 10px 10px;
+        }
       }
     }
   }
 }
-@media (max-height: 350px) {
-  .button-panel--main {
-    .button-panel--container:not(.button-panel--container-no-full-height) {
-      min-height: 100% !important;
-      .button-panel--item {
-        margin: 0px !important;
-      }
-    }
-  }
-}
+
 
 /* Modifiers */
 

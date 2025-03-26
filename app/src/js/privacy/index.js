@@ -21,7 +21,6 @@ window.addEventListener("load", () => {
 export async function privacy_test(force = false) {
   const prefGdpr = await prefGet(ID_PRIVACY);
   const hidePrivacy = getQueryParameter("hidePrivacyModal", [false])[0];
-  console.log('hidePrivacy',hidePrivacy);
   const accepted = prefGdpr && isTrue(prefGdpr.accepted);
   const ignore = DISABLED || accepted || hidePrivacy;
 

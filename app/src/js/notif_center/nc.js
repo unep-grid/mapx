@@ -24,6 +24,7 @@ const def = {
   },
   panel: {
     id: "notif_panel",
+    useCompact: true,
     elContainer: null,
     button_lang_key: "nc_button",
     button_classes: ["fa", "fa-bell"],
