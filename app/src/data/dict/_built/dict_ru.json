@@ -6040,11 +6040,6 @@
     "ru": "Функция "
   },
   {
-    "id": "contact_function_desc",
-    "en": "Name of the contact function, e.g. Administrator, Publisher",
-    "ru": "Имя контактного лица, например, администратор, издатель. "
-  },
-  {
     "id": "contact_function_author",
     "en": "Author",
     "ru": "Автор"
@@ -6611,8 +6606,8 @@
   },
   {
     "id": "textual_keywords_desc",
-    "en": "List of user-defined keywords describing the data. At least one keyword must be defined.",
-    "ru": "Список определенных пользователем ключевых слов, описывающих данные. Должно быть определено хотя бы одно ключевое слово."
+    "en": "List of user-defined keywords describing the data.",
+    "ru": "Список пользовательских ключевых слов, описывающих данные."
   },
   {
     "id": "textual_keyword_title",
@@ -6627,7 +6622,7 @@
   {
     "id": "textual_keywords_m49_desc",
     "en": "List of geographic keywords describing the spatial extent of the data. These keywords come from the \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\" prepared by the Statistics Division of the United Nations Secretariat. At least one keyword is required.",
-    "ru": "Список географических ключевых слов, описывающих пространственный экстент данных. Эти ключевые слова взяты из «Стандартных кодов стран или регионов для использования в статистике (M49), 1999 (редакция 4)», подготовленных Статистическим отделом Секретариата Организации Объединенных Наций. Требуется хотя бы одно ключевое слово."
+    "ru": "Список географических ключевых слов, описывающих пространственный охват данных. Эти ключевые слова взяты из \"Стандартных кодов стран или территорий для статистического использования (M49), 1999 (Редакция 4)\", подготовленных Статистическим отделом Секретариата ООН. Требуется как минимум одно ключевое слово."
   },
   {
     "id": "textual_keywords_gemet_title",
@@ -6636,8 +6631,18 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional.",
-    "ru": "Список ключевых слов GEMET, описывающих данные. GEMET (Общий многоязычный экологический тезаурус) - это многоязычный документальный тезаурус, разработанный и опубликованный Европейским агентством по окружающей среде. Ключевые слова GEMET необязательны."
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency.",
+    "ru": "Список ключевых слов GEMET, описывающих данные. GEMET (Общий многоязычный экологический тезаурус) — это многоязычный документальный тезаурус, разработанный и опубликованный Европейским агентством по окружающей среде."
+  },
+  {
+    "id": "textual_topics",
+    "en": "Topics",
+    "ru": "Темы"
+  },
+  {
+    "id": "textual_topics_desc",
+    "en": "List of topic categories describing the data, in accordance with EN ISO 19115: Geographic information — Metadata.",
+    "ru": "Список категорий тем, описывающих данные, в соответствии с EN ISO 19115: Географическая информация — Метаданные."
   },
   {
     "id": "textual_title",
@@ -7656,8 +7661,8 @@
   },
   {
     "id": "meta_source_keywords_topic",
-    "en": "Topic",
-    "ru": "Тема"
+    "en": "Topics",
+    "ru": "Темы"
   },
   {
     "id": "meta_source_keywords_m49",

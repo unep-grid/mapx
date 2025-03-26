@@ -26,6 +26,7 @@ JSONEditor.defaults.editors.select_tom_simple = class mxeditors extends JSONEdit
 
     if (editor.schema.description) {
       editor.description = editor.theme.getDescription(editor.schema.description);
+      editor.description.classList.add("help-block");
     }
 
     editor.input = el("input", { type: "text" });

@@ -3538,7 +3538,7 @@
   },
   {
     "id": "email_manager_sent_error_generic",
-    "en" : "An error has occurred, the email has not been sent to {{email}}. Please check the validity of the email.",
+    "en": "An error has occurred, the email has not been sent to {{email}}. Please check the validity of the email.",
     "fr": "",
     "es": "",
     "ru": "",
@@ -8204,19 +8204,6 @@
     "de": ""
   },
   {
-    "id": "contact_function_desc",
-    "en": "Name of the contact function, e.g. Administrator, Publisher",
-    "fr": "Nom de la fonction du contact : par ex. Administrateur, Editeur",
-    "es": "Nombre de la función de contacto. Ej. Administrador",
-    "ru": "",
-    "zh": "联系人的职能名称，比如管理员、发布者",
-    "ar": "",
-    "fa": "نام مخاطب عمل کننده، مثل مدیر، ناشر ",
-    "ps": "د فعایت کوونکو مخاطبینو نومونه، لکه: اداره کوونکی، خپروونکی",
-    "bn": "",
-    "de": ""
-  },
-  {
     "id": "contact_function_author",
     "en": "Author",
     "fr": "Auteur",
@@ -9687,16 +9674,16 @@
   },
   {
     "id": "textual_keywords_desc",
-    "en": "List of user-defined keywords describing the data. At least one keyword must be defined.",
-    "fr": "Liste de mots-clés définis par l'utilisateur décrivant la donnée. Au moins un mot-clé est requis.",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
+    "en": "List of user-defined keywords describing the data.",
+    "fr": "Liste de mots-clés définis par l'utilisateur décrivant la donnée.",
+    "es": "Lista de palabras clave definidas por el usuario que describen los datos.",
+    "ru": "Список пользовательских ключевых слов, описывающих данные.",
+    "zh": "用户定义的关键字列表，用于描述数据。",
+    "ar": "قائمة بالكلمات المفتاحية التي يحددها المستخدم لوصف البيانات.",
+    "fa": "فهرست کلمات کلیدی تعریف‌شده توسط کاربر که داده‌ها را توصیف می‌کنند.",
+    "ps": "د کارونکي لخوا تعریف شوي کلیدي کلمو لیست چې معلومات توضیح کوي.",
+    "bn": "ব্যবহারকারীর সংজ্ঞায়িত কীওয়ার্ডগুলির তালিকা যা ডেটা বর্ণনা করে।",
+    "de": "Liste der vom Benutzer definierten Schlüsselwörter zur Beschreibung der Daten."
   },
   {
     "id": "textual_keyword_title",
@@ -9727,15 +9714,15 @@
   {
     "id": "textual_keywords_m49_desc",
     "en": "List of geographic keywords describing the spatial extent of the data. These keywords come from the \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\" prepared by the Statistics Division of the United Nations Secretariat. At least one keyword is required.",
-    "fr": "Liste de mots-clés géographiques décrivant l'étendue spatiale des données. Ces mots-clés proviennent des \"Codes Standard des Pays et des Zones à Usage Statistique (M49), 1999 (Révision 4)\" préparés par la Division de statistique du Secrétariat des Nations Unies. Au moins un mot-clé est requis.",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
+    "fr": "Liste de mots-clés géographiques décrivant l'étendue spatiale des données. Ces mots-clés proviennent de la \"Classification type des pays ou régions aux fins statistiques (M49), 1999 (Révision 4)\", préparée par la Division des statistiques du Secrétariat des Nations Unies. Au moins un mot-clé est requis.",
+    "es": "Lista de palabras clave geográficas que describen la extensión espacial de los datos. Estas palabras clave provienen de los \"Códigos estándar de países o áreas para uso estadístico (M49), 1999 (Revisión 4)\" preparados por la División de Estadística de la Secretaría de las Naciones Unidas. Se requiere al menos una palabra clave.",
+    "ru": "Список географических ключевых слов, описывающих пространственный охват данных. Эти ключевые слова взяты из \"Стандартных кодов стран или территорий для статистического использования (M49), 1999 (Редакция 4)\", подготовленных Статистическим отделом Секретариата ООН. Требуется как минимум одно ключевое слово.",
+    "zh": "描述数据空间范围的地理关键字列表。这些关键字来自联合国秘书处统计司编制的《统计用途的标准国家或地区代码 (M49)，1999 年（修订版 4）》。至少需要一个关键字。",
+    "ar": "قائمة بالكلمات المفتاحية الجغرافية التي تصف النطاق المكاني للبيانات. تأتي هذه الكلمات المفتاحية من \"المعايير القياسية لأكواد الدول أو المناطق للاستخدام الإحصائي (M49)، 1999 (الإصدار الرابع)\" التي أعدتها شعبة الإحصاءات في أمانة الأمم المتحدة. مطلوب كلمة مفتاحية واحدة على الأقل.",
+    "fa": "فهرستی از کلمات کلیدی جغرافیایی که گستره فضایی داده‌ها را توصیف می‌کنند. این کلمات کلیدی از \"استاندارد کدهای کشور یا منطقه برای استفاده آماری (M49)، 1999 (ویرایش 4)\" که توسط بخش آمار دبیرخانه سازمان ملل متحد تهیه شده، گرفته شده‌اند. حداقل یک کلمه کلیدی الزامی است.",
+    "ps": "د جغرافیایي کلیدي کلمو لیست چې د معلوماتو فضایي پراخوالی تشریح کوي. دا کلیدي کلمې د \"احصایوي کارونې لپاره د هېواد یا سیمې معیاري کوډونه (M49)، 1999 (څلورمه بیاکتنه)\" څخه اخیستل شوي، چې د ملګرو ملتونو د احصایې څانګې لخوا چمتو شوي دي. لږترلږه یوه کلیدي کلمه اړینه ده.",
+    "bn": "তথ্যের স্থানিক বিস্তৃতি বর্ণনা করার জন্য ভৌগলিক কীওয়ার্ডগুলির তালিকা। এই কীওয়ার্ডগুলি জাতিসংঘ সচিবালয়ের পরিসংখ্যান বিভাগ দ্বারা প্রস্তুত করা \"পরিসংখ্যান ব্যবহারের জন্য মানক দেশ বা অঞ্চল কোড (M49), 1999 (সংস্করণ 4)\" থেকে এসেছে। অন্তত একটি কীওয়ার্ড আবশ্যক।",
+    "de": "Liste geografischer Schlüsselwörter, die die räumliche Ausdehnung der Daten beschreiben. Diese Schlüsselwörter stammen aus den \"Standard-Länder- oder Gebietscodes für statistische Zwecke (M49), 1999 (Revision 4)\", die von der Statistikabteilung des Sekretariats der Vereinten Nationen erstellt wurden. Mindestens ein Schlüsselwort ist erforderlich."
   },
   {
     "id": "textual_keywords_gemet_title",
@@ -9752,16 +9739,42 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional.",
-    "fr": "Liste de mots-clés GEMET décrivant la donnée. GEMET (GEneral Multilingual Environmental Thesaurus) est un thésaurus documentaire multilingue développé et publié par l'Agence européenne pour l'environnement. Les mots-clés GEMET sont optionnels.",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency.",
+    "fr": "Liste de mots-clés GEMET décrivant les données. GEMET (Thésaurus Environnemental Multilingue Général) est un thésaurus documentaire multilingue développé et publié par l'Agence européenne pour l'environnement.",
+    "es": "Lista de palabras clave GEMET que describen los datos. GEMET (Tesauro Ambiental Multilingüe General) es un tesauro documental multilingüe desarrollado y publicado por la Agencia Europea de Medio Ambiente.",
+    "ru": "Список ключевых слов GEMET, описывающих данные. GEMET (Общий многоязычный экологический тезаурус) — это многоязычный документальный тезаурус, разработанный и опубликованный Европейским агентством по окружающей среде.",
+    "zh": "描述数据的 GEMET 关键词列表。GEMET（通用多语言环境词库）是由欧洲环境署开发和发布的多语言文献词库。",
+    "ar": "قائمة بالكلمات المفتاحية لـ GEMET التي تصف البيانات. GEMET (المكنز البيئي متعدد اللغات العام) هو مكنز وثائقي متعدد اللغات تم تطويره ونشره من قبل الوكالة الأوروبية للبيئة.",
+    "fa": "فهرستی از کلمات کلیدی GEMET که داده‌ها را توصیف می‌کنند. GEMET (واژگان عمومی چندزبانه محیط‌زیست) یک واژگان مستند چندزبانه است که توسط آژانس محیط‌زیست اروپا توسعه و منتشر شده است.",
+    "ps": "د GEMET کلیدي کلمو لیست چې معلومات تشریح کوي. GEMET (عمومي څو ژبنیز چاپېریالي تېزاریس) یو څو ژبنیز مستند تېزاریس دی چې د اروپایي چاپېریال ادارې لخوا رامینځته او خپور شوی.",
+    "bn": "GEMET কীওয়ার্ডগুলির তালিকা যা ডেটা বর্ণনা করে। GEMET (সাধারণ বহুভাষিক পরিবেশগত থিসরাস) একটি বহুভাষিক ডকুমেন্টারি থিসরাস যা ইউরোপীয় পরিবেশ সংস্থা দ্বারা উন্নত এবং প্রকাশিত হয়েছে।",
+    "de": "Liste der GEMET-Schlüsselwörter zur Beschreibung der Daten. GEMET (Allgemeines Mehrsprachiges Umweltthesaurus) ist ein mehrsprachiger dokumentarischer Thesaurus, der von der Europäischen Umweltagentur entwickelt und veröffentlicht wurde."
+  },
+  {
+    "id": "textual_topics",
+    "en": "Topics",
+    "fr": "Sujets",
+    "es": "Temas",
+    "ru": "Темы",
+    "zh": "主题",
+    "ar": "المواضيع",
+    "fa": "موضوعات",
+    "ps": "موضوعونه",
+    "bn": "বিষয়সমূহ",
+    "de": "Themen"
+  },
+  {
+    "id": "textual_topics_desc",
+    "en": "List of topic categories describing the data, in accordance with EN ISO 19115: Geographic information — Metadata.",
+    "fr": "Liste des catégories thématiques décrivant les données, conformément à la norme EN ISO 19115 : Information géographique — Métadonnées.",
+    "es": "Lista de categorías temáticas que describen los datos, de acuerdo con EN ISO 19115: Información geográfica — Metadatos.",
+    "ru": "Список категорий тем, описывающих данные, в соответствии с EN ISO 19115: Географическая информация — Метаданные.",
+    "zh": "符合 EN ISO 19115: 地理信息 — 元数据的主题类别列表。",
+    "ar": "قائمة بفئات الموضوعات التي تصف البيانات، وفقًا للمعيار EN ISO 19115: المعلومات الجغرافية — البيانات الوصفية.",
+    "fa": "فهرستی از دسته‌بندی‌های موضوعی که داده‌ها را توصیف می‌کنند، مطابق با استاندارد EN ISO 19115: اطلاعات جغرافیایی — فراداده.",
+    "ps": "د موضوعي کټګوریو لیست چې معلومات توضیح کوي، د EN ISO 19115: جغرافیایي معلومات — میټاډا سره سم.",
+    "bn": "EN ISO 19115: ভূগোলসংক্রান্ত তথ্য — মেটাডেটা অনুযায়ী তথ্য বর্ণনা করার জন্য বিষয় বিভাগের তালিকা।",
+    "de": "Liste der thematischen Kategorien zur Beschreibung der Daten gemäß EN ISO 19115: Geoinformation — Metadaten."
   },
   {
     "id": "textual_title",
@@ -10428,7 +10441,7 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "Downloading layer {{title}}. The process could take a while. An email will be sent to {{email}} and the download link will be activated at the end of the process", 
+    "en": "Downloading layer {{title}}. The process could take a while. An email will be sent to {{email}} and the download link will be activated at the end of the process",
     "fr": "",
     "es": "",
     "ru": "",

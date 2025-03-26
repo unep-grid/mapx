@@ -417,16 +417,16 @@
   },
   {
     "id": "meta_source_keywords_topic",
-    "en": "Topic",
-    "fr": "Sujet",
-    "es": "Tema",
-    "ru": "Тема",
+    "en": "Topics",
+    "fr": "Sujets",
+    "es": "Temas",
+    "ru": "Темы",
     "zh": "主题",
-    "ar": "الموضوع",
-    "fa": "موضوع",
-    "ps": "موضوع",
-    "bn": "বিষয়",
-    "de": "Thema"
+    "ar": "المواضيع",
+    "fa": "موضوعات",
+    "ps": "موضوعونه",
+    "bn": "বিষয়সমূহ",
+    "de": "Themen"
   },
   {
     "id": "meta_source_keywords_m49",

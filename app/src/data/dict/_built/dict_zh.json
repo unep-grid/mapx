@@ -6040,11 +6040,6 @@
     "zh": "职能"
   },
   {
-    "id": "contact_function_desc",
-    "en": "Name of the contact function, e.g. Administrator, Publisher",
-    "zh": "联系人的职能名称，比如管理员、发布者"
-  },
-  {
     "id": "contact_function_author",
     "en": "Author",
     "zh": "作者"
@@ -6611,8 +6606,8 @@
   },
   {
     "id": "textual_keywords_desc",
-    "en": "List of user-defined keywords describing the data. At least one keyword must be defined.",
-    "zh": "描述数据的用户定义关键字列表。必须至少定义一个关键字。"
+    "en": "List of user-defined keywords describing the data.",
+    "zh": "用户定义的关键字列表，用于描述数据。"
   },
   {
     "id": "textual_keyword_title",
@@ -6627,7 +6622,7 @@
   {
     "id": "textual_keywords_m49_desc",
     "en": "List of geographic keywords describing the spatial extent of the data. These keywords come from the \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\" prepared by the Statistics Division of the United Nations Secretariat. At least one keyword is required.",
-    "zh": "描述数据空间范围的地理关键字列表。这些关键词来自联合国秘书处统计司编写的“统计使用的标准国家或地区代码（M49），1999（修订版4）”。至少需要一个关键字。"
+    "zh": "描述数据空间范围的地理关键字列表。这些关键字来自联合国秘书处统计司编制的《统计用途的标准国家或地区代码 (M49)，1999 年（修订版 4）》。至少需要一个关键字。"
   },
   {
     "id": "textual_keywords_gemet_title",
@@ -6636,8 +6631,18 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional.",
-    "zh": "描述数据的 GEMET 关键字列表。 GEMET（通用多语言环境词库）是由欧洲环境署开发和出版的多语言文献词库。 GEMET 关键字是可选的。"
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency.",
+    "zh": "描述数据的 GEMET 关键词列表。GEMET（通用多语言环境词库）是由欧洲环境署开发和发布的多语言文献词库。"
+  },
+  {
+    "id": "textual_topics",
+    "en": "Topics",
+    "zh": "主题"
+  },
+  {
+    "id": "textual_topics_desc",
+    "en": "List of topic categories describing the data, in accordance with EN ISO 19115: Geographic information — Metadata.",
+    "zh": "符合 EN ISO 19115: 地理信息 — 元数据的主题类别列表。"
   },
   {
     "id": "textual_title",
@@ -7656,7 +7661,7 @@
   },
   {
     "id": "meta_source_keywords_topic",
-    "en": "Topic",
+    "en": "Topics",
     "zh": "主题"
   },
   {

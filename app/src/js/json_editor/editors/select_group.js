@@ -27,6 +27,7 @@ JSONEditor.defaults.editors.selectizeOptGroup = class mxeditors extends (
       editor.description = editor.theme.getDescription(
         editor.schema.description,
       );
+      editor.description.classList.add("help-block");
     }
 
     editor.input = document.createElement("select");

@@ -116,8 +116,8 @@ mxSchemaSourceMeta <- function(
                 )
               ),
               keys_topic = list(
-                title = "Topic",
-                description = "Topic of the data",
+                title = t("textual_topics"),
+                description = t("textual_topics_desc"),
                 type = "array",
                 format = "select_tom_simple",
                 uniqueItems = TRUE,
@@ -443,7 +443,6 @@ mxSchemaSourceMeta <- function(
               properties = list(
                 "function" = list(
                   title = t("contact_function"),
-                  description = t("contact_function_desc"),
                   default = "point_of_contact",
                   type = "string",
                   minLength = 1,

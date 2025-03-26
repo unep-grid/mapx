@@ -4832,10 +4832,6 @@
     "en": "Function"
   },
   {
-    "id": "contact_function_desc",
-    "en": "Name of the contact function, e.g. Administrator, Publisher"
-  },
-  {
     "id": "contact_function_author",
     "en": "Author"
   },
@@ -5289,7 +5285,7 @@
   },
   {
     "id": "textual_keywords_desc",
-    "en": "List of user-defined keywords describing the data. At least one keyword must be defined."
+    "en": "List of user-defined keywords describing the data."
   },
   {
     "id": "textual_keyword_title",
@@ -5309,7 +5305,15 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional."
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency."
+  },
+  {
+    "id": "textual_topics",
+    "en": "Topics"
+  },
+  {
+    "id": "textual_topics_desc",
+    "en": "List of topic categories describing the data, in accordance with EN ISO 19115: Geographic information — Metadata."
   },
   {
     "id": "textual_title",
@@ -6125,7 +6129,7 @@
   },
   {
     "id": "meta_source_keywords_topic",
-    "en": "Topic"
+    "en": "Topics"
   },
   {
     "id": "meta_source_keywords_m49",

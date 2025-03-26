@@ -1,5 +1,5 @@
 import { JSONEditor } from "@json-editor/json-editor";
-import TomSelect from "tom-select"; 
+import TomSelect from "tom-select";
 import { el } from "./../../el_mapx";
 import { isArray, isEmpty, isNotEmpty } from "./../../is_test/index.js";
 import { getMetadataKeywords } from "./../../metadata/keywords.js";
@@ -43,6 +43,7 @@ JSONEditor.defaults.editors.selectizeMetaKeywords = class mxeditors extends (
       editor.description = editor.theme.getDescription(
         editor.schema.description,
       );
+      editor.description.classList.add("help-block");
     }
 
     editor.input = document.createElement("select");
@@ -159,4 +160,3 @@ JSONEditor.defaults.editors.selectizeMetaKeywords = class mxeditors extends (
     editor.value = editor.input.selectize.getValue();
   }
 };
-

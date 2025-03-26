@@ -6040,11 +6040,6 @@
     "ps": "فعالیت"
   },
   {
-    "id": "contact_function_desc",
-    "en": "Name of the contact function, e.g. Administrator, Publisher",
-    "ps": "د فعایت کوونکو مخاطبینو نومونه، لکه: اداره کوونکی، خپروونکی"
-  },
-  {
     "id": "contact_function_author",
     "en": "Author",
     "ps": "لیکوال"
@@ -6611,8 +6606,8 @@
   },
   {
     "id": "textual_keywords_desc",
-    "en": "List of user-defined keywords describing the data. At least one keyword must be defined.",
-    "ps": "د کارونکي لخوا ټاکل شوي کلیمو لیست چې ډاټا تشریح کوي. لږترلږه یو کلیمه باید تعریف شي."
+    "en": "List of user-defined keywords describing the data.",
+    "ps": "د کارونکي لخوا تعریف شوي کلیدي کلمو لیست چې معلومات توضیح کوي."
   },
   {
     "id": "textual_keyword_title",
@@ -6627,7 +6622,7 @@
   {
     "id": "textual_keywords_m49_desc",
     "en": "List of geographic keywords describing the spatial extent of the data. These keywords come from the \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\" prepared by the Statistics Division of the United Nations Secretariat. At least one keyword is required.",
-    "ps": "د جغرافیوي کلیمو لیست چې د معلوماتو ځایی حد بیانوي. دا کلیدي کلمې د \"احصایوي کارونې لپاره معیاري هیواد یا ساحې کوډونه (M49) ، 1999 (بیاکتنه 4)\" څخه راځي چې د ملګرو ملتونو سکریټریټ احصایوي څانګې لخوا چمتو شوي. لږترلږه یو کلیدي کلمې ته اړتیا ده."
+    "ps": "د جغرافیایي کلیدي کلمو لیست چې د معلوماتو فضایي پراخوالی تشریح کوي. دا کلیدي کلمې د \"احصایوي کارونې لپاره د هېواد یا سیمې معیاري کوډونه (M49)، 1999 (څلورمه بیاکتنه)\" څخه اخیستل شوي، چې د ملګرو ملتونو د احصایې څانګې لخوا چمتو شوي دي. لږترلږه یوه کلیدي کلمه اړینه ده."
   },
   {
     "id": "textual_keywords_gemet_title",
@@ -6636,8 +6631,18 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional.",
-    "ps": "د GEMET کلیمو لیست چې ډاټا تشریح کوي. GEMET (د جینرل څو ژبني چاپیریال تساورس) یو څو ژبنی مستند کیسه ده چې د اروپا چاپیریال ادارې لخوا رامینځته او خپره شوې. د GEMET کلیدي کلمې اختیاري دي."
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency.",
+    "ps": "د GEMET کلیدي کلمو لیست چې معلومات تشریح کوي. GEMET (عمومي څو ژبنیز چاپېریالي تېزاریس) یو څو ژبنیز مستند تېزاریس دی چې د اروپایي چاپېریال ادارې لخوا رامینځته او خپور شوی."
+  },
+  {
+    "id": "textual_topics",
+    "en": "Topics",
+    "ps": "موضوعونه"
+  },
+  {
+    "id": "textual_topics_desc",
+    "en": "List of topic categories describing the data, in accordance with EN ISO 19115: Geographic information — Metadata.",
+    "ps": "د موضوعي کټګوریو لیست چې معلومات توضیح کوي، د EN ISO 19115: جغرافیایي معلومات — میټاډا سره سم."
   },
   {
     "id": "textual_title",
@@ -7656,8 +7661,8 @@
   },
   {
     "id": "meta_source_keywords_topic",
-    "en": "Topic",
-    "ps": "موضوع"
+    "en": "Topics",
+    "ps": "موضوعونه"
   },
   {
     "id": "meta_source_keywords_m49",

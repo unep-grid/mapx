@@ -6040,11 +6040,6 @@
     "bn": "ফাংশন "
   },
   {
-    "id": "contact_function_desc",
-    "en": "Name of the contact function, e.g. Administrator, Publisher",
-    "bn": "পরিচিতি ফাংশনের নাম, যেমন প্রশাসক, প্রকাশক "
-  },
-  {
     "id": "contact_function_author",
     "en": "Author",
     "bn": "লেখক"
@@ -6611,8 +6606,8 @@
   },
   {
     "id": "textual_keywords_desc",
-    "en": "List of user-defined keywords describing the data. At least one keyword must be defined.",
-    "bn": "ডেটা বর্ণনাকারী ব্যবহারকারী-সংজ্ঞায়িত কীওয়ার্ডের তালিকা। কমপক্ষে একটি কীওয়ার্ড সংজ্ঞায়িত করা আবশ্যক।"
+    "en": "List of user-defined keywords describing the data.",
+    "bn": "ব্যবহারকারীর সংজ্ঞায়িত কীওয়ার্ডগুলির তালিকা যা ডেটা বর্ণনা করে।"
   },
   {
     "id": "textual_keyword_title",
@@ -6627,7 +6622,7 @@
   {
     "id": "textual_keywords_m49_desc",
     "en": "List of geographic keywords describing the spatial extent of the data. These keywords come from the \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\" prepared by the Statistics Division of the United Nations Secretariat. At least one keyword is required.",
-    "bn": "ভৌগলিক কীওয়ার্ডের তালিকা যা ডেটার স্থানিক ব্যাপ্তি বর্ণনা করে। জাতিসংঘ সচিবালয়ের পরিসংখ্যান বিভাগ কর্তৃক প্রস্তুতকৃত \"স্ট্যান্ডার্ড কান্ট্রি বা এরিয়া কোডস ফর স্ট্যাটিস্টিকস ইউজ (এম 49), 1999 (রিভিশন 4)\" থেকে এই কীওয়ার্ডগুলি এসেছে। কমপক্ষে একটি কীওয়ার্ড প্রয়োজন।"
+    "bn": "তথ্যের স্থানিক বিস্তৃতি বর্ণনা করার জন্য ভৌগলিক কীওয়ার্ডগুলির তালিকা। এই কীওয়ার্ডগুলি জাতিসংঘ সচিবালয়ের পরিসংখ্যান বিভাগ দ্বারা প্রস্তুত করা \"পরিসংখ্যান ব্যবহারের জন্য মানক দেশ বা অঞ্চল কোড (M49), 1999 (সংস্করণ 4)\" থেকে এসেছে। অন্তত একটি কীওয়ার্ড আবশ্যক।"
   },
   {
     "id": "textual_keywords_gemet_title",
@@ -6636,8 +6631,18 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional.",
-    "bn": "ডেটা বর্ণনাকারী GEMET কীওয়ার্ডের তালিকা। GEMET (GEneral Multilingual Environmental Thesaurus) হল ইউরোপিয়ান এনভায়রনমেন্ট এজেন্সি দ্বারা বিকশিত এবং প্রকাশিত একটি বহুভাষিক তথ্যচিত্র থিসরাস। GEMET কীওয়ার্ড optionচ্ছিক।"
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency.",
+    "bn": "GEMET কীওয়ার্ডগুলির তালিকা যা ডেটা বর্ণনা করে। GEMET (সাধারণ বহুভাষিক পরিবেশগত থিসরাস) একটি বহুভাষিক ডকুমেন্টারি থিসরাস যা ইউরোপীয় পরিবেশ সংস্থা দ্বারা উন্নত এবং প্রকাশিত হয়েছে।"
+  },
+  {
+    "id": "textual_topics",
+    "en": "Topics",
+    "bn": "বিষয়সমূহ"
+  },
+  {
+    "id": "textual_topics_desc",
+    "en": "List of topic categories describing the data, in accordance with EN ISO 19115: Geographic information — Metadata.",
+    "bn": "EN ISO 19115: ভূগোলসংক্রান্ত তথ্য — মেটাডেটা অনুযায়ী তথ্য বর্ণনা করার জন্য বিষয় বিভাগের তালিকা।"
   },
   {
     "id": "textual_title",
@@ -7656,8 +7661,8 @@
   },
   {
     "id": "meta_source_keywords_topic",
-    "en": "Topic",
-    "bn": "বিষয়"
+    "en": "Topics",
+    "bn": "বিষয়সমূহ"
   },
   {
     "id": "meta_source_keywords_m49",

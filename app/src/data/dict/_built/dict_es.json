@@ -6040,11 +6040,6 @@
     "es": "Función"
   },
   {
-    "id": "contact_function_desc",
-    "en": "Name of the contact function, e.g. Administrator, Publisher",
-    "es": "Nombre de la función de contacto. Ej. Administrador"
-  },
-  {
     "id": "contact_function_author",
     "en": "Author",
     "es": "Autor"
@@ -6611,8 +6606,8 @@
   },
   {
     "id": "textual_keywords_desc",
-    "en": "List of user-defined keywords describing the data. At least one keyword must be defined.",
-    "es": "Lista de palabras clave definidas por el usuario que describen los datos. Debe definirse al menos una palabra clave."
+    "en": "List of user-defined keywords describing the data.",
+    "es": "Lista de palabras clave definidas por el usuario que describen los datos."
   },
   {
     "id": "textual_keyword_title",
@@ -6627,7 +6622,7 @@
   {
     "id": "textual_keywords_m49_desc",
     "en": "List of geographic keywords describing the spatial extent of the data. These keywords come from the \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\" prepared by the Statistics Division of the United Nations Secretariat. At least one keyword is required.",
-    "es": "Lista de palabras clave geográficas que describen la extensión espacial de los datos. Estas palabras clave provienen de los \"Códigos estándar de país o área para uso estadístico (M49), 1999 (Revisión 4)\", preparado por la División de Estadística de la Secretaría de las Naciones Unidas. Se requiere al menos una palabra clave."
+    "es": "Lista de palabras clave geográficas que describen la extensión espacial de los datos. Estas palabras clave provienen de los \"Códigos estándar de países o áreas para uso estadístico (M49), 1999 (Revisión 4)\" preparados por la División de Estadística de la Secretaría de las Naciones Unidas. Se requiere al menos una palabra clave."
   },
   {
     "id": "textual_keywords_gemet_title",
@@ -6636,8 +6631,18 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional.",
-    "es": "Lista de palabras clave GEMET que describen los datos. GEMET (Tesauro medioambiental multilingüe general) es un tesauro documental multilingüe desarrollado y publicado por la Agencia Europea de Medio Ambiente. Las palabras clave GEMET son opcionales."
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency.",
+    "es": "Lista de palabras clave GEMET que describen los datos. GEMET (Tesauro Ambiental Multilingüe General) es un tesauro documental multilingüe desarrollado y publicado por la Agencia Europea de Medio Ambiente."
+  },
+  {
+    "id": "textual_topics",
+    "en": "Topics",
+    "es": "Temas"
+  },
+  {
+    "id": "textual_topics_desc",
+    "en": "List of topic categories describing the data, in accordance with EN ISO 19115: Geographic information — Metadata.",
+    "es": "Lista de categorías temáticas que describen los datos, de acuerdo con EN ISO 19115: Información geográfica — Metadatos."
   },
   {
     "id": "textual_title",
@@ -7656,8 +7661,8 @@
   },
   {
     "id": "meta_source_keywords_topic",
-    "en": "Topic",
-    "es": "Tema"
+    "en": "Topics",
+    "es": "Temas"
   },
   {
     "id": "meta_source_keywords_m49",

@@ -6040,11 +6040,6 @@
     "fa": "عملکرد"
   },
   {
-    "id": "contact_function_desc",
-    "en": "Name of the contact function, e.g. Administrator, Publisher",
-    "fa": "نام مخاطب عمل کننده، مثل مدیر، ناشر "
-  },
-  {
     "id": "contact_function_author",
     "en": "Author",
     "fa": "نویسنده"
@@ -6611,8 +6606,8 @@
   },
   {
     "id": "textual_keywords_desc",
-    "en": "List of user-defined keywords describing the data. At least one keyword must be defined.",
-    "fa": "لیست کلمات کلیدی تعریف شده توسط کاربر که داده ها را توصیف می کند. حداقل یک کلمه کلیدی باید تعریف شود."
+    "en": "List of user-defined keywords describing the data.",
+    "fa": "فهرست کلمات کلیدی تعریف‌شده توسط کاربر که داده‌ها را توصیف می‌کنند."
   },
   {
     "id": "textual_keyword_title",
@@ -6627,7 +6622,7 @@
   {
     "id": "textual_keywords_m49_desc",
     "en": "List of geographic keywords describing the spatial extent of the data. These keywords come from the \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\" prepared by the Statistics Division of the United Nations Secretariat. At least one keyword is required.",
-    "fa": "فهرست کلمات کلیدی جغرافیایی که گستره فضایی داده ها را توصیف می کند. این کلمات کلیدی از \"استاندارد کشورها یا کدهای منطقه ای برای استفاده از آمار (M49) ، 1999 (ویرایش 4)\" تهیه شده توسط بخش آمار دبیرخانه سازمان ملل متحد آمده است. حداقل یک کلمه کلیدی مورد نیاز است."
+    "fa": "فهرستی از کلمات کلیدی جغرافیایی که گستره فضایی داده‌ها را توصیف می‌کنند. این کلمات کلیدی از \"استاندارد کدهای کشور یا منطقه برای استفاده آماری (M49)، 1999 (ویرایش 4)\" که توسط بخش آمار دبیرخانه سازمان ملل متحد تهیه شده، گرفته شده‌اند. حداقل یک کلمه کلیدی الزامی است."
   },
   {
     "id": "textual_keywords_gemet_title",
@@ -6636,8 +6631,18 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional.",
-    "fa": "لیست کلمات کلیدی GEMET که داده ها را توصیف می کند. GEMET (GEneral Multilingual Environmental Thesaurus) یک اصطلاحنامه مستند چند زبانه است که توسط آژانس محیط زیست اروپا توسعه و منتشر شده است. کلمات کلیدی GEMET اختیاری هستند."
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency.",
+    "fa": "فهرستی از کلمات کلیدی GEMET که داده‌ها را توصیف می‌کنند. GEMET (واژگان عمومی چندزبانه محیط‌زیست) یک واژگان مستند چندزبانه است که توسط آژانس محیط‌زیست اروپا توسعه و منتشر شده است."
+  },
+  {
+    "id": "textual_topics",
+    "en": "Topics",
+    "fa": "موضوعات"
+  },
+  {
+    "id": "textual_topics_desc",
+    "en": "List of topic categories describing the data, in accordance with EN ISO 19115: Geographic information — Metadata.",
+    "fa": "فهرستی از دسته‌بندی‌های موضوعی که داده‌ها را توصیف می‌کنند، مطابق با استاندارد EN ISO 19115: اطلاعات جغرافیایی — فراداده."
   },
   {
     "id": "textual_title",
@@ -7656,8 +7661,8 @@
   },
   {
     "id": "meta_source_keywords_topic",
-    "en": "Topic",
-    "fa": "موضوع"
+    "en": "Topics",
+    "fa": "موضوعات"
   },
   {
     "id": "meta_source_keywords_m49",
