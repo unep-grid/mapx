@@ -22,8 +22,9 @@ export async function privacy_test(force = false) {
   const prefGdpr = await prefGet(ID_PRIVACY);
   const hidePrivacy = isTrue(getQueryParameter("hidePrivacyModal")[0]);
   const accepted = prefGdpr && isTrue(prefGdpr.accepted);
-  const ignore = DISABLED || accepted || hidePrivacy;
-
+  const nested = window.parent !== window
+  const ignore = DISABLED || accepted || hidePrivacy || nested;
+ 
   if (ignore && !force) {
     return;
   }
