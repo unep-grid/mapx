@@ -1,10 +1,16 @@
 import { Events } from "./events.js";
 import settings from "./settings.json";
 import { MessageFrameCom, RequestFrameCom } from "./messages.js";
-import { parse, stringify } from "./helpers.js";
+import { parse, stringify, patchObject } from "./helpers.js";
 import { version } from "../package.json";
 import { isObject } from "../../is_test/index.js";
-import { patchObject } from "../../mx_helper_misc.js";
+
+/**
+*
+* ⚠️  importing module from the codebase could trigger recursively importing 
+* many unwanted modules
+*/ 
+
 /**
  * Class to create a manager to build an iframe and post message to a worker inside
  * @extends Events
