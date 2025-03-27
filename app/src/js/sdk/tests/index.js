@@ -1,3 +1,5 @@
+// The Testing class is now globally available from utils/dist/index.umd.js
+
 const elContainer = document.getElementById("mapx");
 const elResults = document.getElementById("results");
 const mapx = new mxsdk.Manager({
@@ -42,7 +44,7 @@ mapx.on("message", (message) => {
 
 const groups = new window.URL(window.location.href).searchParams.get("groups");
 const titles = new window.URL(window.location.href).searchParams.get("titles");
-const t = new mxsdk.Testing({
+const t = new mxsdkTestUtils.Testing({
   container: elResults,
   title: "mapx sdk test",
   groups: groups ? groups.split(",") : [],

@@ -1,0 +1,14 @@
+{
+  "name": "@fxi/mxsdk-test-utils",
+  "version": "1.0.0",
+  "description": "Testing utilities for MapX SDK",
+  "source": "./index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.module.js",
+  "unpkg": "./dist/index.umd.js",
+  "amdName": "mxsdkTestUtils",
+  "scripts": {
+    "build": "microbundle --external none -o dist"
+  },
+  "dependencies": {}
+}

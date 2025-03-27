@@ -19,7 +19,8 @@
   ],
   "amdName": "mxsdk",
   "scripts": {
-    "test": "microbundle --external none -o dist --no-compress && live-server tests --mount=/dist:dist --mount=/data:data",
+    "build:test-utils": "cd tests/utils && microbundle --external none -o dist --no-compress",
+    "test": "npm run build && npm run build:test-utils && live-server tests --mount=/dist:dist --mount=/data:data --mount=/tests/utils/dist:tests/utils/dist",
     "dev": "microbundle --external none watch -o dist --no-compress",
     "serve": "live-server dev --mount=/dist:dist --mount=/data:data",
     "build-serve": "npm run build && live-server dev --mount=/dist:dist",

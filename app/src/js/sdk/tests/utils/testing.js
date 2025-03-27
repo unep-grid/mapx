@@ -1,5 +1,5 @@
-import { el } from "./../../el/src/index.js";
-import * as valid from "./../../is_test/index.js";
+import * as valid from "./../../../is_test/index.js";
+import { el } from "./../../../el";
 
 const defaults = {
   title: "test",
@@ -242,9 +242,9 @@ export class Testing {
         "b",
         (elIcon = el("span")),
         (elTitle = el("span", title)),
-        (elText = el("span"))
+        (elText = el("span")),
       ),
-      (elList = el("ul"))
+      (elList = el("ul")),
     );
     t.opt.container.appendChild(elSection);
     return {
@@ -261,7 +261,7 @@ export class Testing {
       (elIcon = el("span")),
       (elTitle = el("span", name)),
       (elText = el("span")),
-      (elTiming = el("span", { style: { color: "#ccc" } }))
+      (elTiming = el("span", { style: { color: "#ccc" } })),
     );
     section.list.appendChild(elLi);
     return {

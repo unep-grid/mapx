@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -14,7 +14,7 @@
         width: 100%;
         height: 100%;
         display: flex;
-        flex-direction:column;
+        flex-direction: column;
       }
       .container > .item {
         flex-grow: 1;
@@ -36,7 +36,10 @@
       <div id="mapx" class="item"></div>
       <div id="results" class="item"></div>
     </div>
-    <small>Iframe should be visible on Chrome. If not, tests do not start</small>
+    <small>
+      Iframe should be visible on Chrome. If not, tests do not start
+    </small>
+    <script src="utils/dist/mxsdk-test-utils.umd.js"></script>
     <script src="dist/mxsdk.umd.js"></script>
     <script src="index.js"></script>
   </body>
