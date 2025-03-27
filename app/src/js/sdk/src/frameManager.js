@@ -4,7 +4,7 @@ import { MessageFrameCom, RequestFrameCom } from "./messages.js";
 import { parse, stringify } from "./helpers.js";
 import { version } from "../package.json";
 import { isObject } from "../../is_test/index.js";
-
+import { patchObject } from "../../mx_helper_misc.js";
 /**
  * Class to create a manager to build an iframe and post message to a worker inside
  * @extends Events
@@ -67,10 +67,10 @@ class FrameManager extends Events {
       return;
     }
 
-    fm.opt = Object.assign({}, settings, opt);
+    fm.opt = patchObject(settings, opt);
 
     if (typeof fm.opt.url === "object") {
-      fm.opt.url = Object.assign({}, settings.url, fm.opt.url);
+      fm.opt.url = patchObject(settings.url, fm.opt.url);
     }
 
     fm._sdkToken = Math.random().toString(32);
