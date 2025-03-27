@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - staging
+      - main
   workflow_dispatch:
   schedule:
     - cron: '0 7 * * 1'  # Monday 7 AM UTC
