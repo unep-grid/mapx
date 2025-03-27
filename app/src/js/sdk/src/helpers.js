@@ -98,35 +98,48 @@ export function stringify(data) {
 /**
  * Applies a patch object to a source object, returning a new object.
  * Only modifies properties specified in the patch.
- * 
+ *
  * @param {Object} source - Original object
  * @param {Object} patch - Updates to apply
  * @returns {Object} New object with patches applied
  */
 export function patchObject(source, patch) {
   // Handle non-object cases
-  if (!source || typeof source !== 'object' || !patch || typeof patch !== 'object') {
+  if (
+    !source ||
+    typeof source !== "object" ||
+    !patch ||
+    typeof patch !== "object"
+  ) {
     return patch ?? source;
   }
-  
+
   // Create shallow copy of source
-  const result = Array.isArray(source) ? [...source] : {...source};
-  
+  const result = Array.isArray(source) ? [...source] : { ...source };
+
   // Apply patches
-  Object.keys(patch).forEach(key => {
+  Object.keys(patch).forEach((key) => {
     const patchValue = patch[key];
-    
+
     // Skip null/undefined values
     if (patchValue === null || patchValue === undefined) return;
-    
+
     // Handle nested objects
-    if (typeof patchValue === 'object' && !Array.isArray(patchValue) && 
-        typeof source[key] === 'object' && !Array.isArray(source[key])) {
+    if (
+      typeof patchValue === "object" &&
+      !Array.isArray(patchValue) &&
+      typeof source[key] === "object" &&
+      !Array.isArray(source[key])
+    ) {
       result[key] = patchObject(source[key], patchValue);
     } else {
       result[key] = patchValue;
     }
   });
-  
+
   return result;
+}
+
+export function isObject(item) {
+  return !!item && typeof item === "object" && !Array.isArray(item);
 }

@@ -1,9 +1,8 @@
 import { Events } from "./events.js";
 import settings from "./settings.json";
 import { MessageFrameCom, RequestFrameCom } from "./messages.js";
-import { parse, stringify, patchObject } from "./helpers.js";
+import { parse, stringify, patchObject, isObject } from "./helpers.js";
 import { version } from "../package.json";
-import { isObject } from "../../is_test/index.js";
 
 /**
 *
