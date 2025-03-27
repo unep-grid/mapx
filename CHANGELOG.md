@@ -1,3 +1,10 @@
+  - [1.13.15](https://github.com/unep-grid/mapx/tree/1.13.15) 
+
+    - fix(sdk): force hiding sdk privacy if nested – temporary patch
+    - docs(ci): update action/ci badge -> staging as builder + set staging as the build action –> gha
+    - fix(ci): build on push to main
+
+
   - [1.13.14](https://github.com/unep-grid/mapx/tree/1.13.14) 
 
 
