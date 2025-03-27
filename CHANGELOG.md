@@ -1,3 +1,13 @@
+  - [1.13.14-beta.11](https://github.com/unep-grid/mapx/tree/1.13.14-beta.11) 
+
+    - refactor(sdk): move testing utilities out of SDK source
+    - fix(sdk): use local helpers to avoid overbloating the sdk module
+    - fix(sdk/privacy): merging user/default options issue solved by properly recursivelly merge them
+    - style(sdk-examples): formating
+    - docs(misc): update mergeDeep and patchObject jsdoc
+    - fix(sdk): recursive settings patch should solve issue with hidePrivacyModal not being correctly set
+
+
   - [1.13.14-beta.10](https://github.com/unep-grid/mapx/tree/1.13.14-beta.10) 
 
     - fix(privacy): fix hidePrivacyModal parameter handling in SDK context
