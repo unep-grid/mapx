@@ -229,11 +229,21 @@ export function updateIfEmpty(target, source) {
 }
 
 /**
- * Recursively merges two objects without modifying the original objects.
- * @note TODO replace updateIfEmpty and mergeDeep
- * @param {Object} source The source object to be updated.
- * @param {Object} patch The object containing updates. Undefined or null values are ignored.
- * @returns {Object} A new object with properties from both source and patch.
+ * Selectively updates an object with values from a patch object.
+ * - For nested objects, recursively applies patches
+ * - Skips empty values in the patch
+ * - Only processes own properties of the patch
+ * - Preserves the original structure where not specified in the patch
+ *
+ * @param {Object} source - The original object to be patched
+ * @param {Object} patch - The patch object containing updates to apply
+ * @returns {Object} A new object with the patch applied
+ * 
+ * @example
+ * const source = { a: { b: 1, c: 2 }, d: 3 };
+ * const patch = { a: { b: 10 }, e: 4 };
+ * const result = patchObject(source, patch);
+ * // result: { a: { b: 10, c: 2 }, d: 3, e: 4 }
  */
 export function patchObject(source, patch) {
   if (!isObject(source) || !isObject(patch)) {
@@ -269,10 +279,21 @@ export function patchObject(source, patch) {
 }
 
 /**
- * Performs a deep merge of objects and returns new object. Does not modify
- * objects (immutable) and merges arrays via concatenation.
+ * Deeply merges two objects, combining their properties recursively.
+ * - For arrays, concatenates the source array to the target array
+ * - For objects, recursively merges their properties
+ * - For other values, replaces the target value with the source value
  * https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
  *
+ * @param {Object} target - The target object to merge into
+ * @param {Object} source - The source object whose properties will be merged into the target
+ * @returns {Object} The merged object (modified target)
+ * 
+ * @example
+ * const target = { a: { b: 1 }, c: [1, 2] };
+ * const source = { a: { d: 2 }, c: [3, 4] };
+ * const result = mergeDeep(target, source);
+ * // result: { a: { b: 1, d: 2 }, c: [1, 2, 3, 4] }
  */
 export function mergeDeep(target, source) {
   if (!isObject(target) || !isObject(source)) {
