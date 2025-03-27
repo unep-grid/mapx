@@ -1,3 +1,7 @@
+  - [1.13.14](https://github.com/unep-grid/mapx/tree/1.13.14) 
+
+
+
   - [1.13.14-beta.11](https://github.com/unep-grid/mapx/tree/1.13.14-beta.11) 
 
     - refactor(sdk): move testing utilities out of SDK source
