@@ -67,6 +67,13 @@ mxIsUserDev <- function(idUser) {
   return(idUser %in% .get(config, c("dev", "members")))
 }
 
+#' Check if user id is in the project creator group
+#' @param {Integer} idUser user id
+#' @return {Logical} is creator
+mxIsUserProjectCreator <- function(idUser) {
+  return(idUser %in% .get(config, c("project", "creation", "usersAllowed")))
+}
+
 #' Is a source ok to be edited ?
 #'
 #' @param {Character} idSource  Source id

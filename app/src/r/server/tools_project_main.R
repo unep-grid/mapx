@@ -2,21 +2,15 @@
 # Admin panel and button
 #
 observe({
-  usersAllowedToCreate <- .get(
-    config,
-    c("project", "creation", "usersAllowed"),
-    default = list()
-  )
   userRole <- getUserRole()
   userData <- reactUser$data
   isAdmin <- isTRUE(userRole$admin)
   isPublisher <- isTRUE(userRole$publisher)
-  isProjectCreator <- isTRUE(userData$id %in% usersAllowedToCreate)
+  isProjectCreator <- isTRUE(userRole$project_creator)
   isProjectDefault <- isTRUE(
     reactData$project == .get(config, c("project", "default"))
   )
   isGuest <- isGuestUser()
-  reactData$projectAllowedToCreate <- isProjectCreator
 
   if (isGuest) {
     return()

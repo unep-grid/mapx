@@ -1,4 +1,4 @@
-import { isRoot } from "#mapx/authentication";
+import { isRoot, isProjectCreator } from "#mapx/authentication";
 import { validate } from "./validate.js";
 import { isProjectId, isNotEmpty } from "@fxi/mx_valid";
 import { randomString } from "#mapx/helpers";
@@ -6,7 +6,7 @@ import { insertRow } from "#mapx/db_utils";
 
 export async function ioProjectCreate(socket, data, cb) {
   try {
-    const auth = isRoot(socket);
+    const auth = isRoot(socket) || isProjectCreator(socket);
     if (!auth) {
       throw new Error("proj_manage_creation_not_allowed");
     }

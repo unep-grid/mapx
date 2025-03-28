@@ -12,5 +12,6 @@ export {
   isAdmin,
   isMember,
   isPublisher,
+  isProjectCreator,
   getUserRoles,
 } from "./helpers.js";

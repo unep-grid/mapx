@@ -1,11 +1,11 @@
-import { isRoot } from "#mapx/authentication";
+import { isProjectCreator, isRoot } from "#mapx/authentication";
 import { settings } from "#root/settings";
 import { isStringRange } from "@fxi/mx_valid";
 import { pgRead } from "#mapx/db";
 
 export async function ioProjectNameValidate(socket, data, cb) {
   try {
-    const auth = isRoot(socket);
+    const auth = isRoot(socket) || isProjectCreator(socket);
 
     if (!auth) {
       throw new Error("proj_manage_not_allowed");

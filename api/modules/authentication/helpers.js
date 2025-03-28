@@ -29,6 +29,7 @@ export async function getUserRoles(idUser, idProject) {
     guest: false,
     root: false,
     developer: false,
+    project_creator: false,
     group_max: "guests",
   };
 
@@ -48,12 +49,20 @@ export async function getUserRoles(idUser, idProject) {
    * All admin are publisher, member
    * All publisher are member
    */
+  
+  // global roles from environment 
   roles.root = isUserRoot(idUser);
+  roles.project_creator = isUserProjectCreator(idUser);
+  
+   // project roles
   roles.admin = roles.root || pData.admins.includes(idUser);
   roles.publisher = roles.admin || pData.publishers.includes(idUser);
   roles.member = roles.publisher || pData.members.includes(idUser);
   roles.guest = !roles.member && pData.public;
+
+  // hybrid roles 
   roles.developer = roles.publisher && isUserDeveloper(idUser);
+
 
   if (roles.guest) {
     roles.list.push("guest");
@@ -96,6 +105,15 @@ export function isUserRoot(idUser) {
  */
 export function isUserDeveloper(idUser) {
   return settings.mapx.users.dev.includes(idUser);
+}
+
+/**
+ * Is the user in project creator group ?
+ * @param {Number} idUser
+ * @return {Boolean} User is in project creators group
+ */
+export function isUserProjectCreator(idUser) {
+  return settings.mapx.users.project_creator.includes(idUser);
 }
 
 /**
@@ -176,4 +194,8 @@ export function isRoot(socket) {
 export function isDeveloper(socket) {
   const s = socket.session || {};
   return !!s?.user_authenticated && s?.user_roles.developer;
+}
+export function isProjectCreator(socket) {
+  const s = socket.session || {};
+  return !!s?.user_authenticated && s?.user_roles.project_creator;
 }

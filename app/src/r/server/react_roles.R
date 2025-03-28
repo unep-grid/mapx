@@ -29,6 +29,7 @@ getUserRole <- reactive({
   #
   isGuest <- isGuestUser()
   isRoot <- mxIsUserRoot(idUser)
+  isProjCreator <- mxIsUserProjectCreator(idUser)
   isDev <- roles$publisher && mxIsUserDev(idUser)
 
   #
@@ -40,6 +41,10 @@ getUserRole <- reactive({
   if (isRoot) {
     roles$groups <- c(roles$groups, "roots")
   }
+  if(isProjCreator){
+    roles$groups <- c(roles$groups,'project_creators')
+  }
+  roles$project_creator <- isProjCreator
   roles$developer <- isDev
   roles$root <- isRoot
   roles$guest <- isGuest # eq. to roles$groups => public

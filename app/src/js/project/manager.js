@@ -8,7 +8,7 @@ import { tt } from "../el_mapx";
 import { getDictItem } from "./../language";
 
 const options = {
-  min_role: "root",
+  roles : [ "root", "project_creator"]
 };
 
 export class ProjectManager {
@@ -142,7 +142,7 @@ export class ProjectManager {
 
   testAuth() {
     return new Promise((resolve, reject) => {
-      const isAuthorized = settings.user.roles[options.min_role];
+      const isAuthorized = options.roles.find(r => settings.user.roles[r])
       if (!isAuthorized) {
         return reject("proj_manage_not_allowed");
       }
