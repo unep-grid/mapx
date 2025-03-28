@@ -1,3 +1,8 @@
+  - [1.13.16-alpha.0](https://github.com/unep-grid/mapx/tree/1.13.16-alpha.0) 
+
+    - fix(project manager): allow non root user to create and manage project #976
+
+
   - [1.13.15](https://github.com/unep-grid/mapx/tree/1.13.15) 
 
     - fix(sdk): force hiding sdk privacy if nested – temporary patch
