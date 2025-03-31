@@ -28,9 +28,7 @@ import { ViewBase } from "../views_builder/view_base.js";
 import { ChaosTest } from "./chaos_test.js";
 import {
   MapxLogo,
-  MapControlLiveCoord,
   MapControlAttribution,
-  MapControlScale,
 } from "./../map_controls";
 import { NotifCenter } from "./../notif_center/";
 import { cleanDiacritic } from "./../string_util/";
