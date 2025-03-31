@@ -7,10 +7,8 @@ import {
   getViewVtSourceId,
 } from "../map_helpers/index.js";
 import {
-  isEmpty,
   isElement,
   isNumeric,
-  isArray,
   isViewVt,
   isViewGj,
 } from "../is_test_mapx/index.js";
@@ -19,9 +17,11 @@ import { getAttributesAlias } from "../metadata/utils.js";
 import { dashboard } from "../dashboards/index.js";
 import { EventSimple } from "../event_simple/index.js";
 import { Widget } from "../dashboards/widget.js";
-import { elWait, el, elCheckToggle } from "../el_mapx/index.js";
+import { elWait, el } from "../el_mapx/index.js";
 import "./style.less";
 import { onNextFrame, waitTimeoutAsync } from "../animation_frame/index.js";
+import  Tabulator  from "tabulator-tables/src/js/core/Tabulator.js";
+import "tabulator-tables/dist/css/tabulator.min.css";
 
 const defaults = {
   fw_timeout: {
@@ -66,6 +66,8 @@ const defaults = {
 const state = {
   widget: null,
   filters: {},
+  tables: {},
+  selectedCells: {},
 };
 
 window._fw_state = state;
@@ -93,14 +95,6 @@ export class FeaturesToWidget extends EventSimple {
     }
     fw.render();
     await fw.show();
-  }
-
-  clear() {
-    const fw = this;
-    fw.resetFilter();
-    while (fw.elContainer.firstElementChild) {
-      fw.elContainer.removeChild(fw.elContainer.firstElementChild);
-    }
   }
 
   setDashboardWidth() {
@@ -144,14 +138,35 @@ export class FeaturesToWidget extends EventSimple {
     this.widget.dashboard.updatePanelLayout();
   }
 
+  clear() {
+    const fw = this;
+    fw.resetFilter();
+
+    // Destroy all Tabulator instances
+    for (const id in state.tables) {
+      if (state.tables[id]) {
+        state.tables[id].destroy();
+      }
+    }
+    state.tables = {};
+    state.selectedCells = {};
+
+    // Clear DOM
+    while (fw.elContainer.firstElementChild) {
+      fw.elContainer.removeChild(fw.elContainer.firstElementChild);
+    }
+  }
+
   destroy() {
     if (this._is_destroyed) {
       return;
     }
-    this.resetFilter();
+    this.clear();
+
     if (state.widget?.destroy) {
       state.widget.destroy();
     }
+
     state.widget = {};
     state.filters = {};
     this._is_destroyed = true;
@@ -189,6 +204,7 @@ export class FeaturesToWidget extends EventSimple {
   }
 
   async _render_item(idView, promAttributes) {
+    const fw = this;
     const view = getView(idView);
     const isVector = isViewVt(view) || isViewGj(view);
     const title = getViewTitle(idView);
@@ -197,10 +213,9 @@ export class FeaturesToWidget extends EventSimple {
     const item = {};
 
     try {
-      // Initialize the item with a title, spinner, and attributes container
-      this._render_init_item(item, title);
-
-      this.elContainer.appendChild(item.elItem);
+      // Initialize the item with a title, spinner, and container
+      fw._render_init_item(item, title);
+      fw.elContainer.appendChild(item.elItem);
 
       // Wait for the attributes promise to resolve
       const promWait = waitTimeoutAsync(
@@ -219,7 +234,7 @@ export class FeaturesToWidget extends EventSimple {
 
       if (attrNames.length === 0) {
         item.elAttributesContainer.appendChild(
-          await this.elIssueMessage("noValue"),
+          await fw.elIssueMessage("noValue"),
         );
         item.elItem.classList.add("disabled");
         return;
@@ -231,23 +246,211 @@ export class FeaturesToWidget extends EventSimple {
         Object.assign(labels, await getAttributesAlias(idSource, attrNames));
       }
 
-      // Iterate through each attribute and build elements
+      // Prepare attribute data for Tabulator
+      const tableData = [];
+      const tableColumns = [];
+
       for (const attribute of attrNames) {
+        const label = getLabelFromObjectPath({
+          obj: labels[attribute],
+          defaultValue: attribute,
+        });
+
         const position = attrOrder.indexOf(attribute);
-        this._render_attribute(
-          item,
-          attribute,
-          attributes[attribute],
-          labels,
-          idView,
-          isVector,
-          position,
-        );
+
+        // Configure column for this attribute
+        tableColumns.push({
+          title: label,
+          field: attribute,
+          headerSortTristate:true,
+          headerTooltip:true,
+          vertAlign: "middle",
+          tooltip: true,
+          sorter: (a, b) => {
+            if (isNumeric(a) && isNumeric(b)) {
+              return Number(a) - Number(b);
+            }
+            return String(a).localeCompare(String(b));
+          },
+        });
+
+        // Get values for this attribute
+        const values = attributes[attribute];
+        const valuesSorted = getArrayStat({ stat: "sortNatural", arr: values });
+
+        // Create data rows for each value
+        valuesSorted.forEach((value, index) => {
+          if (!tableData[index]) {
+            tableData[index] = {};
+          }
+          tableData[index][attribute] = value;
+        });
       }
 
-      this.updateLayout();
+      // Create Tabulator table
+      const elTable = el("div", {
+        class: ["mx-feature-widget--table"],
+      });
+      item.elAttributesContainer.appendChild(elTable);
+
+      console.log(console.table(tableColumns));
+
+      const table = new Tabulator(elTable, {
+        data: tableData,
+        columns: tableColumns,
+        layout: "fitDataTable", // Use fitDataTable instead of fitColumns
+        maxHeight: "300px", // Set max height to ensure scrolling
+        minHeight: "100px", // Set min height
+        //responsiveLayout: "hide", // Hide columns that don't fit
+        movableColumns: true, // Allow column reordering
+        columnMinWidth: 100, // Set minimum column width
+        resizableColumns: true, // Allow column resizing
+        selectable: false,
+        placeholder: "No Data Available",
+      });
+
+      // Add cell click event to handle selection and filtering
+      if (isVector) {
+        table.on("cellClick", (e, cell) => {
+          const column = cell.getColumn();
+          const attribute = column.getField();
+          const value = cell.getValue();
+          console.log('click', {columnm, attribute, value})
+
+          fw._handleCellClick(idView, attribute, value, cell);
+        });
+      }
+
+      state.tables[idView] = table;
+
+      // Resize after table is fully rendered
+      table.on("tableBuilt", () => {
+        fw.fit();
+        fw.updateLayout();
+      });
     } catch (err) {
       this._render_on_error(item, err);
+    }
+  }
+
+  _handleCellClick(idView, attribute, value, cell) {
+    console.log("Cell clicked:", idView, attribute, value);
+
+    // Initialize filter arrays if not exists
+    if (!state.filters[idView]) {
+      state.filters[idView] = ["any"];
+    }
+
+    // Get table instance
+    const table = state.tables[idView];
+    if (!table) return;
+
+    // Toggle selection state
+    const cellElement = cell.getElement();
+    const isSelected = cellElement.classList.contains("selected-cell");
+
+    // Find all cells with the same value in this column
+    const rows = table.getRows();
+    const cells = [];
+
+    rows.forEach((row) => {
+      const cell = row.getCell(attribute);
+      if (cell && String(cell.getValue()) === String(value)) {
+        cells.push(cell);
+      }
+    });
+
+    console.log(
+      `Found ${cells.length} matching cells for value "${value}" in column "${attribute}"`,
+    );
+
+    // Unselect if already selected
+    if (isSelected) {
+      cells.forEach((c) => {
+        c.getElement().classList.remove("selected-cell");
+      });
+
+      // Remove from filters
+      this._removeFromFilters(idView, attribute, value);
+    } else {
+      // Select this value
+      cells.forEach((c) => {
+        c.getElement().classList.add("selected-cell");
+      });
+
+      // Add to filters
+      this._addToFilters(idView, attribute, value);
+    }
+
+    // Apply the filter to map
+    this.applyFilters(idView);
+  }
+
+  _addToFilters(idView, attribute, value) {
+    if (!state.filters[idView]) {
+      state.filters[idView] = ["any"];
+    }
+
+    const isNum = isNumeric(value);
+    let rule = [];
+
+    if (value === settings.valuesMap.null) {
+      rule.push(...["!", ["has", attribute]]);
+    } else {
+      if (isNum) {
+        rule = [
+          "any",
+          ["==", ["get", attribute], value],
+          ["==", ["get", attribute], value * 1],
+        ];
+      } else {
+        rule = ["==", ["get", attribute], value];
+      }
+    }
+
+    state.filters[idView].push(rule);
+  }
+
+  _removeFromFilters(idView, attribute, value) {
+    if (!state.filters[idView] || state.filters[idView].length <= 1) {
+      state.filters[idView] = ["any"];
+      return;
+    }
+
+    const isNum = isNumeric(value);
+
+    // Find and remove matching rule
+    for (let i = 1; i < state.filters[idView].length; i++) {
+      const rule = state.filters[idView][i];
+
+      if (
+        value === settings.valuesMap.null &&
+        rule[0] === "!" &&
+        rule[1][0] === "has" &&
+        rule[1][1] === attribute
+      ) {
+        state.filters[idView].splice(i, 1);
+        break;
+      } else if (
+        isNum &&
+        rule[0] === "any" &&
+        rule[1][0] === "==" &&
+        rule[1][1][0] === "get" &&
+        rule[1][1][1] === attribute &&
+        (rule[1][2] === value || rule[1][2] === value * 1)
+      ) {
+        state.filters[idView].splice(i, 1);
+        break;
+      } else if (
+        !isNum &&
+        rule[0] === "==" &&
+        rule[1][0] === "get" &&
+        rule[1][1] === attribute &&
+        rule[2] === value
+      ) {
+        state.filters[idView].splice(i, 1);
+        break;
+      }
     }
   }
 
@@ -267,125 +470,7 @@ export class FeaturesToWidget extends EventSimple {
     );
   }
 
-  _render_attribute(item, attribute, values, labels, idView, isVector, order) {
-    const fw = this;
-    const label = getLabelFromObjectPath({
-      obj: labels[attribute],
-      defaultValue: attribute,
-    });
-
-    const valuesSorted = getArrayStat({ stat: "sortNatural", arr: values });
-    if (valuesSorted.length === 0) {
-      valuesSorted.push("-");
-    }
-
-    // Create attribute container elements
-    const elAttributeValues = el("div", {
-      class: "mx-feature-widget--attribute-values",
-    });
-
-    const elAttributeTitle = el(
-      "summary",
-      {
-        class: "mx-feature-widget--attribute-title",
-        title: attribute,
-      },
-      label,
-    );
-    const elAttribute = el(
-      "details",
-      {
-        class: "mx-feature-widget--attribute",
-        on: ["click", () => fw.fit()],
-      },
-      [elAttributeTitle, elAttributeValues],
-    );
-    // raster = -1, vector 0
-    if (order < 1) {
-      elAttribute.setAttribute("open", true);
-    }
-    elAttribute.style.order = order;
-
-    item.elAttributesContainer.appendChild(elAttribute);
-
-    // Append values to the attribute grid
-    const maxValue = 5;
-    const nItems = valuesSorted.length;
-    const addBtnMore = nItems > maxValue;
-    const { collector, elBtnMore } = this._build_more(elAttributeValues);
-
-    for (let i = 0, iL = valuesSorted.length; i < iL; i++) {
-      const value = valuesSorted[i];
-      const elValue = this._render_value(value, idView, attribute, isVector);
-      if (i > maxValue) {
-        collector(elValue);
-      } else {
-        elAttributeValues.appendChild(elValue);
-      }
-    }
-    if (addBtnMore) {
-      elAttributeValues.appendChild(elBtnMore);
-    }
-  }
-
-  _build_more(elTarget) {
-    const fw = this;
-    const elFragItems = document.createDocumentFragment();
-    const elBtnMore = el(
-      "label",
-      {
-        on: ["click", renderMore],
-        class: [
-          "mx-feature-widget--value",
-          "mx-feature-widget--value-clickable",
-        ],
-      },
-      "More",
-    );
-
-    return {
-      elBtnMore,
-      collector,
-    };
-
-    function collector(x) {
-      elFragItems.appendChild(x);
-    }
-
-    function renderMore() {
-      elBtnMore.remove();
-      elTarget.appendChild(elFragItems);
-      fw.fit();
-    }
-  }
-
-  _render_value(value, idView, attribute, isVector) {
-    const valueArray = isArray(value) ? value : [value];
-    const elFrag = document.createDocumentFragment();
-
-    for (const val of valueArray) {
-      const elValue = isVector
-        ? elCheckToggle({
-            label: val,
-            onChange: this.filterValues.bind(this),
-            data: {
-              layer: idView,
-              attribute,
-              value: val,
-              type: isNumeric(val) ? "numeric" : "string",
-            },
-            checked: false,
-            classLabel: [
-              "mx-feature-widget--value-group",
-              "mx-feature-widget--value-clickable",
-            ],
-          })
-        : el("span", { class: "mx-feature-widget--value", title: val }, val);
-      elFrag.appendChild(elValue);
-    }
-
-    return elFrag;
-  }
+  // Methods removed as they're replaced by Tabulator functionality
 
   async _render_on_error(item, err) {
     if (isElement(item.elItem)) {
@@ -414,46 +499,7 @@ export class FeaturesToWidget extends EventSimple {
     }
   }
 
-  filterValues(e) {
-    const elBtn = e.target;
-    const elContainer = this.elContainer;
-    const layer = elBtn.dataset.layer;
-    const elChecks = elContainer.querySelectorAll(`[data-layer=${layer}]`);
-
-    state.filters[layer] = ["any"];
-
-    for (const elCheck of elChecks) {
-      this.updateFilters(elCheck);
-    }
-
-    this.applyFilters(layer);
-  }
-
-  updateFilters(el) {
-    const value = el.dataset.value;
-    const layer = el.dataset.layer;
-    const type = el.dataset.type;
-    const attribute = el.dataset.attribute;
-    const add = el.checked;
-    const isNum = !isEmpty(type) ? type === "numeric" : isNumeric(value);
-    let rule = [];
-    if (add) {
-      if (value === settings.valuesMap.null) {
-        rule.push(...["!", ["has", attribute]]);
-      } else {
-        if (isNum) {
-          rule = [
-            "any",
-            ["==", ["get", attribute], value],
-            ["==", ["get", attribute], value * 1],
-          ];
-        } else {
-          rule = ["==", ["get", attribute], value];
-        }
-      }
-      state.filters[layer].push(rule);
-    }
-  }
+  // These methods are replaced by _handleCellClick, _addToFilters, and _removeFromFilters
 
   applyFilters(idV) {
     const filter = state.filters[idV];
