@@ -1,3 +1,7 @@
+  - [1.13.16](https://github.com/unep-grid/mapx/tree/1.13.16) 
+
+
+
   - [1.13.16-beta.0](https://github.com/unep-grid/mapx/tree/1.13.16-beta.0) 
 
     - feat(url): set MapX default tab via URL param 'tab' (not persistant)
