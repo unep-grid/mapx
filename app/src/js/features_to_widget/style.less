@@ -5,6 +5,7 @@
   padding: 5px;
   display: flex;
   flex-direction: column;
+  
   .mx-feature-widget--item {
     padding: 10px;
     color: #fff;
@@ -15,68 +16,79 @@
     .mx-feature-widget--title {
       margin-top: 0;
       font-size: 1.1em;
-    }
-
-    .mx-feature-widget--property {
-      margin-bottom: 1em;
-      font-size: 0.8em;
+      margin-bottom: 10px;
     }
 
     .mx-feature-widget--attributes {
       display: flex;
       flex-direction: column;
       padding: 10px;
-
-      .mx-feature-widget--attribute {
-        margin-top: 6px;
+      overflow: hidden;
+      
+      .mx-feature-widget--table {
+        width: 100%;
+        margin-top: 8px;
         border-radius: 5px;
-        background: var(--mx_ui_background_accent);
-        box-shadow: var(--mx_ui_box_shadow);
-
-        .mx-feature-widget--attribute-title {
-          padding: 5px;
-        }
-
-        .mx-feature-widget--attribute-values {
-          margin: 5px;
-          background-color: var(--mx_ui_background_faded);
-          border-radius: 5px;
-          display: grid;
-          grid-gap: 10px;
-          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-          padding: 10px;
-
-          .mx-feature-widget--value-group span,
-          .mx-feature-widget--value {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 80%;
-            white-space: nowrap;
+        overflow: hidden;
+        
+        // Tabulator customization
+        .tabulator {
+          background-color: var(--mx_ui_background_accent);
+          border: none;
+          
+          .tabulator-header {
+            background-color: var(--mx_ui_background_accent);
+            border-bottom: 1px solid var(--mx_ui_border);
+            
+            .tabulator-col {
+              background-color: var(--mx_ui_background_accent);
+              border-right: 1px solid var(--mx_ui_border);
+              
+              .tabulator-col-content {
+                padding: 8px;
+                
+                .tabulator-col-title {
+                  font-weight: bold;
+                  color: #fff;
+                }
+              }
+            }
           }
-
-          .mx-feature-widget--value,
-          .mx-feature-widget--value-group {
-            background: var(--mx_ui_background_accent);
-            border: 1px solid var(--mx_ui_border);
-            border-radius: 5px;
-            margin: 0px;
-            padding: 5px;
-            padding-left: 10px;
-            padding-right: 10px;
-          }
-
-          .mx-feature-widget--value-group {
-            display: flex;
-            align-items: center;
-            flex-direction: row-reverse;
-            justify-content: space-between;
-
-            &.mx-feature-widget--value-clickable {
-              cursor: pointer;
+          
+          .tabulator-tableHolder {
+            .tabulator-table {
+              .tabulator-row {
+                background-color: var(--mx_ui_background_faded);
+                border-bottom: 1px solid var(--mx_ui_border);
+                
+                &:hover {
+                  background-color: var(--mx_ui_background_accent) !important;
+                }
+                
+                .tabulator-cell {
+                  padding: 8px;
+                  border-right: 1px solid var(--mx_ui_border);
+                  cursor: pointer;
+                  
+                  &.selected-cell {
+                    background-color: var(--mx_ui_highlight);
+                    color: #fff;
+                  }
+                }
+              }
             }
           }
         }
       }
     }
   }
+}
+
+// Fix for dark theme compatibility
+.tabulator-row.tabulator-group {
+  background-color: var(--mx_ui_background) !important;
+}
+
+.tabulator-row.tabulator-selected {
+  background-color: var(--mx_ui_highlight) !important;
 }
