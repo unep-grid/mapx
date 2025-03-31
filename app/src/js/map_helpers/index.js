@@ -1045,6 +1045,14 @@ export async function initMapx(o) {
   }
 
   /**
+   * Set initial tab to open
+   */
+  const tab = getQueryParameter("tab")[0];
+  if (tab) {
+    settings.tab = tab;
+  }
+
+  /**
    * Update  sprites path
    * -> glyphs are hosted with mapbox. If self hosted:
    * settings.style.glyphs = getAppPathUrl("fontstack");
@@ -1264,6 +1272,14 @@ export async function initMapx(o) {
         console.error(e);
       }
     });
+
+
+    /**
+    * Set init tab to show
+    */ 
+    if (settings.tab) {
+      mx_local.panel_main.tabActivate(settings.tab);
+    }
 
     /**
      * On language change, update
