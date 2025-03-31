@@ -1,3 +1,9 @@
+  - [1.13.16-beta.0](https://github.com/unep-grid/mapx/tree/1.13.16-beta.0) 
+
+    - feat(url): set MapX default tab via URL param 'tab' (not persistant)
+    - fix(doc): set documentation URL to the prod version
+
+
   - [1.13.16-alpha.0](https://github.com/unep-grid/mapx/tree/1.13.16-alpha.0) 
 
     - fix(project manager): allow non root user to create and manage project #976

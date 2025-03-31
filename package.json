@@ -11,7 +11,7 @@
     "husky": "^9.1.7",
     "release-it": "^18.1.2"
   },
-  "version": "1.13.16-alpha.0",
+  "version": "1.13.16-beta.0",
   "scripts": {
     "prepare": "husky",
     "commit": "cz",
