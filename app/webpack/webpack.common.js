@@ -106,11 +106,10 @@ module.exports = {
         use: { loader: "worker-loader" },
       },
       {
-        test: /\.js$/,
+        test: /\.m?js$/, // This matches both .js and .mjs files
         loader: "esbuild-loader",
         options: {
           loader: "js",
-          target: "es2015",
         },
       },
       {
@@ -118,7 +117,6 @@ module.exports = {
         loader: "esbuild-loader",
         options: {
           loader: "tsx",
-          target: "es2015",
         },
       },
       { test: /\.html$/, loader: "html-loader", options: {} },

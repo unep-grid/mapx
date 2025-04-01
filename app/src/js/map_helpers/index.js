@@ -26,10 +26,7 @@ import { Search } from "./../search";
 import { downloadJSON } from "../download/index.js";
 import { ViewBase } from "../views_builder/view_base.js";
 import { ChaosTest } from "./chaos_test.js";
-import {
-  MapxLogo,
-  MapControlAttribution,
-} from "./../map_controls";
+import { MapxLogo, MapControlAttribution } from "./../map_controls";
 import { NotifCenter } from "./../notif_center/";
 import { cleanDiacritic } from "./../string_util/";
 import chroma from "chroma-js";
@@ -160,6 +157,7 @@ const mx_local = {
   panel_main: null,
   button_filter: null,
   search: null,
+  features_widget: null,
 };
 
 /**
@@ -1271,10 +1269,9 @@ export async function initMapx(o) {
       }
     });
 
-
     /**
-    * Set init tab to show
-    */ 
+     * Set init tab to show
+     */
     if (settings.tab) {
       mx_local.panel_main.tabActivate(settings.tab);
     }
@@ -1752,7 +1749,7 @@ export async function handleClickEvent(e, idMap) {
     map: map,
     point: e.point,
     type: ["vt", "gj", "cc", "rt"],
-    asObject: true,
+    asObject: false,
   });
 
   if (isEmpty(layersAttributes)) {
@@ -1760,11 +1757,12 @@ export async function handleClickEvent(e, idMap) {
   }
 
   if (addWidget) {
-    const fw = new FeaturesToWidget();
+    const fw = mx_local.features_widget || new FeaturesToWidget();
+    mx_local.features_widget = fw;
 
-    window._fw = fw;
     fw.on("destroyed", () => {
       highlighter.reset();
+      delete mx_local.features_widget;
     });
 
     events.once({
@@ -1782,9 +1780,7 @@ export async function handleClickEvent(e, idMap) {
       },
     });
 
-    await fw.init({
-      layersAttributes,
-    });
+    await fw.set({ attributes: layersAttributes });
   }
 
   if (addHighlight) {
