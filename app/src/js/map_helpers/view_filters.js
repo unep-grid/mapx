@@ -22,7 +22,7 @@ import { getViewSourceSummary } from "./../mx_helper_source_summary";
  */
 export function viewSetFilter(o) {
   o = o || {};
-  const m = getMap();
+  const map = getMap();
   const view = getView(o.idView);
   const idView = view.id;
   const filterView = view._getFilters();
@@ -77,7 +77,8 @@ export function viewSetFilter(o) {
     } else {
       filterFinal.push(...filterOrig, ...filterNew);
     }
-    m.setFilter(layer.id, filterFinal);
+
+    map.setFilter(layer.id, filterFinal);
   }
 
   events.fire({
@@ -164,7 +165,7 @@ export function viewFiltersInit(idView) {
     text: ["all"],
     numeric: ["all"],
     custom_style: ["all"],
-    popup_filter: null,
+    popup_filter: ["all"],
   };
   view._setFilter = (opt) => viewSetFilter({ ...opt, idView });
   view._getFilters = (opt) => viewGetFilters({ ...opt, idView });
@@ -215,7 +216,7 @@ export function viewSetTextFilter(opt) {
   const filter = ["any"];
   for (const value of values) {
     if (value === settings.valuesMap.null) {
-      filter.push(["!", ["has", attribute]]);
+      filter.push(["!has", attribute]);
     } else {
       filter.push(["==", ["get", attribute], value]);
     }
