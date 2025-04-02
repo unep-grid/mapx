@@ -1,10 +1,10 @@
-import { getArrayStat } from "./../array_stat/index.js";
 import { getDictItem, getLabelFromObjectPath } from "./../language";
 import {
   getView,
   getViewAttributes,
   getViewTitle,
   getViewVtSourceId,
+  getMap,
 } from "../map_helpers/index.js";
 import {
   isElement,
@@ -13,7 +13,6 @@ import {
   isViewGj,
   isEmpty,
 } from "../is_test_mapx/index.js";
-import { settings } from "../mx.js";
 import { getAttributesAlias } from "../metadata/utils.js";
 import { dashboard } from "../dashboards/index.js";
 import { EventSimple } from "../event_simple/index.js";
@@ -23,6 +22,8 @@ import "./style.less";
 import { onNextFrame, waitTimeoutAsync } from "../animation_frame/index.js";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
 import "tabulator-tables/dist/css/tabulator.min.css";
+import "./tabulator.less";
+import { clone } from "../mx_helper_misc";
 
 const defaults = {
   fw_timeout: {
@@ -65,18 +66,25 @@ const defaults = {
 };
 
 export class FeaturesToWidget extends EventSimple {
-  constructor() {
+  constructor(opt = {}) {
     super();
     this._widget = {};
     this._tables = {};
     this._filters = {};
     this._attributes = {};
     this._el_container = null;
+    this._activeFilters = {}; // Store active column value filters
+    this._highlighter_orig = null;
+
+    // Create a custom highlighter with specific options
+    this._highlighter = opt?.highlighter;
   }
 
   async set(data) {
     const fw = this;
     fw._attributes = data.attributes;
+    fw._highlighter_orig = null;
+
     if (fw.hasWidget) {
       fw._el_container = this.widget.elContent.firstElementChild;
     } else {
@@ -89,7 +97,10 @@ export class FeaturesToWidget extends EventSimple {
         fw.destroy();
       });
     }
+
+
     fw.render();
+
     await fw.show();
   }
   get attributes() {
@@ -151,6 +162,12 @@ export class FeaturesToWidget extends EventSimple {
     // reset views filter
     fw.resetFilter();
 
+    // Reset active column filters
+    fw._activeFilters = {};
+
+    // Reset highlighter to clear any highlights
+    fw._resetHighlights();
+
     // Destroy all Tabulator instances
     for (const id in this.tables) {
       if (this.tables[id]) {
@@ -169,6 +186,7 @@ export class FeaturesToWidget extends EventSimple {
     if (this._is_destroyed) {
       return;
     }
+    this._is_destroyed = true;
     this.clear();
 
     // destroy the widget
@@ -180,7 +198,8 @@ export class FeaturesToWidget extends EventSimple {
     this._widget = {};
     this._filters = {};
     this._tables = {};
-    this._is_destroyed = true;
+    this._highlighter = null;
+    this._highlighter_orig = null;
 
     this.fire("destroyed");
   }
@@ -262,7 +281,7 @@ export class FeaturesToWidget extends EventSimple {
           formatter: "rowSelection",
           titleFormatter: "rowSelection",
           headerSort: false,
-          width: 50,
+          width: 25,
           headerFilter: false,
           frozen: true,
           headerTooltip: false,
@@ -292,6 +311,9 @@ export class FeaturesToWidget extends EventSimple {
           headerTooltip: true,
           vertAlign: "middle",
           tooltip: true,
+          cellClick: (_, cell) => {
+            fw._handleCellClick(idView, cell);
+          },
           sorter: (a, b) => {
             if (isNumeric(a) && isNumeric(b)) {
               return Number(a) - Number(b);
@@ -318,7 +340,7 @@ export class FeaturesToWidget extends EventSimple {
         columnMinWidth: 100, // Set minimum column width
         resizableColumns: true, // Allow column resizing
         selectable: "multiple",
-        selectableRows: true,
+        selectableRows: false,
         placeholder: "[ No Value ]",
       });
 
@@ -403,5 +425,171 @@ export class FeaturesToWidget extends EventSimple {
         type: "popup_filter",
       });
     }
+  }
+
+  /**
+   * Handle cell click to filter by cell value within a column
+   * @param {String} idView View id
+   * @param {Object} cell Tabulator cell object
+   */
+  _handleCellClick(idView, cell) {
+    const fw = this;
+    const value = cell.getValue();
+    const field = cell.getColumn().getField();
+    const table = fw.tables[idView];
+
+    // Value can be null or undefined for empty fields, which we should still handle
+    if (!field || !table) {
+      return;
+    }
+
+    // Check if this specific cell value is already active
+    const isCellActive = this._isCellActive(idView, field, value);
+
+    // Always reset ALL cell highlighting (across all columns) and map highlights
+    this._clearAllActiveCells(idView);
+
+    if (!fw._highlighter_orig) {
+      fw._highlighter_orig = this._highlighter.get();
+    }
+
+    // Toggle behavior: If this exact cell was active, just clear everything and return
+
+    if (isCellActive) {
+      this._resetHighlights();
+      return;
+    }
+
+    // Activate this cell value and highlight features
+    this._setCellActive(idView, field, value);
+    this._highlightMatchingCells(idView, field, value);
+    this._highlightMatchingFeatures(idView, field, value);
+  }
+
+  /**
+   * Check if a specific cell value is active
+   * @param {String} idView View id
+   * @param {String} field Field name
+   * @param {*} value Cell value
+   * @returns {Boolean} True if the cell is active
+   */
+  _isCellActive(idView, field, value) {
+    const fw = this;
+    const filterKey = `${field}:${value}`;
+    return !!fw._activeFilters[idView]?.[filterKey];
+  }
+
+  /**
+   * Mark a cell value as active in the state
+   * @param {String} idView View id
+   * @param {String} field Field name
+   * @param {*} value Cell value
+   */
+  _setCellActive(idView, field, value) {
+    const fw = this;
+    const filterKey = `${field}:${value}`;
+
+    if (!fw._activeFilters[idView]) {
+      fw._activeFilters[idView] = {};
+    }
+
+    fw._activeFilters[idView][filterKey] = true;
+  }
+
+  /**
+   * Clear all active cells in a view
+   * @param {String} idView View id
+   */
+  _clearAllActiveCells(idView) {
+    const fw = this;
+    const table = fw.tables[idView];
+
+    if (!fw._activeFilters[idView] || !table) {
+      return;
+    }
+
+    // Clear all active filters in the state
+    fw._activeFilters[idView] = {};
+
+    // Remove visual highlighting from all cells in the table
+    table.getRows().forEach((row) => {
+      for (const cellObj of row.getCells()) {
+        const cellElement = cellObj.getElement();
+        if (cellElement) {
+          cellElement.classList.remove("selected-cell");
+        }
+      }
+    });
+  }
+
+  /**
+   * Reset the highlighter to clear visual highlights on the map
+   */
+  _resetHighlights() {
+    const fw = this;
+    if (fw._highlighter_orig) {
+      fw._highlighter.set(this._highlighter_orig);
+    }
+  }
+
+  /**
+   * Highlight all cells in the table that match a specific value
+   * @param {String} idView View id
+   * @param {String} field Field name
+   * @param {*} value Cell value to match
+   */
+  _highlightMatchingCells(idView, field, value) {
+    const fw = this;
+    const table = fw.tables[idView];
+
+    if (!table) {
+      return;
+    }
+
+    table.getRows().forEach((row) => {
+      const cellToCheck = row.getCell(field);
+      if (cellToCheck) {
+        const cellValue = cellToCheck.getValue();
+
+        // Check if both are empty or have the same value
+        const bothEmpty = isEmpty(value) && isEmpty(cellValue);
+        const sameValue =
+          isNumeric(value) && isNumeric(cellValue)
+            ? Number(value) === Number(cellValue)
+            : value === cellValue;
+
+        if (bothEmpty || sameValue) {
+          const cellElement = cellToCheck.getElement();
+          if (cellElement) {
+            cellElement.classList.add("selected-cell");
+          }
+        }
+      }
+    });
+  }
+
+  /**
+   * Highlight features on the map that match a specific attribute value
+   * @param {String} idView View id
+   * @param {String} field Field name
+   * @param {*} value Attribute value to match
+   */
+  _highlightMatchingFeatures(idView, field, value) {
+    const fw = this;
+    let filter;
+
+    // Create appropriate filter based on value type
+    if (isEmpty(value)) {
+      filter = ["!has", field];
+    } else if (isNumeric(value)) {
+      filter = ["==", ["to-number", ["get", field]], value];
+    } else {
+      filter = ["==", ["get", field], value];
+    }
+
+    // Set highlighter with the filter
+    fw._highlighter.set({
+      filters: [{ id: idView, filter: filter }],
+    });
   }
 }

@@ -1,8 +1,10 @@
+import { onNextFrame } from "../animation_frame";
 import { bindAll } from "../bind_class_methods";
+import { patchObject, path } from "../mx_helper_misc";
 import { isEmpty, isString } from "./../is_test/index";
 const def = {
   map: null, // Mapbox gl instance
-  use_animation: false, // Enable animation
+  use_animation: true, // Enable animation
   register_listener: false, // If true highligther will be triggered by event "event_type". "false" set as default as highligther is triggered during popup handling
   event_type: "mousemove", // click, mousemove. Does not work yet with mousemove
   transition_duration: 200,
@@ -12,7 +14,7 @@ const def = {
   highlight_offset: 2, // greater that 2 is too much for lines
   highlight_blur: 0.2,
   highlight_width: 5,
-  highlight_color: "#F0F",
+  highlight_color: "#000",
   highlight_opacity: 0.9,
   highlight_feature_opacity: 0.5,
   highlight_radius: 20,
@@ -22,7 +24,7 @@ const def = {
 };
 
 const defConfig = {
-  point: null,
+  coord: null,
   filters: [],
   all: false,
 };
@@ -88,7 +90,7 @@ class Highlighter {
    * Set hl config
    *
    * @param {Object} config - Configuration options for the highlighter.
-   * @param {(PointLike | Array<PointLike>)?} config.point Location to query
+   * @param {Object} config.coord Location to query
    * @param {Array.<Object>} config.filters - Array of filter objects to be applied.
    * @param {String} config.filters[].id - Identifier of the view to which the filter applies.
    * @param {Array} config.filters[].filter - MapboxGL expression
@@ -125,18 +127,19 @@ class Highlighter {
    */
   set(config) {
     const hl = this;
+
     if (isEmpty(config)) {
       console.error("Missing config. Use 'update' to re-use previous config");
       return;
     }
     hl.reset();
-    Object.assign(hl._config, config);
+    hl._config = patchObject(defConfig, config);
     return hl.update({ animate: true });
   }
 
-  _clearConfig() {
-    const hl = this;
-    hl._config = Object.assign({}, defConfig);
+  get() {
+    console.log("get highlight in hl module");
+    return this._config;
   }
 
   /**
@@ -144,9 +147,13 @@ class Highlighter {
    */
   reset() {
     const hl = this;
-    hl._clearConfig();
+    hl._config = defConfig;
     hl._clear();
     return hl.count();
+  }
+  clean() {
+    const hl = this;
+    return hl.reset();
   }
 
   /**
@@ -172,11 +179,6 @@ class Highlighter {
     hl._layers.clear();
     hl._items.clear();
   }
-  clean() {
-    console.warn("Deprecated, use clear() instead");
-    const hl = this;
-    return hl._clear();
-  }
 
   /**
    * Render : for each feature :
@@ -188,8 +190,6 @@ class Highlighter {
     const opt = Object.assign({}, { animate: false }, renderOptions);
     const max = hl.opt.max_layers_render;
     const animate = opt.animate && hl.opt.use_animation;
-    //cancelFrame(hl._id_render);
-    //hl._id_render = onNextFrame(() => {
     let i = 0;
     for (const layer of hl._layers.values()) {
       if (i++ >= max) {
@@ -198,9 +198,10 @@ class Highlighter {
       hl.addHighlightLayer(layer);
     }
     if (animate) {
-      hl.animate();
+      onNextFrame(() => {
+        hl.animate();
+      });
     }
-    //});
   }
 
   /**
@@ -255,7 +256,7 @@ class Highlighter {
    */
   _update_items() {
     const hl = this;
-    const config = Object.assign({}, defConfig, hl._config);
+    const config = patchObject(defConfig, hl._config);
 
     if (hl.isNotSet()) {
       return;
@@ -279,19 +280,18 @@ class Highlighter {
       for (const feature of allFeatures) {
         features.push(feature);
       }
-    } else if (config.point) {
+    } else if (config.coord) {
       /**
        * All features touched  by "PointLike" object
        */
-      const pointFeatures = hl._map.queryRenderedFeatures(config?.point, {
+      const point = hl._map.project(config.coord);
+      const coordFeatures = hl._map.queryRenderedFeatures(point, {
         layers: layers,
       });
 
-      for (const feature of pointFeatures) {
+      for (const feature of coordFeatures) {
         features.push(feature);
       }
-
-      hl._clearConfig();
     } else {
       /**
        * All feature filtered by config
@@ -341,7 +341,7 @@ class Highlighter {
   isNotSet() {
     const hl = this;
     const config = hl._config;
-    return isEmpty(config.point) && isEmpty(config.filters) && !config.all;
+    return isEmpty(config.coord) && isEmpty(config.filters) && !config.all;
   }
 
   /**
