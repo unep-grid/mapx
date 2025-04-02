@@ -1447,7 +1447,6 @@ export async function initMapListener(map) {
     if (highlighter.isNotSet()) {
       return;
     }
-    console.log("moveend", highlighter.get());
     highlighter.update();
   });
 
