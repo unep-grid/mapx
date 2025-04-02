@@ -127,9 +127,8 @@ class Highlighter {
    */
   set(config) {
     const hl = this;
-
     if (isEmpty(config)) {
-      console.error("Missing config. Use 'update' to re-use previous config");
+      console.warn("Missing config. Use 'update' to re-use previous config");
       return;
     }
     hl.reset();
@@ -138,7 +137,6 @@ class Highlighter {
   }
 
   get() {
-    console.log("get highlight in hl module");
     return this._config;
   }
 

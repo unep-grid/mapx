@@ -4,7 +4,6 @@ import {
   getViewAttributes,
   getViewTitle,
   getViewVtSourceId,
-  getMap,
 } from "../map_helpers/index.js";
 import {
   isElement,
@@ -23,7 +22,6 @@ import { onNextFrame, waitTimeoutAsync } from "../animation_frame/index.js";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
 import "tabulator-tables/dist/css/tabulator.min.css";
 import "./tabulator.less";
-import { clone } from "../mx_helper_misc";
 
 const defaults = {
   fw_timeout: {
