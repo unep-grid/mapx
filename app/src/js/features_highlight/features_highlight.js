@@ -1,7 +1,7 @@
 import { onNextFrame } from "../animation_frame";
 import { bindAll } from "../bind_class_methods";
 import { patchObject, path } from "../mx_helper_misc";
-import { isEmpty, isString } from "./../is_test/index";
+import { isArray, isEmpty, isNotEmpty, isString } from "./../is_test/index";
 const def = {
   map: null, // Mapbox gl instance
   use_animation: true, // Enable animation
@@ -26,6 +26,7 @@ const def = {
 const defConfig = {
   coord: null,
   filters: [],
+  features: [],
   all: false,
 };
 
@@ -278,7 +279,7 @@ class Highlighter {
       for (const feature of allFeatures) {
         features.push(feature);
       }
-    } else if (config.coord) {
+    } else if (isNotEmpty(config.coord)) {
       /**
        * All features touched  by "PointLike" object
        */
@@ -286,11 +287,12 @@ class Highlighter {
       const coordFeatures = hl._map.queryRenderedFeatures(point, {
         layers: layers,
       });
-
       for (const feature of coordFeatures) {
         features.push(feature);
       }
-    } else {
+      config.features =  features; 
+      config.coord = null;
+    } else if (isNotEmpty(config.filters)) {
       /**
        * All feature filtered by config
        */
@@ -305,6 +307,8 @@ class Highlighter {
           features.push(feature);
         }
       }
+    } else {
+      features.push(...config.features);
     }
 
     const items = features
@@ -339,7 +343,12 @@ class Highlighter {
   isNotSet() {
     const hl = this;
     const config = hl._config;
-    return isEmpty(config.coord) && isEmpty(config.filters) && !config.all;
+    return (
+      isEmpty(config.features) &&
+      isEmpty(config.coord) &&
+      isEmpty(config.filters) &&
+      !config.all
+    );
   }
 
   /**
