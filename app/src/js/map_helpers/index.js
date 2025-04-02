@@ -1745,14 +1745,14 @@ export async function handleClickEvent(e, idMap) {
    * e.g. {MX-OTXV7-C2HI3-Z7XLJ: Promise}
    *
    */
-  const layersAttributes = await getLayersPropertiesAtPoint({
+  const attributes = getLayersPropertiesAtPoint({
     map: map,
     point: e.point,
     type: ["vt", "gj", "cc", "rt"],
     asObject: false,
   });
 
-  if (isEmpty(layersAttributes)) {
+  if (isEmpty(attributes)) {
     return;
   }
 
@@ -1789,14 +1789,14 @@ export async function handleClickEvent(e, idMap) {
       },
     });
 
-    await fw.set({ attributes: layersAttributes });
+    await fw.set({ attributes });
   }
 
   /**
    * Dispatch to event
    * - If something listens to "click_attributes", return values
    */
-  await attributesToEvent(layersAttributes, e);
+  await attributesToEvent(attributes, e);
 }
 
 /**
@@ -4314,61 +4314,59 @@ export function getLayersPropertiesAtPoint(opt) {
    * Fetch properties on vector layer
    */
   function fetchVectorProp(view) {
-    return new Promise((resolve) => {
-      const id = view.id;
-      let attributes = view?.data?.attribute?.names || [];
-      if (isString(attributes)) {
-        // vector of 1 in R -> string during r->json conversion
-        attributes = [attributes];
-      }
-      const layers = getLayerNamesByPrefix({
-        map: map,
-        prefix: id,
-      });
-
-      const features = map.queryRenderedFeatures(opt.point, {
-        layers: layers,
-      });
-
-      const out = modeObject ? {} : [];
-
-      features.forEach((f) => {
-        /**
-         * Fill null
-         * -> tiles can't contain nulls
-         * -> nulls expected in popup and widget clicked feature
-         */
-        for (const a of attributes) {
-          if (isEmpty(f.properties[a])) {
-            f.properties[a] = "$NULL";
-          }
-        }
-
-        if (modeObject) {
-          for (const p in f.properties) {
-            /**
-             * Exclude prop (time, gid, etc)
-             */
-            if (!excludeProp.includes(p)) {
-              /**
-               * Aggregate value by attribute
-               */
-              let value = f.properties[p];
-              let values = out[p] || [];
-              values = values.concat(value);
-              out[p] = getArrayDistinct(values);
-            }
-          }
-        } else {
-          /*
-           * Raw properties
-           */
-          out.push(f.properties);
-        }
-      });
-
-      resolve(out);
+    const id = view.id;
+    let attributes = view?.data?.attribute?.names || [];
+    if (isString(attributes)) {
+      // vector of 1 in R -> string during r->json conversion
+      attributes = [attributes];
+    }
+    const layers = getLayerNamesByPrefix({
+      map: map,
+      prefix: id,
     });
+
+    const features = map.queryRenderedFeatures(opt.point, {
+      layers: layers,
+    });
+
+    const out = modeObject ? {} : [];
+
+    features.forEach((f) => {
+      /**
+       * Fill null
+       * -> tiles can't contain nulls
+       * -> nulls expected in popup and widget clicked feature
+       */
+      for (const a of attributes) {
+        if (isEmpty(f.properties[a])) {
+          f.properties[a] = "$NULL";
+        }
+      }
+
+      if (modeObject) {
+        for (const p in f.properties) {
+          /**
+           * Exclude prop (time, gid, etc)
+           */
+          if (!excludeProp.includes(p)) {
+            /**
+             * Aggregate value by attribute
+             */
+            let value = f.properties[p];
+            let values = out[p] || [];
+            values = values.concat(value);
+            out[p] = getArrayDistinct(values);
+          }
+        }
+      } else {
+        /*
+         * Raw properties
+         */
+        out.push(f.properties);
+      }
+    });
+
+    return out;
   }
 }
 

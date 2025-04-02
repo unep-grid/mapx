@@ -11,6 +11,7 @@ import {
   isViewVt,
   isViewGj,
   isEmpty,
+  isString,
 } from "../is_test_mapx/index.js";
 import { getAttributesAlias } from "../metadata/utils.js";
 import { dashboard } from "../dashboards/index.js";
@@ -95,7 +96,6 @@ export class FeaturesToWidget extends EventSimple {
         fw.destroy();
       });
     }
-
 
     fw.render();
 
@@ -256,8 +256,12 @@ export class FeaturesToWidget extends EventSimple {
       }
       item.elSpinner.remove();
 
-      const attrNames = Object.keys(attributes);
       const attrOrder = getViewAttributes(view);
+      const attrNames = Object.keys(attributes[0] || {});
+
+      if (isEmpty(attrOrder)) {
+        attrOrder.push(...attrNames);
+      }
 
       if (isEmpty(attrNames)) {
         item.elAttributesContainer.appendChild(
@@ -268,27 +272,30 @@ export class FeaturesToWidget extends EventSimple {
       }
 
       // Fetch attribute labels if the view is vector
-      if (isViewVt(view)) {
+      if (isVector) {
         const idSource = getViewVtSourceId(view);
         Object.assign(labels, await getAttributesAlias(idSource, attrNames));
       }
 
       // Prepare attribute data for Tabulator
-      const tableColumns = [
-        {
-          formatter: "rowSelection",
-          titleFormatter: "rowSelection",
-          headerSort: false,
-          width: 25,
-          headerFilter: false,
-          frozen: true,
-          headerTooltip: false,
-          tooltip: false,
-          resizable: false,
-        },
-      ];
+      const tableColumns = isVector
+        ? [
+            {
+              formatter: "rowSelection",
+              titleFormatter: "rowSelection",
+              headerSort: false,
+              width: 25,
+              headerFilter: false,
+              frozen: true,
+              headerTooltip: false,
+              tooltip: false,
+              resizable: false,
+            },
+          ]
+        : [];
 
       let isFirst = true;
+
       for (const attribute of attrOrder) {
         /**
          * Get value from language object
@@ -310,7 +317,9 @@ export class FeaturesToWidget extends EventSimple {
           vertAlign: "middle",
           tooltip: true,
           cellClick: (_, cell) => {
-            fw._handleCellClick(idView, cell);
+            if (isVector) {
+              fw._handleCellClick(idView, cell);
+            }
           },
           sorter: (a, b) => {
             if (isNumeric(a) && isNumeric(b)) {
@@ -579,10 +588,13 @@ export class FeaturesToWidget extends EventSimple {
     // Create appropriate filter based on value type
     if (isEmpty(value)) {
       filter = ["!has", field];
+    } else if (isString(value)) {
+      filter = ["==", ["get", field], value];
     } else if (isNumeric(value)) {
       filter = ["==", ["to-number", ["get", field]], value];
     } else {
-      filter = ["==", ["get", field], value];
+      console.warn("Unexpected for", value);
+      filter = ["all"];
     }
 
     // Set highlighter with the filter

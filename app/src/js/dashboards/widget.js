@@ -312,11 +312,12 @@ class Widget extends EventSimple {
     if (!viewType || !idView) {
       return [];
     }
-    const items = getLayersPropertiesAtPoint({
+    const items = await getLayersPropertiesAtPoint({
       map: widget.config.map,
       type: viewType,
       point: e ? e.point : null,
       idView: idView,
+      wait: false,
     });
     return items[idView] || [];
   }
