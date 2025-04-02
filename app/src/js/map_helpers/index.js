@@ -1447,6 +1447,7 @@ export async function initMapListener(map) {
     if (highlighter.isNotSet()) {
       return;
     }
+    console.log("moveend", highlighter.get());
     highlighter.update();
   });
 
@@ -1756,14 +1757,23 @@ export async function handleClickEvent(e, idMap) {
     return;
   }
 
-  if (addWidget) {
-    const fw = mx_local.features_widget || new FeaturesToWidget();
-    mx_local.features_widget = fw;
+  if (addHighlight) {
+    highlighter.set({ coord: map.unproject(e.point) });
+  }
 
-    fw.on("destroyed", () => {
-      highlighter.reset();
-      delete mx_local.features_widget;
-    });
+  if (addWidget) {
+    const hasFeatureWidget =
+      mx_local.features_widget instanceof FeaturesToWidget;
+
+    if (!hasFeatureWidget) {
+      mx_local.features_widget = new FeaturesToWidget({ highlighter });
+      mx_local.features_widget.on("destroyed", () => {
+        highlighter.reset();
+        delete mx_local.features_widget;
+      });
+    }
+
+    const fw = mx_local.features_widget;
 
     events.once({
       type: [
@@ -1781,10 +1791,6 @@ export async function handleClickEvent(e, idMap) {
     });
 
     await fw.set({ attributes: layersAttributes });
-  }
-
-  if (addHighlight) {
-    highlighter.set({ point: e.point });
   }
 
   /**

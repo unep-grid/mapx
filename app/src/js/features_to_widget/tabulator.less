@@ -1,0 +1,66 @@
+// Base Tabulator styling for MapX
+// This file can be reused across the application for consistent Tabulator styling
+
+.tabulator {
+  background-color: var(--mx_ui_background_accent);
+  border: 1px solid var(--mx_ui_border);
+
+  .tabulator-header {
+    background-color: var(--mx_ui_background_accent);
+    border-bottom: 1px solid var(--mx_ui_border);
+
+    .tabulator-col {
+      background-color: var(--mx_ui_background_accent);
+      border-right: 1px solid var(--mx_ui_border);
+
+      .tabulator-col-content {
+        .tabulator-col-title {
+          font-weight: bold;
+          color: var(--mx_ui_text);
+        }
+      }
+    }
+  }
+
+  .tabulator-table {
+    .tabulator-row {
+      background-color: var(--mx_ui_background_faded);
+      border-bottom: 1px solid var(--mx_ui_border);
+
+      &:hover {
+        background-color: var(--mx_ui_background_accent) !important;
+      }
+
+      .tabulator-cell {
+        padding: 8px;
+        border-right: 1px solid var(--mx_ui_border);
+        cursor: pointer;
+
+        &.selected-cell {
+          position: relative;
+
+          &::after {
+            position: absolute;
+            content: "";
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 3px solid var(--mx_ui_input_accent);
+            border-radius: 4px;
+            pointer-events: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Fix for dark theme compatibility
+.tabulator-row.tabulator-group {
+  background-color: var(--mx_ui_background) !important;
+}
+
+.tabulator-row.tabulator-selected {
+  background-color: var(--mx_ui_highlight) !important;
+}

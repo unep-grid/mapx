@@ -1,3 +1,6 @@
+// Import Tabulator specific styles
+@import "./tabulator.less";
+
 .mx-feature-widget--container {
   max-height: 100%;
   overflow-y: hidden;
@@ -30,65 +33,7 @@
         margin-top: 8px;
         border-radius: 5px;
         overflow: hidden;
-        
-        // Tabulator customization
-        .tabulator {
-          background-color: var(--mx_ui_background_accent);
-          border: none;
-          
-          .tabulator-header {
-            background-color: var(--mx_ui_background_accent);
-            border-bottom: 1px solid var(--mx_ui_border);
-            
-            .tabulator-col {
-              background-color: var(--mx_ui_background_accent);
-              border-right: 1px solid var(--mx_ui_border);
-              
-              .tabulator-col-content {
-                padding: 8px;
-                
-                .tabulator-col-title {
-                  font-weight: bold;
-                  color: #fff;
-                }
-              }
-            }
-          }
-          
-          .tabulator-tableHolder {
-            .tabulator-table {
-              .tabulator-row {
-                background-color: var(--mx_ui_background_faded);
-                border-bottom: 1px solid var(--mx_ui_border);
-                
-                &:hover {
-                  background-color: var(--mx_ui_background_accent) !important;
-                }
-                
-                .tabulator-cell {
-                  padding: 8px;
-                  border-right: 1px solid var(--mx_ui_border);
-                  cursor: pointer;
-                  
-                  &.selected-cell {
-                    background-color: var(--mx_ui_highlight);
-                    color: #fff;
-                  }
-                }
-              }
-            }
-          }
-        }
       }
     }
   }
-}
-
-// Fix for dark theme compatibility
-.tabulator-row.tabulator-group {
-  background-color: var(--mx_ui_background) !important;
-}
-
-.tabulator-row.tabulator-selected {
-  background-color: var(--mx_ui_highlight) !important;
 }
