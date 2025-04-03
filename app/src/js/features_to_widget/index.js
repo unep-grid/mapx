@@ -23,6 +23,7 @@ import { onNextFrame, waitTimeoutAsync } from "../animation_frame/index.js";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
 import "tabulator-tables/dist/css/tabulator.min.css";
 import "./tabulator.less";
+import { theme } from "../init_theme";
 
 const defaults = {
   fw_timeout: {
@@ -73,7 +74,7 @@ export class FeaturesToWidget extends EventSimple {
     this._attributes = {};
     this._el_container = null;
     this._activeFilters = {}; // Store active column value filters
-    this._highlighter_orig = null;
+    this._highlighter_config_init = null;
 
     // Create a custom highlighter with specific options
     this._highlighter = opt?.highlighter;
@@ -82,7 +83,7 @@ export class FeaturesToWidget extends EventSimple {
   async set(data) {
     const fw = this;
     fw._attributes = data.attributes;
-    fw._highlighter_orig = null;
+    fw._highlighter_config_init = null;
 
     if (fw.hasWidget) {
       fw._el_container = this.widget.elContent.firstElementChild;
@@ -197,7 +198,7 @@ export class FeaturesToWidget extends EventSimple {
     this._filters = {};
     this._tables = {};
     this._highlighter = null;
-    this._highlighter_orig = null;
+    this._highlighter_config_init = null;
 
     this.fire("destroyed");
   }
@@ -456,8 +457,8 @@ export class FeaturesToWidget extends EventSimple {
     // Always reset ALL cell highlighting (across all columns) and map highlights
     this._clearAllActiveCells(idView);
 
-    if (!fw._highlighter_orig) {
-      fw._highlighter_orig = this._highlighter.get();
+    if (!fw._highlighter_config_init) {
+      fw._highlighter_config_init = this._highlighter.get();
     }
 
     // Toggle behavior: If this exact cell was active, just clear everything and return
@@ -534,8 +535,11 @@ export class FeaturesToWidget extends EventSimple {
    */
   _resetHighlights() {
     const fw = this;
-    if (fw._highlighter_orig) {
-      fw._highlighter.set(this._highlighter_orig);
+    if (fw._highlighter_config_init) {
+      fw._highlighter.setOptions({
+        highlight_color: theme.getColorThemeItem("mx_map_feature_highlight"),
+      });
+      fw._highlighter.set(this._highlighter_config_init);
     }
   }
 
@@ -597,6 +601,9 @@ export class FeaturesToWidget extends EventSimple {
       filter = ["all"];
     }
 
+    fw._highlighter.setOptions({
+      highlight_color: theme.getColorThemeItem("mx_ui_input_accent"),
+    });
     // Set highlighter with the filter
     fw._highlighter.set({
       filters: [{ id: idView, filter: filter }],
