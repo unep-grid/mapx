@@ -1,6 +1,14 @@
+
+  - [1.13.17-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.1) 
+
+    - feat(attribute_table_widget): fix raster attributes + better strategy
+    - feat(attribute_table_widget): remove console log messages
+    - feat(attribute_table_widget): coordinate cells click + highlighter, many changes
+    - feat(attribute_table_widget): column sort, filter row, fix many issues
+    - fix(email): email sender transforms domain to lowercase, creating a bug during check
+    - feat(attribute_table_widget): render attributes as table mwp
+
   - [1.13.16](https://github.com/unep-grid/mapx/tree/1.13.16) 
-
-
 
   - [1.13.16-beta.0](https://github.com/unep-grid/mapx/tree/1.13.16-beta.0) 
 
