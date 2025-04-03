@@ -57,7 +57,8 @@ class Highlighter {
   setOptions(opt) {
     const hl = this;
     Object.assign(hl.opt, opt);
-    hl.update();
+    hl.reset();
+    hl.update({ animate: true });
   }
 
   /**
@@ -290,7 +291,7 @@ class Highlighter {
       for (const feature of coordFeatures) {
         features.push(feature);
       }
-      config.features =  features; 
+      config.features = features;
       config.coord = null;
     } else if (isNotEmpty(config.filters)) {
       /**
