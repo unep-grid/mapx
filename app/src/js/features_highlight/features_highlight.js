@@ -1,26 +1,25 @@
 import { onNextFrame } from "../animation_frame";
 import { bindAll } from "../bind_class_methods";
-import { patchObject, path } from "../mx_helper_misc";
-import { isArray, isEmpty, isNotEmpty, isString } from "./../is_test/index";
+import { patchObject } from "../mx_helper_misc";
+import { isEmpty, isNotEmpty, isString } from "./../is_test/index";
 const def = {
   map: null, // Mapbox gl instance
-  use_animation: true, // Enable animation
+  use_animation: false, // Enable animation
   register_listener: false, // If true highligther will be triggered by event "event_type". "false" set as default as highligther is triggered during popup handling
   event_type: "mousemove", // click, mousemove. Does not work yet with mousemove
-  transition_duration: 200,
+  transition_duration: 180,
   transition_delay: 0,
-  animation_duration: 1400, // 0 unlimited
+  animation_duration: 200, // 0 unlimited
   animation_on: "line-width", // only option now
-  highlight_offset: 2, // greater that 2 is too much for lines
   highlight_blur: 0.2,
-  highlight_width: 5,
+  highlight_width: 2,
   highlight_color: "#000",
-  highlight_opacity: 0.9,
-  highlight_feature_opacity: 0.5,
-  highlight_radius: 20,
+  highlight_opacity: 1,
+  highlight_radius: 3,
+  highlight_translate: [-2, -2],
   supported_types: ["circle", "symbol", "fill", "line"],
   regex_layer_id: /^MX-/,
-  max_layers_render: 3,
+  max_layers_render: 20,
 };
 
 const defConfig = {
@@ -173,8 +172,10 @@ class Highlighter {
    */
   _clear() {
     const hl = this;
-    for (const layer of hl._layers.values()) {
-      hl.removeHighlightLayer(layer);
+    for (const layers of hl._layers.values()) {
+      for (const layer of layers) {
+        hl.removeHighlightLayer(layer);
+      }
     }
     hl._layers.clear();
     hl._items.clear();
@@ -191,11 +192,14 @@ class Highlighter {
     const max = hl.opt.max_layers_render;
     const animate = opt.animate && hl.opt.use_animation;
     let i = 0;
-    for (const layer of hl._layers.values()) {
+    for (const layers of hl._layers.values()) {
       if (i++ >= max) {
         return;
       }
-      hl.addHighlightLayer(layer);
+
+      for (const layer of layers) {
+        hl.addHighlightLayer(layer);
+      }
     }
     if (animate) {
       onNextFrame(() => {
@@ -225,11 +229,17 @@ class Highlighter {
    */
   animate() {
     const hl = this;
-    for (const layer of hl._layers.values()) {
-      if (!layer._animation) {
-        layer._animation = new Animate(hl, layer);
+
+    for (const layers of hl._layers.values()) {
+      for (const layer of layers) {
+        if (layer._no_anim) {
+          continue;
+        }
+        if (!layer._animation) {
+          layer._animation = new Animate(hl, layer);
+        }
+        layer._animation.start();
       }
-      layer._animation.start();
     }
   }
 
@@ -366,7 +376,7 @@ class Highlighter {
         true,
         false,
       ];
-      hl._layers.set(id, hl._item_to_layer(item));
+      hl._layers.set(id, hl._item_to_layers(item));
     }
   }
 
@@ -426,6 +436,7 @@ class Highlighter {
 
     switch (type) {
       case "fill":
+      case "fill-extrusion":
         Object.assign(layer, {
           type: "line",
           layout: {
@@ -433,7 +444,6 @@ class Highlighter {
             "line-join": "round",
           },
           paint: {
-            "line-offset": 0, // -hl.opt.highlight_offset, result not good on complex polygon
             "line-width": hl.opt.highlight_width,
             "line-color": hl.opt.highlight_color,
             "line-blur": hl.opt.highlight_blur,
@@ -449,7 +459,6 @@ class Highlighter {
             "line-join": "round",
           },
           paint: {
-            "line-gap-width": hl.opt.highlight_offset,
             "line-width": hl.opt.highlight_width,
             "line-color": hl.opt.highlight_color,
             "line-blur": hl.opt.highlight_blur,
@@ -457,8 +466,9 @@ class Highlighter {
           },
         });
         break;
-      default:
-        let radius = hl.opt.highlight_radius + hl.opt.highlight_offset / 2;
+      case "symbol":
+      case "circle":
+        let radius = hl.opt.highlight_radius;
         Object.assign(layer, {
           type: "circle",
           paint: {
@@ -471,8 +481,155 @@ class Highlighter {
             "circle-opacity": hl.opt.highlight_opacity,
           },
         });
+        break;
+      default:
+        console.warn(`Layer type ${type}`);
     }
     return layer;
+  }
+
+  _item_to_layers(item) {
+    const hl = this;
+    const idSource = item.source;
+    const idSourceLayer = item.sourceLayer;
+    const idLayer = `@hl-${idSource}`;
+    const type = item.type;
+    const filter = item.filter;
+    const translate = hl.opt.highlight_translate;
+
+    const baseLayer = {
+      id: idLayer,
+      source: idSource,
+      filter: filter,
+    };
+
+    if (idSourceLayer) {
+      baseLayer["source-layer"] = idSourceLayer;
+    }
+
+    let layers = [];
+
+    switch (type) {
+      case "fill":
+      case "fill-extrusion":
+        const lineLayer = {
+          ...baseLayer,
+          type: "line",
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-offset": 0,
+            "line-width": hl.opt.highlight_width,
+            "line-color": hl.opt.highlight_color,
+            "line-blur": hl.opt.highlight_blur,
+            "line-opacity": hl.opt.highlight_opacity,
+            "line-translate": translate, // Shadow offset using translate
+          },
+        };
+
+        const shadowLayer = {
+          ...baseLayer,
+          id: `${idLayer}-shadow`,
+          type: "line",
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-offset": 0,
+            "line-width": hl.opt.highlight_width,
+            "line-color": "rgba(0, 0, 0, 0.5)",
+            "line-blur": hl.opt.highlight_blur,
+            "line-opacity": hl.opt.highlight_opacity * 0.7,
+          },
+        };
+        shadowLayer._no_anim = true;
+
+        layers = [shadowLayer, lineLayer];
+        break;
+
+      case "line":
+        const lineLayerLine = {
+          ...baseLayer,
+          type: "line",
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-width": hl.opt.highlight_width,
+            "line-color": hl.opt.highlight_color,
+            "line-blur": hl.opt.highlight_blur,
+            "line-opacity": hl.opt.highlight_opacity,
+            "line-translate": translate, // Shadow offset using translate
+          },
+        };
+
+        const shadowLayerLine = {
+          ...baseLayer,
+          id: `${idLayer}-shadow`,
+          type: "line",
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-width": hl.opt.highlight_width,
+            "line-color": "rgba(0, 0, 0, 0.5)",
+            "line-blur": hl.opt.highlight_blur,
+            "line-opacity": hl.opt.highlight_opacity * 0.7,
+          },
+        };
+
+        shadowLayerLine._no_anim = true;
+        layers = [shadowLayerLine, lineLayerLine];
+        break;
+
+      case "symbol":
+      case "circle":
+        let radius = hl.opt.highlight_radius;
+
+        const circleLayer = {
+          ...baseLayer,
+          type: "circle",
+          paint: {
+            "circle-color": "rgba(0,0,0,0)",
+            "circle-stroke-color": hl.opt.highlight_color,
+            "circle-stroke-opacity": hl.opt.highlight_opacity,
+            "circle-stroke-width": hl.opt.highlight_width,
+            "circle-blur": hl.opt.highlight_blur / radius,
+            "circle-radius": radius,
+            "circle-opacity": hl.opt.highlight_opacity,
+            "circle-translate": translate, // shadow offset using translate.
+          },
+        };
+
+        const shadowCircleLayer = {
+          ...baseLayer,
+          id: `${idLayer}-shadow`,
+          type: "circle",
+          paint: {
+            "circle-color": "rgba(0,0,0,0)",
+            "circle-stroke-color": "rgba(0, 0, 0, 0.5)",
+            "circle-stroke-opacity": hl.opt.highlight_opacity * 0.7,
+            "circle-stroke-width": hl.opt.highlight_width,
+            "circle-blur": hl.opt.highlight_blur / radius,
+            "circle-radius": radius,
+            "circle-opacity": hl.opt.highlight_opacity * 0.7,
+          },
+        };
+        shadowCircleLayer._no_anim = true;
+        layers = [shadowCircleLayer, circleLayer];
+        break;
+
+      default:
+        console.warn(`Layer type ${type}`);
+        layers = [baseLayer];
+    }
+
+    return layers;
   }
 
   /**
@@ -533,19 +690,19 @@ class Animate {
     /* set animation values */
     anim._s = {
       fill: {
-        param: "line-width",
-        min: layer.paint["line-width"],
-        max: layer.paint["line-width"] * 1.5,
+        param: "line-translate",
+        min: [0, 0],
+        max: [-3, -3],
       },
       line: {
-        param: "line-width",
-        min: layer.paint["line-width"],
-        max: layer.paint["line-width"] * 1.5,
+        param: "line-translate",
+        min: [0, 0],
+        max: [-3, -3],
       },
       circle: {
-        param: "circle-stroke-width",
-        min: layer.paint["circle-stroke-width"],
-        max: layer.paint["circle-stroke-width"] * 1.5,
+        param: "circle-translate",
+        min: [0, 0],
+        max: [-3, -3],
       },
     }[layer.type];
   }

@@ -98,7 +98,7 @@
     },
     "mx_map_feature_highlight": {
       "visibility": "visible",
-      "color": "rgb(255,0,255)"
+      "color": "rgb(255,230,0)"
     },
     "mx_map_hillshade_shadow": {
       "visibility": "visible",
