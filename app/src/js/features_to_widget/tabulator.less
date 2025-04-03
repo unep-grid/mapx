@@ -53,14 +53,17 @@
         }
       }
     }
+    .tabulator-row.tabulator-group {
+      background-color: var(--mx_ui_background) !important;
+    }
+
+    .tabulator-row.tabulator-selected {
+      background-color: var(--mx_ui_highlight) !important;
+    }
   }
 }
-
-// Fix for dark theme compatibility
-.tabulator-row.tabulator-group {
-  background-color: var(--mx_ui_background) !important;
-}
-
-.tabulator-row.tabulator-selected {
-  background-color: var(--mx_ui_highlight) !important;
+.tabulator-tooltip {
+  background-color: var(--mx_ui_background_accent);
+  border: 1px solid var(--mx_ui_border);
+  border-radius: 4px;
 }
