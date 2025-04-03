@@ -1,3 +1,16 @@
+  - [1.13.17-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.3) 
+
+    - feat(attribute_table_widget): improved highlighted feature  with a shadow, removed anim
+    - feat(attribute_table_widget): tooltip + highlight color
+    - fix(conflicts): merge conflict
+    - feat(attribute_table_widget): fix raster attributes + better strategy
+    - feat(attribute_table_widget): remove console log messages
+    - feat(attribute_table_widget): coordinate cells click + highlighter, many changes
+    - feat(attribute_table_widget): column sort, filter row, fix many issues
+    - fix(email): email sender transforms domain to lowercase, creating a bug during check
+    - feat(attribute_table_widget): render attributes as table mwp
+
+
   - [1.13.17-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.2) 
 
     - feat(attribute_table_widget): tooltip + highlight color
