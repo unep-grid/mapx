@@ -1,6 +1,8 @@
 {
   "id": "classic_dark",
-  "description": { "en": "Classic dark theme" },
+  "description": {
+    "en": "Classic dark theme"
+  },
   "author": "frederic.moser@unepgrid.ch",
   "dark": true,
   "colors": {
@@ -9,7 +11,10 @@
       "color": "rgb(250,250,250)",
       "font": "Noto Sans"
     },
-    "mx_ui_link": { "visibility": "visible", "color": "rgb(17,176,248)" },
+    "mx_ui_link": {
+      "visibility": "visible",
+      "color": "rgb(17,176,248)"
+    },
     "mx_ui_input_accent": {
       "visibility": "visible",
       "color": "rgb(17,176,248)"
@@ -18,12 +23,18 @@
       "visibility": "visible",
       "color": "rgba(192,192,192,0.75)"
     },
-    "mx_ui_hidden": { "visibility": "visible", "color": "rgba(0,84,147,0)" },
+    "mx_ui_hidden": {
+      "visibility": "visible",
+      "color": "rgba(0,84,147,0)"
+    },
     "mx_ui_border": {
       "visibility": "visible",
       "color": "rgba(255,255,255,0.1)"
     },
-    "mx_ui_background": { "visibility": "visible", "color": "rgb(66,66,66)" },
+    "mx_ui_background": {
+      "visibility": "visible",
+      "color": "rgb(66,66,66)"
+    },
     "mx_ui_background_accent": {
       "visibility": "visible",
       "color": "rgb(70,70,70)"
@@ -40,17 +51,29 @@
       "visibility": "visible",
       "color": "rgba(66,66,66,0.5)"
     },
-    "mx_ui_shadow": { "visibility": "visible", "color": "rgba(36,36,36,0.3)" },
-    "mx_map_background": { "visibility": "visible", "color": "rgb(41,41,41)" },
-    "mx_map_snow": { "visibility": "visible", "color": "rgb(107,107,107)" },
-    "mx_map_vegetation": { "visibility": "none", "color": "rgba(0,0,0,0.35)" },
+    "mx_ui_shadow": {
+      "visibility": "visible",
+      "color": "rgba(36,36,36,0.3)"
+    },
+    "mx_map_background": {
+      "visibility": "visible",
+      "color": "rgb(41,41,41)"
+    },
+    "mx_map_snow": {
+      "visibility": "visible",
+      "color": "rgb(107,107,107)"
+    },
+    "mx_map_vegetation": {
+      "visibility": "none",
+      "color": "rgba(0,0,0,0.35)"
+    },
     "mx_map_zone_commercial": {
       "visibility": "visible",
       "color": "rgba(94,94,94,0.73)"
     },
     "mx_map_feature_highlight": {
       "visibility": "visible",
-      "color": "rgb(0,255,0)"
+      "color": "rgb(255,230,0)"
     },
     "mx_map_hillshade_shadow": {
       "visibility": "visible",
@@ -60,7 +83,10 @@
       "visibility": "visible",
       "color": "rgba(135,135,135,0.16)"
     },
-    "mx_map_mask": { "visibility": "visible", "color": "rgba(0,0,0,0.2)" },
+    "mx_map_mask": {
+      "visibility": "visible",
+      "color": "rgba(0,0,0,0.2)"
+    },
     "mx_map_text_place": {
       "visibility": "visible",
       "color": "rgb(214,214,214)",
@@ -80,7 +106,10 @@
       "visibility": "visible",
       "color": "rgba(255,255,255,0.1)"
     },
-    "mx_map_water": { "visibility": "visible", "color": "rgb(255,255,255)" },
+    "mx_map_water": {
+      "visibility": "visible",
+      "color": "rgb(255,255,255)"
+    },
     "mx_map_bathymetry_high": {
       "visibility": "visible",
       "color": "rgba(214,214,214,0.5)"
@@ -93,7 +122,10 @@
       "visibility": "visible",
       "color": "rgba(250,250,250,0.8)"
     },
-    "mx_map_road": { "visibility": "visible", "color": "rgb(28,28,28)" },
+    "mx_map_road": {
+      "visibility": "visible",
+      "color": "rgb(28,28,28)"
+    },
     "mx_map_rail": {
       "visibility": "visible",
       "color": "rgba(250,250,250,0.2)"
@@ -164,7 +196,6 @@
       "visibility": "visible",
       "color": "rgba(0,0,0,0.9)"
     },
-
     "mx_map_text_country_0_0": {
       "visibility": "visible",
       "color": "rgb(245,245,245)",

@@ -600,10 +600,7 @@ export class FeaturesToWidget extends EventSimple {
       console.warn("Unexpected for", value);
       filter = ["all"];
     }
-
-    fw._highlighter.setOptions({
-      highlight_color: theme.getColorThemeItem("mx_ui_input_accent"),
-    });
+    
     // Set highlighter with the filter
     fw._highlighter.set({
       filters: [{ id: idView, filter: filter }],

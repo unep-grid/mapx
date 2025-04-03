@@ -1,6 +1,8 @@
 {
   "id": "tree_light",
-  "description": { "en": "Tree light theme" },
+  "description": {
+    "en": "Tree light theme"
+  },
   "author": "frederic.moser@unepgrid.ch",
   "dark": false,
   "colors": {
@@ -9,7 +11,10 @@
       "color": "rgb(53,53,53)",
       "font": "Noto Sans"
     },
-    "mx_ui_link": { "visibility": "visible", "color": "rgb(17,176,248)" },
+    "mx_ui_link": {
+      "visibility": "visible",
+      "color": "rgb(17,176,248)"
+    },
     "mx_ui_input_accent": {
       "visibility": "visible",
       "color": "rgb(17,176,248)"
@@ -18,7 +23,10 @@
       "visibility": "visible",
       "color": "rgba(53,53,53,0.5)"
     },
-    "mx_ui_hidden": { "visibility": "visible", "color": "rgba(2,186,253,0)" },
+    "mx_ui_hidden": {
+      "visibility": "visible",
+      "color": "rgba(2,186,253,0)"
+    },
     "mx_ui_border": {
       "visibility": "visible",
       "color": "rgba(156,156,156,0.2)"
@@ -43,7 +51,10 @@
       "visibility": "visible",
       "color": "rgba(245,245,245,0.4)"
     },
-    "mx_ui_shadow": { "visibility": "visible", "color": "rgba(61,61,61,0.09)" },
+    "mx_ui_shadow": {
+      "visibility": "visible",
+      "color": "rgba(61,61,61,0.09)"
+    },
     "mx_map_background": {
       "visibility": "visible",
       "color": "rgb(246,242,234)"
@@ -74,7 +85,7 @@
     },
     "mx_map_feature_highlight": {
       "visibility": "visible",
-      "color": "rgb(255,0,255)"
+      "color": "rgb(255,230,0)"
     },
     "mx_map_hillshade_shadow": {
       "visibility": "visible",
@@ -103,7 +114,10 @@
       "color": "rgba(115,115,115,0.89)",
       "font": "Libre Baskerville Italic"
     },
-    "mx_map_water": { "visibility": "visible", "color": "rgb(222,222,222)" },
+    "mx_map_water": {
+      "visibility": "visible",
+      "color": "rgb(222,222,222)"
+    },
     "mx_map_bathymetry_high": {
       "visibility": "visible",
       "color": "rgba(196,196,196,0.5)"
@@ -134,13 +148,18 @@
       "visibility": "visible",
       "color": "rgba(255,255,255,0.9)"
     },
-
-    "mx_map_road": { "visibility": "visible", "color": "rgb(255,255,255)" },
+    "mx_map_road": {
+      "visibility": "visible",
+      "color": "rgb(255,255,255)"
+    },
     "mx_map_road_border": {
       "visibility": "visible",
       "color": "rgb(155,155,155)"
     },
-    "mx_map_rail": { "visibility": "visible", "color": "rgba(251,4,4,0.15)" },
+    "mx_map_rail": {
+      "visibility": "visible",
+      "color": "rgba(251,4,4,0.15)"
+    },
     "mx_map_building": {
       "visibility": "visible",
       "color": "rgba(209,209,209,0.95)"
