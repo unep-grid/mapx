@@ -1,3 +1,6 @@
+  - [1.13.17-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.2) 
+
+    - feat(attribute_table_widget): tooltip + highlight color
 
   - [1.13.17-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.1) 
 
