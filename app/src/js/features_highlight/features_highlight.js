@@ -11,12 +11,11 @@ const def = {
   transition_delay: 0,
   animation_duration: 200, // 0 unlimited
   animation_on: "line-width", // only option now
-  highlight_blur: 0.2,
+  highlight_shadow_blur: 1,
   highlight_width: 2,
   highlight_color: "#000",
   highlight_opacity: 1,
   highlight_radius: 3,
-  highlight_translate: [-2, -2],
   supported_types: ["circle", "symbol", "fill", "line"],
   regex_layer_id: /^MX-/,
   max_layers_render: 20,
@@ -416,78 +415,6 @@ class Highlighter {
   /**
    * Build highlight layer:
    */
-  _item_to_layer(item) {
-    const hl = this;
-    const idSource = item.source;
-    const idSourceLayer = item.sourceLayer;
-    const idLayer = `@hl-@${idSource}`;
-    const type = item.type;
-    const filter = item.filter;
-
-    const layer = {
-      id: idLayer,
-      source: idSource,
-      filter: filter,
-    };
-
-    if (idSourceLayer) {
-      layer["source-layer"] = idSourceLayer;
-    }
-
-    switch (type) {
-      case "fill":
-      case "fill-extrusion":
-        Object.assign(layer, {
-          type: "line",
-          layout: {
-            "line-cap": "round",
-            "line-join": "round",
-          },
-          paint: {
-            "line-width": hl.opt.highlight_width,
-            "line-color": hl.opt.highlight_color,
-            "line-blur": hl.opt.highlight_blur,
-            "line-opacity": hl.opt.highlight_opacity,
-          },
-        });
-        break;
-      case "line":
-        Object.assign(layer, {
-          type: "line",
-          layout: {
-            "line-cap": "round",
-            "line-join": "round",
-          },
-          paint: {
-            "line-width": hl.opt.highlight_width,
-            "line-color": hl.opt.highlight_color,
-            "line-blur": hl.opt.highlight_blur,
-            "line-opacity": hl.opt.highlight_opacity,
-          },
-        });
-        break;
-      case "symbol":
-      case "circle":
-        let radius = hl.opt.highlight_radius;
-        Object.assign(layer, {
-          type: "circle",
-          paint: {
-            "circle-color": "rgba(0,0,0,0)",
-            "circle-stroke-color": hl.opt.highlight_color,
-            "circle-stroke-opacity": hl.opt.highlight_opacity,
-            "circle-stroke-width": hl.opt.highlight_width,
-            "circle-blur": hl.opt.highlight_blur / radius,
-            "circle-radius": radius,
-            "circle-opacity": hl.opt.highlight_opacity,
-          },
-        });
-        break;
-      default:
-        console.warn(`Layer type ${type}`);
-    }
-    return layer;
-  }
-
   _item_to_layers(item) {
     const hl = this;
     const idSource = item.source;
@@ -495,7 +422,6 @@ class Highlighter {
     const idLayer = `@hl-${idSource}`;
     const type = item.type;
     const filter = item.filter;
-    const translate = hl.opt.highlight_translate;
 
     const baseLayer = {
       id: idLayer,
@@ -512,44 +438,6 @@ class Highlighter {
     switch (type) {
       case "fill":
       case "fill-extrusion":
-        const lineLayer = {
-          ...baseLayer,
-          type: "line",
-          layout: {
-            "line-cap": "round",
-            "line-join": "round",
-          },
-          paint: {
-            "line-offset": 0,
-            "line-width": hl.opt.highlight_width,
-            "line-color": hl.opt.highlight_color,
-            "line-blur": hl.opt.highlight_blur,
-            "line-opacity": hl.opt.highlight_opacity,
-            "line-translate": translate, // Shadow offset using translate
-          },
-        };
-
-        const shadowLayer = {
-          ...baseLayer,
-          id: `${idLayer}-shadow`,
-          type: "line",
-          layout: {
-            "line-cap": "round",
-            "line-join": "round",
-          },
-          paint: {
-            "line-offset": 0,
-            "line-width": hl.opt.highlight_width,
-            "line-color": "rgba(0, 0, 0, 0.5)",
-            "line-blur": hl.opt.highlight_blur,
-            "line-opacity": hl.opt.highlight_opacity * 0.7,
-          },
-        };
-        shadowLayer._no_anim = true;
-
-        layers = [shadowLayer, lineLayer];
-        break;
-
       case "line":
         const lineLayerLine = {
           ...baseLayer,
@@ -561,9 +449,7 @@ class Highlighter {
           paint: {
             "line-width": hl.opt.highlight_width,
             "line-color": hl.opt.highlight_color,
-            "line-blur": hl.opt.highlight_blur,
             "line-opacity": hl.opt.highlight_opacity,
-            "line-translate": translate, // Shadow offset using translate
           },
         };
 
@@ -576,10 +462,27 @@ class Highlighter {
             "line-join": "round",
           },
           paint: {
-            "line-width": hl.opt.highlight_width,
-            "line-color": "rgba(0, 0, 0, 0.5)",
-            "line-blur": hl.opt.highlight_blur,
-            "line-opacity": hl.opt.highlight_opacity * 0.7,
+            "line-width": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              4,
+              hl.opt.highlight_width * 2,
+              11,
+              hl.opt.highlight_width * 8, // 2 * offset
+            ],
+            "line-color": hl.opt.highlight_color,
+            "line-opacity": hl.opt.highlight_opacity / 4,
+            "line-blur": hl.opt.highlight_shadow_blur,
+            "line-offset": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              4,
+              -hl.opt.highlight_width  ,
+              11,
+              -hl.opt.highlight_width * 4,
+            ],
           },
         };
 
@@ -589,20 +492,21 @@ class Highlighter {
 
       case "symbol":
       case "circle":
-        let radius = hl.opt.highlight_radius;
+        let r1 = hl.opt.highlight_radius;
+        let r2 = r1 + hl.opt.highlight_width;
+        let s1 = hl.opt.highlight_width;
+        let s2 = s1 * 2;
 
         const circleLayer = {
           ...baseLayer,
           type: "circle",
           paint: {
-            "circle-color": "rgba(0,0,0,0)",
+            "circle-color": "rgb(0,0,0)",
             "circle-stroke-color": hl.opt.highlight_color,
             "circle-stroke-opacity": hl.opt.highlight_opacity,
-            "circle-stroke-width": hl.opt.highlight_width,
-            "circle-blur": hl.opt.highlight_blur / radius,
-            "circle-radius": radius,
-            "circle-opacity": hl.opt.highlight_opacity,
-            "circle-translate": translate, // shadow offset using translate.
+            "circle-stroke-width": s1,
+            "circle-radius": r1,
+            "circle-opacity": 0,
           },
         };
 
@@ -611,13 +515,12 @@ class Highlighter {
           id: `${idLayer}-shadow`,
           type: "circle",
           paint: {
-            "circle-color": "rgba(0,0,0,0)",
-            "circle-stroke-color": "rgba(0, 0, 0, 0.5)",
-            "circle-stroke-opacity": hl.opt.highlight_opacity * 0.7,
-            "circle-stroke-width": hl.opt.highlight_width,
-            "circle-blur": hl.opt.highlight_blur / radius,
-            "circle-radius": radius,
-            "circle-opacity": hl.opt.highlight_opacity * 0.7,
+            "circle-opacity": 0,
+            "circle-color": "rgb(0,0,0)",
+            "circle-stroke-color": hl.opt.highlight_color,
+            "circle-stroke-opacity": hl.opt.highlight_opacity / 4,
+            "circle-stroke-width": s2,
+            "circle-radius": r2,
           },
         };
         shadowCircleLayer._no_anim = true;
