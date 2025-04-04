@@ -4,7 +4,7 @@
 process_json() {
   local file="$1"
 
-  jq '.colors.mx_map_feature_highlight.color = "rgb(255,230,0)"' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+  jq '.colors.mx_map_feature_highlight.color = "rgb(255, 20, 147)"' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
 }
 
 # Find all JSON files in the current directory and its subdirectories
