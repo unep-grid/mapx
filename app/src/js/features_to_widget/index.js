@@ -23,7 +23,6 @@ import { onNextFrame, waitTimeoutAsync } from "../animation_frame/index.js";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
 import "tabulator-tables/dist/css/tabulator.min.css";
 import "./tabulator.less";
-import { theme } from "../init_theme";
 
 const defaults = {
   fw_timeout: {
@@ -78,12 +77,13 @@ export class FeaturesToWidget extends EventSimple {
 
     // Create a custom highlighter with specific options
     this._highlighter = opt?.highlighter;
+    window._fw = this;
   }
 
   async set(data) {
     const fw = this;
     fw._attributes = data.attributes;
-    fw._highlighter_config_init = null;
+    fw._highlighter_config_init = this._highlighter.get();
 
     if (fw.hasWidget) {
       fw._el_container = this.widget.elContent.firstElementChild;
@@ -236,7 +236,8 @@ export class FeaturesToWidget extends EventSimple {
   async _render_item(idView, promAttributes) {
     const fw = this;
     const view = getView(idView);
-    const isVector = isViewVt(view) || isViewGj(view);
+    const isVt = isViewVt(view);
+    const isVector = isVt || isViewGj(view);
     const title = getViewTitle(idView);
     const labels = {};
     let item;
@@ -273,7 +274,7 @@ export class FeaturesToWidget extends EventSimple {
       }
 
       // Fetch attribute labels if the view is vector
-      if (isVector) {
+      if (isVt) {
         const idSource = getViewVtSourceId(view);
         Object.assign(labels, await getAttributesAlias(idSource, attrNames));
       }
@@ -457,14 +458,10 @@ export class FeaturesToWidget extends EventSimple {
     // Always reset ALL cell highlighting (across all columns) and map highlights
     this._clearAllActiveCells(idView);
 
-    if (!fw._highlighter_config_init) {
-      fw._highlighter_config_init = this._highlighter.get();
-    }
-
     // Toggle behavior: If this exact cell was active, just clear everything and return
 
     if (isCellActive) {
-      this._resetHighlights();
+      this._resetHighlights(idView);
       return;
     }
 
@@ -533,13 +530,22 @@ export class FeaturesToWidget extends EventSimple {
   /**
    * Reset the highlighter to clear visual highlights on the map
    */
-  _resetHighlights() {
+  _resetHighlights(id) {
     const fw = this;
+
     if (fw._highlighter_config_init) {
-      fw._highlighter.setOptions({
-        highlight_color: theme.getColorThemeItem("mx_map_feature_highlight"),
-      });
-      fw._highlighter.set(this._highlighter_config_init);
+      const init = this._highlighter_config_init;
+
+      if (id) {
+        for (const i_f of init.filters) {
+          if (i_f.id === id) {
+            fw._highlighter.set({ filters: [i_f] });
+            return;
+          }
+        }
+      }
+
+      fw._highlighter.set(init);
     }
   }
 
@@ -600,7 +606,7 @@ export class FeaturesToWidget extends EventSimple {
       console.warn("Unexpected for", value);
       filter = ["all"];
     }
-    
+
     // Set highlighter with the filter
     fw._highlighter.set({
       filters: [{ id: idView, filter: filter }],

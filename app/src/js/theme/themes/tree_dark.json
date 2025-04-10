@@ -73,7 +73,7 @@
     },
     "mx_map_feature_highlight": {
       "visibility": "visible",
-      "color": "rgb(255, 20, 147)"
+      "color": "rgb(255, 255, 0)"
     },
     "mx_map_hillshade_shadow": {
       "visibility": "visible",
@@ -235,6 +235,10 @@
       "visibility": "visible",
       "color": "rgb(250,250,250)",
       "font": "Noto Sans Italic"
+    },
+    "mx_ui_highlighter": {
+      "color": "rgb(255, 255, 0)",
+      "visibility": "visible"
     }
   }
 }

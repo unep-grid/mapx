@@ -11,10 +11,10 @@ const def = {
   transition_delay: 0,
   animation_duration: 200, // 0 unlimited
   animation_on: "line-width", // only option now
-  highlight_shadow_blur: 1,
-  highlight_width: 2,
+  highlight_shadow_blur: 2,
+  highlight_width: 3,
   highlight_color: "#000",
-  highlight_opacity: 1,
+  highlight_opacity: 0.8,
   highlight_radius: 3,
   supported_types: ["circle", "symbol", "fill", "line"],
   regex_layer_id: /^MX-/,
@@ -55,7 +55,6 @@ class Highlighter {
   setOptions(opt) {
     const hl = this;
     Object.assign(hl.opt, opt);
-    hl.reset();
     hl.update({ animate: true });
   }
 
@@ -127,11 +126,11 @@ class Highlighter {
    */
   set(config) {
     const hl = this;
+    console.log('hl set', config);
     if (isEmpty(config)) {
-      console.warn("Missing config. Use 'update' to re-use previous config");
+      hl.reset();
       return;
     }
-    hl.reset();
     hl._config = patchObject(defConfig, config);
     return hl.update({ animate: true });
   }
@@ -158,12 +157,22 @@ class Highlighter {
    * Update
    * @returns {number} Number of matched features
    */
-  update(renderOptions) {
+  update() {
     const hl = this;
     hl._update_items();
     hl._update_layers();
-    hl._render(renderOptions);
-    return hl.count();
+    hl._render();
+    const c = hl.count();
+    return c;
+  }
+
+  _clear_layers_map() {
+    const hl = this;
+    for (const layers of hl._layers.values()) {
+      for (const layer of layers) {
+        hl.removeHighlightLayer(layer);
+      }
+    }
   }
 
   /**
@@ -171,11 +180,7 @@ class Highlighter {
    */
   _clear() {
     const hl = this;
-    for (const layers of hl._layers.values()) {
-      for (const layer of layers) {
-        hl.removeHighlightLayer(layer);
-      }
-    }
+    hl._clear_layers_map();
     hl._layers.clear();
     hl._items.clear();
   }
@@ -185,19 +190,17 @@ class Highlighter {
    * - Enable state
    * - Add highlight layer
    */
-  _render(renderOptions) {
+  _render() {
     const hl = this;
-    const opt = Object.assign({}, { animate: false }, renderOptions);
     const max = hl.opt.max_layers_render;
-    const animate = opt.animate && hl.opt.use_animation;
+    const animate = hl.opt.use_animation;
     let i = 0;
     for (const layers of hl._layers.values()) {
       if (i++ >= max) {
         return;
       }
-
       for (const layer of layers) {
-        hl.addHighlightLayer(layer);
+        hl._add_or_update_highlight_layer(layer);
       }
     }
     if (animate) {
@@ -210,16 +213,21 @@ class Highlighter {
   /**
    * Add layer
    */
-  addHighlightLayer(layer) {
+  _add_or_update_highlight_layer(layer) {
     const hl = this;
     if (layer?._animation instanceof Animate) {
       layer._animation.stop();
     }
     const mapLayer = hl._map.getLayer(layer.id);
+
     if (isEmpty(mapLayer)) {
       hl._map.addLayer(layer);
     } else {
       hl._map.setFilter(mapLayer.id, layer.filter);
+      for (const key in layer.paint) {
+        const value = layer.paint[key];
+        hl._map.setPaintProperty(mapLayer.id, key, value);
+      }
     }
   }
 
@@ -254,6 +262,7 @@ class Highlighter {
     }
     const mapLayer = hl._map.getLayer(layer.id);
     if (isEmpty(mapLayer)) {
+      console.warn("tried to remove non-existing layers", layer.id);
       return;
     }
     hl._map.removeLayer(layer.id);
@@ -286,36 +295,19 @@ class Highlighter {
         layers: layers,
       });
 
-      for (const feature of allFeatures) {
-        features.push(feature);
-      }
-    } else if (isNotEmpty(config.coord)) {
-      /**
-       * All features touched  by "PointLike" object
-       */
-      const point = hl._map.project(config.coord);
-      const coordFeatures = hl._map.queryRenderedFeatures(point, {
-        layers: layers,
-      });
-      for (const feature of coordFeatures) {
-        features.push(feature);
-      }
-      config.features = features;
-      config.coord = null;
+      features.push(...allFeatures);
     } else if (isNotEmpty(config.filters)) {
       /**
        * All feature filtered by config
        */
       for (const filter of config.filters) {
-        const viewLayers = hl._id_view_layers(filter.id, layers);
-        const viewFeatures = hl._map.queryRenderedFeatures(null, {
-          layers: viewLayers,
+        const layersSelect = hl._filter_layer_by_prefix(filter.id, layers);
+        const featuresSelect = hl._map.queryRenderedFeatures(null, {
+          layers: layersSelect,
           filter: filter.filter,
         });
 
-        for (const feature of viewFeatures) {
-          features.push(feature);
-        }
+        features.push(...featuresSelect);
       }
     } else {
       features.push(...config.features);
@@ -333,7 +325,7 @@ class Highlighter {
   /**
    * Filter layer by view id as prefix
    */
-  _id_view_layers(id, layers) {
+  _filter_layer_by_prefix(id, layers) {
     const reg = new RegExp(`^${id}`);
     return layers.filter((id) => id.match(reg));
   }
@@ -368,6 +360,7 @@ class Highlighter {
     const hl = this;
     const items = hl._items;
     for (const [id, item] of items) {
+      debugger;
       item.filter = [
         "match",
         ["get", "gid"],
@@ -458,7 +451,7 @@ class Highlighter {
           id: `${idLayer}-shadow`,
           type: "line",
           layout: {
-            "line-cap": "round",
+            "line-cap": "butt",
             "line-join": "round",
           },
           paint: {
@@ -466,22 +459,24 @@ class Highlighter {
               "interpolate",
               ["linear"],
               ["zoom"],
-              4,
-              hl.opt.highlight_width * 2,
+              2,
+              hl.opt.highlight_width * 1,
               11,
-              hl.opt.highlight_width * 8, // 2 * offset
+              hl.opt.highlight_width * 4, // 2 * offset
             ],
             "line-color": hl.opt.highlight_color,
-            "line-opacity": hl.opt.highlight_opacity / 4,
+            "line-opacity": hl.opt.highlight_opacity / 10,
             "line-blur": hl.opt.highlight_shadow_blur,
             "line-offset": [
               "interpolate",
               ["linear"],
               ["zoom"],
-              4,
-              -hl.opt.highlight_width  ,
+              2,
+              -hl.opt.highlight_width +
+                (type === "line" ? hl.opt.highlight_width * 2 : 0),
               11,
-              -hl.opt.highlight_width * 4,
+              -hl.opt.highlight_width * 2 +
+                (type === "line" ? hl.opt.highlight_width * 2 : 0),
             ],
           },
         };
@@ -518,7 +513,7 @@ class Highlighter {
             "circle-opacity": 0,
             "circle-color": "rgb(0,0,0)",
             "circle-stroke-color": hl.opt.highlight_color,
-            "circle-stroke-opacity": hl.opt.highlight_opacity / 4,
+            "circle-stroke-opacity": hl.opt.highlight_opacity / 10,
             "circle-stroke-width": s2,
             "circle-radius": r2,
           },
