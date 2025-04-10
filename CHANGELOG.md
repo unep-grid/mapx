@@ -1,3 +1,8 @@
+  - [1.13.17-alpha.6](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.6) 
+
+    - feat(attribute_table_widget): solve table multi-selection
+
+
   - [1.13.17-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.5) 
 
     - feat(attribute_table_widget): refactor highlight module
