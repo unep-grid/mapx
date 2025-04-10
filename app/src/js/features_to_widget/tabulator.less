@@ -39,6 +39,12 @@
         border-right: 1px solid var(--mx_ui_border);
         cursor: pointer;
 
+        &.tabulator-row-header {
+          background: var(--mx_ui_background_faded);
+          border-bottom: 1px solid var(--mx_ui_border);
+          border-right: 1px solid var(--mx_ui_border);
+        }
+
         &.selected-cell {
           position: relative;
 
@@ -59,8 +65,6 @@
     .tabulator-row.tabulator-group {
       background-color: var(--mx_ui_background) !important;
     }
-
-    
   }
 }
 .tabulator-tooltip {
