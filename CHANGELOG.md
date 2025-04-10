@@ -1,3 +1,8 @@
+  - [1.13.17-alpha.7](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.7) 
+
+    - fix(attribute_table_widget): re-enabled support for wms/raster
+
+
   - [1.13.17-alpha.6](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.6) 
 
     - feat(attribute_table_widget): solve table multi-selection
