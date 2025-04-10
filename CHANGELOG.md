@@ -1,3 +1,8 @@
+  - [1.13.17-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.5) 
+
+    - feat(attribute_table_widget): refactor highlight module
+
+
   - [1.13.17-alpha.4](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.4) 
 
     - feat(attribute_table_widget): highlight replaceed shadow by an outline + better contrast color
