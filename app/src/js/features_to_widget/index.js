@@ -280,21 +280,22 @@ export class FeaturesToWidget extends EventSimple {
       }
 
       // Prepare attribute data for Tabulator
-      const tableColumns = isVector
-        ? [
-            {
-              formatter: "rowSelection",
-              titleFormatter: "rowSelection",
-              headerSort: false,
-              width: 25,
-              headerFilter: false,
-              frozen: true,
-              headerTooltip: false,
-              tooltip: false,
-              resizable: false,
-            },
-          ]
-        : [];
+      /*  const tableColumns = isVector*/
+      /*? [*/
+      /*{*/
+      /*formatter: "rowSelection",*/
+      /*titleFormatter: "rowSelection",*/
+      /*headerSort: false,*/
+      /*width: 25,*/
+      /*headerFilter: false,*/
+      /*frozen: true,*/
+      /*headerTooltip: false,*/
+      /*tooltip: false,*/
+      /*resizable: false,*/
+      /*},*/
+      /*]*/
+      /*: [];*/
+      const tableColumns = [];
 
       let isFirst = true;
 
@@ -317,7 +318,7 @@ export class FeaturesToWidget extends EventSimple {
           headerSortTristate: true,
           headerTooltip: true,
           vertAlign: "middle",
-          tooltip: true,
+          tooltip: false,
           cellClick: (_, cell) => {
             if (isVector) {
               fw._handleCellClick(idView, cell);
@@ -344,13 +345,17 @@ export class FeaturesToWidget extends EventSimple {
         layout: "fitDataTable", // Use fitDataTable instead of fitColumns
         maxHeight: "300px", // Set max height to ensure scrolling
         minHeight: "100px", // Set min height
-        //responsiveLayout: "hide", // Hide columns that don't fit
-        movableColumns: false, // Allow column reordering
         columnMinWidth: 100, // Set minimum column width
-        resizableColumns: true, // Allow column resizing
-        selectable: "multiple",
-        selectableRows: false,
         placeholder: "[ No Value ]",
+        rowHeader: {
+          headerSort: false,
+          resizable: false,
+          frozen: true,
+          headerHozAlign: "center",
+          hozAlign: "center",
+          formatter: "rowSelection",
+          titleFormatter: "rowSelection",
+        },
       });
 
       // Add cell click event to handle selection and filtering
