@@ -1740,12 +1740,12 @@ export async function handleClickEvent(event, idMap) {
     asObject: false,
   });
 
-  if (isEmpty(attributes)) {
+  if (isEmpty(attributes.raster) && isEmpty(attributes.vector)) {
     return;
   }
 
   if (addHighlight) {
-    const filters = layersAttributesToFilters(attributes);
+    const filters = await layersAttributesToFilters(attributes.vector);
     highlighter.set({ filters });
   }
 
@@ -1778,7 +1778,9 @@ export async function handleClickEvent(event, idMap) {
       },
     });
 
-    await fw.set({ attributes });
+    const table = { ...attributes.vector, ...attributes.raster };
+
+    await fw.set({ attributes: table });
   }
 
   /**
@@ -1788,7 +1790,7 @@ export async function handleClickEvent(event, idMap) {
   await attributesToEvent(attributes, event);
 }
 
-function layersAttributesToFilters(layersAttributes) {
+async function layersAttributesToFilters(layersAttributes) {
   const result = [];
   const la = layersAttributes;
   const layers = Object.keys(la);
@@ -1797,7 +1799,7 @@ function layersAttributesToFilters(layersAttributes) {
 
   for (const layer of layers) {
     let filter;
-    const data = layersAttributes[layer] || [];
+    const data = (await layersAttributes[layer]) || [];
     const gids = data.map((d) => d.gid);
     if (isEmpty(gids)) {
       filter = false;
@@ -4210,7 +4212,10 @@ export function getLayersPropertiesAtBbox(opt) {
   const { map, idView, asObject, type, bbox } = opt;
   const hasViewId = isViewId(idView);
   const modeObject = isTrue(asObject);
-  const items = {};
+  const items = {
+    vector: {},
+    raster: {},
+  };
   const excludeProp = ["mx_t0", "mx_t1", "gid"];
   const types = isArray(type) ? type : [type];
   /**
@@ -4253,11 +4258,11 @@ export function getLayersPropertiesAtBbox(opt) {
           const type = sources[id].type;
           switch (type) {
             case "raster":
-              items[idView] = fetchRasterProp(view, sources[id], bbox);
+              items.raster[idView] = fetchRasterProp(view, sources[id], bbox);
               break;
             case "vector":
             case "geojson":
-              items[view.id] = fetchVectorProp(view, bbox);
+              items.vector[view.id] = fetchVectorProp(view, bbox);
               break;
           }
         }

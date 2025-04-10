@@ -279,22 +279,6 @@ export class FeaturesToWidget extends EventSimple {
         Object.assign(labels, await getAttributesAlias(idSource, attrNames));
       }
 
-      // Prepare attribute data for Tabulator
-      /*  const tableColumns = isVector*/
-      /*? [*/
-      /*{*/
-      /*formatter: "rowSelection",*/
-      /*titleFormatter: "rowSelection",*/
-      /*headerSort: false,*/
-      /*width: 25,*/
-      /*headerFilter: false,*/
-      /*frozen: true,*/
-      /*headerTooltip: false,*/
-      /*tooltip: false,*/
-      /*resizable: false,*/
-      /*},*/
-      /*]*/
-      /*: [];*/
       const tableColumns = [];
 
       let isFirst = true;
@@ -347,15 +331,17 @@ export class FeaturesToWidget extends EventSimple {
         minHeight: "100px", // Set min height
         columnMinWidth: 100, // Set minimum column width
         placeholder: "[ No Value ]",
-        rowHeader: {
-          headerSort: false,
-          resizable: false,
-          frozen: true,
-          headerHozAlign: "center",
-          hozAlign: "center",
-          formatter: "rowSelection",
-          titleFormatter: "rowSelection",
-        },
+        rowHeader: isVector
+          ? {
+              headerSort: false,
+              resizable: false,
+              frozen: true,
+              headerHozAlign: "center",
+              hozAlign: "center",
+              formatter: "rowSelection",
+              titleFormatter: "rowSelection",
+            }
+          : null,
       });
 
       // Add cell click event to handle selection and filtering
