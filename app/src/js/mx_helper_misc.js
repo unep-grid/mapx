@@ -2104,7 +2104,6 @@ export function progressScreen(o) {
  * @param {Object|Array} Source to clone
  */
 export function clone(obj) {
-  //return structuredClone(obj);
   return copy(obj);
 }
 

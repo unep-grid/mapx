@@ -57,7 +57,6 @@ import {
   getClickHandlers,
   setClickHandler,
   cssTransformFun,
-  xyToDegree,
   debounce,
   isShinyReady,
   //debouncePromise,
@@ -133,6 +132,7 @@ import {
   isBboxMeta,
   isBbox,
   isViewGj,
+  isTrue,
 } from "./../is_test_mapx/index.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { elViewListOption } from "./view_list_options.js";
@@ -143,6 +143,7 @@ import { createViewControls } from "../views_builder/view_controls.js";
 import { ButtonFilter } from "../button_filter/index.js";
 import { ViewsUpdateHelper } from "../views_list_update/index.js";
 import { getViewSourceMetadata } from "../metadata/utils.js";
+import { eventToPointBbox } from "./utils.js";
 export * from "./view_filters.js";
 
 /**
@@ -1404,6 +1405,7 @@ export async function initMapListener(map) {
    * Highlight on event
    */
   highlighter.init(map);
+  window._hl = highlighter;
 
   /**
    * Spotlight
@@ -1423,11 +1425,18 @@ export async function initMapListener(map) {
       "view_remove",
       "story_step",
       "story_close",
-      "view_panel_click",
+      //"view_panel_click",
     ],
     idGroup: "highlight_reset",
     callback: () => {
       highlighter.reset();
+    },
+  });
+
+  events.on({
+    type: ["view_filtered"],
+    callback: () => {
+      highlighter.update();
     },
   });
 
@@ -1444,44 +1453,22 @@ export async function initMapListener(map) {
   });
 
   map.on("moveend", () => {
-    if (highlighter.isNotSet()) {
-      return;
-    }
     highlighter.update();
   });
 
-  map.on("mousemove", (e) => {
-    const layers = getLayerNamesByPrefix({
-      id: map.id,
-      prefix: "MX", // custom code could be MXCC ...
-    });
-    /**
-     * Change cursor when hovering mapx layers : invite for click
-     */
-    const features = map.queryRenderedFeatures(e.point, { layers: layers });
+  map.on("mousemove", (event) => {
+    const bbox = eventToPointBbox(event);
+    const features = getFeaturesAtBbox(map, bbox);
     map.getCanvas().style.cursor = features.length ? "pointer" : "";
-
-    /**
-     * Change illuminaion direction accoding to mouse position
-     * - Quite intensive on GPU.
-     * - setPaintProperty seems buggy
-     */
-    if (0) {
-      const elCanvas = map.getCanvas();
-      const dpx = window.devicePixelRatio || 1;
-      const wMap = elCanvas.width;
-      const hMap = elCanvas.height;
-      const x = e.point.x - wMap / (2 * dpx);
-      const y = hMap / (2 * dpx) - e.point.y;
-      const deg = xyToDegree(x, y);
-
-      map.setPaintProperty(
-        "hillshading",
-        "hillshade-illumination-direction",
-        deg,
-      );
-    }
   });
+}
+
+export function getFeaturesAtBbox(map, bbox, prefix = "MX") {
+  // Get all rendered features within the bounding box and filter by layer prefix.
+  const features = map.queryRenderedFeatures(bbox).filter((feature) => {
+    return feature.layer.id.startsWith(prefix);
+  });
+  return features;
 }
 
 export async function initMapxStatic(o) {
@@ -1718,8 +1705,8 @@ async function updateButtonGlobe() {
  * Handle click event
  * @param {Object} e Mapboxgl event object
  */
-export async function handleClickEvent(e, idMap) {
-  const type = e.type;
+export async function handleClickEvent(event, idMap) {
+  const { type } = event;
   const hasLayer = getLayerNamesByPrefix().length > 0;
   const map = getMap(idMap);
   const clickModes = getClickHandlers();
@@ -1740,14 +1727,15 @@ export async function handleClickEvent(e, idMap) {
     return;
   }
   /*
-   * Extract attributes, return an object with idView
+   * Extract point bbox, attributes, return an object with idView
    * as key and promises as value
    * e.g. {MX-OTXV7-C2HI3-Z7XLJ: Promise}
    *
    */
-  const attributes = getLayersPropertiesAtPoint({
+  const bbox = eventToPointBbox(event);
+  const attributes = getLayersPropertiesAtBbox({
     map: map,
-    point: e.point,
+    bbox: bbox,
     type: ["vt", "gj", "cc", "rt"],
     asObject: false,
   });
@@ -1757,7 +1745,8 @@ export async function handleClickEvent(e, idMap) {
   }
 
   if (addHighlight) {
-    highlighter.set({ coord: map.unproject(e.point) });
+    const filters = layersAttributesToFilters(attributes);
+    highlighter.set({ filters });
   }
 
   if (addWidget) {
@@ -1781,7 +1770,7 @@ export async function handleClickEvent(e, idMap) {
         "story_step",
         "story_lock",
         "story_close",
-        "view_filter_legend",
+        //"view_filter_legend",
       ],
       idGroup: "click_feature_widget",
       callback: () => {
@@ -1796,7 +1785,29 @@ export async function handleClickEvent(e, idMap) {
    * Dispatch to event
    * - If something listens to "click_attributes", return values
    */
-  await attributesToEvent(attributes, e);
+  await attributesToEvent(attributes, event);
+}
+
+function layersAttributesToFilters(layersAttributes) {
+  const result = [];
+  const la = layersAttributes;
+  const layers = Object.keys(la);
+
+  // Loop through each layer in the data
+
+  for (const layer of layers) {
+    let filter;
+    const data = layersAttributes[layer] || [];
+    const gids = data.map((d) => d.gid);
+    if (isEmpty(gids)) {
+      filter = false;
+    } else {
+      filter = ["in", ["get", "gid"], ["literal", gids]];
+    }
+    result.push({ id: layer, filter: filter });
+  }
+
+  return result;
 }
 
 /**
@@ -4189,26 +4200,24 @@ export function getViewAttributes(
  * Query layers properties at point
  * @param {Object} opt Options
  * @param {Object||String} opt.map Map object or id of the map
- * @param {Object} opt.point
+ * @param {Object} opt.bbox
  * @param {String} opt.type Type : vt or rt
  * @param {String} opt.idView Use only given view id
  * @param {Boolean} opt.asObject Return an object of array `{a:[2,1]}` instead of an array of object `[{a:2},{a:1}]`.
  * @return {Object} Object with view id as keys
  */
-export function getLayersPropertiesAtPoint(opt) {
-  const map = getMap(opt.map);
-  const hasViewId = isString(opt.idView);
-  const modeObject = opt.asObject === true || false;
+export function getLayersPropertiesAtBbox(opt) {
+  const { map, idView, asObject, type, bbox } = opt;
+  const hasViewId = isViewId(idView);
+  const modeObject = isTrue(asObject);
   const items = {};
   const excludeProp = ["mx_t0", "mx_t1", "gid"];
-  let idViews = [];
-  let type = opt.type || "vt" || "rt" || "gj" || "cc";
-  type = isArray(type) ? type : [type];
+  const types = isArray(type) ? type : [type];
   /**
    * Use id from idView as array OR get all mapx displayed base layer
    * to get array of view ID.
    */
-  idViews = hasViewId
+  const idViews = hasViewId
     ? [opt.idView]
     : getLayerNamesByPrefix({
         base: true,
@@ -4230,7 +4239,7 @@ export function getLayersPropertiesAtPoint(opt) {
    */
   idViewsSorted
     .map((idView) => getView(idView))
-    .filter((view) => type.includes(view?.type))
+    .filter((view) => types.includes(view?.type))
     .forEach((view) => {
       if (!isView(view)) {
         console.warn("Not a view:", view, " opt:", opt);
@@ -4244,11 +4253,11 @@ export function getLayersPropertiesAtPoint(opt) {
           const type = sources[id].type;
           switch (type) {
             case "raster":
-              items[idView] = fetchRasterProp(view, sources[id]);
+              items[idView] = fetchRasterProp(view, sources[id], bbox);
               break;
             case "vector":
             case "geojson":
-              items[view.id] = fetchVectorProp(view);
+              items[view.id] = fetchVectorProp(view, bbox);
               break;
           }
         }
@@ -4260,7 +4269,7 @@ export function getLayersPropertiesAtPoint(opt) {
   /**
    * Fetch properties on raster WMS layer
    */
-  async function fetchRasterProp(view, source) {
+  async function fetchRasterProp(view, source, bbox) {
     const out = modeObject ? {} : [];
     try {
       const tiles = view?.data?.source?.tiles || source?.tiles || [];
@@ -4285,7 +4294,7 @@ export function getLayersPropertiesAtPoint(opt) {
       }
 
       const res = await wmsQuery({
-        point: opt.point,
+        bbox: bbox,
         layers: params.layers,
         styles: params.styles,
         url: endpoint,
@@ -4313,25 +4322,14 @@ export function getLayersPropertiesAtPoint(opt) {
   /**
    * Fetch properties on vector layer
    */
-  function fetchVectorProp(view) {
-    const id = view.id;
-    let attributes = view?.data?.attribute?.names || [];
-    if (isString(attributes)) {
-      // vector of 1 in R -> string during r->json conversion
-      attributes = [attributes];
-    }
-    const layers = getLayerNamesByPrefix({
-      map: map,
-      prefix: id,
-    });
-
-    const features = map.queryRenderedFeatures(opt.point, {
-      layers: layers,
-    });
+  function fetchVectorProp(view, bbox) {
+    const idView = view.id;
+    const attributes = getViewAttributes(view, excludeProp);
+    const features = getFeaturesAtBbox(map, bbox, idView);
 
     const out = modeObject ? {} : [];
 
-    features.forEach((f) => {
+    for (const f of features) {
       /**
        * Fill null
        * -> tiles can't contain nulls
@@ -4348,7 +4346,7 @@ export function getLayersPropertiesAtPoint(opt) {
           /**
            * Exclude prop (time, gid, etc)
            */
-          if (!excludeProp.includes(p)) {
+          if (attributes.includes(p)) {
             /**
              * Aggregate value by attribute
              */
@@ -4364,7 +4362,7 @@ export function getLayersPropertiesAtPoint(opt) {
          */
         out.push(f.properties);
       }
-    });
+    }
 
     return out;
   }

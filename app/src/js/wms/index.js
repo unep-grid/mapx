@@ -14,7 +14,8 @@ import {
 import { moduleLoad } from "../modules_loader_async";
 import { fetchProgress_xhr } from "../mx_helper_fetch_progress";
 import { path } from "../mx_helper_misc";
-import { getMap } from "../map_helpers";
+import { pointBboxToWms } from "../map_helpers/utils";
+import { isTrue } from "../is_test";
 
 export {
   wmsBuildQueryUi,
@@ -22,7 +23,6 @@ export {
   wmsGetLayers,
   urlTile,
   urlLegend,
-  pointToBbox,
 };
 
 /**
@@ -136,28 +136,26 @@ function isWmsLayer(layer) {
  * @param {Object} opt Options
  * @param {Object} opt.map Mapbox gl map. Empty, use default
  * @param {Boolean} opt.asObject Return an object of array `{a:[2,1]}` instead of an array of object `[{a:2},{a:1}]`.
- * @param {Object} opt.point Mapbox gl point object
+ * @param {Object} opt.bbox point bbox
  * @param {Array} opt.layers layer list
  * @param {Array} opt.styles style list
  * @param {String} opt.url Service url
  */
 export async function wmsQuery(opt) {
   opt = Object.assign({}, opt);
-  const map = opt.map || getMap();
-  const point = opt.point;
-  const urlBase = opt.url;
-  const modeObject = opt.asObject === true || false;
+  const { asObject, bbox: pixelBbox, url: urlBase, optGetCapabilities } = opt;
+  const modeObject = isTrue(asObject);
+  const useMirror = isTrue(optGetCapabilities?.useMirror);
   const ignoreBbox = true;
-  const useMirror = path(opt, "optGetCapabilities.useMirror", false);
   /**
    * Return fetch promise
    */
-  const cap = await wmsGetCapabilities(urlBase, opt.optGetCapabilities);
+  const cap = await wmsGetCapabilities(urlBase, optGetCapabilities);
 
   /**
    * Build bbox
    */
-  const bbox = await pointToBbox(map, point, 4326);
+  const wmsBbox = await pointBboxToWms(pixelBbox);
 
   /*
    * Build query string
@@ -180,7 +178,7 @@ export async function wmsQuery(opt) {
     width: 9,
     height: 9,
     srs: "EPSG:4326",
-    bbox: bbox.join(","),
+    bbox: wmsBbox,
   };
   /**
    * Update formats using capabilities
@@ -307,38 +305,4 @@ function urlLegend(opt) {
   });
 
   return opt.url + "?" + query;
-}
-
-/*
- * Build a bounding box
- *
- * @return [minLng,minLat,maxLng,maxLat],
- */
-async function pointToBbox(map, point, srid) {
-  const out = [];
-  const xMax = point.x + 5;
-  const xMin = point.x - 5;
-  const yMax = point.y + 5;
-  const yMin = point.y - 5;
-  const sw = map.unproject([xMax, yMin]);
-  const ne = map.unproject([xMin, yMax]);
-  const minLat = Math.min(sw.lat, ne.lat);
-  const minLng = Math.min(sw.lng, ne.lng);
-  const maxLat = Math.max(sw.lat, ne.lat);
-  const maxLng = Math.max(sw.lng, ne.lng);
-  if (srid && srid !== 4326) {
-    const proj4 = (await import("proj4")).default;
-    // default proj
-    const p4326 =
-      "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees";
-    const p3857 =
-      "+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs +type=crs";
-    const sw = proj4(p4326, p3857, [minLng, minLat]);
-    const ne = proj4(p4326, p3857, [maxLng, maxLat]);
-    out.push(...sw);
-    out.push(...ne);
-  } else {
-    out.push(...[minLng, minLat, maxLng, maxLat]);
-  }
-  return out;
 }

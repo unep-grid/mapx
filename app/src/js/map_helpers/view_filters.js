@@ -66,6 +66,18 @@ export function viewSetFilter(o) {
     }
   }
 
+  if (layers.length > 0) {
+    map.once("idle", (e) => {
+      events.fire({
+        type: "view_filtered",
+        data: {
+          idView: idView,
+          filter: filterView,
+        },
+      });
+    });
+  }
+
   /**
    * Apply filters to each layer, in top of base filters
    */
@@ -80,14 +92,6 @@ export function viewSetFilter(o) {
 
     map.setFilter(layer.id, filterFinal);
   }
-
-  events.fire({
-    type: "view_filtered",
-    data: {
-      idView: idView,
-      filter: filterView,
-    },
-  });
 }
 
 /**

@@ -18,6 +18,7 @@ export async function css_resolver(c) {
   --mx_ui_shadow: ${color(c.mx_ui_shadow)};
   --mx_ui_link: ${color(c.mx_ui_link)};
   --mx_ui_input_accent: ${color(c.mx_ui_input_accent)};
+  --mx_ui_highlighter: ${color(c.mx_ui_highlighter)};
   border-color: var(--mx_ui_border);
   color: var(--mx_ui_text);
 }`;

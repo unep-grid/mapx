@@ -18,7 +18,7 @@
   --mx_ui_shadow: hsla(0, 0%, 60%, 0.1);
   --mx_ui_link: #12b0f8;
   --mx_ui_input_accent: #12b0f8;
-  --mx_ui_highlighter: rgb(255, 20, 147);
+  --mx_ui_highlighter: rgb(255, 255, 0);
 
   /**
   * Font family 
