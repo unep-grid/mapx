@@ -166,6 +166,7 @@ app.get("/get/projects/list/user/", project.mwGetListByUser);
 app.get("/get/project/search", project.mwProjectSearchText);
 
 app.post("/upload/image/", upload.mwImage);
+app.post("/upload/vector/", upload.mwVector);
 app.post("/send/mail/", mwSendMail);
 app.post("/collect/logs/", log.mwCollect);
 

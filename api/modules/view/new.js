@@ -44,20 +44,25 @@ const view_template_vt = {
  */
 export async function ioAddViewVt(socket, config, view_options) {
   try {
-    const session = socket.session;
-    if (!session.user_roles.publisher) {
-      return false;
-    }
+    const session = socket.session || {};
+    const idUser = session.user_id || config.idUser || config.user;
+    const idProject = session.project_id || config.idProject || config.project;
+    const idSource = config.idSource || config.source;
+    const idView = config.idView || view;
+    const title = config.title || "Undefined";
+    const filename = config.filename || config?.file?.filename;
+    const desc = config.description || filename;
+
     const view_base = clone(view_template_vt);
     const view = Object.assign({}, view_base, view_options);
-    view.id = config.idView;
-    view.editor = session.user_id;
+    view.id = idView;
+    view.editor = idUser;
     view.date_modified = new Date().toISOString();
     view.type = "vt";
-    view.project = session.project_id;
-    view.data.source.layerInfo.name = config.idSource;
-    view.data.title[config.language || "en"] = config.title;
-    view.data.abstract[config.language || "en"] = config.filename;
+    view.project = idProject;
+    view.data.source.layerInfo.name = idSource;
+    view.data.title[config.language || "en"] = title;
+    view.data.abstract[config.language || "en"] = desc;
 
     /**
      * Auto creation config

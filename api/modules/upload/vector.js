@@ -267,8 +267,9 @@ export async function ioConvertOgr(res, config) {
  */
 async function ioAddSource(socket, config) {
   const { title, idSource, id_request, enable_wms, enable_download } = config;
-  const idProject = socket?.session?.project_id || config.idProject;
-  const idUser = (socket?.session?.user_id || config.idUser) * 1;
+  const idProject =
+    socket?.session?.project_id || config.idProject || config.project;
+  const idUser = (socket?.session?.user_id || config.idUser || config.user) * 1;
 
   if (!isProjectId(idProject)) {
     throw Error("Not a valid project id");
@@ -339,16 +340,18 @@ async function ioAddSource(socket, config) {
     });
   }
 
-  /**
-   * Trigger source reload in shiny
-   * TODO: this will be removed after shiny transition over
-   * e.g. : trigger update source list in shiny app
-   *        ws -> handler -> shiny -> update view list
-   */
-  await socket.mx_emit_ws_response("/server/source/added", {
-    idSource,
-  });
+  if (socket.mx_emit_ws_response) {
+    /**
+     * Trigger source reload in shiny
+     * TODO: this will be removed after shiny transition over
+     * e.g. : trigger update source list in shiny app
+     *        ws -> handler -> shiny -> update view list
+     */
 
+    await socket.mx_emit_ws_response("/server/source/added", {
+      idSource,
+    });
+  }
   return true;
 }
 
