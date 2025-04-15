@@ -123,11 +123,14 @@ function sendJSON(res, data, opt) {
     };
     opt.end = opt.end || false;
     data = isString(data) ? data : JSON.stringify(data || "");
-    res.setHeader("Mapx-Content-Length", data.length || 0);
-    res.setHeader("Content-Type", "application/json");
-    res.setHeader("Cache-Control", "max-age=0, s-maxage=0");
-    if (opt.etag) {
-      res.setHeader("Etag", opt.etag);
+    if (!res.headersSent) {
+      res.setHeader("Mapx-Content-Length", data.length || 0);
+      res.setHeader("Content-Type", "application/json");
+      res.setHeader("Cache-Control", "max-age=0, s-maxage=0");
+
+      if (opt.etag) {
+        res.setHeader("Etag", opt.etag);
+      }
     }
     if (opt.toRes) {
       data = data + "\t\n";

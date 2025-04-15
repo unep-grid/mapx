@@ -360,7 +360,6 @@ class Highlighter {
     const hl = this;
     const items = hl._items;
     for (const [id, item] of items) {
-      debugger;
       item.filter = [
         "match",
         ["get", "gid"],
