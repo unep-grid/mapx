@@ -1719,6 +1719,7 @@ export async function handleClickEvent(event, idMap) {
 
   const retrieveAttributes = addWidget || hasSdk;
 
+
   if (!hasLayer && type !== "click") {
     return;
   }
@@ -1787,7 +1788,10 @@ export async function handleClickEvent(event, idMap) {
    * Dispatch to event
    * - If something listens to "click_attributes", return values
    */
-  await attributesToEvent(attributes, event);
+  await attributesToEvent(
+    { ...attributes?.raster, ...attributes?.vector },
+    event,
+  );
 }
 
 async function layersAttributesToFilters(layersAttributes) {
@@ -4228,6 +4232,7 @@ export function getLayersPropertiesAtBbox(opt) {
         base: true,
       });
 
+
   if (idViews.length === 0) {
     return items;
   }
@@ -4268,6 +4273,7 @@ export function getLayersPropertiesAtBbox(opt) {
         }
       }
     });
+
 
   return items;
 

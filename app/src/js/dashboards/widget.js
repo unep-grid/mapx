@@ -7,7 +7,7 @@ import {
   getContentSize,
   makeId,
 } from "./../mx_helper_misc.js";
-import { getLayersPropertiesAtPoint } from "./../map_helpers/index.js";
+import { getLayersPropertiesAtBbox } from "./../map_helpers/index.js";
 import {
   isElement,
   isEmpty,
@@ -23,6 +23,7 @@ import { modalSimple } from "../mx_helper_modal.js";
 import { moduleLoad } from "../modules_loader_async/index.js";
 import { theme } from "../init_theme.js";
 import { elButtonFa } from "../el_mapx/index.js";
+import { eventToPointBbox } from "../map_helpers/utils.js";
 const { valuesMap } = settings;
 
 /**
@@ -304,7 +305,7 @@ class Widget extends EventSimple {
    * @returns {Promise<Object[]>}
    * @internal
    */
-  async getWidgetDataFromLinkedView(e) {
+  async getWidgetDataFromLinkedView(event) {
     const widget = this;
     const idView = path(widget.config, "view.id", widget.id);
     const viewType = path(widget.config, "view.type", null);
@@ -312,14 +313,19 @@ class Widget extends EventSimple {
     if (!viewType || !idView) {
       return [];
     }
-    const items = await getLayersPropertiesAtPoint({
+
+    const bbox = eventToPointBbox(event);
+    const items = await getLayersPropertiesAtBbox({
       map: widget.config.map,
       type: viewType,
-      point: e ? e.point : null,
+      bbox: bbox,
       idView: idView,
       wait: false,
     });
-    return items[idView] || [];
+
+    const itemsFlat = { ...items?.raster, ...items?.vector };
+
+    return itemsFlat[idView] || [];
   }
 
   /**
