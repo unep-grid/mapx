@@ -7,7 +7,7 @@ body,
 .full-page {
   height: 100%;
   width: 100%;
-  background: #474747;
+  background: var(--mx_ui_background);
   padding: 0px;
   margin: 0px;
   overflow: hidden;
