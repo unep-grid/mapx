@@ -1,3 +1,9 @@
+  - [1.13.17-alpha.9](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.9) 
+
+    - fix(story): added a config entry to set panels config in story static mode
+    - fix(widget): replaced old feature query tools by the new bbox based one
+
+
   - [1.13.17-alpha.8](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.8) 
 
     - fix(upload): re-enabled the http/CURL upload route + handler
