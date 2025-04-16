@@ -399,19 +399,19 @@ export function path(obj, path, def) {
  * @return {Array} handlers id
  */
 export function setClickHandler(opt) {
-  var type = opt.type;
-  var enable = opt.enable;
-  var toggle = opt.toggle;
-  var handlers = getClickHandlers();
-  var posClickHandler = handlers.indexOf(type);
-  var hasClickHandler = posClickHandler > -1;
+  const type = opt.type;
+  let enable = opt.enable;
+  const toggle = opt.toggle;
+  const handlers = getClickHandlers();
+  const posClickHandler = handlers.indexOf(type);
+  const hasClickHandler = posClickHandler > -1;
 
   if (toggle) {
     enable = !hasClickHandler;
   }
 
   if (!type || typeof enable === "undefined") {
-    return;
+    return settings.clickHandlers;
   }
 
   if (enable && !hasClickHandler) {

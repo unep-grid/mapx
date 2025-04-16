@@ -6,6 +6,7 @@ import {
   setClickHandler,
   getContentSize,
   makeId,
+  getClickHandlers,
 } from "./../mx_helper_misc.js";
 import { getLayersPropertiesAtBbox } from "./../map_helpers/index.js";
 import {
@@ -261,6 +262,9 @@ class Widget extends EventSimple {
   async updateDataFromAttribute() {
     const widget = this;
     try {
+      if (widget.app_mode_draw) {
+        return;
+      }
       const d = path(widget.config, "view.data.attribute.table", []);
       await widget.setData(d);
     } catch (e) {
@@ -277,11 +281,23 @@ class Widget extends EventSimple {
   async updateDataFromLayerAtMousePosition(e) {
     const widget = this;
     try {
+      if (widget.app_mode_draw) {
+        return;
+      }
       const data = await widget.getWidgetDataFromLinkedView(e);
       await widget.setData(data);
     } catch (e) {
       widget.warn("error with data at mouse position", e);
     }
+  }
+
+  /**
+   * Test if mode draw
+   * NOTE: could be a callback for the module
+   */
+  get app_mode_draw() {
+    const clickHandlers = getClickHandlers();
+    return clickHandlers.includes("draw");
   }
 
   /**
@@ -292,6 +308,9 @@ class Widget extends EventSimple {
   async updateDataFromLayerOnRender() {
     const widget = this;
     try {
+      if (widget.app_mode_draw) {
+        return;
+      }
       const data = await widget.getWidgetDataFromLinkedView();
       await widget.setData(data);
     } catch (e) {
@@ -347,7 +366,7 @@ class Widget extends EventSimple {
           target: map,
           bind: widget,
           group: "base",
-          type: "render",
+          type: "idle",
           debounce: true,
           debounceTime: 300,
           callback: widget.updateDataFromLayerOnRender,

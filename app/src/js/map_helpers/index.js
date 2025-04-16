@@ -1716,19 +1716,14 @@ export async function handleClickEvent(event, idMap) {
   const hasDashboard = clickModes.includes("dashboard");
   const hasDraw = clickModes.includes("draw");
   const hasSdk = clickModes.includes("sdk");
-  const hasCC = clickModes.includes("cc");
-  const addWidget = !(hasDashboard || hasCC || hasSdk || hasDraw);
-  const addHighlight = !hasDraw && !hasDashboard;
 
-  const retrieveAttributes = addWidget || hasSdk;
+  const addWidget = !(hasDashboard || !hasSdk || !hasDraw);
+  const addHighlight = !(hasDraw || hasDashboard);
 
   if (!hasLayer && type !== "click") {
     return;
   }
 
-  if (!retrieveAttributes) {
-    return;
-  }
   /*
    * Extract point bbox, attributes, return an object with idView
    * as key and promises as value
@@ -1743,7 +1738,9 @@ export async function handleClickEvent(event, idMap) {
     asObject: false,
   });
 
-  if (isEmpty(attributes.raster) && isEmpty(attributes.vector)) {
+  const attributes_flat = { ...attributes.vector, ...attributes.raster };
+
+  if (isEmpty(attributes_flat)) {
     return;
   }
 
@@ -1781,19 +1778,14 @@ export async function handleClickEvent(event, idMap) {
       },
     });
 
-    const table = { ...attributes.vector, ...attributes.raster };
-
-    await fw.set({ attributes: table });
+    await fw.set({ attributes: attributes_flat });
   }
 
   /**
    * Dispatch to event
    * - If something listens to "click_attributes", return values
    */
-  await attributesToEvent(
-    { ...attributes?.raster, ...attributes?.vector },
-    event,
-  );
+  await attributesToEvent(attributes_flat, event);
 }
 
 async function layersAttributesToFilters(layersAttributes) {
@@ -1823,10 +1815,11 @@ async function layersAttributesToFilters(layersAttributes) {
  * @param {Object} List of promise of attributes with layers id as key
  * @param {Event} e Map click event
  */
-async function attributesToEvent(layersAttributes, e) {
-  const isValid = isObject(layersAttributes) && isObject(e);
+async function attributesToEvent(layersAttributes, event) {
+  const isValid = isObject(layersAttributes);
 
   if (!isValid) {
+    console.warn("Invalid values in attributesToEvent", layersAttributes);
     return;
   }
 
@@ -1852,8 +1845,8 @@ async function attributesToEvent(layersAttributes, e) {
         nPart: nViews,
         idView: idView,
         attributes: attributes,
-        point: e.point,
-        lngLat: e.lngLat,
+        point: event.point,
+        lngLat: event.lngLat,
       },
     });
   }
@@ -4584,7 +4577,6 @@ export async function getViewsBounds(views) {
   };
 
   const extents = await Promise.all(views.map((view) => getViewExtent(view)));
-  
 
   const extent = extents.reduce((a, ext) => {
     if (ext) {
