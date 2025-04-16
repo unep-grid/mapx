@@ -1508,11 +1508,14 @@ export async function initMapxStatic(o) {
      */
     const story = mapData.views.find((v) => v.type === "sm");
     if (story) {
+      const panelState = getQueryParameter("panels")[0];
+
       storyRead({
         id: o.id,
         idView: story.id,
         save: false,
         autoStart: true,
+        panels: panelState,
       });
       return;
     }
@@ -1718,7 +1721,6 @@ export async function handleClickEvent(event, idMap) {
   const addHighlight = !hasDraw && !hasDashboard;
 
   const retrieveAttributes = addWidget || hasSdk;
-
 
   if (!hasLayer && type !== "click") {
     return;
@@ -4232,7 +4234,6 @@ export function getLayersPropertiesAtBbox(opt) {
         base: true,
       });
 
-
   if (idViews.length === 0) {
     return items;
   }
@@ -4273,7 +4274,6 @@ export function getLayersPropertiesAtBbox(opt) {
         }
       }
     });
-
 
   return items;
 
@@ -4584,6 +4584,7 @@ export async function getViewsBounds(views) {
   };
 
   const extents = await Promise.all(views.map((view) => getViewExtent(view)));
+  
 
   const extent = extents.reduce((a, ext) => {
     if (ext) {

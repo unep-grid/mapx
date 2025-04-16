@@ -461,6 +461,15 @@ export function isJSON(str) {
 }
 export const isJson = isJSON;
 
+export function isJSONObject(str) {
+  try {
+    const x = JSON.parse(str);
+    return isObject(x);
+  } catch (e) {
+    return false;
+  }
+}
+
 /**
  * Test if stringifiable
  * @param {Any} item
