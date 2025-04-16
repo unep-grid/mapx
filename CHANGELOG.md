@@ -1,3 +1,8 @@
+  - [1.13.17-alpha.10](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.10) 
+
+    - fix(theme): set body background to selected theme value + set map 'outer-space' color to that value
+
+
   - [1.13.17-alpha.9](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.9) 
 
     - fix(story): added a config entry to set panels config in story static mode
