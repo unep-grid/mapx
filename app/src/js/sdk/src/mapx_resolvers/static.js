@@ -111,8 +111,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
    */
   set_panel_left_visibility(opt) {
     const rslv = this;
-    const panelMain = panels.get("panel_main");
-    const panel = panelMain.panel;
+    const panel = panels.get("main_panel");
     return rslv._handle_panel_visibility(panel, opt);
   }
 

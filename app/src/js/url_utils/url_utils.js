@@ -12,7 +12,7 @@ import {
   isArrayOfNumber,
   isBooleanCoercible,
 } from "./../is_test";
-import { isJSON } from "../is_test/index.js";
+import { isJSON, isJSONObject, isNotEmpty } from "../is_test/index.js";
 
 /**
  * Set url init param
@@ -133,6 +133,10 @@ export function getQueryParameter(name) {
     if (isBooleanCoercible(value)) {
       value = asBoolean(value);
     }
+
+    if (isNotEmpty(value) && isJSONObject(value)) {
+      value = JSON.parse(value);
+    }
     return asArray(value);
   }
 }
@@ -171,16 +175,26 @@ export function getQueryParametersAsObject(urlString = "", opt = {}) {
   return out;
 }
 
-function asArray(str) {
-  return !str
-    ? []
-    : isJSON(str)
-      ? [JSON.parse(str)]
-      : isArray(str)
-        ? str
-        : isString(str)
-          ? str.split(",")
-          : [str];
+function asArray(item) {
+  if (isArray(item)) {
+    return item;
+  }
+
+  if (isEmpty(item)) {
+    return [];
+  }
+
+  if (isObject(item) || isBoolean(item)) {
+    return [item];
+  }
+  if (isJSONObject(item)) {
+    item = JSON.parse(item);
+    return [item];
+  }
+  if (isString(item)) {
+    return item.split(",");
+  }
+  return [item];
 }
 
 function asString(array) {

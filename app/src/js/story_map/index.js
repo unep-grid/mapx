@@ -96,11 +96,16 @@ export async function storyRead(opt) {
 
 async function init(opt) {
   const state = getState();
+
   Object.assign(state, opt);
+
   if (state.elStory) {
     state.update = true;
     state.initScroll = state.elStory.scrollTop;
     state.stepUpdate = state.stepActive;
+  }
+  if (state.panels) {
+    panels.batch(state.panels);
   }
   state.map = getMap();
   state.enable = false;
@@ -271,6 +276,7 @@ function initMouseMoveListener() {
 async function initSettings() {
   const story = getStory();
   const sSettings = path(story, "settings", {});
+
   if (settingsMapx.mode.static) {
     storySettings.panel_disable = ["notif_panel"];
   }
