@@ -1,3 +1,8 @@
+  - [1.13.17-alpha.12](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.12) 
+
+    - fix(click handler): should handle all specified cases correctly
+
+
   - [1.13.17-alpha.11](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.11) 
 
     - fix(theme): revert space color for clear theme
