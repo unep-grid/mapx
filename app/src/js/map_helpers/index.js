@@ -1717,7 +1717,8 @@ export async function handleClickEvent(event, idMap) {
   const hasDraw = clickModes.includes("draw");
   const hasSdk = clickModes.includes("sdk");
 
-  const addWidget = !(hasDashboard || !hasSdk || !hasDraw);
+  const addWidget = !(hasDashboard || hasSdk || hasDraw);
+  
   const addHighlight = !(hasDraw || hasDashboard);
 
   if (!hasLayer && type !== "click") {
