@@ -1718,7 +1718,7 @@ export async function handleClickEvent(event, idMap) {
   const hasSdk = clickModes.includes("sdk");
 
   const addWidget = !(hasDashboard || hasSdk || hasDraw);
-  
+
   const addHighlight = !(hasDraw || hasDashboard);
 
   if (!hasLayer && type !== "click") {
@@ -2964,6 +2964,7 @@ export async function viewRender(o) {
   const idView = view.id;
   const idMap = o.id || settings.map.id;
   const idType = view.type;
+  const hasDashboard = isViewDashboard(view);
 
   /**
    * Fire view add event
@@ -3023,9 +3024,8 @@ export async function viewRender(o) {
    * - As story steps could manage dashboard state,
    *   it's rendered inside the story
    */
-  if (!isStory) {
+  if (!isStory && hasDashboard) {
     await dashboard.createFromView(view);
-    await dashboard.autoDestroy();
   }
 
   /**
