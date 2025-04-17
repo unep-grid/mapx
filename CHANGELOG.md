@@ -1,3 +1,8 @@
+  - [1.13.17-alpha.14](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.14) 
+
+    - fix(dashboard): static mode, bug when displaying multiple views, destroyed before rendering #1054
+
+
   - [1.13.17-alpha.13](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.13) 
 
     - fix(controls): safari button controls issue #1050
