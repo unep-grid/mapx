@@ -238,7 +238,7 @@ export function updateIfEmpty(target, source) {
  * @param {Object} source - The original object to be patched
  * @param {Object} patch - The patch object containing updates to apply
  * @returns {Object} A new object with the patch applied
- * 
+ *
  * @example
  * const source = { a: { b: 1, c: 2 }, d: 3 };
  * const patch = { a: { b: 10 }, e: 4 };
@@ -288,7 +288,7 @@ export function patchObject(source, patch) {
  * @param {Object} target - The target object to merge into
  * @param {Object} source - The source object whose properties will be merged into the target
  * @returns {Object} The merged object (modified target)
- * 
+ *
  * @example
  * const target = { a: { b: 1 }, c: [1, 2] };
  * const source = { a: { d: 2 }, c: [3, 4] };
@@ -2177,8 +2177,8 @@ export function getContentSize(
     position: "absolute",
     left: 0,
     top: 0,
-    width: "fit-content",
-    height: "fit-content",
+    width: "auto",
+    height: "auto",
     overflow: "visible",
     zIndex: 1000,
     // Adding max-width/height constraints to prevent any potential layout issues
@@ -2479,8 +2479,7 @@ export function getBrowserData() {
 
 export function isFirefox() {
   const uaparser = new UAParser();
-  const isGecko = uaparser.getEngine().name === "Gecko";
-  return isGecko;
+  return uaparser.getEngine().name === "Gecko";
 }
 
 /**
