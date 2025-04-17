@@ -1,3 +1,9 @@
+  - [1.13.17-alpha.13](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.13) 
+
+    - fix(controls): safari button controls issue #1050
+    - fix(click handler): boolean issue. Should fix #1005
+
+
   - [1.13.17-alpha.12](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.12) 
 
     - fix(click handler): should handle all specified cases correctly
