@@ -278,6 +278,7 @@ export function makeSimpleLayer(opt) {
       break;
   }
 
+
   return layer;
 }
 

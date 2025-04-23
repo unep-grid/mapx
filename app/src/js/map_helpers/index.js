@@ -1980,14 +1980,15 @@ export async function addSourceFromView({ view, noLocationCheck, map }) {
  */
 function setSourceViewVt(view) {
   const urlBase = getApiUrl("getTile");
-  const useServerCache = settings.tiles.vector.useCache;
-  const usePostgisTiles = settings.tiles.vector.usePostgisTiles;
-  // URL API escape {x}/{y}/{z}, use concat
-  const url =
-    `${urlBase}?idView=${view.id}&` +
-    `timestamp=${view.date_modified}&` +
-    (usePostgisTiles === true ? `usePostgisTiles=true&` : "") +
-    (useServerCache === false ? `skipCache=true&` : "");
+  const useServerCache = isTrue(settings.tiles.vector.useCache);
+  const usePostgisTiles = isTrue(settings.tiles.vector.usePostgisTiles);
+  // URL API escapes {x}/{y}/{z}, use concat
+  const url = [
+    `${urlBase}?idView=${view.id}`,
+    `timestamp=${view.date_modified}`,
+    `usePostgisTiles=${usePostgisTiles}`,
+    `skipCache=${useServerCache}`,
+  ].join("&");
 
   view.data.source.tiles = [url, url];
   view.data.source.promoteId = "gid";
