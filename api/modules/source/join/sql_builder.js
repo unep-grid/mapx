@@ -46,6 +46,14 @@ export class SQLQueryBuilder {
       case "type":
         colsBase.push(...[`ST_GeometryType(${this.baseAlias}.geom) geom`]);
         break;
+      case "type_gid":
+        colsBase.push(
+          ...[
+            `ST_GeometryType(${this.baseAlias}.geom) geom`,
+            `${this.baseAlias}.gid`,
+          ]
+        );
+        break;
       case "exclude":
       default:
         null;
@@ -114,7 +122,7 @@ export class SQLQueryBuilder {
    * @returns {string} SQL query for fetching the first N rows.
    */
   firstNRowsSQL(n) {
-    let coreQuery = this.buildCoreQuery({ geom: "type" });
+    let coreQuery = this.buildCoreQuery({ geom: "type_gid" });
     return `${coreQuery} LIMIT ${n};`;
   }
 }
