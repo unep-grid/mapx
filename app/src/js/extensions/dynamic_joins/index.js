@@ -1,6 +1,7 @@
 import chroma from "chroma-js";
 import { getApiUrl } from "../../api_routes";
 import { el } from "../../el_mapx";
+import { moduleLoad } from "../../modules_loader_async";
 
 export class DynamicJoin {
   /**
@@ -13,7 +14,28 @@ export class DynamicJoin {
     this._rawTable = [];
     this._aggTable = [];
     this._colorScale = null;
-    this._currentFilter = null;
+    // multi-field filtering support
+    this._filterFields = [];
+    this._filterSelects = {};
+    this._currentFilters = {};
+  }
+  // remove existing filter UI and TomSelect instances
+  _destroyFilterUI() {
+    const container = this._options.container;
+    if (!container) return;
+    for (const ts of Object.values(this._filterSelects)) {
+      ts.destroy();
+    }
+    this._filterSelects = {};
+    this._currentFilters = {};
+    container.innerHTML = "";
+  }
+
+  // helper to refresh styling after filter change
+  _refresh() {
+    this._prepareDataForStyling();
+    this._computeColorScale();
+    this._applyStyle();
   }
 
   /**
@@ -29,7 +51,8 @@ export class DynamicJoin {
    * @param {string} [opts.stat='quantile']    – 'quantile', 'equal', 'kmeans', etc.
    * @param {number} [opts.classes=5]          – number of classes/breaks
    * @param {string} [opts.na='#ccc']          – fallback color for missing joins
-   * @param {string} [opts.filterField]        – field name to build a filter dropdown on
+   * @param {string} [opts.filterField]        – (deprecated) single field to build a filter dropdown on
+   * @param {Array<string>} [opts.filterFields] – array of field names to build filter inputs on
    * @param {string} [opts.aggregation='sum']  – 'sum', 'median', 'max', 'min', or 'mode'
    * @param {HTMLElement} [opts.container]     – DOM element to append filter UI
    */
@@ -51,6 +74,7 @@ export class DynamicJoin {
       dataUrl,
       joinOn,
       filterField,
+      filterFields,
       container,
     } = this._options;
 
@@ -60,7 +84,16 @@ export class DynamicJoin {
     this._idSourceGeom = idSourceGeom;
     this._sourceLayer = idSourceGeom;
     this._idSourceData = idSourceData;
-    this._filterField = filterField;
+    // normalize filter fields (support legacy single filterField)
+    this._filterFields = Array.isArray(filterFields)
+      ? filterFields
+      : filterField
+        ? [filterField]
+        : [];
+    // initialize current filter values
+    for (const field of this._filterFields) {
+      this._currentFilters[field] = null;
+    }
     this._idLayer = `${idSourceGeom}-dynamic-join`;
     this._idSource = `${idSourceGeom}-dynamic-join-src`;
     this._data_url = dataUrl;
@@ -68,8 +101,8 @@ export class DynamicJoin {
     // load raw data
     await this._loadData();
 
-    // if filtering enabled, build the UI
-    if (filterField && container) {
+    // if filtering enabled, build the UI for each field
+    if (this._filterFields.length > 0 && container) {
       await this._buildFilterUI(container);
     }
 
@@ -80,15 +113,15 @@ export class DynamicJoin {
     this._applyStyle();
   }
 
-  // load your attribute table; include filterField if provided
+  // load your attribute table; include all filter fields if provided
   async _loadData() {
     let url;
 
     if (this._data_url) {
       url = this._data_url;
     } else {
-      const attrs = [this._fieldData, "value"];
-      if (this._filterField) attrs.push(this._filterField);
+      // request data including all filter fields
+      const attrs = [this._fieldData, "value", ...this._filterFields];
       url = new URL(getApiUrl("getSourceTableAttribute"));
       url.searchParams.set("id", this._idSourceData);
       url.searchParams.set("attributes", attrs);
@@ -98,78 +131,75 @@ export class DynamicJoin {
     this._rawTable = Array.isArray(json.data) ? json.data : [];
   }
 
-  // build a select UI for filtering
+  // build inputs with TomSelect for each filter field
   async _buildFilterUI(container) {
-    const distinct = [
-      ...new Set(
-        this._rawTable
-          .map((r) => r[this._filterField])
-          .filter((v) => v != null),
-      ),
-    ].sort();
+    // clear any existing filter UI
+    this._destroyFilterUI();
+    const TomSelect = await moduleLoad("tom-select");
 
-    const { default : TomSelect } = await import("tom-select");
-
-    const elSelect = el(
-      "select",
-      {
-        on: [
-          "change",
-          () => {
-            this._currentFilter = elSelect.value || null;
-            this._prepareDataForStyling();
-            this._computeColorScale();
-            this._applyStyle();
-          },
-        ],
+    const elWrapper = el("div", {
+      style: {
+        padding: "15px",
       },
-      [
-        el(
-          "option",
-          {
-            value: "",
-          },
-          "All",
-        ),
-      ],
-    );
+    });
+    container.appendChild(elWrapper);
 
-    for (const value of distinct) {
-      const elOption = el(
-        "option",
-        {
-          value: value,
+    for (const field of this._filterFields) {
+      // compute distinct values and counts
+      const counts = {};
+      for (const row of this._rawTable) {
+        const v = row[field];
+        if (v != null) {
+          const key = String(v);
+          counts[key] = (counts[key] || 0) + 1;
+        }
+      }
+      const options = Object.entries(counts)
+        .map(([value, count]) => ({ value, text: `${value} (${count})` }))
+        .sort((a, b) => (a.value > b.value ? 1 : a.value < b.value ? -1 : 0));
+
+      // create input element
+      const input = el("select");
+      elWrapper.appendChild(input);
+
+      // initialize TomSelect on input
+      const ts = new TomSelect(input, {
+        options,
+        create: false,
+        allowEmptyOption: true,
+        dropdownParent: "body",
+        closeAfterSelect: true,
+        placeholder: `Filter by ${field}`,
+        onChange: (val) => {
+          this._currentFilters[field] = val || null;
+          this._refresh();
         },
-        value,
-      );
-
-      elSelect.appendChild(elOption);
+      });
+      this._filterSelects[field] = ts;
+      debugger;
+      this._currentFilters[field] = null;
     }
-
-    container.appendChild(elSelect);
-
-    new TomSelect(elSelect, {});
-
-    this._filterSelect = elSelect;
   }
 
-  // group & aggregate rows by join key, applying current filter
+  // group & aggregate rows by join key, applying current filters
   _prepareDataForStyling() {
     const groups = {};
 
-    this._rawTable.forEach((row) => {
-      // apply filter if set
-      if (
-        this._filterField &&
-        this._currentFilter != null &&
-        row[this._filterField] !== this._currentFilter
-      )
-        return;
-
+    // group rows by join key, applying all active filters
+    for (const row of this._rawTable) {
+      let skip = false;
+      for (const field of this._filterFields) {
+        const selected = this._currentFilters[field];
+        if (selected != null && row[field] !== selected) {
+          skip = true;
+          break;
+        }
+      }
+      if (skip) continue;
       const key = row[this._fieldData];
       if (!groups[key]) groups[key] = [];
       groups[key].push(row.value);
-    });
+    }
 
     // aggregation function
     const agg = (vals) => {
@@ -294,21 +324,39 @@ export class DynamicJoin {
    * @param {Object} newOpts – any of the same keys you passed into init()
    */
   async update(newOpts = {}) {
+    // merge provided opts
     this._options = { ...this._options, ...newOpts };
-
-    // if data source changed, re-fetch raw table (and rebuild filter UI)
+    // normalize filter fields (support legacy single filterField)
+    const { filterField, filterFields, container } = this._options;
+    this._filterFields = Array.isArray(filterFields)
+      ? filterFields
+      : filterField
+        ? [filterField]
+        : [];
+    // reset new filters
+    for (const field of this._filterFields) {
+      if (!(field in this._currentFilters)) {
+        this._currentFilters[field] = null;
+      }
+    }
+    // if data source changed, reload data and rebuild filter UI
     if (newOpts.idSourceData || newOpts.dataUrl) {
       this._idSourceData = this._options.idSourceData;
       this._data_url = this._options.dataUrl;
       await this._loadData();
-      if (this._filterField && this._filterSelect) {
-        this._filterSelect.remove();
-        await this._buildFilterUI(this._options.container);
+      if (this._filterFields.length > 0 && container) {
+        this._destroyFilterUI();
+        await this._buildFilterUI(container);
       }
     }
-
-    this._prepareDataForStyling();
-    this._computeColorScale();
-    this._applyStyle();
+    // if filter fields changed, rebuild filter UI
+    else if (newOpts.filterField || newOpts.filterFields) {
+      if (this._filterFields.length > 0 && container) {
+        this._destroyFilterUI();
+        await this._buildFilterUI(container);
+      }
+    }
+    // reapply data styling
+    this._refresh();
   }
 }
