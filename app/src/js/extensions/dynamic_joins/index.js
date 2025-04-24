@@ -15,7 +15,7 @@ export class DynamicJoin {
     this._aggTable = [];
     this._colorScale = null;
     // multi-field filtering support
-    this._filterFields = [];
+    this._fieldsFilter = [];
     this._filterSelects = {};
     this._currentFilters = {};
   }
@@ -51,8 +51,8 @@ export class DynamicJoin {
    * @param {string} [opts.stat='quantile']    – 'quantile', 'equal', 'kmeans', etc.
    * @param {number} [opts.classes=5]          – number of classes/breaks
    * @param {string} [opts.na='#ccc']          – fallback color for missing joins
-   * @param {string} [opts.filterField]        – (deprecated) single field to build a filter dropdown on
-   * @param {Array<string>} [opts.filterFields] – array of field names to build filter inputs on
+   * @param {Array<string>} [opts.fieldsFilter] – array of field names to build filter inputs on
+   * @param {string} [opts.fieldValue ]        – value field
    * @param {string} [opts.aggregation='sum']  – 'sum', 'median', 'max', 'min', or 'mode'
    * @param {HTMLElement} [opts.container]     – DOM element to append filter UI
    */
@@ -73,25 +73,20 @@ export class DynamicJoin {
       idSourceData,
       dataUrl,
       joinOn,
-      filterField,
-      filterFields,
+      fieldsFilter,
+      fieldValue,
       container,
     } = this._options;
 
     // join fields
-    this._fieldData = joinOn[0];
-    this._fieldGeom = joinOn[1];
+    this._fieldValue = fieldValue;
+    this._fieldJoinData = joinOn[1];
+    this._fieldJoinGeom = joinOn[0];
     this._idSourceGeom = idSourceGeom;
     this._sourceLayer = idSourceGeom;
     this._idSourceData = idSourceData;
-    // normalize filter fields (support legacy single filterField)
-    this._filterFields = Array.isArray(filterFields)
-      ? filterFields
-      : filterField
-        ? [filterField]
-        : [];
-    // initialize current filter values
-    for (const field of this._filterFields) {
+    this._fieldsFilter = fieldsFilter;
+    for (const field of this._fieldsFilter) {
       this._currentFilters[field] = null;
     }
     this._idLayer = `${idSourceGeom}-dynamic-join`;
@@ -102,7 +97,7 @@ export class DynamicJoin {
     await this._loadData();
 
     // if filtering enabled, build the UI for each field
-    if (this._filterFields.length > 0 && container) {
+    if (this._fieldsFilter.length > 0 && container) {
       await this._buildFilterUI(container);
     }
 
@@ -121,7 +116,11 @@ export class DynamicJoin {
       url = this._data_url;
     } else {
       // request data including all filter fields
-      const attrs = [this._fieldData, "value", ...this._filterFields];
+      const attrs = [
+        this._fieldJoinData,
+        this._fieldValue,
+        ...this._fieldsFilter,
+      ];
       url = new URL(getApiUrl("getSourceTableAttribute"));
       url.searchParams.set("id", this._idSourceData);
       url.searchParams.set("attributes", attrs);
@@ -144,7 +143,7 @@ export class DynamicJoin {
     });
     container.appendChild(elWrapper);
 
-    for (const field of this._filterFields) {
+    for (const field of this._fieldsFilter) {
       // compute distinct values and counts
       const counts = {};
       for (const row of this._rawTable) {
@@ -159,11 +158,14 @@ export class DynamicJoin {
         .sort((a, b) => (a.value > b.value ? 1 : a.value < b.value ? -1 : 0));
 
       // create input element
-      const input = el("select");
-      elWrapper.appendChild(input);
+      const id = `dj_select_${field}`;
+      const elInput = el("select", { id });
+      const elLabel = el("label", { for: id }, field);
+      elWrapper.appendChild(elLabel);
+      elWrapper.appendChild(elInput);
 
       // initialize TomSelect on input
-      const ts = new TomSelect(input, {
+      const ts = new TomSelect(elInput, {
         options,
         create: false,
         allowEmptyOption: true,
@@ -176,7 +178,6 @@ export class DynamicJoin {
         },
       });
       this._filterSelects[field] = ts;
-      debugger;
       this._currentFilters[field] = null;
     }
   }
@@ -188,7 +189,7 @@ export class DynamicJoin {
     // group rows by join key, applying all active filters
     for (const row of this._rawTable) {
       let skip = false;
-      for (const field of this._filterFields) {
+      for (const field of this._fieldsFilter) {
         const selected = this._currentFilters[field];
         if (selected != null && row[field] !== selected) {
           skip = true;
@@ -196,7 +197,7 @@ export class DynamicJoin {
         }
       }
       if (skip) continue;
-      const key = row[this._fieldData];
+      const key = row[this._fieldJoinData];
       if (!groups[key]) groups[key] = [];
       groups[key].push(row.value);
     }
@@ -250,7 +251,7 @@ export class DynamicJoin {
 
   // build the Mapbox GL "match" expression
   _buildMatchExpression() {
-    const expr = ["match", ["get", this._fieldGeom]];
+    const expr = ["match", ["get", this._fieldJoinGeom]];
     this._aggTable.forEach((row) => {
       expr.push(row.key, this._colorScale(row.value).hex());
     });
@@ -307,7 +308,7 @@ export class DynamicJoin {
     // URL API escapes {x}/{y}/{z}, use concat
     const url = [
       `${urlBase}?idSource=${idSource}`,
-      `attributes=${"gid"},${this._fieldGeom}`,
+      `attributes=${"gid"},${this._fieldJoinGeom}`,
       `timestamp=${Date.now()}`,
     ].join("&");
     return [url, url];
@@ -327,14 +328,10 @@ export class DynamicJoin {
     // merge provided opts
     this._options = { ...this._options, ...newOpts };
     // normalize filter fields (support legacy single filterField)
-    const { filterField, filterFields, container } = this._options;
-    this._filterFields = Array.isArray(filterFields)
-      ? filterFields
-      : filterField
-        ? [filterField]
-        : [];
+    const { fieldsFilter, container } = this._options;
+    this._fieldsFilter = fieldsFilter;
     // reset new filters
-    for (const field of this._filterFields) {
+    for (const field of this._fieldsFilter) {
       if (!(field in this._currentFilters)) {
         this._currentFilters[field] = null;
       }
@@ -344,14 +341,14 @@ export class DynamicJoin {
       this._idSourceData = this._options.idSourceData;
       this._data_url = this._options.dataUrl;
       await this._loadData();
-      if (this._filterFields.length > 0 && container) {
+      if (this._fieldsFilter.length > 0 && container) {
         this._destroyFilterUI();
         await this._buildFilterUI(container);
       }
     }
     // if filter fields changed, rebuild filter UI
-    else if (newOpts.filterField || newOpts.filterFields) {
-      if (this._filterFields.length > 0 && container) {
+    else if (newOpts.fieldsFilter) {
+      if (this._fieldsFilter.length > 0 && container) {
         this._destroyFilterUI();
         await this._buildFilterUI(container);
       }
