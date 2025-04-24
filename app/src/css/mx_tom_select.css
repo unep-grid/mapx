@@ -235,7 +235,7 @@
   display: inline-block;
 }
 .ts-control > div {
-  width: 100%;
+  /*width: 100%;*/
 }
 .ts-wrapper.multi .ts-control > div {
   cursor: pointer;
