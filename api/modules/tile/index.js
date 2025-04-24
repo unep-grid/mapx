@@ -227,7 +227,7 @@ function geojsonToPbf(geojson, data) {
   }
 
   geojsonSanitize(geojson);
-  const pbfOptions = {};
+  const pbfLayersMap = {};
   const tileIndex = geojsonvt(geojson, {
     maxZoom: data.zoom + 1,
     indexMaxZoom: data.zoom - 1,
@@ -237,6 +237,6 @@ function geojsonToPbf(geojson, data) {
   if (!tile) {
     return null;
   }
-  pbfOptions[data.view] = tile;
-  return vtpbf.fromGeojsonVt(pbfOptions, { version: 2 });
+  pbfLayersMap[data.layer] = tile;
+  return vtpbf.fromGeojsonVt(pbfLayersMap, { version: 2 });
 }
