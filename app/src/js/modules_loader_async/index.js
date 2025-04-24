@@ -193,6 +193,9 @@ async function loadExtension(id) {
   return m[id];
 }
 
+/**
+* Webpack hot module replacement
+*/ 
 if (module.hot) {
   module.hot.accept("./../extensions/index.js", function () {
     console.log("Accepting the updated module!");
