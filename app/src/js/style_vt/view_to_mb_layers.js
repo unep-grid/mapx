@@ -561,7 +561,7 @@ export async function getViewMapboxLayers(v, opt) {
         id: null,
         rule: {},
         idSource: idSource,
-        idSourceLayer: idView,
+        idSourceLayer: idView, //source-layer
         idView: idView,
         type: isNumeric ? "number" : "string",
         idSuffix: "",

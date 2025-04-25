@@ -109,6 +109,6 @@ features_mvt as (
 /* Build MVT tile */
 SELECT ST_AsMVT(
   f.*,
-  '{{view}}',
+  '{{sourceLayer}}',
   4096
 ) AS mvt from features_mvt f;
