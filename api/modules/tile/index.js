@@ -12,6 +12,7 @@ import util from "util";
 import zlib from "zlib";
 import geojsonvt from "geojson-vt";
 import vtpbf from "vt-pbf";
+import { getViewTileSourceData } from "#mapx/view";
 const gzip = util.promisify(zlib.gzip);
 
 /**
@@ -36,23 +37,17 @@ export default { mwGet };
 
 export async function handlerTile(req, res) {
   try {
-    const data = req.query;
+    const data = { ...req.query };
     const modeView = isViewId(data.idView);
 
     if (modeView) {
-      const sqlViewInfo = templates.getViewSourceAndAttributes;
-      const resultView = await pgRead.query(sqlViewInfo, [data.idView]);
-
-      if (resultView.rowCount !== 1) {
-        throw Error("Error fetching view source and attribute");
-      }
-
-      const [viewSrcConfig] = resultView.rows;
-
-      Object.assign(data, viewSrcConfig);
+      const dataTile = await getViewTileSourceData(data.idView);
+      Object.assign(data, dataTile);
+      data.sourceLayer = data.idView;
     } else {
       if (isSourceId(data.idSource)) {
         data.layer = data.idSource;
+        data.sourceLayer = data.idSource;
       }
     }
 
@@ -237,6 +232,6 @@ function geojsonToPbf(geojson, data) {
   if (!tile) {
     return null;
   }
-  pbfLayersMap[data.layer] = tile;
+  pbfLayersMap[data.sourceLayer] = tile;
   return vtpbf.fromGeojsonVt(pbfLayersMap, { version: 2 });
 }
