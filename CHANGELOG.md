@@ -1,3 +1,7 @@
+  - [1.13.17-alpha.16](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.16) 
+
+
+
   - [1.13.17-alpha.15](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.15) 
 
     - refactor(dynamic_joins): export as an helper instead of an extension
