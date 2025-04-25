@@ -1,3 +1,14 @@
+  - [1.13.17-alpha.15](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.15) 
+
+    - refactor(dynamic_joins): export as an helper instead of an extension
+    - refactor(tile): use more consistant approach for naming layers in tile
+    - feat(dynamic_join): better naming, improved labels
+    - feat(dynamic_join): auto multi-fitlers + count
+    - feat(dynamic_join): mvp
+    - feat(joins): preview table shows gid, for inspection
+    - refactor: simplify URL construction in  setSourceViewVt
+
+
   - [1.13.17-alpha.14](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.14) 
 
     - fix(dashboard): static mode, bug when displaying multiple views, destroyed before rendering #1054
