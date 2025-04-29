@@ -1,3 +1,8 @@
+  - [1.13.16-fix.1](https://github.com/unep-grid/mapx/tree/1.13.16-fix.1) 
+
+    - fix: allow iframes with necessary attributes for story map overlays
+
+
   - [1.13.16](https://github.com/unep-grid/mapx/tree/1.13.16) 
 
 
