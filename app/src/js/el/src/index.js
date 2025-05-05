@@ -264,7 +264,17 @@ export class ElementCreator {
    * - keep target, e.g target=_blank
    */
   sanitize(string) {
-    return DOMPurify.sanitize(string, { ADD_ATTR: ["target"] });
+    return DOMPurify.sanitize(string, {
+      ADD_TAGS: ['iframe'],
+      ADD_ATTR: [
+        'target',
+        'src',
+        'width',
+        'height',
+        'frameborder',
+        'allowfullscreen'
+      ]
+    });
   }
 
   /**

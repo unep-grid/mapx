@@ -96,6 +96,14 @@
     - fix(email): email sender transforms domain to lowercase, creating a bug during check
     - feat(attribute_table_widget): render attributes as table mwp
 
+<<<<<<< HEAD
+=======
+  - [1.13.16-fix.1](https://github.com/unep-grid/mapx/tree/1.13.16-fix.1) 
+
+    - fix: allow iframes with necessary attributes for story map overlays
+
+
+>>>>>>> feature/dynamic_join_client_1048_b
   - [1.13.16](https://github.com/unep-grid/mapx/tree/1.13.16) 
 
   - [1.13.16-beta.0](https://github.com/unep-grid/mapx/tree/1.13.16-beta.0) 
