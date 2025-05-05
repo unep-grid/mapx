@@ -1,3 +1,39 @@
+  - [1.13.17-alpha.17](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.17) 
+
+    - chore: merge dynamic join branch in staging
+    - refactor(dynamic_joins): export as an helper instead of an extension
+    - refactor(tile): use more consistant approach for naming layers in tile
+    - feat(dynamic_join): better naming, improved labels
+    - feat(dynamic_join): auto multi-fitlers + count
+    - feat(dynamic_join): mvp
+    - feat(joins): preview table shows gid, for inspection
+    - refactor: simplify URL construction in  setSourceViewVt
+    - fix(dashboard): static mode, bug when displaying multiple views, destroyed before rendering #1054
+    - fix(controls): safari button controls issue #1050
+    - fix(click handler): boolean issue. Should fix #1005
+    - fix(click handler): should handle all specified cases correctly
+    - fix(theme): revert space color for clear theme
+    - fix(theme): set body background to selected theme value + set map 'outer-space' color to that value
+    - fix(story): added a config entry to set panels config in story static mode
+    - fix(widget): replaced old feature query tools by the new bbox based one
+    - fix(upload): re-enabled the http/CURL upload route + handler
+    - fix(attribute_table_widget): re-enabled support for wms/raster
+    - feat(attribute_table_widget): solve table multi-selection
+    - feat(attribute_table_widget): refactor highlight module
+    - feat(attribute_table_widget): highlight replaceed shadow by an outline + better contrast color
+    - feat(attribute_table_widget): improved highlighted feature  with a shadow, removed anim
+    - feat(attribute_table_widget): tooltip + highlight color
+    - fix(conflicts): merge conflict
+    - feat(attribute_table_widget): fix raster attributes + better strategy
+    - feat(attribute_table_widget): remove console log messages
+    - feat(attribute_table_widget): coordinate cells click + highlighter, many changes
+    - feat(attribute_table_widget): column sort, filter row, fix many issues
+    - fix(email): email sender transforms domain to lowercase, creating a bug during check
+    - feat(attribute_table_widget): render attributes as table mwp
+    - chore: allow building from push from main
+    - fix: allow iframes with necessary attributes for story map overlays
+
+
   - [1.13.17-alpha.16](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.16) 
 
 
