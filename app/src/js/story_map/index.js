@@ -1614,6 +1614,11 @@ export async function storyPlayStep(stepNum) {
     map.stop();
     events.fire("story_step");
     /**
+    * Always lock at each step
+    */ 
+    storyMapLock("lock");
+
+    /**
      * retrieve step information
      */
     state.currentStep = stepNum;
