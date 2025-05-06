@@ -1986,7 +1986,7 @@ function setSourceViewVt(view) {
     `${urlBase}?idView=${view.id}`,
     `timestamp=${view.date_modified}`,
     `usePostgisTiles=${usePostgisTiles}`,
-    `skipCache=${useServerCache}`,
+    `skipCache=${!useServerCache}`,
   ].join("&");
 
   view.data.source.tiles = [url, url];

@@ -156,9 +156,8 @@ async function getTilePg(res, hash, data) {
 
       const zBuffer = await gzip(buffer);
       sendTileZip(res, zBuffer);
-      if (data.useCache) {
-        redisSet(hash, zBuffer.toString("base64"));
-      }
+
+      redisSet(hash, zBuffer.toString("base64"));
 
       return;
     } else {
