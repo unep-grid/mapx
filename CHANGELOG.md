@@ -1,3 +1,9 @@
+  - [1.13.17-alpha.19](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.19) 
+
+    - fix(cache): boolean inversion for cache testing
+    - feat(story): #1036 lock at each step
+
+
   - [1.13.17-alpha.18](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.18) 
 
     - fix(story): solved views management conflict between app and story mode
