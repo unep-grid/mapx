@@ -5,12 +5,13 @@ const def = {
   icon: "gears",
   text: "",
   duration: 800,
-  removePrevious: true,
+  removePrevious: false,
   scaleStart: 1,
   scaleEnd: 1.4,
   opacityStart: 0.2,
   opacityEnd: 0,
   angle: 0,
+  target: null,
   x: null,
   y: null,
 };
@@ -25,7 +26,7 @@ let previous;
  * @param {string} [opt.text=''] - The text to display next to the icon.
  * @param {number} [opt.angle=0] - The angle if the icon
  * @param {number} [opt.duration=800] - The duration of the flash animation in milliseconds.
- * @param {boolean} [opt.removePrevious=true] - Whether to remove the previous flash item before displaying the new one.
+ * @param {boolean} [opt.removePrevious=false] - Whether to remove the previous flash item before displaying the new one.
  * @param {number} [opt.scaleStart=1] - The starting scale of the icon.
  * @param {number} [opt.scaleEnd=1.4] - The ending scale of the icon.
  * @param {number} [opt.opacityStart=0.2] - The starting opacity of the icon.
@@ -54,6 +55,11 @@ class FlashItem {
    */
   build() {
     const fi = this;
+
+    if (fi.opt.target) {
+      Object.assign(fi.opt, fi.getCenter(fi.opt.target));
+    }
+
     fi.elFlash = el("i", {
       class: ["fa", `fa-${fi.opt.icon}`],
       style: {
@@ -77,9 +83,18 @@ class FlashItem {
           left: fi.opt.x ? `${fi.opt.x}px` : null,
         },
       },
-      fi.elFlash
+      fi.elFlash,
     );
     document.body.appendChild(fi.elContainer);
+    
+  }
+
+  getCenter(element) {
+    const { x, y, height, width } = element.getBoundingClientRect();
+    return {
+      x: x + width / 2,
+      y: y + height / 2,
+    };
   }
 
   /**
@@ -137,8 +152,8 @@ class FlashCircle extends FlashItem {
           x: null,
           y: null,
         },
-        opt
-      )
+        opt,
+      ),
     );
   }
 }

@@ -148,8 +148,8 @@ function initClickListener() {
         return;
       }
       controls.panel.open();
-      state.ctrlLock.shake("look_at_me");
-      new FlashItem("ban");
+      storyMapShakeLock();
+      new FlashItem("lock");
     },
     group: "story_map",
   });
@@ -1084,13 +1084,25 @@ export async function storyAutoPlay(cmd) {
 }
 
 /**
+ * Lock button request user attention
+ */
+export function storyMapShakeLock() {
+  const isLocked = storyMapLock("test");
+
+  if (isLocked) {
+    //state.ctrlLock.shake("look_at_me");
+    state.ctrlLock.shake("look_at_me");
+  }
+}
+
+/**
  * Control map pan during story map
  * @param {String} cmd Action : recalc, unlock, toggle;
  */
 export async function storyMapLock(cmd) {
   try {
     const state = getState();
-    const valid = ["recalc", "lock", "unlock", "toggle"].includes(cmd);
+    const valid = ["test", "recalc", "lock", "unlock", "toggle"].includes(cmd);
     if (!valid) {
       cmd = "toggle";
     }
@@ -1104,6 +1116,11 @@ export async function storyMapLock(cmd) {
     const isLocked = elIcon.classList.contains(classLock);
     const isUnlocked = !isLocked;
     const isRecalc = cmd === "recalc";
+    const isTest = cmd === "test";
+
+    if (isTest) {
+      return isLocked;
+    }
 
     const cases = {
       unlock: true,
@@ -1129,9 +1146,6 @@ export async function storyMapLock(cmd) {
       elStoryContainer.classList.remove(classNoEvent);
       if (!isRecalc && hasChanged) {
         new FlashItem("lock");
-      }
-      if (dashboard.hasInstance()) {
-        await dashboard.exec("hide");
       }
     }
   } catch (e) {

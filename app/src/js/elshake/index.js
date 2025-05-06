@@ -1,3 +1,4 @@
+import { FlashCircle } from "../icon_flash";
 import "./style.less";
 const types = ["no_way", "look_at_me"];
 const DURATION = 820;
@@ -17,6 +18,11 @@ export async function shake(element, options = {}) {
   return new Promise((resolve, reject) => {
     try {
       element.classList.add("el_shake", settings.type);
+      new FlashCircle({
+        target: element,
+        scaleStart: 2,
+        scaleEnd: 10,
+      });
       const timeout = setTimeout(() => {
         element.classList.remove("el_shake", settings.type);
         resolve(true);

@@ -1,6 +1,6 @@
 import { getView, getMap } from "./../map_helpers";
 import { path } from "./../mx_helper_misc.js";
-import { storyMapLock, isStoryPlaying } from "../story_map";
+import { storyMapShakeLock, isStoryPlaying } from "../story_map";
 import { getDictItem } from "../language";
 import { isString, isEmpty, isView, isArray } from "./../is_test";
 import { Dashboard } from "./dashboard.js";
@@ -246,23 +246,13 @@ export class DashboardManager {
     dm._dashboard.on("show", () => {
       const hasStory = isStoryPlaying();
       if (hasStory) {
-        storyMapLock("unlock");
+        storyMapShakeLock();
       }
     });
 
-    dm._dashboard.on("hide", () => {
-      const hasStory = isStoryPlaying();
-      if (hasStory) {
-        storyMapLock("lock");
-      }
-    });
+    dm._dashboard.on("hide", () => {});
 
-    dm._dashboard.on("destroy", () => {
-      const hasStory = isStoryPlaying();
-      if (hasStory) {
-        storyMapLock("lock");
-      }
-    });
+    dm._dashboard.on("destroy", () => {});
 
     return dm._dashboard;
   }
