@@ -1,3 +1,11 @@
+  - [1.13.17-alpha.18](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.18) 
+
+    - fix(story): solved views management conflict between app and story mode
+    - feat(story): better handling of the lock system, see #1036. Partial
+    - chore(story): mouse hiding / opacity timeout description, added hint to set at 0 to disable
+    - chore: fix mixed up changelog after merge
+
+
   - [1.13.17-alpha.17](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.17) 
 
     - chore: merge dynamic join branch in staging
