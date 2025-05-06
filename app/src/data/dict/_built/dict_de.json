@@ -8106,8 +8106,8 @@
   },
   {
     "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
-    "de": "Verzögerung vor dem Verringern der Deckkraft von Bedienfeldern und Navigationspunkten bei Inaktivität der Maus"
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity. Set to 0 to disable this feature.",
+    "de": "Verzögerung vor der Verringerung der Deckkraft von Bedienfeldern und Navigationspunkten bei Inaktivität der Maus. Setzen Sie den Wert auf 0, um diese Funktion zu deaktivieren."
   },
   {
     "id": "schema_story_tips_title",

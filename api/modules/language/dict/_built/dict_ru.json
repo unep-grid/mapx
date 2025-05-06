@@ -8106,8 +8106,8 @@
   },
   {
     "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
-    "ru": "Задержка перед уменьшением непрозрачности панелей и маркеров навигации в случае бездействия мыши"
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity. Set to 0 to disable this feature.",
+    "ru": "Задержка перед уменьшением непрозрачности панелей и навигационных маркеров в случае бездействия мыши. Установите значение 0, чтобы отключить эту функцию."
   },
   {
     "id": "schema_story_tips_title",

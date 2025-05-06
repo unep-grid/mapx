@@ -8106,8 +8106,8 @@
   },
   {
     "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
-    "bn": "মাউস নিষ্ক্রিয়তার ক্ষেত্রে প্যানেল এবং নেভিগেশন বুলেটগুলির অস্বচ্ছতা হ্রাস করার আগে বিলম্ব করুন"
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity. Set to 0 to disable this feature.",
+    "bn": "মাউস নিষ্ক্রিয়তার ক্ষেত্রে প্যানেল এবং নেভিগেশন বুলেটের অস্বচ্ছতা কমাতে বিলম্ব করুন। এই বৈশিষ্ট্যটি নিষ্ক্রিয় করতে 0 তে সেট করুন।"
   },
   {
     "id": "schema_story_tips_title",

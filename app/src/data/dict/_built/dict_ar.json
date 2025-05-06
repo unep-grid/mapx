@@ -8106,8 +8106,8 @@
   },
   {
     "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
-    "ar": "تأخير قبل تقليل عتامة اللوحات ورموز التنقل في حالة عدم نشاط الماوس"
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity. Set to 0 to disable this feature.",
+    "ar": "مهلة قبل تقليل تعتيم اللوحات ونقاط التنقل في حالة عدم نشاط الماوس. اضبطها على 0 لتعطيل هذه الميزة."
   },
   {
     "id": "schema_story_tips_title",

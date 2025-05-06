@@ -8106,8 +8106,8 @@
   },
   {
     "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
-    "ps": "د موږک د غیرفعالیت په صورت کې د پینلونو او نیویګیشن ګولیو د شفافیت کمولو دمخه ځنډ"
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity. Set to 0 to disable this feature.",
+    "ps": "د موږک د غیر فعالیت په صورت کې د پینلونو او نیویګیشن ګولیو د شفافیت کمولو دمخه ځنډ. د دې ځانګړتیا غیر فعالولو لپاره 0 ته تنظیم کړئ."
   },
   {
     "id": "schema_story_tips_title",

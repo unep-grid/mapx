@@ -8106,8 +8106,8 @@
   },
   {
     "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
-    "fr": "Délai avant diminution de l'opacité des panneaux et des puces de navigation en cas d'inactivité de la souris"
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity. Set to 0 to disable this feature.",
+    "fr": "Délai avant la diminution de l'opacité des panneaux et des puces de navigation en cas d'inactivité de la souris. Réglez sur 0 pour désactiver cette fonctionnalité."
   },
   {
     "id": "schema_story_tips_title",

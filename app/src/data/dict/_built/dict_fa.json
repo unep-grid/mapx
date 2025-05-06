@@ -8106,8 +8106,8 @@
   },
   {
     "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
-    "fa": "تاخیر قبل از کاهش شفافیت پانل ها و گلوله های ناوبری در صورت عدم فعالیت ماوس"
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity. Set to 0 to disable this feature.",
+    "fa": "تأخیر قبل از کاهش شفافیت پنل‌ها و نشانگرهای ناوبری در صورت عدم فعالیت ماوس. برای غیرفعال کردن این ویژگی، آن را روی ۰ تنظیم کنید."
   },
   {
     "id": "schema_story_tips_title",

@@ -8106,8 +8106,8 @@
   },
   {
     "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
-    "zh": "在鼠标不活动的情况下，在降低面板和导航项目符号的不透明度之前延迟"
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity. Set to 0 to disable this feature.",
+    "zh": "鼠标静止时降低面板和导航项目符号不透明度前的延迟时间。设置为 0 可禁用此功能。"
   },
   {
     "id": "schema_story_tips_title",

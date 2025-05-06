@@ -21074,16 +21074,16 @@
   },
   {
     "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
-    "fr": "Délai avant diminution de l'opacité des panneaux et des puces de navigation en cas d'inactivité de la souris",
-    "es": "Retraso antes de disminuir la opacidad de los paneles y las viñetas de navegación en caso de inactividad del mouse",
-    "ru": "Задержка перед уменьшением непрозрачности панелей и маркеров навигации в случае бездействия мыши",
-    "zh": "在鼠标不活动的情况下，在降低面板和导航项目符号的不透明度之前延迟",
-    "ar": "تأخير قبل تقليل عتامة اللوحات ورموز التنقل في حالة عدم نشاط الماوس",
-    "fa": "تاخیر قبل از کاهش شفافیت پانل ها و گلوله های ناوبری در صورت عدم فعالیت ماوس",
-    "ps": "د موږک د غیرفعالیت په صورت کې د پینلونو او نیویګیشن ګولیو د شفافیت کمولو دمخه ځنډ",
-    "bn": "মাউস নিষ্ক্রিয়তার ক্ষেত্রে প্যানেল এবং নেভিগেশন বুলেটগুলির অস্বচ্ছতা হ্রাস করার আগে বিলম্ব করুন",
-    "de": "Verzögerung vor dem Verringern der Deckkraft von Bedienfeldern und Navigationspunkten bei Inaktivität der Maus"
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity. Set to 0 to disable this feature.",
+    "fr": "Délai avant la diminution de l'opacité des panneaux et des puces de navigation en cas d'inactivité de la souris. Réglez sur 0 pour désactiver cette fonctionnalité.",
+    "es": "Retardo antes de disminuir la opacidad de los paneles y las viñetas de navegación en caso de inactividad del ratón. Establezca en 0 para desactivar esta función.",
+    "ru": "Задержка перед уменьшением непрозрачности панелей и навигационных маркеров в случае бездействия мыши. Установите значение 0, чтобы отключить эту функцию.",
+    "zh": "鼠标静止时降低面板和导航项目符号不透明度前的延迟时间。设置为 0 可禁用此功能。",
+    "ar": "مهلة قبل تقليل تعتيم اللوحات ونقاط التنقل في حالة عدم نشاط الماوس. اضبطها على 0 لتعطيل هذه الميزة.",
+    "fa": "تأخیر قبل از کاهش شفافیت پنل‌ها و نشانگرهای ناوبری در صورت عدم فعالیت ماوس. برای غیرفعال کردن این ویژگی، آن را روی ۰ تنظیم کنید.",
+    "ps": "د موږک د غیر فعالیت په صورت کې د پینلونو او نیویګیشن ګولیو د شفافیت کمولو دمخه ځنډ. د دې ځانګړتیا غیر فعالولو لپاره 0 ته تنظیم کړئ.",
+    "bn": "মাউস নিষ্ক্রিয়তার ক্ষেত্রে প্যানেল এবং নেভিগেশন বুলেটের অস্বচ্ছতা কমাতে বিলম্ব করুন। এই বৈশিষ্ট্যটি নিষ্ক্রিয় করতে 0 তে সেট করুন।",
+    "de": "Verzögerung vor der Verringerung der Deckkraft von Bedienfeldern und Navigationspunkten bei Inaktivität der Maus. Setzen Sie den Wert auf 0, um diese Funktion zu deaktivieren."
   },
   {
     "id": "schema_story_tips_title",
