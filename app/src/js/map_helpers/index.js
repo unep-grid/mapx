@@ -510,9 +510,8 @@ export function triggerUpdateSourcesList() {
 export async function setProject(idProject, opt, origin) {
   const hasShiny = isShinyReady();
 
-  console.log("set project. Origin", origin);
   if (!hasShiny) {
-    console.log("Project change requires a valid app session");
+    console.warn("Project change requires a valid app session");
     return;
   }
 
@@ -2541,18 +2540,21 @@ export async function viewDelete(view) {
 }
 
 /**
- * Close view and clean its modules
- * @param {Object} o options;
- * @param {String} o.id map id
- * @param {String} o.idView view id
- * @param {Object} o.view view
+ * Closes a view and cleans up its associated modules and layers.
+ *
+ * @param {Object} options - Configuration object.
+ * @param {String} options.id - Map ID (optional, defaults to settings.map.id).
+ * @param {String} options.idView - View ID (used to retrieve the view if not provided).
+ * @param {Object} options.view - View object to be cleared (optional).
+ * @returns {Promise<boolean>} Resolves to true when cleanup is complete.
  */
-export async function viewClear(o) {
-  const view = o.view || getView(o.idView);
-  o.id = o.id || settings.map.id;
+export async function viewClear(options) {
+  const { idView, view: providedView } = options;
+  const view = providedView || getView(idView);
+  const id = options.id || settings.map.id;
 
   if (!isView(view)) {
-    throw new Error("viewClear : view not found");
+    return;
   }
 
   const now = Date.now();
@@ -2565,14 +2567,14 @@ export async function viewClear(o) {
   events.fire({
     type: "view_remove",
     data: {
-      idView: o.idView,
+      idView: view.id,
       view: getViewJson(view, { asString: false }),
     },
   });
 
   removeLayersByPrefix({
-    id: o.id,
-    prefix: o.idView,
+    id,
+    prefix: view.id,
   });
 
   mx_local.views_active.delete(view.id);
@@ -2580,7 +2582,7 @@ export async function viewClear(o) {
   events.fire({
     type: "view_removed",
     data: {
-      idView: o.idView,
+      idView: view.id,
       time: now,
       duration: viewDuration,
     },
@@ -2740,30 +2742,44 @@ export function getLayerBaseName(str) {
  * @param {Boolean} o.base should return base layer only
  * @return {Array} Array of layer names / ids
  */
-export function getLayerByPrefix(o) {
-  o = Object.assign(
+export function getLayerByPrefix(opt) {
+  const config = Object.assign(
     {},
     {
       prefix: /^MX/,
       base: false,
       nameOnly: false,
     },
-    o,
+    opt,
   );
 
-  const map = o.map || getMap(o.id);
+  if (isEmpty(config.prefix)) {
+    debugger;
+  }
 
-  if (!isRegExp(o.prefix)) {
-    o.prefix = new RegExp("^" + o.prefix);
+  const map = config.map || getMap(config.id);
+
+  const hasRegex = isRegExp(config.prefix);
+  const hasString = isString(config.prefix);
+
+  if (!hasRegex && !hasString) {
+    throw new Error(
+      'getLayerByPrefix requires "prefix" set as a string or regex',
+      config.prefix,
+    );
+  }
+
+  if (!hasRegex) {
+    config.prefix = new RegExp("^" + config.prefix);
   }
 
   const layers = map
     .getStyle()
-    .layers.filter((layer) => layer.id.match(o.prefix));
+    .layers.filter((layer) => layer.id.match(config.prefix));
 
-  if (o.nameOnly) {
+  if (config.nameOnly) {
     const layerNames = layers.map((l) =>
-      o.base ? getLayerBaseName(l.id) : l.id,
+      config.base ? getLayerBaseName(l.id) : l.id,
     );
     return getArrayDistinct(layerNames);
   } else {
@@ -3986,7 +4002,8 @@ export async function viewModulesRemove(view) {
     delete view._elLegend;
   }
 
-  if (dashboard.hasViewWidgets(view)) {
+  const hasWidget = dashboard.hasViewWidgets(view);
+  if (hasWidget) {
     await dashboard.removeWidgetsFromView(view);
   }
 

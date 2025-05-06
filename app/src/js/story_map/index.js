@@ -37,8 +37,6 @@ import {
 } from "./../is_test/index.js";
 import {
   getMapPos,
-  getViewsRemote,
-  getViews,
   viewAdd,
   viewRemove,
   viewClear,
@@ -48,13 +46,12 @@ import {
   getViewsLayersVisibles,
   setMapProjection,
   getViewAuto,
-  getViewsListId,
+  getViewsActive,
 } from "./../map_helpers/index.js";
 
 /**
  * Story and state storage
  */
-const viewsAdditional = []; // will be in state
 const story = {};
 const state = {};
 window._sm = { story, state };
@@ -80,7 +77,6 @@ export async function storyRead(opt) {
     await initSettings();
     await initControls();
     await initLegendPanel();
-    await initViews();
     await build();
     await initState();
     await initTheme();
@@ -230,6 +226,12 @@ function initMouseMoveListener() {
     if (timer) {
       clearTimeout(timer);
     }
+
+    if (s.opacity_auto_timeout === 0) {
+      return;
+    }
+ 
+
     show();
     timer = setTimeout(() => {
       if (!destroyed) {
@@ -321,36 +323,16 @@ function getStory() {
   return story || {};
 }
 
-/**
- * Clear vVisible view, e.g. before update / restart / preview
- */
-async function clearViewsVisible() {
-  try {
-    const map = getMap();
-    map.stop();
-    const state = getState();
-    const elLegendContainer = state?.button_legend?.elPanelContent;
-    const vVisible = getViewsLayersVisibles();
-    for (const v of vVisible) {
-      await viewClear({
-        idView: v,
-        elLegendContainer,
-      });
-    }
-  } catch (e) {
-    console.warn(e);
-  }
-}
-
 export async function cleanRemoveViews() {
-  await clearViewsVisible();
-  const views = getViews();
-  while (viewsAdditional.length) {
-    const view = viewsAdditional.pop();
-    const pos = views.indexOf(view);
-    if (pos > -1) {
-      views.splice(pos, 1);
-    }
+  const state = getState();
+  const elLegendContainer = state?.button_legend?.elPanelContent;
+  const idViews = getViewsActive();
+
+  for (const idView of idViews) {
+    await viewClear({
+      idView: idView,
+      elLegendContainer,
+    });
   }
   return true;
 }
@@ -451,39 +433,7 @@ async function initStory() {
   Object.assign(story, state.view.data.story);
 }
 
-/**
- * Evaluate missing view and fetch them if needed
- */
-async function initViews() {
-  await cleanRemoveViews();
 
-  const idViewsToAdd = [];
-  const viewsBase = getViews();
-  const idViewsBase = getViewsListId();
-  const idViewsStory = getStoryViewsId();
-
-  /**
-   * Create a list of views id to download
-   * ( e.g. if they are from another project )
-   */
-  for (const id of idViewsStory) {
-    const existsInBase = idViewsBase.includes(id);
-    if (!existsInBase) {
-      idViewsToAdd.push(id);
-    }
-  }
-
-  /**
-   * Fetch additional views
-   */
-  const viewsFetched = await getViewsRemote(idViewsToAdd);
-  viewsAdditional.push(...viewsFetched);
-
-  /**
-   * addExternal views to views base
-   */
-  viewsBase.push(...viewsAdditional);
-}
 
 /**
  * Start
@@ -516,7 +466,7 @@ async function start() {
 
   if (isNotEmpty(state.stepUpdate)) {
     state.stepActive = null;
-    await clearViewsVisible();
+    await cleanRemoveViews();
     await storyGoTo(state.stepUpdate);
   }
   /**
@@ -851,8 +801,8 @@ async function storyUpdateSlides() {
     }
 
     if (toActivate) {
-      await storyPlayStep(s);
       await updateBullets();
+      await storyPlayStep(s);
     }
   }
 }
@@ -1262,7 +1212,7 @@ async function initState() {
    * Get map / view set
    */
   const position = getMapPos();
-  const oldViews = getViewsLayersVisibles();
+  const oldViews = getViewsActive();
   const maxBounds = map.getMaxBounds();
 
   /**
@@ -1282,6 +1232,7 @@ async function initState() {
 
   /**
    * Clear views
+   * viewRemove also close the UI item
    */
   for (const id of oldViews) {
     await viewRemove(id);
@@ -1724,7 +1675,7 @@ export async function storyPlayStep(stepNum) {
      * Views set
      */
     const vStep = step.views.map(getStepViewId);
-    const vVisible = getViewsLayersVisibles();
+    const vVisible = getViewsActive();
     const vToRemove = getArrayDiff(vVisible, vStep);
     const vToAdd = getArrayDiff(vStep, vVisible);
 
