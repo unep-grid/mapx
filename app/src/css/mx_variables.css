@@ -74,4 +74,10 @@
   --mx_ui_type_number: #00ffff59;
   --mx_ui_type_boolean: #95ff0059;
   --mx_ui_type_object: #dd511159;
+
+  /**
+  * Patterns 
+  */
+  --mx_ui_pattern_checker:  url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAANJwAADScBQwZj3AAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAmSURBVBiVY2TAAp49e/YfXYwJm0JsYAAVMmJzuJSUFCPtraa+QgDLYwfEbRLGHgAAAABJRU5ErkJggg==");
+  
 }

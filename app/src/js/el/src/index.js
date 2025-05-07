@@ -194,31 +194,29 @@ export class ElementCreator {
 
   /**
    * Handles the attachment of event listeners to the created element.
-   * Supports both array and object formats for specifying listeners.
+   * Supports array, object, array of arrays, and array of objects formats.
    * @param {HTMLElement|SVGElement} elOut - The element to attach listeners to.
    * @param {Array|Object} listeners - Event listeners specifications.
    */
   handleEventListeners(elOut, listeners) {
-    const type = isArray(listeners)
-      ? "array"
-      : isObject(listeners)
-        ? "object"
-        : null;
-
-    switch (type) {
-      case "array":
-        // Array format: ['eventName', eventHandler, options]
+    if (Array.isArray(listeners)) {
+      // Check if it's an array of arrays or array of objects
+      if (listeners.every((item) => Array.isArray(item) || isObject(item))) {
+        for (const item of listeners) {
+          this.handleEventListeners(elOut, item); // Recursive call
+        }
+      } else {
+        // Single array format: ['eventName', eventHandler, options]
         const [eventName, eventHandler, options] = listeners;
         this.trackListener(elOut, eventName, eventHandler, options);
-        break;
-      case "object":
-        // Object format: { eventName: eventHandler, ... }
-        for (const [eventName, eventHandler] of Object.entries(listeners)) {
-          this.trackListener(elOut, eventName, eventHandler);
-        }
-        break;
-      default:
-        console.warn("ElementCreator : unsuported event listener", listeners);
+      }
+    } else if (isObject(listeners)) {
+      // Object format: { eventName: eventHandler, ... }
+      for (const [eventName, eventHandler] of Object.entries(listeners)) {
+        this.trackListener(elOut, eventName, eventHandler);
+      }
+    } else {
+      console.warn("ElementCreator : unsupported event listener", listeners);
     }
   }
 
@@ -265,15 +263,15 @@ export class ElementCreator {
    */
   sanitize(string) {
     return DOMPurify.sanitize(string, {
-      ADD_TAGS: ['iframe'],
+      ADD_TAGS: ["iframe"],
       ADD_ATTR: [
-        'target',
-        'src',
-        'width',
-        'height',
-        'frameborder',
-        'allowfullscreen'
-      ]
+        "target",
+        "src",
+        "width",
+        "height",
+        "frameborder",
+        "allowfullscreen",
+      ],
     });
   }
 

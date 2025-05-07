@@ -20,6 +20,7 @@ observeEvent(input$btnShowProjectConfig, {
       jedOutput("projectTitleSchema"),
       jedOutput("projectDescriptionSchema"),
       jedOutput("projectMapPosition"),
+      jedOutput("projectLogo"),
       selectizeInput(
         "selectProjectConfigCountries",
         label = d("project_countries_highlight", language, web = F),
@@ -36,15 +37,10 @@ observeEvent(input$btnShowProjectConfig, {
         selected = projectData$theme,
         choices = config$themes$idsNamed
       ),
-      tags$div(
-        class = "well",
-        tagList(
-          textInput("txtProjectNameAlias",
-            ddesc("project_alias_name", language),
-            value = projectData$alias,
-            placeholder = project
-          )
-        )
+      textInput("txtProjectNameAlias",
+        ddesc("project_alias_name", language),
+        value = projectData$alias,
+        placeholder = project
       ),
       checkboxInput(
         "checkProjectionGlobe",
@@ -171,6 +167,40 @@ observe({
 })
 
 
+observeEvent(input$projectLogo_init, {
+  userRole <- getUserRole()
+  isAdmin <- isTRUE(userRole$admin)
+  if (!isAdmin) {
+    return()
+  }
+
+  project <- reactData$project
+  projectData <- mxDbGetProjectData(project)
+  logo <- .get(projectData, c("logo"))
+
+  schema <- list(
+    type = "string",
+    format = "svg",
+    title = "Logo",
+    options = list(
+      label = "Project logo",
+      uploadText = "Drop SVG file here or click to upload"
+    )
+  )
+
+  jedSchema(
+    id = "projectLogo",
+    schema = schema,
+    startVal = logo,
+    options = list(
+      getValidationOnChange = TRUE,
+      getValuesOnChange = TRUE
+    )
+  )
+})
+
+
+
 observeEvent(input$projectMapPosition_init, {
   userRole <- getUserRole()
   isAdmin <- isTRUE(userRole$admin)
@@ -263,6 +293,10 @@ observeEvent(input$projectMapPosition_init, {
     )
   }
 })
+
+
+
+
 
 
 
@@ -379,6 +413,7 @@ observeEvent(input$btnSaveProjectConfig, {
     members = NULL,
     publishers = NULL,
     map_position = input$projectMapPosition_values$data,
+    logo = input$projectLogo_values$data,
     map_projection = projection,
     countries = countries,
     theme = theme,

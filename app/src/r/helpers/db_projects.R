@@ -373,7 +373,7 @@ mxDbProjectCheckEmailMembership <- function(email, idProject) {
 mxDbGetProjectData <- function(idProject) {
   projectData <- as.list(
     mxDbGetQuery(
-      "SELECT * from mx_projects where id='" + idProject + "' OR id_old='" + idProject + "'"
+      "SELECT * from mx_projects where id='" + idProject + "' OR id_old='" + idProject + "' LIMIT 1"
     )[1, ]
   )
 
@@ -443,7 +443,8 @@ mxDbSaveProjectData <- function(idProject, values = list(
   countries = NULL,
   creator = NULL,
   allow_join = NULL,
-  states_views = NULL
+  states_views = NULL,
+  logo = NULL
 )
 ) {
   hasChanged <- FALSE
@@ -508,7 +509,7 @@ mxDbSaveProjectData <- function(idProject, values = list(
     }
   }
 
-  for (key in c("alias", "theme")) {
+  for (key in c("alias", "theme", "logo")) {
     value <- values[[key]]
     toUpdate <- notNull(value)
     if (toUpdate) {
