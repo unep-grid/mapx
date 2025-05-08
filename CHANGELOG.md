@@ -1,3 +1,10 @@
+  - [1.13.17-beta.0](https://github.com/unep-grid/mapx/tree/1.13.17-beta.0) 
+
+    - fix(story): better bullet handling
+    - fix(story): adding/removing with the sdk + control panel
+    - fix(story): solve issue where bullet buttons where not in sync with the current step playing
+
+
   - [1.13.17-alpha.19](https://github.com/unep-grid/mapx/tree/1.13.17-alpha.19) 
 
     - fix(cache): boolean inversion for cache testing
