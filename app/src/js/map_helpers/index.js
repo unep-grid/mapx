@@ -32,7 +32,7 @@ import { cleanDiacritic } from "./../string_util/";
 import chroma from "chroma-js";
 import { mirrorUrlCreate } from "./../mirror_util";
 import { getAppPathUrl } from "./../api_routes/index.js";
-import { isStoryPlaying, storyRead } from "./../story_map/index.js";
+import { isStoryPlaying, storyClose, storyRead } from "./../story_map/index.js";
 import { wmsQuery } from "./../wms/index.js";
 import { clearMapxCache, getVersion } from "./../app_utils";
 import { onNextFrame } from "./../animation_frame/index.js";
@@ -133,6 +133,7 @@ import {
   isBbox,
   isViewGj,
   isTrue,
+  isViewSm,
 } from "./../is_test_mapx/index.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { elViewListOption } from "./view_list_options.js";
@@ -2557,12 +2558,17 @@ export async function viewClear(options) {
     return;
   }
 
+  const isStory = isViewSm(view);
   const now = Date.now();
   const viewDuration = now - view._added_at || 0;
 
   delete view._added_at;
 
   await viewModulesRemove(view);
+
+  if (isStory) {
+    await storyClose();
+  }
 
   events.fire({
     type: "view_remove",
@@ -2638,6 +2644,14 @@ export async function viewAddAuto(idView, options) {
   const view = await getViewAuto(idView);
   const isApp = !!settings.mode.app;
   const isInstance = isViewInstance(view);
+  const isStory = isViewSm(view);
+
+  if (!isApp && isStory) {
+    return storyRead({
+      idView: view.id,
+      autoStart: true,
+    });
+  }
 
   if (isApp && !isInstance) {
     await viewsListAddSingle(view, { open: true });
@@ -2671,6 +2685,7 @@ export async function viewRemove(idView) {
     if (!isView(view)) {
       throw new Error("viewRemove : view not found");
     }
+
     /**
      * Close UI
      * - Layers can take a while

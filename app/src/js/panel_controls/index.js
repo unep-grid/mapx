@@ -30,10 +30,10 @@ const settings = {
       marginTop: "40px",
     },
     container_style: {
-      width: "110px",
+      width: "120px",
       height: "500px",
-      minWidth: "110px",
-      minHeight: "110px",
+      minWidth: "120px",
+      minHeight: "120px",
       maxHeight: "calc(100% - 50px)",
       maxWidth: "calc(100% - 50px)",
     },

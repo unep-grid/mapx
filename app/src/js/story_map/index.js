@@ -354,6 +354,9 @@ async function storyUiClear() {
  */
 export async function storyClose() {
   const state = getState();
+  if (isEmpty(state) || !state.enable) {
+    return;
+  }
   state.enable = false;
   events.fire("story_close");
   removeAllListeners();
