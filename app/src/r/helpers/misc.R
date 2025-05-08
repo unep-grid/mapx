@@ -177,7 +177,7 @@ mxSchemaMultiLingualInput <- function(
   keyCounter = "b",
   propertyOrder = 0,
   type = "string",
-  collapsed = TRUE,
+  collapsed = FALSE,
   language = "en",
   languages = .get(config, c("languages", "codes")),
   languagesRequired = c("en"),

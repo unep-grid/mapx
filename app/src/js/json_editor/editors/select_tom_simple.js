@@ -6,7 +6,9 @@ JSONEditor.defaults.resolvers.unshift(function (schema) {
   // Handle both string and array types with select_tom_simple format
   if (
     (schema.type === "string" && schema.format === "select_tom_simple") ||
-    (schema.type === "array" && schema.format === "select_tom_simple" && schema.items?.type === "string")
+    (schema.type === "array" &&
+      schema.format === "select_tom_simple" &&
+      schema.items?.type === "string")
   ) {
     return "select_tom_simple";
   }
@@ -15,7 +17,9 @@ JSONEditor.defaults.resolvers.unshift(function (schema) {
 /**
  * Custom editor supporting both single string and array of strings
  */
-JSONEditor.defaults.editors.select_tom_simple = class mxeditors extends JSONEditor.AbstractEditor {
+JSONEditor.defaults.editors.select_tom_simple = class mxeditors extends (
+  JSONEditor.AbstractEditor
+) {
   build() {
     const editor = this;
 
@@ -25,7 +29,9 @@ JSONEditor.defaults.editors.select_tom_simple = class mxeditors extends JSONEdit
     editor.error_holder = document.createElement("div");
 
     if (editor.schema.description) {
-      editor.description = editor.theme.getDescription(editor.schema.description);
+      editor.description = editor.theme.getDescription(
+        editor.schema.description,
+      );
       editor.description.classList.add("help-block");
     }
 
@@ -34,7 +40,7 @@ JSONEditor.defaults.editors.select_tom_simple = class mxeditors extends JSONEdit
     const group = editor.theme.getFormControl(
       editor.title,
       editor.input,
-      editor.description
+      editor.description,
     );
 
     editor.container.appendChild(group);
@@ -43,7 +49,7 @@ JSONEditor.defaults.editors.select_tom_simple = class mxeditors extends JSONEdit
     // Handle both array and string schema types
     const isArray = editor.schema.type === "array";
     const enumValues = isArray ? editor.schema.items.enum : editor.schema.enum;
-    const enumTitles = isArray 
+    const enumTitles = isArray
       ? editor.schema.items.options?.enum_titles || enumValues
       : editor.schema.options?.enum_titles || enumValues;
 
@@ -51,7 +57,7 @@ JSONEditor.defaults.editors.select_tom_simple = class mxeditors extends JSONEdit
       return { value: v, text: enumTitles[i] };
     });
 
-    editor.input.ts = new TomSelect(editor.input, {
+    editor.ts = new TomSelect(editor.input, {
       options,
       delimiter: ",",
       createOnBlur: false,
@@ -59,10 +65,10 @@ JSONEditor.defaults.editors.select_tom_simple = class mxeditors extends JSONEdit
       showAddOptionOnCreate: false,
       searchField: ["text", "value"],
       maxItems: isArray ? null : 1, // null means unlimited for arrays
-      plugins: isArray ? ['remove_button'] : [], // Add remove button for array mode
+      plugins: isArray ? ["remove_button"] : [], // Add remove button for array mode
       persist: false,
       // Handle unique items constraint
-      duplicates: !(isArray && editor.schema.uniqueItems === true)
+      duplicates: !(isArray && editor.schema.uniqueItems === true),
     });
 
     editor.refreshValue();
@@ -70,7 +76,7 @@ JSONEditor.defaults.editors.select_tom_simple = class mxeditors extends JSONEdit
 
   postBuild() {
     const editor = this;
-    editor.input.ts.on("change", function () {
+    editor.ts.on("change", function () {
       editor.refreshValue();
       editor.onChange(true);
     });
@@ -86,7 +92,7 @@ JSONEditor.defaults.editors.select_tom_simple = class mxeditors extends JSONEdit
       editor.description.parentNode.removeChild(editor.description);
     }
     if (editor.input && editor.input.parentNode) {
-      editor.input.ts.destroy();
+      editor.ts.destroy();
       editor.input.parentNode.removeChild(editor.input);
     }
     super.destroy();
@@ -96,23 +102,30 @@ JSONEditor.defaults.editors.select_tom_simple = class mxeditors extends JSONEdit
 
   setValue(value) {
     const editor = this;
-    const ts = editor.input.ts;
+    const ts = editor.ts;
+    if (!ts) {
+      return;
+    }
     ts.clear(true);
-    
+
     // Handle both string and array values
     if (Array.isArray(value)) {
-      value.forEach(v => ts.addItem(v));
+      value.forEach((v) => ts.addItem(v));
     } else if (value !== undefined && value !== null) {
       ts.addItem(value);
     }
-    
+
     editor.refreshValue();
   }
 
   refreshValue() {
     const editor = this;
-    const value = editor.input.ts.getValue();
-    
+    const ts = editor.ts;
+    if (!ts) {
+      return;
+    }
+    const value = ts.getValue();
+
     // Convert value based on schema type
     if (editor.schema.type === "array") {
       editor.value = value ? value.split(",") : [];
