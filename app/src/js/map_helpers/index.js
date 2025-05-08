@@ -2647,10 +2647,11 @@ export async function viewAddAuto(idView, options) {
   const isStory = isViewSm(view);
 
   if (!isApp && isStory) {
-    return storyRead({
+    await storyRead({
       idView: view.id,
       autoStart: true,
     });
+    return true;
   }
 
   if (isApp && !isInstance) {
@@ -2696,6 +2697,7 @@ export async function viewRemove(idView) {
     if (view._vb instanceof ViewBase) {
       view._vb.close();
     }
+   
 
     await viewClear({
       idView: view.id,
@@ -2767,10 +2769,6 @@ export function getLayerByPrefix(opt) {
     },
     opt,
   );
-
-  if (isEmpty(config.prefix)) {
-    debugger;
-  }
 
   const map = config.map || getMap(config.id);
 

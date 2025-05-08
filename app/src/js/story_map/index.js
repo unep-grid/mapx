@@ -69,7 +69,7 @@ export async function storyRead(opt) {
   try {
     if (opt.close) {
       await storyClose();
-      return;
+      return true;
     }
     await init(opt);
     await initStory();
@@ -83,9 +83,14 @@ export async function storyRead(opt) {
     await initListeners();
     await handleMissingImages();
     await initAdaptiveLayout();
-    await start();
+    // start  = infinite loop rendering
+    start().catch((e) => {
+      errorHandler(e);
+    });
   } catch (e) {
     errorHandler(e);
+  } finally {
+    return true;
   }
 }
 
