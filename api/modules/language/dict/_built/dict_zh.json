@@ -5230,269 +5230,9 @@
     "zh": "你不能从管理组中删除自己"
   },
   {
-    "id": "project_enable_public",
-    "en": "This project is public",
-    "zh": "此项目是公开的。"
-  },
-  {
-    "id": "project_enable_public_desc",
-    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
-    "zh": "如果启用，该项目将列在项目目录中。该项目中发布的所有公众观点都可供所有人阅读。"
-  },
-  {
-    "id": "project_globe_projection",
-    "en": "Enable globe mode",
-    "zh": "启用地球模式"
-  },
-  {
-    "id": "project_globe_projection_desc",
-    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
-    "zh": "激活后，地图将呈现为地球仪，与传统的 Web 墨卡托投影不同。启用“使用范围限制地图平移”设置将自动禁用地球模式"
-  },
-  {
-    "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project ( only if public )",
-    "zh": "允许非成员请求成为该项目的成员（仅当公开时）"
-  },
-  {
-    "id": "project_state_key",
-    "en": "Identifier",
-    "zh": "ID"
-  },
-  {
-    "id": "project_save_views_state",
-    "en": "Save views state",
-    "zh": "保存视图状态"
-  },
-  {
-    "id": "project_roles_modal_title",
-    "en": "Roles administration",
-    "zh": "角色管理"
-  },
-  {
-    "id": "project_alias_name",
-    "en": "Alias of the project",
-    "zh": "项目别名"
-  },
-  {
-    "id": "project_alias_name_desc",
-    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
-    "zh": "最少1个字符，最多30个字符，允许小写ASCII字符[a-z]，数字[0-9]，破折号[-]和下划线[_]"
-  },
-  {
-    "id": "error_project_alias_not_valid",
-    "en": "Project alias not valid or already taken",
-    "zh": "项目别名无效或已使用"
-  },
-  {
-    "id": "project_access_denied",
-    "en": "Access denied. You cannot access the requested project",
-    "zh": "拒绝访问，你无法访问请求的项目"
-  },
-  {
-    "id": "btn_show_project_delete",
-    "en": "Delete this project",
-    "zh": "删除此项目"
-  },
-  {
-    "id": "btn_show_project_delete_disabled",
-    "en": "Delete this project ( disabled )",
-    "zh": "删除此项目（不可用）"
-  },
-  {
-    "id": "project_delete_confirm_title",
-    "en": "Write the project name you want to delete",
-    "zh": "输入要删除的项目名称"
-  },
-  {
-    "id": "project_delete_view_n_share",
-    "en": "Projects",
-    "zh": "项目"
-  },
-  {
-    "id": "project_delete_view_n_external",
-    "en": "Externals",
-    "zh": "外部"
-  },
-  {
-    "id": "project_delete_view_n_story",
-    "en": "Story Maps",
-    "zh": "故事地图"
-  },
-  {
-    "id": "project_invite_modal_title",
-    "en": "Invite a new member",
-    "zh": "邀请新成员"
-  },
-  {
     "id": "btn_show_invite_member",
     "en": "Invite a new member",
     "zh": "邀请新成员"
-  },
-  {
-    "id": "project_invite_message_compose",
-    "en": "Compose invite email",
-    "zh": "撰写邀请邮件"
-  },
-  {
-    "id": "project_invite_message_title",
-    "en": "MapX invitation",
-    "zh": "MapX邀请 "
-  },
-  {
-    "id": "project_invite_message_subject",
-    "en": "Invitation to join the project {{project}}",
-    "zh": "邀请加入项目 {{project}}"
-  },
-  {
-    "id": "project_invite_message_accept",
-    "en": "Accept invitation to the project {{project}}",
-    "zh": "接受项目邀请 {{project}}"
-  },
-  {
-    "id": "project_invite_message_sent",
-    "en": "Email sent.",
-    "zh": "邮件已发送"
-  },
-  {
-    "id": "project_invite_message_tips",
-    "en": "The tag {{link}} will be replaced by an encrypted link.",
-    "zh": "标签{{link}}将被加密的链接替换。"
-  },
-  {
-    "id": "project_invite_message",
-    "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
-    "zh": "你好！ \n 我想邀请你成为MapX项目 \"{{projectName}}\" 的成员。 \n请单击提供的链接进行确认。 \n{{link}} \n项目管理员"
-  },
-  {
-    "id": "project_invite_message_confirm",
-    "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
-    "zh": "你好！ \n感谢你与我们联系。 \n为了确认你加入MapX项目 {{projectName}} ，成为其成员，请单击以下链接： \n{{link}} \n此致， \n敬礼！ \n项目管理员"
-  },
-  {
-    "id": "project_invite_notify_auto_register_email",
-    "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
-    "zh": "你好，<br>用户' {{emailUser}} '使用邀请链接进入项目 {{project}}。<ul><li>截止日期： {{timeExpire}}</li></ul><br>祝你今天过得愉快 ！ "
-  },
-  {
-    "id": "project_invite_notify_auto_register_email_subject",
-    "en": "Invitation link used in project {{project}}",
-    "zh": "项目中使用的邀请链接 {{project}} "
-  },
-  {
-    "id": "project_user_added_email_user_subject",
-    "en": "You've have been added to project {{project}}",
-    "zh": "您已被添加到项目中 {{project}} "
-  },
-  {
-    "id": "project_user_added_email_user",
-    "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
-    "zh": "你好，<br>您已添加到项目 {{project}}在群组里）： {{roles}} 。<br>祝你今天过得愉快 ！ "
-  },
-  {
-    "id": "project_user_added_email_admin_subject",
-    "en": "A user has been added to project {{project}}.",
-    "zh": "用户已添加到项目 {{project}}。 "
-  },
-  {
-    "id": "project_user_added_email_admin",
-    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
-    "zh": "用户（ {{emailUser}} ）已添加到项目中 {{project}}在群组里） {{roles}}<br>祝你今天过得愉快 ！ "
-  },
-  {
-    "id": "project_countries_highlight",
-    "en": "Countries to be highlighted on the map",
-    "zh": "地图上要突出显示的国家/地区"
-  },
-  {
-    "id": "project_id_theme",
-    "en": "Default theme",
-    "zh": "默认主题"
-  },
-  {
-    "id": "project_search_values",
-    "en": "Search projects",
-    "zh": "搜索项目"
-  },
-  {
-    "id": "project_saved",
-    "en": "Project saved",
-    "zh": "项目已保存"
-  },
-  {
-    "id": "project_created",
-    "en": "Project {{title}} created",
-    "zh": "项目 {{title}} 已创建"
-  },
-  {
-    "id": "project_deleted",
-    "en": "Project deleted",
-    "zh": "项目已删除"
-  },
-  {
-    "id": "project_delete_analyze",
-    "en": "Analysing, please wait...",
-    "zh": "分析中，请稍候..."
-  },
-  {
-    "id": "project_delete_table_views",
-    "en": "Table of views to delete",
-    "zh": "要删除的视图表"
-  },
-  {
-    "id": "project_delete_table_sources",
-    "en": "Table of sources to delete",
-    "zh": "要删除的源表"
-  },
-  {
-    "id": "project_delete_table_views_dep",
-    "en": "Table of dependent views to delete",
-    "zh": "要删除的从属视图表"
-  },
-  {
-    "id": "project_delete_table_sources_dep",
-    "en": "Table of dependent sources to delete",
-    "zh": "要删除的依赖源表"
-  },
-  {
-    "id": "project_delete_title",
-    "en": "Project deletion",
-    "zh": "删除项目"
-  },
-  {
-    "id": "project_new_title",
-    "en": "Title of the project",
-    "zh": "项目标题"
-  },
-  {
-    "id": "project_list",
-    "en": "List of projects",
-    "zh": "项目列表"
-  },
-  {
-    "id": "project_list_select_desc",
-    "en": "Click on a project name to access it. If you are not member of a project, you can ask to join it by clicking the join button ",
-    "zh": "单击项目名称以访问它。如果你不是项目成员，可以通过单击 加入 按钮请求加入此项目。"
-  },
-  {
-    "id": "project_title",
-    "en": "Title",
-    "zh": "标题"
-  },
-  {
-    "id": "project_description",
-    "en": "Description",
-    "zh": "描述"
-  },
-  {
-    "id": "project_settings",
-    "en": "Project settings",
-    "zh": "项目设置"
-  },
-  {
-    "id": "project_map_pos_set",
-    "en": "Initial map position",
-    "zh": "初始化地图位置"
   },
   {
     "id": "btn_map_pos_get",
@@ -5503,36 +5243,6 @@
     "id": "btn_map_pos_reset_max_bounds",
     "en": "Reset maximum map bounds",
     "zh": "重置最大地图边界"
-  },
-  {
-    "id": "project_map_proj_set",
-    "en": "Map projection (experimental)",
-    "zh": "地图投影（实验性）"
-  },
-  {
-    "id": "project_map_proj_name",
-    "en": "Projection name",
-    "zh": "投影名称"
-  },
-  {
-    "id": "project_map_proj_center_latitude",
-    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
-    "zh": "中心 - 纬度（Albers，Lamber Conic）"
-  },
-  {
-    "id": "project_map_proj_center_longitude",
-    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
-    "zh": "中心 - 经度 (Albers, Lamber Conic)"
-  },
-  {
-    "id": "project_map_proj_parallels_latitude_0",
-    "en": "Latitude North (Albers, Lamber Conic )",
-    "zh": "北纬 (Albers, Lamber Conic )"
-  },
-  {
-    "id": "project_map_proj_parallels_latitude_1",
-    "en": "Latitude South (Albers, Lamber Conic )",
-    "zh": "南纬 (Albers, Lamber Conic )"
   },
   {
     "id": "map_use_max_bounds",
@@ -5648,41 +5358,6 @@
     "id": "txt_email_not_valid",
     "en": "Email not valid",
     "zh": "邮箱无效"
-  },
-  {
-    "id": "project_request_membership_message",
-    "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
-    "zh": "你好！ \\n 请把我添加到项目 {{projectName}} 。 \\n 此致， \\n敬礼！ \\n 一位积极的未来成员 \\n"
-  },
-  {
-    "id": "project_request_membership",
-    "en": "Membership request",
-    "zh": "成员资格申请"
-  },
-  {
-    "id": "project_request_membership_subject",
-    "en": "Application to join the {{project}} project ",
-    "zh": "申请加入 {{project}}项目 "
-  },
-  {
-    "id": "project_request_membership_message_recap",
-    "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
-    "zh": "<span> 已经收到来自 {{from}} 的成员资格申请。</span><ul><li>消息: <b>{{msg}}</b></li><li>用户状态:  <b>{{userStatus}}</b></li><li>行动: {{actionUrl}}</li><li>网址: {{projectUrl}}</li><li>数据:<pre>{{data}}</pre></li></ul>"
-  },
-  {
-    "id": "project_join_message_reply",
-    "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
-    "zh": "回应来自“ {{email}} “为项目” {{project}} ” "
-  },
-  {
-    "id": "project_open_url",
-    "en": "Open the project \"{{project}}\"",
-    "zh": "打开项目“ {{project}} ” "
-  },
-  {
-    "id": "project_request_membership_message_sent",
-    "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
-    "zh": "你的申请已发送至项目管理员，你将在未来几天内收到一封确认邮件。 请检查你的收件箱中来自MapX的邮件，并点击链接以访问此项目！"
   },
   {
     "id": "update_app_msg",
@@ -8000,64 +7675,464 @@
     "zh": "我已阅读并同意<a href={{privacy_link}} target=\"_blank\">隐私政策</a>和<a href={{tou_link}} target=\"_blank\">使用条款</a>"
   },
   {
-    "id": "proj_manage_load_title",
+    "id": "project_enable_public",
+    "en": "This project is public",
+    "zh": "此项目是公开的。"
+  },
+  {
+    "id": "project_enable_public_desc",
+    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
+    "zh": "如果启用，该项目将列在项目目录中。该项目中发布的所有公众观点都可供所有人阅读。"
+  },
+  {
+    "id": "project_globe_projection",
+    "en": "Enable globe mode",
+    "zh": "启用地球模式"
+  },
+  {
+    "id": "project_globe_projection_desc",
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
+    "zh": "激活后，地图将呈现为地球仪，与传统的 Web 墨卡托投影不同。启用“使用范围限制地图平移”设置将自动禁用地球模式"
+  },
+  {
+    "id": "project_enable_join",
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "zh": "允许非成员请求成为该项目的成员（仅当公开时）"
+  },
+  {
+    "id": "project_state_key",
+    "en": "Identifier",
+    "zh": "ID"
+  },
+  {
+    "id": "project_save_views_state",
+    "en": "Save views state",
+    "zh": "保存视图状态"
+  },
+  {
+    "id": "project_roles_modal_title",
+    "en": "Roles administration",
+    "zh": "角色管理"
+  },
+  {
+    "id": "project_alias_name",
+    "en": "Alias of the project",
+    "zh": "项目别名"
+  },
+  {
+    "id": "project_alias_name_desc",
+    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
+    "zh": "最少1个字符，最多30个字符，允许小写ASCII字符[a-z]，数字[0-9]，破折号[-]和下划线[_]"
+  },
+  {
+    "id": "error_project_alias_not_valid",
+    "en": "Project alias not valid or already taken",
+    "zh": "项目别名无效或已使用"
+  },
+  {
+    "id": "project_access_denied",
+    "en": "Access denied. You cannot access the requested project",
+    "zh": "拒绝访问，你无法访问请求的项目"
+  },
+  {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "zh": "删除此项目"
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "zh": "删除此项目（不可用）"
+  },
+  {
+    "id": "project_delete_confirm_title",
+    "en": "Write the project name you want to delete",
+    "zh": "输入要删除的项目名称"
+  },
+  {
+    "id": "project_delete_view_n_share",
+    "en": "Projects",
+    "zh": "项目"
+  },
+  {
+    "id": "project_delete_view_n_external",
+    "en": "Externals",
+    "zh": "外部"
+  },
+  {
+    "id": "project_delete_view_n_story",
+    "en": "Story Maps",
+    "zh": "故事地图"
+  },
+  {
+    "id": "project_invite_modal_title",
+    "en": "Invite a new member",
+    "zh": "邀请新成员"
+  },
+  {
+    "id": "project_invite_message_compose",
+    "en": "Compose invite email",
+    "zh": "撰写邀请邮件"
+  },
+  {
+    "id": "project_invite_message_title",
+    "en": "MapX invitation",
+    "zh": "MapX邀请 "
+  },
+  {
+    "id": "project_invite_message_subject",
+    "en": "Invitation to join the project {{project}}",
+    "zh": "邀请加入项目 {{project}}"
+  },
+  {
+    "id": "project_invite_message_accept",
+    "en": "Accept invitation to the project {{project}}",
+    "zh": "接受项目邀请 {{project}}"
+  },
+  {
+    "id": "project_invite_message_sent",
+    "en": "Email sent.",
+    "zh": "邮件已发送"
+  },
+  {
+    "id": "project_invite_message_tips",
+    "en": "The tag {{link}} will be replaced by an encrypted link.",
+    "zh": "标签{{link}}将被加密的链接替换。"
+  },
+  {
+    "id": "project_invite_message",
+    "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
+    "zh": "你好！ \n 我想邀请你成为MapX项目 \"{{projectName}}\" 的成员。 \n请单击提供的链接进行确认。 \n{{link}} \n项目管理员"
+  },
+  {
+    "id": "project_invite_message_confirm",
+    "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
+    "zh": "你好！ \n感谢你与我们联系。 \n为了确认你加入MapX项目 {{projectName}} ，成为其成员，请单击以下链接： \n{{link}} \n此致， \n敬礼！ \n项目管理员"
+  },
+  {
+    "id": "project_invite_notify_auto_register_email",
+    "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
+    "zh": "你好，<br>用户' {{emailUser}} '使用邀请链接进入项目 {{project}}。<ul><li>截止日期： {{timeExpire}}</li></ul><br>祝你今天过得愉快 ！ "
+  },
+  {
+    "id": "project_invite_notify_auto_register_email_subject",
+    "en": "Invitation link used in project {{project}}",
+    "zh": "项目中使用的邀请链接 {{project}} "
+  },
+  {
+    "id": "project_user_added_email_user_subject",
+    "en": "You've have been added to project {{project}}",
+    "zh": "您已被添加到项目中 {{project}} "
+  },
+  {
+    "id": "project_user_added_email_user",
+    "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
+    "zh": "你好，<br>您已添加到项目 {{project}}在群组里）： {{roles}} 。<br>祝你今天过得愉快 ！ "
+  },
+  {
+    "id": "project_user_added_email_admin_subject",
+    "en": "A user has been added to project {{project}}.",
+    "zh": "用户已添加到项目 {{project}}。 "
+  },
+  {
+    "id": "project_user_added_email_admin",
+    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
+    "zh": "用户（ {{emailUser}} ）已添加到项目中 {{project}}在群组里） {{roles}}<br>祝你今天过得愉快 ！ "
+  },
+  {
+    "id": "project_countries_highlight",
+    "en": "Countries to be highlighted on the map",
+    "zh": "地图上要突出显示的国家/地区"
+  },
+  {
+    "id": "project_id_theme",
+    "en": "Default theme",
+    "zh": "默认主题"
+  },
+  {
+    "id": "project_search_values",
+    "en": "Search projects",
+    "zh": "搜索项目"
+  },
+  {
+    "id": "project_saved",
+    "en": "Project saved",
+    "zh": "项目已保存"
+  },
+  {
+    "id": "project_created",
+    "en": "Project {{title}} created",
+    "zh": "项目 {{title}} 已创建"
+  },
+  {
+    "id": "project_deleted",
+    "en": "Project deleted",
+    "zh": "项目已删除"
+  },
+  {
+    "id": "project_delete_analyze",
+    "en": "Analysing, please wait...",
+    "zh": "分析中，请稍候..."
+  },
+  {
+    "id": "project_delete_table_views",
+    "en": "Table of views to delete",
+    "zh": "要删除的视图表"
+  },
+  {
+    "id": "project_delete_table_sources",
+    "en": "Table of sources to delete",
+    "zh": "要删除的源表"
+  },
+  {
+    "id": "project_delete_table_views_dep",
+    "en": "Table of dependent views to delete",
+    "zh": "要删除的从属视图表"
+  },
+  {
+    "id": "project_delete_table_sources_dep",
+    "en": "Table of dependent sources to delete",
+    "zh": "要删除的依赖源表"
+  },
+  {
+    "id": "project_delete_title",
+    "en": "Project deletion",
+    "zh": "删除项目"
+  },
+  {
+    "id": "project_new_title",
+    "en": "Title of the project",
+    "zh": "项目标题"
+  },
+  {
+    "id": "project_list",
+    "en": "List of projects",
+    "zh": "项目列表"
+  },
+  {
+    "id": "project_list_select_desc",
+    "en": "Click on a project name to access it. If you are not member of a project, you can ask to join it by clicking the join button ",
+    "zh": "单击项目名称以访问它。如果你不是项目成员，可以通过单击 加入 按钮请求加入此项目。"
+  },
+  {
+    "id": "project_title",
+    "en": "Title",
+    "zh": "标题"
+  },
+  {
+    "id": "project_description",
+    "en": "Description",
+    "zh": "描述"
+  },
+  {
+    "id": "project_settings",
+    "en": "Project settings",
+    "zh": "项目设置"
+  },
+  {
+    "id": "project_map_pos_set",
+    "en": "Initial map position",
+    "zh": "初始化地图位置"
+  },
+  {
+    "id": "project_map_proj_set",
+    "en": "Map projection (experimental)",
+    "zh": "地图投影（实验性）"
+  },
+  {
+    "id": "project_map_proj_name",
+    "en": "Projection name",
+    "zh": "投影名称"
+  },
+  {
+    "id": "project_map_proj_center_latitude",
+    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
+    "zh": "中心 - 纬度（Albers，Lamber Conic）"
+  },
+  {
+    "id": "project_map_proj_center_longitude",
+    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
+    "zh": "中心 - 经度 (Albers, Lamber Conic)"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_0",
+    "en": "Latitude North (Albers, Lamber Conic )",
+    "zh": "北纬 (Albers, Lamber Conic )"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_1",
+    "en": "Latitude South (Albers, Lamber Conic )",
+    "zh": "南纬 (Albers, Lamber Conic )"
+  },
+  {
+    "id": "project_request_membership_message",
+    "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
+    "zh": "你好！ \\n 请把我添加到项目 {{projectName}} 。 \\n 此致， \\n敬礼！ \\n 一位积极的未来成员 \\n"
+  },
+  {
+    "id": "project_request_membership",
+    "en": "Membership request",
+    "zh": "成员资格申请"
+  },
+  {
+    "id": "project_request_membership_subject",
+    "en": "Application to join the {{project}} project ",
+    "zh": "申请加入 {{project}}项目 "
+  },
+  {
+    "id": "project_request_membership_message_recap",
+    "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
+    "zh": "<span> 已经收到来自 {{from}} 的成员资格申请。</span><ul><li>消息: <b>{{msg}}</b></li><li>用户状态:  <b>{{userStatus}}</b></li><li>行动: {{actionUrl}}</li><li>网址: {{projectUrl}}</li><li>数据:<pre>{{data}}</pre></li></ul>"
+  },
+  {
+    "id": "project_join_message_reply",
+    "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
+    "zh": "回应来自“ {{email}} “为项目” {{project}} ” "
+  },
+  {
+    "id": "project_open_url",
+    "en": "Open the project \"{{project}}\"",
+    "zh": "打开项目“ {{project}} ” "
+  },
+  {
+    "id": "project_request_membership_message_sent",
+    "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
+    "zh": "你的申请已发送至项目管理员，你将在未来几天内收到一封确认邮件。 请检查你的收件箱中来自MapX的邮件，并点击链接以访问此项目！"
+  },
+  {
+    "id": "project_manage_load_title",
     "en": "Load new project ?",
     "zh": "加载新项目？"
   },
   {
-    "id": "proj_manage_load_content",
+    "id": "project_manage_load_content",
     "en": "Load project {{name}} ?",
     "zh": "加载项目 {{name}}？"
   },
   {
-    "id": "proj_manage_create_title",
+    "id": "project_manage_create_title",
     "en": "Create new project",
     "zh": "创建新项目"
   },
   {
-    "id": "proj_manage_create_label",
+    "id": "project_manage_create_label",
     "en": "Project name (english)",
     "zh": "项目名称（英文）"
   },
   {
-    "id": "proj_manage_btn_create",
+    "id": "project_manage_btn_create",
     "en": "Create",
     "zh": "创造"
   },
   {
-    "id": "proj_manage_create_placeholder",
+    "id": "project_manage_create_placeholder",
     "en": "Project name (english)",
     "zh": "项目名称（英文）"
   },
   {
-    "id": "proj_manage_name_ok",
+    "id": "project_manage_name_ok",
     "en": "Name valid",
     "zh": "名称有效"
   },
   {
-    "id": "proj_manage_creation_not_allowed",
+    "id": "project_manage_creation_not_allowed",
     "en": "Creation not allowed",
     "zh": "不允许创建"
   },
   {
-    "id": "proj_manage_not_allowed",
+    "id": "project_manage_not_allowed",
     "en": "Not allowed",
     "zh": "不允许"
   },
   {
-    "id": "proj_manage_name_not_valid",
+    "id": "project_manage_name_not_valid",
     "en": "Invalid name",
-    "zh": "名称无效"
+    "zh": "无效名称"
   },
   {
-    "id": "proj_manage_name_not_in_range",
+    "id": "project_manage_name_not_in_range",
     "en": "Name string not in range : min 3, max 50 characters",
-    "zh": "名称字符串不在范围内：最少 3 个，最多 50 个字符"
+    "zh": "名称长度超出范围：最少 3 个字符，最多 50 个字符"
   },
   {
-    "id": "proj_manage_name_not_available",
+    "id": "project_manage_name_not_available",
     "en": "Name not available",
-    "zh": "名字不可用"
+    "zh": "名称不可用"
+  },
+  {
+    "id": "project_basic_info",
+    "en": "Project info",
+    "zh": "项目信息"
+  },
+  {
+    "id": "project_org_details",
+    "en": "Organisation details",
+    "zh": "组织详情"
+  },
+  {
+    "id": "project_org_name",
+    "en": "Name",
+    "zh": "名称"
+  },
+  {
+    "id": "project_contact_name",
+    "en": "Contact name",
+    "zh": "联系人姓名"
+  },
+  {
+    "id": "project_contact_email",
+    "en": "Contact email",
+    "zh": "联系人电子邮箱"
+  },
+  {
+    "id": "project_appearance",
+    "en": "Apparance & theme",
+    "zh": "外观和主题"
+  },
+  {
+    "id": "project_logo",
+    "en": "Project logo",
+    "zh": "项目标志"
+  },
+  {
+    "id": "project_logo_upload",
+    "en": "Drag and drop SVG or click to choose a file...",
+    "zh": "拖放 SVG 或点击选择文件..."
+  },
+  {
+    "id": "project_map_settings",
+    "en": "Map settings",
+    "zh": "地图设置"
+  },
+  {
+    "id": "project_map_projection",
+    "en": "Map projection",
+    "zh": "地图投影"
+  },
+  {
+    "id": "project_map_projection_type",
+    "en": "Default map projection type",
+    "zh": "默认地图投影类型"
+  },
+  {
+    "id": "project_map_projection_mercator",
+    "en": "Web mercator",
+    "zh": "网页墨卡托"
+  },
+  {
+    "id": "project_map_projection_globe",
+    "en": "Globe",
+    "zh": "地球仪"
+  },
+  {
+    "id": "project_disable_globe",
+    "en": "Disable globe mode in the UI",
+    "zh": "在界面中禁用地球仪模式"
+  },
+  {
+    "id": "project_access_settings",
+    "en": "Project access settings",
+    "zh": "项目访问设置"
   },
   {
     "id": "schema_story_theme",

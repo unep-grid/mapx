@@ -5230,269 +5230,9 @@
     "ps": "تاسو نشئ کولی خپل ځان د ایڈمن ګروپ څخه لرې کړئ "
   },
   {
-    "id": "project_enable_public",
-    "en": "This project is public",
-    "ps": "دا پروژه عامه ده."
-  },
-  {
-    "id": "project_enable_public_desc",
-    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
-    "ps": "که فعاله شي، پروژه به د پروژو په کتلاګ کې لیست شي. په دې پروژه کې خپاره شوي ټول عامه نظریات به د هرچا لپاره د لوستلو وړ وي."
-  },
-  {
-    "id": "project_globe_projection",
-    "en": "Enable globe mode",
-    "ps": "د ګلوب حالت فعال کړئ"
-  },
-  {
-    "id": "project_globe_projection_desc",
-    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
-    "ps": "کله چې فعال شي، نقشه به د نړۍ په توګه وړاندې شي، د دودیز ویب مرکټر پروجیکشن څخه وځي. د نقشې پینګ کولو محدودولو لپاره د حد څخه کار اخیستلو فعالول به په اتوماتيک ډول د نړۍ حالت غیر فعال کړي"
-  },
-  {
-    "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project ( only if public )",
-    "ps": "غیر غړو ته اجازه ورکړئ چې پدې پروژې کې د غړیتوب غوښتنه وکړي (یوازې که عامه)"
-  },
-  {
-    "id": "project_state_key",
-    "en": "Identifier",
-    "ps": "پیژندونکی "
-  },
-  {
-    "id": "project_save_views_state",
-    "en": "Save views state",
-    "ps": "د لید حالت خوندي کړئ "
-  },
-  {
-    "id": "project_roles_modal_title",
-    "en": "Roles administration",
-    "ps": "د رول اداره "
-  },
-  {
-    "id": "project_alias_name",
-    "en": "Alias of the project",
-    "ps": "د پروژې عرف "
-  },
-  {
-    "id": "project_alias_name_desc",
-    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
-    "ps": "لږترلږه 1 ، لږترلږه 30 ټیټ قضیه چې د ASCII حروف [از] ، شمیر [0-9] ، ټوټې ټوټې [-] او لاندې سکور ته اجازه ورکړل شوې [_] "
-  },
-  {
-    "id": "error_project_alias_not_valid",
-    "en": "Project alias not valid or already taken",
-    "ps": "د پروژې عرف درست ندی یا دمخه اخیستل شوی "
-  },
-  {
-    "id": "project_access_denied",
-    "en": "Access denied. You cannot access the requested project",
-    "ps": "رسۍ منکره شوه. تاسو غوښتل شوې پروژې ته لاسرسی نلرئ "
-  },
-  {
-    "id": "btn_show_project_delete",
-    "en": "Delete this project",
-    "ps": "دا پروژه حذف کړئ "
-  },
-  {
-    "id": "btn_show_project_delete_disabled",
-    "en": "Delete this project ( disabled )",
-    "ps": "دا پروژه ړنګ کړئ (معلول شوی) "
-  },
-  {
-    "id": "project_delete_confirm_title",
-    "en": "Write the project name you want to delete",
-    "ps": "د پروژې نوم ولیکئ چې غواړئ یې حذف کړئ "
-  },
-  {
-    "id": "project_delete_view_n_share",
-    "en": "Projects",
-    "ps": "پروژې"
-  },
-  {
-    "id": "project_delete_view_n_external",
-    "en": "Externals",
-    "ps": "بهرني"
-  },
-  {
-    "id": "project_delete_view_n_story",
-    "en": "Story Maps",
-    "ps": "د کیسې نقشې"
-  },
-  {
-    "id": "project_invite_modal_title",
-    "en": "Invite a new member",
-    "ps": "نوی غړی راوبلئ "
-  },
-  {
     "id": "btn_show_invite_member",
     "en": "Invite a new member",
     "ps": "نوی غړی راوبلئ "
-  },
-  {
-    "id": "project_invite_message_compose",
-    "en": "Compose invite email",
-    "ps": "د بلنې بریښنالیکونه ولیکئ "
-  },
-  {
-    "id": "project_invite_message_title",
-    "en": "MapX invitation",
-    "ps": "میپ ایکس بلنه "
-  },
-  {
-    "id": "project_invite_message_subject",
-    "en": "Invitation to join the project {{project}}",
-    "ps": "په پروژه کې د ګډون بلنه {{project}}"
-  },
-  {
-    "id": "project_invite_message_accept",
-    "en": "Accept invitation to the project {{project}}",
-    "ps": "پروژې ته بلنه ومنئ {{project}}"
-  },
-  {
-    "id": "project_invite_message_sent",
-    "en": "Email sent.",
-    "ps": "بریښنالیک لیږل شوی. "
-  },
-  {
-    "id": "project_invite_message_tips",
-    "en": "The tag {{link}} will be replaced by an encrypted link.",
-    "ps": "ټاګ {{link}} به د یوې کوډ شوې لینک سره ځای په ځای شي. "
-  },
-  {
-    "id": "project_invite_message",
-    "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
-    "ps": "سلام!\n زه غواړم تاسو ته دې پروژې ته د غړي په توګه بلنه درکړم \" {{projectName}} \"په میپ ایکس کې.\n د تایید لپاره مهرباني وکړئ چمتو شوي لینک باندې کلیک وکړئ.\n {{link}}\n د پروژې مدیر "
-  },
-  {
-    "id": "project_invite_message_confirm",
-    "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
-    "ps": "سلام!\n موږ ته د رسېدو لپاره مننه.\n ترڅو خپلې پروژې غړیتوب تایید کړئ {{projectName}} په میپ ایکس کې ، مهرباني وکړئ لاندې لینک باندې کلیک وکړئ:\n {{link}}\n په ډیر درنښت،\n د پروژې مدیر "
-  },
-  {
-    "id": "project_invite_notify_auto_register_email",
-    "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
-    "ps": "سلام،<br> کارن {{emailUser}} 'پروژې ته د ننوتلو لپاره د بلنې لینک وکاروه {{project}} .<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> له کاره وتنې نېټه: {{timeExpire}}</li></ul><br> ښه ورځ ولرئ ! "
-  },
-  {
-    "id": "project_invite_notify_auto_register_email_subject",
-    "en": "Invitation link used in project {{project}}",
-    "ps": "د بلنې لینک په پروژه کې کارول شوی {{project}} "
-  },
-  {
-    "id": "project_user_added_email_user_subject",
-    "en": "You've have been added to project {{project}}",
-    "ps": "تاسو په پروژه کې اضافه شوي {{project}} "
-  },
-  {
-    "id": "project_user_added_email_user",
-    "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
-    "ps": "سلام،<br> تاسو په پروژه کې شامل شوي {{project}} په ګروپ (ګروپونو) کې: {{roles}} .<br> ښه ورځ ولرئ ! "
-  },
-  {
-    "id": "project_user_added_email_admin_subject",
-    "en": "A user has been added to project {{project}}.",
-    "ps": "یو کاروونکی په پروژه کې شامل شوی {{project}} . "
-  },
-  {
-    "id": "project_user_added_email_admin",
-    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
-    "ps": "یو کارن ( {{emailUser}} ) په پروژه کې اضافه شوی {{project}} په ګروپ کې {{roles}}<br> ښه ورځ ولرئ ! "
-  },
-  {
-    "id": "project_countries_highlight",
-    "en": "Countries to be highlighted on the map",
-    "ps": "هیوادونه به په نقشه کې روښانه شي "
-  },
-  {
-    "id": "project_id_theme",
-    "en": "Default theme",
-    "ps": "ډیفالټ موضوع"
-  },
-  {
-    "id": "project_search_values",
-    "en": "Search projects",
-    "ps": "پروژې لټول "
-  },
-  {
-    "id": "project_saved",
-    "en": "Project saved",
-    "ps": "پروژه خوندي شوه "
-  },
-  {
-    "id": "project_created",
-    "en": "Project {{title}} created",
-    "ps": "پروژه {{title}} جوړ شوی "
-  },
-  {
-    "id": "project_deleted",
-    "en": "Project deleted",
-    "ps": "پروژه ړنګه شوه "
-  },
-  {
-    "id": "project_delete_analyze",
-    "en": "Analysing, please wait...",
-    "ps": "شننه ، مهرباني وکړئ انتظار وکړئ ... "
-  },
-  {
-    "id": "project_delete_table_views",
-    "en": "Table of views to delete",
-    "ps": "د ړنګولو لپاره د لیدونو جدول"
-  },
-  {
-    "id": "project_delete_table_sources",
-    "en": "Table of sources to delete",
-    "ps": "د ړنګولو لپاره د سرچینو جدول"
-  },
-  {
-    "id": "project_delete_table_views_dep",
-    "en": "Table of dependent views to delete",
-    "ps": "د ړنګولو لپاره د انحصاري لیدونو جدول"
-  },
-  {
-    "id": "project_delete_table_sources_dep",
-    "en": "Table of dependent sources to delete",
-    "ps": "د ړنګولو لپاره د انحصاري سرچینو جدول"
-  },
-  {
-    "id": "project_delete_title",
-    "en": "Project deletion",
-    "ps": "د پروژې ړنګول "
-  },
-  {
-    "id": "project_new_title",
-    "en": "Title of the project",
-    "ps": "د پروژې سرلیک "
-  },
-  {
-    "id": "project_list",
-    "en": "List of projects",
-    "ps": "د پروژو لیست "
-  },
-  {
-    "id": "project_list_select_desc",
-    "en": "Click on a project name to access it. If you are not member of a project, you can ask to join it by clicking the join button ",
-    "ps": "د لاسرسي لپاره د پروژې نوم باندې کلیک وکړئ. که تاسو د یوې پروژې غړی نه یاست ، تاسو کولی شئ د شمولیت ت clickingۍ کلیک کولو سره پدې کې د ګډون غوښتنه وکړئ "
-  },
-  {
-    "id": "project_title",
-    "en": "Title",
-    "ps": "پروژه"
-  },
-  {
-    "id": "project_description",
-    "en": "Description",
-    "ps": "توضيح "
-  },
-  {
-    "id": "project_settings",
-    "en": "Project settings",
-    "ps": "د پروژې امستنې "
-  },
-  {
-    "id": "project_map_pos_set",
-    "en": "Initial map position",
-    "ps": "د نقشې لومړنی موقعیت "
   },
   {
     "id": "btn_map_pos_get",
@@ -5503,36 +5243,6 @@
     "id": "btn_map_pos_reset_max_bounds",
     "en": "Reset maximum map bounds",
     "ps": "د نقشې اعظمي حدونه تنظیم کړئ"
-  },
-  {
-    "id": "project_map_proj_set",
-    "en": "Map projection (experimental)",
-    "ps": "د نقشې پروجیکشن (تجربې)"
-  },
-  {
-    "id": "project_map_proj_name",
-    "en": "Projection name",
-    "ps": "د پروجیکشن نوم"
-  },
-  {
-    "id": "project_map_proj_center_latitude",
-    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
-    "ps": "مرکز - عرض البلد (البرز، لامبر کونک)"
-  },
-  {
-    "id": "project_map_proj_center_longitude",
-    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
-    "ps": "مرکز - عرض البلد (البرز، لامبر کونک)"
-  },
-  {
-    "id": "project_map_proj_parallels_latitude_0",
-    "en": "Latitude North (Albers, Lamber Conic )",
-    "ps": "شمال عرض البلد (البرز، لامبر کونک)"
-  },
-  {
-    "id": "project_map_proj_parallels_latitude_1",
-    "en": "Latitude South (Albers, Lamber Conic )",
-    "ps": "عرض البلد جنوبي (البرز، لامبر کونک)"
   },
   {
     "id": "map_use_max_bounds",
@@ -5648,41 +5358,6 @@
     "id": "txt_email_not_valid",
     "en": "Email not valid",
     "ps": "بریښنالیک اعتبار نه لري "
-  },
-  {
-    "id": "project_request_membership_message",
-    "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
-    "ps": "سلام!\\n مهرباني وکړئ ما په پروژه کې اضافه کړئ {{projectName}} .\\n په ډیر درنښت،\\n د راتلونکي هڅونکی غړی\\n "
-  },
-  {
-    "id": "project_request_membership",
-    "en": "Membership request",
-    "ps": "د غړیتوب غوښتنه "
-  },
-  {
-    "id": "project_request_membership_subject",
-    "en": "Application to join the {{project}} project ",
-    "ps": "د شمولیت لپاره غوښتنلیک {{project}} پروژه "
-  },
-  {
-    "id": "project_request_membership_message_recap",
-    "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
-    "ps": "<span>څخه د غړیتوب غوښتنه {{from}} ترلاسه شوی دی</span><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> پیغام:<b> {{msg}}</b></li><li style=\";text-align:right;direction:rtl\"> د کارونکي حالت:<b> {{userStatus}}</b></li><li style=\";text-align:right;direction:rtl\"> عمل: {{actionUrl}}</li><li style=\";text-align:right;direction:rtl\"> لینک: {{projectUrl}}</li><li style=\";text-align:right;direction:rtl\"> معلومات:<pre style=\";text-align:right;direction:rtl\"> {{data}}</pre></li></ul> "
-  },
-  {
-    "id": "project_join_message_reply",
-    "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
-    "ps": "د غړیتوب غوښتنې ته ځواب ووایی \" {{email}} \"د پروژې لپاره\" {{project}} \" "
-  },
-  {
-    "id": "project_open_url",
-    "en": "Open the project \"{{project}}\"",
-    "ps": "پروژه پرانسته \" {{project}} \" "
-  },
-  {
-    "id": "project_request_membership_message_sent",
-    "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
-    "ps": "ستاسو غوښتنه د پروژې مدیر ته لیږل شوې ، تاسو به په راتلونکو ورځو کې د تایید بریښنالیک ترلاسه کړئ. د نقشې بوټ څخه د بریښنالیک لپاره خپل انباکس وګورئ او پروژې ته د لاسرسي لپاره لینک کلیک وکړئ! "
   },
   {
     "id": "update_app_msg",
@@ -8000,64 +7675,464 @@
     "ps": "ما <a href={{privacy_link}} target=\"_blank\">د محرمیت تګلاره</a> او <a href={{tou_link}} target=\"_blank\">د کارولو شرایط</a> لوستلي او منم"
   },
   {
-    "id": "proj_manage_load_title",
+    "id": "project_enable_public",
+    "en": "This project is public",
+    "ps": "دا پروژه عامه ده."
+  },
+  {
+    "id": "project_enable_public_desc",
+    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
+    "ps": "که فعاله شي، پروژه به د پروژو په کتلاګ کې لیست شي. په دې پروژه کې خپاره شوي ټول عامه نظریات به د هرچا لپاره د لوستلو وړ وي."
+  },
+  {
+    "id": "project_globe_projection",
+    "en": "Enable globe mode",
+    "ps": "د ګلوب حالت فعال کړئ"
+  },
+  {
+    "id": "project_globe_projection_desc",
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
+    "ps": "کله چې فعال شي، نقشه به د نړۍ په توګه وړاندې شي، د دودیز ویب مرکټر پروجیکشن څخه وځي. د نقشې پینګ کولو محدودولو لپاره د حد څخه کار اخیستلو فعالول به په اتوماتيک ډول د نړۍ حالت غیر فعال کړي"
+  },
+  {
+    "id": "project_enable_join",
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "ps": "غیر غړو ته اجازه ورکړئ چې پدې پروژې کې د غړیتوب غوښتنه وکړي (یوازې که عامه)"
+  },
+  {
+    "id": "project_state_key",
+    "en": "Identifier",
+    "ps": "پیژندونکی "
+  },
+  {
+    "id": "project_save_views_state",
+    "en": "Save views state",
+    "ps": "د لید حالت خوندي کړئ "
+  },
+  {
+    "id": "project_roles_modal_title",
+    "en": "Roles administration",
+    "ps": "د رول اداره "
+  },
+  {
+    "id": "project_alias_name",
+    "en": "Alias of the project",
+    "ps": "د پروژې عرف "
+  },
+  {
+    "id": "project_alias_name_desc",
+    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
+    "ps": "لږترلږه 1 ، لږترلږه 30 ټیټ قضیه چې د ASCII حروف [از] ، شمیر [0-9] ، ټوټې ټوټې [-] او لاندې سکور ته اجازه ورکړل شوې [_] "
+  },
+  {
+    "id": "error_project_alias_not_valid",
+    "en": "Project alias not valid or already taken",
+    "ps": "د پروژې عرف درست ندی یا دمخه اخیستل شوی "
+  },
+  {
+    "id": "project_access_denied",
+    "en": "Access denied. You cannot access the requested project",
+    "ps": "رسۍ منکره شوه. تاسو غوښتل شوې پروژې ته لاسرسی نلرئ "
+  },
+  {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "ps": "دا پروژه حذف کړئ "
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "ps": "دا پروژه ړنګ کړئ (معلول شوی) "
+  },
+  {
+    "id": "project_delete_confirm_title",
+    "en": "Write the project name you want to delete",
+    "ps": "د پروژې نوم ولیکئ چې غواړئ یې حذف کړئ "
+  },
+  {
+    "id": "project_delete_view_n_share",
+    "en": "Projects",
+    "ps": "پروژې"
+  },
+  {
+    "id": "project_delete_view_n_external",
+    "en": "Externals",
+    "ps": "بهرني"
+  },
+  {
+    "id": "project_delete_view_n_story",
+    "en": "Story Maps",
+    "ps": "د کیسې نقشې"
+  },
+  {
+    "id": "project_invite_modal_title",
+    "en": "Invite a new member",
+    "ps": "نوی غړی راوبلئ "
+  },
+  {
+    "id": "project_invite_message_compose",
+    "en": "Compose invite email",
+    "ps": "د بلنې بریښنالیکونه ولیکئ "
+  },
+  {
+    "id": "project_invite_message_title",
+    "en": "MapX invitation",
+    "ps": "میپ ایکس بلنه "
+  },
+  {
+    "id": "project_invite_message_subject",
+    "en": "Invitation to join the project {{project}}",
+    "ps": "په پروژه کې د ګډون بلنه {{project}}"
+  },
+  {
+    "id": "project_invite_message_accept",
+    "en": "Accept invitation to the project {{project}}",
+    "ps": "پروژې ته بلنه ومنئ {{project}}"
+  },
+  {
+    "id": "project_invite_message_sent",
+    "en": "Email sent.",
+    "ps": "بریښنالیک لیږل شوی. "
+  },
+  {
+    "id": "project_invite_message_tips",
+    "en": "The tag {{link}} will be replaced by an encrypted link.",
+    "ps": "ټاګ {{link}} به د یوې کوډ شوې لینک سره ځای په ځای شي. "
+  },
+  {
+    "id": "project_invite_message",
+    "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
+    "ps": "سلام!\n زه غواړم تاسو ته دې پروژې ته د غړي په توګه بلنه درکړم \" {{projectName}} \"په میپ ایکس کې.\n د تایید لپاره مهرباني وکړئ چمتو شوي لینک باندې کلیک وکړئ.\n {{link}}\n د پروژې مدیر "
+  },
+  {
+    "id": "project_invite_message_confirm",
+    "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
+    "ps": "سلام!\n موږ ته د رسېدو لپاره مننه.\n ترڅو خپلې پروژې غړیتوب تایید کړئ {{projectName}} په میپ ایکس کې ، مهرباني وکړئ لاندې لینک باندې کلیک وکړئ:\n {{link}}\n په ډیر درنښت،\n د پروژې مدیر "
+  },
+  {
+    "id": "project_invite_notify_auto_register_email",
+    "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
+    "ps": "سلام،<br> کارن {{emailUser}} 'پروژې ته د ننوتلو لپاره د بلنې لینک وکاروه {{project}} .<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> له کاره وتنې نېټه: {{timeExpire}}</li></ul><br> ښه ورځ ولرئ ! "
+  },
+  {
+    "id": "project_invite_notify_auto_register_email_subject",
+    "en": "Invitation link used in project {{project}}",
+    "ps": "د بلنې لینک په پروژه کې کارول شوی {{project}} "
+  },
+  {
+    "id": "project_user_added_email_user_subject",
+    "en": "You've have been added to project {{project}}",
+    "ps": "تاسو په پروژه کې اضافه شوي {{project}} "
+  },
+  {
+    "id": "project_user_added_email_user",
+    "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
+    "ps": "سلام،<br> تاسو په پروژه کې شامل شوي {{project}} په ګروپ (ګروپونو) کې: {{roles}} .<br> ښه ورځ ولرئ ! "
+  },
+  {
+    "id": "project_user_added_email_admin_subject",
+    "en": "A user has been added to project {{project}}.",
+    "ps": "یو کاروونکی په پروژه کې شامل شوی {{project}} . "
+  },
+  {
+    "id": "project_user_added_email_admin",
+    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
+    "ps": "یو کارن ( {{emailUser}} ) په پروژه کې اضافه شوی {{project}} په ګروپ کې {{roles}}<br> ښه ورځ ولرئ ! "
+  },
+  {
+    "id": "project_countries_highlight",
+    "en": "Countries to be highlighted on the map",
+    "ps": "هیوادونه به په نقشه کې روښانه شي "
+  },
+  {
+    "id": "project_id_theme",
+    "en": "Default theme",
+    "ps": "ډیفالټ موضوع"
+  },
+  {
+    "id": "project_search_values",
+    "en": "Search projects",
+    "ps": "پروژې لټول "
+  },
+  {
+    "id": "project_saved",
+    "en": "Project saved",
+    "ps": "پروژه خوندي شوه "
+  },
+  {
+    "id": "project_created",
+    "en": "Project {{title}} created",
+    "ps": "پروژه {{title}} جوړ شوی "
+  },
+  {
+    "id": "project_deleted",
+    "en": "Project deleted",
+    "ps": "پروژه ړنګه شوه "
+  },
+  {
+    "id": "project_delete_analyze",
+    "en": "Analysing, please wait...",
+    "ps": "شننه ، مهرباني وکړئ انتظار وکړئ ... "
+  },
+  {
+    "id": "project_delete_table_views",
+    "en": "Table of views to delete",
+    "ps": "د ړنګولو لپاره د لیدونو جدول"
+  },
+  {
+    "id": "project_delete_table_sources",
+    "en": "Table of sources to delete",
+    "ps": "د ړنګولو لپاره د سرچینو جدول"
+  },
+  {
+    "id": "project_delete_table_views_dep",
+    "en": "Table of dependent views to delete",
+    "ps": "د ړنګولو لپاره د انحصاري لیدونو جدول"
+  },
+  {
+    "id": "project_delete_table_sources_dep",
+    "en": "Table of dependent sources to delete",
+    "ps": "د ړنګولو لپاره د انحصاري سرچینو جدول"
+  },
+  {
+    "id": "project_delete_title",
+    "en": "Project deletion",
+    "ps": "د پروژې ړنګول "
+  },
+  {
+    "id": "project_new_title",
+    "en": "Title of the project",
+    "ps": "د پروژې سرلیک "
+  },
+  {
+    "id": "project_list",
+    "en": "List of projects",
+    "ps": "د پروژو لیست "
+  },
+  {
+    "id": "project_list_select_desc",
+    "en": "Click on a project name to access it. If you are not member of a project, you can ask to join it by clicking the join button ",
+    "ps": "د لاسرسي لپاره د پروژې نوم باندې کلیک وکړئ. که تاسو د یوې پروژې غړی نه یاست ، تاسو کولی شئ د شمولیت ت clickingۍ کلیک کولو سره پدې کې د ګډون غوښتنه وکړئ "
+  },
+  {
+    "id": "project_title",
+    "en": "Title",
+    "ps": "پروژه"
+  },
+  {
+    "id": "project_description",
+    "en": "Description",
+    "ps": "توضيح "
+  },
+  {
+    "id": "project_settings",
+    "en": "Project settings",
+    "ps": "د پروژې امستنې "
+  },
+  {
+    "id": "project_map_pos_set",
+    "en": "Initial map position",
+    "ps": "د نقشې لومړنی موقعیت "
+  },
+  {
+    "id": "project_map_proj_set",
+    "en": "Map projection (experimental)",
+    "ps": "د نقشې پروجیکشن (تجربې)"
+  },
+  {
+    "id": "project_map_proj_name",
+    "en": "Projection name",
+    "ps": "د پروجیکشن نوم"
+  },
+  {
+    "id": "project_map_proj_center_latitude",
+    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
+    "ps": "مرکز - عرض البلد (البرز، لامبر کونک)"
+  },
+  {
+    "id": "project_map_proj_center_longitude",
+    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
+    "ps": "مرکز - عرض البلد (البرز، لامبر کونک)"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_0",
+    "en": "Latitude North (Albers, Lamber Conic )",
+    "ps": "شمال عرض البلد (البرز، لامبر کونک)"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_1",
+    "en": "Latitude South (Albers, Lamber Conic )",
+    "ps": "عرض البلد جنوبي (البرز، لامبر کونک)"
+  },
+  {
+    "id": "project_request_membership_message",
+    "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
+    "ps": "سلام!\\n مهرباني وکړئ ما په پروژه کې اضافه کړئ {{projectName}} .\\n په ډیر درنښت،\\n د راتلونکي هڅونکی غړی\\n "
+  },
+  {
+    "id": "project_request_membership",
+    "en": "Membership request",
+    "ps": "د غړیتوب غوښتنه "
+  },
+  {
+    "id": "project_request_membership_subject",
+    "en": "Application to join the {{project}} project ",
+    "ps": "د شمولیت لپاره غوښتنلیک {{project}} پروژه "
+  },
+  {
+    "id": "project_request_membership_message_recap",
+    "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
+    "ps": "<span>څخه د غړیتوب غوښتنه {{from}} ترلاسه شوی دی</span><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> پیغام:<b> {{msg}}</b></li><li style=\";text-align:right;direction:rtl\"> د کارونکي حالت:<b> {{userStatus}}</b></li><li style=\";text-align:right;direction:rtl\"> عمل: {{actionUrl}}</li><li style=\";text-align:right;direction:rtl\"> لینک: {{projectUrl}}</li><li style=\";text-align:right;direction:rtl\"> معلومات:<pre style=\";text-align:right;direction:rtl\"> {{data}}</pre></li></ul> "
+  },
+  {
+    "id": "project_join_message_reply",
+    "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
+    "ps": "د غړیتوب غوښتنې ته ځواب ووایی \" {{email}} \"د پروژې لپاره\" {{project}} \" "
+  },
+  {
+    "id": "project_open_url",
+    "en": "Open the project \"{{project}}\"",
+    "ps": "پروژه پرانسته \" {{project}} \" "
+  },
+  {
+    "id": "project_request_membership_message_sent",
+    "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
+    "ps": "ستاسو غوښتنه د پروژې مدیر ته لیږل شوې ، تاسو به په راتلونکو ورځو کې د تایید بریښنالیک ترلاسه کړئ. د نقشې بوټ څخه د بریښنالیک لپاره خپل انباکس وګورئ او پروژې ته د لاسرسي لپاره لینک کلیک وکړئ! "
+  },
+  {
+    "id": "project_manage_load_title",
     "en": "Load new project ?",
     "ps": "نوې پروژه پورته کړئ؟"
   },
   {
-    "id": "proj_manage_load_content",
+    "id": "project_manage_load_content",
     "en": "Load project {{name}} ?",
     "ps": "پروژه بار کړئ {{name}} ؟"
   },
   {
-    "id": "proj_manage_create_title",
+    "id": "project_manage_create_title",
     "en": "Create new project",
     "ps": "نوې پروژه جوړه کړئ"
   },
   {
-    "id": "proj_manage_create_label",
+    "id": "project_manage_create_label",
     "en": "Project name (english)",
     "ps": "د پروژې نوم (انګلیسي)"
   },
   {
-    "id": "proj_manage_btn_create",
+    "id": "project_manage_btn_create",
     "en": "Create",
-    "ps": "جوړ کړئ"
+    "ps": "جوړول"
   },
   {
-    "id": "proj_manage_create_placeholder",
+    "id": "project_manage_create_placeholder",
     "en": "Project name (english)",
     "ps": "د پروژې نوم (انګلیسي)"
   },
   {
-    "id": "proj_manage_name_ok",
+    "id": "project_manage_name_ok",
     "en": "Name valid",
     "ps": "نوم معتبر دی"
   },
   {
-    "id": "proj_manage_creation_not_allowed",
+    "id": "project_manage_creation_not_allowed",
     "en": "Creation not allowed",
-    "ps": "د جوړولو اجازه نشته"
+    "ps": "جوړول اجازه نلري"
   },
   {
-    "id": "proj_manage_not_allowed",
+    "id": "project_manage_not_allowed",
     "en": "Not allowed",
-    "ps": "اجازه نه ورکول کیږي"
+    "ps": "اجازه نشته"
   },
   {
-    "id": "proj_manage_name_not_valid",
+    "id": "project_manage_name_not_valid",
     "en": "Invalid name",
     "ps": "ناسم نوم"
   },
   {
-    "id": "proj_manage_name_not_in_range",
+    "id": "project_manage_name_not_in_range",
     "en": "Name string not in range : min 3, max 50 characters",
-    "ps": "د نوم تار په حد کې نه دی: لږ تر لږه 3، اعظمي 50 حروف"
+    "ps": "د نوم اوږدوالی په محدوده کې نه دی: لږ تر لږه 3، حد اکثر 50 توري"
   },
   {
-    "id": "proj_manage_name_not_available",
+    "id": "project_manage_name_not_available",
     "en": "Name not available",
-    "ps": "نوم نشته"
+    "ps": "نوم شتون نلري"
+  },
+  {
+    "id": "project_basic_info",
+    "en": "Project info",
+    "ps": "د پروژې معلومات"
+  },
+  {
+    "id": "project_org_details",
+    "en": "Organisation details",
+    "ps": "د سازمان تفصیلات"
+  },
+  {
+    "id": "project_org_name",
+    "en": "Name",
+    "ps": "نوم"
+  },
+  {
+    "id": "project_contact_name",
+    "en": "Contact name",
+    "ps": "د اړیکې نوم"
+  },
+  {
+    "id": "project_contact_email",
+    "en": "Contact email",
+    "ps": "د اړیکې بریښنالیک"
+  },
+  {
+    "id": "project_appearance",
+    "en": "Apparance & theme",
+    "ps": "ښکارېدنه او تیم"
+  },
+  {
+    "id": "project_logo",
+    "en": "Project logo",
+    "ps": "د پروژې نښان"
+  },
+  {
+    "id": "project_logo_upload",
+    "en": "Drag and drop SVG or click to choose a file...",
+    "ps": "SVG راکش کړئ او پرېږدئ یا د فایل غوره کولو لپاره کلیک وکړئ..."
+  },
+  {
+    "id": "project_map_settings",
+    "en": "Map settings",
+    "ps": "د نقشې تنظیمات"
+  },
+  {
+    "id": "project_map_projection",
+    "en": "Map projection",
+    "ps": "د نقشې تصویر"
+  },
+  {
+    "id": "project_map_projection_type",
+    "en": "Default map projection type",
+    "ps": "د نقشې د تصویر اصلي ډول"
+  },
+  {
+    "id": "project_map_projection_mercator",
+    "en": "Web mercator",
+    "ps": "ویب مرکاتور"
+  },
+  {
+    "id": "project_map_projection_globe",
+    "en": "Globe",
+    "ps": "نړۍ"
+  },
+  {
+    "id": "project_disable_globe",
+    "en": "Disable globe mode in the UI",
+    "ps": "په UI کې د نړۍ موډ غیر فعال کړئ"
+  },
+  {
+    "id": "project_access_settings",
+    "en": "Project access settings",
+    "ps": "د پروژې د لاسرسي تنظیمات"
   },
   {
     "id": "schema_story_theme",

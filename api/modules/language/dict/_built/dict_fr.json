@@ -5230,269 +5230,9 @@
     "fr": "Vous ne pouvez pas vous-même vous enlever du groupe des administrateurs"
   },
   {
-    "id": "project_enable_public",
-    "en": "This project is public",
-    "fr": "Ce projet est public."
-  },
-  {
-    "id": "project_enable_public_desc",
-    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
-    "fr": "Si activé, le projet va être listé dans le catalogue des projets. Toutes les vues publiques publiées dans ce projet seront également visibles à tous."
-  },
-  {
-    "id": "project_globe_projection",
-    "en": "Enable globe mode",
-    "fr": "Activer le mode globe"
-  },
-  {
-    "id": "project_globe_projection_desc",
-    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
-    "fr": "Lorsqu'elle est activée, la carte se présente sous la forme d'un globe, s'écartant de la projection conventionnelle Web Mercator. L'activation du paramètre \"Utiliser l'étendue pour limiter le panoramique de la carte\" désactivera automatiquement le mode globe"
-  },
-  {
-    "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project ( only if public )",
-    "fr": "Autoriser les non-membres à demander une adhésion à ce projet (uniquement si public)"
-  },
-  {
-    "id": "project_state_key",
-    "en": "Identifier",
-    "fr": "Identifiant"
-  },
-  {
-    "id": "project_save_views_state",
-    "en": "Save views state",
-    "fr": "Sauvegarder l'ordre des vues"
-  },
-  {
-    "id": "project_roles_modal_title",
-    "en": "Roles administration",
-    "fr": "Administration des rôles"
-  },
-  {
-    "id": "project_alias_name",
-    "en": "Alias of the project",
-    "fr": "Alias de project"
-  },
-  {
-    "id": "project_alias_name_desc",
-    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
-    "fr": "Minimum 1, maximum 30 charactères parmis les lettre minuscules ASCII  [a-z], les chiffres [0-9], le tiret court [-] ainsi que le charactère de soulignement [_]"
-  },
-  {
-    "id": "error_project_alias_not_valid",
-    "en": "Project alias not valid or already taken",
-    "fr": "Alias de projet non valide ou déjà existant"
-  },
-  {
-    "id": "project_access_denied",
-    "en": "Access denied. You cannot access the requested project",
-    "fr": "Accès refusé. Vous ne pouvez pas accéder à ce projet"
-  },
-  {
-    "id": "btn_show_project_delete",
-    "en": "Delete this project",
-    "fr": "Supprimer ce projet"
-  },
-  {
-    "id": "btn_show_project_delete_disabled",
-    "en": "Delete this project ( disabled )",
-    "fr": "Supprimer ce projet ( désactivé )"
-  },
-  {
-    "id": "project_delete_confirm_title",
-    "en": "Write the project name you want to delete",
-    "fr": "Écrivez le titre du projet que vous désirez supprimer"
-  },
-  {
-    "id": "project_delete_view_n_share",
-    "en": "Projects",
-    "fr": "Projets"
-  },
-  {
-    "id": "project_delete_view_n_external",
-    "en": "Externals",
-    "fr": "Externes"
-  },
-  {
-    "id": "project_delete_view_n_story",
-    "en": "Story Maps",
-    "fr": "Cartes narratives"
-  },
-  {
-    "id": "project_invite_modal_title",
-    "en": "Invite a new member",
-    "fr": "Inviter un nouveau membre"
-  },
-  {
     "id": "btn_show_invite_member",
     "en": "Invite a new member",
     "fr": "Inviter un nouveau membre"
-  },
-  {
-    "id": "project_invite_message_compose",
-    "en": "Compose invite email",
-    "fr": "Écrivez le message d'invitation"
-  },
-  {
-    "id": "project_invite_message_title",
-    "en": "MapX invitation",
-    "fr": "Invitation MapX"
-  },
-  {
-    "id": "project_invite_message_subject",
-    "en": "Invitation to join the project {{project}}",
-    "fr": "Invitation à rejoindre le projet {{project}}"
-  },
-  {
-    "id": "project_invite_message_accept",
-    "en": "Accept invitation to the project {{project}}",
-    "fr": "Accepter l'invitation au projet {{project}}"
-  },
-  {
-    "id": "project_invite_message_sent",
-    "en": "Email sent.",
-    "fr": "Email envoyé."
-  },
-  {
-    "id": "project_invite_message_tips",
-    "en": "The tag {{link}} will be replaced by an encrypted link.",
-    "fr": "Le tag {{link}} va être replacé par le lien définitif lors de l'envoi"
-  },
-  {
-    "id": "project_invite_message",
-    "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
-    "fr": "Bonjour! \nJe souhaite vous inviter en tant que membre du projet \"{{projectName}}\" dans MapX. \nMerci de confirmer en cliquant le lien ci-dessous: \n{{link}} \nBonne journée ! \nL'administrateur du projet."
-  },
-  {
-    "id": "project_invite_message_confirm",
-    "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
-    "fr": "Bonjour! \nMerci de nous avoir contacté pour devenir membre du projet {{projectName}} dans MapX. \nMerci de confirmer votre demande en cliquant le lien ci-dessous: \n{{link}} \nBonne journée !  \nL'administrateur du projet"
-  },
-  {
-    "id": "project_invite_notify_auto_register_email",
-    "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
-    "fr": "Bonjour,<br> Utilisateur ' {{emailUser}} 'a utilisé un lien d'invitation pour entrer dans le projet {{project}} .<ul><li> Date d'expiration: {{timeExpire}}</li></ul><br> Passe une bonne journée ! "
-  },
-  {
-    "id": "project_invite_notify_auto_register_email_subject",
-    "en": "Invitation link used in project {{project}}",
-    "fr": "Lien d'invitation utilisé dans le projet {{project}} "
-  },
-  {
-    "id": "project_user_added_email_user_subject",
-    "en": "You've have been added to project {{project}}",
-    "fr": "Vous avez été ajouté au projet {{project}} "
-  },
-  {
-    "id": "project_user_added_email_user",
-    "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
-    "fr": "Bonjour,<br> Vous avez été ajouté au projet {{project}} en groupes): {{roles}} .<br> Passe une bonne journée ! "
-  },
-  {
-    "id": "project_user_added_email_admin_subject",
-    "en": "A user has been added to project {{project}}.",
-    "fr": "Un utilisateur a été ajouté au projet {{project}} . "
-  },
-  {
-    "id": "project_user_added_email_admin",
-    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
-    "fr": "Un utilisateur ( {{emailUser}} ) a été ajouté au projet {{project}} en groupes) {{roles}}<br> Passe une bonne journée ! "
-  },
-  {
-    "id": "project_countries_highlight",
-    "en": "Countries to be highlighted on the map",
-    "fr": "Pays mis en évidence sur la carte"
-  },
-  {
-    "id": "project_id_theme",
-    "en": "Default theme",
-    "fr": "Thème par défaut"
-  },
-  {
-    "id": "project_search_values",
-    "en": "Search projects",
-    "fr": "Rechercher de projets"
-  },
-  {
-    "id": "project_saved",
-    "en": "Project saved",
-    "fr": "Projet sauvegardé"
-  },
-  {
-    "id": "project_created",
-    "en": "Project {{title}} created",
-    "fr": "Projet {{title}} créé"
-  },
-  {
-    "id": "project_deleted",
-    "en": "Project deleted",
-    "fr": "Projet supprimé"
-  },
-  {
-    "id": "project_delete_analyze",
-    "en": "Analysing, please wait...",
-    "fr": "Analyse, veuillez patienter..."
-  },
-  {
-    "id": "project_delete_table_views",
-    "en": "Table of views to delete",
-    "fr": "Table des vues à supprimer"
-  },
-  {
-    "id": "project_delete_table_sources",
-    "en": "Table of sources to delete",
-    "fr": "Table des sources à supprimer"
-  },
-  {
-    "id": "project_delete_table_views_dep",
-    "en": "Table of dependent views to delete",
-    "fr": "Table des vues dépendantes à supprimer"
-  },
-  {
-    "id": "project_delete_table_sources_dep",
-    "en": "Table of dependent sources to delete",
-    "fr": "Table des sources dépendantes à supprimer"
-  },
-  {
-    "id": "project_delete_title",
-    "en": "Project deletion",
-    "fr": "Suppression du projet"
-  },
-  {
-    "id": "project_new_title",
-    "en": "Title of the project",
-    "fr": "Titre du projet"
-  },
-  {
-    "id": "project_list",
-    "en": "List of projects",
-    "fr": "Liste des projets"
-  },
-  {
-    "id": "project_list_select_desc",
-    "en": "Click on a project name to access it. If you are not member of a project, you can ask to join it by clicking the join button ",
-    "fr": "Cliquez sur le nom d'un projet pour y accéder. Si vous n'êtes pas membre d'un projet, vous pouvez demander d'y adhérer en cliquant sur le lien d'adhésion."
-  },
-  {
-    "id": "project_title",
-    "en": "Title",
-    "fr": "Titre"
-  },
-  {
-    "id": "project_description",
-    "en": "Description",
-    "fr": "Description"
-  },
-  {
-    "id": "project_settings",
-    "en": "Project settings",
-    "fr": "Configuration du projet"
-  },
-  {
-    "id": "project_map_pos_set",
-    "en": "Initial map position",
-    "fr": "Position initiale de la carte"
   },
   {
     "id": "btn_map_pos_get",
@@ -5503,36 +5243,6 @@
     "id": "btn_map_pos_reset_max_bounds",
     "en": "Reset maximum map bounds",
     "fr": "Réinitialiser les limites maximales de la carte"
-  },
-  {
-    "id": "project_map_proj_set",
-    "en": "Map projection (experimental)",
-    "fr": "Projection cartographique (expérimentale)"
-  },
-  {
-    "id": "project_map_proj_name",
-    "en": "Projection name",
-    "fr": "Nom de la projection"
-  },
-  {
-    "id": "project_map_proj_center_latitude",
-    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
-    "fr": "Centre - Latitude ( Albers, Lamber Conic )"
-  },
-  {
-    "id": "project_map_proj_center_longitude",
-    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
-    "fr": "Centre - Longitude ( Albers, Lamber Conic )"
-  },
-  {
-    "id": "project_map_proj_parallels_latitude_0",
-    "en": "Latitude North (Albers, Lamber Conic )",
-    "fr": "Latitude Nord (Albers, Lamber Conic)"
-  },
-  {
-    "id": "project_map_proj_parallels_latitude_1",
-    "en": "Latitude South (Albers, Lamber Conic )",
-    "fr": "Latitude Sud (Albers, Lamber Conic)"
   },
   {
     "id": "map_use_max_bounds",
@@ -5648,41 +5358,6 @@
     "id": "txt_email_not_valid",
     "en": "Email not valid",
     "fr": "Email non valide"
-  },
-  {
-    "id": "project_request_membership_message",
-    "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
-    "fr": "Bonjour, \\nMerci de m'inscrire comme membre du projet {{projectName}} \\nCordialement, \\nUne future membre motivée \\n"
-  },
-  {
-    "id": "project_request_membership",
-    "en": "Membership request",
-    "fr": "Demande d'adhésion"
-  },
-  {
-    "id": "project_request_membership_subject",
-    "en": "Application to join the {{project}} project ",
-    "fr": "Demande d'adhésion au projet {{project}}"
-  },
-  {
-    "id": "project_request_membership_message_recap",
-    "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
-    "fr": "<span> Une demande d'adhésion de la part de {{from}} a été reçue. </span><ul><li>Message:  <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Lien: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>"
-  },
-  {
-    "id": "project_join_message_reply",
-    "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
-    "fr": "Répondre à la demande d'adhésion de \"{{email}}\" pour le projet \"{{project}}\""
-  },
-  {
-    "id": "project_open_url",
-    "en": "Open the project \"{{project}}\"",
-    "fr": "Ouvrir le projet \"{{project}}\""
-  },
-  {
-    "id": "project_request_membership_message_sent",
-    "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
-    "fr": "Votre demande a été envoyée à l’administrateur du projet, vous recevrez un email confirmant votre adhésion dans les prochains jours. Vérifiez régulièrement vos emails et cliquez sur le lien de confirmation pour accéder au projet!"
   },
   {
     "id": "update_app_msg",
@@ -8000,64 +7675,464 @@
     "fr": "J'ai lu et j'accepte la <a href={{privacy_link}} target=\"_blank\">politique de confidentialité</a> et les <a href={{tou_link}} target=\"_blank\">conditions d'utilisation</a>"
   },
   {
-    "id": "proj_manage_load_title",
-    "en": "Load new project ?",
-    "fr": "Charger un nouveau projet ?"
+    "id": "project_enable_public",
+    "en": "This project is public",
+    "fr": "Ce projet est public."
   },
   {
-    "id": "proj_manage_load_content",
+    "id": "project_enable_public_desc",
+    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
+    "fr": "Si activé, le projet va être listé dans le catalogue des projets. Toutes les vues publiques publiées dans ce projet seront également visibles à tous."
+  },
+  {
+    "id": "project_globe_projection",
+    "en": "Enable globe mode",
+    "fr": "Activer le mode globe"
+  },
+  {
+    "id": "project_globe_projection_desc",
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
+    "fr": "Lorsqu'elle est activée, la carte se présente sous la forme d'un globe, s'écartant de la projection conventionnelle Web Mercator. L'activation du paramètre \"Utiliser l'étendue pour limiter le panoramique de la carte\" désactivera automatiquement le mode globe"
+  },
+  {
+    "id": "project_enable_join",
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "fr": "Autoriser les non-membres à demander une adhésion à ce projet (uniquement si public)"
+  },
+  {
+    "id": "project_state_key",
+    "en": "Identifier",
+    "fr": "Identifiant"
+  },
+  {
+    "id": "project_save_views_state",
+    "en": "Save views state",
+    "fr": "Sauvegarder l'ordre des vues"
+  },
+  {
+    "id": "project_roles_modal_title",
+    "en": "Roles administration",
+    "fr": "Administration des rôles"
+  },
+  {
+    "id": "project_alias_name",
+    "en": "Alias of the project",
+    "fr": "Alias de project"
+  },
+  {
+    "id": "project_alias_name_desc",
+    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
+    "fr": "Minimum 1, maximum 30 charactères parmis les lettre minuscules ASCII  [a-z], les chiffres [0-9], le tiret court [-] ainsi que le charactère de soulignement [_]"
+  },
+  {
+    "id": "error_project_alias_not_valid",
+    "en": "Project alias not valid or already taken",
+    "fr": "Alias de projet non valide ou déjà existant"
+  },
+  {
+    "id": "project_access_denied",
+    "en": "Access denied. You cannot access the requested project",
+    "fr": "Accès refusé. Vous ne pouvez pas accéder à ce projet"
+  },
+  {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "fr": "Supprimer ce projet"
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "fr": "Supprimer ce projet ( désactivé )"
+  },
+  {
+    "id": "project_delete_confirm_title",
+    "en": "Write the project name you want to delete",
+    "fr": "Écrivez le titre du projet que vous désirez supprimer"
+  },
+  {
+    "id": "project_delete_view_n_share",
+    "en": "Projects",
+    "fr": "Projets"
+  },
+  {
+    "id": "project_delete_view_n_external",
+    "en": "Externals",
+    "fr": "Externes"
+  },
+  {
+    "id": "project_delete_view_n_story",
+    "en": "Story Maps",
+    "fr": "Cartes narratives"
+  },
+  {
+    "id": "project_invite_modal_title",
+    "en": "Invite a new member",
+    "fr": "Inviter un nouveau membre"
+  },
+  {
+    "id": "project_invite_message_compose",
+    "en": "Compose invite email",
+    "fr": "Écrivez le message d'invitation"
+  },
+  {
+    "id": "project_invite_message_title",
+    "en": "MapX invitation",
+    "fr": "Invitation MapX"
+  },
+  {
+    "id": "project_invite_message_subject",
+    "en": "Invitation to join the project {{project}}",
+    "fr": "Invitation à rejoindre le projet {{project}}"
+  },
+  {
+    "id": "project_invite_message_accept",
+    "en": "Accept invitation to the project {{project}}",
+    "fr": "Accepter l'invitation au projet {{project}}"
+  },
+  {
+    "id": "project_invite_message_sent",
+    "en": "Email sent.",
+    "fr": "Email envoyé."
+  },
+  {
+    "id": "project_invite_message_tips",
+    "en": "The tag {{link}} will be replaced by an encrypted link.",
+    "fr": "Le tag {{link}} va être replacé par le lien définitif lors de l'envoi"
+  },
+  {
+    "id": "project_invite_message",
+    "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
+    "fr": "Bonjour! \nJe souhaite vous inviter en tant que membre du projet \"{{projectName}}\" dans MapX. \nMerci de confirmer en cliquant le lien ci-dessous: \n{{link}} \nBonne journée ! \nL'administrateur du projet."
+  },
+  {
+    "id": "project_invite_message_confirm",
+    "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
+    "fr": "Bonjour! \nMerci de nous avoir contacté pour devenir membre du projet {{projectName}} dans MapX. \nMerci de confirmer votre demande en cliquant le lien ci-dessous: \n{{link}} \nBonne journée !  \nL'administrateur du projet"
+  },
+  {
+    "id": "project_invite_notify_auto_register_email",
+    "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
+    "fr": "Bonjour,<br> Utilisateur ' {{emailUser}} 'a utilisé un lien d'invitation pour entrer dans le projet {{project}} .<ul><li> Date d'expiration: {{timeExpire}}</li></ul><br> Passe une bonne journée ! "
+  },
+  {
+    "id": "project_invite_notify_auto_register_email_subject",
+    "en": "Invitation link used in project {{project}}",
+    "fr": "Lien d'invitation utilisé dans le projet {{project}} "
+  },
+  {
+    "id": "project_user_added_email_user_subject",
+    "en": "You've have been added to project {{project}}",
+    "fr": "Vous avez été ajouté au projet {{project}} "
+  },
+  {
+    "id": "project_user_added_email_user",
+    "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
+    "fr": "Bonjour,<br> Vous avez été ajouté au projet {{project}} en groupes): {{roles}} .<br> Passe une bonne journée ! "
+  },
+  {
+    "id": "project_user_added_email_admin_subject",
+    "en": "A user has been added to project {{project}}.",
+    "fr": "Un utilisateur a été ajouté au projet {{project}} . "
+  },
+  {
+    "id": "project_user_added_email_admin",
+    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
+    "fr": "Un utilisateur ( {{emailUser}} ) a été ajouté au projet {{project}} en groupes) {{roles}}<br> Passe une bonne journée ! "
+  },
+  {
+    "id": "project_countries_highlight",
+    "en": "Countries to be highlighted on the map",
+    "fr": "Pays mis en évidence sur la carte"
+  },
+  {
+    "id": "project_id_theme",
+    "en": "Default theme",
+    "fr": "Thème par défaut"
+  },
+  {
+    "id": "project_search_values",
+    "en": "Search projects",
+    "fr": "Rechercher de projets"
+  },
+  {
+    "id": "project_saved",
+    "en": "Project saved",
+    "fr": "Projet sauvegardé"
+  },
+  {
+    "id": "project_created",
+    "en": "Project {{title}} created",
+    "fr": "Projet {{title}} créé"
+  },
+  {
+    "id": "project_deleted",
+    "en": "Project deleted",
+    "fr": "Projet supprimé"
+  },
+  {
+    "id": "project_delete_analyze",
+    "en": "Analysing, please wait...",
+    "fr": "Analyse, veuillez patienter..."
+  },
+  {
+    "id": "project_delete_table_views",
+    "en": "Table of views to delete",
+    "fr": "Table des vues à supprimer"
+  },
+  {
+    "id": "project_delete_table_sources",
+    "en": "Table of sources to delete",
+    "fr": "Table des sources à supprimer"
+  },
+  {
+    "id": "project_delete_table_views_dep",
+    "en": "Table of dependent views to delete",
+    "fr": "Table des vues dépendantes à supprimer"
+  },
+  {
+    "id": "project_delete_table_sources_dep",
+    "en": "Table of dependent sources to delete",
+    "fr": "Table des sources dépendantes à supprimer"
+  },
+  {
+    "id": "project_delete_title",
+    "en": "Project deletion",
+    "fr": "Suppression du projet"
+  },
+  {
+    "id": "project_new_title",
+    "en": "Title of the project",
+    "fr": "Titre du projet"
+  },
+  {
+    "id": "project_list",
+    "en": "List of projects",
+    "fr": "Liste des projets"
+  },
+  {
+    "id": "project_list_select_desc",
+    "en": "Click on a project name to access it. If you are not member of a project, you can ask to join it by clicking the join button ",
+    "fr": "Cliquez sur le nom d'un projet pour y accéder. Si vous n'êtes pas membre d'un projet, vous pouvez demander d'y adhérer en cliquant sur le lien d'adhésion."
+  },
+  {
+    "id": "project_title",
+    "en": "Title",
+    "fr": "Titre"
+  },
+  {
+    "id": "project_description",
+    "en": "Description",
+    "fr": "Description"
+  },
+  {
+    "id": "project_settings",
+    "en": "Project settings",
+    "fr": "Configuration du projet"
+  },
+  {
+    "id": "project_map_pos_set",
+    "en": "Initial map position",
+    "fr": "Position initiale de la carte"
+  },
+  {
+    "id": "project_map_proj_set",
+    "en": "Map projection (experimental)",
+    "fr": "Projection cartographique (expérimentale)"
+  },
+  {
+    "id": "project_map_proj_name",
+    "en": "Projection name",
+    "fr": "Nom de la projection"
+  },
+  {
+    "id": "project_map_proj_center_latitude",
+    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
+    "fr": "Centre - Latitude ( Albers, Lamber Conic )"
+  },
+  {
+    "id": "project_map_proj_center_longitude",
+    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
+    "fr": "Centre - Longitude ( Albers, Lamber Conic )"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_0",
+    "en": "Latitude North (Albers, Lamber Conic )",
+    "fr": "Latitude Nord (Albers, Lamber Conic)"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_1",
+    "en": "Latitude South (Albers, Lamber Conic )",
+    "fr": "Latitude Sud (Albers, Lamber Conic)"
+  },
+  {
+    "id": "project_request_membership_message",
+    "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
+    "fr": "Bonjour, \\nMerci de m'inscrire comme membre du projet {{projectName}} \\nCordialement, \\nUne future membre motivée \\n"
+  },
+  {
+    "id": "project_request_membership",
+    "en": "Membership request",
+    "fr": "Demande d'adhésion"
+  },
+  {
+    "id": "project_request_membership_subject",
+    "en": "Application to join the {{project}} project ",
+    "fr": "Demande d'adhésion au projet {{project}}"
+  },
+  {
+    "id": "project_request_membership_message_recap",
+    "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
+    "fr": "<span> Une demande d'adhésion de la part de {{from}} a été reçue. </span><ul><li>Message:  <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Lien: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>"
+  },
+  {
+    "id": "project_join_message_reply",
+    "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
+    "fr": "Répondre à la demande d'adhésion de \"{{email}}\" pour le projet \"{{project}}\""
+  },
+  {
+    "id": "project_open_url",
+    "en": "Open the project \"{{project}}\"",
+    "fr": "Ouvrir le projet \"{{project}}\""
+  },
+  {
+    "id": "project_request_membership_message_sent",
+    "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
+    "fr": "Votre demande a été envoyée à l’administrateur du projet, vous recevrez un email confirmant votre adhésion dans les prochains jours. Vérifiez régulièrement vos emails et cliquez sur le lien de confirmation pour accéder au projet!"
+  },
+  {
+    "id": "project_manage_load_title",
+    "en": "Load new project ?",
+    "fr": "Charger un nouveau projet ?"
+  },
+  {
+    "id": "project_manage_load_content",
     "en": "Load project {{name}} ?",
     "fr": "Charger le projet {{name}} ?"
   },
   {
-    "id": "proj_manage_create_title",
+    "id": "project_manage_create_title",
     "en": "Create new project",
     "fr": "Créer un nouveau projet"
   },
   {
-    "id": "proj_manage_create_label",
+    "id": "project_manage_create_label",
     "en": "Project name (english)",
     "fr": "Nom du projet (anglais)"
   },
   {
-    "id": "proj_manage_btn_create",
+    "id": "project_manage_btn_create",
     "en": "Create",
     "fr": "Créer"
   },
   {
-    "id": "proj_manage_create_placeholder",
+    "id": "project_manage_create_placeholder",
     "en": "Project name (english)",
     "fr": "Nom du projet (anglais)"
   },
   {
-    "id": "proj_manage_name_ok",
+    "id": "project_manage_name_ok",
     "en": "Name valid",
     "fr": "Nom valide"
   },
   {
-    "id": "proj_manage_creation_not_allowed",
+    "id": "project_manage_creation_not_allowed",
     "en": "Creation not allowed",
     "fr": "Création non autorisée"
   },
   {
-    "id": "proj_manage_not_allowed",
+    "id": "project_manage_not_allowed",
     "en": "Not allowed",
-    "fr": "Interdit"
+    "fr": "Non autorisé"
   },
   {
-    "id": "proj_manage_name_not_valid",
+    "id": "project_manage_name_not_valid",
     "en": "Invalid name",
-    "fr": "Nom incorrect"
+    "fr": "Nom invalide"
   },
   {
-    "id": "proj_manage_name_not_in_range",
+    "id": "project_manage_name_not_in_range",
     "en": "Name string not in range : min 3, max 50 characters",
-    "fr": "Chaîne de nom hors plage : min 3, max 50 caractères"
+    "fr": "Nom hors limites : min 3, max 50 caractères"
   },
   {
-    "id": "proj_manage_name_not_available",
+    "id": "project_manage_name_not_available",
     "en": "Name not available",
     "fr": "Nom non disponible"
+  },
+  {
+    "id": "project_basic_info",
+    "en": "Project info",
+    "fr": "Informations du projet"
+  },
+  {
+    "id": "project_org_details",
+    "en": "Organisation details",
+    "fr": "Détails de l'organisation"
+  },
+  {
+    "id": "project_org_name",
+    "en": "Name",
+    "fr": "Nom"
+  },
+  {
+    "id": "project_contact_name",
+    "en": "Contact name",
+    "fr": "Nom du contact"
+  },
+  {
+    "id": "project_contact_email",
+    "en": "Contact email",
+    "fr": "Email de contact"
+  },
+  {
+    "id": "project_appearance",
+    "en": "Apparance & theme",
+    "fr": "Apparence et thème"
+  },
+  {
+    "id": "project_logo",
+    "en": "Project logo",
+    "fr": "Logo du projet"
+  },
+  {
+    "id": "project_logo_upload",
+    "en": "Drag and drop SVG or click to choose a file...",
+    "fr": "Glissez-déposez un SVG ou cliquez pour choisir un fichier..."
+  },
+  {
+    "id": "project_map_settings",
+    "en": "Map settings",
+    "fr": "Paramètres de la carte"
+  },
+  {
+    "id": "project_map_projection",
+    "en": "Map projection",
+    "fr": "Projection de la carte"
+  },
+  {
+    "id": "project_map_projection_type",
+    "en": "Default map projection type",
+    "fr": "Type de projection de carte par défaut"
+  },
+  {
+    "id": "project_map_projection_mercator",
+    "en": "Web mercator",
+    "fr": "Mercator Web"
+  },
+  {
+    "id": "project_map_projection_globe",
+    "en": "Globe",
+    "fr": "Globe"
+  },
+  {
+    "id": "project_disable_globe",
+    "en": "Disable globe mode in the UI",
+    "fr": "Désactiver le mode globe dans l'interface"
+  },
+  {
+    "id": "project_access_settings",
+    "en": "Project access settings",
+    "fr": "Paramètres d'accès au projet"
   },
   {
     "id": "schema_story_theme",

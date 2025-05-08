@@ -100,6 +100,10 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
     const { maxItems, watch, loader } = options;
 
     switch (loader) {
+      case "countries":
+        return {
+          maxItems,
+        };
       case "views":
         const { includeAllPublic } = options;
         return {

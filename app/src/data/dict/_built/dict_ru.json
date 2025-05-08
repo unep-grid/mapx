@@ -5230,269 +5230,9 @@
     "ru": "Вы не можете удалить себя из группы администраторов "
   },
   {
-    "id": "project_enable_public",
-    "en": "This project is public",
-    "ru": "Этот проект является публичным."
-  },
-  {
-    "id": "project_enable_public_desc",
-    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
-    "ru": "Если включено, проект будет указан в каталоге проектов. Все общедоступные представления, опубликованные в этом проекте, будут доступны для чтения всем."
-  },
-  {
-    "id": "project_globe_projection",
-    "en": "Enable globe mode",
-    "ru": "Включить режим глобуса"
-  },
-  {
-    "id": "project_globe_projection_desc",
-    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
-    "ru": "При активации карта будет представлена ​​в виде глобуса, отличающегося от обычной веб-проекции Меркатора. Включение параметра «Использовать экстент для ограничения панорамирования карты» автоматически отключит режим глобуса."
-  },
-  {
-    "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project ( only if public )",
-    "ru": "Разрешить лицам, не являющимся членами, запрашивать членство в этом проекте (только если он общедоступный)"
-  },
-  {
-    "id": "project_state_key",
-    "en": "Identifier",
-    "ru": "Идентификатор "
-  },
-  {
-    "id": "project_save_views_state",
-    "en": "Save views state",
-    "ru": "Сохранить состояние просмотров "
-  },
-  {
-    "id": "project_roles_modal_title",
-    "en": "Roles administration",
-    "ru": "Управление ролями "
-  },
-  {
-    "id": "project_alias_name",
-    "en": "Alias of the project",
-    "ru": "Псевдоним проекта "
-  },
-  {
-    "id": "project_alias_name_desc",
-    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
-    "ru": "Минимум 1, максимум 30 строчных букв в ASCII-символах [az], числах [0-9], дефисах [-] и подчеркиваниях [_] "
-  },
-  {
-    "id": "error_project_alias_not_valid",
-    "en": "Project alias not valid or already taken",
-    "ru": "Псевдоним проекта недействителен или уже занят "
-  },
-  {
-    "id": "project_access_denied",
-    "en": "Access denied. You cannot access the requested project",
-    "ru": "В доступе отказано. Вы не можете получить доступ к запрошенному проекту "
-  },
-  {
-    "id": "btn_show_project_delete",
-    "en": "Delete this project",
-    "ru": "Удалить этот проект "
-  },
-  {
-    "id": "btn_show_project_delete_disabled",
-    "en": "Delete this project ( disabled )",
-    "ru": "Удалить этот проект (отключено) "
-  },
-  {
-    "id": "project_delete_confirm_title",
-    "en": "Write the project name you want to delete",
-    "ru": "Напишите название проекта, который хотите удалить "
-  },
-  {
-    "id": "project_delete_view_n_share",
-    "en": "Projects",
-    "ru": "Проекты"
-  },
-  {
-    "id": "project_delete_view_n_external",
-    "en": "Externals",
-    "ru": "Внешние"
-  },
-  {
-    "id": "project_delete_view_n_story",
-    "en": "Story Maps",
-    "ru": "Карты историй"
-  },
-  {
-    "id": "project_invite_modal_title",
-    "en": "Invite a new member",
-    "ru": "Пригласить нового участника "
-  },
-  {
     "id": "btn_show_invite_member",
     "en": "Invite a new member",
     "ru": "Пригласить нового участника "
-  },
-  {
-    "id": "project_invite_message_compose",
-    "en": "Compose invite email",
-    "ru": "Написать письмо с приглашением "
-  },
-  {
-    "id": "project_invite_message_title",
-    "en": "MapX invitation",
-    "ru": "Приглашение MapX "
-  },
-  {
-    "id": "project_invite_message_subject",
-    "en": "Invitation to join the project {{project}}",
-    "ru": "Приглашение присоединиться к проекту {{project}}"
-  },
-  {
-    "id": "project_invite_message_accept",
-    "en": "Accept invitation to the project {{project}}",
-    "ru": "Принять приглашение в проект {{project}}"
-  },
-  {
-    "id": "project_invite_message_sent",
-    "en": "Email sent.",
-    "ru": "Письмо отправлено. "
-  },
-  {
-    "id": "project_invite_message_tips",
-    "en": "The tag {{link}} will be replaced by an encrypted link.",
-    "ru": "Тег {{link}} будет заменен зашифрованной ссылкой. "
-  },
-  {
-    "id": "project_invite_message",
-    "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
-    "ru": "Здравствуй!\n Хочу пригласить вас в качестве участника проекта » {{projectName}} \"в MapX.\n Пожалуйста, нажмите на предоставленную ссылку для подтверждения.\n {{link}}\n Администратор проекта. "
-  },
-  {
-    "id": "project_invite_message_confirm",
-    "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
-    "ru": "Здравствуй!\n Спасибо, что обратились к нам.\n Подтвердить свое участие в проекте {{projectName}} в MapX щелкните следующую ссылку:\n {{link}}\n С наилучшими пожеланиями,\n Администратор проекта "
-  },
-  {
-    "id": "project_invite_notify_auto_register_email",
-    "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
-    "ru": "Привет,<br> Пользователь ' {{emailUser}} 'использовали пригласительную ссылку для входа в проект {{project}} .<ul><li> Дата окончания срока: {{timeExpire}}</li></ul><br> Хорошего дня ! "
-  },
-  {
-    "id": "project_invite_notify_auto_register_email_subject",
-    "en": "Invitation link used in project {{project}}",
-    "ru": "Ссылка-приглашение, используемая в проекте {{project}} "
-  },
-  {
-    "id": "project_user_added_email_user_subject",
-    "en": "You've have been added to project {{project}}",
-    "ru": "Вас добавили в проект {{project}} "
-  },
-  {
-    "id": "project_user_added_email_user",
-    "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
-    "ru": "Привет,<br> Вы добавлены в проект {{project}} в группах): {{roles}} .<br> Хорошего дня ! "
-  },
-  {
-    "id": "project_user_added_email_admin_subject",
-    "en": "A user has been added to project {{project}}.",
-    "ru": "Пользователь добавлен в проект {{project}} . "
-  },
-  {
-    "id": "project_user_added_email_admin",
-    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
-    "ru": "Пользователь ( {{emailUser}} ) добавлен в проект {{project}} в группах) {{roles}}<br> Хорошего дня ! "
-  },
-  {
-    "id": "project_countries_highlight",
-    "en": "Countries to be highlighted on the map",
-    "ru": "Страны, которые будут выделены на карте "
-  },
-  {
-    "id": "project_id_theme",
-    "en": "Default theme",
-    "ru": "Тема по умолчанию"
-  },
-  {
-    "id": "project_search_values",
-    "en": "Search projects",
-    "ru": "Искать проекты "
-  },
-  {
-    "id": "project_saved",
-    "en": "Project saved",
-    "ru": "Проект сохранен "
-  },
-  {
-    "id": "project_created",
-    "en": "Project {{title}} created",
-    "ru": "Проект {{title}} созданный "
-  },
-  {
-    "id": "project_deleted",
-    "en": "Project deleted",
-    "ru": "Проект удален "
-  },
-  {
-    "id": "project_delete_analyze",
-    "en": "Analysing, please wait...",
-    "ru": "Анализируем, подождите ... "
-  },
-  {
-    "id": "project_delete_table_views",
-    "en": "Table of views to delete",
-    "ru": "Таблица представлений для удаления"
-  },
-  {
-    "id": "project_delete_table_sources",
-    "en": "Table of sources to delete",
-    "ru": "Таблица источников для удаления"
-  },
-  {
-    "id": "project_delete_table_views_dep",
-    "en": "Table of dependent views to delete",
-    "ru": "Таблица зависимых представлений для удаления"
-  },
-  {
-    "id": "project_delete_table_sources_dep",
-    "en": "Table of dependent sources to delete",
-    "ru": "Таблица зависимых источников для удаления"
-  },
-  {
-    "id": "project_delete_title",
-    "en": "Project deletion",
-    "ru": "Удаление проекта "
-  },
-  {
-    "id": "project_new_title",
-    "en": "Title of the project",
-    "ru": "Название проекта "
-  },
-  {
-    "id": "project_list",
-    "en": "List of projects",
-    "ru": "Список проектов "
-  },
-  {
-    "id": "project_list_select_desc",
-    "en": "Click on a project name to access it. If you are not member of a project, you can ask to join it by clicking the join button ",
-    "ru": "Щелкните название проекта, чтобы получить к нему доступ. Если вы не являетесь участником проекта, вы можете попросить присоединиться к нему, нажав кнопку присоединиться "
-  },
-  {
-    "id": "project_title",
-    "en": "Title",
-    "ru": "Проект"
-  },
-  {
-    "id": "project_description",
-    "en": "Description",
-    "ru": "Описание "
-  },
-  {
-    "id": "project_settings",
-    "en": "Project settings",
-    "ru": "Настройки проекта "
-  },
-  {
-    "id": "project_map_pos_set",
-    "en": "Initial map position",
-    "ru": "Исходное положение на карте "
   },
   {
     "id": "btn_map_pos_get",
@@ -5503,36 +5243,6 @@
     "id": "btn_map_pos_reset_max_bounds",
     "en": "Reset maximum map bounds",
     "ru": "Сбросить максимальные границы карты"
-  },
-  {
-    "id": "project_map_proj_set",
-    "en": "Map projection (experimental)",
-    "ru": "Проекция карты (экспериментальная)"
-  },
-  {
-    "id": "project_map_proj_name",
-    "en": "Projection name",
-    "ru": "Название проекции"
-  },
-  {
-    "id": "project_map_proj_center_latitude",
-    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
-    "ru": "Центр - Широта (Альберс, Ламбер Коник)"
-  },
-  {
-    "id": "project_map_proj_center_longitude",
-    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
-    "ru": "Центр - долгота (Альберс, Ламбер Коник)"
-  },
-  {
-    "id": "project_map_proj_parallels_latitude_0",
-    "en": "Latitude North (Albers, Lamber Conic )",
-    "ru": "Широта на север (Альберс, Ламбер Коник)"
-  },
-  {
-    "id": "project_map_proj_parallels_latitude_1",
-    "en": "Latitude South (Albers, Lamber Conic )",
-    "ru": "Южная широта (Альберс, Ламбер Коник)"
   },
   {
     "id": "map_use_max_bounds",
@@ -5648,41 +5358,6 @@
     "id": "txt_email_not_valid",
     "en": "Email not valid",
     "ru": "Электронная почта недействительна "
-  },
-  {
-    "id": "project_request_membership_message",
-    "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
-    "ru": "Здравствуй!\\n Пожалуйста, добавь меня в проект {{projectName}} .\\n С наилучшими пожеланиями,\\n Мотивированный будущий участник\\n "
-  },
-  {
-    "id": "project_request_membership",
-    "en": "Membership request",
-    "ru": "Запрос на членство "
-  },
-  {
-    "id": "project_request_membership_subject",
-    "en": "Application to join the {{project}} project ",
-    "ru": "Заявление на вступление в {{project}} проект "
-  },
-  {
-    "id": "project_request_membership_message_recap",
-    "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
-    "ru": "<span>Запрос на членство от {{from}} был получен.</span><ul><li> Сообщение:<b> {{msg}}</b></li><li> Статус пользователя:<b> {{userStatus}}</b></li><li> Действие: {{actionUrl}}</li><li> Связь: {{projectUrl}}</li><li> Данные:<pre> {{data}}</pre></li></ul> "
-  },
-  {
-    "id": "project_join_message_reply",
-    "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
-    "ru": "Ответьте на запрос о членстве от \" {{email}} \"для проекта\" {{project}} \" "
-  },
-  {
-    "id": "project_open_url",
-    "en": "Open the project \"{{project}}\"",
-    "ru": "Откройте проект » {{project}} \" "
-  },
-  {
-    "id": "project_request_membership_message_sent",
-    "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
-    "ru": "Ваш запрос отправлен администратору проекта, вы получите письмо с подтверждением в ближайшие дни. Проверьте свой почтовый ящик на наличие электронного письма от бота MapX и щелкните ссылку, чтобы получить доступ к проекту! "
   },
   {
     "id": "update_app_msg",
@@ -8000,64 +7675,464 @@
     "ru": "Я прочитал(а) и соглашаюсь с <a href={{privacy_link}} target=\"_blank\">политикой конфиденциальности</a> и <a href={{tou_link}} target=\"_blank\">условиями использования</a>"
   },
   {
-    "id": "proj_manage_load_title",
+    "id": "project_enable_public",
+    "en": "This project is public",
+    "ru": "Этот проект является публичным."
+  },
+  {
+    "id": "project_enable_public_desc",
+    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
+    "ru": "Если включено, проект будет указан в каталоге проектов. Все общедоступные представления, опубликованные в этом проекте, будут доступны для чтения всем."
+  },
+  {
+    "id": "project_globe_projection",
+    "en": "Enable globe mode",
+    "ru": "Включить режим глобуса"
+  },
+  {
+    "id": "project_globe_projection_desc",
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
+    "ru": "При активации карта будет представлена ​​в виде глобуса, отличающегося от обычной веб-проекции Меркатора. Включение параметра «Использовать экстент для ограничения панорамирования карты» автоматически отключит режим глобуса."
+  },
+  {
+    "id": "project_enable_join",
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "ru": "Разрешить лицам, не являющимся членами, запрашивать членство в этом проекте (только если он общедоступный)"
+  },
+  {
+    "id": "project_state_key",
+    "en": "Identifier",
+    "ru": "Идентификатор "
+  },
+  {
+    "id": "project_save_views_state",
+    "en": "Save views state",
+    "ru": "Сохранить состояние просмотров "
+  },
+  {
+    "id": "project_roles_modal_title",
+    "en": "Roles administration",
+    "ru": "Управление ролями "
+  },
+  {
+    "id": "project_alias_name",
+    "en": "Alias of the project",
+    "ru": "Псевдоним проекта "
+  },
+  {
+    "id": "project_alias_name_desc",
+    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
+    "ru": "Минимум 1, максимум 30 строчных букв в ASCII-символах [az], числах [0-9], дефисах [-] и подчеркиваниях [_] "
+  },
+  {
+    "id": "error_project_alias_not_valid",
+    "en": "Project alias not valid or already taken",
+    "ru": "Псевдоним проекта недействителен или уже занят "
+  },
+  {
+    "id": "project_access_denied",
+    "en": "Access denied. You cannot access the requested project",
+    "ru": "В доступе отказано. Вы не можете получить доступ к запрошенному проекту "
+  },
+  {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "ru": "Удалить этот проект "
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "ru": "Удалить этот проект (отключено) "
+  },
+  {
+    "id": "project_delete_confirm_title",
+    "en": "Write the project name you want to delete",
+    "ru": "Напишите название проекта, который хотите удалить "
+  },
+  {
+    "id": "project_delete_view_n_share",
+    "en": "Projects",
+    "ru": "Проекты"
+  },
+  {
+    "id": "project_delete_view_n_external",
+    "en": "Externals",
+    "ru": "Внешние"
+  },
+  {
+    "id": "project_delete_view_n_story",
+    "en": "Story Maps",
+    "ru": "Карты историй"
+  },
+  {
+    "id": "project_invite_modal_title",
+    "en": "Invite a new member",
+    "ru": "Пригласить нового участника "
+  },
+  {
+    "id": "project_invite_message_compose",
+    "en": "Compose invite email",
+    "ru": "Написать письмо с приглашением "
+  },
+  {
+    "id": "project_invite_message_title",
+    "en": "MapX invitation",
+    "ru": "Приглашение MapX "
+  },
+  {
+    "id": "project_invite_message_subject",
+    "en": "Invitation to join the project {{project}}",
+    "ru": "Приглашение присоединиться к проекту {{project}}"
+  },
+  {
+    "id": "project_invite_message_accept",
+    "en": "Accept invitation to the project {{project}}",
+    "ru": "Принять приглашение в проект {{project}}"
+  },
+  {
+    "id": "project_invite_message_sent",
+    "en": "Email sent.",
+    "ru": "Письмо отправлено. "
+  },
+  {
+    "id": "project_invite_message_tips",
+    "en": "The tag {{link}} will be replaced by an encrypted link.",
+    "ru": "Тег {{link}} будет заменен зашифрованной ссылкой. "
+  },
+  {
+    "id": "project_invite_message",
+    "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
+    "ru": "Здравствуй!\n Хочу пригласить вас в качестве участника проекта » {{projectName}} \"в MapX.\n Пожалуйста, нажмите на предоставленную ссылку для подтверждения.\n {{link}}\n Администратор проекта. "
+  },
+  {
+    "id": "project_invite_message_confirm",
+    "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
+    "ru": "Здравствуй!\n Спасибо, что обратились к нам.\n Подтвердить свое участие в проекте {{projectName}} в MapX щелкните следующую ссылку:\n {{link}}\n С наилучшими пожеланиями,\n Администратор проекта "
+  },
+  {
+    "id": "project_invite_notify_auto_register_email",
+    "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
+    "ru": "Привет,<br> Пользователь ' {{emailUser}} 'использовали пригласительную ссылку для входа в проект {{project}} .<ul><li> Дата окончания срока: {{timeExpire}}</li></ul><br> Хорошего дня ! "
+  },
+  {
+    "id": "project_invite_notify_auto_register_email_subject",
+    "en": "Invitation link used in project {{project}}",
+    "ru": "Ссылка-приглашение, используемая в проекте {{project}} "
+  },
+  {
+    "id": "project_user_added_email_user_subject",
+    "en": "You've have been added to project {{project}}",
+    "ru": "Вас добавили в проект {{project}} "
+  },
+  {
+    "id": "project_user_added_email_user",
+    "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
+    "ru": "Привет,<br> Вы добавлены в проект {{project}} в группах): {{roles}} .<br> Хорошего дня ! "
+  },
+  {
+    "id": "project_user_added_email_admin_subject",
+    "en": "A user has been added to project {{project}}.",
+    "ru": "Пользователь добавлен в проект {{project}} . "
+  },
+  {
+    "id": "project_user_added_email_admin",
+    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
+    "ru": "Пользователь ( {{emailUser}} ) добавлен в проект {{project}} в группах) {{roles}}<br> Хорошего дня ! "
+  },
+  {
+    "id": "project_countries_highlight",
+    "en": "Countries to be highlighted on the map",
+    "ru": "Страны, которые будут выделены на карте "
+  },
+  {
+    "id": "project_id_theme",
+    "en": "Default theme",
+    "ru": "Тема по умолчанию"
+  },
+  {
+    "id": "project_search_values",
+    "en": "Search projects",
+    "ru": "Искать проекты "
+  },
+  {
+    "id": "project_saved",
+    "en": "Project saved",
+    "ru": "Проект сохранен "
+  },
+  {
+    "id": "project_created",
+    "en": "Project {{title}} created",
+    "ru": "Проект {{title}} созданный "
+  },
+  {
+    "id": "project_deleted",
+    "en": "Project deleted",
+    "ru": "Проект удален "
+  },
+  {
+    "id": "project_delete_analyze",
+    "en": "Analysing, please wait...",
+    "ru": "Анализируем, подождите ... "
+  },
+  {
+    "id": "project_delete_table_views",
+    "en": "Table of views to delete",
+    "ru": "Таблица представлений для удаления"
+  },
+  {
+    "id": "project_delete_table_sources",
+    "en": "Table of sources to delete",
+    "ru": "Таблица источников для удаления"
+  },
+  {
+    "id": "project_delete_table_views_dep",
+    "en": "Table of dependent views to delete",
+    "ru": "Таблица зависимых представлений для удаления"
+  },
+  {
+    "id": "project_delete_table_sources_dep",
+    "en": "Table of dependent sources to delete",
+    "ru": "Таблица зависимых источников для удаления"
+  },
+  {
+    "id": "project_delete_title",
+    "en": "Project deletion",
+    "ru": "Удаление проекта "
+  },
+  {
+    "id": "project_new_title",
+    "en": "Title of the project",
+    "ru": "Название проекта "
+  },
+  {
+    "id": "project_list",
+    "en": "List of projects",
+    "ru": "Список проектов "
+  },
+  {
+    "id": "project_list_select_desc",
+    "en": "Click on a project name to access it. If you are not member of a project, you can ask to join it by clicking the join button ",
+    "ru": "Щелкните название проекта, чтобы получить к нему доступ. Если вы не являетесь участником проекта, вы можете попросить присоединиться к нему, нажав кнопку присоединиться "
+  },
+  {
+    "id": "project_title",
+    "en": "Title",
+    "ru": "Проект"
+  },
+  {
+    "id": "project_description",
+    "en": "Description",
+    "ru": "Описание "
+  },
+  {
+    "id": "project_settings",
+    "en": "Project settings",
+    "ru": "Настройки проекта "
+  },
+  {
+    "id": "project_map_pos_set",
+    "en": "Initial map position",
+    "ru": "Исходное положение на карте "
+  },
+  {
+    "id": "project_map_proj_set",
+    "en": "Map projection (experimental)",
+    "ru": "Проекция карты (экспериментальная)"
+  },
+  {
+    "id": "project_map_proj_name",
+    "en": "Projection name",
+    "ru": "Название проекции"
+  },
+  {
+    "id": "project_map_proj_center_latitude",
+    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
+    "ru": "Центр - Широта (Альберс, Ламбер Коник)"
+  },
+  {
+    "id": "project_map_proj_center_longitude",
+    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
+    "ru": "Центр - долгота (Альберс, Ламбер Коник)"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_0",
+    "en": "Latitude North (Albers, Lamber Conic )",
+    "ru": "Широта на север (Альберс, Ламбер Коник)"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_1",
+    "en": "Latitude South (Albers, Lamber Conic )",
+    "ru": "Южная широта (Альберс, Ламбер Коник)"
+  },
+  {
+    "id": "project_request_membership_message",
+    "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
+    "ru": "Здравствуй!\\n Пожалуйста, добавь меня в проект {{projectName}} .\\n С наилучшими пожеланиями,\\n Мотивированный будущий участник\\n "
+  },
+  {
+    "id": "project_request_membership",
+    "en": "Membership request",
+    "ru": "Запрос на членство "
+  },
+  {
+    "id": "project_request_membership_subject",
+    "en": "Application to join the {{project}} project ",
+    "ru": "Заявление на вступление в {{project}} проект "
+  },
+  {
+    "id": "project_request_membership_message_recap",
+    "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
+    "ru": "<span>Запрос на членство от {{from}} был получен.</span><ul><li> Сообщение:<b> {{msg}}</b></li><li> Статус пользователя:<b> {{userStatus}}</b></li><li> Действие: {{actionUrl}}</li><li> Связь: {{projectUrl}}</li><li> Данные:<pre> {{data}}</pre></li></ul> "
+  },
+  {
+    "id": "project_join_message_reply",
+    "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
+    "ru": "Ответьте на запрос о членстве от \" {{email}} \"для проекта\" {{project}} \" "
+  },
+  {
+    "id": "project_open_url",
+    "en": "Open the project \"{{project}}\"",
+    "ru": "Откройте проект » {{project}} \" "
+  },
+  {
+    "id": "project_request_membership_message_sent",
+    "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
+    "ru": "Ваш запрос отправлен администратору проекта, вы получите письмо с подтверждением в ближайшие дни. Проверьте свой почтовый ящик на наличие электронного письма от бота MapX и щелкните ссылку, чтобы получить доступ к проекту! "
+  },
+  {
+    "id": "project_manage_load_title",
     "en": "Load new project ?",
     "ru": "Загрузить новый проект?"
   },
   {
-    "id": "proj_manage_load_content",
+    "id": "project_manage_load_content",
     "en": "Load project {{name}} ?",
     "ru": "Загрузить проект {{name}} ?"
   },
   {
-    "id": "proj_manage_create_title",
+    "id": "project_manage_create_title",
     "en": "Create new project",
     "ru": "Создать новый проект"
   },
   {
-    "id": "proj_manage_create_label",
+    "id": "project_manage_create_label",
     "en": "Project name (english)",
-    "ru": "Название проекта (англ.)"
+    "ru": "Название проекта (английский)"
   },
   {
-    "id": "proj_manage_btn_create",
+    "id": "project_manage_btn_create",
     "en": "Create",
     "ru": "Создавать"
   },
   {
-    "id": "proj_manage_create_placeholder",
+    "id": "project_manage_create_placeholder",
     "en": "Project name (english)",
-    "ru": "Название проекта (англ.)"
+    "ru": "Название проекта (английский)"
   },
   {
-    "id": "proj_manage_name_ok",
+    "id": "project_manage_name_ok",
     "en": "Name valid",
-    "ru": "Имя допустимо"
+    "ru": "Имя действительно"
   },
   {
-    "id": "proj_manage_creation_not_allowed",
+    "id": "project_manage_creation_not_allowed",
     "en": "Creation not allowed",
-    "ru": "Создание запрещено"
+    "ru": "Создание не разрешено"
   },
   {
-    "id": "proj_manage_not_allowed",
+    "id": "project_manage_not_allowed",
     "en": "Not allowed",
-    "ru": "Не допускается"
+    "ru": "Не разрешено"
   },
   {
-    "id": "proj_manage_name_not_valid",
+    "id": "project_manage_name_not_valid",
     "en": "Invalid name",
-    "ru": "Неверное имя"
+    "ru": "Недействительное имя"
   },
   {
-    "id": "proj_manage_name_not_in_range",
+    "id": "project_manage_name_not_in_range",
     "en": "Name string not in range : min 3, max 50 characters",
-    "ru": "Строка имени вне допустимого диапазона: не менее 3, не более 50 символов."
+    "ru": "Длина имени вне диапазона: мин 3, макс 50 символов"
   },
   {
-    "id": "proj_manage_name_not_available",
+    "id": "project_manage_name_not_available",
     "en": "Name not available",
-    "ru": "Имя не доступно"
+    "ru": "Имя недоступно"
+  },
+  {
+    "id": "project_basic_info",
+    "en": "Project info",
+    "ru": "Информация о проекте"
+  },
+  {
+    "id": "project_org_details",
+    "en": "Organisation details",
+    "ru": "Сведения об организации"
+  },
+  {
+    "id": "project_org_name",
+    "en": "Name",
+    "ru": "Название"
+  },
+  {
+    "id": "project_contact_name",
+    "en": "Contact name",
+    "ru": "Контактное лицо"
+  },
+  {
+    "id": "project_contact_email",
+    "en": "Contact email",
+    "ru": "Контактный email"
+  },
+  {
+    "id": "project_appearance",
+    "en": "Apparance & theme",
+    "ru": "Внешний вид и тема"
+  },
+  {
+    "id": "project_logo",
+    "en": "Project logo",
+    "ru": "Логотип проекта"
+  },
+  {
+    "id": "project_logo_upload",
+    "en": "Drag and drop SVG or click to choose a file...",
+    "ru": "Перетащите SVG или нажмите, чтобы выбрать файл..."
+  },
+  {
+    "id": "project_map_settings",
+    "en": "Map settings",
+    "ru": "Настройки карты"
+  },
+  {
+    "id": "project_map_projection",
+    "en": "Map projection",
+    "ru": "Проекция карты"
+  },
+  {
+    "id": "project_map_projection_type",
+    "en": "Default map projection type",
+    "ru": "Тип проекции карты по умолчанию"
+  },
+  {
+    "id": "project_map_projection_mercator",
+    "en": "Web mercator",
+    "ru": "Веб-Меркатор"
+  },
+  {
+    "id": "project_map_projection_globe",
+    "en": "Globe",
+    "ru": "Глобус"
+  },
+  {
+    "id": "project_disable_globe",
+    "en": "Disable globe mode in the UI",
+    "ru": "Отключить режим глобуса в интерфейсе"
+  },
+  {
+    "id": "project_access_settings",
+    "en": "Project access settings",
+    "ru": "Настройки доступа к проекту"
   },
   {
     "id": "schema_story_theme",

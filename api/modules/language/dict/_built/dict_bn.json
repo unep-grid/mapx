@@ -5230,269 +5230,9 @@
     "bn": "আপনি অ্যাডমিন গ্রুপ থেকে নিজেকে সরাতে পারবেন না "
   },
   {
-    "id": "project_enable_public",
-    "en": "This project is public",
-    "bn": "এই প্রকল্পটি পাবলিক।"
-  },
-  {
-    "id": "project_enable_public_desc",
-    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
-    "bn": "সক্ষম হলে, প্রকল্পটি প্রকল্পের ক্যাটালগে তালিকাভুক্ত হবে৷ এই প্রকল্পে প্রকাশিত সকল পাবলিক মতামত সকলের জন্য পাঠযোগ্য হবে।"
-  },
-  {
-    "id": "project_globe_projection",
-    "en": "Enable globe mode",
-    "bn": "গ্লোব মোড সক্ষম করুন"
-  },
-  {
-    "id": "project_globe_projection_desc",
-    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
-    "bn": "সক্রিয় করা হলে, মানচিত্রটি একটি গ্লোব হিসাবে উপস্থাপন করা হবে, প্রচলিত ওয়েব মার্কেটর প্রজেকশন থেকে প্রস্থান করে। 'ম্যাপ প্যানিং সীমিত করার জন্য ব্যাপ্তি ব্যবহার করুন' সেটিং সক্ষম করা স্বয়ংক্রিয়ভাবে গ্লোব মোডকে অক্ষম করবে৷"
-  },
-  {
-    "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project ( only if public )",
-    "bn": "অ-সদস্যদের এই প্রকল্পে সদস্যতার অনুরোধ করার অনুমতি দিন (শুধুমাত্র যদি সর্বজনীন)"
-  },
-  {
-    "id": "project_state_key",
-    "en": "Identifier",
-    "bn": "শনাক্তকারী "
-  },
-  {
-    "id": "project_save_views_state",
-    "en": "Save views state",
-    "bn": "দর্শন অবস্থার সংরক্ষণ করুন "
-  },
-  {
-    "id": "project_roles_modal_title",
-    "en": "Roles administration",
-    "bn": "ভূমিকা প্রশাসন "
-  },
-  {
-    "id": "project_alias_name",
-    "en": "Alias of the project",
-    "bn": "প্রকল্পের উপন্যাস "
-  },
-  {
-    "id": "project_alias_name_desc",
-    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
-    "bn": "ন্যূনতম 1, সর্বাধিক 30 নিম্ন কেসির মধ্যে ASCII অক্ষর [এজেড], সংখ্যা [0-9], ড্যাশ [-] এবং আন্ডারস্কোর অনুমোদিত [_] "
-  },
-  {
-    "id": "error_project_alias_not_valid",
-    "en": "Project alias not valid or already taken",
-    "bn": "প্রকল্পের নামটি বৈধ নয় বা ইতিমধ্যে নেওয়া হয়েছে "
-  },
-  {
-    "id": "project_access_denied",
-    "en": "Access denied. You cannot access the requested project",
-    "bn": "অ্যাক্সেস অস্বীকৃত। আপনি অনুরোধ করা প্রকল্পটি অ্যাক্সেস করতে পারবেন না "
-  },
-  {
-    "id": "btn_show_project_delete",
-    "en": "Delete this project",
-    "bn": "এই প্রকল্পটি মুছুন "
-  },
-  {
-    "id": "btn_show_project_delete_disabled",
-    "en": "Delete this project ( disabled )",
-    "bn": "এই প্রকল্পটি মুছুন (অক্ষম) "
-  },
-  {
-    "id": "project_delete_confirm_title",
-    "en": "Write the project name you want to delete",
-    "bn": "আপনি মুছে ফেলতে চান এমন প্রকল্পের নাম লিখুন "
-  },
-  {
-    "id": "project_delete_view_n_share",
-    "en": "Projects",
-    "bn": "প্রকল্প"
-  },
-  {
-    "id": "project_delete_view_n_external",
-    "en": "Externals",
-    "bn": "বহিরাগত"
-  },
-  {
-    "id": "project_delete_view_n_story",
-    "en": "Story Maps",
-    "bn": "গল্পের মানচিত্র"
-  },
-  {
-    "id": "project_invite_modal_title",
-    "en": "Invite a new member",
-    "bn": "নতুন সদস্যকে আমন্ত্রণ জানান "
-  },
-  {
     "id": "btn_show_invite_member",
     "en": "Invite a new member",
     "bn": "নতুন সদস্যকে আমন্ত্রণ জানান "
-  },
-  {
-    "id": "project_invite_message_compose",
-    "en": "Compose invite email",
-    "bn": "আমন্ত্রণ ইমেলটি রচনা করুন "
-  },
-  {
-    "id": "project_invite_message_title",
-    "en": "MapX invitation",
-    "bn": "ম্যাপএক্স আমন্ত্রণ "
-  },
-  {
-    "id": "project_invite_message_subject",
-    "en": "Invitation to join the project {{project}}",
-    "bn": "প্রকল্পে যোগদানের আমন্ত্রণ {{project}}"
-  },
-  {
-    "id": "project_invite_message_accept",
-    "en": "Accept invitation to the project {{project}}",
-    "bn": "প্রকল্পের আমন্ত্রণ গ্রহণ করুন {{project}}"
-  },
-  {
-    "id": "project_invite_message_sent",
-    "en": "Email sent.",
-    "bn": "ইমেইল পাঠানো. "
-  },
-  {
-    "id": "project_invite_message_tips",
-    "en": "The tag {{link}} will be replaced by an encrypted link.",
-    "bn": "ট্যাগ {{link}} একটি এনক্রিপ্ট লিঙ্ক দ্বারা প্রতিস্থাপন করা হবে। "
-  },
-  {
-    "id": "project_invite_message",
-    "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
-    "bn": "ওহে!\n আমি আপনাকে প্রকল্পের একজন সদস্য হিসাবে আমন্ত্রণ জানাতে চাই \" {{projectName}} \"ম্যাপএক্সে\n নিশ্চিত করার জন্য প্রদত্ত লিঙ্কটিতে ক্লিক করুন।\n {{link}}\n প্রকল্পের প্রশাসক। "
-  },
-  {
-    "id": "project_invite_message_confirm",
-    "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
-    "bn": "ওহে!\n আমাদের পৌঁছানোর জন্য ধন্যবাদ।\n প্রকল্পে আপনার সদস্যতা নিশ্চিত করতে {{projectName}} ম্যাপএক্স-এ, দয়া করে নীচের লিঙ্কটিতে ক্লিক করুন:\n {{link}}\n শুভেচ্ছান্তে,\n প্রকল্পের প্রশাসক "
-  },
-  {
-    "id": "project_invite_notify_auto_register_email",
-    "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
-    "bn": "হ্যালো,<br> ব্যবহারকারী ' {{emailUser}} 'প্রকল্পে প্রবেশের জন্য একটি আমন্ত্রণ লিঙ্ক ব্যবহার করেছে {{project}} ।<ul><li> মেয়াদ শেষ হওয়ার তারিখ: {{timeExpire}}</li></ul><br> আপনার দিনটি শুভ হোক ! "
-  },
-  {
-    "id": "project_invite_notify_auto_register_email_subject",
-    "en": "Invitation link used in project {{project}}",
-    "bn": "প্রকল্পে আমন্ত্রণ লিঙ্ক ব্যবহৃত হয় {{project}} "
-  },
-  {
-    "id": "project_user_added_email_user_subject",
-    "en": "You've have been added to project {{project}}",
-    "bn": "আপনাকে প্রকল্পে যুক্ত করা হয়েছে {{project}} "
-  },
-  {
-    "id": "project_user_added_email_user",
-    "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
-    "bn": "হ্যালো,<br> আপনাকে প্রকল্পে যুক্ত করা হয়েছে {{project}} দলের মধ্যে): {{roles}} ।<br> আপনার দিনটি শুভ হোক ! "
-  },
-  {
-    "id": "project_user_added_email_admin_subject",
-    "en": "A user has been added to project {{project}}.",
-    "bn": "একটি ব্যবহারকারী প্রকল্পে যুক্ত করা হয়েছে {{project}} । "
-  },
-  {
-    "id": "project_user_added_email_admin",
-    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
-    "bn": "একজন ব্যাবহারকারি ( {{emailUser}} ) প্রকল্পে যুক্ত করা হয়েছে {{project}} দলের মধ্যে) {{roles}}<br> আপনার দিনটি শুভ হোক ! "
-  },
-  {
-    "id": "project_countries_highlight",
-    "en": "Countries to be highlighted on the map",
-    "bn": "দেশগুলিকে মানচিত্রে হাইলাইট করা হবে "
-  },
-  {
-    "id": "project_id_theme",
-    "en": "Default theme",
-    "bn": "ডিফল্ট থিম"
-  },
-  {
-    "id": "project_search_values",
-    "en": "Search projects",
-    "bn": "প্রকল্প অনুসন্ধান করুন "
-  },
-  {
-    "id": "project_saved",
-    "en": "Project saved",
-    "bn": "প্রকল্প সংরক্ষিত "
-  },
-  {
-    "id": "project_created",
-    "en": "Project {{title}} created",
-    "bn": "প্রকল্প {{title}} তৈরি "
-  },
-  {
-    "id": "project_deleted",
-    "en": "Project deleted",
-    "bn": "প্রকল্প মোছা হয়েছে "
-  },
-  {
-    "id": "project_delete_analyze",
-    "en": "Analysing, please wait...",
-    "bn": "বিশ্লেষণ করা হচ্ছে, দয়া করে অপেক্ষা করুন ... "
-  },
-  {
-    "id": "project_delete_table_views",
-    "en": "Table of views to delete",
-    "bn": "মুছে ফেলার জন্য দর্শনের সারণী"
-  },
-  {
-    "id": "project_delete_table_sources",
-    "en": "Table of sources to delete",
-    "bn": "মুছে ফেলার জন্য উৎসের সারণী"
-  },
-  {
-    "id": "project_delete_table_views_dep",
-    "en": "Table of dependent views to delete",
-    "bn": "মুছে ফেলার জন্য নির্ভরশীল দর্শনের সারণী"
-  },
-  {
-    "id": "project_delete_table_sources_dep",
-    "en": "Table of dependent sources to delete",
-    "bn": "মুছে ফেলার জন্য নির্ভরশীল উত্সের সারণী"
-  },
-  {
-    "id": "project_delete_title",
-    "en": "Project deletion",
-    "bn": "প্রকল্প মোছা "
-  },
-  {
-    "id": "project_new_title",
-    "en": "Title of the project",
-    "bn": "প্রকল্পের শিরোনাম "
-  },
-  {
-    "id": "project_list",
-    "en": "List of projects",
-    "bn": "প্রকল্পের তালিকা "
-  },
-  {
-    "id": "project_list_select_desc",
-    "en": "Click on a project name to access it. If you are not member of a project, you can ask to join it by clicking the join button ",
-    "bn": "এটিতে অ্যাক্সেস পেতে কোনও প্রকল্পের নামের উপর ক্লিক করুন। আপনি যদি কোনও প্রকল্পের সদস্য না হন তবে আপনি জয়েন বোতামটি ক্লিক করে এতে যোগদানের জন্য বলতে পারেন "
-  },
-  {
-    "id": "project_title",
-    "en": "Title",
-    "bn": "প্রকল্প"
-  },
-  {
-    "id": "project_description",
-    "en": "Description",
-    "bn": "বর্ণনা "
-  },
-  {
-    "id": "project_settings",
-    "en": "Project settings",
-    "bn": "প্রকল্প সেটিংস "
-  },
-  {
-    "id": "project_map_pos_set",
-    "en": "Initial map position",
-    "bn": "প্রাথমিক মানচিত্রের অবস্থান "
   },
   {
     "id": "btn_map_pos_get",
@@ -5503,36 +5243,6 @@
     "id": "btn_map_pos_reset_max_bounds",
     "en": "Reset maximum map bounds",
     "bn": "সর্বোচ্চ মানচিত্র সীমানা রিসেট করুন"
-  },
-  {
-    "id": "project_map_proj_set",
-    "en": "Map projection (experimental)",
-    "bn": "মানচিত্র অভিক্ষেপ (পরীক্ষামূলক)"
-  },
-  {
-    "id": "project_map_proj_name",
-    "en": "Projection name",
-    "bn": "অভিক্ষেপের নাম"
-  },
-  {
-    "id": "project_map_proj_center_latitude",
-    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
-    "bn": "কেন্দ্র - অক্ষাংশ ( Albers, Lamber Conic )"
-  },
-  {
-    "id": "project_map_proj_center_longitude",
-    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
-    "bn": "কেন্দ্র - দ্রাঘিমাংশ ( Albers, Lamber Conic )"
-  },
-  {
-    "id": "project_map_proj_parallels_latitude_0",
-    "en": "Latitude North (Albers, Lamber Conic )",
-    "bn": "অক্ষাংশ উত্তর (আলবার্স, ল্যাম্বার কনিক)"
-  },
-  {
-    "id": "project_map_proj_parallels_latitude_1",
-    "en": "Latitude South (Albers, Lamber Conic )",
-    "bn": "অক্ষাংশ দক্ষিণ (আলবার্স, ল্যাম্বার কনিক)"
   },
   {
     "id": "map_use_max_bounds",
@@ -5648,41 +5358,6 @@
     "id": "txt_email_not_valid",
     "en": "Email not valid",
     "bn": "ইমেল বৈধ নয় "
-  },
-  {
-    "id": "project_request_membership_message",
-    "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
-    "bn": "ওহে!\\n প্রকল্পে আমাকে যুক্ত করুন {{projectName}} ।\\n শুভেচ্ছান্তে,\\n অনুপ্রাণিত ভবিষ্যতের সদস্য\\n "
-  },
-  {
-    "id": "project_request_membership",
-    "en": "Membership request",
-    "bn": "সদস্যতার অনুরোধ "
-  },
-  {
-    "id": "project_request_membership_subject",
-    "en": "Application to join the {{project}} project ",
-    "bn": "যোগদানের জন্য আবেদন {{project}} প্রকল্প "
-  },
-  {
-    "id": "project_request_membership_message_recap",
-    "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
-    "bn": "<span>থেকে একটি সদস্যতার অনুরোধ {{from}} গৃহীত হয়েছে.</span><ul><li> বার্তা:<b> {{msg}}</b></li><li> ব্যবহারকারীর অবস্থা:<b> {{userStatus}}</b></li><li> কর্ম: {{actionUrl}}</li><li> লিঙ্ক: {{projectUrl}}</li><li> ডেটা:<pre> {{data}}</pre></li></ul> "
-  },
-  {
-    "id": "project_join_message_reply",
-    "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
-    "bn": "\"থেকে সদস্যতার অনুরোধের প্রতিক্রিয়া {{email}} \"প্রকল্পের জন্য\" {{project}} \" "
-  },
-  {
-    "id": "project_open_url",
-    "en": "Open the project \"{{project}}\"",
-    "bn": "প্রকল্পটি খুলুন \" {{project}} \" "
-  },
-  {
-    "id": "project_request_membership_message_sent",
-    "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
-    "bn": "আপনার অনুরোধটি প্রকল্প প্রশাসকের কাছে প্রেরণ করা হয়েছে, আপনি আগামী দিনগুলিতে একটি নিশ্চিতকরণ ইমেল পাবেন। ম্যাপএক্স বট থেকে একটি ইমেলের জন্য আপনার ইনবক্সটি পরীক্ষা করুন এবং প্রকল্পটি অ্যাক্সেস করতে লিংকে ক্লিক করুন! "
   },
   {
     "id": "update_app_msg",
@@ -8000,64 +7675,464 @@
     "bn": "আমি <a href={{privacy_link}} target=\"_blank\">গোপনীয়তা নীতি</a> এবং <a href={{tou_link}} target=\"_blank\">ব্যবহারের শর্তাবলী</a> পড়েছি এবং সম্মত আছি"
   },
   {
-    "id": "proj_manage_load_title",
+    "id": "project_enable_public",
+    "en": "This project is public",
+    "bn": "এই প্রকল্পটি পাবলিক।"
+  },
+  {
+    "id": "project_enable_public_desc",
+    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
+    "bn": "সক্ষম হলে, প্রকল্পটি প্রকল্পের ক্যাটালগে তালিকাভুক্ত হবে৷ এই প্রকল্পে প্রকাশিত সকল পাবলিক মতামত সকলের জন্য পাঠযোগ্য হবে।"
+  },
+  {
+    "id": "project_globe_projection",
+    "en": "Enable globe mode",
+    "bn": "গ্লোব মোড সক্ষম করুন"
+  },
+  {
+    "id": "project_globe_projection_desc",
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
+    "bn": "সক্রিয় করা হলে, মানচিত্রটি একটি গ্লোব হিসাবে উপস্থাপন করা হবে, প্রচলিত ওয়েব মার্কেটর প্রজেকশন থেকে প্রস্থান করে। 'ম্যাপ প্যানিং সীমিত করার জন্য ব্যাপ্তি ব্যবহার করুন' সেটিং সক্ষম করা স্বয়ংক্রিয়ভাবে গ্লোব মোডকে অক্ষম করবে৷"
+  },
+  {
+    "id": "project_enable_join",
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "bn": "অ-সদস্যদের এই প্রকল্পে সদস্যতার অনুরোধ করার অনুমতি দিন (শুধুমাত্র যদি সর্বজনীন)"
+  },
+  {
+    "id": "project_state_key",
+    "en": "Identifier",
+    "bn": "শনাক্তকারী "
+  },
+  {
+    "id": "project_save_views_state",
+    "en": "Save views state",
+    "bn": "দর্শন অবস্থার সংরক্ষণ করুন "
+  },
+  {
+    "id": "project_roles_modal_title",
+    "en": "Roles administration",
+    "bn": "ভূমিকা প্রশাসন "
+  },
+  {
+    "id": "project_alias_name",
+    "en": "Alias of the project",
+    "bn": "প্রকল্পের উপন্যাস "
+  },
+  {
+    "id": "project_alias_name_desc",
+    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
+    "bn": "ন্যূনতম 1, সর্বাধিক 30 নিম্ন কেসির মধ্যে ASCII অক্ষর [এজেড], সংখ্যা [0-9], ড্যাশ [-] এবং আন্ডারস্কোর অনুমোদিত [_] "
+  },
+  {
+    "id": "error_project_alias_not_valid",
+    "en": "Project alias not valid or already taken",
+    "bn": "প্রকল্পের নামটি বৈধ নয় বা ইতিমধ্যে নেওয়া হয়েছে "
+  },
+  {
+    "id": "project_access_denied",
+    "en": "Access denied. You cannot access the requested project",
+    "bn": "অ্যাক্সেস অস্বীকৃত। আপনি অনুরোধ করা প্রকল্পটি অ্যাক্সেস করতে পারবেন না "
+  },
+  {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "bn": "এই প্রকল্পটি মুছুন "
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "bn": "এই প্রকল্পটি মুছুন (অক্ষম) "
+  },
+  {
+    "id": "project_delete_confirm_title",
+    "en": "Write the project name you want to delete",
+    "bn": "আপনি মুছে ফেলতে চান এমন প্রকল্পের নাম লিখুন "
+  },
+  {
+    "id": "project_delete_view_n_share",
+    "en": "Projects",
+    "bn": "প্রকল্প"
+  },
+  {
+    "id": "project_delete_view_n_external",
+    "en": "Externals",
+    "bn": "বহিরাগত"
+  },
+  {
+    "id": "project_delete_view_n_story",
+    "en": "Story Maps",
+    "bn": "গল্পের মানচিত্র"
+  },
+  {
+    "id": "project_invite_modal_title",
+    "en": "Invite a new member",
+    "bn": "নতুন সদস্যকে আমন্ত্রণ জানান "
+  },
+  {
+    "id": "project_invite_message_compose",
+    "en": "Compose invite email",
+    "bn": "আমন্ত্রণ ইমেলটি রচনা করুন "
+  },
+  {
+    "id": "project_invite_message_title",
+    "en": "MapX invitation",
+    "bn": "ম্যাপএক্স আমন্ত্রণ "
+  },
+  {
+    "id": "project_invite_message_subject",
+    "en": "Invitation to join the project {{project}}",
+    "bn": "প্রকল্পে যোগদানের আমন্ত্রণ {{project}}"
+  },
+  {
+    "id": "project_invite_message_accept",
+    "en": "Accept invitation to the project {{project}}",
+    "bn": "প্রকল্পের আমন্ত্রণ গ্রহণ করুন {{project}}"
+  },
+  {
+    "id": "project_invite_message_sent",
+    "en": "Email sent.",
+    "bn": "ইমেইল পাঠানো. "
+  },
+  {
+    "id": "project_invite_message_tips",
+    "en": "The tag {{link}} will be replaced by an encrypted link.",
+    "bn": "ট্যাগ {{link}} একটি এনক্রিপ্ট লিঙ্ক দ্বারা প্রতিস্থাপন করা হবে। "
+  },
+  {
+    "id": "project_invite_message",
+    "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
+    "bn": "ওহে!\n আমি আপনাকে প্রকল্পের একজন সদস্য হিসাবে আমন্ত্রণ জানাতে চাই \" {{projectName}} \"ম্যাপএক্সে\n নিশ্চিত করার জন্য প্রদত্ত লিঙ্কটিতে ক্লিক করুন।\n {{link}}\n প্রকল্পের প্রশাসক। "
+  },
+  {
+    "id": "project_invite_message_confirm",
+    "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
+    "bn": "ওহে!\n আমাদের পৌঁছানোর জন্য ধন্যবাদ।\n প্রকল্পে আপনার সদস্যতা নিশ্চিত করতে {{projectName}} ম্যাপএক্স-এ, দয়া করে নীচের লিঙ্কটিতে ক্লিক করুন:\n {{link}}\n শুভেচ্ছান্তে,\n প্রকল্পের প্রশাসক "
+  },
+  {
+    "id": "project_invite_notify_auto_register_email",
+    "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
+    "bn": "হ্যালো,<br> ব্যবহারকারী ' {{emailUser}} 'প্রকল্পে প্রবেশের জন্য একটি আমন্ত্রণ লিঙ্ক ব্যবহার করেছে {{project}} ।<ul><li> মেয়াদ শেষ হওয়ার তারিখ: {{timeExpire}}</li></ul><br> আপনার দিনটি শুভ হোক ! "
+  },
+  {
+    "id": "project_invite_notify_auto_register_email_subject",
+    "en": "Invitation link used in project {{project}}",
+    "bn": "প্রকল্পে আমন্ত্রণ লিঙ্ক ব্যবহৃত হয় {{project}} "
+  },
+  {
+    "id": "project_user_added_email_user_subject",
+    "en": "You've have been added to project {{project}}",
+    "bn": "আপনাকে প্রকল্পে যুক্ত করা হয়েছে {{project}} "
+  },
+  {
+    "id": "project_user_added_email_user",
+    "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
+    "bn": "হ্যালো,<br> আপনাকে প্রকল্পে যুক্ত করা হয়েছে {{project}} দলের মধ্যে): {{roles}} ।<br> আপনার দিনটি শুভ হোক ! "
+  },
+  {
+    "id": "project_user_added_email_admin_subject",
+    "en": "A user has been added to project {{project}}.",
+    "bn": "একটি ব্যবহারকারী প্রকল্পে যুক্ত করা হয়েছে {{project}} । "
+  },
+  {
+    "id": "project_user_added_email_admin",
+    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
+    "bn": "একজন ব্যাবহারকারি ( {{emailUser}} ) প্রকল্পে যুক্ত করা হয়েছে {{project}} দলের মধ্যে) {{roles}}<br> আপনার দিনটি শুভ হোক ! "
+  },
+  {
+    "id": "project_countries_highlight",
+    "en": "Countries to be highlighted on the map",
+    "bn": "দেশগুলিকে মানচিত্রে হাইলাইট করা হবে "
+  },
+  {
+    "id": "project_id_theme",
+    "en": "Default theme",
+    "bn": "ডিফল্ট থিম"
+  },
+  {
+    "id": "project_search_values",
+    "en": "Search projects",
+    "bn": "প্রকল্প অনুসন্ধান করুন "
+  },
+  {
+    "id": "project_saved",
+    "en": "Project saved",
+    "bn": "প্রকল্প সংরক্ষিত "
+  },
+  {
+    "id": "project_created",
+    "en": "Project {{title}} created",
+    "bn": "প্রকল্প {{title}} তৈরি "
+  },
+  {
+    "id": "project_deleted",
+    "en": "Project deleted",
+    "bn": "প্রকল্প মোছা হয়েছে "
+  },
+  {
+    "id": "project_delete_analyze",
+    "en": "Analysing, please wait...",
+    "bn": "বিশ্লেষণ করা হচ্ছে, দয়া করে অপেক্ষা করুন ... "
+  },
+  {
+    "id": "project_delete_table_views",
+    "en": "Table of views to delete",
+    "bn": "মুছে ফেলার জন্য দর্শনের সারণী"
+  },
+  {
+    "id": "project_delete_table_sources",
+    "en": "Table of sources to delete",
+    "bn": "মুছে ফেলার জন্য উৎসের সারণী"
+  },
+  {
+    "id": "project_delete_table_views_dep",
+    "en": "Table of dependent views to delete",
+    "bn": "মুছে ফেলার জন্য নির্ভরশীল দর্শনের সারণী"
+  },
+  {
+    "id": "project_delete_table_sources_dep",
+    "en": "Table of dependent sources to delete",
+    "bn": "মুছে ফেলার জন্য নির্ভরশীল উত্সের সারণী"
+  },
+  {
+    "id": "project_delete_title",
+    "en": "Project deletion",
+    "bn": "প্রকল্প মোছা "
+  },
+  {
+    "id": "project_new_title",
+    "en": "Title of the project",
+    "bn": "প্রকল্পের শিরোনাম "
+  },
+  {
+    "id": "project_list",
+    "en": "List of projects",
+    "bn": "প্রকল্পের তালিকা "
+  },
+  {
+    "id": "project_list_select_desc",
+    "en": "Click on a project name to access it. If you are not member of a project, you can ask to join it by clicking the join button ",
+    "bn": "এটিতে অ্যাক্সেস পেতে কোনও প্রকল্পের নামের উপর ক্লিক করুন। আপনি যদি কোনও প্রকল্পের সদস্য না হন তবে আপনি জয়েন বোতামটি ক্লিক করে এতে যোগদানের জন্য বলতে পারেন "
+  },
+  {
+    "id": "project_title",
+    "en": "Title",
+    "bn": "প্রকল্প"
+  },
+  {
+    "id": "project_description",
+    "en": "Description",
+    "bn": "বর্ণনা "
+  },
+  {
+    "id": "project_settings",
+    "en": "Project settings",
+    "bn": "প্রকল্প সেটিংস "
+  },
+  {
+    "id": "project_map_pos_set",
+    "en": "Initial map position",
+    "bn": "প্রাথমিক মানচিত্রের অবস্থান "
+  },
+  {
+    "id": "project_map_proj_set",
+    "en": "Map projection (experimental)",
+    "bn": "মানচিত্র অভিক্ষেপ (পরীক্ষামূলক)"
+  },
+  {
+    "id": "project_map_proj_name",
+    "en": "Projection name",
+    "bn": "অভিক্ষেপের নাম"
+  },
+  {
+    "id": "project_map_proj_center_latitude",
+    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
+    "bn": "কেন্দ্র - অক্ষাংশ ( Albers, Lamber Conic )"
+  },
+  {
+    "id": "project_map_proj_center_longitude",
+    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
+    "bn": "কেন্দ্র - দ্রাঘিমাংশ ( Albers, Lamber Conic )"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_0",
+    "en": "Latitude North (Albers, Lamber Conic )",
+    "bn": "অক্ষাংশ উত্তর (আলবার্স, ল্যাম্বার কনিক)"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_1",
+    "en": "Latitude South (Albers, Lamber Conic )",
+    "bn": "অক্ষাংশ দক্ষিণ (আলবার্স, ল্যাম্বার কনিক)"
+  },
+  {
+    "id": "project_request_membership_message",
+    "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
+    "bn": "ওহে!\\n প্রকল্পে আমাকে যুক্ত করুন {{projectName}} ।\\n শুভেচ্ছান্তে,\\n অনুপ্রাণিত ভবিষ্যতের সদস্য\\n "
+  },
+  {
+    "id": "project_request_membership",
+    "en": "Membership request",
+    "bn": "সদস্যতার অনুরোধ "
+  },
+  {
+    "id": "project_request_membership_subject",
+    "en": "Application to join the {{project}} project ",
+    "bn": "যোগদানের জন্য আবেদন {{project}} প্রকল্প "
+  },
+  {
+    "id": "project_request_membership_message_recap",
+    "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
+    "bn": "<span>থেকে একটি সদস্যতার অনুরোধ {{from}} গৃহীত হয়েছে.</span><ul><li> বার্তা:<b> {{msg}}</b></li><li> ব্যবহারকারীর অবস্থা:<b> {{userStatus}}</b></li><li> কর্ম: {{actionUrl}}</li><li> লিঙ্ক: {{projectUrl}}</li><li> ডেটা:<pre> {{data}}</pre></li></ul> "
+  },
+  {
+    "id": "project_join_message_reply",
+    "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
+    "bn": "\"থেকে সদস্যতার অনুরোধের প্রতিক্রিয়া {{email}} \"প্রকল্পের জন্য\" {{project}} \" "
+  },
+  {
+    "id": "project_open_url",
+    "en": "Open the project \"{{project}}\"",
+    "bn": "প্রকল্পটি খুলুন \" {{project}} \" "
+  },
+  {
+    "id": "project_request_membership_message_sent",
+    "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
+    "bn": "আপনার অনুরোধটি প্রকল্প প্রশাসকের কাছে প্রেরণ করা হয়েছে, আপনি আগামী দিনগুলিতে একটি নিশ্চিতকরণ ইমেল পাবেন। ম্যাপএক্স বট থেকে একটি ইমেলের জন্য আপনার ইনবক্সটি পরীক্ষা করুন এবং প্রকল্পটি অ্যাক্সেস করতে লিংকে ক্লিক করুন! "
+  },
+  {
+    "id": "project_manage_load_title",
     "en": "Load new project ?",
-    "bn": "নতুন প্রকল্প লোড?"
+    "bn": "নতুন প্রকল্প লোড করবেন?"
   },
   {
-    "id": "proj_manage_load_content",
+    "id": "project_manage_load_content",
     "en": "Load project {{name}} ?",
-    "bn": "লোড প্রকল্প {{name}} ?"
+    "bn": "প্রকল্প লোড করুন {{name}} ?"
   },
   {
-    "id": "proj_manage_create_title",
+    "id": "project_manage_create_title",
     "en": "Create new project",
     "bn": "নতুন প্রকল্প তৈরি করুন"
   },
   {
-    "id": "proj_manage_create_label",
+    "id": "project_manage_create_label",
     "en": "Project name (english)",
     "bn": "প্রকল্পের নাম (ইংরেজি)"
   },
   {
-    "id": "proj_manage_btn_create",
+    "id": "project_manage_btn_create",
     "en": "Create",
-    "bn": "সৃষ্টি"
+    "bn": "তৈরি করুন"
   },
   {
-    "id": "proj_manage_create_placeholder",
+    "id": "project_manage_create_placeholder",
     "en": "Project name (english)",
     "bn": "প্রকল্পের নাম (ইংরেজি)"
   },
   {
-    "id": "proj_manage_name_ok",
+    "id": "project_manage_name_ok",
     "en": "Name valid",
     "bn": "নাম বৈধ"
   },
   {
-    "id": "proj_manage_creation_not_allowed",
+    "id": "project_manage_creation_not_allowed",
     "en": "Creation not allowed",
-    "bn": "সৃষ্টির অনুমতি নেই"
+    "bn": "তৈরি করা অনুমোদিত নয়"
   },
   {
-    "id": "proj_manage_not_allowed",
+    "id": "project_manage_not_allowed",
     "en": "Not allowed",
-    "bn": "অনুমতি নেই"
+    "bn": "অনুমোদিত নয়"
   },
   {
-    "id": "proj_manage_name_not_valid",
+    "id": "project_manage_name_not_valid",
     "en": "Invalid name",
     "bn": "অবৈধ নাম"
   },
   {
-    "id": "proj_manage_name_not_in_range",
+    "id": "project_manage_name_not_in_range",
     "en": "Name string not in range : min 3, max 50 characters",
-    "bn": "নামের স্ট্রিং ব্যাপ্তির মধ্যে নেই : সর্বনিম্ন 3, সর্বোচ্চ 50টি অক্ষর৷"
+    "bn": "নামের দৈর্ঘ্য সীমার মধ্যে নয়: ন্যূনতম 3, সর্বাধিক 50 অক্ষর"
   },
   {
-    "id": "proj_manage_name_not_available",
+    "id": "project_manage_name_not_available",
     "en": "Name not available",
-    "bn": "নাম উপলব্ধ নেই"
+    "bn": "নাম উপলব্ধ নয়"
+  },
+  {
+    "id": "project_basic_info",
+    "en": "Project info",
+    "bn": "প্রকল্পের তথ্য"
+  },
+  {
+    "id": "project_org_details",
+    "en": "Organisation details",
+    "bn": "প্রতিষ্ঠানের বিবরণ"
+  },
+  {
+    "id": "project_org_name",
+    "en": "Name",
+    "bn": "নাম"
+  },
+  {
+    "id": "project_contact_name",
+    "en": "Contact name",
+    "bn": "যোগাযোগের নাম"
+  },
+  {
+    "id": "project_contact_email",
+    "en": "Contact email",
+    "bn": "যোগাযোগের ইমেইল"
+  },
+  {
+    "id": "project_appearance",
+    "en": "Apparance & theme",
+    "bn": "উপস্থিতি এবং থিম"
+  },
+  {
+    "id": "project_logo",
+    "en": "Project logo",
+    "bn": "প্রকল্পের লোগো"
+  },
+  {
+    "id": "project_logo_upload",
+    "en": "Drag and drop SVG or click to choose a file...",
+    "bn": "SVG টেনে ছাড়ুন বা ফাইল বেছে নিতে ক্লিক করুন..."
+  },
+  {
+    "id": "project_map_settings",
+    "en": "Map settings",
+    "bn": "মানচিত্র সেটিংস"
+  },
+  {
+    "id": "project_map_projection",
+    "en": "Map projection",
+    "bn": "মানচিত্র প্রক্ষেপণ"
+  },
+  {
+    "id": "project_map_projection_type",
+    "en": "Default map projection type",
+    "bn": "ডিফল্ট মানচিত্র প্রক্ষেপণ প্রকার"
+  },
+  {
+    "id": "project_map_projection_mercator",
+    "en": "Web mercator",
+    "bn": "ওয়েব মার্কেটর"
+  },
+  {
+    "id": "project_map_projection_globe",
+    "en": "Globe",
+    "bn": "গ্লোব"
+  },
+  {
+    "id": "project_disable_globe",
+    "en": "Disable globe mode in the UI",
+    "bn": "ইউআই-তে গ্লোব মোড নিষ্ক্রিয় করুন"
+  },
+  {
+    "id": "project_access_settings",
+    "en": "Project access settings",
+    "bn": "প্রকল্প অ্যাক্সেস সেটিংস"
   },
   {
     "id": "schema_story_theme",

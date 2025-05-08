@@ -5230,269 +5230,9 @@
     "fa": "نمی توانید خود را از گروه سرپرست حذف کنید "
   },
   {
-    "id": "project_enable_public",
-    "en": "This project is public",
-    "fa": "این پروژه عمومی است."
-  },
-  {
-    "id": "project_enable_public_desc",
-    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
-    "fa": "اگر فعال باشد، پروژه در کاتالوگ پروژه ها فهرست می شود. تمام نماهای عمومی منتشر شده در این پروژه برای همه قابل خواندن خواهد بود."
-  },
-  {
-    "id": "project_globe_projection",
-    "en": "Enable globe mode",
-    "fa": "حالت کره زمین را فعال کنید"
-  },
-  {
-    "id": "project_globe_projection_desc",
-    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
-    "fa": "هنگامی که فعال می شود، نقشه به عنوان یک کره ارائه می شود، که از طرح مرکب Web Mercator خارج می شود. فعال کردن تنظیمات «استفاده از وسعت برای محدود کردن پیمایش نقشه» به طور خودکار حالت کره زمین را غیرفعال می کند"
-  },
-  {
-    "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project ( only if public )",
-    "fa": "به غیر اعضا اجازه درخواست عضویت در این پروژه را بدهید (فقط در صورت عمومی)"
-  },
-  {
-    "id": "project_state_key",
-    "en": "Identifier",
-    "fa": "مشخص کننده "
-  },
-  {
-    "id": "project_save_views_state",
-    "en": "Save views state",
-    "fa": "حالت مشاهده را ذخیره کنید "
-  },
-  {
-    "id": "project_roles_modal_title",
-    "en": "Roles administration",
-    "fa": "دولت نقش "
-  },
-  {
-    "id": "project_alias_name",
-    "en": "Alias of the project",
-    "fa": "نام مستعار پروژه "
-  },
-  {
-    "id": "project_alias_name_desc",
-    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
-    "fa": "حداقل 1 ، حداکثر 30 حرف کوچک با حروف ASCII [az] ، اعداد [0-9] ، خط تیره [-] و زیرخط مجاز است [_] "
-  },
-  {
-    "id": "error_project_alias_not_valid",
-    "en": "Project alias not valid or already taken",
-    "fa": "نام مستعار پروژه معتبر نیست یا قبلاً گرفته شده است "
-  },
-  {
-    "id": "project_access_denied",
-    "en": "Access denied. You cannot access the requested project",
-    "fa": "دسترسی ممنوع است. شما نمی توانید به پروژه درخواستی دسترسی پیدا کنید "
-  },
-  {
-    "id": "btn_show_project_delete",
-    "en": "Delete this project",
-    "fa": "این پروژه را حذف کنید "
-  },
-  {
-    "id": "btn_show_project_delete_disabled",
-    "en": "Delete this project ( disabled )",
-    "fa": "حذف این پروژه (غیرفعال) "
-  },
-  {
-    "id": "project_delete_confirm_title",
-    "en": "Write the project name you want to delete",
-    "fa": "نام پروژه ای را که می خواهید حذف کنید بنویسید "
-  },
-  {
-    "id": "project_delete_view_n_share",
-    "en": "Projects",
-    "fa": "پروژه‌ها"
-  },
-  {
-    "id": "project_delete_view_n_external",
-    "en": "Externals",
-    "fa": "خارجی‌ها"
-  },
-  {
-    "id": "project_delete_view_n_story",
-    "en": "Story Maps",
-    "fa": "نقشه‌های داستانی"
-  },
-  {
-    "id": "project_invite_modal_title",
-    "en": "Invite a new member",
-    "fa": "عضو جدیدی دعوت کنید "
-  },
-  {
     "id": "btn_show_invite_member",
     "en": "Invite a new member",
     "fa": "عضو جدیدی دعوت کنید "
-  },
-  {
-    "id": "project_invite_message_compose",
-    "en": "Compose invite email",
-    "fa": "نوشتن ایمیل دعوت "
-  },
-  {
-    "id": "project_invite_message_title",
-    "en": "MapX invitation",
-    "fa": "دعوت از MapX "
-  },
-  {
-    "id": "project_invite_message_subject",
-    "en": "Invitation to join the project {{project}}",
-    "fa": "دعوت به عضویت در پروژه {{project}}"
-  },
-  {
-    "id": "project_invite_message_accept",
-    "en": "Accept invitation to the project {{project}}",
-    "fa": "دعوت به پروژه را بپذیرید {{project}}"
-  },
-  {
-    "id": "project_invite_message_sent",
-    "en": "Email sent.",
-    "fa": "ایمیل ارسال شد "
-  },
-  {
-    "id": "project_invite_message_tips",
-    "en": "The tag {{link}} will be replaced by an encrypted link.",
-    "fa": "برچسب {{link}} با یک لینک رمزگذاری شده جایگزین خواهد شد. "
-  },
-  {
-    "id": "project_invite_message",
-    "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
-    "fa": "سلام!\n من می خواهم شما را به عنوان عضو پروژه دعوت کنم \" {{projectName}} \"در MapX.\n برای تأیید لطفاً روی پیوند ارائه شده کلیک کنید.\n {{link}}\n مجری طرح. "
-  },
-  {
-    "id": "project_invite_message_confirm",
-    "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
-    "fa": "سلام!\n ممنون که به ما رسیدید\n برای تأیید عضویت در پروژه {{projectName}} در MapX ، لطفاً روی پیوند زیر کلیک کنید:\n {{link}}\n با احترام،\n مجری طرح "
-  },
-  {
-    "id": "project_invite_notify_auto_register_email",
-    "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
-    "fa": "سلام،<br> کاربر ' {{emailUser}} از پیوند دعوت برای ورود به پروژه استفاده کرد {{project}} .<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> تاریخ انقضا: {{timeExpire}}</li></ul><br> روز خوبی داشته باشید ! "
-  },
-  {
-    "id": "project_invite_notify_auto_register_email_subject",
-    "en": "Invitation link used in project {{project}}",
-    "fa": "پیوند دعوت در پروژه استفاده می شود {{project}} "
-  },
-  {
-    "id": "project_user_added_email_user_subject",
-    "en": "You've have been added to project {{project}}",
-    "fa": "شما به پروژه اضافه شده اید {{project}} "
-  },
-  {
-    "id": "project_user_added_email_user",
-    "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
-    "fa": "سلام،<br> شما به پروژه اضافه شده اید {{project}} در گروه): {{roles}} .<br> روز خوبی داشته باشید ! "
-  },
-  {
-    "id": "project_user_added_email_admin_subject",
-    "en": "A user has been added to project {{project}}.",
-    "fa": "یک کاربر به پروژه اضافه شده است {{project}} . "
-  },
-  {
-    "id": "project_user_added_email_admin",
-    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
-    "fa": "یک کاربر ( {{emailUser}} ) به پروژه اضافه شده است {{project}} در گروه) {{roles}}<br> روز خوبی داشته باشید ! "
-  },
-  {
-    "id": "project_countries_highlight",
-    "en": "Countries to be highlighted on the map",
-    "fa": "کشورهایی که باید روی نقشه برجسته شوند "
-  },
-  {
-    "id": "project_id_theme",
-    "en": "Default theme",
-    "fa": "تم پیش‌فرض"
-  },
-  {
-    "id": "project_search_values",
-    "en": "Search projects",
-    "fa": "جستجوی پروژه ها "
-  },
-  {
-    "id": "project_saved",
-    "en": "Project saved",
-    "fa": "پروژه ذخیره شد "
-  },
-  {
-    "id": "project_created",
-    "en": "Project {{title}} created",
-    "fa": "پروژه {{title}} ایجاد شده "
-  },
-  {
-    "id": "project_deleted",
-    "en": "Project deleted",
-    "fa": "پروژه حذف شد "
-  },
-  {
-    "id": "project_delete_analyze",
-    "en": "Analysing, please wait...",
-    "fa": "با تجزیه و تحلیل ، لطفا صبر کنید ... "
-  },
-  {
-    "id": "project_delete_table_views",
-    "en": "Table of views to delete",
-    "fa": "جدول نماها برای حذف"
-  },
-  {
-    "id": "project_delete_table_sources",
-    "en": "Table of sources to delete",
-    "fa": "جدول منابع برای حذف"
-  },
-  {
-    "id": "project_delete_table_views_dep",
-    "en": "Table of dependent views to delete",
-    "fa": "جدول نماهای وابسته برای حذف"
-  },
-  {
-    "id": "project_delete_table_sources_dep",
-    "en": "Table of dependent sources to delete",
-    "fa": "جدول منابع وابسته برای حذف"
-  },
-  {
-    "id": "project_delete_title",
-    "en": "Project deletion",
-    "fa": "حذف پروژه "
-  },
-  {
-    "id": "project_new_title",
-    "en": "Title of the project",
-    "fa": "عنوان پروژه "
-  },
-  {
-    "id": "project_list",
-    "en": "List of projects",
-    "fa": "لیست پروژه ها "
-  },
-  {
-    "id": "project_list_select_desc",
-    "en": "Click on a project name to access it. If you are not member of a project, you can ask to join it by clicking the join button ",
-    "fa": "برای دسترسی به یک پروژه ، روی آن کلیک کنید. اگر عضو پروژه ای نیستید ، می توانید با کلیک روی دکمه عضویت درخواست پیوستن به آن را داشته باشید "
-  },
-  {
-    "id": "project_title",
-    "en": "Title",
-    "fa": "پروژه"
-  },
-  {
-    "id": "project_description",
-    "en": "Description",
-    "fa": "شرح "
-  },
-  {
-    "id": "project_settings",
-    "en": "Project settings",
-    "fa": "تنظیمات پروژه "
-  },
-  {
-    "id": "project_map_pos_set",
-    "en": "Initial map position",
-    "fa": "موقعیت اولیه نقشه "
   },
   {
     "id": "btn_map_pos_get",
@@ -5503,36 +5243,6 @@
     "id": "btn_map_pos_reset_max_bounds",
     "en": "Reset maximum map bounds",
     "fa": "حداکثر محدوده نقشه را بازنشانی کنید"
-  },
-  {
-    "id": "project_map_proj_set",
-    "en": "Map projection (experimental)",
-    "fa": "طرح ریزی نقشه (تجربی)"
-  },
-  {
-    "id": "project_map_proj_name",
-    "en": "Projection name",
-    "fa": "نام پروجکشن"
-  },
-  {
-    "id": "project_map_proj_center_latitude",
-    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
-    "fa": "مرکز - عرض جغرافیایی ( Albers، Lamber Conic )"
-  },
-  {
-    "id": "project_map_proj_center_longitude",
-    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
-    "fa": "مرکز - طول جغرافیایی (آلبرز، مخروطی لامبر)"
-  },
-  {
-    "id": "project_map_proj_parallels_latitude_0",
-    "en": "Latitude North (Albers, Lamber Conic )",
-    "fa": "عرض شمالی (آلبرز، لامبر مخروطی)"
-  },
-  {
-    "id": "project_map_proj_parallels_latitude_1",
-    "en": "Latitude South (Albers, Lamber Conic )",
-    "fa": "Latitude South (Albers، Lamber Conic)"
   },
   {
     "id": "map_use_max_bounds",
@@ -5648,41 +5358,6 @@
     "id": "txt_email_not_valid",
     "en": "Email not valid",
     "fa": "ایمیل معتبر نیست "
-  },
-  {
-    "id": "project_request_membership_message",
-    "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
-    "fa": "سلام!\\n لطفا من را به پروژه اضافه کنید {{projectName}} .\\n با احترام،\\n یک عضو آینده با انگیزه\\n "
-  },
-  {
-    "id": "project_request_membership",
-    "en": "Membership request",
-    "fa": "درخواست عضویت "
-  },
-  {
-    "id": "project_request_membership_subject",
-    "en": "Application to join the {{project}} project ",
-    "fa": "برنامه پیوستن به {{project}} پروژه "
-  },
-  {
-    "id": "project_request_membership_message_recap",
-    "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
-    "fa": "<span>درخواست عضویت از {{from}} قبلا رسیده.</span><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> پیام:<b> {{msg}}</b></li><li style=\";text-align:right;direction:rtl\"> وضعیت کاربر:<b> {{userStatus}}</b></li><li style=\";text-align:right;direction:rtl\"> عمل: {{actionUrl}}</li><li style=\";text-align:right;direction:rtl\"> ارتباط دادن: {{projectUrl}}</li><li style=\";text-align:right;direction:rtl\"> داده ها:<pre style=\";text-align:right;direction:rtl\"> {{data}}</pre></li></ul> "
-  },
-  {
-    "id": "project_join_message_reply",
-    "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
-    "fa": "به درخواست عضویت از \"پاسخ دهید {{email}} \"برای پروژه\" {{project}} \" "
-  },
-  {
-    "id": "project_open_url",
-    "en": "Open the project \"{{project}}\"",
-    "fa": "پروژه را باز کنید \" {{project}} \" "
-  },
-  {
-    "id": "project_request_membership_message_sent",
-    "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
-    "fa": "درخواست شما به مدیر پروژه ارسال شده است ، شما طی روزهای آینده یک ایمیل تأیید دریافت خواهید کرد. صندوق ورودی خود را برای دریافت ایمیل از ربات MapX بررسی کنید و برای دسترسی به پروژه روی پیوند کلیک کنید! "
   },
   {
     "id": "update_app_msg",
@@ -8000,64 +7675,464 @@
     "fa": "من <a href={{privacy_link}} target=\"_blank\">سیاست حفظ حریم خصوصی</a> و <a href={{tou_link}} target=\"_blank\">شرایط استفاده</a> را خوانده و می‌پذیرم"
   },
   {
-    "id": "proj_manage_load_title",
-    "en": "Load new project ?",
-    "fa": "پروژه جدید بارگیری شود؟"
+    "id": "project_enable_public",
+    "en": "This project is public",
+    "fa": "این پروژه عمومی است."
   },
   {
-    "id": "proj_manage_load_content",
+    "id": "project_enable_public_desc",
+    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
+    "fa": "اگر فعال باشد، پروژه در کاتالوگ پروژه ها فهرست می شود. تمام نماهای عمومی منتشر شده در این پروژه برای همه قابل خواندن خواهد بود."
+  },
+  {
+    "id": "project_globe_projection",
+    "en": "Enable globe mode",
+    "fa": "حالت کره زمین را فعال کنید"
+  },
+  {
+    "id": "project_globe_projection_desc",
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
+    "fa": "هنگامی که فعال می شود، نقشه به عنوان یک کره ارائه می شود، که از طرح مرکب Web Mercator خارج می شود. فعال کردن تنظیمات «استفاده از وسعت برای محدود کردن پیمایش نقشه» به طور خودکار حالت کره زمین را غیرفعال می کند"
+  },
+  {
+    "id": "project_enable_join",
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "fa": "به غیر اعضا اجازه درخواست عضویت در این پروژه را بدهید (فقط در صورت عمومی)"
+  },
+  {
+    "id": "project_state_key",
+    "en": "Identifier",
+    "fa": "مشخص کننده "
+  },
+  {
+    "id": "project_save_views_state",
+    "en": "Save views state",
+    "fa": "حالت مشاهده را ذخیره کنید "
+  },
+  {
+    "id": "project_roles_modal_title",
+    "en": "Roles administration",
+    "fa": "دولت نقش "
+  },
+  {
+    "id": "project_alias_name",
+    "en": "Alias of the project",
+    "fa": "نام مستعار پروژه "
+  },
+  {
+    "id": "project_alias_name_desc",
+    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
+    "fa": "حداقل 1 ، حداکثر 30 حرف کوچک با حروف ASCII [az] ، اعداد [0-9] ، خط تیره [-] و زیرخط مجاز است [_] "
+  },
+  {
+    "id": "error_project_alias_not_valid",
+    "en": "Project alias not valid or already taken",
+    "fa": "نام مستعار پروژه معتبر نیست یا قبلاً گرفته شده است "
+  },
+  {
+    "id": "project_access_denied",
+    "en": "Access denied. You cannot access the requested project",
+    "fa": "دسترسی ممنوع است. شما نمی توانید به پروژه درخواستی دسترسی پیدا کنید "
+  },
+  {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "fa": "این پروژه را حذف کنید "
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "fa": "حذف این پروژه (غیرفعال) "
+  },
+  {
+    "id": "project_delete_confirm_title",
+    "en": "Write the project name you want to delete",
+    "fa": "نام پروژه ای را که می خواهید حذف کنید بنویسید "
+  },
+  {
+    "id": "project_delete_view_n_share",
+    "en": "Projects",
+    "fa": "پروژه‌ها"
+  },
+  {
+    "id": "project_delete_view_n_external",
+    "en": "Externals",
+    "fa": "خارجی‌ها"
+  },
+  {
+    "id": "project_delete_view_n_story",
+    "en": "Story Maps",
+    "fa": "نقشه‌های داستانی"
+  },
+  {
+    "id": "project_invite_modal_title",
+    "en": "Invite a new member",
+    "fa": "عضو جدیدی دعوت کنید "
+  },
+  {
+    "id": "project_invite_message_compose",
+    "en": "Compose invite email",
+    "fa": "نوشتن ایمیل دعوت "
+  },
+  {
+    "id": "project_invite_message_title",
+    "en": "MapX invitation",
+    "fa": "دعوت از MapX "
+  },
+  {
+    "id": "project_invite_message_subject",
+    "en": "Invitation to join the project {{project}}",
+    "fa": "دعوت به عضویت در پروژه {{project}}"
+  },
+  {
+    "id": "project_invite_message_accept",
+    "en": "Accept invitation to the project {{project}}",
+    "fa": "دعوت به پروژه را بپذیرید {{project}}"
+  },
+  {
+    "id": "project_invite_message_sent",
+    "en": "Email sent.",
+    "fa": "ایمیل ارسال شد "
+  },
+  {
+    "id": "project_invite_message_tips",
+    "en": "The tag {{link}} will be replaced by an encrypted link.",
+    "fa": "برچسب {{link}} با یک لینک رمزگذاری شده جایگزین خواهد شد. "
+  },
+  {
+    "id": "project_invite_message",
+    "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
+    "fa": "سلام!\n من می خواهم شما را به عنوان عضو پروژه دعوت کنم \" {{projectName}} \"در MapX.\n برای تأیید لطفاً روی پیوند ارائه شده کلیک کنید.\n {{link}}\n مجری طرح. "
+  },
+  {
+    "id": "project_invite_message_confirm",
+    "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
+    "fa": "سلام!\n ممنون که به ما رسیدید\n برای تأیید عضویت در پروژه {{projectName}} در MapX ، لطفاً روی پیوند زیر کلیک کنید:\n {{link}}\n با احترام،\n مجری طرح "
+  },
+  {
+    "id": "project_invite_notify_auto_register_email",
+    "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
+    "fa": "سلام،<br> کاربر ' {{emailUser}} از پیوند دعوت برای ورود به پروژه استفاده کرد {{project}} .<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> تاریخ انقضا: {{timeExpire}}</li></ul><br> روز خوبی داشته باشید ! "
+  },
+  {
+    "id": "project_invite_notify_auto_register_email_subject",
+    "en": "Invitation link used in project {{project}}",
+    "fa": "پیوند دعوت در پروژه استفاده می شود {{project}} "
+  },
+  {
+    "id": "project_user_added_email_user_subject",
+    "en": "You've have been added to project {{project}}",
+    "fa": "شما به پروژه اضافه شده اید {{project}} "
+  },
+  {
+    "id": "project_user_added_email_user",
+    "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
+    "fa": "سلام،<br> شما به پروژه اضافه شده اید {{project}} در گروه): {{roles}} .<br> روز خوبی داشته باشید ! "
+  },
+  {
+    "id": "project_user_added_email_admin_subject",
+    "en": "A user has been added to project {{project}}.",
+    "fa": "یک کاربر به پروژه اضافه شده است {{project}} . "
+  },
+  {
+    "id": "project_user_added_email_admin",
+    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
+    "fa": "یک کاربر ( {{emailUser}} ) به پروژه اضافه شده است {{project}} در گروه) {{roles}}<br> روز خوبی داشته باشید ! "
+  },
+  {
+    "id": "project_countries_highlight",
+    "en": "Countries to be highlighted on the map",
+    "fa": "کشورهایی که باید روی نقشه برجسته شوند "
+  },
+  {
+    "id": "project_id_theme",
+    "en": "Default theme",
+    "fa": "تم پیش‌فرض"
+  },
+  {
+    "id": "project_search_values",
+    "en": "Search projects",
+    "fa": "جستجوی پروژه ها "
+  },
+  {
+    "id": "project_saved",
+    "en": "Project saved",
+    "fa": "پروژه ذخیره شد "
+  },
+  {
+    "id": "project_created",
+    "en": "Project {{title}} created",
+    "fa": "پروژه {{title}} ایجاد شده "
+  },
+  {
+    "id": "project_deleted",
+    "en": "Project deleted",
+    "fa": "پروژه حذف شد "
+  },
+  {
+    "id": "project_delete_analyze",
+    "en": "Analysing, please wait...",
+    "fa": "با تجزیه و تحلیل ، لطفا صبر کنید ... "
+  },
+  {
+    "id": "project_delete_table_views",
+    "en": "Table of views to delete",
+    "fa": "جدول نماها برای حذف"
+  },
+  {
+    "id": "project_delete_table_sources",
+    "en": "Table of sources to delete",
+    "fa": "جدول منابع برای حذف"
+  },
+  {
+    "id": "project_delete_table_views_dep",
+    "en": "Table of dependent views to delete",
+    "fa": "جدول نماهای وابسته برای حذف"
+  },
+  {
+    "id": "project_delete_table_sources_dep",
+    "en": "Table of dependent sources to delete",
+    "fa": "جدول منابع وابسته برای حذف"
+  },
+  {
+    "id": "project_delete_title",
+    "en": "Project deletion",
+    "fa": "حذف پروژه "
+  },
+  {
+    "id": "project_new_title",
+    "en": "Title of the project",
+    "fa": "عنوان پروژه "
+  },
+  {
+    "id": "project_list",
+    "en": "List of projects",
+    "fa": "لیست پروژه ها "
+  },
+  {
+    "id": "project_list_select_desc",
+    "en": "Click on a project name to access it. If you are not member of a project, you can ask to join it by clicking the join button ",
+    "fa": "برای دسترسی به یک پروژه ، روی آن کلیک کنید. اگر عضو پروژه ای نیستید ، می توانید با کلیک روی دکمه عضویت درخواست پیوستن به آن را داشته باشید "
+  },
+  {
+    "id": "project_title",
+    "en": "Title",
+    "fa": "پروژه"
+  },
+  {
+    "id": "project_description",
+    "en": "Description",
+    "fa": "شرح "
+  },
+  {
+    "id": "project_settings",
+    "en": "Project settings",
+    "fa": "تنظیمات پروژه "
+  },
+  {
+    "id": "project_map_pos_set",
+    "en": "Initial map position",
+    "fa": "موقعیت اولیه نقشه "
+  },
+  {
+    "id": "project_map_proj_set",
+    "en": "Map projection (experimental)",
+    "fa": "طرح ریزی نقشه (تجربی)"
+  },
+  {
+    "id": "project_map_proj_name",
+    "en": "Projection name",
+    "fa": "نام پروجکشن"
+  },
+  {
+    "id": "project_map_proj_center_latitude",
+    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
+    "fa": "مرکز - عرض جغرافیایی ( Albers، Lamber Conic )"
+  },
+  {
+    "id": "project_map_proj_center_longitude",
+    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
+    "fa": "مرکز - طول جغرافیایی (آلبرز، مخروطی لامبر)"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_0",
+    "en": "Latitude North (Albers, Lamber Conic )",
+    "fa": "عرض شمالی (آلبرز، لامبر مخروطی)"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_1",
+    "en": "Latitude South (Albers, Lamber Conic )",
+    "fa": "Latitude South (Albers، Lamber Conic)"
+  },
+  {
+    "id": "project_request_membership_message",
+    "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
+    "fa": "سلام!\\n لطفا من را به پروژه اضافه کنید {{projectName}} .\\n با احترام،\\n یک عضو آینده با انگیزه\\n "
+  },
+  {
+    "id": "project_request_membership",
+    "en": "Membership request",
+    "fa": "درخواست عضویت "
+  },
+  {
+    "id": "project_request_membership_subject",
+    "en": "Application to join the {{project}} project ",
+    "fa": "برنامه پیوستن به {{project}} پروژه "
+  },
+  {
+    "id": "project_request_membership_message_recap",
+    "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
+    "fa": "<span>درخواست عضویت از {{from}} قبلا رسیده.</span><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> پیام:<b> {{msg}}</b></li><li style=\";text-align:right;direction:rtl\"> وضعیت کاربر:<b> {{userStatus}}</b></li><li style=\";text-align:right;direction:rtl\"> عمل: {{actionUrl}}</li><li style=\";text-align:right;direction:rtl\"> ارتباط دادن: {{projectUrl}}</li><li style=\";text-align:right;direction:rtl\"> داده ها:<pre style=\";text-align:right;direction:rtl\"> {{data}}</pre></li></ul> "
+  },
+  {
+    "id": "project_join_message_reply",
+    "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
+    "fa": "به درخواست عضویت از \"پاسخ دهید {{email}} \"برای پروژه\" {{project}} \" "
+  },
+  {
+    "id": "project_open_url",
+    "en": "Open the project \"{{project}}\"",
+    "fa": "پروژه را باز کنید \" {{project}} \" "
+  },
+  {
+    "id": "project_request_membership_message_sent",
+    "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
+    "fa": "درخواست شما به مدیر پروژه ارسال شده است ، شما طی روزهای آینده یک ایمیل تأیید دریافت خواهید کرد. صندوق ورودی خود را برای دریافت ایمیل از ربات MapX بررسی کنید و برای دسترسی به پروژه روی پیوند کلیک کنید! "
+  },
+  {
+    "id": "project_manage_load_title",
+    "en": "Load new project ?",
+    "fa": "پروژه جدید بارگذاری شود؟"
+  },
+  {
+    "id": "project_manage_load_content",
     "en": "Load project {{name}} ?",
     "fa": "بارگذاری پروژه {{name}} ?"
   },
   {
-    "id": "proj_manage_create_title",
+    "id": "project_manage_create_title",
     "en": "Create new project",
-    "fa": "پروژه جدید ایجاد کنید"
+    "fa": "ایجاد پروژه جدید"
   },
   {
-    "id": "proj_manage_create_label",
+    "id": "project_manage_create_label",
     "en": "Project name (english)",
     "fa": "نام پروژه (انگلیسی)"
   },
   {
-    "id": "proj_manage_btn_create",
+    "id": "project_manage_btn_create",
     "en": "Create",
-    "fa": "ايجاد كردن"
+    "fa": "ایجاد کردن"
   },
   {
-    "id": "proj_manage_create_placeholder",
+    "id": "project_manage_create_placeholder",
     "en": "Project name (english)",
     "fa": "نام پروژه (انگلیسی)"
   },
   {
-    "id": "proj_manage_name_ok",
+    "id": "project_manage_name_ok",
     "en": "Name valid",
     "fa": "نام معتبر است"
   },
   {
-    "id": "proj_manage_creation_not_allowed",
+    "id": "project_manage_creation_not_allowed",
     "en": "Creation not allowed",
     "fa": "ایجاد مجاز نیست"
   },
   {
-    "id": "proj_manage_not_allowed",
+    "id": "project_manage_not_allowed",
     "en": "Not allowed",
     "fa": "مجاز نیست"
   },
   {
-    "id": "proj_manage_name_not_valid",
+    "id": "project_manage_name_not_valid",
     "en": "Invalid name",
     "fa": "نام نامعتبر"
   },
   {
-    "id": "proj_manage_name_not_in_range",
+    "id": "project_manage_name_not_in_range",
     "en": "Name string not in range : min 3, max 50 characters",
-    "fa": "رشته نام در محدوده نیست: حداقل 3، حداکثر 50 کاراکتر"
+    "fa": "طول نام خارج از محدوده: حداقل 3، حداکثر 50 کاراکتر"
   },
   {
-    "id": "proj_manage_name_not_available",
+    "id": "project_manage_name_not_available",
     "en": "Name not available",
     "fa": "نام در دسترس نیست"
+  },
+  {
+    "id": "project_basic_info",
+    "en": "Project info",
+    "fa": "اطلاعات پروژه"
+  },
+  {
+    "id": "project_org_details",
+    "en": "Organisation details",
+    "fa": "جزئیات سازمان"
+  },
+  {
+    "id": "project_org_name",
+    "en": "Name",
+    "fa": "نام"
+  },
+  {
+    "id": "project_contact_name",
+    "en": "Contact name",
+    "fa": "نام تماس"
+  },
+  {
+    "id": "project_contact_email",
+    "en": "Contact email",
+    "fa": "ایمیل تماس"
+  },
+  {
+    "id": "project_appearance",
+    "en": "Apparance & theme",
+    "fa": "ظاهر و قالب"
+  },
+  {
+    "id": "project_logo",
+    "en": "Project logo",
+    "fa": "لوگوی پروژه"
+  },
+  {
+    "id": "project_logo_upload",
+    "en": "Drag and drop SVG or click to choose a file...",
+    "fa": "SVG را بکشید و رها کنید یا برای انتخاب فایل کلیک کنید..."
+  },
+  {
+    "id": "project_map_settings",
+    "en": "Map settings",
+    "fa": "تنظیمات نقشه"
+  },
+  {
+    "id": "project_map_projection",
+    "en": "Map projection",
+    "fa": "تصویر نقشه"
+  },
+  {
+    "id": "project_map_projection_type",
+    "en": "Default map projection type",
+    "fa": "نوع پیش‌فرض تصویر نقشه"
+  },
+  {
+    "id": "project_map_projection_mercator",
+    "en": "Web mercator",
+    "fa": "مرکاتور وب"
+  },
+  {
+    "id": "project_map_projection_globe",
+    "en": "Globe",
+    "fa": "کره زمین"
+  },
+  {
+    "id": "project_disable_globe",
+    "en": "Disable globe mode in the UI",
+    "fa": "غیرفعال کردن حالت کره زمین در رابط کاربری"
+  },
+  {
+    "id": "project_access_settings",
+    "en": "Project access settings",
+    "fa": "تنظیمات دسترسی پروژه"
   },
   {
     "id": "schema_story_theme",

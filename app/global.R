@@ -45,6 +45,7 @@ mxSource("src/r/helpers/db_views.R")
 mxSource("src/r/helpers/schema_source_meta.R")
 mxSource("src/r/helpers/schema_view_story.R")
 mxSource("src/r/helpers/schema_view_style.R")
+mxSource("src/r/helpers/schema_project_config.R")
 
 #
 # Global configuration

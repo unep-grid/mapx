@@ -33,13 +33,13 @@ export class ProjectManager {
       const name =
         config?.name ||
         (await modalPrompt({
-          title: tt("proj_manage_create_title"),
-          label: tt("proj_manage_create_label"),
-          confirm: tt("proj_manage_btn_create"),
+          title: tt("project_manage_create_title"),
+          label: tt("project_manage_create_label"),
+          confirm: tt("project_manage_btn_create"),
           inputOptions: {
             type: "text",
             value: ``,
-            placeholder: await getDictItem("proj_manage_create_placeholder"),
+            placeholder: await getDictItem("project_manage_create_placeholder"),
           },
           onInput: pm.validateCreatePrompt,
         }));
@@ -68,8 +68,8 @@ export class ProjectManager {
       }
 
       const open = await modalConfirm({
-        title: tt("proj_manage_load_title"),
-        content: tt("proj_manage_load_content", {
+        title: tt("project_manage_load_title"),
+        content: tt("project_manage_load_content", {
           data: { name: project?.title?.en },
         }),
         confirm: tt("btn_confirm"),
@@ -100,7 +100,7 @@ export class ProjectManager {
       btnCreate.classList.add("disabled");
       pm.disable();
     } else {
-      elFrag.appendChild(el("span", tt("proj_manage_name_ok")));
+      elFrag.appendChild(el("span", tt("project_manage_name_ok")));
       btnCreate.removeAttribute("disabled");
       btnCreate.classList.remove("disabled");
       pm.enable();
@@ -144,7 +144,7 @@ export class ProjectManager {
     return new Promise((resolve, reject) => {
       const isAuthorized = options.roles.find(r => settings.user.roles[r])
       if (!isAuthorized) {
-        return reject("proj_manage_not_allowed");
+        return reject("project_manage_not_allowed");
       }
       return resolve(true);
     });

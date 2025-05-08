@@ -8,11 +8,11 @@ export async function ioProjectCreate(socket, data, cb) {
   try {
     const auth = isRoot(socket) || isProjectCreator(socket);
     if (!auth) {
-      throw new Error("proj_manage_creation_not_allowed");
+      throw new Error("project_manage_creation_not_allowed");
     }
     const issues = await validate(data.name);
     if (isNotEmpty(issues)) {
-      throw new Error("proj_manage_name_not_valid");
+      throw new Error("project_manage_name_not_valid");
     }
     const idUser = socket.session.user_id;
     const project = await addProject(idUser, data.name);

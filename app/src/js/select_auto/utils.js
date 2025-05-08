@@ -32,6 +32,7 @@ async function configLoader(type) {
       return config;
     }
     default:
+      debugger;
       throw new Error(`Missing resolver ${type} `);
   }
 }

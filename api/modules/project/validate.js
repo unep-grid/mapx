@@ -8,7 +8,7 @@ export async function ioProjectNameValidate(socket, data, cb) {
     const auth = isRoot(socket) || isProjectCreator(socket);
 
     if (!auth) {
-      throw new Error("proj_manage_not_allowed");
+      throw new Error("project_manage_not_allowed");
     }
 
     data.issues = await validate(data.name);
@@ -26,7 +26,7 @@ export async function validate(name) {
   const inRange = isStringRange(name, pName.min, pName.max);
 
   if (!inRange) {
-    issues.push("proj_manage_name_not_in_range");
+    issues.push("project_manage_name_not_in_range");
   }
 
   const res = await pgRead.query(
@@ -43,7 +43,7 @@ export async function validate(name) {
   const available = res.rowCount > 0 && res.rows[0].count === 0;
 
   if (!available) {
-    issues.push("proj_manage_name_not_available");
+    issues.push("project_manage_name_not_available");
   }
 
   return issues;

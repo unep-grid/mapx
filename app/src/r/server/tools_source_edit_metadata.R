@@ -31,117 +31,117 @@ observeEvent(reactData$triggerSourceMetadata, {
 
     if (!isPublisher || !isAllowed) {
       return()
-    } else {
-      uiOut <- tagList(
-        uiOutput("uiValidateSourceMetadata", class = "mx-error-container"),
-        jedOutput("jedSourceMetadata")
-      )
-
-      btn <- list(
-        actionButton(
-          "btnSaveSourceMetadata",
-          d("btn_save", language),
-          disabled = TRUE
-        ),
-        actionButton(
-          "btnValidateMetadata",
-          d("btn_validate_metadata", language)
-        )
-      )
-
-      mxModal(
-        id = "editSourceMetadata",
-        title = d("source_edit_metadata", language),
-        content = uiOut,
-        buttons = btn,
-        textCloseButton = d("btn_close", language)
-      )
-
-      #
-      # Init schema
-      #
-      schema <- list()
-      meta <- list()
-      attributesNames <- list()
-
-
-      #
-      # Get old layer meta
-      #
-      meta <- mxDbGetSourceMeta(layer)
-      hasJoin <- isNotEmpty(meta$join)
-
-      if (isEmpty(.get(meta, c("spatial", "bbox"), list()))) {
-        #
-        # This is also performed if the user request a zoom to all features
-        # client side and not valid bbox  is found, we updated that
-        # -> see api/modules/view/metadata.js
-        #
-        extent <- mxDbGetLayerExtent(layer)
-        bbox <- list(
-          lng_min  = .get(extent, "lng1", -180),
-          lng_max  = .get(extent, "lng2", 180),
-          lat_min  = .get(extent, "lat1", -90),
-          lat_max  = .get(extent, "lat2", 90)
-        )
-        meta <- .set(meta, c("spatial", "bbox"), bbox)
-      } else {
-        extent <- list()
-      }
-
-      #
-      # Clean and/or update attribute
-      #
-      attributesNames <- mxDbGetTableColumnsNames(layer,
-        notIn = c(
-          "gid",
-          "geom",
-          "mx_t0",
-          "mx_t1",
-          "_mx_valid"
-        )
-      )
-      attributesOld <- names(.get(meta, c("text", "attributes")))
-      attributesRemoved <- attributesOld[!attributesOld %in% attributesNames]
-
-      for (a in attributesRemoved) {
-        meta <- .set(meta, c("text", "attributes", a), NULL)
-      }
-
-      #
-      # Create schema for source metadata,
-      # Use attributes to generate attributes object
-      #
-      schema <- mxSchemaSourceMeta(
-        language = language,
-        attributesNames = attributesNames,
-        noAttributes = hasJoin,
-        idSource = layer
-      )
-
-      sourceTimeLastModified <- mxDbGetSourceLastDateModified(layer)
-      sourceTimeStamp <- as.numeric(
-        as.POSIXct(
-          sourceTimeLastModified,
-          format = "%Y-%m-%d%tT%T",
-          tz = "UTC"
-        )
-      )
-
-
-      jedSchema(
-        id = "jedSourceMetadata",
-        schema = schema,
-        startVal = meta,
-        options = list(
-          disableSelectize = FALSE,
-          draftAutoSaveId = layer,
-          draftAutoSaveDbTimestamp = sourceTimeStamp,
-          getValidationOnChange = TRUE,
-          addSearch = TRUE
-        )
-      )
     }
+
+    uiOut <- tagList(
+      uiOutput("uiValidateSourceMetadata", class = "mx-error-container"),
+      jedOutput("jedSourceMetadata")
+    )
+
+    btn <- list(
+      actionButton(
+        "btnSaveSourceMetadata",
+        d("btn_save", language),
+        disabled = TRUE
+      ),
+      actionButton(
+        "btnValidateMetadata",
+        d("btn_validate_metadata", language)
+      )
+    )
+
+    mxModal(
+      id = "editSourceMetadata",
+      title = d("source_edit_metadata", language),
+      content = uiOut,
+      buttons = btn,
+      textCloseButton = d("btn_close", language)
+    )
+
+    #
+    # Init schema
+    #
+    schema <- list()
+    meta <- list()
+    attributesNames <- list()
+
+
+    #
+    # Get old layer meta
+    #
+    meta <- mxDbGetSourceMeta(layer)
+    hasJoin <- isNotEmpty(meta$join)
+
+    if (isEmpty(.get(meta, c("spatial", "bbox"), list()))) {
+      #
+      # This is also performed if the user request a zoom to all features
+      # client side and not valid bbox  is found, we updated that
+      # -> see api/modules/view/metadata.js
+      #
+      extent <- mxDbGetLayerExtent(layer)
+      bbox <- list(
+        lng_min  = .get(extent, "lng1", -180),
+        lng_max  = .get(extent, "lng2", 180),
+        lat_min  = .get(extent, "lat1", -90),
+        lat_max  = .get(extent, "lat2", 90)
+      )
+      meta <- .set(meta, c("spatial", "bbox"), bbox)
+    } else {
+      extent <- list()
+    }
+
+    #
+    # Clean and/or update attribute
+    #
+    attributesNames <- mxDbGetTableColumnsNames(layer,
+      notIn = c(
+        "gid",
+        "geom",
+        "mx_t0",
+        "mx_t1",
+        "_mx_valid"
+      )
+    )
+    attributesOld <- names(.get(meta, c("text", "attributes")))
+    attributesRemoved <- attributesOld[!attributesOld %in% attributesNames]
+
+    for (a in attributesRemoved) {
+      meta <- .set(meta, c("text", "attributes", a), NULL)
+    }
+
+    #
+    # Create schema for source metadata,
+    # Use attributes to generate attributes object
+    #
+    schema <- mxSchemaSourceMeta(
+      language = language,
+      attributesNames = attributesNames,
+      noAttributes = hasJoin,
+      idSource = layer
+    )
+
+    sourceTimeLastModified <- mxDbGetSourceLastDateModified(layer)
+    sourceTimeStamp <- as.numeric(
+      as.POSIXct(
+        sourceTimeLastModified,
+        format = "%Y-%m-%d%tT%T",
+        tz = "UTC"
+      )
+    )
+
+
+    jedSchema(
+      id = "jedSourceMetadata",
+      schema = schema,
+      startVal = meta,
+      options = list(
+        disableSelectize = FALSE,
+        draftAutoSaveId = layer,
+        draftAutoSaveDbTimestamp = sourceTimeStamp,
+        getValidationOnChange = TRUE,
+        addSearch = TRUE
+      )
+    )
   })
 })
 
