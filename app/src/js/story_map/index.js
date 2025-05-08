@@ -43,7 +43,6 @@ import {
   viewRender,
   viewsLayersOrderUpdate,
   getMap,
-  getViewsLayersVisibles,
   setMapProjection,
   getViewAuto,
   getViewsActive,
@@ -230,7 +229,6 @@ function initMouseMoveListener() {
     if (s.opacity_auto_timeout === 0) {
       return;
     }
- 
 
     show();
     timer = setTimeout(() => {
@@ -432,8 +430,6 @@ async function initStory() {
   }
   Object.assign(story, state.view.data.story);
 }
-
-
 
 /**
  * Start
@@ -801,7 +797,6 @@ async function storyUpdateSlides() {
     }
 
     if (toActivate) {
-      await updateBullets();
       await storyPlayStep(s);
     }
   }
@@ -1614,8 +1609,8 @@ export async function storyPlayStep(stepNum) {
     map.stop();
     events.fire("story_step");
     /**
-    * Always lock at each step
-    */ 
+     * Always lock at each step
+     */
     storyMapLock("lock");
 
     /**
@@ -1719,9 +1714,7 @@ export async function storyPlayStep(stepNum) {
       order: vStep,
     });
 
-    /**
-     * Update panels behaviour
-     */
+    await updateBullets();
     await updatePanelBehaviour(settings, step);
   } catch (e) {
     console.warn(e);
