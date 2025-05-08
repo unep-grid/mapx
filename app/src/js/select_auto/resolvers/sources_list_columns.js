@@ -39,8 +39,6 @@ export const config = {
   },
 };
 
-
-
 async function update() {
   const tom = this;
   try {
@@ -69,7 +67,11 @@ function formater(data, escape) {
         },
       },
       el("span", escape(data.column_name)),
-      el("span", { class: "text-muted" }, escape(data.column_type)),
+      el(
+        "span",
+        { class: ["text-muted", "space-around"] },
+        escape(data.column_type),
+      ),
     ),
   ]);
 }

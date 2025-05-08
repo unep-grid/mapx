@@ -30,7 +30,7 @@ export const config = {
           class: "mx-flex-space-between",
         },
         el("label", elSpanTranslate(id)),
-        el("small", { class: "text-muted" }, `${id}`),
+        el("small", { class: ["text-muted", "space-around"] }, `${id}`),
       );
     },
     item: (data, escape) => {
@@ -45,7 +45,7 @@ export const config = {
           },
           [
             el("span", elSpanTranslate(id)),
-            el("span", { class: ["text-muted"] }, ` ${id}`),
+            el("span", { class: ["text-muted", "space-around"] }, ` ${id}`),
           ],
         ),
       );
