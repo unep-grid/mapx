@@ -807,9 +807,6 @@ async function storyUpdateSlides() {
 
 async function updateBullets() {
   const state = getState();
-  if (!state.enable) {
-    return;
-  }
   const s = state.stepActive;
   const elBullets = state.elBullets;
   const nStep = state.stepsConfig.length;
@@ -1623,6 +1620,8 @@ export async function storyPlayStep(stepNum) {
     state.stepActive = stepNum;
     state.step = step;
 
+    await updateBullets();
+
     const pos = step.position;
     const anim = Object.assign(
       {},
@@ -1717,7 +1716,6 @@ export async function storyPlayStep(stepNum) {
       order: vStep,
     });
 
-    await updateBullets();
     await updatePanelBehaviour(settings, step);
   } catch (e) {
     console.warn(e);
