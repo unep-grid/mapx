@@ -1,3 +1,9 @@
+  - [1.13.17-beta.1](https://github.com/unep-grid/mapx/tree/1.13.17-beta.1) 
+
+    - fix(story): start() method launch an infinite animation rendering, don't await that
+    - fix(select items): text-muted style in drop down menus
+
+
   - [1.13.17-beta.0](https://github.com/unep-grid/mapx/tree/1.13.17-beta.0) 
 
     - fix(story): better bullet handling
