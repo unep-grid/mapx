@@ -43,7 +43,6 @@ import {
   viewRender,
   viewsLayersOrderUpdate,
   getMap,
-  getViewsLayersVisibles,
   setMapProjection,
   getViewAuto,
   getViewsActive,
@@ -70,7 +69,7 @@ export async function storyRead(opt) {
   try {
     if (opt.close) {
       await storyClose();
-      return;
+      return true;
     }
     await init(opt);
     await initStory();
@@ -84,9 +83,14 @@ export async function storyRead(opt) {
     await initListeners();
     await handleMissingImages();
     await initAdaptiveLayout();
-    await start();
+    // start  = infinite loop rendering
+    start().catch((e) => {
+      errorHandler(e);
+    });
   } catch (e) {
     errorHandler(e);
+  } finally {
+    return true;
   }
 }
 
@@ -230,7 +234,6 @@ function initMouseMoveListener() {
     if (s.opacity_auto_timeout === 0) {
       return;
     }
- 
 
     show();
     timer = setTimeout(() => {
@@ -356,6 +359,9 @@ async function storyUiClear() {
  */
 export async function storyClose() {
   const state = getState();
+  if (isEmpty(state) || !state.enable) {
+    return;
+  }
   state.enable = false;
   events.fire("story_close");
   removeAllListeners();
@@ -432,8 +438,6 @@ async function initStory() {
   }
   Object.assign(story, state.view.data.story);
 }
-
-
 
 /**
  * Start
@@ -801,7 +805,6 @@ async function storyUpdateSlides() {
     }
 
     if (toActivate) {
-      await updateBullets();
       await storyPlayStep(s);
     }
   }
@@ -809,9 +812,6 @@ async function storyUpdateSlides() {
 
 async function updateBullets() {
   const state = getState();
-  if (!state.enable) {
-    return;
-  }
   const s = state.stepActive;
   const elBullets = state.elBullets;
   const nStep = state.stepsConfig.length;
@@ -1614,8 +1614,8 @@ export async function storyPlayStep(stepNum) {
     map.stop();
     events.fire("story_step");
     /**
-    * Always lock at each step
-    */ 
+     * Always lock at each step
+     */
     storyMapLock("lock");
 
     /**
@@ -1624,6 +1624,8 @@ export async function storyPlayStep(stepNum) {
     state.currentStep = stepNum;
     state.stepActive = stepNum;
     state.step = step;
+
+    await updateBullets();
 
     const pos = step.position;
     const anim = Object.assign(
@@ -1719,9 +1721,6 @@ export async function storyPlayStep(stepNum) {
       order: vStep,
     });
 
-    /**
-     * Update panels behaviour
-     */
     await updatePanelBehaviour(settings, step);
   } catch (e) {
     console.warn(e);

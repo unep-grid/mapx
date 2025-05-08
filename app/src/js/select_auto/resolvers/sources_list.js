@@ -140,7 +140,7 @@ function formaterItem(data, escape) {
       },
       [
         el("span", title),
-        el("span", { class: "text-muted" }, `${type}${txt_global}`),
+        el("span", { class: ["text-muted", "space-around"] }, `${type}${txt_global}`),
       ],
     ),
   ]);

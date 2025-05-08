@@ -1026,6 +1026,7 @@ code {
   hyphens: auto;
   color: var(--mx_ui_text_faded);
   transition: color ease-in-out 100ms;
+  align-content: center;
 }
 .text-muted:hover,
 .text-muted:hover > * {

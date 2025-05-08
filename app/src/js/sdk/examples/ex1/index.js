@@ -1,7 +1,6 @@
 const mapx = new mxsdk.Manager({
   container: document.getElementById("mapx"),
   verbose: true,
-
   url: {
     host: "dev.mapx.localhost",
     port: 8880,

@@ -68,16 +68,10 @@ function renderItem(view, escape) {
     /*
      * remove button will be added here
      */
-    el(
-      "div",
-      {
-        style: {
-          display: "flex",
-          flexDirection: "column",
-        },
-      },
-      [el("span", title), el("span", { class: ["text-muted"] }, titleProject)],
-    ),
+    el("div", [
+      el("span", title),
+      el("span", { class: ["text-muted", "space-around"] }, titleProject),
+    ]),
   );
 }
 
