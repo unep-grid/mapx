@@ -22,7 +22,7 @@ observeEvent(input$btnShowProjectConfig, {
   # Create additional UI components that are not part of the schema
   ui <- tagList(
     jedOutput("projectConfigSchema"),
-    uiOutput("uiValidateProject")
+    uiOutput("uiValidateProject", class = c("mx-sticky-bottom-10"))
   )
 
   btnSave <- actionButton(
@@ -51,7 +51,7 @@ observeEvent(input$btnShowProjectConfig, {
     options = list(
       getValidationOnChange = TRUE,
       getValuesOnChange = TRUE,
-      draftAutoSaveId = sprintf('jed_project_config_%s',project),
+      draftAutoSaveId = sprintf("jed_project_config_%s", project),
       draftAutoSaveDbTimestamp = projectTimeStamp
     )
   )
@@ -186,8 +186,8 @@ observeEvent(input$btnSaveProjectConfig, {
   description <- .get(data, c("basic_info", "description"))
   aliasProject <- .get(data, c("basic_info", "alias"))
   orgName <- .get(data, c("basic_info", "organisation", "org_name"))
-  contactName <- .get(data, c("basic_info", "organisation", "contact_name"))
-  contactEmail <- .get(data, c("basic_info", "organisation", "contact_email"))
+  contactName <- .get(data, c("basic_info", "organisation", "org_contact_name"))
+  contactEmail <- .get(data, c("basic_info", "organisation", "org_contact_email"))
 
   # Appearance section
   logo <- .get(data, c("appearance", "logo"))
@@ -234,8 +234,8 @@ observeEvent(input$btnSaveProjectConfig, {
     description = description,
     alias = aliasProject,
     org_name = orgName,
-    contact_name = contactName,
-    contact_email = contactEmail,
+    org_contact_name = contactName,
+    org_contact_email = contactEmail,
     admins = NULL, # Keep existing data structure
     members = NULL, # Keep existing data structure
     publishers = NULL, # Keep existing data structure
@@ -263,13 +263,11 @@ observeEvent(input$btnSaveProjectConfig, {
     disable = FALSE
   )
 
+  projectData <- mxDbGetProjectData(idProject)
+
   # Update UI settings
   mxUpdateSettings(list(
-    project = list(
-      id = project,
-      public = isPublic,
-      title = title
-    )
+    project = projectData
   ))
 
   # Flash save icon

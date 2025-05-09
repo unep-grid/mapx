@@ -3,6 +3,7 @@ import {
   isArray,
   isObject,
   isEmpty,
+  isNotEmpty,
   isFunction,
   isNumeric,
   isHTML,
@@ -170,7 +171,9 @@ export class ElementCreator {
       case "class":
         if (isArray(value)) {
           for (const className of value) {
-            elOut.classList.add(className);
+            if (isNotEmpty(className)) {
+              elOut.classList.add(className);
+            }
           }
         } else {
           elOut.className = value;

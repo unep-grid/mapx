@@ -1099,6 +1099,12 @@ input[type="checkbox"] {
   z-index: 10;
 }
 
+.mx-sticky-bottom-10 {
+  position: sticky;
+  bottom: 10px;
+  z-index: 10;
+}
+
 .mx-flex-space-between {
   display: flex;
   justify-content: space-between;

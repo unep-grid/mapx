@@ -774,6 +774,16 @@ export function date(val) {
   return out;
 }
 
+export function formatDate(dateString, language = "en") {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  return date.toLocaleDateString(language, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
 /**
  * Get week number
  * @param {Date} date Optional date

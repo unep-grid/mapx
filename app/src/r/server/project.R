@@ -210,7 +210,6 @@ observeEvent(reactData$mapIsReady, {
 # Show project panel
 #
 observeEvent(reactChain$showProjectsList, {
-
   userRole <- getUserRole()
   userData <- reactUser$data
   project <- reactData$project
@@ -340,11 +339,7 @@ observeEvent(reactData$project, {
   ))
 
   mxUpdateSettings(list(
-    project = list(
-      id = idProject,
-      public = projectData$public,
-      title = projectData$title
-    )
+    project = projectData
   ))
 
   if (!isGuest) {

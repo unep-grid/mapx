@@ -1,16 +1,27 @@
 <div class="mx-panel--header">
-  <!--title -->
-  <button
-    tabindex="0"
-    class="mx-panel--header-btn mx-panel--header-btn-title hint hint--bottom-right hint--fit"
-    id="btnShowProject">
-    <img alt="MapX" src="./../svg/logo.svg" class="mx-panel--header-btn-logo" />
-    <span
-      class="mx-panel--header-btn-label"
-      aria-label="Project"
-      id="btnShowProjectLabel"></span>
-    <i id="btnShowProjectPrivate" class="fa"></i>
-  </button>
+  <!-- project -->
+  <div class="mx-panel--header-group">
+    <button
+      tabindex="0"
+      class="mx-panel--header-btn mx-panel--header-btn-title hint hint--bottom-right hint--fit"
+      id="btnShowProject">
+      <img
+        alt="MapX"
+        src="./../svg/logo.svg"
+        class="mx-panel--header-btn-logo" />
+      <span
+        class="mx-panel--header-btn-label"
+        aria-label="Project"
+        id="btnShowProjectLabel"></span>
+      <i id="btnShowProjectPrivate" class="fa"></i>
+    </button>
+    <button
+      tabindex="1"
+      id="btnShowProjectInfo"
+      class="mx-panel--header-btn hint hint--bottom-right hint--fit">
+      <i aria-label="Project info" class="fa fa-info"></i>
+    </button>
+  </div>
 
   <!-- login -->
   <button class="mx-panel--header-btn" id="btnShowLogin">

@@ -70,13 +70,13 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
               contact_name = list(
                 type = "string",
                 title = tt("project_contact_name"),
-                default = projectData$contact_name
+                default = projectData$org_contact_name
               ),
               contact_email = list(
                 type = "string",
                 title = tt("project_contact_email"),
                 format = "email",
-                default = projectData$contact_email
+                default = projectData$org_contact_email
               )
             )
           )
@@ -252,8 +252,8 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
       alias = projectData$alias,
       organisation = list(
         org_name = projectData$org_name,
-        contact_name = projectData$contact_name,
-        contact_email = projectData$contact_email
+        org_contact_name = projectData$org_contact_name,
+        org_contact_email = projectData$org_contact_email
       )
     ),
     appearance = list(

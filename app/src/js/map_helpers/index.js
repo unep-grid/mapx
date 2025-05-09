@@ -145,6 +145,7 @@ import { ButtonFilter } from "../button_filter/index.js";
 import { ViewsUpdateHelper } from "../views_list_update/index.js";
 import { getViewSourceMetadata } from "../metadata/utils.js";
 import { eventToPointBbox } from "./utils.js";
+import { showProjectInfo } from "../project/info.js";
 export * from "./view_filters.js";
 
 /**
@@ -756,6 +757,13 @@ export function initListenersApp() {
     target: document.getElementById("btnShowProject"),
     type: "click",
     callback: showSelectProject,
+    group: "mapx_base",
+  });
+
+  listeners.addListener({
+    target: document.getElementById("btnShowProjectInfo"),
+    type: "click",
+    callback: showProjectInfo,
     group: "mapx_base",
   });
 
@@ -2697,7 +2705,6 @@ export async function viewRemove(idView) {
     if (view._vb instanceof ViewBase) {
       view._vb.close();
     }
-   
 
     await viewClear({
       idView: view.id,
