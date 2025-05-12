@@ -49,6 +49,7 @@ observeEvent(input$btnShowProjectConfig, {
     schema = schema$schema,
     startVal = schema$startVal,
     options = list(
+      addSearch = TRUE,
       getValidationOnChange = TRUE,
       getValuesOnChange = TRUE,
       draftAutoSaveId = sprintf("jed_project_config_%s", project),

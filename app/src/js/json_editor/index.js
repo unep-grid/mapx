@@ -81,7 +81,7 @@ export async function jedInit(o) {
     theme: "bootstrap3",
     iconlib: "bootstrap3",
     //disable_collapse: true,
-    collapsed : false,
+    collapsed: false,
     disable_properties: true,
     disable_edit_json: false,
     required_by_default: true,
@@ -132,6 +132,7 @@ export async function jedInit(o) {
   /**
    * Test for readyness
    */
+
   editor.on("ready", async function () {
     const hasShiny = isShinyReady();
 
@@ -142,21 +143,22 @@ export async function jedInit(o) {
       try {
         const draft = await mx_storage.draft.getItem(idDraft);
         draftLock = false;
-        if (!draft || draft.type !== "draft") {
-          return;
-        }
-        const draftClientTimeStamp = draft.timestamp;
-        // add 5 sec margin
-        const moreRecent = draftClientTimeStamp > draftDbTimeStamp;
+        const validDraft = isNotEmpty(draft) && draft?.type === "draft";
 
-        if (moreRecent) {
-          await jedShowDraftRecovery({
-            editor: editor,
-            idDraft: idDraft,
-            timeDb: opt_final.draftAutoSaveDbTimestamp,
-            draft: draft,
-            saved: opt_final.startval,
-          });
+        if (validDraft) {
+          const draftClientTimeStamp = draft.timestamp;
+          // add 5 sec margin
+          const moreRecent = draftClientTimeStamp > draftDbTimeStamp;
+
+          if (moreRecent) {
+            await jedShowDraftRecovery({
+              editor: editor,
+              idDraft: idDraft,
+              timeDb: opt_final.draftAutoSaveDbTimestamp,
+              draft: draft,
+              saved: opt_final.startval,
+            });
+          }
         }
       } catch (e) {
         draftLock = false;
@@ -167,6 +169,7 @@ export async function jedInit(o) {
     /**
      * Add search item
      */
+
     if (opt_final.addSearch) {
       const elInput = el("input", {
         type: "text",
@@ -181,7 +184,6 @@ export async function jedInit(o) {
         elContainer: elJed.parentElement,
         timeout: 50,
       });
-
     }
 
     /**
