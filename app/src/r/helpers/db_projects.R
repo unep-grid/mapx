@@ -441,6 +441,7 @@ mxDbSaveProjectData <- function(idProject, values = list(
   map_position = NULL,
   map_projection = NULL,
   theme = NULL,
+  theme_data = NULL,
   countries = NULL,
   creator = NULL,
   allow_join = NULL,
@@ -480,7 +481,7 @@ mxDbSaveProjectData <- function(idProject, values = list(
         idCol = "id",
         id = idProject,
         column = key,
-        value = as.list(value)
+        value = value
       )
     }
   }
@@ -513,7 +514,15 @@ mxDbSaveProjectData <- function(idProject, values = list(
     }
   }
 
-  for (key in c("alias", "theme", "logo", "org_name", "org_contact_name", "org_contact_email")) {
+  for (key in c(
+    "alias",
+    "theme",
+    "logo",
+    "org_name",
+    "org_contact_name",
+    "org_contact_email",
+    "theme_data"
+  )) {
     value <- values[[key]]
     toUpdate <- notNull(value)
     if (toUpdate) {

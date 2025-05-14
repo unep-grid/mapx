@@ -4997,9 +4997,7 @@ export async function setMapProjection(opt) {
  * @param {String} opt.id Theme id
  */
 export async function setTheme(opt) {
-  if (theme.isValidId(opt.id)) {
-    await theme.set(opt.id, { save_url: true });
-  }
+  await theme.set(opt.theme, { save_url: true });
 }
 
 /**

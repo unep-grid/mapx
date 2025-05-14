@@ -50,5 +50,18 @@
     "ps": "په‌رته‌کاندن/کچک کول",
     "bn": "বাড়ান/সংকোচন",
     "de": "Erweitern/Minimieren"
+  },
+  {
+    "id": "btn_editor_tool_import_current_theme",
+    "en": "Import current theme",
+    "fr": "Importer le thème actuel",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
   }
 ]

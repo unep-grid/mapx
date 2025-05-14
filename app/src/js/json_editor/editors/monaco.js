@@ -5,6 +5,8 @@ import { textToDom } from "./../../mx_helper_misc.js";
 import { el, elSpanTranslate, elButtonFa } from "./../../el_mapx/index.js";
 import { theme } from "./../../mx.js";
 import { jed } from "./../index.js";
+import { DataDiffModal } from "../../data_diff_recover/index.js";
+import { isEmpty } from "../../is_test/index.js";
 
 JSONEditor.defaults.resolvers.unshift(function (schema) {
   if (
@@ -79,18 +81,12 @@ JSONEditor.defaults.editors.monaco = class mxeditors extends (
     const editor = this;
     const mode = editor.options.language;
 
-    /* === "javascript"*/
-    /*? "typescript"*/
-    /*: editor.options.language;*/
-
     const editors = jed.monacoEditors;
 
     if (editor.options.hidden) {
       editor.theme.afterInputReady(editor.input);
       return;
     }
-
-    const addTools = !editor.options.readonly;
 
     /**
      * wrapper
@@ -138,11 +134,15 @@ JSONEditor.defaults.editors.monaco = class mxeditors extends (
     /**
      * set default;
      */
+    const value = editor.getValue();
     editor._monaco = monaco;
     editor._editor = monaco.editor;
     editor._monaco_editor = monaco.editor.create(editor._el_monaco_container, {
       language: mode,
-      value: editor.getValue(),
+      value:
+        mode === "json"
+          ? JSON.stringify(JSON.parse(value || '""'), 0, 2)
+          : value,
       theme: theme.isDarkMode() ? "vs-dark" : "vs-light",
       readOnly: editor.options.readOnly === true,
       automaticLayout: true,
@@ -179,62 +179,7 @@ JSONEditor.defaults.editors.monaco = class mxeditors extends (
      */
     editors.push(editor._monaco_editor);
 
-    /**
-     * Add tools
-     */
-    if (addTools) {
-      const elBtnTidy = elButtonFa("btn_editor_tool_format", {
-        icon: "magic",
-        action: async () => {
-          await editor._monaco_editor
-            .getAction("editor.action.formatDocument")
-            .run();
-        },
-      });
-      editor._el_tool_container.appendChild(elBtnTidy);
-      const elBtnExpand = elButtonFa("btn_editor_tool_expand_editor", {
-        icon: "expand",
-        action: async () => {
-          const elIcon = elBtnExpand.querySelector(".fa");
-          const elTarget = editor.jsoneditor.element.parentElement;
-          const elTargetContainer = elTarget.parentElement;
-          const elWrapper = editor._el_monaco_wrapper;
-          const isExpanded = elIcon.classList.contains("fa-compress");
-          elIcon.classList.toggle("fa-compress");
-          elIcon.classList.toggle("fa-expand");
-          if (isExpanded) {
-            elTarget.style.display = "block";
-            editor.input.parentNode.insertBefore(
-              editor._el_monaco_wrapper,
-              editor.input,
-            );
-            editor._el_monaco_wrapper.scrollIntoView(true);
-          } else {
-            elTarget.style.display = "none";
-            elTargetContainer.appendChild(elWrapper);
-          }
-        },
-      });
-      editor._el_tool_container.appendChild(elBtnExpand);
-    }
-
-    /**
-     * Add optional help panel
-     */
-    if (editor.options.htmlHelp) {
-      const elHelp = textToDom(editor.options.htmlHelp);
-      const elBtnHelp = elButtonFa("btn_editor_tool_help", {
-        icon: "question",
-        action: () => {
-          modalSimple({
-            title: elSpanTranslate("btn_editor_tool_help_title"),
-            content: elHelp,
-            addBackground: true,
-          });
-        },
-      });
-      editor._el_tool_container.appendChild(elBtnHelp);
-    }
+    await handleCustomFeatures(editor);
   }
 
   disable() {
@@ -273,3 +218,98 @@ JSONEditor.defaults.editors.monaco = class mxeditors extends (
     }
   }
 };
+
+async function handleCustomFeatures(editor) {
+  const options = editor.options;
+  const editorMonaco = editor._monaco_editor;
+  /**
+   * Add tools
+   */
+  if (!options.readonly) {
+    const elBtnTidy = elButtonFa("btn_editor_tool_format", {
+      icon: "magic",
+      action: async () => {
+        await editorMonaco.getAction("editor.action.formatDocument").run();
+      },
+    });
+    editor._el_tool_container.appendChild(elBtnTidy);
+    const elBtnExpand = elButtonFa("btn_editor_tool_expand_editor", {
+      icon: "expand",
+      action: async () => {
+        const elIcon = elBtnExpand.querySelector(".fa");
+        const elTarget = editor.jsoneditor.element.parentElement;
+        const elTargetContainer = elTarget.parentElement;
+        const elWrapper = editor._el_monaco_wrapper;
+        const isExpanded = elIcon.classList.contains("fa-compress");
+        elIcon.classList.toggle("fa-compress");
+        elIcon.classList.toggle("fa-expand");
+        if (isExpanded) {
+          elTarget.style.display = "block";
+          editor.input.parentNode.insertBefore(
+            editor._el_monaco_wrapper,
+            editor.input,
+          );
+          editor._el_monaco_wrapper.scrollIntoView(true);
+        } else {
+          elTarget.style.display = "none";
+          elTargetContainer.appendChild(elWrapper);
+        }
+      },
+    });
+    editor._el_tool_container.appendChild(elBtnExpand);
+  }
+
+  /**
+   * Add optional help panel
+   */
+  if (editor.options.htmlHelp) {
+    const elHelp = textToDom(editor.options.htmlHelp);
+    const elBtnHelp = elButtonFa("btn_editor_tool_help", {
+      icon: "question",
+      action: () => {
+        modalSimple({
+          title: elSpanTranslate("btn_editor_tool_help_title"),
+          content: elHelp,
+          addBackground: true,
+        });
+      },
+    });
+    editor._el_tool_container.appendChild(elBtnHelp);
+  }
+
+  /**
+   * Theme editor management
+   * - import
+   * - preview
+   * -
+   */
+  if (editor.options.resolver === "theme_editor") {
+    const elBtnThemeImport = elButtonFa(
+      "btn_editor_tool_import_current_theme",
+      {
+        icon: "download",
+        action: async () => {
+          const importTheme = await theme.getFromInput();
+
+          const projectTheme = JSON.parse(editorMonaco.getValue());
+
+          if (isEmpty(projectTheme)) {
+            editorMonaco.setValue(JSON.stringify(importTheme, 0, 2));
+          } else {
+            const diff = new DataDiffModal({
+              contextLabel: "Theme Editor Diff",
+              dataSource: projectTheme,
+              dataTarget: importTheme,
+              onAccept: (data) => {
+                editorMonaco.setValue(JSON.stringify(data, 0, 2));
+              },
+            });
+
+            await diff.start();
+          }
+        },
+      },
+    );
+    editor._el_tool_container.appendChild(elBtnThemeImport);
+  }
+}

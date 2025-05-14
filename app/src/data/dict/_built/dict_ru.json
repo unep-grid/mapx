@@ -1395,6 +1395,61 @@
     "ru": "Зимбабве"
   },
   {
+    "id": "diff_modal_title",
+    "en": "Diff Tool",
+    "ru": "Инструмент сравнения"
+  },
+  {
+    "id": "diff_modal_summary_title",
+    "en": "Change Summary",
+    "ru": "Сводка изменений"
+  },
+  {
+    "id": "diff_modal_source_date",
+    "en": "Source date",
+    "ru": "Дата источника"
+  },
+  {
+    "id": "diff_modal_target_date",
+    "en": "Target date",
+    "ru": "Дата цели"
+  },
+  {
+    "id": "diff_modal_use_target",
+    "en": "Use target version",
+    "ru": "Использовать целевую версию"
+  },
+  {
+    "id": "diff_modal_cancel",
+    "en": "Cancel",
+    "ru": "Отмена"
+  },
+  {
+    "id": "diff_modal_diffs",
+    "en": "Differences",
+    "ru": "Различия"
+  },
+  {
+    "id": "diff_modal_no_diff",
+    "en": "No differences found",
+    "ru": "Различий не найдено"
+  },
+  {
+    "id": "diff_modal_legend",
+    "en": "Legend",
+    "ru": "Легенда"
+  },
+  {
+    "id": "diff_modal_legend_source",
+    "en": "Source data",
+    "ru": "Исходные данные"
+  },
+  {
+    "id": "diff_modal_legend_target",
+    "en": "Target data",
+    "ru": "Целевые данные"
+  },
+  {
     "id": "dl_title",
     "en": "Download",
     "ru": "Скачать"
@@ -6365,46 +6420,6 @@
     "ru": "MapX в настоящее время недоступен из-за технического обслуживания сервера.<br> Вернись позже днем!<br><br> С уважением, ваша команда MapX "
   },
   {
-    "id": "draft_recover_modal_title",
-    "en": "Data recovery",
-    "ru": "Восстановление данных "
-  },
-  {
-    "id": "draft_recover_use_most_recent",
-    "en": "Use the most recent",
-    "ru": "Используйте самые последние "
-  },
-  {
-    "id": "draft_recover_cancel",
-    "en": "Cancel",
-    "ru": "Отмена "
-  },
-  {
-    "id": "draft_recover_preview_diff",
-    "en": "Preview differences",
-    "ru": "Предварительный просмотр различий "
-  },
-  {
-    "id": "draft_recover_last_saved_date",
-    "en": "Date of the last saved version",
-    "ru": "Дата последней сохраненной версии "
-  },
-  {
-    "id": "draft_recover_recovered_date",
-    "en": "Date of the recovered version",
-    "ru": "Дата восстановленной версии "
-  },
-  {
-    "id": "draft_recover_diffs",
-    "en": "Differences",
-    "ru": "Отличия "
-  },
-  {
-    "id": "draft_recover_summary_title",
-    "en": "Summary",
-    "ru": "Резюме "
-  },
-  {
     "id": "api_download_ready",
     "en": "Process done, the data is available for download : ",
     "ru": "Процесс завершен, данные доступны для скачивания: "
@@ -7575,6 +7590,11 @@
     "ru": "Развернуть/Свернуть"
   },
   {
+    "id": "btn_editor_tool_import_current_theme",
+    "en": "Import current theme",
+    "ru": "Импортировать текущую тему"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "ru": "Подробности..."
@@ -7848,6 +7868,16 @@
     "id": "project_id_theme",
     "en": "Default theme",
     "ru": "Тема по умолчанию"
+  },
+  {
+    "id": "project_theme_data",
+    "en": "Custom theme",
+    "ru": "Пользовательская тема"
+  },
+  {
+    "id": "project_theme_data_desc",
+    "en": "If set, the custom theme will be used, with a fallback on the selected theme.",
+    "ru": "Если установлено, будет использоваться пользовательская тема с резервным вариантом на основе выбранной темы."
   },
   {
     "id": "project_search_values",

@@ -305,18 +305,18 @@ mglSetMapProjection <- function(
 
 
 #' Set theme
-#' @param id Theme id
+#' @param theme Theme id or theme object
 #' @param {Reactive} session Shiny session
 #' @export
 mglSetTheme <- function(
-  id = NULL,
+  theme = NULL,
   session = shiny::getDefaultReactiveDomain()
 ) {
-  if (isEmpty(id)) {
+  if (isEmpty(theme)) {
     return()
   }
   session$sendCustomMessage("mglSetTheme", list(
-    id = id
+    theme = theme
   ))
 }
 

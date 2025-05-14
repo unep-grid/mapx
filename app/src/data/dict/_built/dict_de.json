@@ -1395,6 +1395,61 @@
     "de": "Simbabwe"
   },
   {
+    "id": "diff_modal_title",
+    "en": "Diff Tool",
+    "de": "Vergleichswerkzeug"
+  },
+  {
+    "id": "diff_modal_summary_title",
+    "en": "Change Summary",
+    "de": "Änderungsübersicht"
+  },
+  {
+    "id": "diff_modal_source_date",
+    "en": "Source date",
+    "de": "Quelldatum"
+  },
+  {
+    "id": "diff_modal_target_date",
+    "en": "Target date",
+    "de": "Zieldatum"
+  },
+  {
+    "id": "diff_modal_use_target",
+    "en": "Use target version",
+    "de": "Zielversion verwenden"
+  },
+  {
+    "id": "diff_modal_cancel",
+    "en": "Cancel",
+    "de": "Abbrechen"
+  },
+  {
+    "id": "diff_modal_diffs",
+    "en": "Differences",
+    "de": "Unterschiede"
+  },
+  {
+    "id": "diff_modal_no_diff",
+    "en": "No differences found",
+    "de": "Keine Unterschiede gefunden"
+  },
+  {
+    "id": "diff_modal_legend",
+    "en": "Legend",
+    "de": "Legende"
+  },
+  {
+    "id": "diff_modal_legend_source",
+    "en": "Source data",
+    "de": "Quelldaten"
+  },
+  {
+    "id": "diff_modal_legend_target",
+    "en": "Target data",
+    "de": "Zieldaten"
+  },
+  {
     "id": "dl_title",
     "en": "Download",
     "de": "Herunterladen"
@@ -6365,46 +6420,6 @@
     "de": "MapX ist derzeit aufgrund der Serverwartung nicht verfügbar.<br> Komm später am Tag zurück!<br><br> Mit freundlichen Grüßen Ihr MapX-Team "
   },
   {
-    "id": "draft_recover_modal_title",
-    "en": "Data recovery",
-    "de": "Datenwiederherstellung "
-  },
-  {
-    "id": "draft_recover_use_most_recent",
-    "en": "Use the most recent",
-    "de": "Verwenden Sie die neueste "
-  },
-  {
-    "id": "draft_recover_cancel",
-    "en": "Cancel",
-    "de": "Stornieren "
-  },
-  {
-    "id": "draft_recover_preview_diff",
-    "en": "Preview differences",
-    "de": "Vorschau von Unterschieden "
-  },
-  {
-    "id": "draft_recover_last_saved_date",
-    "en": "Date of the last saved version",
-    "de": "Datum der zuletzt gespeicherten Version "
-  },
-  {
-    "id": "draft_recover_recovered_date",
-    "en": "Date of the recovered version",
-    "de": "Datum der wiederhergestellten Version "
-  },
-  {
-    "id": "draft_recover_diffs",
-    "en": "Differences",
-    "de": "Unterschiede "
-  },
-  {
-    "id": "draft_recover_summary_title",
-    "en": "Summary",
-    "de": "Zusammenfassung "
-  },
-  {
     "id": "api_download_ready",
     "en": "Process done, the data is available for download : ",
     "de": "Prozess abgeschlossen, die Daten stehen zum Download zur Verfügung: "
@@ -7575,6 +7590,11 @@
     "de": "Erweitern/Minimieren"
   },
   {
+    "id": "btn_editor_tool_import_current_theme",
+    "en": "Import current theme",
+    "de": "Aktuelles Design importieren"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "de": "Einzelheiten..."
@@ -7848,6 +7868,16 @@
     "id": "project_id_theme",
     "en": "Default theme",
     "de": "Standardthema"
+  },
+  {
+    "id": "project_theme_data",
+    "en": "Custom theme",
+    "de": "Benutzerdefiniertes Design"
+  },
+  {
+    "id": "project_theme_data_desc",
+    "en": "If set, the custom theme will be used, with a fallback on the selected theme.",
+    "de": "Wenn festgelegt, wird das benutzerdefinierte Design verwendet, mit einem Fallback auf das ausgewählte Design."
   },
   {
     "id": "project_search_values",

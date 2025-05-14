@@ -1395,6 +1395,61 @@
     "es": "Zimbabwe"
   },
   {
+    "id": "diff_modal_title",
+    "en": "Diff Tool",
+    "es": "Herramienta de diferencias"
+  },
+  {
+    "id": "diff_modal_summary_title",
+    "en": "Change Summary",
+    "es": "Resumen de cambios"
+  },
+  {
+    "id": "diff_modal_source_date",
+    "en": "Source date",
+    "es": "Fecha de origen"
+  },
+  {
+    "id": "diff_modal_target_date",
+    "en": "Target date",
+    "es": "Fecha de destino"
+  },
+  {
+    "id": "diff_modal_use_target",
+    "en": "Use target version",
+    "es": "Usar versión de destino"
+  },
+  {
+    "id": "diff_modal_cancel",
+    "en": "Cancel",
+    "es": "Cancelar"
+  },
+  {
+    "id": "diff_modal_diffs",
+    "en": "Differences",
+    "es": "Diferencias"
+  },
+  {
+    "id": "diff_modal_no_diff",
+    "en": "No differences found",
+    "es": "No se encontraron diferencias"
+  },
+  {
+    "id": "diff_modal_legend",
+    "en": "Legend",
+    "es": "Leyenda"
+  },
+  {
+    "id": "diff_modal_legend_source",
+    "en": "Source data",
+    "es": "Datos de origen"
+  },
+  {
+    "id": "diff_modal_legend_target",
+    "en": "Target data",
+    "es": "Datos de destino"
+  },
+  {
     "id": "dl_title",
     "en": "Download",
     "es": "Descargar"
@@ -6365,46 +6420,6 @@
     "es": "MapX no está disponible actualmente debido al mantenimiento del servidor. <br> ¡Vuelve más tarde en el día! <br> <br> Atentamente, su equipo de MapX "
   },
   {
-    "id": "draft_recover_modal_title",
-    "en": "Data recovery",
-    "es": "Recuperar datos"
-  },
-  {
-    "id": "draft_recover_use_most_recent",
-    "en": "Use the most recent",
-    "es": "Utilizar la versión más reciente"
-  },
-  {
-    "id": "draft_recover_cancel",
-    "en": "Cancel",
-    "es": "Anular"
-  },
-  {
-    "id": "draft_recover_preview_diff",
-    "en": "Preview differences",
-    "es": "Vista anticipada de las diferencias"
-  },
-  {
-    "id": "draft_recover_last_saved_date",
-    "en": "Date of the last saved version",
-    "es": "Fecha de la última version guardada"
-  },
-  {
-    "id": "draft_recover_recovered_date",
-    "en": "Date of the recovered version",
-    "es": "Fecha de la version recuperada"
-  },
-  {
-    "id": "draft_recover_diffs",
-    "en": "Differences",
-    "es": "Diferencias"
-  },
-  {
-    "id": "draft_recover_summary_title",
-    "en": "Summary",
-    "es": "Resumen"
-  },
-  {
     "id": "api_download_ready",
     "en": "Process done, the data is available for download : ",
     "es": "Proceso terminado, los datos están disponibles para descargar:"
@@ -7575,6 +7590,11 @@
     "es": "Expandir/Minimizar"
   },
   {
+    "id": "btn_editor_tool_import_current_theme",
+    "en": "Import current theme",
+    "es": "Importar el tema actual"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "es": "Detalles..."
@@ -7848,6 +7868,16 @@
     "id": "project_id_theme",
     "en": "Default theme",
     "es": "Tema predeterminado"
+  },
+  {
+    "id": "project_theme_data",
+    "en": "Custom theme",
+    "es": "Tema personalizado"
+  },
+  {
+    "id": "project_theme_data_desc",
+    "en": "If set, the custom theme will be used, with a fallback on the selected theme.",
+    "es": "Si se configura, se utilizará el tema personalizado, con una reserva en el tema seleccionado."
   },
   {
     "id": "project_search_values",

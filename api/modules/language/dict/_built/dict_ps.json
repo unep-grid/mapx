@@ -1395,6 +1395,61 @@
     "ps": "زيمبابوي"
   },
   {
+    "id": "diff_modal_title",
+    "en": "Diff Tool",
+    "ps": "د توپير وسيله"
+  },
+  {
+    "id": "diff_modal_summary_title",
+    "en": "Change Summary",
+    "ps": "د بدلون لنډيز"
+  },
+  {
+    "id": "diff_modal_source_date",
+    "en": "Source date",
+    "ps": "د سرچینې نېټه"
+  },
+  {
+    "id": "diff_modal_target_date",
+    "en": "Target date",
+    "ps": "د هدف نېټه"
+  },
+  {
+    "id": "diff_modal_use_target",
+    "en": "Use target version",
+    "ps": "د هدف نسخه وکاروئ"
+  },
+  {
+    "id": "diff_modal_cancel",
+    "en": "Cancel",
+    "ps": "لغوه کول"
+  },
+  {
+    "id": "diff_modal_diffs",
+    "en": "Differences",
+    "ps": "توپيرونه"
+  },
+  {
+    "id": "diff_modal_no_diff",
+    "en": "No differences found",
+    "ps": "هیڅ توپیر ونه موندل شو"
+  },
+  {
+    "id": "diff_modal_legend",
+    "en": "Legend",
+    "ps": "لیجنډ"
+  },
+  {
+    "id": "diff_modal_legend_source",
+    "en": "Source data",
+    "ps": "د سرچینې معلومات"
+  },
+  {
+    "id": "diff_modal_legend_target",
+    "en": "Target data",
+    "ps": "د هدف معلومات"
+  },
+  {
     "id": "dl_title",
     "en": "Download",
     "ps": "ډاونلوډ کړئ"
@@ -6365,46 +6420,6 @@
     "ps": "میپ ایکس اوس مهال د سرور ساتنې له امله شتون نلري.<br> د ورځې وروسته بیرته راشه!<br><br> مخلص ، ستاسو د MapX ټیم "
   },
   {
-    "id": "draft_recover_modal_title",
-    "en": "Data recovery",
-    "ps": "د معلوماتو بیا رغونه "
-  },
-  {
-    "id": "draft_recover_use_most_recent",
-    "en": "Use the most recent",
-    "ps": "ترټولو وروستی وکاروئ "
-  },
-  {
-    "id": "draft_recover_cancel",
-    "en": "Cancel",
-    "ps": "لغوه کول "
-  },
-  {
-    "id": "draft_recover_preview_diff",
-    "en": "Preview differences",
-    "ps": "د مخکتنې توپیرونه "
-  },
-  {
-    "id": "draft_recover_last_saved_date",
-    "en": "Date of the last saved version",
-    "ps": "د وروستي خوندي شوي نسخې نیټه "
-  },
-  {
-    "id": "draft_recover_recovered_date",
-    "en": "Date of the recovered version",
-    "ps": "د ترلاسه شوي نسخې نیټه "
-  },
-  {
-    "id": "draft_recover_diffs",
-    "en": "Differences",
-    "ps": "توپیرونه "
-  },
-  {
-    "id": "draft_recover_summary_title",
-    "en": "Summary",
-    "ps": "لنډیز "
-  },
-  {
     "id": "api_download_ready",
     "en": "Process done, the data is available for download : ",
     "ps": "پروسس شوی ، ډاټا د ډاونلوډ لپاره شتون لري: "
@@ -7575,6 +7590,11 @@
     "ps": "په‌رته‌کاندن/کچک کول"
   },
   {
+    "id": "btn_editor_tool_import_current_theme",
+    "en": "Import current theme",
+    "ps": "اوسنی موضوع وارد کړئ"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "ps": "جزیات..."
@@ -7848,6 +7868,16 @@
     "id": "project_id_theme",
     "en": "Default theme",
     "ps": "ډیفالټ موضوع"
+  },
+  {
+    "id": "project_theme_data",
+    "en": "Custom theme",
+    "ps": "دودیز موضوع"
+  },
+  {
+    "id": "project_theme_data_desc",
+    "en": "If set, the custom theme will be used, with a fallback on the selected theme.",
+    "ps": "که چیرې تنظیم شي، نو دودیز موضوع به وکارول شي، د ټاکل شوي موضوع په بیرته راګرځیدو سره."
   },
   {
     "id": "project_search_values",

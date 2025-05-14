@@ -327,27 +327,6 @@ span.mx-badge-role {
 }
 
 
-
-/*.mx-view-item {*/
-/*background-color: var(--mx_ui_background);*/
-/*}*/
-
-/**
-* jsondiffpatch
-*/
-.mx .jsondiffpatch-deleted .jsondiffpatch-property-name,
-.mx .jsondiffpatch-deleted pre,
-.mx .jsondiffpatch-modified .jsondiffpatch-left-value pre,
-.mx .jsondiffpatch-textdiff-deleted {
-  background: #e60606;
-  text-decoration: line-through;
-}
-.mx .jsondiffpatch-added .jsondiffpatch-property-name,
-.mx .jsondiffpatch-added .jsondiffpatch-value pre,
-.mx .jsondiffpatch-modified .jsondiffpatch-right-value pre,
-.mx .jsondiffpatch-textdiff-added {
-  background: #549a03;
-}
 /**
 * Boostrap fixes
 */

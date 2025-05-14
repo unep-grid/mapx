@@ -1,12 +1,12 @@
 import {
   getDict,
   getLanguageCurrent,
-  updateLanguageElements,
 } from "./../language";
 import {
   isArray,
   isEmpty,
   isFunction,
+  isJson,
   isNotEmpty,
   isObject,
 } from "./../is_test_mapx";
@@ -23,10 +23,10 @@ import { getViewMapboxStyle, getViewSldStyle } from "./../style_vt/index.js";
 import { settings, data as mx_storage } from "./../mx.js";
 import { moduleLoad } from "../modules_loader_async";
 import { modalSimple } from "../mx_helper_modal";
-import { jsonDiff } from "../mx_helper_utils_json";
 import { TextFilter } from "../text_filter_simple";
 import "./style.less";
 import "./../../css/mx_tom_select.css";
+import { DataDiffModal } from "../data_diff_recover";
 
 export const jed = {
   editors: {},
@@ -151,13 +151,18 @@ export async function jedInit(o) {
           const moreRecent = draftClientTimeStamp > draftDbTimeStamp;
 
           if (moreRecent) {
-            await jedShowDraftRecovery({
-              editor: editor,
-              idDraft: idDraft,
-              timeDb: opt_final.draftAutoSaveDbTimestamp,
-              draft: draft,
-              saved: opt_final.startval,
+            const recovery = new DataDiffModal({
+              contextLabel: "Draft",
+              dataSource: opt_final.startval,
+              dataTarget: draft.data,
+              timestampSource: opt_final.draftAutoSaveDbTimestamp,
+              timestampTarget: draft.timestamp,
+              onAccept: (recoveredData) => {
+                editor.setValue(recoveredData);
+              },
             });
+
+            await recovery.start();
           }
         }
       } catch (e) {
@@ -374,151 +379,6 @@ export function jedGetValidationById(o) {
   } else {
     return values;
   }
-}
-/** Show recovery panel
- * @param {Object} o options
- * @param {Object} o.editor Editor
- * @param {String} o.idDraft Id of the draft
- * @param {Object} o.draft draft to recover
- * @param {Object} o.saved data provided from db
- * @param {Number} o.timeDb Posix time stamp of the db version
- */
-async function jedShowDraftRecovery(o) {
-  const { draft, editor, saved, timeDb } = o;
-
-  if (isEmpty(draft) || draft.type !== "draft") {
-    throw new Error({
-      msg: "Invalid draft",
-      data: o.draft,
-    });
-  }
-
-  const recoveredData = draft.data;
-  const dbData = saved;
-  const dateTimeDb = formatDateTime(timeDb);
-  const dateTimeBrowser = formatDateTime(draft.timestamp);
-
-  const diff = await getDiff();
-  const hasEmptyDiff = isEmpty(diff);
-  if (hasEmptyDiff) {
-    return;
-  }
-
-  const btnYes = el("button", {
-    type: "button",
-    class: ["btn", "btn-default"],
-    on: ["click", restore],
-    dataset: {
-      lang_key: "draft_recover_use_most_recent",
-    },
-  });
-
-  const btnDiffData = el("button", {
-    type: "button",
-    class: ["btn", "btn-default"],
-    on: ["click", previewDiff],
-    dataset: {
-      lang_key: "draft_recover_preview_diff",
-    },
-  });
-
-  let elData;
-
-  const modal = modalSimple({
-    addBackground: true,
-    id: "modalDataRecovery",
-    title: el("span", { dataset: { lang_key: "draft_recover_modal_title" } }),
-    buttons: [btnYes, btnDiffData],
-    textCloseButton: el("span", {
-      dataset: { lang_key: "draft_recover_cancel" },
-    }),
-    content: el(
-      "div",
-      el("h3", {
-        dataset: {
-          lang_key: "draft_recover_summary_title",
-        },
-      }),
-      el(
-        "p",
-        el(
-          "ul",
-          el(
-            "li",
-            el("span", {
-              dataset: { lang_key: "draft_recover_last_saved_date" },
-            }),
-            el("span", ": " + dateTimeDb),
-          ),
-          el(
-            "li",
-            el("span", {
-              dataset: { lang_key: "draft_recover_recovered_date" },
-            }),
-            el("span", ": " + dateTimeBrowser),
-          ),
-        ),
-        (elData = el("div")),
-      ),
-    ),
-  });
-
-  updateLanguageElements({
-    el: modal,
-  });
-
-  async function getDiff() {
-    const config = {
-      propertyFilter: filter,
-    };
-    const data = await jsonDiff(dbData, recoveredData, config);
-    return data;
-    function filter(name) {
-      const firstChar = name.slice(0, 1);
-      /**
-       * Set of known key that should not be used in diff
-       */
-      return name !== "spriteEnable" && firstChar !== "_" && firstChar !== "$";
-    }
-  }
-
-  async function previewDiff() {
-    const elItem = el("div", {
-      class: ["mx-diff-item"],
-    });
-    elData.innerHTML = "";
-    elData.classList.add("mx-diff-items");
-    elData.appendChild(
-      el("h3", el("span", { dataset: { lang_key: "draft_recover_diffs" } })),
-    );
-    elData.appendChild(elItem);
-    const html = await jsonDiff(dbData, recoveredData, {
-      toHTML: true,
-      propertyFilter: function (name) {
-        const firstChar = name.slice(0, 1);
-        /**
-         * Set of known key that should not be used in diff
-         */
-        return (
-          name !== "spriteEnable" && firstChar !== "_" && firstChar !== "$"
-        );
-      },
-    });
-    elItem.innerHTML = html;
-  }
-
-  function restore() {
-    delete recoveredData._timestamp;
-    editor.setValue(recoveredData);
-    modal.close();
-  }
-}
-
-function formatDateTime(posix) {
-  const d = new Date(posix * 1000);
-  const date = d.toLocaleDateString();
-  const time = d.toLocaleTimeString();
-  return date + " at " + time;
 }
 
 /**

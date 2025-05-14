@@ -67,12 +67,12 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
                 title = tt("project_org_name"),
                 default = projectData$org_name
               ),
-              contact_name = list(
+              org_contact_name = list(
                 type = "string",
                 title = tt("project_contact_name"),
                 default = projectData$org_contact_name
               ),
-              contact_email = list(
+              org_contact_email = list(
                 type = "string",
                 title = tt("project_contact_email"),
                 format = "email",
@@ -87,15 +87,6 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
         title = tt("project_appearance"),
         options = list(collapsed = TRUE),
         properties = list(
-          theme = list(
-            type = "string",
-            title = tt("project_id_theme"),
-            enum = names(config$themes$idsNamed),
-            options = list(
-              enum_titles = unname(config$themes$idsNamed)
-            ),
-            default = projectData$theme
-          ),
           logo = list(
             type = "string",
             format = "svg",
@@ -119,6 +110,26 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
               renderer = "tom-select",
               loader = "countries"
             )
+          ),
+          theme = list(
+            type = "string",
+            title = tt("project_id_theme"),
+            enum = config$themes$ids,
+            options = list(
+              enum_titles = config$themes$names
+            ),
+            default = projectData$theme
+          ),
+          theme_data = list(
+            type = "string",
+            title = tt("project_theme_data"),
+            format = "textarea",
+            options = list(
+              editor = "monaco",
+              resolver = "theme_editor",
+              language = "json"
+            ),
+            default = projectData$theme_data
           )
         )
       ),
@@ -257,9 +268,10 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
       )
     ),
     appearance = list(
-      theme = projectData$theme,
       logo = projectData$logo,
-      countries = projectData$countries
+      countries = projectData$countries,
+      theme = projectData$theme,
+      theme_data = projectData$theme_data
     ),
     map_settings = list(
       map_position = projectData$map_position,

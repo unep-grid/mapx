@@ -1395,6 +1395,61 @@
     "zh": "津巴布韦"
   },
   {
+    "id": "diff_modal_title",
+    "en": "Diff Tool",
+    "zh": "差异工具"
+  },
+  {
+    "id": "diff_modal_summary_title",
+    "en": "Change Summary",
+    "zh": "变更摘要"
+  },
+  {
+    "id": "diff_modal_source_date",
+    "en": "Source date",
+    "zh": "源日期"
+  },
+  {
+    "id": "diff_modal_target_date",
+    "en": "Target date",
+    "zh": "目标日期"
+  },
+  {
+    "id": "diff_modal_use_target",
+    "en": "Use target version",
+    "zh": "使用目标版本"
+  },
+  {
+    "id": "diff_modal_cancel",
+    "en": "Cancel",
+    "zh": "取消"
+  },
+  {
+    "id": "diff_modal_diffs",
+    "en": "Differences",
+    "zh": "差异"
+  },
+  {
+    "id": "diff_modal_no_diff",
+    "en": "No differences found",
+    "zh": "未发现差异"
+  },
+  {
+    "id": "diff_modal_legend",
+    "en": "Legend",
+    "zh": "图例"
+  },
+  {
+    "id": "diff_modal_legend_source",
+    "en": "Source data",
+    "zh": "源数据"
+  },
+  {
+    "id": "diff_modal_legend_target",
+    "en": "Target data",
+    "zh": "目标数据"
+  },
+  {
     "id": "dl_title",
     "en": "Download",
     "zh": "下载"
@@ -6365,46 +6420,6 @@
     "zh": "由于服务器维护，MapX当前不可用。 <br> 请稍后回来！ <br>此致，<br>敬礼！<br> MapX Team"
   },
   {
-    "id": "draft_recover_modal_title",
-    "en": "Data recovery",
-    "zh": "数据恢复"
-  },
-  {
-    "id": "draft_recover_use_most_recent",
-    "en": "Use the most recent",
-    "zh": "使用最近的"
-  },
-  {
-    "id": "draft_recover_cancel",
-    "en": "Cancel",
-    "zh": "取消"
-  },
-  {
-    "id": "draft_recover_preview_diff",
-    "en": "Preview differences",
-    "zh": "预览差异"
-  },
-  {
-    "id": "draft_recover_last_saved_date",
-    "en": "Date of the last saved version",
-    "zh": "上次保存版本的日期"
-  },
-  {
-    "id": "draft_recover_recovered_date",
-    "en": "Date of the recovered version",
-    "zh": "恢复版本的日期"
-  },
-  {
-    "id": "draft_recover_diffs",
-    "en": "Differences",
-    "zh": "差异"
-  },
-  {
-    "id": "draft_recover_summary_title",
-    "en": "Summary",
-    "zh": "摘要"
-  },
-  {
     "id": "api_download_ready",
     "en": "Process done, the data is available for download : ",
     "zh": "处理完成，数据可供下载："
@@ -7575,6 +7590,11 @@
     "zh": "展开/最小化"
   },
   {
+    "id": "btn_editor_tool_import_current_theme",
+    "en": "Import current theme",
+    "zh": "导入当前主题"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "zh": "细节..."
@@ -7848,6 +7868,16 @@
     "id": "project_id_theme",
     "en": "Default theme",
     "zh": "默认主题"
+  },
+  {
+    "id": "project_theme_data",
+    "en": "Custom theme",
+    "zh": "自定义主题"
+  },
+  {
+    "id": "project_theme_data_desc",
+    "en": "If set, the custom theme will be used, with a fallback on the selected theme.",
+    "zh": "如果设置，则将使用自定义主题，并回退到所选主题。"
   },
   {
     "id": "project_search_values",

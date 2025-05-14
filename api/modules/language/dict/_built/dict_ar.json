@@ -1395,6 +1395,61 @@
     "ar": "زمبابوي"
   },
   {
+    "id": "diff_modal_title",
+    "en": "Diff Tool",
+    "ar": "أداة المقارنة"
+  },
+  {
+    "id": "diff_modal_summary_title",
+    "en": "Change Summary",
+    "ar": "ملخص التغييرات"
+  },
+  {
+    "id": "diff_modal_source_date",
+    "en": "Source date",
+    "ar": "تاريخ المصدر"
+  },
+  {
+    "id": "diff_modal_target_date",
+    "en": "Target date",
+    "ar": "تاريخ الهدف"
+  },
+  {
+    "id": "diff_modal_use_target",
+    "en": "Use target version",
+    "ar": "استخدام النسخة المستهدفة"
+  },
+  {
+    "id": "diff_modal_cancel",
+    "en": "Cancel",
+    "ar": "إلغاء"
+  },
+  {
+    "id": "diff_modal_diffs",
+    "en": "Differences",
+    "ar": "الاختلافات"
+  },
+  {
+    "id": "diff_modal_no_diff",
+    "en": "No differences found",
+    "ar": "لم يتم العثور على اختلافات"
+  },
+  {
+    "id": "diff_modal_legend",
+    "en": "Legend",
+    "ar": "مفتاح الرموز"
+  },
+  {
+    "id": "diff_modal_legend_source",
+    "en": "Source data",
+    "ar": "بيانات المصدر"
+  },
+  {
+    "id": "diff_modal_legend_target",
+    "en": "Target data",
+    "ar": "بيانات الهدف"
+  },
+  {
     "id": "dl_title",
     "en": "Download",
     "ar": "تحميل"
@@ -6365,46 +6420,6 @@
     "ar": "MapX غير متاح حاليًا بسبب صيانة الخادم.<br> تعال لاحقًا في اليوم!<br><br> مع خالص التقدير ، فريق MapX الخاص بك "
   },
   {
-    "id": "draft_recover_modal_title",
-    "en": "Data recovery",
-    "ar": "استعادة البيانات "
-  },
-  {
-    "id": "draft_recover_use_most_recent",
-    "en": "Use the most recent",
-    "ar": "استخدم أحدث "
-  },
-  {
-    "id": "draft_recover_cancel",
-    "en": "Cancel",
-    "ar": "يلغي "
-  },
-  {
-    "id": "draft_recover_preview_diff",
-    "en": "Preview differences",
-    "ar": "معاينة الاختلافات "
-  },
-  {
-    "id": "draft_recover_last_saved_date",
-    "en": "Date of the last saved version",
-    "ar": "تاريخ آخر نسخة محفوظة "
-  },
-  {
-    "id": "draft_recover_recovered_date",
-    "en": "Date of the recovered version",
-    "ar": "تاريخ النسخة المستردة "
-  },
-  {
-    "id": "draft_recover_diffs",
-    "en": "Differences",
-    "ar": "اختلافات "
-  },
-  {
-    "id": "draft_recover_summary_title",
-    "en": "Summary",
-    "ar": "ملخص "
-  },
-  {
     "id": "api_download_ready",
     "en": "Process done, the data is available for download : ",
     "ar": "تمت العملية ، البيانات متاحة للتنزيل: "
@@ -7575,6 +7590,11 @@
     "ar": "توسيع/تصغير"
   },
   {
+    "id": "btn_editor_tool_import_current_theme",
+    "en": "Import current theme",
+    "ar": "استيراد السمة الحالية"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "ar": "تفاصيل..."
@@ -7848,6 +7868,16 @@
     "id": "project_id_theme",
     "en": "Default theme",
     "ar": "السمة الافتراضية"
+  },
+  {
+    "id": "project_theme_data",
+    "en": "Custom theme",
+    "ar": "موضوع مخصص"
+  },
+  {
+    "id": "project_theme_data_desc",
+    "en": "If set, the custom theme will be used, with a fallback on the selected theme.",
+    "ar": "إذا تم تعيين ذلك، سيتم استخدام السمة المخصصة، مع الرجوع إلى السمة المحددة."
   },
   {
     "id": "project_search_values",

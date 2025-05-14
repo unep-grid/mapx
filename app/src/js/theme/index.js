@@ -22,6 +22,7 @@ import { sounds } from "./sound/index.js";
 import { MapScaler } from "../map_scaler";
 
 import "./style.less";
+import { jsonDiff } from "../mx_helper_utils_json";
 
 /**
  * Set globals
@@ -220,6 +221,10 @@ class Theme extends EventSimple {
     try {
       const isId = t.isValidId(theme);
 
+      if (!isId && isJson(theme)) {
+        theme = JSON.parse(theme);
+      }
+
       if (isId) {
         theme = t.get(theme);
       }
@@ -228,11 +233,14 @@ class Theme extends EventSimple {
         throw new Error("Invalid theme");
       }
 
-      if (theme.id === t._id) {
-        return true;
-      }
       const oldTheme = t.theme();
       const newTheme = theme;
+      const diff = await jsonDiff(newTheme, oldTheme, opt);
+      const hasDiff = isNotEmpty(diff);
+
+      if (!hasDiff) {
+        return;
+      }
 
       t._id = theme.id;
       t._theme = theme;
@@ -751,22 +759,28 @@ class Theme extends EventSimple {
     }
   }
 
+  async getFromInput() {
+    const t = this;
+    const theme = t.get();
+    const colors = t.getColorsFromInputs();
+
+    if (isNotEmpty(colors)) {
+      theme.colors = colors;
+    }
+
+    const isValid = await validate(theme);
+
+    if (!isValid) {
+      throw new Error(`Theme not valid`);
+    }
+    return theme;
+  }
+
   async exportStyle() {
     try {
       const t = this;
       const config = {};
-      const theme = t.get();
-      const colors = t.getColorsFromInputs();
-
-      if (isNotEmpty(colors)) {
-        theme.colors = colors;
-      }
-
-      const isValid = await validate(theme);
-
-      if (!isValid) {
-        throw new Error(`Theme not valid`);
-      }
+      const theme = await t.getFromInput();
 
       for (const item of ["id", "description", "author"]) {
         let value;

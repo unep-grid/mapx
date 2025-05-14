@@ -1395,6 +1395,61 @@
     "bn": "জিম্বাবোয়ে"
   },
   {
+    "id": "diff_modal_title",
+    "en": "Diff Tool",
+    "bn": "পার্থক্য সরঞ্জাম"
+  },
+  {
+    "id": "diff_modal_summary_title",
+    "en": "Change Summary",
+    "bn": "পরিবর্তনের সারাংশ"
+  },
+  {
+    "id": "diff_modal_source_date",
+    "en": "Source date",
+    "bn": "উৎস তারিখ"
+  },
+  {
+    "id": "diff_modal_target_date",
+    "en": "Target date",
+    "bn": "লক্ষ্য তারিখ"
+  },
+  {
+    "id": "diff_modal_use_target",
+    "en": "Use target version",
+    "bn": "লক্ষ্য সংস্করণ ব্যবহার করুন"
+  },
+  {
+    "id": "diff_modal_cancel",
+    "en": "Cancel",
+    "bn": "বাতিল"
+  },
+  {
+    "id": "diff_modal_diffs",
+    "en": "Differences",
+    "bn": "পার্থক্যসমূহ"
+  },
+  {
+    "id": "diff_modal_no_diff",
+    "en": "No differences found",
+    "bn": "কোন পার্থক্য পাওয়া যায়নি"
+  },
+  {
+    "id": "diff_modal_legend",
+    "en": "Legend",
+    "bn": "সূচি"
+  },
+  {
+    "id": "diff_modal_legend_source",
+    "en": "Source data",
+    "bn": "উৎস ডেটা"
+  },
+  {
+    "id": "diff_modal_legend_target",
+    "en": "Target data",
+    "bn": "লক্ষ্য ডেটা"
+  },
+  {
     "id": "dl_title",
     "en": "Download",
     "bn": "ডাউনলোড করুন"
@@ -6365,46 +6420,6 @@
     "bn": "সার্ভার রক্ষণাবেক্ষণের কারণে ম্যাপএক্স বর্তমানে অনুপলব্ধ।<br> দিনের পর দিন ফিরে আসুন!<br><br> আন্তরিকভাবে, আপনার ম্যাপএক্স টিম "
   },
   {
-    "id": "draft_recover_modal_title",
-    "en": "Data recovery",
-    "bn": "তথ্য পুনরুদ্ধার "
-  },
-  {
-    "id": "draft_recover_use_most_recent",
-    "en": "Use the most recent",
-    "bn": "সর্বাধিক সাম্প্রতিক ব্যবহার করুন "
-  },
-  {
-    "id": "draft_recover_cancel",
-    "en": "Cancel",
-    "bn": "বাতিল "
-  },
-  {
-    "id": "draft_recover_preview_diff",
-    "en": "Preview differences",
-    "bn": "পূর্বরূপ পার্থক্য "
-  },
-  {
-    "id": "draft_recover_last_saved_date",
-    "en": "Date of the last saved version",
-    "bn": "সর্বশেষ সংরক্ষিত সংস্করণটির তারিখ "
-  },
-  {
-    "id": "draft_recover_recovered_date",
-    "en": "Date of the recovered version",
-    "bn": "পুনরুদ্ধার করা সংস্করণটির তারিখ "
-  },
-  {
-    "id": "draft_recover_diffs",
-    "en": "Differences",
-    "bn": "পার্থক্য "
-  },
-  {
-    "id": "draft_recover_summary_title",
-    "en": "Summary",
-    "bn": "সারসংক্ষেপ "
-  },
-  {
     "id": "api_download_ready",
     "en": "Process done, the data is available for download : ",
     "bn": "প্রক্রিয়া শেষ হয়েছে, ডেটা ডাউনলোডের জন্য উপলব্ধ: "
@@ -7575,6 +7590,11 @@
     "bn": "বাড়ান/সংকোচন"
   },
   {
+    "id": "btn_editor_tool_import_current_theme",
+    "en": "Import current theme",
+    "bn": "বর্তমান থিমটি আমদানি করুন"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "bn": "বিস্তারিত..."
@@ -7848,6 +7868,16 @@
     "id": "project_id_theme",
     "en": "Default theme",
     "bn": "ডিফল্ট থিম"
+  },
+  {
+    "id": "project_theme_data",
+    "en": "Custom theme",
+    "bn": "কাস্টম থিম"
+  },
+  {
+    "id": "project_theme_data_desc",
+    "en": "If set, the custom theme will be used, with a fallback on the selected theme.",
+    "bn": "যদি সেট করা থাকে, তাহলে কাস্টম থিমটি ব্যবহার করা হবে, নির্বাচিত থিমের উপর একটি ফলব্যাক সহ।"
   },
   {
     "id": "project_search_values",

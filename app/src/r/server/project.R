@@ -375,6 +375,7 @@ observe({
     mapPos <- projectData$map_position
     mapProj <- projectData$map_projection
     theme <- projectData$theme
+    themeData <- projectData$theme_data
     themeQuery <- query$theme
     hasMaxBounds <- isTRUE(mapPos$useMaxBounds)
     language <- reactData$language
@@ -401,9 +402,16 @@ observe({
     #
     # Updaet theme
     #
-    if (isEmpty(themeQuery) && isNotEmpty(theme)) {
+    if (isNotEmpty(themeData)) {
+      mglSetTheme(themeData)
+    } else if (isNotEmpty(theme)) {
       mglSetTheme(theme)
+    } else if (isNotEmpty(themeQuery)) {
+      mglSetTheme(themeQuery)
     }
+
+
+
 
     #
     # Update map pos config

@@ -1,0 +1,18 @@
+.mx .jsondiffpatch-deleted .jsondiffpatch-property-name,
+.mx .jsondiffpatch-deleted pre,
+.mx .jsondiffpatch-modified .jsondiffpatch-left-value pre,
+.mx .jsondiffpatch-textdiff-deleted {
+  background: var(--mx_ui_message_danger);
+  text-decoration: line-through;
+}
+.mx .jsondiffpatch-added .jsondiffpatch-property-name,
+.mx .jsondiffpatch-added .jsondiffpatch-value pre,
+.mx .jsondiffpatch-modified .jsondiffpatch-right-value pre,
+.mx .jsondiffpatch-textdiff-added {
+  background: var(--mx_ui_message_success);
+}
+
+.mx .mx-diff-item * {
+  background-color: #fff;
+  color: #000;
+}

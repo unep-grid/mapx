@@ -163,114 +163,118 @@ observe({
 # Save project configuration
 #
 observeEvent(input$btnSaveProjectConfig, {
-  mxToggleButton(
-    id = "btnSaveProjectConfig",
-    disable = TRUE
-  )
+  mxCatch(title = "btn save project config", {
+    mxToggleButton(
+      id = "btnSaveProjectConfig",
+      disable = TRUE
+    )
 
-  userRole <- getUserRole()
-  project <- reactData$project
-  language <- reactData$language
-  isAdmin <- isTRUE(userRole$admin)
-  isValid <- isTRUE(reactData$projectConfigValid)
+    userRole <- getUserRole()
+    project <- reactData$project
+    language <- reactData$language
+    isAdmin <- isTRUE(userRole$admin)
+    isValid <- isTRUE(reactData$projectConfigValid)
 
-  if (!isAdmin || !isValid) {
-    return()
-  }
+    if (!isAdmin || !isValid) {
+      return()
+    }
 
-  # Get values from the schema
-  data <- input$projectConfigSchema_values$data
+    # Get values from the schema
+    data <- input$projectConfigSchema_values$data
 
-  # Extract all the values from the schema structure
-  # Basic info section
-  title <- .get(data, c("basic_info", "title"))
-  description <- .get(data, c("basic_info", "description"))
-  aliasProject <- .get(data, c("basic_info", "alias"))
-  orgName <- .get(data, c("basic_info", "organisation", "org_name"))
-  contactName <- .get(data, c("basic_info", "organisation", "org_contact_name"))
-  contactEmail <- .get(data, c("basic_info", "organisation", "org_contact_email"))
+    # Extract all the values from the schema structure
+    # Basic info section
+    title <- .get(data, c("basic_info", "title"))
+    description <- .get(data, c("basic_info", "description"))
+    aliasProject <- .get(data, c("basic_info", "alias"))
+    orgName <- .get(data, c("basic_info", "organisation", "org_name"))
+    contactName <- .get(data, c("basic_info", "organisation", "org_contact_name"))
+    contactEmail <- .get(data, c("basic_info", "organisation", "org_contact_email"))
 
-  # Appearance section
-  logo <- .get(data, c("appearance", "logo"))
-  theme <- .get(data, c("appearance", "theme"))
-  countries <- .get(data, c("appearance", "countries"), list())
+    # Appearance section
+    logo <- .get(data, c("appearance", "logo"))
+    theme <- .get(data, c("appearance", "theme"))
+    countries <- .get(data, c("appearance", "countries"), list())
+    theme_data <- .get(data, c("appearance", "theme_data"), "")
 
-  # Map settings section
-  mapPosition <- .get(data, c("map_settings", "map_position"))
-  projectionName <- .get(data, c("map_settings", "projection", "name"), "mercator")
-  projectionDisableGlobe <- .get(data, c("map_settings", "projection", "disableGlobe"), FALSE)
+    # Map settings section
+    mapPosition <- .get(data, c("map_settings", "map_position"))
+    projectionName <- .get(data, c("map_settings", "projection", "name"), "mercator")
+    projectionDisableGlobe <- .get(data, c("map_settings", "projection", "disableGlobe"), FALSE)
 
-  # Access settings section
-  isPublic <- .get(data, c("access_settings", "public"), FALSE)
-  allowJoin <- .get(data, c("access_settings", "allow_join"), FALSE)
+    # Access settings section
+    isPublic <- .get(data, c("access_settings", "public"), FALSE)
+    allowJoin <- .get(data, c("access_settings", "allow_join"), FALSE)
 
-  # Default project must be public
-  if (.get(config, c("project", "default")) == project) {
-    isPublic <- TRUE
-  }
+    # Default project must be public
+    if (.get(config, c("project", "default")) == project) {
+      isPublic <- TRUE
+    }
 
-  # Validate project alias
-  hasValidAlias <- mxDbValidateProjectAlias(aliasProject, project)
+    # Validate project alias
+    hasValidAlias <- mxDbValidateProjectAlias(aliasProject, project)
 
-  if (!hasValidAlias) {
-    aliasProject <- ""
-  }
+    if (!hasValidAlias) {
+      aliasProject <- ""
+    }
 
-  # Prepare projection data
-  projection <- list(
-    name = projectionName,
-    disableGlobe = projectionDisableGlobe
-  )
+    # Prepare projection data
+    projection <- list(
+      name = projectionName,
+      disableGlobe = projectionDisableGlobe
+    )
 
-  # Ensure countries is a list
-  if (isEmpty(countries)) {
-    countries <- list()
-  }
+    # Ensure countries is a list
+    if (isEmpty(countries)) {
+      countries <- list()
+    }
 
-  # Save the project data
-  mxDbSaveProjectData(project, list(
-    public = isPublic,
-    active = TRUE,
-    title = title,
-    description = description,
-    alias = aliasProject,
-    org_name = orgName,
-    org_contact_name = contactName,
-    org_contact_email = contactEmail,
-    admins = NULL, # Keep existing data structure
-    members = NULL, # Keep existing data structure
-    publishers = NULL, # Keep existing data structure
-    map_position = mapPosition,
-    logo = logo,
-    map_projection = projection,
-    countries = countries,
-    theme = theme,
-    creator = NULL, # Keep existing data structure
-    allow_join = allowJoin
-  ))
+    # Save the project data
+    mxDbSaveProjectData(project, list(
+      public = isPublic,
+      active = TRUE,
+      title = title,
+      description = description,
+      alias = aliasProject,
+      org_name = orgName,
+      org_contact_name = contactName,
+      org_contact_email = contactEmail,
+      admins = NULL, # Keep existing data structure
+      members = NULL, # Keep existing data structure
+      publishers = NULL, # Keep existing data structure
+      map_position = mapPosition,
+      logo = logo,
+      map_projection = projection,
+      countries = countries,
+      theme = theme,
+      theme_data = theme_data,
+      creator = NULL, # Keep existing data structure
+      allow_join = allowJoin
+    ))
 
-  # Update the project state
-  reactData$updateProject <- runif(1)
+    # Update the project state
+    reactData$updateProject <- runif(1)
 
-  # Show save confirmation
-  mxUpdateText(
-    id = "projectConfig_txt",
-    text = sprintf("Saved at %s", format(Sys.time(), "%H:%M"))
-  )
+    # Show save confirmation
+    mxUpdateText(
+      id = "projectConfig_txt",
+      text = sprintf("Saved at %s", format(Sys.time(), "%H:%M"))
+    )
 
-  # Re-enable save button
-  mxToggleButton(
-    id = "btnSaveProjectConfig",
-    disable = FALSE
-  )
+    # Re-enable save button
+    mxToggleButton(
+      id = "btnSaveProjectConfig",
+      disable = FALSE
+    )
 
-  projectData <- mxDbGetProjectData(idProject)
+    projectData <- mxDbGetProjectData(project)
 
-  # Update UI settings
-  mxUpdateSettings(list(
-    project = projectData
-  ))
+    # Update UI settings
+    mxUpdateSettings(list(
+      project = projectData
+    ))
 
-  # Flash save icon
-  mxFlashIcon("floppy-o")
+    # Flash save icon
+    mxFlashIcon("floppy-o")
+  })
 })
