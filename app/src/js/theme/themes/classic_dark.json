@@ -5,6 +5,8 @@
   },
   "author": "frederic.moser@unepgrid.ch",
   "dark": true,
+  "tree": false,
+  "water": false,
   "colors": {
     "mx_ui_text": {
       "visibility": "visible",
@@ -242,3 +244,4 @@
     }
   }
 }
+

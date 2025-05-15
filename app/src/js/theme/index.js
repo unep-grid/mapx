@@ -12,7 +12,12 @@ import { isElement, makeSafeName, isStringRange } from "../is_test";
 import { settings } from "../settings";
 import { downloadJSON } from "../download";
 import { TextFilter } from "../text_filter_simple";
-import { inverseResolver, resolver, themes } from "./themes/index.js";
+import {
+  custom_themes,
+  inverseResolver,
+  resolver,
+  themes,
+} from "./themes/index.js";
 import { fileSelectorJSON } from "../mx_helper_misc";
 import { isNotEmpty } from "../is_test";
 import { fontFamilies, fonts, loadFontFace } from "./fonts.js";
@@ -23,6 +28,7 @@ import { MapScaler } from "../map_scaler";
 
 import "./style.less";
 import { jsonDiff } from "../mx_helper_utils_json";
+import { ThemeService } from "./services";
 
 /**
  * Set globals
@@ -32,7 +38,13 @@ class Theme extends EventSimple {
     super();
     const t = this;
     bindAll(t);
-    t._opt = Object.assign({}, { themes: Object.keys(themes) }, global, opt);
+
+    t._opt = Object.assign(
+      {},
+      { themes: Object.keys(themes), custom_themes },
+      global,
+      opt,
+    );
 
     t._btns = {
       dark: null,
@@ -54,6 +66,8 @@ class Theme extends EventSimple {
       global.elStyle = el("style");
       document.head.appendChild(global.elStyle);
     }
+    t._s = new ThemeService();
+
     for (const k in Object.keys(t._opt.on)) {
       t.on(k, t._opt.on[k]);
     }
@@ -660,6 +674,15 @@ class Theme extends EventSimple {
         overflowY: "auto",
       },
     });
+    t._elManagerBtnRemoteSave = elButtonFa("mx_theme_remote_save_button", {
+      icon: "cloud-upload",
+      action: t.saveToRemote,
+    });
+    t._elManagerBtnRemoteLoad = elButtonFa("mx_theme_remote_load_button", {
+      icon: "cloud-download",
+      action: t.loadRemoteThemesDialog,
+    });
+
     t._elManagerBtnExport = elButtonFa("mx_theme_export_button", {
       icon: "cloud-download",
       action: t.exportThemeDownload,
@@ -678,6 +701,8 @@ class Theme extends EventSimple {
       el("div", { class: ["btn-group", "mx-theme--manager-buttons"] }, [
         t._elManagerBtnExport,
         t._elManagerBtnImport,
+        t._elManagerBtnRemoteSave,
+        t._elManagerBtnRemoteLoad,
       ]),
       t._elManagerInputFilter,
     ]);
@@ -877,6 +902,65 @@ class Theme extends EventSimple {
    */
   async sound(id) {
     await sounds[id].play();
+  }
+
+  /**
+   * Services
+   */
+
+  async registerThemes(idsThemes) {
+    custom_themes.length = 0;
+    for (const id of idsThemes) {
+      const theme = await this._s.get(id);
+      custom_themes.push(theme);
+    }
+  }
+
+  async listRemoteThemes() {
+    const response = await this._s.list();
+    if (response.error) {
+      console.warn("Failed to list remote themes:", response.error);
+      return [];
+    }
+    return response.themes || [];
+  }
+
+  async saveToRemote() {
+    try {
+      const theme = await this.getFromInput();
+      const response = await this._s.create(theme);
+
+      if (response.error) {
+        throw new Error(response.error);
+      }
+
+      return response.success;
+    } catch (e) {
+      console.error("Failed to save theme to remote:", e);
+      return false;
+    }
+  }
+
+  async loadRemoteThemesDialog() {
+    const t = this;
+    try {
+      const themes = await t.listRemoteThemes();
+
+      if (themes.length === 0) {
+        await modalPrompt({
+          title: tt("mx_theme_remote_empty"),
+          content: tt("mx_theme_remote_empty_message"),
+          confirm: tt("btn_ok"),
+        });
+        return;
+      }
+
+      // Build theme selection UI...
+      // This would be similar to your existing modals but with theme selection
+      // Once selected, load the theme with t.set(theme)
+    } catch (e) {
+      console.error("Failed to load remote themes:", e);
+    }
   }
 }
 

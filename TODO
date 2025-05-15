@@ -1,1 +1,7 @@
+- maybe build a select_auto resolver for themes, that  could be used in a custom editor, just to list themes, with a description -> it could be used also to list local themes. 
+- schema builder for project config should let the user select multiple theme ids : use tom-select editor
+- the mglSetTheme should be simplified : theme handling will be perfomed later, no more theme_data
+- theme_data should not be present in the whole app
+- a theme method should be exposed to register themes by id and the resolver should be able to fetchn missing theme, to be used in static mode
+- story map should be able to use an editor that list available themes - from the project
 

@@ -12,6 +12,11 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
   }
 
   # Create counter to keep property order
+  themesProject <- mxDbGetThemesProject(projectData$id, language)
+
+  idsThemes <- c(themesProject$id, config$themes$ids, )
+  labelThemes <- c(themesProject$label, config$themes$names, )
+
 
 
   # Create the schema structure
@@ -114,23 +119,14 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
           theme = list(
             type = "string",
             title = tt("project_id_theme"),
-            enum = config$themes$ids,
+            enum = idsThemes,
+            maxItems = 10,
+            minItems = 0,
             options = list(
-              enum_titles = config$themes$names
+              enum_titles = labelThemes
             ),
             default = projectData$theme
           ),
-          theme_data = list(
-            type = "string",
-            title = tt("project_theme_data"),
-            format = "textarea",
-            options = list(
-              editor = "monaco",
-              resolver = "theme_editor",
-              language = "json"
-            ),
-            default = projectData$theme_data
-          )
         )
       ),
       map_settings = list(

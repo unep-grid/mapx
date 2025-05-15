@@ -59,6 +59,13 @@ import {
 } from "#mapx/io";
 
 import events from "events";
+import {
+  ioThemeCreate,
+  ioThemeDelete,
+  ioThemeGet,
+  ioThemeList,
+  ioThemeUpdate,
+} from "#mapx/themes";
 events.EventEmitter.defaultMaxListeners = 100;
 
 /**
@@ -128,6 +135,11 @@ io.use((socket, next) => {
     use(ioSourceAttributesAlias)
   );
   socket.on("/client/metadata/keywords/search", use(ioKeywordsSearch));
+  socket.on("/client/theme/list", use(ioThemeList));
+  socket.on("/client/theme/create", use(ioThemeCreate));
+  socket.on("/client/theme/update", use(ioThemeUpdate));
+  socket.on("/client/theme/get", use(ioThemeGet));
+  socket.on("/client/theme/delete", use(ioThemeDelete));
 
   // tests
   socket.on("echo", use(ioEcho));

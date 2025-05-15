@@ -402,16 +402,15 @@ observe({
     #
     # Updaet theme
     #
-    if (isNotEmpty(themeData)) {
+    useCustom = theme == "custom"
+
+    if (useCustom &&  isNotEmpty(themeData)) {
       mglSetTheme(themeData)
     } else if (isNotEmpty(theme)) {
       mglSetTheme(theme)
     } else if (isNotEmpty(themeQuery)) {
       mglSetTheme(themeQuery)
     }
-
-
-
 
     #
     # Update map pos config
