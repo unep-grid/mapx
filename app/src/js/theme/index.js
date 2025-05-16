@@ -17,6 +17,8 @@ import {
   inverseResolver,
   resolver,
   themes,
+  registerCustomThemes,
+  clearCustomThemes,
 } from "./themes/index.js";
 import { fileSelectorJSON } from "../mx_helper_misc";
 import { isNotEmpty } from "../is_test";
@@ -29,6 +31,7 @@ import { MapScaler } from "../map_scaler";
 import "./style.less";
 import { jsonDiff } from "../mx_helper_utils_json";
 import { ThemeService } from "./services";
+import { ThemeModal } from "./theme_modal"; // Import the new modal class
 
 /**
  * Set globals
@@ -52,6 +55,7 @@ class Theme extends EventSimple {
       water: null,
     };
     t._inputs = [];
+
     t.init().catch((e) => {
       console.warn(e);
     });
@@ -66,11 +70,23 @@ class Theme extends EventSimple {
       global.elStyle = el("style");
       document.head.appendChild(global.elStyle);
     }
+
     t._s = new ThemeService();
 
     for (const k in Object.keys(t._opt.on)) {
       t.on(k, t._opt.on[k]);
     }
+    
+    // Load remote themes from the server
+    try {
+      const remoteThemes = await t.listRemoteThemes();
+      if (remoteThemes && remoteThemes.length > 0) {
+        await t.registerThemes(remoteThemes);
+      }
+    } catch (e) {
+      console.warn("Failed to load remote themes:", e);
+    }
+    
     let id_saved = localStorage.getItem("theme@id");
 
     if (!t.isValidId(id_saved)) {
@@ -83,6 +99,32 @@ class Theme extends EventSimple {
       save_url: true,
     });
     return ok;
+  }
+
+  async initManager(elContainer) {
+    const t = this;
+
+    if (!t._opt.elContainer) {
+      t._opt.elContainer = elContainer;
+    }
+
+    // Add the button to open the theme manager modal
+
+    t._elThemeManagerButton = elButtonFa("mx_theme_open_manager", {
+      icon: "palette", // Using a palette icon for theme manager
+      action: t.openThemeManager,
+      class: "mx-theme--manager-button", // Add a class for styling
+    });
+
+    // Append the button to a relevant part of the UI, e.g., the main container
+    // This assumes there's a main container element available in the options
+    if (t._opt.elContainer) {
+      t._opt.elContainer.appendChild(t._elThemeManagerButton);
+    } else {
+      console.warn(
+        "Option 'elContainer' not provided. Theme Manager button not added to the DOM.",
+      );
+    }
   }
 
   async updateThemeByButton() {
@@ -135,9 +177,13 @@ class Theme extends EventSimple {
     if (global.elStyle) {
       global.elStyle.remove();
     }
-    if (t._elManagerInputs) {
-      t._elManagerInputs.off("change", t.updateFromInput);
-      t._elManagerInputs.replaceChildren();
+    if (t._elThemeManagerButton) {
+      t._elThemeManagerButton.remove();
+      t._elThemeManagerButton = null;
+    }
+    if (t._themeModal) {
+      t._themeModal.close(); // Close the modal if it's open
+      t._themeModal = null;
     }
   }
 
@@ -167,12 +213,16 @@ class Theme extends EventSimple {
   }
 
   ids() {
-    return Object.values(themes).map((theme) => theme.id);
+    // Get IDs from both built-in and custom themes
+    const builtInIds = Object.values(themes).map((theme) => theme.id);
+    const customIds = custom_themes.map((theme) => theme.id);
+    return [...builtInIds, ...customIds];
   }
 
   isValidId(id) {
     const t = this;
-    return t.ids().includes(id);
+    // Check if ID exists in either built-in or custom themes
+    return t.ids().includes(id) || Object.keys(t.getAll()).includes(id);
   }
 
   get(id) {
@@ -180,11 +230,58 @@ class Theme extends EventSimple {
     if (!id) {
       id = t.id();
     }
-    return themes[id];
+    // Use getAll() which already combines built-in and custom themes
+    // with custom themes having priority
+    return t.getAll()[id];
   }
 
   getAll() {
-    return themes;
+    // Start with custom themes to give them priority
+    const allThemes = {};
+    
+    // Add custom themes first
+    custom_themes.forEach(theme => {
+      if (theme && theme.id) {
+        allThemes[theme.id] = theme;
+      }
+    });
+    
+    // Then add built-in themes (won't overwrite custom themes with same ID)
+    Object.entries(themes).forEach(([id, theme]) => {
+      if (!allThemes[id]) {
+        allThemes[id] = theme;
+      }
+    });
+    
+    return allThemes;
+  }
+  
+  /**
+   * Register remote themes from the server
+   * @param {Array<Object>} remoteThemes - Array of theme objects from the server
+   */
+  async registerThemes(remoteThemes) {
+    // Register the themes in the custom_themes array
+    registerCustomThemes(remoteThemes);
+    
+    // Update the modal if it's open
+    if (this._themeModal) {
+      this._themeModal.updateThemeSelectOptions();
+    }
+  }
+  
+  /**
+   * Clear custom themes
+   * Called when switching projects
+   */
+  clearCustomThemes() {
+    // Clear the custom_themes array
+    clearCustomThemes();
+    
+    // Update the modal if it's open
+    if (this._themeModal) {
+      this._themeModal.updateThemeSelectOptions();
+    }
   }
 
   /**
@@ -198,17 +295,31 @@ class Theme extends EventSimple {
     opt = Object.assign({}, opt);
     const ok = await validate(theme);
     if (!ok) {
+      console.warn("Invalid theme", validate.errors);
       throw new Error("Invalid theme");
     }
-    themes[theme.id] = theme;
+    
+    // Add to custom_themes array instead of directly to themes object
+    // This ensures it can be properly managed and cleared when switching projects
+    const existingIndex = custom_themes.findIndex(t => t.id === theme.id);
+    if (existingIndex >= 0) {
+      // Replace existing theme with same ID
+      custom_themes[existingIndex] = theme;
+    } else {
+      // Add new theme
+      custom_themes.push(theme);
+    }
+    
+    // Update the modal's theme list if it's open
+    if (t._themeModal) {
+      t._themeModal.updateThemeSelectOptions();
+    }
+    
     return await t.set(theme, opt);
   }
 
   /**
    * Set the theme with the provided ID and options.
-   * colors: 947.512939453125 ms
-   *inputs: 0.02978515625 ms
-   * sound: 0.085693359375 ms
    * @async
    * @param {string|Object} theme - The theme or theme id
    * @param {Object} [opt] - Optional settings for the theme.
@@ -271,7 +382,7 @@ class Theme extends EventSimple {
       }
 
       await t.setColors(theme.colors);
-      await t.buildInputs();
+      // We no longer build inputs directly in the Theme class
 
       if (save) {
         localStorage.setItem("theme@id", theme.id);
@@ -647,254 +758,18 @@ class Theme extends EventSimple {
     loadFontFace(name);
   }
 
-  async initManager(elTarget) {
+  /**
+   * Open the Theme Manager Modal
+   */
+  openThemeManager() {
     const t = this;
-
-    if (t._elManager) {
-      return;
+    if (!t._themeModal) {
+      t._themeModal = new ThemeModal({
+        theme: t, // Pass the Theme instance to the modal
+      });
+    } else {
+      t._themeModal.reset(); // Reset the modal if it's already open
     }
-
-    t._elManager = elTarget || t._opt.elManager;
-
-    if (!isElement(t._elManager)) {
-      return;
-    }
-
-    t.buildManager();
-    await t.buildInputs();
-  }
-
-  buildManager() {
-    const t = this;
-    t._elManager.classList.add("mx-theme--manager");
-    t._elManagerInputs = el("div", {
-      class: "well",
-      style: {
-        maxHeight: "400px",
-        overflowY: "auto",
-      },
-    });
-    t._elManagerBtnRemoteSave = elButtonFa("mx_theme_remote_save_button", {
-      icon: "cloud-upload",
-      action: t.saveToRemote,
-    });
-    t._elManagerBtnRemoteLoad = elButtonFa("mx_theme_remote_load_button", {
-      icon: "cloud-download",
-      action: t.loadRemoteThemesDialog,
-    });
-
-    t._elManagerBtnExport = elButtonFa("mx_theme_export_button", {
-      icon: "cloud-download",
-      action: t.exportThemeDownload,
-    });
-    t._elManagerBtnImport = elButtonFa("mx_theme_import_button", {
-      icon: "cloud-upload",
-      action: t.importTheme,
-    });
-    t._elManagerInputFilter = el("input", {
-      type: "text",
-      class: ["form-control", "mx-theme--manager-filter"],
-      placeholder: "Filter items...",
-    });
-
-    t._elManagerTools = el("div", { class: "mx-theme--manager-bar" }, [
-      el("div", { class: ["btn-group", "mx-theme--manager-buttons"] }, [
-        t._elManagerBtnExport,
-        t._elManagerBtnImport,
-        t._elManagerBtnRemoteSave,
-        t._elManagerBtnRemoteLoad,
-      ]),
-      t._elManagerInputFilter,
-    ]);
-
-    t._elManagerToolsWrapper = el("div", { class: "well" }, t._elManagerTools);
-    t._elManager.appendChild(t._elManagerToolsWrapper);
-    t._elManager.appendChild(t._elManagerInputs);
-    t._elManagerInputs.addEventListener("input", t.updateFromInput);
-
-    /**
-     * Filter helper
-     */
-    t._filter = new TextFilter({
-      modeFlex: true,
-      selector: ".mx-theme--inputs",
-      elInput: t._elManagerInputFilter,
-      elContent: t._elManagerInputs,
-      timeout: 10,
-    });
-  }
-
-  async buildInputs() {
-    return new Promise((resolve, reject) => {
-      try {
-        const t = this;
-        const colors = t.colors();
-        const elManagerInputs = t._elManagerInputs;
-        const elFrag = new DocumentFragment();
-        if (!isElement(elManagerInputs)) {
-          return resolve(false);
-        }
-        elManagerInputs.replaceChildren();
-
-        for (const cid in colors) {
-          const elInputGrp = t.buildInputGroup(cid);
-          elFrag.appendChild(elInputGrp);
-        }
-        /**
-         * Replacing input is not a priority. In case
-         * of theme change, a lot of update is happening
-         * at the same time. Building input in the next
-         * frame improve performance. That and using
-         * fragment require 10ms instead of 28ms.
-         */
-        onNextFrame(() => {
-          elManagerInputs.replaceChildren(elFrag);
-          t._filter.update();
-          return resolve(true);
-        });
-      } catch (e) {
-        reject(e);
-      }
-    });
-  }
-
-  async importTheme() {
-    const t = this;
-    try {
-      const data = await fileSelectorJSON({ multiple: false });
-      if (isEmpty(data)) {
-        return;
-      }
-      await t.addTheme(data[0]);
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  async exportThemeDownload() {
-    try {
-      const t = this;
-      const theme = await t.exportStyle();
-      if (!theme) {
-        return;
-      }
-      await downloadJSON(theme, `${makeSafeName(theme.id)}.json`);
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  async getFromInput() {
-    const t = this;
-    const theme = t.get();
-    const colors = t.getColorsFromInputs();
-
-    if (isNotEmpty(colors)) {
-      theme.colors = colors;
-    }
-
-    const isValid = await validate(theme);
-
-    if (!isValid) {
-      throw new Error(`Theme not valid`);
-    }
-    return theme;
-  }
-
-  async exportStyle() {
-    try {
-      const t = this;
-      const config = {};
-      const theme = await t.getFromInput();
-
-      for (const item of ["id", "description", "author"]) {
-        let value;
-        switch (item) {
-          case "id":
-            value = theme.id;
-            break;
-          case "description":
-            value = theme?.description?.en;
-            break;
-          case "author":
-            value = settings?.user?.email || "Guest";
-            break;
-          default:
-            value = "na";
-        }
-
-        const res = await modalPrompt({
-          label: tt(`mx_theme_export_${item}`),
-          confirm: tt("mx_theme_export_next"),
-          inputOptions: {
-            type: "text",
-            value: value,
-          },
-          onInput: (value, _, elMsg, elInput) => {
-            const max = item === "id" ? 20 : 100;
-            const min = 3;
-            const valid = isStringRange(value, min, max);
-            if (valid && item === "id") {
-              elInput.value = makeSafeName(value);
-            }
-            if (!valid) {
-              elMsg.innerText = `Not in range min: ${min} max: ${max}`;
-            }
-            return valid;
-          },
-        });
-
-        if (!res) {
-          return;
-        }
-
-        if (item === "description") {
-          config[item] = { en: res };
-        } else {
-          config[item] = res;
-        }
-      }
-
-      const out = Object.assign({}, theme, config);
-      return out;
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  getColorsFromInputs() {
-    /**
-     * NOTE: this could have been a form ?
-     */
-    const t = this;
-    const out = {};
-    for (const input of t._inputs) {
-      const cid = input.dataset.id;
-      const isCheck = input.type === "checkbox";
-      const value = isCheck ? input.checked : input.value;
-      const param = input.dataset.param;
-      if (!out[cid]) {
-        out[cid] = {};
-      }
-      out[cid][param] = value;
-    }
-
-    /**
-     * Build color
-     */
-    for (const cid in out) {
-      const hex = out[cid].hex;
-      const alpha = out[cid].alpha * 1;
-      const font = out[cid].font;
-      out[cid] = {
-        visibility: out[cid].visibility === true ? "visible" : "none",
-        color: chroma(hex).alpha(alpha).css(),
-      };
-      if (font) {
-        out[cid].font = font;
-      }
-    }
-    return out;
   }
 
   /**
@@ -908,13 +783,6 @@ class Theme extends EventSimple {
    * Services
    */
 
-  async registerThemes(idsThemes) {
-    custom_themes.length = 0;
-    for (const id of idsThemes) {
-      const theme = await this._s.get(id);
-      custom_themes.push(theme);
-    }
-  }
 
   async listRemoteThemes() {
     const response = await this._s.list();
@@ -925,43 +793,6 @@ class Theme extends EventSimple {
     return response.themes || [];
   }
 
-  async saveToRemote() {
-    try {
-      const theme = await this.getFromInput();
-      const response = await this._s.create(theme);
-
-      if (response.error) {
-        throw new Error(response.error);
-      }
-
-      return response.success;
-    } catch (e) {
-      console.error("Failed to save theme to remote:", e);
-      return false;
-    }
-  }
-
-  async loadRemoteThemesDialog() {
-    const t = this;
-    try {
-      const themes = await t.listRemoteThemes();
-
-      if (themes.length === 0) {
-        await modalPrompt({
-          title: tt("mx_theme_remote_empty"),
-          content: tt("mx_theme_remote_empty_message"),
-          confirm: tt("btn_ok"),
-        });
-        return;
-      }
-
-      // Build theme selection UI...
-      // This would be similar to your existing modals but with theme selection
-      // Once selected, load the theme with t.set(theme)
-    } catch (e) {
-      console.error("Failed to load remote themes:", e);
-    }
-  }
 }
 
 export { Theme };

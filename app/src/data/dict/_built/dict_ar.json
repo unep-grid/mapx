@@ -7870,16 +7870,6 @@
     "ar": "السمة الافتراضية"
   },
   {
-    "id": "project_theme_data",
-    "en": "Custom theme",
-    "ar": "موضوع مخصص"
-  },
-  {
-    "id": "project_theme_data_desc",
-    "en": "If set, the custom theme will be used, with a fallback on the selected theme.",
-    "ar": "إذا تم تعيين ذلك، سيتم استخدام السمة المخصصة، مع الرجوع إلى السمة المحددة."
-  },
-  {
     "id": "project_search_values",
     "en": "Search projects",
     "ar": "مشاريع البحث "
@@ -9688,6 +9678,76 @@
     "id": "mx_theme_import_button",
     "en": "Import",
     "ar": "يستورد"
+  },
+  {
+    "id": "mx_theme_manager_title",
+    "en": "Theme Manager",
+    "ar": "مدير السمات"
+  },
+  {
+    "id": "mx_theme_manager_select_placeholder",
+    "en": "Select a theme",
+    "ar": "اختر موضوعًا"
+  },
+  {
+    "id": "mx_theme_manager_filter_placeholder",
+    "en": "Filter colors...",
+    "ar": "تصفية الألوان..."
+  },
+  {
+    "id": "mx_theme_manager_id",
+    "en": "Theme ID",
+    "ar": "معرف السمة"
+  },
+  {
+    "id": "mx_theme_manager_description",
+    "en": "Description",
+    "ar": "وصف"
+  },
+  {
+    "id": "mx_theme_manager_author",
+    "en": "Author",
+    "ar": "مؤلف"
+  },
+  {
+    "id": "mx_theme_manager_dark",
+    "en": "Dark",
+    "ar": "مظلم"
+  },
+  {
+    "id": "mx_theme_manager_tree",
+    "en": "Tree",
+    "ar": "شجرة"
+  },
+  {
+    "id": "mx_theme_manager_water",
+    "en": "Water",
+    "ar": "ماء"
+  },
+  {
+    "id": "mx_theme_save_button",
+    "en": "Save",
+    "ar": "يحفظ"
+  },
+  {
+    "id": "mx_theme_create_button",
+    "en": "Create New",
+    "ar": "إنشاء جديد"
+  },
+  {
+    "id": "mx_theme_delete_button",
+    "en": "Delete",
+    "ar": "يمسح"
+  },
+  {
+    "id": "mx_theme_remote_empty",
+    "en": "No Remote Themes",
+    "ar": "لا توجد مواضيع بعيدة"
+  },
+  {
+    "id": "mx_theme_remote_empty_message",
+    "en": "No themes found on the remote server.",
+    "ar": "لم يتم العثور على أي مواضيع على الخادم البعيد."
   },
   {
     "id": "topic_biota",

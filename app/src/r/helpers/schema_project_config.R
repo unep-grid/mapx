@@ -17,8 +17,6 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
   idsThemes <- c(themesProject$id, config$themes$ids, )
   labelThemes <- c(themesProject$label, config$themes$names, )
 
-
-
   # Create the schema structure
   schema <- list(
     title = tt("project_settings"),
@@ -266,8 +264,7 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
     appearance = list(
       logo = projectData$logo,
       countries = projectData$countries,
-      theme = projectData$theme,
-      theme_data = projectData$theme_data
+      theme = projectData$theme
     ),
     map_settings = list(
       map_position = projectData$map_position,

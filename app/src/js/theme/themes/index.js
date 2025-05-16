@@ -26,18 +26,53 @@ const def = {
 
 export const custom_themes = [];
 
+/**
+ * Register custom themes
+ * @param {Array<Object>} newThemes - Array of theme objects to register
+ */
+export function registerCustomThemes(newThemes) {
+  if (!Array.isArray(newThemes)) {
+    console.warn("registerCustomThemes expects an array of themes");
+    return;
+  }
+  
+  // Clear existing custom themes
+  clearCustomThemes();
+  
+  // Add new themes
+  newThemes.forEach(theme => {
+    if (theme && theme.id) {
+      custom_themes.push(theme);
+    }
+  });
+}
+
+/**
+ * Clear all custom themes
+ * Called when switching projects or when themes need to be refreshed
+ */
+export function clearCustomThemes() {
+  custom_themes.length = 0;
+}
+
+/**
+ * Resolve theme based on criteria
+ * Prioritizes custom themes over built-in themes
+ */
 export function resolver(opt) {
+  // First check custom themes
   const cthemes = custom_themes.filter((theme) => {
     return filterTheme(theme, opt);
   });
   const nThemes = cthemes.length;
   if (nThemes > 0) {
     if (nThemes > 1) {
-      console.warn("More than one theme found,returning first");
+      console.warn("More than one custom theme found, returning first");
     }
     return cthemes[0];
   }
 
+  // Then check built-in themes
   for (const theme of Object.values(themes)) {
     if (filterTheme(theme, opt)) {
       return theme;
@@ -62,4 +97,3 @@ export function inverseResolver(themeId) {
   const { tree, dark, water } = theme;
   return { tree, dark, water };
 }
-

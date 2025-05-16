@@ -1,7 +1,10 @@
 {
   "id": "water_dark",
+  "label": {
+    "en": "Water dark"
+  },
   "description": {
-    "en": "Water, dark theme"
+    "en": "Dark theme with emphasis on water features, suitable for low light viewing"
   },
   "author": "frederic.moser@unepgrid.ch",
   "dark": true,
@@ -244,4 +247,3 @@
     }
   }
 }
-

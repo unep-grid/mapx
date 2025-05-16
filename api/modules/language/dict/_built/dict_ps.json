@@ -7870,16 +7870,6 @@
     "ps": "ډیفالټ موضوع"
   },
   {
-    "id": "project_theme_data",
-    "en": "Custom theme",
-    "ps": "دودیز موضوع"
-  },
-  {
-    "id": "project_theme_data_desc",
-    "en": "If set, the custom theme will be used, with a fallback on the selected theme.",
-    "ps": "که چیرې تنظیم شي، نو دودیز موضوع به وکارول شي، د ټاکل شوي موضوع په بیرته راګرځیدو سره."
-  },
-  {
     "id": "project_search_values",
     "en": "Search projects",
     "ps": "پروژې لټول "
@@ -9688,6 +9678,76 @@
     "id": "mx_theme_import_button",
     "en": "Import",
     "ps": "واردول"
+  },
+  {
+    "id": "mx_theme_manager_title",
+    "en": "Theme Manager",
+    "ps": "د موضوع مدیر"
+  },
+  {
+    "id": "mx_theme_manager_select_placeholder",
+    "en": "Select a theme",
+    "ps": "یوه موضوع غوره کړئ"
+  },
+  {
+    "id": "mx_theme_manager_filter_placeholder",
+    "en": "Filter colors...",
+    "ps": "رنګونه فلټر کړئ..."
+  },
+  {
+    "id": "mx_theme_manager_id",
+    "en": "Theme ID",
+    "ps": "د موضوع ID"
+  },
+  {
+    "id": "mx_theme_manager_description",
+    "en": "Description",
+    "ps": "تفصیل"
+  },
+  {
+    "id": "mx_theme_manager_author",
+    "en": "Author",
+    "ps": "لیکوال"
+  },
+  {
+    "id": "mx_theme_manager_dark",
+    "en": "Dark",
+    "ps": "تیاره"
+  },
+  {
+    "id": "mx_theme_manager_tree",
+    "en": "Tree",
+    "ps": "ونې"
+  },
+  {
+    "id": "mx_theme_manager_water",
+    "en": "Water",
+    "ps": "اوبه"
+  },
+  {
+    "id": "mx_theme_save_button",
+    "en": "Save",
+    "ps": "خوندي کړئ"
+  },
+  {
+    "id": "mx_theme_create_button",
+    "en": "Create New",
+    "ps": "نوی جوړ کړئ"
+  },
+  {
+    "id": "mx_theme_delete_button",
+    "en": "Delete",
+    "ps": "ړنګول"
+  },
+  {
+    "id": "mx_theme_remote_empty",
+    "en": "No Remote Themes",
+    "ps": "هیڅ لرې پرتې موضوعګانې نشته"
+  },
+  {
+    "id": "mx_theme_remote_empty_message",
+    "en": "No themes found on the remote server.",
+    "ps": "په لرې پرتو سرور کې هیڅ موضوع ونه موندل شوه."
   },
   {
     "id": "topic_biota",

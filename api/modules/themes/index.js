@@ -32,32 +32,35 @@ export async function ioThemeCreate(socket, data, cb) {
       creator: idUser,
       last_editor: idUser,
       public: data.theme.public || false,
-      colors: JSON.stringify(data.theme.colors),
+      colors: data.theme.colors,
       dark: data.theme.dark || false,
-      vegetation: data.theme.tree || false,
+      tree: data.theme.tree || false,
       water: data.theme.water || false,
       base: data.theme.base || false,
-      description: JSON.stringify(data.theme.description || {}),
+      description: data.theme.description || {},
+      label: data.theme.label || {},
     };
 
     // Insert theme
     await pgWrite.query(
       `INSERT INTO mx_themes(
-        id, creator, last_editor, public, colors, dark, tree, water, base, description
+        id, id_project, creator, last_editor, public, colors, dark, tree, water, base, description, label
       ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
       )`,
       [
         theme.id,
+        theme.id_project,
         theme.creator,
         theme.last_editor,
         theme.public,
         theme.colors,
         theme.dark,
-        theme.vegetation,
+        theme.tree,
         theme.water,
         theme.base,
         theme.description,
+        theme.label,
       ]
     );
 
@@ -92,14 +95,9 @@ export async function ioThemeList(socket, data, cb) {
 
     const { rows } = await pgRead.query(query);
 
-    // Parse JSON fields
-    const themes = rows.map((theme) => ({
-      ...theme,
-      colors: JSON.parse(theme.colors),
-      description: JSON.parse(theme.description),
-    }));
+   
 
-    data.themes = themes;
+    data.themes = rows;
     data.success = true;
   } catch (e) {
     data.error = e?.message || e;
@@ -149,20 +147,22 @@ export async function ioThemeUpdate(socket, data, cb) {
         public = $2,
         colors = $3,
         dark = $4,
-        vegetation = $5,
+        tree = $5,
         water = $6,
         base = $7,
-        description = $8
-      WHERE id = $9`,
+        description = $8,
+        label = $9
+      WHERE id = $10`,
       [
         idUser,
         data.theme.public || false,
-        JSON.stringify(data.theme.colors),
+        data.theme.colors,
         data.theme.dark || false,
-        data.theme.vegetation || false,
+        data.theme.tree || false,
         data.theme.water || false,
         data.theme.base || false,
-        JSON.stringify(data.theme.description || {}),
+        data.theme.description || {},
+        data.theme.label || {},
         themeId,
       ]
     );
@@ -250,12 +250,7 @@ export async function ioThemeGet(socket, data, cb) {
       throw new Error("theme_access_not_allowed");
     }
 
-    // Parse JSON fields
-    const theme = {
-      ...rows[0],
-      colors: JSON.parse(rows[0].colors),
-      description: JSON.parse(rows[0].description),
-    };
+    const theme = rows[0];
 
     data.theme = theme;
     data.success = true;

@@ -13,7 +13,24 @@
           "type": "string"
         }
       },
-      "required": ["en"]
+      "required": [
+        "en"
+      ]
+    },
+    "label": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 20,
+          "title": "Label",
+          "description": "Label for the theme"
+        }
+      },
+      "required": [
+        "en"
+      ]
     },
     "dark": {
       "type": "boolean"
@@ -24,6 +41,12 @@
     "water": {
       "type": "boolean"
     },
+    "base": {
+      "type": "boolean"
+    },
+    "public": {
+      "type": "boolean"
+    },
     "author": {
       "type": "string"
     },
@@ -31,72 +54,190 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "mx_ui_highlighter": { "$ref": "#/definitions/colorProperty" },
-        "mx_ui_text": { "$ref": "#/definitions/colorProperty" },
-        "mx_ui_link": { "$ref": "#/definitions/colorProperty" },
-        "mx_ui_input_accent": { "$ref": "#/definitions/colorProperty" },
-        "mx_ui_text_faded": { "$ref": "#/definitions/colorProperty" },
-        "mx_ui_hidden": { "$ref": "#/definitions/colorProperty" },
-        "mx_ui_border": { "$ref": "#/definitions/colorProperty" },
-        "mx_ui_background": { "$ref": "#/definitions/colorProperty" },
-        "mx_ui_background_accent": { "$ref": "#/definitions/colorProperty" },
-        "mx_ui_background_faded": { "$ref": "#/definitions/colorProperty" },
-        "mx_ui_background_contrast": { "$ref": "#/definitions/colorProperty" },
-        "mx_ui_background_transparent": { "$ref": "#/definitions/colorProperty" },
-        "mx_ui_shadow": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_background": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_feature_highlight": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_hillshade_shadow": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_hillshade_highlight": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_mask": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_place": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_road": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_water": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_water_outline": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_water": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_bathymetry_high": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_bathymetry_low": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_bathymetry_lines": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_road": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_road_border": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_building": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_building_border": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_boundary_un_1": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_boundary_un_2": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_boundary_un_3": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_boundary_un_4": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_boundary_un_8": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_boundary_un_9": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_boundary_un_6": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_land_outline": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_bathymetry_outline": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_bathymetry": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_country_0_0": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_country_0_1": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_country_0_2": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_country_0_3": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_country_0_4": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_country_0_5": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_country_0_99": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_country_1_1": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_rail": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_vegetation": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_zone_commercial": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_snow": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_contour_lines": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_contour": { "$ref": "#/definitions/colorProperty" },
-        "mx_map_text_contour_outline": { "$ref": "#/definitions/colorProperty" }
+        "mx_ui_highlighter": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_ui_text": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_ui_link": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_ui_input_accent": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_ui_text_faded": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_ui_hidden": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_ui_border": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_ui_background": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_ui_background_accent": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_ui_background_faded": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_ui_background_contrast": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_ui_background_transparent": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_ui_shadow": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_background": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_feature_highlight": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_hillshade_shadow": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_hillshade_highlight": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_mask": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_place": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_road": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_water": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_water_outline": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_water": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_bathymetry_high": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_bathymetry_low": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_bathymetry_lines": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_road": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_road_border": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_building": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_building_border": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_boundary_un_1": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_boundary_un_2": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_boundary_un_3": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_boundary_un_4": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_boundary_un_8": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_boundary_un_9": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_boundary_un_6": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_land_outline": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_bathymetry_outline": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_bathymetry": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_country_0_0": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_country_0_1": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_country_0_2": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_country_0_3": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_country_0_4": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_country_0_5": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_country_0_99": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_country_1_1": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_rail": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_vegetation": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_zone_commercial": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_snow": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_contour_lines": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_contour": {
+          "$ref": "#/definitions/colorProperty"
+        },
+        "mx_map_text_contour_outline": {
+          "$ref": "#/definitions/colorProperty"
+        }
       }
     }
   },
-  "required": ["id", "description", "author", "colors"],
+  "required": [
+    "id",
+    "description",
+    "author",
+    "colors"
+  ],
   "definitions": {
     "colorProperty": {
       "type": "object",
       "properties": {
         "visibility": {
           "type": "string",
-          "enum": ["visible", "none"]
+          "enum": [
+            "visible",
+            "none"
+          ]
         },
         "color": {
           "type": "string",
@@ -106,7 +247,10 @@
           "type": "string"
         }
       },
-      "required": ["visibility", "color"],
+      "required": [
+        "visibility",
+        "color"
+      ],
       "additionalProperties": false
     }
   }

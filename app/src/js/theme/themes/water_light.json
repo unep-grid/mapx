@@ -1,7 +1,10 @@
 {
   "id": "water_light",
+  "label": {
+    "en": "Water light"
+  },
   "description": {
-    "en": "Water light theme"
+    "en": "Bright theme with emphasis on water features"
   },
   "author": "frederic.moser@unepgrid.ch",
   "dark": false,

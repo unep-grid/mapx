@@ -7870,16 +7870,6 @@
     "fa": "تم پیش‌فرض"
   },
   {
-    "id": "project_theme_data",
-    "en": "Custom theme",
-    "fa": "تم سفارشی"
-  },
-  {
-    "id": "project_theme_data_desc",
-    "en": "If set, the custom theme will be used, with a fallback on the selected theme.",
-    "fa": "در صورت تنظیم، از قالب سفارشی استفاده می‌شود، به همراه یک جایگزین برای قالب انتخاب شده."
-  },
-  {
     "id": "project_search_values",
     "en": "Search projects",
     "fa": "جستجوی پروژه ها "
@@ -9688,6 +9678,76 @@
     "id": "mx_theme_import_button",
     "en": "Import",
     "fa": "وارد كردن"
+  },
+  {
+    "id": "mx_theme_manager_title",
+    "en": "Theme Manager",
+    "fa": "مدیر قالب"
+  },
+  {
+    "id": "mx_theme_manager_select_placeholder",
+    "en": "Select a theme",
+    "fa": "یک تم انتخاب کنید"
+  },
+  {
+    "id": "mx_theme_manager_filter_placeholder",
+    "en": "Filter colors...",
+    "fa": "فیلتر رنگ‌ها..."
+  },
+  {
+    "id": "mx_theme_manager_id",
+    "en": "Theme ID",
+    "fa": "شناسه قالب"
+  },
+  {
+    "id": "mx_theme_manager_description",
+    "en": "Description",
+    "fa": "توضیحات"
+  },
+  {
+    "id": "mx_theme_manager_author",
+    "en": "Author",
+    "fa": "نویسنده"
+  },
+  {
+    "id": "mx_theme_manager_dark",
+    "en": "Dark",
+    "fa": "تیره"
+  },
+  {
+    "id": "mx_theme_manager_tree",
+    "en": "Tree",
+    "fa": "درخت"
+  },
+  {
+    "id": "mx_theme_manager_water",
+    "en": "Water",
+    "fa": "آب"
+  },
+  {
+    "id": "mx_theme_save_button",
+    "en": "Save",
+    "fa": "ذخیره"
+  },
+  {
+    "id": "mx_theme_create_button",
+    "en": "Create New",
+    "fa": "ایجاد جدید"
+  },
+  {
+    "id": "mx_theme_delete_button",
+    "en": "Delete",
+    "fa": "حذف"
+  },
+  {
+    "id": "mx_theme_remote_empty",
+    "en": "No Remote Themes",
+    "fa": "بدون تم‌های ریموت"
+  },
+  {
+    "id": "mx_theme_remote_empty_message",
+    "en": "No themes found on the remote server.",
+    "fa": "هیچ قالبی روی سرور راه دور یافت نشد."
   },
   {
     "id": "topic_biota",

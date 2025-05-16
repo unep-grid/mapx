@@ -1,7 +1,10 @@
 {
   "id": "color_light",
+  "label": {
+    "en": "Color light"
+  },
   "description": {
-    "en": "Color light theme"
+    "en": "Bright theme with enhanced colors for both vegetation and water features"
   },
   "author": "frederic.moser@unepgrid.ch",
   "dark": false,
@@ -244,4 +247,3 @@
     }
   }
 }
-

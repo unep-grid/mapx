@@ -455,32 +455,6 @@
     "de": ""
   },
   {
-    "id": "project_theme_data",
-    "en": "Custom theme",
-    "fr": "",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "project_theme_data_desc",
-    "en": "If set, the custom theme will be used, with a fallback on the selected theme.",
-    "fr": "",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
     "id": "project_search_values",
     "en": "Search projects",
     "fr": "Rechercher de projets",

@@ -1,7 +1,10 @@
 {
   "id": "tree_light",
+  "label": {
+    "en": "Vegetation light"
+  },
   "description": {
-    "en": "Tree light theme"
+    "en": "Bright theme with emphasis on vegetation features"
   },
   "author": "frederic.moser@unepgrid.ch",
   "dark": false,

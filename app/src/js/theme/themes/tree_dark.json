@@ -1,8 +1,12 @@
 {
   "id": "tree_dark",
-  "description": {
-    "en": "Vegetation dark theme"
+  "label": {
+    "en": "Vegetation dark"
   },
+  "description": {
+    "en": "Theme emphasis on vegetation features, for low light environments"
+  },
+
   "author": "frederic.moser@unepgrid.ch",
   "dark": true,
   "tree": true,
@@ -244,4 +248,3 @@
     }
   }
 }
-

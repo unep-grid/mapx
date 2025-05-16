@@ -1,7 +1,10 @@
 {
   "id": "color_dark",
+  "label": {
+    "en": "Color dark"
+  },
   "description": {
-    "en": "Color dark theme"
+    "en": "Dark theme with enhanced colors for both vegetation and water features"
   },
   "author": "frederic.moser@unepgrid.ch",
   "dark": true,
@@ -244,4 +247,3 @@
     }
   }
 }
-

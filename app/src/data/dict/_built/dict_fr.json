@@ -7870,16 +7870,6 @@
     "fr": "Thème par défaut"
   },
   {
-    "id": "project_theme_data",
-    "en": "Custom theme",
-    "fr": "Thème personnalisé"
-  },
-  {
-    "id": "project_theme_data_desc",
-    "en": "If set, the custom theme will be used, with a fallback on the selected theme.",
-    "fr": "Si défini, le thème personnalisé sera utilisé, avec un repli sur le thème sélectionné."
-  },
-  {
     "id": "project_search_values",
     "en": "Search projects",
     "fr": "Rechercher de projets"
@@ -9688,6 +9678,76 @@
     "id": "mx_theme_import_button",
     "en": "Import",
     "fr": "Importer"
+  },
+  {
+    "id": "mx_theme_manager_title",
+    "en": "Theme Manager",
+    "fr": "Gestionnaire de thèmes"
+  },
+  {
+    "id": "mx_theme_manager_select_placeholder",
+    "en": "Select a theme",
+    "fr": "Sélectionnez un thème"
+  },
+  {
+    "id": "mx_theme_manager_filter_placeholder",
+    "en": "Filter colors...",
+    "fr": "Filtrer les couleurs..."
+  },
+  {
+    "id": "mx_theme_manager_id",
+    "en": "Theme ID",
+    "fr": "ID du thème"
+  },
+  {
+    "id": "mx_theme_manager_description",
+    "en": "Description",
+    "fr": "Description"
+  },
+  {
+    "id": "mx_theme_manager_author",
+    "en": "Author",
+    "fr": "Auteur"
+  },
+  {
+    "id": "mx_theme_manager_dark",
+    "en": "Dark",
+    "fr": "Sombre"
+  },
+  {
+    "id": "mx_theme_manager_tree",
+    "en": "Tree",
+    "fr": "Arbre"
+  },
+  {
+    "id": "mx_theme_manager_water",
+    "en": "Water",
+    "fr": "Eau"
+  },
+  {
+    "id": "mx_theme_save_button",
+    "en": "Save",
+    "fr": "Sauvegarder"
+  },
+  {
+    "id": "mx_theme_create_button",
+    "en": "Create New",
+    "fr": "Créer un nouveau"
+  },
+  {
+    "id": "mx_theme_delete_button",
+    "en": "Delete",
+    "fr": "Supprimer"
+  },
+  {
+    "id": "mx_theme_remote_empty",
+    "en": "No Remote Themes",
+    "fr": "Pas de thèmes distants"
+  },
+  {
+    "id": "mx_theme_remote_empty_message",
+    "en": "No themes found on the remote server.",
+    "fr": "Aucun thème trouvé sur le serveur distant."
   },
   {
     "id": "topic_biota",

@@ -7870,16 +7870,6 @@
     "bn": "ডিফল্ট থিম"
   },
   {
-    "id": "project_theme_data",
-    "en": "Custom theme",
-    "bn": "কাস্টম থিম"
-  },
-  {
-    "id": "project_theme_data_desc",
-    "en": "If set, the custom theme will be used, with a fallback on the selected theme.",
-    "bn": "যদি সেট করা থাকে, তাহলে কাস্টম থিমটি ব্যবহার করা হবে, নির্বাচিত থিমের উপর একটি ফলব্যাক সহ।"
-  },
-  {
     "id": "project_search_values",
     "en": "Search projects",
     "bn": "প্রকল্প অনুসন্ধান করুন "
@@ -9688,6 +9678,76 @@
     "id": "mx_theme_import_button",
     "en": "Import",
     "bn": "আমদানি"
+  },
+  {
+    "id": "mx_theme_manager_title",
+    "en": "Theme Manager",
+    "bn": "থিম ম্যানেজার"
+  },
+  {
+    "id": "mx_theme_manager_select_placeholder",
+    "en": "Select a theme",
+    "bn": "একটি থিম নির্বাচন করুন"
+  },
+  {
+    "id": "mx_theme_manager_filter_placeholder",
+    "en": "Filter colors...",
+    "bn": "রঙ ফিল্টার করুন..."
+  },
+  {
+    "id": "mx_theme_manager_id",
+    "en": "Theme ID",
+    "bn": "থিম আইডি"
+  },
+  {
+    "id": "mx_theme_manager_description",
+    "en": "Description",
+    "bn": "বিবরণ"
+  },
+  {
+    "id": "mx_theme_manager_author",
+    "en": "Author",
+    "bn": "লেখক"
+  },
+  {
+    "id": "mx_theme_manager_dark",
+    "en": "Dark",
+    "bn": "অন্ধকার"
+  },
+  {
+    "id": "mx_theme_manager_tree",
+    "en": "Tree",
+    "bn": "গাছ"
+  },
+  {
+    "id": "mx_theme_manager_water",
+    "en": "Water",
+    "bn": "জল"
+  },
+  {
+    "id": "mx_theme_save_button",
+    "en": "Save",
+    "bn": "সংরক্ষণ করুন"
+  },
+  {
+    "id": "mx_theme_create_button",
+    "en": "Create New",
+    "bn": "নতুন তৈরি করুন"
+  },
+  {
+    "id": "mx_theme_delete_button",
+    "en": "Delete",
+    "bn": "মুছে ফেলুন"
+  },
+  {
+    "id": "mx_theme_remote_empty",
+    "en": "No Remote Themes",
+    "bn": "কোনও দূরবর্তী থিম নেই"
+  },
+  {
+    "id": "mx_theme_remote_empty_message",
+    "en": "No themes found on the remote server.",
+    "bn": "রিমোট সার্ভারে কোন থিম পাওয়া যায়নি।"
   },
   {
     "id": "topic_biota",

@@ -1,7 +1,10 @@
 {
   "id": "classic_dark",
+  "label": {
+    "en": "Classic dark"
+  },
   "description": {
-    "en": "Classic dark theme"
+    "en": "Classic dark theme with minimal colors, optimized for low light environments"
   },
   "author": "frederic.moser@unepgrid.ch",
   "dark": true,
@@ -244,4 +247,3 @@
     }
   }
 }
-

@@ -1,7 +1,10 @@
 {
   "id": "classic_light",
+  "label": {
+    "en": "Classic light"
+  },
   "description": {
-    "en": "Classic light theme"
+    "en": "Classic bright theme with minimal colors, emphasis on data presented on the map"
   },
   "author": "frederic.moser@unepgrid.ch",
   "dark": false,

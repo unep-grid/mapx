@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 20,
+      "pattern": "^[a-zA-Z0-9_]+$",
+      "title": "Theme ID",
+      "description": "Unique identifier for the theme (3-20 characters, no space + underscore _ allowed)"
+    },
+    "description": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 100,
+          "title": "Description",
+          "description": "Brief description of the theme"
+        }
+      },
+      "required": [
+        "en"
+      ]
+    },
+    "label": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 20,
+          "title": "Label",
+          "description": "Label for the theme"
+        }
+      },
+      "required": [
+        "en"
+      ]
+    },
+    "author": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 100,
+      "title": "Author",
+      "description": "Creator of the theme"
+    },
+    "dark": {
+      "type": "boolean",
+      "title": "Dark Mode",
+      "description": "Enable dark mode for this theme",
+      "default": false
+    },
+    "tree": {
+      "type": "boolean",
+      "title": "Tree Mode",
+      "description": "Emphasize vegetation/tree cover",
+      "default": false
+    },
+    "water": {
+      "type": "boolean",
+      "title": "Water Mode",
+      "description": "Emphasize water features",
+      "default": false
+    },
+    "base": {
+      "type": "boolean",
+      "title": "Base Theme",
+      "description": "Designate as a base theme (cannot be deleted)",
+      "default": false
+    },
+    "public": {
+      "type": "boolean",
+      "title": "Public Theme",
+      "description": "Make this theme available to all users",
+      "default": false
+    }
+  },
+  "required": [
+    "id",
+    "description",
+    "author"
+  ]
+}
