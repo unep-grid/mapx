@@ -95,8 +95,7 @@ export async function ioThemeList(socket, data, cb) {
 
     const { rows } = await pgRead.query(query);
 
-   
-
+  
     data.themes = rows;
     data.success = true;
   } catch (e) {

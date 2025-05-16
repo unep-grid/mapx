@@ -591,6 +591,7 @@ export async function setProject(idProject, opt, origin) {
    * Restart websocket
    */
   await ws.connect();
+  await theme.init();
 
   /**
    * Wait the view list to be updated
@@ -807,6 +808,7 @@ export function initListenersApp() {
          * Reconnect to ws
          */
         await ws.connect();
+        await theme.init();
         /**
          * Re-init notifications control
          */
@@ -1068,6 +1070,7 @@ export async function initMapx(o) {
    * WS connect + authentication
    */
   await ws.connect();
+  await theme.init();
 
   /**
    * Init notification control

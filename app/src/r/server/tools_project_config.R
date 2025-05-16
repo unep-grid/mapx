@@ -195,7 +195,6 @@ observeEvent(input$btnSaveProjectConfig, {
     logo <- .get(data, c("appearance", "logo"))
     theme <- .get(data, c("appearance", "theme"))
     countries <- .get(data, c("appearance", "countries"), list())
-    theme_data <- .get(data, c("appearance", "theme_data"), "")
 
     # Map settings section
     mapPosition <- .get(data, c("map_settings", "map_position"))
@@ -247,7 +246,6 @@ observeEvent(input$btnSaveProjectConfig, {
       map_projection = projection,
       countries = countries,
       theme = theme,
-      theme_data = theme_data,
       creator = NULL, # Keep existing data structure
       allow_join = allowJoin
     ))

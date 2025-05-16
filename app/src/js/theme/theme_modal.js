@@ -19,6 +19,7 @@ import { fontFamilies, fonts } from "./fonts.js";
 import { default as schemaMeta } from "./schema_meta.json"; // Import the new schema
 import { jedInit } from "../json_editor"; // Import jedInit
 import { settings } from "../mx.js";
+import { themes } from "./themes/index.js"; // Import themes for local theme check
 
 export class ThemeModal extends EventSimple {
   constructor(opt) {
@@ -108,6 +109,45 @@ export class ThemeModal extends EventSimple {
     await tm.buildContent(); // Await buildContent
   }
 
+  /**
+   * Check if a theme is a local/built-in theme
+   * @param {string} themeId - Theme ID to check
+   * @returns {boolean} - True if theme is local/built-in
+   */
+  isLocalTheme(themeId) {
+    // Check if theme ID exists in the original themes object (not in custom_themes)
+    return Object.keys(themes).includes(themeId);
+  }
+
+  /**
+   * Update button states based on current theme and user roles
+   */
+  updateButtonStates() {
+    const tm = this;
+    const currentTheme = tm._theme.theme();
+    const isLocal = tm.isLocalTheme(currentTheme.id);
+    const hasPublisherRole = settings.user.roles?.publisher === true;
+
+    // Disable save/delete buttons for local themes
+    if (isLocal) {
+      tm._el_button_save.setAttribute("disabled", "disabled");
+      tm._el_button_delete.setAttribute("disabled", "disabled");
+    } else {
+      tm._el_button_save.removeAttribute("disabled");
+      tm._el_button_delete.removeAttribute("disabled");
+    }
+
+    // Disable create/save/delete buttons if user is not a publisher
+    if (!hasPublisherRole) {
+      tm._el_button_save.setAttribute("disabled", "disabled");
+      tm._el_button_delete.setAttribute("disabled", "disabled");
+      tm._el_button_create.setAttribute("disabled", "disabled");
+    } else if (!isLocal) {
+      // Only enable create button for non-publishers if not a local theme
+      tm._el_button_create.removeAttribute("disabled");
+    }
+  }
+
   async buildContent() {
     // Make buildContent async
     const tm = this;
@@ -120,38 +160,25 @@ export class ThemeModal extends EventSimple {
     tm._el_theme_select_container.appendChild(tm._el_theme_select);
 
     // Load Tom Select asynchronously
-    try {
-      const TomSelect = await moduleLoad("tom-select");
+    const TomSelect = await moduleLoad("tom-select");
 
-      // Initialize Tom Select with options
-      tm._tom_select = new TomSelect(tm._el_theme_select, {
-        placeholder: tt("mx_theme_manager_select_placeholder"), // Use translation key
-        options: Object.entries(tm._theme.getAll()).map(([id, theme]) => ({
-          value: id,
-          text: theme.label?.en || id, // Use label if available, fallback to ID
-        })),
-        items: [tm._theme.id()],
-        create: false,
-        sortField: { field: "text", direction: "asc" },
-        onChange: (value) => tm.selectTheme(value),
-      });
-    } catch (e) {
-      console.error("Failed to load Tom Select:", e);
-      // Fallback to regular select
-      tm._el_theme_select = elSelect("theme_select", {
-        items: Object.keys(tm._theme.getAll()).map((id) =>
-          el("option", { value: id }, id),
-        ),
-        onChange: (event) => tm.selectTheme(event.target.value),
-      });
-      tm._el_theme_select_container.replaceChildren(tm._el_theme_select);
-    }
+    // Initialize Tom Select with options
+    tm._tom_select = new TomSelect(tm._el_theme_select, {
+      placeholder: tt("mx_theme_manager_select_placeholder"), // Use translation key
+      options: Object.entries(tm._theme.getAll()).map(([id, theme]) => ({
+        value: id,
+        text: theme.label?.en || id, // Use label if available, fallback to ID
+      })),
+      items: [tm._theme.id()],
+      create: false,
+      sortField: { field: "text", direction: "asc" },
+      onChange: (value) => tm.selectTheme(value),
+    });
 
     // Container for theme properties (id, description, author, modes)
     tm._el_properties_container = el("div", {
       class: "mx-theme--manager-modal-properties",
     }); // Add properties class
-    tm.buildPropertiesInputs();
 
     // Container for color and font inputs
     tm._el_inputs_container = el("div", {
@@ -191,7 +218,7 @@ export class ThemeModal extends EventSimple {
       timeout: 10,
     });
 
-    await tm.buildInputs(); // Call buildInputs here
+    await tm.update();
   }
 
   buildPropertiesInputs() {
@@ -219,51 +246,6 @@ export class ThemeModal extends EventSimple {
       el("div", { class: "form-control-static" }, theme.author || ""),
     ]);
     tm._el_properties_container.appendChild(tm._el_display_author);
-
-    // Display Modes (dark, tree, water)
-
-    function check(v) {
-      if (v) {
-        return el("i", { class: ["fa", "fa-check-circle"] });
-      } else {
-        return el("i", { class: ["fa", "fa-circle-thin"] });
-      }
-    }
-
-    tm._el_display_modes = el("div", { class: "form-group" }, [
-      el("label", {}, "Modes"), // Consider adding a translation key for "Modes"
-      el(
-        "div",
-        {
-          class: "form-control-static",
-          style: { display: "flex", flexDirection: "column" },
-        },
-        [
-          el("span", [tt("mx_theme_manager_dark"), check(theme.dark)]),
-          el("span", [tt("mx_theme_manager_tree"), check(theme.tree)]),
-          el("span", [tt("mx_theme_manager_water"), check(theme.water)]),
-        ],
-      ),
-    ]);
-    tm._el_properties_container.appendChild(tm._el_display_modes);
-
-    // Display Public and Base flags if they exist
-    if (theme.hasOwnProperty("public") || theme.hasOwnProperty("base")) {
-      tm._el_display_flags = el("div", { class: "form-group" }, [
-        el("label", {}, "Flags"), // Consider adding a translation key for "Flags"
-        el(
-          "div",
-          { class: "form-control-static" },
-          [
-            theme.public ? tt("mx_theme_manager_public") || "Public" : "",
-            theme.base ? tt("mx_theme_manager_base") || "Base" : "",
-          ]
-            .filter(Boolean)
-            .join(", "),
-        ),
-      ]);
-      tm._el_properties_container.appendChild(tm._el_display_flags);
-    }
   }
 
   /**
@@ -299,7 +281,7 @@ export class ThemeModal extends EventSimple {
       startValues,
     );
 
-    // Initialize JSON Editor
+    // Initialize JSON Editor with custom validators
     const editor = await jedInit({
       schema: schemaMeta,
       target: elMetadataEditor,
@@ -315,6 +297,26 @@ export class ThemeModal extends EventSimple {
         prompt_before_delete: false,
         show_errors: "interaction",
       },
+      custom_validators: [
+        {
+          path: "root.id",
+          validator: (schema, value, path) => {
+            // Skip validation if not creating a new theme
+            if (operation !== "create") return true;
+
+            // Check if ID already exists in any theme (local or custom)
+            const allThemeIds = Object.keys(tm._theme.getAll());
+            if (allThemeIds.includes(value)) {
+              return {
+                valid: false,
+                message:
+                  "Theme ID already exists. Please choose a different ID.",
+              };
+            }
+            return true;
+          },
+        },
+      ],
     });
 
     // Disable ID field for existing themes (except when exporting)
@@ -586,8 +588,6 @@ export class ThemeModal extends EventSimple {
     return out;
   }
 
-  // updateFromProperties method removed as it's been replaced by the JSON Editor approach
-
   async selectTheme(themeId) {
     const tm = this;
     await tm._theme.set(themeId, {
@@ -596,8 +596,14 @@ export class ThemeModal extends EventSimple {
       save_url: true,
       update_buttons: true,
     });
+    await tm.update();
+  }
+
+  async update() {
+    const tm = this;
     tm.buildPropertiesInputs(); // Rebuild properties inputs for the new theme
     await tm.buildInputs(); // Rebuild color/font inputs for the new theme
+    tm.updateButtonStates(); // Update button states based on the selected theme
   }
 
   // buildCompleteTheme method removed as it's been replaced by direct metadata handling in each operation
@@ -642,7 +648,7 @@ export class ThemeModal extends EventSimple {
 
       console.log("Theme created successfully:", response.success);
       // Refresh the theme list and select the new theme
-      
+
       await tm._theme.registerThemes(Object.keys(tm._theme.getAll()));
       tm.updateThemeSelectOptions();
       await tm.selectTheme(theme.id);
@@ -685,12 +691,8 @@ export class ThemeModal extends EventSimple {
       await tm._theme.registerThemes(Object.keys(tm._theme.getAll()));
       tm.updateThemeSelectOptions();
       await tm.selectTheme(theme.id);
-
-      // Update the read-only properties display
-      tm.buildPropertiesInputs();
     } catch (e) {
       console.error("Failed to update theme:", e);
-      // Provide user feedback about the error
     }
   }
 
@@ -744,7 +746,14 @@ export class ThemeModal extends EventSimple {
       // Validate the imported theme
       const ok = await validate(importedTheme);
       if (!ok) {
+        console.warn("Invalid theme", validate.errors);
         throw new Error("Invalid theme format");
+      }
+
+      // Validate the colors specifically
+      const colorsValid = await tm._theme.validateColors(importedTheme.colors);
+      if (!colorsValid) {
+        throw new Error("Invalid colors in imported theme");
       }
 
       // Extract metadata from imported theme for the editor
@@ -768,8 +777,16 @@ export class ThemeModal extends EventSimple {
       // Create final theme object with updated metadata and original colors
       const finalTheme = Object.assign({}, importedTheme, metadata);
 
-      // Add the imported theme to the main Theme instance's themes list
-      tm._theme.getAll()[finalTheme.id] = finalTheme;
+      // Add the theme using the addTheme method which handles validation properly
+
+      // Validate the imported theme
+      const okFinal = await validate(finalTheme);
+      if (!okFinal) {
+        console.warn("Invalid theme", validate.errors);
+        throw new Error("Invalid theme format");
+      }
+
+      await tm._theme.addTheme(finalTheme);
 
       // Update the theme selection dropdown
       tm.updateThemeSelectOptions();
@@ -778,7 +795,12 @@ export class ThemeModal extends EventSimple {
       await tm.selectTheme(finalTheme.id);
     } catch (e) {
       console.error("Failed to import theme:", e);
-      // Provide user feedback about the error
+      // Show error to user
+      modalPrompt({
+        title: "Import Error",
+        content: `Failed to import theme: ${e.message}`,
+        buttons: ["OK"],
+      });
     }
   }
 
@@ -837,9 +859,9 @@ export class ThemeModal extends EventSimple {
       // Add new options
       themeIds.forEach((id) => {
         const theme = themes[id];
-        tm._tom_select.addOption({ 
-          value: id, 
-          text: theme.label?.en || id // Use label if available, fallback to ID
+        tm._tom_select.addOption({
+          value: id,
+          text: theme.label?.en || id, // Use label if available, fallback to ID
         });
       });
 
@@ -861,8 +883,7 @@ export class ThemeModal extends EventSimple {
     const tm = this;
     // Reset modal state and UI
     tm.updateThemeSelectOptions();
-    tm.buildPropertiesInputs();
-    await tm.buildInputs();
+    await tm.update();
     tm.fire("reset");
   }
 

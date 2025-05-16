@@ -14,35 +14,3 @@ export const theme = new Theme({
   id: idTheme,
   colors: colors || settings.ui.colors,
 });
-
-/*
- * Init match media query + listener
- */
-export async function initMatchMedia(theme) {
-  try {
-    if (idTheme !== "auto") {
-      return;
-    }
-    const valid = theme instanceof Theme;
-    if (!valid) {
-      return;
-    }
-    /**
-     * theme color auto
-     */
-    const wMdark = window.matchMedia("(prefers-color-scheme: dark)");
-    const wMlight = window.matchMedia("(prefers-color-scheme: light)");
-
-    if (wMdark.matches) {
-      await theme.set("classic_dark");
-    }
-    wMdark.addEventListener("change", async (e) => {
-      return e.matches && (await theme.set("classic_dark"));
-    });
-    wMlight.addEventListener("change", async (e) => {
-      return e.matches && (await theme.set("classic_light"));
-    });
-  } catch (e) {
-    console.warn(e);
-  }
-}

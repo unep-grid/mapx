@@ -85,14 +85,14 @@ config[["themes"]] <- list(
     "color_light",
     "color_dark",
     "water_light",
-    "water_dark",
+    "water_dark"
   ),
   names = c(
     "Classic Light",
     "Classic Dark",
     "Color Light",
     "Color Dark",
-    "Water Light",
+    "Water Light"
   )
 )
 config$themes$idsNamed <- config$themes$ids

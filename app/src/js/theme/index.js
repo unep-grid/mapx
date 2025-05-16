@@ -55,10 +55,6 @@ class Theme extends EventSimple {
       water: null,
     };
     t._inputs = [];
-
-    t.init().catch((e) => {
-      console.warn(e);
-    });
   }
   /**
    * Init
@@ -76,7 +72,7 @@ class Theme extends EventSimple {
     for (const k in Object.keys(t._opt.on)) {
       t.on(k, t._opt.on[k]);
     }
-    
+
     // Load remote themes from the server
     try {
       const remoteThemes = await t.listRemoteThemes();
@@ -86,7 +82,7 @@ class Theme extends EventSimple {
     } catch (e) {
       console.warn("Failed to load remote themes:", e);
     }
-    
+
     let id_saved = localStorage.getItem("theme@id");
 
     if (!t.isValidId(id_saved)) {
@@ -238,24 +234,24 @@ class Theme extends EventSimple {
   getAll() {
     // Start with custom themes to give them priority
     const allThemes = {};
-    
+
     // Add custom themes first
-    custom_themes.forEach(theme => {
+    custom_themes.forEach((theme) => {
       if (theme && theme.id) {
         allThemes[theme.id] = theme;
       }
     });
-    
+
     // Then add built-in themes (won't overwrite custom themes with same ID)
     Object.entries(themes).forEach(([id, theme]) => {
       if (!allThemes[id]) {
         allThemes[id] = theme;
       }
     });
-    
+
     return allThemes;
   }
-  
+
   /**
    * Register remote themes from the server
    * @param {Array<Object>} remoteThemes - Array of theme objects from the server
@@ -263,13 +259,13 @@ class Theme extends EventSimple {
   async registerThemes(remoteThemes) {
     // Register the themes in the custom_themes array
     registerCustomThemes(remoteThemes);
-    
+
     // Update the modal if it's open
     if (this._themeModal) {
       this._themeModal.updateThemeSelectOptions();
     }
   }
-  
+
   /**
    * Clear custom themes
    * Called when switching projects
@@ -277,7 +273,7 @@ class Theme extends EventSimple {
   clearCustomThemes() {
     // Clear the custom_themes array
     clearCustomThemes();
-    
+
     // Update the modal if it's open
     if (this._themeModal) {
       this._themeModal.updateThemeSelectOptions();
@@ -294,14 +290,15 @@ class Theme extends EventSimple {
     const t = this;
     opt = Object.assign({}, opt);
     const ok = await validate(theme);
+
     if (!ok) {
       console.warn("Invalid theme", validate.errors);
       throw new Error("Invalid theme");
     }
-    
+
     // Add to custom_themes array instead of directly to themes object
     // This ensures it can be properly managed and cleared when switching projects
-    const existingIndex = custom_themes.findIndex(t => t.id === theme.id);
+    const existingIndex = custom_themes.findIndex((t) => t.id === theme.id);
     if (existingIndex >= 0) {
       // Replace existing theme with same ID
       custom_themes[existingIndex] = theme;
@@ -309,12 +306,12 @@ class Theme extends EventSimple {
       // Add new theme
       custom_themes.push(theme);
     }
-    
+
     // Update the modal's theme list if it's open
     if (t._themeModal) {
       t._themeModal.updateThemeSelectOptions();
     }
-    
+
     return await t.set(theme, opt);
   }
 
@@ -331,6 +328,11 @@ class Theme extends EventSimple {
    */
   async set(theme, opt) {
     const t = this;
+
+    if (isEmpty(theme)) {
+      return;
+    }
+
     opt = Object.assign(
       {},
       {
@@ -355,6 +357,7 @@ class Theme extends EventSimple {
       }
 
       if (!validate(theme)) {
+        console.warn("Invalid theme", validate.errors);
         throw new Error("Invalid theme");
       }
 
@@ -424,7 +427,7 @@ class Theme extends EventSimple {
 
     /* case json text */
     if (!isValidInputColors && isJson(colors)) {
-      const colors_json = JSON.stringify(colors);
+      const colors_json = JSON.parse(colors);
       if (await t.validateColors(colors_json)) {
         return colors_json;
       }
@@ -783,7 +786,6 @@ class Theme extends EventSimple {
    * Services
    */
 
-
   async listRemoteThemes() {
     const response = await this._s.list();
     if (response.error) {
@@ -792,7 +794,6 @@ class Theme extends EventSimple {
     }
     return response.themes || [];
   }
-
 }
 
 export { Theme };
