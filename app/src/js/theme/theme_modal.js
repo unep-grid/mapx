@@ -20,6 +20,7 @@ import { default as schemaMeta } from "./schema_meta.json"; // Import the new sc
 import { jedInit } from "../json_editor"; // Import jedInit
 import { settings } from "../mx.js";
 import { themes } from "./themes/index.js"; // Import themes for local theme check
+import { getDictItem } from "../mx_helpers.js";
 
 export class ThemeModal extends EventSimple {
   constructor(opt) {
@@ -105,8 +106,7 @@ export class ThemeModal extends EventSimple {
       },
     });
 
-    // Build the internal content of the modal
-    await tm.buildContent(); // Await buildContent
+    await tm.buildContent();
   }
 
   /**
@@ -148,6 +148,54 @@ export class ThemeModal extends EventSimple {
     }
   }
 
+  async buildSelect() {
+    const tm = this;
+    const TomSelect = await moduleLoad("tom-select");
+
+    // Check if Tom Select instance already exists
+    if (tm._tom_select instanceof TomSelect) {
+      // Update existing instance
+      const currentOptions = tm._theme.list();
+      const currentValue = tm._theme.id();
+
+      // Clear existing options
+      tm._tom_select.clear();
+      tm._tom_select.clearOptions();
+
+      // Add new options
+
+      currentOptions.forEach((option) => tm._tom_select.addOption(option));
+
+      // Set the current value
+      if (currentValue) {
+        tm._tom_select.setValue(currentValue, true);
+      }
+
+      // Refresh the control to ensure UI is updated
+      tm._tom_select.refreshOptions(false);
+    } else {
+      // Initialize Tom Select with options if it doesn't exist
+      tm._tom_select = new TomSelect(tm._el_theme_select, {
+        placeholder: await getDictItem("mx_theme_manager_select_placeholder"),
+        options: tm.getOptions(),
+        items: [tm._theme.id()],
+        create: false,
+        sortField: { field: "label", direction: "asc" },
+        onChange: (value) => tm.selectTheme(value),
+      });
+    }
+  }
+
+  getOptions() {
+    const tm = this;
+    return tm._theme.list().map((t) => {
+      return {
+        value: t.id,
+        text: t.label.en || t.id,
+      };
+    });
+  }
+
   async buildContent() {
     // Make buildContent async
     const tm = this;
@@ -158,22 +206,7 @@ export class ThemeModal extends EventSimple {
     }); // Add header class
     tm._el_theme_select = el("select", { id: "theme_select" });
     tm._el_theme_select_container.appendChild(tm._el_theme_select);
-
-    // Load Tom Select asynchronously
-    const TomSelect = await moduleLoad("tom-select");
-
-    // Initialize Tom Select with options
-    tm._tom_select = new TomSelect(tm._el_theme_select, {
-      placeholder: tt("mx_theme_manager_select_placeholder"), // Use translation key
-      options: Object.entries(tm._theme.getAll()).map(([id, theme]) => ({
-        value: id,
-        text: theme.label?.en || id, // Use label if available, fallback to ID
-      })),
-      items: [tm._theme.id()],
-      create: false,
-      sortField: { field: "text", direction: "asc" },
-      onChange: (value) => tm.selectTheme(value),
-    });
+    tm.buildSelect();
 
     // Container for theme properties (id, description, author, modes)
     tm._el_properties_container = el("div", {
@@ -240,12 +273,30 @@ export class ThemeModal extends EventSimple {
     ]);
     tm._el_properties_container.appendChild(tm._el_display_description);
 
-    // Display Author
-    tm._el_display_author = el("div", { class: "form-group" }, [
-      el("label", {}, tt("mx_theme_manager_author")), // Use translation key
-      el("div", { class: "form-control-static" }, theme.author || ""),
+    // Display Creator
+    tm._el_display_creator = el("div", { class: "form-group" }, [
+      el("label", {}, tt("mx_theme_manager_creator")), // Use translation key
+      el("div", { class: "form-control-static" }, theme.creator || "1"),
     ]);
-    tm._el_properties_container.appendChild(tm._el_display_author);
+    tm._el_properties_container.appendChild(tm._el_display_creator);
+
+    // Display Last Editor
+    tm._el_display_last_editor = el("div", { class: "form-group" }, [
+      el("label", {}, tt("mx_theme_manager_last_editor")), // Use translation key
+      el("div", { class: "form-control-static" }, theme.last_editor || "1"),
+    ]);
+    tm._el_properties_container.appendChild(tm._el_display_last_editor);
+
+    // Display Last Modified
+    tm._el_display_date_modified = el("div", { class: "form-group" }, [
+      el("label", {}, tt("mx_theme_manager_date_modified")), // Use translation key
+      el(
+        "div",
+        { class: "form-control-static" },
+        theme.date_modified || new Date().toISOString(),
+      ),
+    ]);
+    tm._el_properties_container.appendChild(tm._el_display_date_modified);
   }
 
   /**
@@ -271,7 +322,9 @@ export class ThemeModal extends EventSimple {
         id: theme.id,
         description: theme.description || { en: "" },
         label: theme.label || { en: "" },
-        author: theme.author || "",
+        creator: theme.creator || 1,
+        last_editor: theme.last_editor || 1,
+        date_modified: theme.date_modified || new Date().toISOString(),
         dark: theme.dark || false,
         tree: theme.tree || false,
         water: theme.water || false,
@@ -550,7 +603,7 @@ export class ThemeModal extends EventSimple {
       const tm = this;
       await waitFrameAsync();
       const colors = tm.getColorsFromInputs();
-      await tm._theme.setColors(colors); // Update the main Theme instance
+      await tm._theme.setColors(colors);
     } catch (e) {
       console.warn("Update from input", e);
     }
@@ -574,15 +627,19 @@ export class ThemeModal extends EventSimple {
      * Build color
      */
     for (const cid in out) {
-      const hex = out[cid].hex;
-      const alpha = out[cid].alpha * 1;
-      const font = out[cid].font;
-      out[cid] = {
-        visibility: out[cid].visibility === true ? "visible" : "none",
-        color: chroma(hex).alpha(alpha).css(),
-      };
-      if (font) {
-        out[cid].font = font;
+      try {
+        const hex = out[cid].hex;
+        const alpha = out[cid].alpha * 1;
+        const font = out[cid].font;
+        out[cid] = {
+          visibility: out[cid].visibility === true ? "visible" : "none",
+          color: chroma(hex).alpha(alpha).css(),
+        };
+        if (font) {
+          out[cid].font = font;
+        }
+      } catch (e) {
+        debugger;
       }
     }
     return out;
@@ -599,14 +656,15 @@ export class ThemeModal extends EventSimple {
     await tm.update();
   }
 
+  /**
+   * Update UI after a theme change change
+   */
   async update() {
     const tm = this;
-    tm.buildPropertiesInputs(); // Rebuild properties inputs for the new theme
-    await tm.buildInputs(); // Rebuild color/font inputs for the new theme
-    tm.updateButtonStates(); // Update button states based on the selected theme
+    tm.buildPropertiesInputs();
+    await tm.buildInputs();
+    tm.updateButtonStates();
   }
-
-  // buildCompleteTheme method removed as it's been replaced by direct metadata handling in each operation
 
   async createTheme() {
     try {
@@ -618,7 +676,9 @@ export class ThemeModal extends EventSimple {
         id: `theme_${makeSafeName(Date.now().toString())}`,
         description: { en: "" },
         label: { en: "" },
-        author: settings.user.email,
+        creator: 1,
+        last_editor: 1,
+        date_modified: new Date().toISOString(),
         dark: false,
         tree: false,
         water: false,
@@ -632,6 +692,8 @@ export class ThemeModal extends EventSimple {
       const theme = Object.assign({}, metadata, {
         colors: tm.getColorsFromInputs(),
       });
+
+      debugger;
 
       // Validate the new theme object
       const isValid = await validate(theme);
@@ -649,8 +711,7 @@ export class ThemeModal extends EventSimple {
       console.log("Theme created successfully:", response.success);
       // Refresh the theme list and select the new theme
 
-      await tm._theme.registerThemes(Object.keys(tm._theme.getAll()));
-      tm.updateThemeSelectOptions();
+      await tm.updateThemeSelectOptions();
       await tm.selectTheme(theme.id);
     } catch (e) {
       console.error("Failed to create theme:", e);
@@ -673,6 +734,8 @@ export class ThemeModal extends EventSimple {
         colors: tm.getColorsFromInputs(),
       });
 
+      debugger;
+
       // Validate the updated theme object
       const isValid = await validate(theme);
       if (!isValid) {
@@ -689,7 +752,7 @@ export class ThemeModal extends EventSimple {
       console.log("Theme updated successfully:", response.success);
       // Refresh the theme list and select the updated theme
       await tm._theme.registerThemes(Object.keys(tm._theme.getAll()));
-      tm.updateThemeSelectOptions();
+      await tm.updateThemeSelectOptions();
       await tm.selectTheme(theme.id);
     } catch (e) {
       console.error("Failed to update theme:", e);
@@ -723,7 +786,7 @@ export class ThemeModal extends EventSimple {
       console.log("Theme deleted successfully:", response.success);
       // Refresh the theme list and select a default theme (e.g., the default light theme)
       await tm._theme.registerThemes(Object.keys(tm._theme.getAll())); // Assuming this refreshes the list
-      tm.updateThemeSelectOptions();
+      await tm.updateThemeSelectOptions();
       await tm.selectTheme(tm._theme._opt.id_default); // Select the default theme after deletion
     } catch (e) {
       console.error("Failed to delete theme:", e);
@@ -761,7 +824,9 @@ export class ThemeModal extends EventSimple {
         id: importedTheme.id,
         description: importedTheme.description || { en: "" },
         label: importedTheme.label || { en: "" },
-        author: importedTheme.author || "",
+        creator: importedTheme.creator || 1,
+        last_editor: importedTheme.last_editor || 1,
+        date_modified: importedTheme.date_modified || new Date().toISOString(),
         dark: importedTheme.dark || false,
         tree: importedTheme.tree || false,
         water: importedTheme.water || false,
@@ -788,10 +853,7 @@ export class ThemeModal extends EventSimple {
 
       await tm._theme.addTheme(finalTheme);
 
-      // Update the theme selection dropdown
-      tm.updateThemeSelectOptions();
-
-      // Select the imported theme
+      await tm.updateThemeSelectOptions();
       await tm.selectTheme(finalTheme.id);
     } catch (e) {
       console.error("Failed to import theme:", e);
@@ -818,6 +880,7 @@ export class ThemeModal extends EventSimple {
       const theme = Object.assign({}, currentTheme, metadata, {
         colors: tm.getColorsFromInputs(),
       });
+      debugger;
 
       // Validate the theme object before export
       const isValid = await validate(theme);
@@ -841,48 +904,18 @@ export class ThemeModal extends EventSimple {
     if (isNotEmpty(colors)) {
       theme.colors = colors;
     }
+    debugger;
 
     return theme;
   }
 
-  updateThemeSelectOptions() {
+  async updateThemeSelectOptions() {
     const tm = this;
-    const currentThemeId = tm._theme.id();
-    const themes = tm._theme.getAll();
-    const themeIds = Object.keys(themes);
-
-    if (tm._tom_select) {
-      // Clear existing options
-      tm._tom_select.clear();
-      tm._tom_select.clearOptions();
-
-      // Add new options
-      themeIds.forEach((id) => {
-        const theme = themes[id];
-        tm._tom_select.addOption({
-          value: id,
-          text: theme.label?.en || id, // Use label if available, fallback to ID
-        });
-      });
-
-      // Select current theme
-      tm._tom_select.setValue(currentThemeId);
-    } else {
-      // Fallback for regular select
-      tm._el_theme_select.replaceChildren(
-        ...themeIds.map((id) => {
-          const theme = themes[id];
-          return el("option", { value: id }, theme.label?.en || id);
-        }),
-      );
-      tm._el_theme_select.value = currentThemeId;
-    }
+    await tm.buildSelect();
   }
 
   async reset() {
     const tm = this;
-    // Reset modal state and UI
-    tm.updateThemeSelectOptions();
     await tm.update();
     tm.fire("reset");
   }

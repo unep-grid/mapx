@@ -9661,8 +9661,8 @@
   },
   {
     "id": "mx_theme_export_author",
-    "en": "Author",
-    "ru": "Автор"
+    "en": "Creator",
+    "ru": "Создатель"
   },
   {
     "id": "mx_theme_export_next",
@@ -9705,9 +9705,19 @@
     "ru": "Описание"
   },
   {
-    "id": "mx_theme_manager_author",
-    "en": "Author",
-    "ru": "Автор"
+    "id": "mx_theme_manager_creator",
+    "en": "Creator",
+    "ru": "Создатель"
+  },
+  {
+    "id": "mx_theme_manager_last_editor",
+    "en": "Last editor",
+    "ru": "Последний редактор"
+  },
+  {
+    "id": "mx_theme_manager_date_modified",
+    "en": "Last modification date",
+    "ru": "Дата последнего изменения"
   },
   {
     "id": "mx_theme_manager_dark",

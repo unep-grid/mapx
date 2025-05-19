@@ -9661,8 +9661,8 @@
   },
   {
     "id": "mx_theme_export_author",
-    "en": "Author",
-    "zh": "作者"
+    "en": "Creator",
+    "zh": "创造者"
   },
   {
     "id": "mx_theme_export_next",
@@ -9705,9 +9705,19 @@
     "zh": "描述"
   },
   {
-    "id": "mx_theme_manager_author",
-    "en": "Author",
-    "zh": "作者"
+    "id": "mx_theme_manager_creator",
+    "en": "Creator",
+    "zh": "创造者"
+  },
+  {
+    "id": "mx_theme_manager_last_editor",
+    "en": "Last editor",
+    "zh": "最后编辑"
+  },
+  {
+    "id": "mx_theme_manager_date_modified",
+    "en": "Last modification date",
+    "zh": "最后修改日期"
   },
   {
     "id": "mx_theme_manager_dark",

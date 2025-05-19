@@ -6,7 +6,11 @@
   "description": {
     "en": "Classic dark theme with minimal colors, optimized for low light environments"
   },
-  "author": "frederic.moser@unepgrid.ch",
+  "creator": 1,
+  "last_editor": 1,
+  "date_modified": "2025-05-19T09:46:21.000Z",
+  "base": true,
+  "public": true,
   "dark": true,
   "tree": false,
   "water": false,

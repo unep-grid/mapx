@@ -31,6 +31,10 @@ async function configLoader(type) {
       const { config } = await import("./resolvers/views.js");
       return config;
     }
+    case "themes": {
+      const { config } = await import("./resolvers/themes.js");
+      return config;
+    }
     default:
       debugger;
       throw new Error(`Missing resolver ${type} `);

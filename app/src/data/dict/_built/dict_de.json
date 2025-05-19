@@ -9661,8 +9661,8 @@
   },
   {
     "id": "mx_theme_export_author",
-    "en": "Author",
-    "de": "Autor"
+    "en": "Creator",
+    "de": "Schöpfer"
   },
   {
     "id": "mx_theme_export_next",
@@ -9705,9 +9705,19 @@
     "de": "Beschreibung"
   },
   {
-    "id": "mx_theme_manager_author",
-    "en": "Author",
-    "de": "Autor"
+    "id": "mx_theme_manager_creator",
+    "en": "Creator",
+    "de": "Schöpfer"
+  },
+  {
+    "id": "mx_theme_manager_last_editor",
+    "en": "Last editor",
+    "de": "Letzter Bearbeiter"
+  },
+  {
+    "id": "mx_theme_manager_date_modified",
+    "en": "Last modification date",
+    "de": "Datum der letzten Änderung"
   },
   {
     "id": "mx_theme_manager_dark",

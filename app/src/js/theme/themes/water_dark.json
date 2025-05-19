@@ -6,7 +6,11 @@
   "description": {
     "en": "Dark theme with emphasis on water features, suitable for low light viewing"
   },
-  "author": "frederic.moser@unepgrid.ch",
+  "creator": 1,
+  "last_editor": 1,
+  "date_modified": "2025-05-19T09:48:06.000Z",
+  "base": true,
+  "public": true,
   "dark": true,
   "water": true,
   "tree": false,

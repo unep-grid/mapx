@@ -69,18 +69,10 @@ class Theme extends EventSimple {
 
     t._s = new ThemeService();
 
+    await t.updateThemes();
+
     for (const k in Object.keys(t._opt.on)) {
       t.on(k, t._opt.on[k]);
-    }
-
-    // Load remote themes from the server
-    try {
-      const remoteThemes = await t.listRemoteThemes();
-      if (remoteThemes && remoteThemes.length > 0) {
-        await t.registerThemes(remoteThemes);
-      }
-    } catch (e) {
-      console.warn("Failed to load remote themes:", e);
     }
 
     let id_saved = localStorage.getItem("theme@id");
@@ -95,6 +87,18 @@ class Theme extends EventSimple {
       save_url: true,
     });
     return ok;
+  }
+
+  async updateThemes() {
+    const t = this;
+    try {
+      const remoteThemes = await t.listRemote();
+      if (remoteThemes && remoteThemes.length > 0) {
+        await t.registerThemes(remoteThemes);
+      }
+    } catch (e) {
+      console.warn("Failed to load remote themes:", e);
+    }
   }
 
   async initManager(elContainer) {
@@ -209,7 +213,6 @@ class Theme extends EventSimple {
   }
 
   ids() {
-    // Get IDs from both built-in and custom themes
     const builtInIds = Object.values(themes).map((theme) => theme.id);
     const customIds = custom_themes.map((theme) => theme.id);
     return [...builtInIds, ...customIds];
@@ -218,7 +221,7 @@ class Theme extends EventSimple {
   isValidId(id) {
     const t = this;
     // Check if ID exists in either built-in or custom themes
-    return t.ids().includes(id) || Object.keys(t.getAll()).includes(id);
+    return t.ids().includes(id);
   }
 
   get(id) {
@@ -226,23 +229,22 @@ class Theme extends EventSimple {
     if (!id) {
       id = t.id();
     }
-    // Use getAll() which already combines built-in and custom themes
-    // with custom themes having priority
     return t.getAll()[id];
   }
 
+  /**
+   *
+   * @returns Object of themes with theme id as key
+   */
   getAll() {
-    // Start with custom themes to give them priority
     const allThemes = {};
 
-    // Add custom themes first
     custom_themes.forEach((theme) => {
       if (theme && theme.id) {
         allThemes[theme.id] = theme;
       }
     });
 
-    // Then add built-in themes (won't overwrite custom themes with same ID)
     Object.entries(themes).forEach(([id, theme]) => {
       if (!allThemes[id]) {
         allThemes[id] = theme;
@@ -250,6 +252,25 @@ class Theme extends EventSimple {
     });
 
     return allThemes;
+  }
+
+  /**
+   *
+   * @returns array of themes
+   */
+  list() {
+    const all = [...Object.values(themes), ...custom_themes];
+    return all.map((theme) => {
+      return {
+        id: theme.id,
+        label: theme.label,
+        description: theme.description,
+        tree: theme.tree,
+        dark: theme.dark,
+        water: theme.water,
+        public: theme.public,
+      };
+    });
   }
 
   /**
@@ -785,8 +806,7 @@ class Theme extends EventSimple {
   /**
    * Services
    */
-
-  async listRemoteThemes() {
+  async listRemote() {
     const response = await this._s.list();
     if (response.error) {
       console.warn("Failed to list remote themes:", response.error);

@@ -6,7 +6,11 @@
   "description": {
     "en": "Bright theme with emphasis on vegetation features"
   },
-  "author": "frederic.moser@unepgrid.ch",
+  "creator": 1,
+  "last_editor": 1,
+  "date_modified": "2025-05-19T09:47:59.000Z",
+  "base": true,
+  "public": true,
   "dark": false,
   "tree": true,
   "water": false,

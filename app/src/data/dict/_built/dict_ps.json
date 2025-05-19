@@ -9661,8 +9661,8 @@
   },
   {
     "id": "mx_theme_export_author",
-    "en": "Author",
-    "ps": "لیکوال"
+    "en": "Creator",
+    "ps": "جوړونکی"
   },
   {
     "id": "mx_theme_export_next",
@@ -9705,9 +9705,19 @@
     "ps": "تفصیل"
   },
   {
-    "id": "mx_theme_manager_author",
-    "en": "Author",
-    "ps": "لیکوال"
+    "id": "mx_theme_manager_creator",
+    "en": "Creator",
+    "ps": "جوړونکی"
+  },
+  {
+    "id": "mx_theme_manager_last_editor",
+    "en": "Last editor",
+    "ps": "وروستی مدیر"
+  },
+  {
+    "id": "mx_theme_manager_date_modified",
+    "en": "Last modification date",
+    "ps": "د وروستي بدلون نیټه"
   },
   {
     "id": "mx_theme_manager_dark",

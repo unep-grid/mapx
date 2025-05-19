@@ -551,7 +551,6 @@ mxDbSaveProjectData <- function(idProject, values = list(
     "org_name",
     "org_contact_name",
     "org_contact_email",
-    "theme_data"
   )) {
     value <- values[[key]]
     toUpdate <- notNull(value)

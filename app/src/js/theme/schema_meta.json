@@ -40,12 +40,23 @@
         "en"
       ]
     },
-    "author": {
+    "creator": {
+      "type": "integer",
+      "title": "Creator ID",
+      "description": "User ID of the theme creator",
+      "default": 1
+    },
+    "last_editor": {
+      "type": "integer",
+      "title": "Last Editor ID",
+      "description": "User ID of the last person to edit the theme",
+      "default": 1
+    },
+    "date_modified": {
       "type": "string",
-      "minLength": 3,
-      "maxLength": 100,
-      "title": "Author",
-      "description": "Creator of the theme"
+      "format": "date-time",
+      "title": "Last Modified Date",
+      "description": "Date and time when the theme was last modified"
     },
     "dark": {
       "type": "boolean",
@@ -81,6 +92,7 @@
   "required": [
     "id",
     "description",
-    "author"
+    "creator",
+    "last_editor"
   ]
 }

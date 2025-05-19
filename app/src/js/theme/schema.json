@@ -47,7 +47,13 @@
     "public": {
       "type": "boolean"
     },
-    "author": {
+    "creator": {
+      "type": "integer"
+    },
+    "last_editor": {
+      "type": "integer"
+    },
+    "date_modified": {
       "type": "string"
     },
     "colors": {
@@ -225,7 +231,8 @@
   "required": [
     "id",
     "description",
-    "author",
+    "creator",
+    "last_editor",
     "colors"
   ],
   "definitions": {

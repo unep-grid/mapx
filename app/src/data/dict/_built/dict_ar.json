@@ -9661,8 +9661,8 @@
   },
   {
     "id": "mx_theme_export_author",
-    "en": "Author",
-    "ar": "مؤلف"
+    "en": "Creator",
+    "ar": "الخالق"
   },
   {
     "id": "mx_theme_export_next",
@@ -9705,9 +9705,19 @@
     "ar": "وصف"
   },
   {
-    "id": "mx_theme_manager_author",
-    "en": "Author",
-    "ar": "مؤلف"
+    "id": "mx_theme_manager_creator",
+    "en": "Creator",
+    "ar": "الخالق"
+  },
+  {
+    "id": "mx_theme_manager_last_editor",
+    "en": "Last editor",
+    "ar": "المحرر الأخير"
+  },
+  {
+    "id": "mx_theme_manager_date_modified",
+    "en": "Last modification date",
+    "ar": "تاريخ آخر تعديل"
   },
   {
     "id": "mx_theme_manager_dark",

@@ -9661,8 +9661,8 @@
   },
   {
     "id": "mx_theme_export_author",
-    "en": "Author",
-    "fa": "نویسنده"
+    "en": "Creator",
+    "fa": "خالق"
   },
   {
     "id": "mx_theme_export_next",
@@ -9705,9 +9705,19 @@
     "fa": "توضیحات"
   },
   {
-    "id": "mx_theme_manager_author",
-    "en": "Author",
-    "fa": "نویسنده"
+    "id": "mx_theme_manager_creator",
+    "en": "Creator",
+    "fa": "خالق"
+  },
+  {
+    "id": "mx_theme_manager_last_editor",
+    "en": "Last editor",
+    "fa": "آخرین ویرایشگر"
+  },
+  {
+    "id": "mx_theme_manager_date_modified",
+    "en": "Last modification date",
+    "fa": "آخرین تاریخ اصلاح"
   },
   {
     "id": "mx_theme_manager_dark",

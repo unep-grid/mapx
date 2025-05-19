@@ -847,7 +847,7 @@
   },
   {
     "id": "mx_theme_export_author",
-    "en": "Author",
+    "en": "Creator",
     "fr": "",
     "es": "",
     "ru": "",
@@ -963,8 +963,34 @@
     "de": ""
   },
   {
-    "id": "mx_theme_manager_author",
-    "en": "Author",
+    "id": "mx_theme_manager_creator",
+    "en": "Creator",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+    {
+    "id": "mx_theme_manager_last_editor",
+    "en": "Last editor",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+    {
+    "id": "mx_theme_manager_date_modified",
+    "en": "Last modification date",
     "fr": "",
     "es": "",
     "ru": "",

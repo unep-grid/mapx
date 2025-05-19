@@ -9661,8 +9661,8 @@
   },
   {
     "id": "mx_theme_export_author",
-    "en": "Author",
-    "bn": "লেখক"
+    "en": "Creator",
+    "bn": "স্রষ্টা"
   },
   {
     "id": "mx_theme_export_next",
@@ -9705,9 +9705,19 @@
     "bn": "বিবরণ"
   },
   {
-    "id": "mx_theme_manager_author",
-    "en": "Author",
-    "bn": "লেখক"
+    "id": "mx_theme_manager_creator",
+    "en": "Creator",
+    "bn": "স্রষ্টা"
+  },
+  {
+    "id": "mx_theme_manager_last_editor",
+    "en": "Last editor",
+    "bn": "শেষ সম্পাদক"
+  },
+  {
+    "id": "mx_theme_manager_date_modified",
+    "en": "Last modification date",
+    "bn": "শেষ পরিবর্তনের তারিখ"
   },
   {
     "id": "mx_theme_manager_dark",

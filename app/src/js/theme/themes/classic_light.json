@@ -6,7 +6,11 @@
   "description": {
     "en": "Classic bright theme with minimal colors, emphasis on data presented on the map"
   },
-  "author": "frederic.moser@unepgrid.ch",
+  "creator": 1,
+  "last_editor": 1,
+  "date_modified": "2025-05-19T09:46:32.000Z",
+  "base": true,
+  "public": true,
   "dark": false,
   "tree": false,
   "water": false,
