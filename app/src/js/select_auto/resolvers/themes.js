@@ -6,7 +6,7 @@ export const config = {
   searchField: ["label", "description", "id"],
   allowEmptyOption: false,
   options: null,
-  maxItems : 1,
+  maxItems: 1,
   create: false,
   dropdownParent: "body",
   preload: "focus",
@@ -26,15 +26,7 @@ export const config = {
       );
     },
     item: (data, escape) => {
-      return el(
-        "div",
-        el("span", escape(data.label.en)),
-        el(
-          "span",
-          { class: ["text-muted", "space-around"] },
-          `${data.description.en}`,
-        ),
-      );
+      return el("div", el("span", escape(data.label.en)));
     },
   },
 };

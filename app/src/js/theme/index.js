@@ -321,7 +321,8 @@ class Theme extends EventSimple {
 
     // Update the modal's theme list if it's open
     if (t._themeModal) {
-      t._themeModal.updateThemeSelectOptions();
+      t._themeModal._auto_select._tom.addOption(theme);
+      t._themeModal._auto_select.value = theme.id;
     }
 
     return await t.set(theme, opt);

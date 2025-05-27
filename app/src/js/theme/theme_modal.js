@@ -65,13 +65,8 @@ export class ThemeModal extends EventSimple {
     });
     tm._el_button_save = elButtonFa("mx_theme_save_button", {
       icon: "save",
-      action: tm.updateTheme, // Use updateTheme for saving changes to existing
+      action: tm.saveTheme, // Unified save method
       title: tt("mx_theme_save_button"),
-    });
-    tm._el_button_create = elButtonFa("mx_theme_create_button", {
-      icon: "plus",
-      action: tm.createTheme, // Use createTheme for saving as new
-      title: tt("mx_theme_create_button"),
     });
     tm._el_button_delete = elButtonFa("mx_theme_delete_button", {
       icon: "trash",
@@ -85,7 +80,6 @@ export class ThemeModal extends EventSimple {
       tm._el_button_export,
       tm._el_button_save,
       tm._el_button_delete,
-      tm._el_button_create,
     ];
 
     // Create modal
@@ -131,23 +125,13 @@ export class ThemeModal extends EventSimple {
     const isLocal = tm.isLocalTheme(currentTheme.id);
     const hasPublisherRole = settings.user.roles?.publisher === true;
 
-    // Disable save/delete buttons for local themes
-    if (isLocal) {
+    // Save and Delete buttons are only enabled for publishers and non-local themes
+    if (!hasPublisherRole || isLocal) {
       tm._el_button_save.setAttribute("disabled", "disabled");
       tm._el_button_delete.setAttribute("disabled", "disabled");
     } else {
       tm._el_button_save.removeAttribute("disabled");
       tm._el_button_delete.removeAttribute("disabled");
-    }
-
-    // Disable create/save/delete buttons if user is not a publisher
-    if (!hasPublisherRole) {
-      tm._el_button_save.setAttribute("disabled", "disabled");
-      tm._el_button_delete.setAttribute("disabled", "disabled");
-      tm._el_button_create.setAttribute("disabled", "disabled");
-    } else if (!isLocal) {
-      // Only enable create button for non-publishers if not a local theme
-      tm._el_button_create.removeAttribute("disabled");
     }
   }
 
@@ -374,9 +358,17 @@ export class ThemeModal extends EventSimple {
         title = tt("mx_theme_save_button");
         confirmText = tt("btn_save");
         break;
+      case "save":
+        title = tt("mx_theme_save_button");
+        confirmText = tt("btn_save");
+        break;
       case "export":
         title = tt("mx_theme_export_button");
         confirmText = tt("btn_export");
+        break;
+      case "import":
+        title = tt("mx_theme_import_button");
+        confirmText = tt("btn_import");
         break;
       default:
         title = tt("mx_theme_edit_metadata");
@@ -649,25 +641,16 @@ export class ThemeModal extends EventSimple {
     await tm.updateButtonStates();
   }
 
-  async createTheme() {
+  /**
+   * Unified save method - handles both create and update based on theme ID existence
+   */
+  async saveTheme() {
     try {
       const tm = this;
+      const currentTheme = tm._theme.theme();
 
-      // Show metadata editor modal for creating a new theme
-      const metadata = await tm.showMetadataEditorModal("create", {
-        // Default empty values for a new theme
-        id: `theme_${makeSafeName(Date.now().toString())}`,
-        description: { en: "" },
-        label: { en: "" },
-        creator: 1,
-        last_editor: 1,
-        date_modified: new Date().toISOString(),
-        dark: false,
-        tree: false,
-        water: false,
-        base: false,
-        public: false,
-      });
+      // Show metadata editor modal for saving
+      const metadata = await tm.showMetadataEditorModal("save", currentTheme);
 
       if (!metadata) return; // User cancelled
 
@@ -676,62 +659,40 @@ export class ThemeModal extends EventSimple {
         colors: tm.getColorsFromInputs(),
       });
 
-      // Validate the new theme object
+      // Validate the theme object
       const isValid = await validate(theme);
+      debugger;
       if (!isValid) {
-        throw new Error(`New theme is not valid`);
+        throw new Error(`Theme is not valid`);
       }
 
-      // Send create request to backend
-      const response = await tm._theme._s.create(theme);
+      // Check if theme exists in the project to determine create vs update
+      const allThemes = tm._theme.getAll();
+      const themeExists = allThemes[theme.id] && !tm.isLocalTheme(theme.id);
+
+      let response;
+      if (themeExists) {
+        // Update existing theme
+        response = await tm._theme._s.update(theme);
+      } else {
+        // Create new theme
+        response = await tm._theme._s.create(theme);
+      }
 
       if (response.error) {
         throw new Error(response.error);
       }
 
-      console.log("Theme created successfully:", response.success);
-      // Refresh the theme list and select the new theme
+      console.log(
+        `Theme ${themeExists ? "updated" : "created"} successfully:`,
+        response.success,
+      );
 
-      await tm.updateThemeSelectOptions();
-      await tm.setThemeId(theme.id);
+      await tm._theme.addTheme(theme);
+
     } catch (e) {
-      console.error("Failed to create theme:", e);
+      console.error("Failed to save theme:", e);
       // Provide user feedback about the error
-    }
-  }
-
-  async updateTheme() {
-    try {
-      const tm = this;
-      const currentTheme = tm._theme.theme();
-
-      // Show metadata editor modal for updating the current theme
-      const metadata = await tm.showMetadataEditorModal("update");
-
-      if (!metadata) return; // User cancelled
-
-      // Create theme object with metadata and current colors
-      const theme = Object.assign({}, currentTheme, metadata, {
-        colors: tm.getColorsFromInputs(),
-      });
-
-      // Validate the updated theme object
-      const isValid = await validate(theme);
-      if (!isValid) {
-        throw new Error(`Updated theme is not valid`);
-      }
-
-      // Send update request to backend
-      const response = await tm._theme._s.update(theme);
-
-      if (response.error) {
-        throw new Error(response.error);
-      }
-
-      await tm._theme.updateThemes();
-      console.log("Theme updated successfully:", response.success);
-    } catch (e) {
-      console.error("Failed to update theme:", e);
     }
   }
 
@@ -782,17 +743,9 @@ export class ThemeModal extends EventSimple {
       // Assuming the imported file contains a single theme object
       const importedTheme = data[0];
 
-      // Validate the imported theme
-      const ok = await validate(importedTheme);
-      if (!ok) {
-        console.warn("Invalid theme", validate.errors);
-        throw new Error("Invalid theme format");
-      }
-
-      // Validate the colors specifically
-      const colorsValid = await tm._theme.validateColors(importedTheme.colors);
-      if (!colorsValid) {
-        throw new Error("Invalid colors in imported theme");
+      // Basic validation of file structure
+      if (!importedTheme || !importedTheme.colors) {
+        throw new Error("Invalid theme file structure");
       }
 
       // Extract metadata from imported theme for the editor
@@ -810,7 +763,7 @@ export class ThemeModal extends EventSimple {
         public: importedTheme.public || false,
       };
 
-      // Show metadata editor modal for importing
+      // Show metadata editor modal FIRST - allows user to resolve conflicts and customize
       const metadata = await tm.showMetadataEditorModal("import", startValues);
 
       if (!metadata) return; // User cancelled
@@ -818,19 +771,22 @@ export class ThemeModal extends EventSimple {
       // Create final theme object with updated metadata and original colors
       const finalTheme = Object.assign({}, importedTheme, metadata);
 
-      // Add the theme using the addTheme method which handles validation properly
-
-      // Validate the imported theme
-      const okFinal = await validate(finalTheme);
-      if (!okFinal) {
+      // Now validate the complete theme
+      const ok = await validate(finalTheme);
+      if (!ok) {
         console.warn("Invalid theme", validate.errors);
         throw new Error("Invalid theme format");
       }
 
-      await tm._theme.addTheme(finalTheme);
+      // Validate the colors specifically
+      const colorsValid = await tm._theme.validateColors(finalTheme.colors);
+      if (!colorsValid) {
+        throw new Error("Invalid colors in imported theme");
+      }
 
-      await tm.updateThemeSelectOptions();
-      await tm.setThemeId(finalTheme.id);
+      // Register and preview the theme
+      await tm._theme.addTheme(finalTheme);
+      // await tm.updateThemeSelectOptions();
     } catch (e) {
       console.error("Failed to import theme:", e);
       // Show error to user
