@@ -597,6 +597,19 @@
     "bn": "",
     "de": ""
   },
+ {
+    "id": "btn_ok",
+    "en": "Ok",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
   {
     "id": "btn_country",
     "en": "Select country",
@@ -1663,7 +1676,6 @@
     "bn": "",
     "de": ""
   },
-
   {
     "id": "btn_show_role_manager",
     "en": "Define roles",
@@ -2027,6 +2039,19 @@
     "ps": "آپډیټ کړئ",
     "bn": "",
     "de": ""
+  },
+  {
+    "id": "btn_export",
+    "en": "Export",
+    "fr": "Exporter",
+    "es": "Exportar",
+    "ru": "Экспорт",
+    "zh": "导出",
+    "ar": "تصدير",
+    "fa": "صادرات",
+    "ps": "صادرول",
+    "bn": "রপ্তানি",
+    "de": "Exportieren"
   },
   {
     "id": "btn_upload",
@@ -10062,7 +10087,6 @@
     "bn": "",
     "de": ""
   },
-
   {
     "id": "vf_group_types",
     "en": "Types",

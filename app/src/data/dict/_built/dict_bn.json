@@ -3170,6 +3170,11 @@
     "bn": "কনফার্ম "
   },
   {
+    "id": "btn_ok",
+    "en": "Ok",
+    "bn": "ঠিক আছে"
+  },
+  {
     "id": "btn_country",
     "en": "Select country",
     "bn": "দেশ নির্বাচন করুন "
@@ -3718,6 +3723,11 @@
     "id": "btn_update",
     "en": "Update  ",
     "bn": "হালনাগাদ "
+  },
+  {
+    "id": "btn_export",
+    "en": "Export",
+    "bn": "রপ্তানি"
   },
   {
     "id": "btn_upload",

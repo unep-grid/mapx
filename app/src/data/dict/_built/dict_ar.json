@@ -3170,6 +3170,11 @@
     "ar": "يتأكد "
   },
   {
+    "id": "btn_ok",
+    "en": "Ok",
+    "ar": "نعم"
+  },
+  {
     "id": "btn_country",
     "en": "Select country",
     "ar": "حدد الدولة "
@@ -3718,6 +3723,11 @@
     "id": "btn_update",
     "en": "Update  ",
     "ar": "تحديث "
+  },
+  {
+    "id": "btn_export",
+    "en": "Export",
+    "ar": "تصدير"
   },
   {
     "id": "btn_upload",

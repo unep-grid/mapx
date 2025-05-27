@@ -49,7 +49,7 @@ async function update() {
     tom.disable();
     tom.control_input.placeholder = placeholder_wait;
 
-    // Get themes data. skipRebuild =true to prevent re-evaluate this
+    // Get themes data. skipUIUpdate=true to prevent circular dependencies
     await theme.updateThemes(true);
     const themes = theme.list();
 

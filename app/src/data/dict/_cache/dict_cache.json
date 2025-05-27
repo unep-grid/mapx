@@ -8242,6 +8242,19 @@
     "de": "Bestätigen "
   },
   {
+    "id": "btn_ok",
+    "en": "Ok",
+    "fr": "D'accord",
+    "es": "De acuerdo",
+    "ru": "Хорошо",
+    "zh": "好的",
+    "ar": "نعم",
+    "fa": "باشه",
+    "ps": "سمه ده",
+    "bn": "ঠিক আছে",
+    "de": "OK"
+  },
+  {
     "id": "btn_country",
     "en": "Select country",
     "fr": "Sélectionnez le pays",
@@ -9670,6 +9683,19 @@
     "ps": "آپډیټ کړئ",
     "bn": "হালনাগাদ ",
     "de": "Aktualisieren "
+  },
+  {
+    "id": "btn_export",
+    "en": "Export",
+    "fr": "Exporter",
+    "es": "Exportar",
+    "ru": "Экспорт",
+    "zh": "导出",
+    "ar": "تصدير",
+    "fa": "صادرات",
+    "ps": "صادرول",
+    "bn": "রপ্তানি",
+    "de": "Exportieren"
   },
   {
     "id": "btn_upload",

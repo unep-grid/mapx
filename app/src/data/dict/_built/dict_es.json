@@ -3170,6 +3170,11 @@
     "es": "Confirmar"
   },
   {
+    "id": "btn_ok",
+    "en": "Ok",
+    "es": "De acuerdo"
+  },
+  {
     "id": "btn_country",
     "en": "Select country",
     "es": "Seleccionar el país"
@@ -3718,6 +3723,11 @@
     "id": "btn_update",
     "en": "Update  ",
     "es": "Actualizar"
+  },
+  {
+    "id": "btn_export",
+    "en": "Export",
+    "es": "Exportar"
   },
   {
     "id": "btn_upload",

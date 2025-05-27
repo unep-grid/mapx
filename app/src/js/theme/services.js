@@ -18,7 +18,7 @@ export class ThemeService {
 
   /**
    * Get a specific theme by ID
-   * @param {String} themeId - ID of theme to retrieve
+   * @param {string} themeId - ID of theme to retrieve
    * @returns {Promise<Object>} Response with theme data
    */
   async get(themeId) {
@@ -47,7 +47,7 @@ export class ThemeService {
 
   /**
    * Delete a theme
-   * @param {String} themeId - ID of theme to delete
+   * @param {string} themeId - ID of theme to delete
    * @returns {Promise<Object>} Response from server
    */
   async delete(themeId) {

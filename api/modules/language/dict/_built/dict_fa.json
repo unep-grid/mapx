@@ -3170,6 +3170,11 @@
     "fa": "تایید"
   },
   {
+    "id": "btn_ok",
+    "en": "Ok",
+    "fa": "باشه"
+  },
+  {
     "id": "btn_country",
     "en": "Select country",
     "fa": "انتخاب کشور"
@@ -3718,6 +3723,11 @@
     "id": "btn_update",
     "en": "Update  ",
     "fa": "تجدید"
+  },
+  {
+    "id": "btn_export",
+    "en": "Export",
+    "fa": "صادرات"
   },
   {
     "id": "btn_upload",

@@ -2536,6 +2536,10 @@
     "en": "Confirm"
   },
   {
+    "id": "btn_ok",
+    "en": "Ok"
+  },
+  {
     "id": "btn_country",
     "en": "Select country"
   },
@@ -2974,6 +2978,10 @@
   {
     "id": "btn_update",
     "en": "Update  "
+  },
+  {
+    "id": "btn_export",
+    "en": "Export"
   },
   {
     "id": "btn_upload",

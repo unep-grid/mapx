@@ -84,12 +84,16 @@ class Theme extends EventSimple {
     return ok;
   }
 
-  async updateThemes(skipRebuild) {
+  /**
+   * Update themes from remote server
+   * @param {boolean} skipUIUpdate - Prevents UI updates to avoid circular dependencies
+   */
+  async updateThemes(skipUIUpdate = false) {
     const t = this;
     try {
       const remoteThemes = await t.listRemote();
       if (remoteThemes && remoteThemes.length > 0) {
-        await t.registerThemes(remoteThemes, skipRebuild);
+        await t.registerThemes(remoteThemes, skipUIUpdate);
       }
     } catch (e) {
       console.warn("Failed to load remote themes:", e);
@@ -262,13 +266,14 @@ class Theme extends EventSimple {
   /**
    * Register remote themes from the server
    * @param {Array<Object>} remoteThemes - Array of theme objects from the server
+   * @param {boolean} skipUIUpdate - Prevents UI updates to avoid circular dependencies
    */
-  async registerThemes(remoteThemes, skipRebuild) {
+  async registerThemes(remoteThemes, skipUIUpdate = false) {
     // Register the themes in the custom_themes array
     registerCustomThemes(remoteThemes);
 
     // Update the modal if it's open
-    if (!skipRebuild && this._themeModal) {
+    if (!skipUIUpdate && this._themeModal) {
       this._themeModal.updateThemeSelectOptions();
     }
   }

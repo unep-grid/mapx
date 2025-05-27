@@ -174,7 +174,7 @@ export class ThemeModal extends EventSimple {
       tm._auto_select.value = tm._theme.id();
     }
   }
- 
+
   async buildContent() {
     // Make buildContent async
     const tm = this;
@@ -894,18 +894,56 @@ export class ThemeModal extends EventSimple {
     tm.fire("reset");
   }
 
+  /**
+   * Close modal and cleanup resources
+   */
   close() {
     const tm = this;
     if (tm._closed) {
       return;
     }
+
+    // Clean up SelectAuto instance
+    if (tm._auto_select) {
+      tm._auto_select.destroy();
+      tm._auto_select = null;
+    }
+
+    // Clean up TextFilter instance
+    if (tm._filter) {
+      tm._filter.destroy();
+      tm._filter = null;
+    }
+
+    // Remove event listeners
+    if (tm._el_inputs_container) {
+      tm._el_inputs_container.removeEventListener("input", tm.updateFromInput);
+    }
+
+    // Clear input references
+    if (tm._inputs) {
+      tm._inputs.length = 0;
+      tm._inputs = null;
+    }
+
+    // Clear DOM element references
+    tm._el_content = null;
+    tm._el_theme_select = null;
+    tm._el_theme_select_container = null;
+    tm._el_properties_container = null;
+    tm._el_inputs_container = null;
+    tm._el_filter_input = null;
+    tm._el_tools_bar = null;
+
+    // Call onClose callback
     if (isFunction(tm._on_close)) {
       tm._on_close();
     }
+
     tm._closed = true;
     tm._modal.close();
     tm.fire("closed");
-    tm.destroy(); 
+    tm.destroy();
   }
 
   // Old promptForMeta and buildTheme methods removed as they've been replaced by the JSON Editor approach

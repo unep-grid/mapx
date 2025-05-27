@@ -3170,6 +3170,11 @@
     "ru": "Подтверждать "
   },
   {
+    "id": "btn_ok",
+    "en": "Ok",
+    "ru": "Хорошо"
+  },
+  {
     "id": "btn_country",
     "en": "Select country",
     "ru": "Выберите страну "
@@ -3718,6 +3723,11 @@
     "id": "btn_update",
     "en": "Update  ",
     "ru": "Обновлять "
+  },
+  {
+    "id": "btn_export",
+    "en": "Export",
+    "ru": "Экспорт"
   },
   {
     "id": "btn_upload",

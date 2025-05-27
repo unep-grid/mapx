@@ -3170,6 +3170,11 @@
     "zh": "确认"
   },
   {
+    "id": "btn_ok",
+    "en": "Ok",
+    "zh": "好的"
+  },
+  {
     "id": "btn_country",
     "en": "Select country",
     "zh": "选择国家/地区"
@@ -3718,6 +3723,11 @@
     "id": "btn_update",
     "en": "Update  ",
     "zh": "更新"
+  },
+  {
+    "id": "btn_export",
+    "en": "Export",
+    "zh": "导出"
   },
   {
     "id": "btn_upload",
