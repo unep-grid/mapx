@@ -6,12 +6,7 @@ import chroma from "chroma-js";
 import { layer_resolver, css_resolver } from "./mapx_style_resolver.js";
 import { bindAll } from "../bind_class_methods";
 import { isJson, isEmpty } from "../is_test";
-import { onNextFrame, waitFrameAsync } from "../animation_frame/index.js";
-import { modalPrompt } from "../mx_helper_modal";
-import { isElement, makeSafeName, isStringRange } from "../is_test";
-import { settings } from "../settings";
-import { downloadJSON } from "../download";
-import { TextFilter } from "../text_filter_simple";
+import { waitFrameAsync } from "../animation_frame/index.js";
 import {
   custom_themes,
   inverseResolver,
@@ -20,7 +15,6 @@ import {
   registerCustomThemes,
   clearCustomThemes,
 } from "./themes/index.js";
-import { fileSelectorJSON } from "../mx_helper_misc";
 import { isNotEmpty } from "../is_test";
 import { fontFamilies, fonts, loadFontFace } from "./fonts.js";
 import { validate } from "./validator.js";
@@ -32,6 +26,7 @@ import "./style.less";
 import { jsonDiff } from "../mx_helper_utils_json";
 import { ThemeService } from "./services";
 import { ThemeModal } from "./theme_modal"; // Import the new modal class
+import { isString } from "../is_test";
 
 /**
  * Set globals
@@ -89,42 +84,33 @@ class Theme extends EventSimple {
     return ok;
   }
 
-  async updateThemes() {
+  async updateThemes(skipRebuild) {
     const t = this;
     try {
       const remoteThemes = await t.listRemote();
       if (remoteThemes && remoteThemes.length > 0) {
-        await t.registerThemes(remoteThemes);
+        await t.registerThemes(remoteThemes, skipRebuild);
       }
     } catch (e) {
       console.warn("Failed to load remote themes:", e);
     }
   }
 
-  async initManager(elContainer) {
+  setButtonManager(selectorButton) {
     const t = this;
 
-    if (!t._opt.elContainer) {
-      t._opt.elContainer = elContainer;
+    if (t._elButtonManager) {
+      return;
     }
 
-    // Add the button to open the theme manager modal
+    t._elButtonManager = document.querySelector(selectorButton);
 
-    t._elThemeManagerButton = elButtonFa("mx_theme_open_manager", {
-      icon: "palette", // Using a palette icon for theme manager
-      action: t.openThemeManager,
-      class: "mx-theme--manager-button", // Add a class for styling
-    });
-
-    // Append the button to a relevant part of the UI, e.g., the main container
-    // This assumes there's a main container element available in the options
-    if (t._opt.elContainer) {
-      t._opt.elContainer.appendChild(t._elThemeManagerButton);
-    } else {
-      console.warn(
-        "Option 'elContainer' not provided. Theme Manager button not added to the DOM.",
-      );
+    if (!t._elButtonManager) {
+      console.warn(`Theme manager: button not found ${selectorButton}`);
+      return;
     }
+
+    t._elButtonManager.addEventListener("click", t.openThemeManager);
   }
 
   async updateThemeByButton() {
@@ -277,12 +263,12 @@ class Theme extends EventSimple {
    * Register remote themes from the server
    * @param {Array<Object>} remoteThemes - Array of theme objects from the server
    */
-  async registerThemes(remoteThemes) {
+  async registerThemes(remoteThemes, skipRebuild) {
     // Register the themes in the custom_themes array
     registerCustomThemes(remoteThemes);
 
     // Update the modal if it's open
-    if (this._themeModal) {
+    if (!skipRebuild && this._themeModal) {
       this._themeModal.updateThemeSelectOptions();
     }
   }
@@ -787,13 +773,16 @@ class Theme extends EventSimple {
    */
   openThemeManager() {
     const t = this;
-    if (!t._themeModal) {
-      t._themeModal = new ThemeModal({
-        theme: t, // Pass the Theme instance to the modal
-      });
-    } else {
-      t._themeModal.reset(); // Reset the modal if it's already open
+    if (t._themeModal) {
+      console.log("Theme manager modal already open");
+      return;
     }
+    t._themeModal = new ThemeModal({
+      theme: t, // Pass the Theme instance to the modal
+      onClose: () => {
+        delete t._themeModal;
+      },
+    });
   }
 
   /**

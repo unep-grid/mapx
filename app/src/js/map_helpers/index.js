@@ -1254,20 +1254,17 @@ export async function initMapx(o) {
     }
 
     /**
-     * Build theme config inputs only when settings tab is displayed
-     * On tab change to search, perform a search
+     * Async init when a tab change
      */
     mx_local.panel_main.on("tab_change", async (id) => {
       try {
         switch (id) {
           case "tools":
-            const elThemeContainer = document.querySelector(
-              "#mxInputThemeColors",
-            );
-            await theme.initManager(elThemeContainer);
+            // add async modules init for the tool tab
+            theme.setButtonManager("#btnThemeManager");
             break;
-
           case "search":
+            // add async module init for the tool tab
             await mx_local.search.initCheck();
             mx_local.search._elInput.focus();
             break;

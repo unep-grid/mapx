@@ -9335,6 +9335,11 @@
     "zh": "当前分辨率取决于缩放级别和纬度。它表示一个像元覆盖的平均面积。"
   },
   {
+    "id": "mx_theme_open_manager",
+    "en": "Theme Manager",
+    "zh": "主题管理器"
+  },
+  {
     "id": "mx_ui_text",
     "en": "Text of the interface",
     "zh": "界面文本"

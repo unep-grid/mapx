@@ -9335,6 +9335,11 @@
     "fr": "La résolution dépend du niveau de zoom actuel ainsi que de la position latitudinale. Elle représente la surface couverte par un pixel. "
   },
   {
+    "id": "mx_theme_open_manager",
+    "en": "Theme Manager",
+    "fr": "Gestionnaire de thèmes"
+  },
+  {
     "id": "mx_ui_text",
     "en": "Text of the interface",
     "fr": "Texte de l'interface"

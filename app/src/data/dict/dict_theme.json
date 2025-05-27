@@ -1,5 +1,18 @@
 [
   {
+    "id": "mx_theme_open_manager",
+    "en": "Theme Manager",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "mx_ui_text",
     "en": "Text of the interface",
     "fr": "Texte de l'interface",

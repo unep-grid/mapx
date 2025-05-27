@@ -21,9 +21,7 @@
           "description": "Brief description of the theme"
         }
       },
-      "required": [
-        "en"
-      ]
+      "required": ["en"]
     },
     "label": {
       "type": "object",
@@ -36,31 +34,12 @@
           "description": "Label for the theme"
         }
       },
-      "required": [
-        "en"
-      ]
-    },
-    "creator": {
-      "type": "integer",
-      "title": "Creator ID",
-      "description": "User ID of the theme creator",
-      "default": 1
-    },
-    "last_editor": {
-      "type": "integer",
-      "title": "Last Editor ID",
-      "description": "User ID of the last person to edit the theme",
-      "default": 1
-    },
-    "date_modified": {
-      "type": "string",
-      "format": "date-time",
-      "title": "Last Modified Date",
-      "description": "Date and time when the theme was last modified"
+      "required": ["en"]
     },
     "dark": {
       "type": "boolean",
       "title": "Dark Mode",
+      "format": "checkbox",
       "description": "Enable dark mode for this theme",
       "default": false
     },
@@ -68,31 +47,23 @@
       "type": "boolean",
       "title": "Tree Mode",
       "description": "Emphasize vegetation/tree cover",
+      "format": "checkbox",
       "default": false
     },
     "water": {
       "type": "boolean",
       "title": "Water Mode",
       "description": "Emphasize water features",
-      "default": false
-    },
-    "base": {
-      "type": "boolean",
-      "title": "Base Theme",
-      "description": "Designate as a base theme (cannot be deleted)",
+      "format": "checkbox",
       "default": false
     },
     "public": {
       "type": "boolean",
       "title": "Public Theme",
       "description": "Make this theme available to all users",
+      "format": "checkbox",
       "default": false
     }
   },
-  "required": [
-    "id",
-    "description",
-    "creator",
-    "last_editor"
-  ]
+  "required": ["id", "description", "label", "dark", "tree", "public", "water"]
 }

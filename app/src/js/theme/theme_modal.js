@@ -1,6 +1,5 @@
 import { modal, modalConfirm, modalPrompt } from "../mx_helper_modal.js";
 import { EventSimple } from "../event_simple/index.js";
-import { moduleLoad } from "../modules_loader_async/index.js"; // Import moduleLoad
 import { el, elButtonFa, elSelect, tt } from "../el_mapx";
 import { bindAll } from "../bind_class_methods/index.js";
 import {
@@ -8,6 +7,7 @@ import {
   makeSafeName,
   isNotEmpty,
   isEmpty,
+  isFunction,
 } from "../is_test/index.js";
 import { downloadJSON } from "../download";
 import { fileSelectorJSON } from "../mx_helper_misc";
@@ -21,6 +21,7 @@ import { jedInit } from "../json_editor"; // Import jedInit
 import { settings } from "../mx.js";
 import { themes } from "./themes/index.js"; // Import themes for local theme check
 import { getDictItem } from "../mx_helpers.js";
+import { SelectAuto } from "../select_auto";
 
 export class ThemeModal extends EventSimple {
   constructor(opt) {
@@ -28,9 +29,11 @@ export class ThemeModal extends EventSimple {
     bindAll(this);
     const tm = this;
 
-    const { theme } = opt;
+    const { theme, onClose } = opt;
 
+    // theme manager instance
     tm._theme = theme;
+    tm._on_close = onClose;
 
     // Build the internal content of the modal
     tm.buildModal().catch(console.error);
@@ -122,7 +125,7 @@ export class ThemeModal extends EventSimple {
   /**
    * Update button states based on current theme and user roles
    */
-  updateButtonStates() {
+  async updateButtonStates() {
     const tm = this;
     const currentTheme = tm._theme.theme();
     const isLocal = tm.isLocalTheme(currentTheme.id);
@@ -150,52 +153,28 @@ export class ThemeModal extends EventSimple {
 
   async buildSelect() {
     const tm = this;
-    const TomSelect = await moduleLoad("tom-select");
 
     // Check if Tom Select instance already exists
-    if (tm._tom_select instanceof TomSelect) {
-      // Update existing instance
-      const currentOptions = tm._theme.list();
-      const currentValue = tm._theme.id();
-
-      // Clear existing options
-      tm._tom_select.clear();
-      tm._tom_select.clearOptions();
-
-      // Add new options
-
-      currentOptions.forEach((option) => tm._tom_select.addOption(option));
-
-      // Set the current value
-      if (currentValue) {
-        tm._tom_select.setValue(currentValue, true);
-      }
-
-      // Refresh the control to ensure UI is updated
-      tm._tom_select.refreshOptions(false);
+    if (tm._auto_select instanceof SelectAuto) {
+      await tm._auto_select.update();
     } else {
-      // Initialize Tom Select with options if it doesn't exist
-      tm._tom_select = new TomSelect(tm._el_theme_select, {
+      tm._auto_select = new SelectAuto(tm._el_theme_select, {
+        onChange: (value) => {
+          tm.setThemeId(value);
+        },
         placeholder: await getDictItem("mx_theme_manager_select_placeholder"),
-        options: tm.getOptions(),
-        items: [tm._theme.id()],
-        create: false,
-        sortField: { field: "label", direction: "asc" },
-        onChange: (value) => tm.selectTheme(value),
       });
+
+      await tm._auto_select.init();
+
+      tm._auto_select.once("init", () => {
+        console.log("Theme select ready");
+      });
+
+      tm._auto_select.value = tm._theme.id();
     }
   }
-
-  getOptions() {
-    const tm = this;
-    return tm._theme.list().map((t) => {
-      return {
-        value: t.id,
-        text: t.label.en || t.id,
-      };
-    });
-  }
-
+ 
   async buildContent() {
     // Make buildContent async
     const tm = this;
@@ -204,7 +183,11 @@ export class ThemeModal extends EventSimple {
     tm._el_theme_select_container = el("div", {
       class: "mx-theme--manager-modal-header",
     }); // Add header class
-    tm._el_theme_select = el("select", { id: "theme_select" });
+    tm._el_theme_select = el("select", {
+      id: "theme_select",
+      dataset: { type: "themes" },
+    });
+
     tm._el_theme_select_container.appendChild(tm._el_theme_select);
     tm.buildSelect();
 
@@ -251,10 +234,10 @@ export class ThemeModal extends EventSimple {
       timeout: 10,
     });
 
-    await tm.update();
+    await tm.updateInputs();
   }
 
-  buildPropertiesInputs() {
+  async buildPropertiesInputs() {
     const tm = this;
     const theme = tm._theme.theme();
     tm._el_properties_container.replaceChildren();
@@ -645,7 +628,7 @@ export class ThemeModal extends EventSimple {
     return out;
   }
 
-  async selectTheme(themeId) {
+  async setThemeId(themeId) {
     const tm = this;
     await tm._theme.set(themeId, {
       sound: true,
@@ -653,17 +636,17 @@ export class ThemeModal extends EventSimple {
       save_url: true,
       update_buttons: true,
     });
-    await tm.update();
+    await tm.updateInputs();
   }
 
   /**
    * Update UI after a theme change change
    */
-  async update() {
+  async updateInputs() {
     const tm = this;
-    tm.buildPropertiesInputs();
+    await tm.buildPropertiesInputs();
     await tm.buildInputs();
-    tm.updateButtonStates();
+    await tm.updateButtonStates();
   }
 
   async createTheme() {
@@ -693,8 +676,6 @@ export class ThemeModal extends EventSimple {
         colors: tm.getColorsFromInputs(),
       });
 
-      debugger;
-
       // Validate the new theme object
       const isValid = await validate(theme);
       if (!isValid) {
@@ -712,7 +693,7 @@ export class ThemeModal extends EventSimple {
       // Refresh the theme list and select the new theme
 
       await tm.updateThemeSelectOptions();
-      await tm.selectTheme(theme.id);
+      await tm.setThemeId(theme.id);
     } catch (e) {
       console.error("Failed to create theme:", e);
       // Provide user feedback about the error
@@ -734,8 +715,6 @@ export class ThemeModal extends EventSimple {
         colors: tm.getColorsFromInputs(),
       });
 
-      debugger;
-
       // Validate the updated theme object
       const isValid = await validate(theme);
       if (!isValid) {
@@ -749,11 +728,8 @@ export class ThemeModal extends EventSimple {
         throw new Error(response.error);
       }
 
+      await tm._theme.updateThemes();
       console.log("Theme updated successfully:", response.success);
-      // Refresh the theme list and select the updated theme
-      await tm._theme.registerThemes(Object.keys(tm._theme.getAll()));
-      await tm.updateThemeSelectOptions();
-      await tm.selectTheme(theme.id);
     } catch (e) {
       console.error("Failed to update theme:", e);
     }
@@ -785,9 +761,9 @@ export class ThemeModal extends EventSimple {
 
       console.log("Theme deleted successfully:", response.success);
       // Refresh the theme list and select a default theme (e.g., the default light theme)
-      await tm._theme.registerThemes(Object.keys(tm._theme.getAll())); // Assuming this refreshes the list
+      await tm._theme.updateThemes();
       await tm.updateThemeSelectOptions();
-      await tm.selectTheme(tm._theme._opt.id_default); // Select the default theme after deletion
+      await tm.setThemeId(tm._theme._opt.id_default); // Select the default theme after deletion
     } catch (e) {
       console.error("Failed to delete theme:", e);
       // Provide user feedback about the error
@@ -854,7 +830,7 @@ export class ThemeModal extends EventSimple {
       await tm._theme.addTheme(finalTheme);
 
       await tm.updateThemeSelectOptions();
-      await tm.selectTheme(finalTheme.id);
+      await tm.setThemeId(finalTheme.id);
     } catch (e) {
       console.error("Failed to import theme:", e);
       // Show error to user
@@ -880,7 +856,6 @@ export class ThemeModal extends EventSimple {
       const theme = Object.assign({}, currentTheme, metadata, {
         colors: tm.getColorsFromInputs(),
       });
-      debugger;
 
       // Validate the theme object before export
       const isValid = await validate(theme);
@@ -904,7 +879,6 @@ export class ThemeModal extends EventSimple {
     if (isNotEmpty(colors)) {
       theme.colors = colors;
     }
-    debugger;
 
     return theme;
   }
@@ -916,7 +890,7 @@ export class ThemeModal extends EventSimple {
 
   async reset() {
     const tm = this;
-    await tm.update();
+    await tm.updateInputs();
     tm.fire("reset");
   }
 
@@ -925,11 +899,13 @@ export class ThemeModal extends EventSimple {
     if (tm._closed) {
       return;
     }
+    if (isFunction(tm._on_close)) {
+      tm._on_close();
+    }
     tm._closed = true;
     tm._modal.close();
     tm.fire("closed");
-    tm.destroy(); //events
-    // Clean up any references if necessary
+    tm.destroy(); 
   }
 
   // Old promptForMeta and buildTheme methods removed as they've been replaced by the JSON Editor approach

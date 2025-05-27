@@ -14,10 +14,14 @@ export class SelectAuto extends EventSimple {
     super();
     const se = this;
 
-    se._opt = {};
+    se._opt = { config: {} };
 
     if (isElement(opt)) {
-      se._opt.target = opt.querySelector("select");
+      if (opt.tagName === "SELECT") {
+        se._opt.target = opt;
+      } else {
+        se._opt.target = opt.querySelector("select");
+      }
       se._opt.type = se._opt.target.dataset.type;
     } else {
       Object.assign(se._opt, def, opt);
@@ -26,6 +30,7 @@ export class SelectAuto extends EventSimple {
     if (config) {
       Object.assign(se._opt.config, config);
     }
+
 
     se.destroy = se.destroy.bind(se);
   }
@@ -43,6 +48,18 @@ export class SelectAuto extends EventSimple {
   get value() {
     const se = this;
     se._tom.getValue();
+  }
+
+  set value(value) {
+    const se = this;
+    se._tom.setValue(value);
+  }
+
+  update() {
+    const se = this;
+    if (se._tom._update) {
+      se._tom._update();
+    }
   }
 
   destroy() {

@@ -240,7 +240,6 @@ config[["ui"]] <- list(
     idDashboards = "mxDashboards",
     idDashboardsButton = "btnTabDashboard",
     idDashboardsPanel = "mxDashboardsPanel",
-    idInputThemeColors = "mxInputThemeColors"
   ),
   ui = list()
 )

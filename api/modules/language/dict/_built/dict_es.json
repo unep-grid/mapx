@@ -9335,6 +9335,11 @@
     "es": "La resolución actual depende del nivel de zoom y la latitud. Representa el área promedio cubierta por un píxel."
   },
   {
+    "id": "mx_theme_open_manager",
+    "en": "Theme Manager",
+    "es": "Administrador de temas"
+  },
+  {
     "id": "mx_ui_text",
     "en": "Text of the interface",
     "es": "Texto de la interfaz"

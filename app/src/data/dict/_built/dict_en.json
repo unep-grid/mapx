@@ -7468,6 +7468,10 @@
     "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel."
   },
   {
+    "id": "mx_theme_open_manager",
+    "en": "Theme Manager"
+  },
+  {
     "id": "mx_ui_text",
     "en": "Text of the interface"
   },

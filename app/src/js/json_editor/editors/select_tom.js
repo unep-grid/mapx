@@ -105,7 +105,6 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
           maxItems,
         };
       case "themes":
-        debugger;
         return {
           maxItems,
           loader_config: { },

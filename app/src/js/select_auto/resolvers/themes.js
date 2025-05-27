@@ -10,7 +10,7 @@ export const config = {
   create: false,
   dropdownParent: "body",
   preload: "focus",
-  load: null, // Remove the load callback approach
+  load: null,
   onInitialize: async function () {
     // Use the countries.js pattern
     const tom = this;
@@ -49,7 +49,8 @@ async function update() {
     tom.disable();
     tom.control_input.placeholder = placeholder_wait;
 
-    // Get themes data
+    // Get themes data. skipRebuild =true to prevent re-evaluate this
+    await theme.updateThemes(true);
     const themes = theme.list();
 
     // Update UI after loading

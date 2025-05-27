@@ -82,7 +82,7 @@ async function emitSocket(socket, type, msg) {
     await asyncDelay(1);
     return true;
   } catch (e) {
-    console.trace("Error in mx_emit_ws (ws) :", e);
+    console.error("Error in mx_emit_ws (ws) :", e);
     return false;
   }
 }
@@ -94,7 +94,7 @@ async function emitSocketBroadcast(socket, type, msg) {
     await asyncDelay(1);
     return true;
   } catch (e) {
-    console.trace("Error in mx_emit_ws_broadcast (ws) :", e);
+    console.error("Error in mx_emit_ws_broadcast (ws) :", e);
     return false;
   }
 }
@@ -107,7 +107,7 @@ async function emitGlobal(socket, type, msg) {
     await asyncDelay(1);
     return true;
   } catch (e) {
-    console.trace("Error in mx_emit_ws_global (ws) :", e);
+    console.error("Error in mx_emit_ws_global (ws) :", e);
     return false;
   }
 }

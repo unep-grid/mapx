@@ -9335,6 +9335,11 @@
     "de": "Die aktuelle Auflösung hängt von der Zoomstufe und dem Breitengrad ab. Es stellt die durchschnittliche Fläche dar, die von einem Pixel abgedeckt wird. "
   },
   {
+    "id": "mx_theme_open_manager",
+    "en": "Theme Manager",
+    "de": "Themenmanager"
+  },
+  {
     "id": "mx_ui_text",
     "en": "Text of the interface",
     "de": "Text der Schnittstelle "
