@@ -14,10 +14,15 @@ import {
   fileSelectorJSON,
   itemFlashSave,
   itemFlashWarning,
+  makeId,
 } from "../mx_helper_misc";
 import { TextFilter } from "../text_filter_simple";
 import chroma from "chroma-js";
-import { onNextFrame, waitFrameAsync } from "../animation_frame/index.js";
+import {
+  onNextFrame,
+  waitFrameAsync,
+  waitTimeoutAsync,
+} from "../animation_frame/index.js";
 import { fontFamilies, fonts } from "./fonts.js";
 import { jedInit } from "../json_editor"; // Import jedInit
 import { settings } from "../mx.js";
@@ -36,13 +41,13 @@ export class ThemeModal extends EventSimple {
     // theme manager instance
     tm._theme = theme;
     tm._on_close = onClose;
+  }
 
-    // Build the internal content of the modal
-    tm.buildModal().catch(console.error);
+  async init() {
+    return this.buildModal();
   }
 
   async buildModal() {
-    // Make buildContent async
     const tm = this;
 
     // Modal content container
@@ -127,22 +132,27 @@ export class ThemeModal extends EventSimple {
     const isLocal = tm.isLocalTheme(currentTheme.id);
     const hasPublisherRole = settings.user.roles?.publisher === true;
 
-    // Save and Delete buttons are only enabled for publishers and non-local themes
-    if (!hasPublisherRole || isLocal) {
-      tm._el_button_save.setAttribute("disabled", "disabled");
-      tm._el_button_delete.setAttribute("disabled", "disabled");
-    } else {
+    tm._el_button_save.setAttribute("disabled", "disabled");
+    tm._el_button_delete.setAttribute("disabled", "disabled");
+
+    if (hasPublisherRole) {
       tm._el_button_save.removeAttribute("disabled");
-      tm._el_button_delete.removeAttribute("disabled");
+      if (!isLocal) {
+        tm._el_button_delete.removeAttribute("disabled");
+      }
     }
   }
 
-  async buildSelect() {
+  async buildSelect(update = false) {
     const tm = this;
+    const exists = tm._auto_select instanceof SelectAuto;
 
-    // Check if Tom Select instance already exists
-    if (tm._auto_select instanceof SelectAuto) {
-      await tm._auto_select.update();
+    if (exists && !update) {
+      return;
+    }
+
+    if (exists) {
+      await tm._auto_select.update(update);
     } else {
       tm._auto_select = new SelectAuto(tm._el_theme_select, {
         onChange: (value) => {
@@ -161,30 +171,35 @@ export class ThemeModal extends EventSimple {
     }
   }
 
+  setSelected(id) {
+    const tm = this;
+    const exists = tm._auto_select instanceof SelectAuto;
+    const changed = exists && id !== tm._auto_select.value;
+    if (changed) {
+      tm._auto_select.value = id;
+    }
+  }
+
   async buildContent() {
-    // Make buildContent async
     const tm = this;
 
-    // Theme selection dropdown
     tm._el_theme_select_container = el("div", {
       class: "mx-theme--manager-modal-header",
-    }); // Add header class
+    });
     tm._el_theme_select = el("select", {
       id: "theme_select",
       dataset: { type: "themes" },
     });
 
     tm._el_theme_select_container.appendChild(tm._el_theme_select);
-    tm.buildSelect();
+    await tm.buildSelect();
 
-    // Container for theme properties (id, description, author, modes)
     tm._el_properties_container = el("div", {
       class: "mx-theme--manager-modal-properties",
-    }); // Add properties class
+    });
 
-    // Container for color and font inputs
     tm._el_inputs_container = el("div", {
-      class: "mx-theme--inputs-container", // Add inputs container class
+      class: "mx-theme--inputs-container",
       style: {
         maxHeight: "400px",
         overflowY: "auto",
@@ -192,26 +207,21 @@ export class ThemeModal extends EventSimple {
     });
     tm._el_inputs_container.addEventListener("input", tm.updateFromInput);
 
-    // Filter input for color/font inputs
     tm._el_filter_input = el("input", {
       type: "text",
       class: ["form-control", "mx-theme--manager-filter"],
-      placeholder: tt("mx_theme_manager_filter_placeholder"), // Use translation key
+      placeholder: tt("mx_theme_manager_filter_placeholder"),
     });
 
-    // Tools bar (filter input)
     tm._el_tools_bar = el("div", { class: "mx-theme--manager-bar" }, [
-      // Use bar class
       tm._el_filter_input,
     ]);
 
-    // Append elements to the modal content
-    tm._el_content.appendChild(tm._el_theme_select_container); // Append container
+    tm._el_content.appendChild(tm._el_theme_select_container);
     tm._el_content.appendChild(tm._el_properties_container);
     tm._el_content.appendChild(tm._el_tools_bar);
     tm._el_content.appendChild(tm._el_inputs_container);
 
-    // Filter helper
     tm._filter = new TextFilter({
       modeFlex: true,
       selector: ".mx-theme--inputs",
@@ -223,7 +233,7 @@ export class ThemeModal extends EventSimple {
     await tm.updateInputs();
   }
 
-  async buildPropertiesInputs() {
+  async buildProperties() {
     const tm = this;
     const theme = tm._theme.theme();
     tm._el_properties_container.replaceChildren();
@@ -291,6 +301,11 @@ export class ThemeModal extends EventSimple {
     const elMetadataEditor = el("div", {
       class: "mx-theme--metadata-editor",
     });
+    const elErrors = el("div", {
+      class: "mx-error-container",
+    });
+
+    const elContainer = el("div", [elErrors, elMetadataEditor]);
 
     // Get current theme for default values
     const theme = tm._theme.theme();
@@ -317,6 +332,7 @@ export class ThemeModal extends EventSimple {
 
     // Initialize JSON Editor with custom validators
     const editor = await jedInit({
+      id: "theme_meta",
       schema: schemaMeta,
       target: elMetadataEditor,
       startVal: metadata,
@@ -330,48 +346,28 @@ export class ThemeModal extends EventSimple {
         no_additional_properties: true,
         prompt_before_delete: false,
         show_errors: "interaction",
-      },
-      custom_validators: [
-        {
-          path: "root.id",
-          validator: (schema, value, path) => {
-            // Skip validation if not creating a new theme
-            if (operation !== "create") return true;
-
-            // Check if ID already exists in any theme (local or custom)
-            const allThemeIds = Object.keys(tm._theme.getAll());
-            if (allThemeIds.includes(value)) {
-              return {
-                valid: false,
-                message:
-                  "Theme ID already exists. Please choose a different ID.",
-              };
+        custom_validators: [
+          (_, value, path) => {
+            const errors = [];
+            if (path === "root.id") {
+              const issue = validateId(value);
+              if (issue) {
+                console.log(issue);
+                errors.push({
+                  path: path,
+                  message: `Invalid id ${issue}`,
+                });
+              }
             }
-            return true;
+            return errors;
           },
-        },
-      ],
+        ],
+      },
     });
-
-    // Disable ID field for existing themes (except when exporting)
-    if (operation !== "create" && operation !== "export") {
-      const idField = editor.getEditor("root.id");
-      if (idField) {
-        idField.disable();
-      }
-    }
 
     // Get appropriate title and button text based on operation
     let title, confirmText;
     switch (operation) {
-      case "create":
-        title = tt("mx_theme_create_button");
-        confirmText = tt("btn_create");
-        break;
-      case "update":
-        title = tt("mx_theme_save_button");
-        confirmText = tt("btn_save");
-        break;
       case "save":
         title = tt("mx_theme_save_button");
         confirmText = tt("btn_save");
@@ -391,16 +387,66 @@ export class ThemeModal extends EventSimple {
     // Show modal with JSON Editor
     const data = await modalConfirm({
       title: title,
-      content: elMetadataEditor,
+      content: elContainer,
       confirm: confirmText,
       cancel: tt("btn_cancel"),
       addBackground: true,
       cbData: () => {
         return Object.assign({}, editor.getValue());
       },
+      cbValidate: (elBtnConfirm) => {
+        editor.on("change", () => {
+          const errors = editor.validate();
+          updateErrors(errors);
+          if (isNotEmpty(errors)) {
+            elBtnConfirm.setAttribute("disabled", "disabled");
+          } else {
+            elBtnConfirm.removeAttribute("disabled");
+          }
+        });
+      },
     });
 
     return data;
+
+    /**
+     *
+     * local validate helpers
+     * @returns string Invalid message
+     */
+    function validateId(id) {
+      if (operation === "save" || operation === "import") {
+        const isLocal = tm.isLocalTheme(id);
+        if (isLocal) {
+          return "Local theme id";
+        }
+      }
+
+      if (operation === "import") {
+        const isExisting = tm._theme.isExistingId(metadata.id);
+        if (isExisting) {
+          return "Existing theme ";
+        }
+      }
+    }
+    function updateErrors(errors) {
+      const elErrorsList = tm.buildErrors(errors);
+      elErrors.replaceChildren(elErrorsList);
+    }
+  }
+
+  buildErrors(errors) {
+    return el(
+      "ul",
+      {
+        class: ["list-group", "mx-error-list-container"],
+      },
+      errors.map((error) => {
+        return el("li", { class: ["list-group-item", "mx-error-item"] }, [
+          el("span", `${error.message} (${error.path})`),
+        ]);
+      }),
+    );
   }
 
   async buildInputs() {
@@ -628,7 +674,7 @@ export class ThemeModal extends EventSimple {
           out[cid].font = font;
         }
       } catch (e) {
-        debugger;
+        console.error("Colors from input error", e);
       }
     }
     return out;
@@ -650,7 +696,7 @@ export class ThemeModal extends EventSimple {
    */
   async updateInputs() {
     const tm = this;
-    await tm.buildPropertiesInputs();
+    await tm.buildProperties();
     await tm.buildInputs();
     await tm.updateButtonStates();
   }
@@ -663,19 +709,15 @@ export class ThemeModal extends EventSimple {
       const tm = this;
       const currentTheme = tm._theme.theme();
 
-      // Show metadata editor modal for saving
       const metadata = await tm.showMetadataEditorModal("save", currentTheme);
 
       if (!metadata) {
-        return; // User cancelled
+        return;
       }
 
-      // Create theme object with metadata and current colors
       const theme = Object.assign({}, metadata, {
         colors: tm.getColorsFromInputs(),
       });
-
-      // Validate the theme object not full, but with colors
 
       await tm._theme.save(theme);
       await tm._theme.addTheme(theme);
@@ -691,33 +733,31 @@ export class ThemeModal extends EventSimple {
       const tm = this;
       const currentTheme = tm._theme.theme();
 
-      // Confirm deletion with the user
       const confirmed = await modalConfirm({
-        title: tt("mx_theme_delete_button"), // Use delete button translation for title
-        content: `Are you sure you want to delete theme "${currentTheme.id}"?`, // TODO: Use translation key for confirmation message
-        confirm: tt("btn_delete"), // Assuming "btn_delete" is a translation key for a delete button
-        cancel: tt("btn_cancel"), // Assuming "btn_cancel" is a translation key for a cancel button
+        title: tt("mx_theme_delete_button"),
+        content: `Are you sure you want to delete theme "${currentTheme.id}"?`,
+        confirm: tt("btn_delete"),
+        cancel: tt("btn_cancel"),
       });
 
       if (!confirmed) {
-        return; // User cancelled deletion
+        return;
       }
 
-      // Send delete request to backend
       const response = await tm._theme._s.delete(currentTheme.id);
 
       if (response.error) {
         throw new Error(response.error);
       }
 
-      console.log("Theme deleted successfully:", response.success);
-      // Refresh the theme list and select a default theme (e.g., the default light theme)
+      await waitTimeoutAsync(1000);
       await tm._theme.updateThemes();
-      await tm.updateThemeSelectOptions();
-      await tm.setThemeId(tm._theme._opt.id_default); // Select the default theme after deletion
+      await tm.buildSelect(true);
+      await tm.setThemeId(tm._theme._opt.id_default);
+      itemFlashSave();
     } catch (e) {
       console.error("Failed to delete theme:", e);
-      // Provide user feedback about the error
+      itemFlashWarning();
     }
   }
 
@@ -812,11 +852,6 @@ export class ThemeModal extends EventSimple {
     return theme;
   }
 
-  async updateThemeSelectOptions() {
-    const tm = this;
-    await tm.buildSelect();
-  }
-
   async reset() {
     const tm = this;
     await tm.updateInputs();
@@ -874,6 +909,4 @@ export class ThemeModal extends EventSimple {
     tm.fire("closed");
     tm.destroy();
   }
-
-  // Old promptForMeta and buildTheme methods removed as they've been replaced by the JSON Editor approach
 }

@@ -3175,6 +3175,11 @@
     "ar": "نعم"
   },
   {
+    "id": "btn_import",
+    "en": "Import",
+    "ar": "يستورد"
+  },
+  {
     "id": "btn_country",
     "en": "Select country",
     "ar": "حدد الدولة "

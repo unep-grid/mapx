@@ -2540,6 +2540,10 @@
     "en": "Ok"
   },
   {
+    "id": "btn_import",
+    "en": "Import"
+  },
+  {
     "id": "btn_country",
     "en": "Select country"
   },

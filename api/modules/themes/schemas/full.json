@@ -4,13 +4,17 @@
   "type": "object",
   "properties": {
     "id": {
-      "type": "string"
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 40
     },
     "description": {
       "type": "object",
       "properties": {
         "en": {
-          "type": "string"
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 100
         }
       },
       "required": [
@@ -23,7 +27,7 @@
         "en": {
           "type": "string",
           "minLength": 3,
-          "maxLength": 20,
+          "maxLength": 40,
           "title": "Label",
           "description": "Label for the theme"
         }

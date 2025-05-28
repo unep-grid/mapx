@@ -8255,6 +8255,19 @@
     "de": "OK"
   },
   {
+    "id": "btn_import",
+    "en": "Import",
+    "fr": "Importer",
+    "es": "Importar",
+    "ru": "Импорт",
+    "zh": "进口",
+    "ar": "يستورد",
+    "fa": "واردات",
+    "ps": "واردول",
+    "bn": "আমদানি করুন",
+    "de": "Import"
+  },
+  {
     "id": "btn_country",
     "en": "Select country",
     "fr": "Sélectionnez le pays",

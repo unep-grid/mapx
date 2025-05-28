@@ -3175,6 +3175,11 @@
     "es": "De acuerdo"
   },
   {
+    "id": "btn_import",
+    "en": "Import",
+    "es": "Importar"
+  },
+  {
     "id": "btn_country",
     "en": "Select country",
     "es": "Seleccionar el país"

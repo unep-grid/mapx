@@ -3175,6 +3175,11 @@
     "de": "OK"
   },
   {
+    "id": "btn_import",
+    "en": "Import",
+    "de": "Import"
+  },
+  {
     "id": "btn_country",
     "en": "Select country",
     "de": "Land auswählen "

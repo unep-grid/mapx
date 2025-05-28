@@ -615,6 +615,7 @@ export function modalConfirm(opt) {
     const hasCbData = isFunction(opt.cbData);
     const hasOnClose = isFunction(opt.onClose);
     const hasCbInit = isFunction(opt.cbInit);
+    const hasCbValidate = isFunction(opt.cbValidate);
     const elBtnCancel = el(
       "button",
       {
@@ -670,6 +671,10 @@ export function modalConfirm(opt) {
 
     if (hasCbInit) {
       opt.cbInit(elModal, elContent);
+    }
+
+    if (hasCbValidate) {
+      opt.cbValidate(elBtnConfirm);
     }
   });
 }

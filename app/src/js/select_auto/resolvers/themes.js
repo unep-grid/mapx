@@ -22,12 +22,16 @@ export const config = {
       return el(
         "div",
         el("h4", escape(data.label.en)),
-        el("small", `${escape(data.description.en)}}`),
+        el("small", `${escape(data.description.en)}`),
       );
     },
     item: (data, escape) => {
       return el("div", el("span", escape(data.label.en)));
     },
+  },
+  // internal
+  loader_config: {
+    onlyPublic: false,
   },
 };
 
@@ -40,10 +44,8 @@ async function update() {
     // Provide UI feedback during loading
     tom.disable();
     tom.control_input.placeholder = placeholder_wait;
-
-    // Get themes data. skipUIUpdate=true to prevent circular dependencies
-    await theme.updateThemes(true);
-    const themes = theme.list();
+    const { onlyPublic } = this.settings.loader_config;
+    const themes = await theme.listClean(onlyPublic);
 
     // Update UI after loading
     tom.enable();

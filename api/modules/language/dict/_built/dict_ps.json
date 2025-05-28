@@ -3175,6 +3175,11 @@
     "ps": "سمه ده"
   },
   {
+    "id": "btn_import",
+    "en": "Import",
+    "ps": "واردول"
+  },
+  {
     "id": "btn_country",
     "en": "Select country",
     "ps": "هیواد وټاکی"

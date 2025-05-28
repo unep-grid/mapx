@@ -610,6 +610,19 @@
     "bn": "",
     "de": ""
   },
+ {
+    "id": "btn_import",
+    "en": "Import",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
   {
     "id": "btn_country",
     "en": "Select country",

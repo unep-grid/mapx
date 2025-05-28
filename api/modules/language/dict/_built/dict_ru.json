@@ -3175,6 +3175,11 @@
     "ru": "Хорошо"
   },
   {
+    "id": "btn_import",
+    "en": "Import",
+    "ru": "Импорт"
+  },
+  {
     "id": "btn_country",
     "en": "Select country",
     "ru": "Выберите страну "

@@ -20,8 +20,12 @@ export class ThemeService {
    * List available themes (filtered by permissions)
    * @returns {Promise<Object>} Response with array of themes
    */
-  async list() {
-    const themes = await ws.emitAsync("/client/theme/list", {}, 10000);
+  async list(onlyPublic) {
+    const themes = await ws.emitAsync(
+      "/client/theme/list",
+      { onlyPublic },
+      10000,
+    );
     return themes;
   }
 
@@ -39,8 +43,8 @@ export class ThemeService {
    * @param {string} themeId - ID of theme to delete
    * @returns {Promise<Object>} Response from server
    */
-  async delete(themeId) {
-    return await ws.emitAsync("/client/theme/delete", { themeId }, 10000);
+  async delete(idTheme) {
+    return await ws.emitAsync("/client/theme/delete", { idTheme }, 10000);
   }
 
   /**

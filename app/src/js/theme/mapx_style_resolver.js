@@ -1,8 +1,14 @@
 import chroma from "chroma-js";
 import { loadFontFace } from "./fonts";
+import { isEmpty } from "../is_test";
 
 export async function css_resolver(c) {
   const family = await font(c.mx_ui_text);
+
+  if (isEmpty(c)) {
+    console.warn("Resolver recieved empty css item");
+    return "";
+  }
   return `
   * {
   --mx_ui_text: ${color(c.mx_ui_text)};
@@ -25,6 +31,10 @@ export async function css_resolver(c) {
 }
 
 export function layer_resolver(c) {
+  if (isEmpty(c)) {
+    console.warn("Resolver recieved empty color");
+    return [];
+  }
   /**
    * id = layers in main style
    * -> layout, paint = parameters to edit
@@ -361,7 +371,7 @@ export function layer_resolver(c) {
         "country_un_0_label_5",
         "country_un_0_label_99",
         "country_un_1_label_1",
-        "contour-label"
+        "contour-label",
       ],
       paint: {
         "text-halo-color": c.mx_map_text_land_outline.color,

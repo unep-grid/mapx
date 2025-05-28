@@ -3175,6 +3175,11 @@
     "zh": "好的"
   },
   {
+    "id": "btn_import",
+    "en": "Import",
+    "zh": "进口"
+  },
+  {
     "id": "btn_country",
     "en": "Select country",
     "zh": "选择国家/地区"

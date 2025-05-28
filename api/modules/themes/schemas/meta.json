@@ -1,14 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
+  "title" : "Theme Metadata",
   "properties": {
     "id": {
       "type": "string",
       "minLength": 3,
-      "maxLength": 20,
-      "pattern": "^[a-zA-Z0-9_]+$",
+      "maxLength": 40,
       "title": "Theme ID",
-      "description": "Unique identifier for the theme (3-20 characters, no space + underscore _ allowed)"
+      "description": "Unique identifier for theme"
     },
     "description": {
       "type": "object",
@@ -29,7 +29,7 @@
         "en": {
           "type": "string",
           "minLength": 3,
-          "maxLength": 20,
+          "maxLength": 40,
           "title": "Label",
           "description": "Label for the theme"
         }

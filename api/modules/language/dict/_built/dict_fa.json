@@ -3175,6 +3175,11 @@
     "fa": "باشه"
   },
   {
+    "id": "btn_import",
+    "en": "Import",
+    "fa": "واردات"
+  },
+  {
     "id": "btn_country",
     "en": "Select country",
     "fa": "انتخاب کشور"

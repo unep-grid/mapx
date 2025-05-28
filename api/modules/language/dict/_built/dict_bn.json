@@ -3175,6 +3175,11 @@
     "bn": "ঠিক আছে"
   },
   {
+    "id": "btn_import",
+    "en": "Import",
+    "bn": "আমদানি করুন"
+  },
+  {
     "id": "btn_country",
     "en": "Select country",
     "bn": "দেশ নির্বাচন করুন "
