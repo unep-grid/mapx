@@ -346,6 +346,18 @@ class Theme extends EventSimple {
     return await t.set(theme, opt);
   }
 
+  updateBrowserThemeColor(color) {
+    let metaThemeColor = document.querySelector("meta[name=theme-color]");
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute("content", color);
+    } else {
+      metaThemeColor = document.createElement("meta");
+      metaThemeColor.name = "theme-color";
+      metaThemeColor.content = color;
+      document.head.appendChild(metaThemeColor);
+    }
+  }
+
   /**
    * Set the theme with the provided ID and options.
    * @async

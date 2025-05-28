@@ -228,44 +228,54 @@ export class ThemeModal extends EventSimple {
     const theme = tm._theme.theme();
     tm._el_properties_container.replaceChildren();
 
-    // Display Theme ID
-    tm._el_display_id = el("div", { class: "form-group" }, [
-      el("label", {}, tt("mx_theme_manager_id")), // Use translation key
-      el("div", { class: "form-control-static" }, theme.id),
-    ]);
-    tm._el_properties_container.appendChild(tm._el_display_id);
+    // Create metadata items as label-value pairs for CSS Grid
+    const metadataItems = [
+      {
+        key: "mx_theme_manager_id",
+        value: theme.id,
+      },
+      {
+        key: "mx_theme_manager_description",
+        value: theme.description?.en || "",
+      },
+      {
+        key: "mx_theme_manager_creator",
+        value: theme.creator || "1",
+      },
+      {
+        key: "mx_theme_manager_last_editor",
+        value: theme.last_editor || "1",
+      },
+      {
+        key: "mx_theme_manager_date_modified",
+        value: theme.date_modified || new Date().toISOString(),
+      },
+    ];
 
-    // Display Description
-    tm._el_display_description = el("div", { class: "form-group" }, [
-      el("label", {}, tt("mx_theme_manager_description")), // Use translation key
-      el("div", { class: "form-control-static" }, theme.description?.en || ""),
-    ]);
-    tm._el_properties_container.appendChild(tm._el_display_description);
+    // Build grid items
+    metadataItems.forEach((item) => {
+      // Create label
+      const elLabel = el(
+        "label",
+        {
+          class: "mx-theme--property-label",
+        },
+        tt(item.key),
+      );
 
-    // Display Creator
-    tm._el_display_creator = el("div", { class: "form-group" }, [
-      el("label", {}, tt("mx_theme_manager_creator")), // Use translation key
-      el("div", { class: "form-control-static" }, theme.creator || "1"),
-    ]);
-    tm._el_properties_container.appendChild(tm._el_display_creator);
-
-    // Display Last Editor
-    tm._el_display_last_editor = el("div", { class: "form-group" }, [
-      el("label", {}, tt("mx_theme_manager_last_editor")), // Use translation key
-      el("div", { class: "form-control-static" }, theme.last_editor || "1"),
-    ]);
-    tm._el_properties_container.appendChild(tm._el_display_last_editor);
-
-    // Display Last Modified
-    tm._el_display_date_modified = el("div", { class: "form-group" }, [
-      el("label", {}, tt("mx_theme_manager_date_modified")), // Use translation key
-      el(
+      // Create value
+      const elValue = el(
         "div",
-        { class: "form-control-static" },
-        theme.date_modified || new Date().toISOString(),
-      ),
-    ]);
-    tm._el_properties_container.appendChild(tm._el_display_date_modified);
+        {
+          class: ["mx-theme--property-value", item.class],
+        },
+        item.value,
+      );
+
+      // Append both to container (CSS Grid will handle positioning)
+      tm._el_properties_container.appendChild(elLabel);
+      tm._el_properties_container.appendChild(elValue);
+    });
   }
 
   /**

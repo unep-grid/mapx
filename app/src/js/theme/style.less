@@ -40,29 +40,25 @@
       }
     }
 
-    // Properties section
+    // Properties section with CSS Grid layout
     &-properties {
-      padding: 15px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px 20px;
+      padding: 20px;
       margin-bottom: 15px;
       border-bottom: 1px solid var(--mx_ui_border);
+      align-items: center;
 
-      .form-group {
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
+      .mx-theme--property-label {
+        color: var(--mx_ui_text);
+        margin: 0;
+        white-space: nowrap;
+      }
 
-        label {
-          width: 220px;
-          margin-bottom: 0;
-        }
-
-        input[type="text"] {
-          flex: 1;
-        }
-
-        input[type="checkbox"] {
-          margin-left: 10px;
-        }
+      .mx-theme--property-value {
+        padding: 8px 12px;
+        border-bottom: 1px solid var(--mx_ui_border);
       }
     }
 
@@ -109,7 +105,9 @@
   .mx-theme--inputs-container {
     max-height: 400px;
     overflow-y: auto;
-    padding: 0 15px 15px;
+    padding: 15px;
+    border-top: 1px solid var(--mx_ui_border);
+    border-bottom: 1px solid var(--mx_ui_border);
   }
 
   // Individual color input groups
