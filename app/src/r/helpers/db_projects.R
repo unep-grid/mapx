@@ -37,36 +37,6 @@ mxDbGetProjectIdByAlias <- function(alias) {
   return(out)
 }
 
-#' Get themes data for a specific project
-#'
-#' Retrieves themes from the database for a given project ID, with label in the requested language.
-#' Falls back to English label if requested language is not available, or to the theme ID if no labels exist.
-#'
-#' @param idProject Character. Project identifier.
-#' @param language Character. Language code for label retrieval (e.g. "en", "fr").
-#' @return Dataframe with project ID, theme ID and label columns.
-mxDbGetThemesProject <- function(idProject, language) {
-  
-  q <- sprintf("
-    SELECT 
-      id_project, 
-      id, 
-      COALESCE(
-        label->>'%1$s', 
-        label->>'en',
-        id::text
-      ) AS label 
-    FROM 
-      mx_themes 
-    WHERE 
-      id_project = '%2$s' 
-    LIMIT 20",
-    language,
-    idProject
-  )
-  r <- mxDbGetQuery(q)
-  return(r)
-}
 
 #' Get project views list states
 #'
@@ -471,7 +441,6 @@ mxDbSaveProjectData <- function(idProject, values = list(
   map_position = NULL,
   map_projection = NULL,
   theme = NULL,
-  theme_data = NULL,
   countries = NULL,
   creator = NULL,
   allow_join = NULL,
@@ -550,7 +519,7 @@ mxDbSaveProjectData <- function(idProject, values = list(
     "logo",
     "org_name",
     "org_contact_name",
-    "org_contact_email",
+    "org_contact_email"
   )) {
     value <- values[[key]]
     toUpdate <- notNull(value)

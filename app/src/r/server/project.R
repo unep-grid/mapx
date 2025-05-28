@@ -375,8 +375,6 @@ observe({
     mapPos <- projectData$map_position
     mapProj <- projectData$map_projection
     theme <- projectData$theme
-    themeData <- projectData$theme_data
-    themeQuery <- query$theme
     hasMaxBounds <- isTRUE(mapPos$useMaxBounds)
     language <- reactData$language
     hasNoClip <- isEmpty(countryClip) || "WLD" %in% countryClip
@@ -402,14 +400,8 @@ observe({
     #
     # Updaet theme
     #
-    useCustom = theme == "custom"
-
-    if (useCustom &&  isNotEmpty(themeData)) {
-      mglSetTheme(themeData)
-    } else if (isNotEmpty(theme)) {
+    if (isNotEmpty(theme)) {
       mglSetTheme(theme)
-    } else if (isNotEmpty(themeQuery)) {
-      mglSetTheme(themeQuery)
     }
 
     #

@@ -1,7 +1,7 @@
 import { default as global } from "./settings.json";
 import { EventSimple } from "./../event_simple";
 import { el } from "./../el/src/index.js";
-import { elButtonFa, elSelect, tt } from "./../el_mapx";
+import { elSelect, tt } from "./../el_mapx";
 import chroma from "chroma-js";
 import { layer_resolver, css_resolver } from "./mapx_style_resolver.js";
 import { bindAll } from "../bind_class_methods";
@@ -17,7 +17,6 @@ import {
 } from "./themes/index.js";
 import { isNotEmpty } from "../is_test";
 import { fontFamilies, fonts, loadFontFace } from "./fonts.js";
-import { validate } from "./validator.js";
 import { Button } from "./../panel_controls/button.js";
 import { sounds } from "./sound/index.js";
 import { MapScaler } from "../map_scaler";
@@ -26,7 +25,6 @@ import "./style.less";
 import { jsonDiff } from "../mx_helper_utils_json";
 import { ThemeService } from "./services";
 import { ThemeModal } from "./theme_modal"; // Import the new modal class
-import { isString } from "../is_test";
 
 /**
  * Set globals
@@ -70,18 +68,43 @@ class Theme extends EventSimple {
       t.on(k, t._opt.on[k]);
     }
 
-    let id_saved = localStorage.getItem("theme@id");
-
-    if (!t.isValidId(id_saved)) {
-      id_saved = t._opt.id_default;
-    }
-
-    const ok = await t.set(t._opt.id || id_saved || t._opt.id_default, {
+    const ok = await t.set(t._opt.id || t._opt.id_default, {
       sound: false,
-      save: false,
       save_url: true,
     });
     return ok;
+  }
+
+  async getSchema(full) {
+    return this._s.getSchema(full);
+  }
+
+  async getRemote(id) {
+    return this._s.get(id);
+  }
+
+  async save(theme) {
+    await this.stopIfInvalid(theme);
+    const response = await this._s.save(theme);
+    if (response.error) {
+      throw new Error(response.error);
+    }
+  }
+
+  async stopIfInvalid(data, full = false, colors = true) {
+    const issues = await this._s.validate(data, full);
+
+    if (isNotEmpty(issues)) {
+      console.warn(`Invalid theme (full:${full}) `, issues);
+      throw new Error("Invalid theme");
+    }
+    if (colors) {
+      const validColors = this.validateColors(data);
+      if (!validColors) {
+        throw new Error("Invalid theme colors");
+      }
+    }
+    return true;
   }
 
   /**
@@ -126,7 +149,6 @@ class Theme extends EventSimple {
     const theme = resolver(s);
     await t.set(theme, {
       sound: true,
-      save: true,
       save_url: true,
       update_buttons: false,
     });
@@ -301,12 +323,8 @@ class Theme extends EventSimple {
   async addTheme(theme, opt) {
     const t = this;
     opt = Object.assign({}, opt);
-    const ok = await validate(theme);
 
-    if (!ok) {
-      console.warn("Invalid theme", validate.errors);
-      throw new Error("Invalid theme");
-    }
+    await this.stopIfInvalid(theme);
 
     // Add to custom_themes array instead of directly to themes object
     // This ensures it can be properly managed and cleared when switching projects
@@ -334,7 +352,7 @@ class Theme extends EventSimple {
    * @param {string|Object} theme - The theme or theme id
    * @param {Object} [opt] - Optional settings for the theme.
    * @param {boolean} [opt.sound=false] - Whether to play the theme sound.
-   * @param {boolean} [opt.save=false] - Whether to save the theme ID to localStorage.
+   * @param {boolean} [opt.save=false] - [deprecated] Whether to save the theme ID to localStorage.
    * @param {boolean} [opt.save_url=false] - Whether to save the theme ID in the URL.
    * @returns {Promise<boolean>} Returns true if the theme was successfully set, otherwise false.
    * @throws {Error} If there is an error while setting the theme.
@@ -350,13 +368,12 @@ class Theme extends EventSimple {
       {},
       {
         sound: false,
-        save: false,
         save_url: false,
         update_buttons: true,
       },
       opt,
     );
-    let { sound, save, save_url, update_buttons } = opt;
+    let { sound, save_url, update_buttons } = opt;
 
     try {
       const isId = t.isValidId(theme);
@@ -369,10 +386,7 @@ class Theme extends EventSimple {
         theme = t.get(theme);
       }
 
-      if (!validate(theme)) {
-        console.warn("Invalid theme", validate.errors);
-        throw new Error("Invalid theme");
-      }
+      await t.stopIfInvalid(theme);
 
       const oldTheme = t.theme();
       const newTheme = theme;
@@ -398,11 +412,6 @@ class Theme extends EventSimple {
       }
 
       await t.setColors(theme.colors);
-      // We no longer build inputs directly in the Theme class
-
-      if (save) {
-        localStorage.setItem("theme@id", theme.id);
-      }
 
       if (save_url) {
         t.setThemeUrl(theme.id);

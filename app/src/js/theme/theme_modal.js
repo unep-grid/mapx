@@ -10,13 +10,15 @@ import {
   isFunction,
 } from "../is_test/index.js";
 import { downloadJSON } from "../download";
-import { fileSelectorJSON } from "../mx_helper_misc";
-import { validate } from "./validator.js";
+import {
+  fileSelectorJSON,
+  itemFlashSave,
+  itemFlashWarning,
+} from "../mx_helper_misc";
 import { TextFilter } from "../text_filter_simple";
 import chroma from "chroma-js";
 import { onNextFrame, waitFrameAsync } from "../animation_frame/index.js";
 import { fontFamilies, fonts } from "./fonts.js";
-import { default as schemaMeta } from "./schema_meta.json"; // Import the new schema
 import { jedInit } from "../json_editor"; // Import jedInit
 import { settings } from "../mx.js";
 import { themes } from "./themes/index.js"; // Import themes for local theme check
@@ -300,6 +302,8 @@ export class ThemeModal extends EventSimple {
       },
       startValues,
     );
+
+    const schemaMeta = await tm._theme.getSchema(false);
 
     // Initialize JSON Editor with custom validators
     const editor = await jedInit({
@@ -652,47 +656,23 @@ export class ThemeModal extends EventSimple {
       // Show metadata editor modal for saving
       const metadata = await tm.showMetadataEditorModal("save", currentTheme);
 
-      if (!metadata) return; // User cancelled
+      if (!metadata) {
+        return; // User cancelled
+      }
 
       // Create theme object with metadata and current colors
       const theme = Object.assign({}, metadata, {
         colors: tm.getColorsFromInputs(),
       });
 
-      // Validate the theme object
-      const isValid = await validate(theme);
-      debugger;
-      if (!isValid) {
-        throw new Error(`Theme is not valid`);
-      }
+      // Validate the theme object not full, but with colors
 
-      // Check if theme exists in the project to determine create vs update
-      const allThemes = tm._theme.getAll();
-      const themeExists = allThemes[theme.id] && !tm.isLocalTheme(theme.id);
-
-      let response;
-      if (themeExists) {
-        // Update existing theme
-        response = await tm._theme._s.update(theme);
-      } else {
-        // Create new theme
-        response = await tm._theme._s.create(theme);
-      }
-
-      if (response.error) {
-        throw new Error(response.error);
-      }
-
-      console.log(
-        `Theme ${themeExists ? "updated" : "created"} successfully:`,
-        response.success,
-      );
-
+      await tm._theme.save(theme);
       await tm._theme.addTheme(theme);
-
+      itemFlashSave();
     } catch (e) {
       console.error("Failed to save theme:", e);
-      // Provide user feedback about the error
+      itemFlashWarning();
     }
   }
 
@@ -771,22 +751,8 @@ export class ThemeModal extends EventSimple {
       // Create final theme object with updated metadata and original colors
       const finalTheme = Object.assign({}, importedTheme, metadata);
 
-      // Now validate the complete theme
-      const ok = await validate(finalTheme);
-      if (!ok) {
-        console.warn("Invalid theme", validate.errors);
-        throw new Error("Invalid theme format");
-      }
-
-      // Validate the colors specifically
-      const colorsValid = await tm._theme.validateColors(finalTheme.colors);
-      if (!colorsValid) {
-        throw new Error("Invalid colors in imported theme");
-      }
-
       // Register and preview the theme
       await tm._theme.addTheme(finalTheme);
-      // await tm.updateThemeSelectOptions();
     } catch (e) {
       console.error("Failed to import theme:", e);
       // Show error to user
@@ -814,10 +780,7 @@ export class ThemeModal extends EventSimple {
       });
 
       // Validate the theme object before export
-      const isValid = await validate(theme);
-      if (!isValid) {
-        throw new Error(`Theme to export is not valid`);
-      }
+      await tm._theme.stopIfInvalid(theme, false, true);
 
       await downloadJSON(theme, `${makeSafeName(theme.id)}.json`);
     } catch (e) {

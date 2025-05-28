@@ -29,7 +29,7 @@
   color: var(--mx_ui_text);
 }
 .mx .mapboxgl-control-container .mapboxgl-ctrl-attrib a {
-  color: #fff;
+  color: var(--mx_ui_text);
   opacity: 0.68;
 }
 .mx .mapboxgl-control-container .mapboxgl-ctrl-attrib a:hover {

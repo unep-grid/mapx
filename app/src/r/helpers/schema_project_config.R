@@ -109,10 +109,10 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
               loader = "countries"
             )
           ),
-          themes= list(
+          theme= list(
             type = "string",
             title = tt("project_id_theme"),
-            default = projectData$themes,
+            default = projectData$theme,
             maxItems = 1,
             minItems = 0,
             mx_options = list(

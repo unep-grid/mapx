@@ -239,7 +239,7 @@ config[["ui"]] <- list(
     idViewsList = "viewListContent", # include views
     idDashboards = "mxDashboards",
     idDashboardsButton = "btnTabDashboard",
-    idDashboardsPanel = "mxDashboardsPanel",
+    idDashboardsPanel = "mxDashboardsPanel"
   ),
   ui = list()
 )

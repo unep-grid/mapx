@@ -1,4 +1,4 @@
-/** 
+/**
 * Set colors of mapx
 * This will be overwritten by css generated in themes/mapx_style_resolver.js
 */
@@ -10,7 +10,7 @@
   --mx_ui_text_faded: hsla(0, 0%, 21%, 0.1);
   --mx_ui_hidden: hsla(196, 98%, 50%, 0);
   --mx_ui_border: hsl(0, 0%, 81%, 0.1);
-  --mx_ui_background: hsla(0, 0%, 97%, 0.1);
+  --mx_ui_background: rgb(20,20,20);
   --mx_ui_background_faded: hsla(0, 0%, 21%, 0.1);
   --mx_ui_background_contrast: hsla(0, 0%, 21%, 0.1);
   --mx_ui_background_accent: hsla(0, 0%, 21%, 0.1);
@@ -21,7 +21,7 @@
   --mx_ui_highlighter: rgb(255, 255, 0);
 
   /**
-  * Font family 
+  * Font family
   */
   --mx_ui_font_text: system-ui;
 
@@ -59,7 +59,7 @@
   --mx_ui_view_cc_checked: hsla(348, 100%, 61%, 1);
 
   /**
-  * Messages 
+  * Messages
   */
   --mx_ui_message_success: #2ebf64;
   --mx_ui_message_info: var(--mx_ui_link);
@@ -68,7 +68,7 @@
   --mx_ui_message_danger_text: #333333;
 
   /**
-  * Types 
+  * Types
   */
   --mx_ui_type_string: #fff50059;
   --mx_ui_type_number: #00ffff59;
@@ -76,8 +76,8 @@
   --mx_ui_type_object: #dd511159;
 
   /**
-  * Patterns 
+  * Patterns
   */
   --mx_ui_pattern_checker:  url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAANJwAADScBQwZj3AAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAmSURBVBiVY2TAAp49e/YfXYwJm0JsYAAVMmJzuJSUFCPtraa+QgDLYwfEbRLGHgAAAABJRU5ErkJggg==");
-  
+
 }

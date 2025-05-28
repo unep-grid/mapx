@@ -535,6 +535,9 @@ export function itemFlashSave() {
   new FlashItem("floppy-o");
 }
 
+export function itemFlashWarning() {
+  new FlashItem("exclamation-triangle");
+}
 /**
  * Fill with zeros
  * @param {Number} n Number

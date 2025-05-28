@@ -27,7 +27,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "background-color": "rgba(200,200,200,0)"
+        "background-color": "rgba(80,80,80,1)"
       }
     },
 

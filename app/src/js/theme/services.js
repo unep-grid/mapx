@@ -8,15 +8,6 @@ export class ThemeService {
   constructor() {}
 
   /**
-   * Create a new theme on the server
-   * @param {Object} theme - Theme object to create
-   * @returns {Promise<Object>} Response from server
-   */
-  async create(theme) {
-    return await ws.emitAsync("/client/theme/create", { theme }, 10000);
-  }
-
-  /**
    * Get a specific theme by ID
    * @param {string} themeId - ID of theme to retrieve
    * @returns {Promise<Object>} Response with theme data
@@ -30,19 +21,17 @@ export class ThemeService {
    * @returns {Promise<Object>} Response with array of themes
    */
   async list() {
-    console.time("client theme list");
     const themes = await ws.emitAsync("/client/theme/list", {}, 10000);
-    console.timeEnd("client theme list");
     return themes;
   }
 
   /**
-   * Update an existing theme
+   * Update or create theme
    * @param {Object} theme - Theme object with updated values
    * @returns {Promise<Object>} Response from server
    */
-  async update(theme) {
-    return await ws.emitAsync("/client/theme/update", { theme }, 10000);
+  async save(theme) {
+    return await ws.emitAsync("/client/theme/save", { theme }, 10000);
   }
 
   /**
@@ -52,5 +41,30 @@ export class ThemeService {
    */
   async delete(themeId) {
     return await ws.emitAsync("/client/theme/delete", { themeId }, 10000);
+  }
+
+  /**
+   * Validate servers side
+   * @param {Object} theme  - Theme object
+   * @param {boolean} full  - full or paritial / meta validation
+   * @returns
+   */
+  async validate(theme, full = false) {
+    return await ws.emitAsync("/client/theme/validate", { theme, full }, 10000);
+  }
+
+  /**
+   * Get schema
+   * @param {boolean} full  - full or paritial / meta validation
+   * @returns schema
+   */
+  async getSchema(full) {
+    const schema = await ws.emitAsync(
+      "/client/theme/get/schema",
+      { full },
+      10000,
+      true,
+    );
+    return schema;
   }
 }

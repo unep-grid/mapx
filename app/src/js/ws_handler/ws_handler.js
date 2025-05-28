@@ -1,8 +1,9 @@
 import { Manager } from "socket.io-client";
 import { isObject, isFunction, isEmpty } from "../is_test/index.js";
 import { bindAll } from "../bind_class_methods";
-import { makeId } from "../mx_helpers.js";
 import { settings } from "./../mx.js";
+
+const cache = new Map();
 
 /**
  * Wrapper for socket-io
@@ -135,6 +136,24 @@ class WsHandler {
   }
 
   /**
+   * Clear the static data cache
+   */
+  clearStaticCache() {
+    cache.clear();
+  }
+
+  /**
+   * Get cache statistics
+   * @returns {Object} Cache size information
+   */
+  getCacheStats() {
+    return {
+      size: cache.size,
+      keys: Array.from(cache.keys())
+    };
+  }
+
+  /**
    * Generic emit wrapper
    * @param {String} type emit route/type
    * @param {Object} data
@@ -150,9 +169,10 @@ class WsHandler {
    * @param {string} type - The event type to emit.
    * @param {*} data - The data to emit with the event.
    * @param {number} [timeout=0] - Optional. The maximum time (in milliseconds) to wait for an acknowledgement. Defaults to `this._opt.timeout`.
+   * @param {boolean} [cache=false] - Whether to cache the response for static/session-independent data (e.g., JSON schemas, configuration).
    * @returns {Promise<*>} A promise that resolves with the acknowledgement response, or rejects if the operation times out.
    */
-  async emitAsync(type, data, timeout) {
+  async emitAsync(type, data, timeout, cache = false) {
     const ws = this;
     return new Promise((resolve, reject) => {
       const maxTime = timeout || ws._opt.timeout;
@@ -164,17 +184,34 @@ class WsHandler {
         return resolve(null);
       }, maxTime + 10);
 
+      const key = cache ? createCacheKey(type, data) : null;
+
+      if (key) {
+        const res = getCache(key);
+        if (res) {
+          clearTimeout(to);
+          return resolve(res);
+        }
+      }
       if (maxTime > 0) {
         ws.socket.timeout(maxTime).emit(type, data, (error, response) => {
           clearTimeout(to);
           if (error instanceof Error) {
             return reject(error);
           }
+
+          if (cache) {
+            setCache(key, response);
+          }
+
           return resolve(response);
         });
       } else {
         ws.socket.emit(type, data, (response) => {
           clearTimeout(to);
+          if (cache) {
+            setCache(key, response);
+          }
           return resolve(response);
         });
       }
@@ -183,3 +220,46 @@ class WsHandler {
 }
 
 export { WsHandler };
+
+/**
+ * Create a stable cache key for static data
+ * @param {string} path - The event type/path
+ * @param {*} params - The parameters to include in the key
+ * @returns {string} A stable cache key
+ */
+function createCacheKey(path, params) {
+  // Handle null/undefined params
+  if (params === null || params === undefined) {
+    return `${path}?null`;
+  }
+
+  // Create a stable string representation
+  let stableParams;
+  if (typeof params === 'object' && params !== null) {
+    // Sort object keys for consistent ordering
+    stableParams = JSON.stringify(params, Object.keys(params).sort());
+  } else {
+    // For primitives, arrays, etc., use standard JSON.stringify
+    stableParams = JSON.stringify(params);
+  }
+
+  return `${path}?${stableParams}`;
+}
+
+/**
+ * Get cached static data
+ * @param {string} key - Cache key
+ * @returns {*} Cached data or undefined
+ */
+function getCache(key) {
+  return cache.get(key);
+}
+
+/**
+ * Set cached static data
+ * @param {string} key - Cache key
+ * @param {*} data - Data to cache
+ */
+function setCache(key, data) {
+  cache.set(key, data);
+}

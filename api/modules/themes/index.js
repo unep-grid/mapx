@@ -1,8 +1,34 @@
 import { isRoot, isAdmin } from "#mapx/authentication";
-import { validate } from "./validate.js";
+import {
+  schemaFull,
+  schemaMeta,
+  validateFull,
+  validateMeta,
+} from "./validate.js";
 import { isNotEmpty } from "@fxi/mx_valid";
 import { pgRead, pgWrite } from "#mapx/db";
-import { randomString } from "#mapx/helpers";
+
+/**
+ * Validate
+ */
+export async function ioThemeValidator(_, data, cb) {
+  let issues = [];
+
+  if (data.full) {
+    issues = await validateFull(data.theme);
+  } else {
+    issues = await validateMeta(data.theme);
+  }
+  cb(issues);
+}
+
+export async function ioThemeGetSchema(_, data, cb) {
+  if (data.full) {
+    cb(schemaFull);
+  } else {
+    cb(schemaMeta);
+  }
+}
 
 /**
  * Create a new theme
@@ -14,20 +40,18 @@ export async function ioThemeCreate(socket, data, cb) {
       throw new Error("theme_creation_not_allowed");
     }
 
-    // Validate theme data
-    const issues = await validate(data.theme);
+    const idUser = socket.session.user_id;
+    const idProject = socket.session.project_id;
+
+    const issues = await validateMeta(data.theme);
+
     if (isNotEmpty(issues)) {
       throw new Error("theme_data_not_valid");
     }
 
-    const idUser = socket.session.user_id;
-    const idProject = socket.session.project_id;
-    const themeId =
-      data.theme.id || `theme_${randomString("", 8, 0, false, true)}`;
-
     // Prepare theme object
     const theme = {
-      id: themeId,
+      id: data.theme.id,
       id_project: idProject,
       creator: idUser,
       last_editor: idUser,
@@ -40,6 +64,12 @@ export async function ioThemeCreate(socket, data, cb) {
       description: data.theme.description || {},
       label: data.theme.label || {},
     };
+
+    const issuesFull = await validateFull(theme);
+
+    if (isNotEmpty(issuesFull)) {
+      throw new Error("theme_data_not_valid");
+    }
 
     // Insert theme
     await pgWrite.query(
@@ -83,19 +113,18 @@ export async function ioThemeList(socket, data, cb) {
     // const isUserRoot = isRoot(socket);
 
     const query = `
-      SELECT * FROM mx_themes 
+      SELECT * FROM mx_themes
       WHERE
       (
-        creator = ${idUser} OR 
+        creator = ${idUser} OR
         public = true
       ) AND
-      id_project = '${idProject}' 
+      id_project = '${idProject}'
       ORDER BY date_modified DESC
     `;
 
     const { rows } = await pgRead.query(query);
 
-  
     data.themes = rows;
     data.success = true;
   } catch (e) {
@@ -108,34 +137,42 @@ export async function ioThemeList(socket, data, cb) {
 /**
  * Update a theme
  */
-export async function ioThemeUpdate(socket, data, cb) {
+export async function ioThemeSave(socket, data, cb) {
   try {
     const idUser = socket.session.user_id;
     const isUserRoot = isRoot(socket);
-    const themeId = data.theme.id;
 
-    if (!themeId) {
-      throw new Error("theme_id_required");
+    const issues = await validateMeta(data.theme);
+
+    if (isNotEmpty(issues)) {
+      throw new Error("theme_data_not_valid");
     }
+
+    const idTheme = data.theme.id;
 
     // Check permissions
     const { rows } = await pgRead.query(
       `SELECT creator FROM mx_themes WHERE id = $1`,
-      [themeId]
+      [idTheme]
     );
 
     if (rows.length === 0) {
-      throw new Error("theme_not_found");
+      return ioThemeCreate(socket, data, cb);
     }
+
+    data.theme.last_editor = idUser;
 
     const canEdit = isUserRoot || rows[0].creator === idUser;
     if (!canEdit) {
       throw new Error("theme_update_not_allowed");
     }
+    // make validathor happy
+    data.theme.creator = rows[0].creator;
 
     // Validate theme data
-    const issues = await validate(data.theme);
-    if (isNotEmpty(issues)) {
+    const issuesFull = await validateFull(data.theme);
+
+    if (isNotEmpty(issuesFull)) {
       throw new Error("theme_data_not_valid");
     }
 
@@ -162,7 +199,7 @@ export async function ioThemeUpdate(socket, data, cb) {
         data.theme.base || false,
         data.theme.description || {},
         data.theme.label || {},
-        themeId,
+        idTheme,
       ]
     );
 
@@ -181,16 +218,16 @@ export async function ioThemeDelete(socket, data, cb) {
   try {
     const idUser = socket.session.user_id;
     const isUserRoot = isRoot(socket);
-    const themeId = data.themeId;
+    const idTheme = data.idTheme;
 
-    if (!themeId) {
+    if (!idTheme) {
       throw new Error("theme_id_required");
     }
 
     // Check if theme exists and permissions
     const { rows } = await pgRead.query(
       `SELECT creator, base FROM mx_themes WHERE id = $1`,
-      [themeId]
+      [idTheme]
     );
 
     if (rows.length === 0) {
@@ -208,7 +245,7 @@ export async function ioThemeDelete(socket, data, cb) {
     }
 
     // Delete theme
-    await pgWrite.query(`DELETE FROM mx_themes WHERE id = $1`, [themeId]);
+    await pgWrite.query(`DELETE FROM mx_themes WHERE id = $1`, [idTheme]);
 
     data.success = true;
   } catch (e) {
@@ -225,16 +262,16 @@ export async function ioThemeGet(socket, data, cb) {
   try {
     const idUser = socket.session.user_id;
     const isUserRoot = isRoot(socket);
-    const themeId = data.themeId;
+    const idTheme = data.idTheme;
 
-    if (!themeId) {
+    if (!idTheme) {
       throw new Error("theme_id_required");
     }
 
     // Get theme
     const { rows } = await pgRead.query(
       `SELECT * FROM mx_themes WHERE id = $1`,
-      [themeId]
+      [idTheme]
     );
 
     if (rows.length === 0) {

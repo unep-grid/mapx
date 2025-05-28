@@ -1,7 +1,7 @@
 import Ajv from "ajv";
 import { columnsExist, columnExists, isSourceRegistered } from "#mapx/db_utils";
 import { validateJoins } from "#mapx/source";
-import { isObject } from "@fxi/mx_valid";
+import { isObject, isString } from "@fxi/mx_valid";
 
 /**
  * Validator class for JSON schema validation with custom database-related validations.
@@ -13,7 +13,9 @@ export class Validator {
    * @param {Object} schema - The JSON schema used for validation.
    */
   constructor(schema) {
-    this._ajv = new Ajv();
+    this._ajv = new Ajv({
+      strict: false, // issues with json-editor 'format' in strict mode
+    });
 
     /**
      * mapx validators
@@ -39,6 +41,8 @@ export class Validator {
       type: ["object", "string", "array"],
       validate: isObject,
     });
+
+    this._ajv.addFormat("checkbox", () => true);
 
     /**
      * Compile validator
