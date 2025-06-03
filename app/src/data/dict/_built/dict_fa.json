@@ -9765,6 +9765,16 @@
     "fa": "ایجاد جدید"
   },
   {
+    "id": "mx_theme_update_project",
+    "en": "Set theme as default",
+    "fa": "تنظیم تم به عنوان پیش‌فرض"
+  },
+  {
+    "id": "mx_theme_update_project_desc",
+    "en": "Set {{idTheme}} as default theme ?",
+    "fa": "تنظیم {{idTheme}} به عنوان تم پیش‌فرض؟"
+  },
+  {
     "id": "mx_theme_delete_button",
     "en": "Delete",
     "fa": "حذف"

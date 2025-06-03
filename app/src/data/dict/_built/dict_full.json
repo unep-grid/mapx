@@ -25389,6 +25389,32 @@
     "de": "Neu erstellen"
   },
   {
+    "id": "mx_theme_update_project",
+    "en": "Set theme as default",
+    "fr": "Définir le thème par défaut",
+    "es": "Establecer tema como predeterminado",
+    "ru": "Установить тему по умолчанию",
+    "zh": "将主题设置为默认主题",
+    "ar": "تعيين السمة كإفتراضي",
+    "fa": "تنظیم تم به عنوان پیش‌فرض",
+    "ps": "موضوع د ډیفالټ په توګه تنظیم کړئ",
+    "bn": "থিমটিকে ডিফল্ট হিসেবে সেট করুন",
+    "de": "Design als Standard festlegen"
+  },
+  {
+    "id": "mx_theme_update_project_desc",
+    "en": "Set {{idTheme}} as default theme ?",
+    "fr": "Ensemble {{idTheme}} comme thème par défaut ?",
+    "es": "Colocar {{idTheme}} ¿como tema predeterminado?",
+    "ru": "Набор {{idTheme}} как тема по умолчанию?",
+    "zh": "放 {{idTheme}}作为默认主题？",
+    "ar": "تعيين {{idTheme}} كموضوع افتراضي ؟",
+    "fa": "تنظیم {{idTheme}} به عنوان تم پیش‌فرض؟",
+    "ps": "ټاکل شوی {{idTheme}} د ډیفالټ موضوع په توګه؟",
+    "bn": "সেট {{idTheme}} ডিফল্ট থিম হিসেবে?",
+    "de": "Satz {{idTheme}} als Standarddesign?"
+  },
+  {
     "id": "mx_theme_delete_button",
     "en": "Delete",
     "fr": "Supprimer",

@@ -9765,6 +9765,16 @@
     "de": "Neu erstellen"
   },
   {
+    "id": "mx_theme_update_project",
+    "en": "Set theme as default",
+    "de": "Design als Standard festlegen"
+  },
+  {
+    "id": "mx_theme_update_project_desc",
+    "en": "Set {{idTheme}} as default theme ?",
+    "de": "Satz {{idTheme}} als Standarddesign?"
+  },
+  {
     "id": "mx_theme_delete_button",
     "en": "Delete",
     "de": "Löschen"

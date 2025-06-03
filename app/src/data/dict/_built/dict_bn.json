@@ -9765,6 +9765,16 @@
     "bn": "নতুন তৈরি করুন"
   },
   {
+    "id": "mx_theme_update_project",
+    "en": "Set theme as default",
+    "bn": "থিমটিকে ডিফল্ট হিসেবে সেট করুন"
+  },
+  {
+    "id": "mx_theme_update_project_desc",
+    "en": "Set {{idTheme}} as default theme ?",
+    "bn": "সেট {{idTheme}} ডিফল্ট থিম হিসেবে?"
+  },
+  {
     "id": "mx_theme_delete_button",
     "en": "Delete",
     "bn": "মুছে ফেলুন"

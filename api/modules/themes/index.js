@@ -47,30 +47,31 @@ export async function ioThemeCreate(socket, data, cb) {
       throw new Error("theme_creation_not_allowed");
     }
 
+    const { setAsProjectDefault, theme } = data;
     const idUser = socket.session.user_id;
     const idProject = socket.session.project_id;
 
-    const issues = await validateMeta(data.theme);
+    const issues = await validateMeta(theme);
 
     if (isNotEmpty(issues)) {
       throw new Error("theme_data_not_valid");
     }
 
     // Prepare theme object
-    const theme = {
-      id: data.theme.id,
+    const themeInsert = {
+      id: theme.id,
       id_project: idProject,
       creator: idUser,
       last_editor: idUser,
-      colors: data.theme.colors,
-      dark: data.theme.dark || false,
-      tree: data.theme.tree || false,
-      water: data.theme.water || false,
-      description: data.theme.description || {},
-      label: data.theme.label || {},
+      colors: theme.colors,
+      dark: theme.dark || false,
+      tree: theme.tree || false,
+      water: theme.water || false,
+      description: theme.description || {},
+      label: theme.label || {},
     };
 
-    const issuesFull = await validateFull(theme);
+    const issuesFull = await validateFull(themeInsert);
 
     if (isNotEmpty(issuesFull)) {
       throw new Error("theme_data_not_valid");
@@ -84,18 +85,22 @@ export async function ioThemeCreate(socket, data, cb) {
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
       )`,
       [
-        theme.id,
-        theme.id_project,
-        theme.creator,
-        theme.last_editor,
-        theme.colors,
-        theme.dark,
-        theme.tree,
-        theme.water,
-        theme.description,
-        theme.label,
+        themeInsert.id,
+        themeInsert.id_project,
+        themeInsert.creator,
+        themeInsert.last_editor,
+        themeInsert.colors,
+        themeInsert.dark,
+        themeInsert.tree,
+        themeInsert.water,
+        themeInsert.description,
+        themeInsert.label,
       ]
     );
+
+    if (setAsProjectDefault) {
+      await updateThemeProject(themeInsert.id, idProject);
+    }
 
     data.theme = theme;
     data.success = true;
@@ -155,6 +160,7 @@ export async function ioThemeListIds(_, data, cb) {
 export async function ioThemeSave(socket, data, cb) {
   try {
     const idUser = socket.session.user_id;
+    const idProject = socket.session.project_id;
 
     const isUserAllowed = isRoot(socket) || isAdmin(socket);
 
@@ -168,7 +174,8 @@ export async function ioThemeSave(socket, data, cb) {
       throw new Error("theme_data_not_valid");
     }
 
-    const idTheme = data.theme.id;
+    const { theme, setAsProjectDefault } = data;
+    const idTheme = theme.id;
 
     // Check uf exists upsert
     const { rows } = await pgRead.query(
@@ -213,11 +220,26 @@ export async function ioThemeSave(socket, data, cb) {
       ]
     );
 
+    if (setAsProjectDefault) {
+      await updateThemeProject(idTheme, idProject);
+    }
+
     data.success = true;
   } catch (e) {
     data.error = e?.message || e;
   } finally {
     cb(data);
+  }
+}
+
+async function updateThemeProject(idTheme, idProject) {
+  if (idTheme && idProject) {
+    await pgWrite.query(
+      `UPDATE mx_projects SET
+        theme = $1
+      WHERE id = $2`,
+      [idTheme, idProject]
+    );
   }
 }
 

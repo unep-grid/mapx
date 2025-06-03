@@ -9765,6 +9765,16 @@
     "zh": "创建新的"
   },
   {
+    "id": "mx_theme_update_project",
+    "en": "Set theme as default",
+    "zh": "将主题设置为默认主题"
+  },
+  {
+    "id": "mx_theme_update_project_desc",
+    "en": "Set {{idTheme}} as default theme ?",
+    "zh": "放 {{idTheme}}作为默认主题？"
+  },
+  {
     "id": "mx_theme_delete_button",
     "en": "Delete",
     "zh": "删除"

@@ -35,8 +35,8 @@ export class ThemeService {
    * @param {Object} theme - Theme object with updated values
    * @returns {Promise<Object>} Response from server
    */
-  async save(theme) {
-    const resp = await ws.emitAsync("/client/theme/save", { theme }, 10000);
+  async save(data = { theme: {}, setAsProjectDefault: false }) {
+    const resp = await ws.emitAsync("/client/theme/save", data, 10000);
     return this._handle_error(resp);
   }
 

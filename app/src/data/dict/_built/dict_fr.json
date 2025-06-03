@@ -9765,6 +9765,16 @@
     "fr": "Créer un nouveau"
   },
   {
+    "id": "mx_theme_update_project",
+    "en": "Set theme as default",
+    "fr": "Définir le thème par défaut"
+  },
+  {
+    "id": "mx_theme_update_project_desc",
+    "en": "Set {{idTheme}} as default theme ?",
+    "fr": "Ensemble {{idTheme}} comme thème par défaut ?"
+  },
+  {
     "id": "mx_theme_delete_button",
     "en": "Delete",
     "fr": "Supprimer"

@@ -9765,6 +9765,16 @@
     "ar": "إنشاء جديد"
   },
   {
+    "id": "mx_theme_update_project",
+    "en": "Set theme as default",
+    "ar": "تعيين السمة كإفتراضي"
+  },
+  {
+    "id": "mx_theme_update_project_desc",
+    "en": "Set {{idTheme}} as default theme ?",
+    "ar": "تعيين {{idTheme}} كموضوع افتراضي ؟"
+  },
+  {
     "id": "mx_theme_delete_button",
     "en": "Delete",
     "ar": "يمسح"

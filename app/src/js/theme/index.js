@@ -107,8 +107,27 @@ class Theme extends EventSimple {
     try {
       const t = this;
       await t.stopIfInvalid(theme);
-      await t._s.save(theme);
+      const notDefault = settings.project.theme != theme.id;
+      let setAsProjectDefault = false;
+      if (notDefault) {
+        const confirmed = await modalConfirm({
+          title: tt("mx_theme_update_project"),
+          content: tt("mx_theme_update_project_desc", {
+            data: { idTheme: theme.id },
+          }),
+          confirm: tt("btn_confirm"),
+          cancel: tt("btn_cancel"),
+        });
+        setAsProjectDefault = !!confirmed;
+      }
+
+      await t._s.save({ theme, setAsProjectDefault });
       await t.addOrUpdateTheme(theme);
+
+      if (setAsProjectDefault) {
+        settings.project.theme = theme.id;
+      }
+
       itemFlashSave();
     } catch (e) {
       console.error("Failed to save theme:", e);
@@ -470,7 +489,7 @@ class Theme extends EventSimple {
 
       if (isId) {
         if (theme === t.id()) {
-          console.log('Set theme: no changes');
+          console.log("Set theme: no changes");
           return;
         }
         theme = t.get(theme);

@@ -988,7 +988,7 @@
     "bn": "",
     "de": ""
   },
-    {
+  {
     "id": "mx_theme_manager_last_editor",
     "en": "Last editor",
     "fr": "",
@@ -1001,7 +1001,7 @@
     "bn": "",
     "de": ""
   },
-    {
+  {
     "id": "mx_theme_manager_date_modified",
     "en": "Last modification date",
     "fr": "",
@@ -1069,6 +1069,32 @@
   {
     "id": "mx_theme_create_button",
     "en": "Create New",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "mx_theme_update_project",
+    "en": "Set theme as default",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "mx_theme_update_project_desc",
+    "en": "Set {{idTheme}} as default theme ?",
     "fr": "",
     "es": "",
     "ru": "",
