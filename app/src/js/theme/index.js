@@ -25,6 +25,7 @@ import {
   patchObject,
 } from "../mx_helper_misc";
 import { modalConfirm } from "../mx_helper_modal";
+import { settings } from "../settings";
 
 const def = {
   tree: true,
@@ -62,13 +63,17 @@ class Theme extends EventSimple {
     }
 
     t._s = new ThemeService();
-    await t.updateThemes();
+
+    if (settings.mode.app) {
+      // load project's theme
+      await t.updateThemes();
+    }
 
     for (const k in Object.keys(t._opt.on)) {
       t.on(k, t._opt.on[k]);
     }
 
-    const ok = await t.set(t._opt.id || t._opt.id_default, {
+    const ok = await t.set(t._opt.id, {
       sound: false,
       save_url: true,
     });
@@ -84,8 +89,14 @@ class Theme extends EventSimple {
     return ids || [];
   }
 
-  async getRemote(id) {
-    return this._s.get(id);
+  async getRemote(idTheme) {
+    try {
+      const resp = await this._s.get(idTheme);
+      return resp.theme;
+    } catch (e) {
+      console.error(e);
+      return;
+    }
   }
 
   getCustom(id) {
@@ -434,6 +445,9 @@ class Theme extends EventSimple {
 
     if (isEmpty(theme)) {
       theme = t.id();
+      if (isEmpty(theme)) {
+        theme = t.getDefault();
+      }
     }
 
     opt = Object.assign(
@@ -456,6 +470,7 @@ class Theme extends EventSimple {
 
       if (isId) {
         if (theme === t.id()) {
+          console.log('Set theme: no changes');
           return;
         }
         theme = t.get(theme);
@@ -463,6 +478,10 @@ class Theme extends EventSimple {
 
       if (!theme?.id) {
         theme = await t.getRemote(theme);
+
+        if (theme) {
+          t.addOrUpdateTheme(theme, true);
+        }
       }
 
       if (!theme?.id) {

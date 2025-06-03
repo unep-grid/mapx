@@ -1,6 +1,5 @@
 import { Theme } from "./theme";
 import { getQueryParameter } from "./url_utils";
-import { settings } from "./settings";
 /**
  * Set theme
  */

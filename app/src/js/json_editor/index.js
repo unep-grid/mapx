@@ -476,7 +476,7 @@ function jsonSchemaArrayFixer(data, schema) {
         result[key] = value;
       }
     } catch (e) {
-      debugger;
+      console.error(e);
     }
   }
 

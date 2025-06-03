@@ -107,7 +107,7 @@ export async function ioThemeCreate(socket, data, cb) {
 }
 
 /**
- * List themes
+ * List themes by project
  */
 export async function ioThemeList(socket, data, cb) {
   try {
@@ -234,7 +234,6 @@ export async function ioThemeDelete(socket, data, cb) {
     const { idTheme } = data;
 
     if (!idTheme) {
-      debugger;
       throw new Error("theme_id_required");
     }
 
@@ -264,8 +263,6 @@ export async function ioThemeValidateId(_, data, cb) {
     const idTheme = data.idTheme;
 
     if (!idTheme) {
-
-      debugger;
       throw new Error("theme_id_required");
     }
 
@@ -289,11 +286,9 @@ export async function ioThemeValidateId(_, data, cb) {
 export async function ioThemeGet(_, data, cb) {
   try {
     const idTheme = data.idTheme;
-
     if (!idTheme) {
       throw new Error("theme_id_required");
     }
-
     // Get theme
     const { rows } = await pgRead.query(
       `SELECT * FROM mx_themes WHERE id = $1 LIMIT 1`,
