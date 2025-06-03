@@ -19,7 +19,7 @@ import {
 import { UAParser } from "ua-parser-js";
 
 import copy from "fast-copy";
-import { settings, data as mx_storage } from "./mx.js";
+import { settings } from "./mx.js";
 import { modalSelectSource } from "./select_auto/modals";
 import { isSourceId } from "./is_test";
 import { el, tt } from "./el_mapx";
@@ -537,6 +537,10 @@ export function itemFlashSave() {
 
 export function itemFlashWarning() {
   new FlashItem("exclamation-triangle");
+}
+
+export function itemFlashCancel() {
+  new FlashItem("times");
 }
 /**
  * Fill with zeros

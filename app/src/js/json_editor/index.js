@@ -1,7 +1,4 @@
-import {
-  getDict,
-  getLanguageCurrent,
-} from "./../language";
+import { getDict, getLanguageCurrent } from "./../language";
 import {
   isArray,
   isEmpty,
@@ -461,20 +458,25 @@ function jsonSchemaArrayFixer(data, schema) {
 
   const result = {};
   for (const [key, value] of Object.entries(data)) {
-    const propertySchema = schema.properties[key];
+    try {
+      const { properties } = schema;
+      const propertySchema = isObject(properties) ? properties[key] : null;
 
-    if (propertySchema && propertySchema.type === "array") {
-      if (isArray(value)) {
-        result[key] = value.map((item) =>
-          jsonSchemaArrayFixer(item, propertySchema.items),
-        );
+      if (propertySchema && propertySchema.type === "array") {
+        if (isArray(value)) {
+          result[key] = value.map((item) =>
+            jsonSchemaArrayFixer(item, propertySchema.items),
+          );
+        } else {
+          result[key] = [jsonSchemaArrayFixer(value, propertySchema.items)];
+        }
+      } else if (isNotEmpty(propertySchema) && isObject(value)) {
+        result[key] = jsonSchemaArrayFixer(value, propertySchema);
       } else {
-        result[key] = [jsonSchemaArrayFixer(value, propertySchema.items)];
+        result[key] = value;
       }
-    } else if (isNotEmpty(propertySchema) && isObject(value)) {
-      result[key] = jsonSchemaArrayFixer(value, propertySchema);
-    } else {
-      result[key] = value;
+    } catch (e) {
+      debugger;
     }
   }
 

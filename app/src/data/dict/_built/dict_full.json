@@ -25364,16 +25364,16 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save",
-    "fr": "Sauvegarder",
-    "es": "Ahorrar",
-    "ru": "Сохранять",
-    "zh": "节省",
-    "ar": "يحفظ",
-    "fa": "ذخیره",
-    "ps": "خوندي کړئ",
-    "bn": "সংরক্ষণ করুন",
-    "de": "Speichern"
+    "en": "Save or update...",
+    "fr": "Enregistrer ou mettre à jour...",
+    "es": "Guardar o actualizar...",
+    "ru": "Сохранить или обновить...",
+    "zh": "保存或更新...",
+    "ar": "حفظ أو تحديث...",
+    "fa": "ذخیره یا به‌روزرسانی...",
+    "ps": "خوندي کړئ یا تازه کړئ...",
+    "bn": "সংরক্ষণ বা আপডেট করুন...",
+    "de": "Speichern oder aktualisieren..."
   },
   {
     "id": "mx_theme_create_button",

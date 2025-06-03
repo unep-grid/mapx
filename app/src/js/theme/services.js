@@ -9,11 +9,12 @@ export class ThemeService {
 
   /**
    * Get a specific theme by ID
-   * @param {string} themeId - ID of theme to retrieve
+   * @param {string} idTheme - ID of theme to retrieve
    * @returns {Promise<Object>} Response with theme data
    */
-  async get(themeId) {
-    return await ws.emitAsync("/client/theme/get", { themeId }, 10000);
+  async get(idTheme) {
+    const resp = await ws.emitAsync("/client/theme/get", { idTheme }, 10000);
+    return this._handle_error(resp);
   }
 
   /**
@@ -21,12 +22,12 @@ export class ThemeService {
    * @returns {Promise<Object>} Response with array of themes
    */
   async list(onlyPublic) {
-    const themes = await ws.emitAsync(
+    const resp = await ws.emitAsync(
       "/client/theme/list",
       { onlyPublic },
       10000,
     );
-    return themes;
+    return this._handle_error(resp);
   }
 
   /**
@@ -35,16 +36,18 @@ export class ThemeService {
    * @returns {Promise<Object>} Response from server
    */
   async save(theme) {
-    return await ws.emitAsync("/client/theme/save", { theme }, 10000);
+    const resp = await ws.emitAsync("/client/theme/save", { theme }, 10000);
+    return this._handle_error(resp);
   }
 
   /**
    * Delete a theme
-   * @param {string} themeId - ID of theme to delete
+   * @param {string} idTheme - ID of theme to delete
    * @returns {Promise<Object>} Response from server
    */
   async delete(idTheme) {
-    return await ws.emitAsync("/client/theme/delete", { idTheme }, 10000);
+    const resp = await ws.emitAsync("/client/theme/delete", { idTheme }, 10000);
+    return this._handle_error(resp);
   }
 
   /**
@@ -54,7 +57,31 @@ export class ThemeService {
    * @returns
    */
   async validate(theme, full = false) {
-    return await ws.emitAsync("/client/theme/validate", { theme, full }, 10000);
+    const resp = await ws.emitAsync(
+      "/client/theme/validate",
+      { theme, full },
+      10000,
+    );
+    return this._handle_error(resp);
+  }
+
+  /**
+   * Check if a theme id exists and is valid
+   * @param {string} idTheme - ID of theme to check
+   * @returns {Promise<Object>} Response from server {exists:true}
+   */
+  async validateId(idTheme) {
+    const resp = await ws.emitAsync(
+      "/client/theme/validate/id",
+      { idTheme },
+      10000,
+    );
+    return this._handle_error(resp);
+  }
+
+  async getAllIds() {
+    const resp = await ws.emitAsync("/client/theme/list/ids", {}, 10000);
+    return this._handle_error(resp);
   }
 
   /**
@@ -63,12 +90,20 @@ export class ThemeService {
    * @returns schema
    */
   async getSchema(full) {
-    const schema = await ws.emitAsync(
-      "/client/theme/get/schema",
+    const resp = await ws.emitAsync(
+      "/client/theme/schema",
       { full },
       10000,
       true,
     );
-    return schema;
+    return this._handle_error(resp);
+  }
+
+  _handle_error(response) {
+    if (response?.error) {
+      throw new Error(`Response error: ${response.error}`);
+    } else {
+      return response;
+    }
   }
 }

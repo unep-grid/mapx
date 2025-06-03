@@ -6,12 +6,10 @@ CREATE TABLE mx_themes (
     creator INTEGER NOT NULL,
     last_editor INTEGER NOT NULL,
     date_modified TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    public BOOLEAN DEFAULT FALSE,
     colors JSONB NOT NULL,
     dark BOOLEAN DEFAULT FALSE,
     tree BOOLEAN DEFAULT FALSE,
     water BOOLEAN DEFAULT FALSE,
-    base BOOLEAN DEFAULT FALSE,
     description JSONB DEFAULT '{}',
     label JSONB DEFAULT '{}'
 );
@@ -19,7 +17,6 @@ CREATE TABLE mx_themes (
 -- Create index for faster theme lookup
 CREATE INDEX mx_themes_id_idx ON mx_themes(id);
 CREATE INDEX mx_themes_id_project_idx ON mx_themes(id_project);
-CREATE INDEX mx_themes_public_idx ON mx_themes(public);
 CREATE INDEX mx_themes_creator_idx ON mx_themes(creator);
 CREATE INDEX mx_themes_metadata_idx ON mx_themes(dark, tree, water);
 

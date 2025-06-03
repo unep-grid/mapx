@@ -11,11 +11,11 @@ export const config = {
   dropdownParent: "body",
   preload: "focus",
   load: null,
-  onInitialize: async function () {
+  onInitialize: function () {
     // Use the countries.js pattern
     const tom = this;
     tom._update = update.bind(tom);
-    await tom._update();
+    tom._update();
   },
   render: {
     option: (data, escape) => {
@@ -29,13 +29,11 @@ export const config = {
       return el("div", el("span", escape(data.label.en)));
     },
   },
-  // internal
-  loader_config: {
-    onlyPublic: false,
-  },
+  // internal config
+  loader_config: {},
 };
 
-async function update() {
+function update() {
   const tom = this;
   try {
     const placeholder_wait = "Loading themes...";
@@ -44,17 +42,21 @@ async function update() {
     // Provide UI feedback during loading
     tom.disable();
     tom.control_input.placeholder = placeholder_wait;
-    const { onlyPublic } = this.settings.loader_config;
-    const themes = await theme.listClean(onlyPublic);
+    const {} = this.settings.loader_config;
+    const themes = theme.list();
+    const id = theme.id();
 
     // Update UI after loading
-    tom.enable();
     tom.control_input.placeholder = placeholder_ready;
     tom.settings.placeholder = placeholder_ready;
 
     // Add options directly
+    tom.clearOptions();
     tom.addOptions(themes);
     tom.refreshOptions(false);
+    tom.setValue(id);
+    tom.enable();
+
   } catch (e) {
     console.error(e);
     tom.enable(); // Make sure to re-enable even if there's an error

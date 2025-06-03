@@ -1,7 +1,20 @@
 import { readJSON } from "#mapx/helpers";
 import { Validator } from "#mapx/schema";
-export const schemaFull = await readJSON("./schemas/full.json", import.meta.url);
-export const schemaMeta = await readJSON("./schemas/meta.json", import.meta.url);
+
+export const schemaFull = await readJSON("./schemas/combined.json", import.meta.url);
+export const schemaMeta = await readJSON("./schemas/combined.json", import.meta.url);
+
+schemaFull.required = [
+  ...schemaFull.required,
+  "colors",
+  "creator",
+  "last_editor",
+  "date_modified",
+];
+
+for (const key of ["colors", "creator", "last_editor", "date_modified"]) {
+  delete schemaMeta.properties[key];
+}
 
 export const validatorFull = new Validator(schemaFull);
 export const validatorMeta = new Validator(schemaMeta);

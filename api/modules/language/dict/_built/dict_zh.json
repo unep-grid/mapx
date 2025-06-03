@@ -9756,8 +9756,8 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save",
-    "zh": "节省"
+    "en": "Save or update...",
+    "zh": "保存或更新..."
   },
   {
     "id": "mx_theme_create_button",

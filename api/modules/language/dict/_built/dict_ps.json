@@ -9756,8 +9756,8 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save",
-    "ps": "خوندي کړئ"
+    "en": "Save or update...",
+    "ps": "خوندي کړئ یا تازه کړئ..."
   },
   {
     "id": "mx_theme_create_button",

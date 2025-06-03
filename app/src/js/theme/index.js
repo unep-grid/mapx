@@ -7,7 +7,7 @@ import { layer_resolver, css_resolver } from "./mapx_style_resolver.js";
 import { bindAll } from "../bind_class_methods";
 import { isJson, isEmpty } from "../is_test";
 import { waitFrameAsync } from "../animation_frame/index.js";
-import { custom_themes, themes } from "./themes/index.js";
+import { themes_custom, themes_orig, themes } from "./themes/index.js";
 import { isNotEmpty } from "../is_test";
 import { fontFamilies, fonts, loadFontFace } from "./fonts.js";
 import { Button } from "./../panel_controls/button.js";
@@ -18,6 +18,13 @@ import "./style.less";
 import { jsonDiff } from "../mx_helper_utils_json";
 import { ThemeService } from "./services";
 import { ThemeModal } from "./theme_modal"; // Import the new modal class
+import {
+  itemFlashCancel,
+  itemFlashSave,
+  itemFlashWarning,
+  patchObject,
+} from "../mx_helper_misc";
+import { modalConfirm } from "../mx_helper_modal";
 
 const def = {
   tree: true,
@@ -33,13 +40,7 @@ class Theme extends EventSimple {
     super();
     const t = this;
     bindAll(t);
-
-    t._opt = Object.assign(
-      {},
-      { themes: Object.keys(themes), custom_themes },
-      global,
-      opt,
-    );
+    t._opt = Object.assign({}, global, opt);
 
     t._btns = {
       dark: null,
@@ -47,6 +48,7 @@ class Theme extends EventSimple {
       water: null,
     };
     t._inputs = [];
+    t.resetThemesOrig();
   }
   /**
    * Init
@@ -60,7 +62,6 @@ class Theme extends EventSimple {
     }
 
     t._s = new ThemeService();
-
     await t.updateThemes();
 
     for (const k in Object.keys(t._opt.on)) {
@@ -78,24 +79,56 @@ class Theme extends EventSimple {
     return this._s.getSchema(full);
   }
 
+  async getAllIds() {
+    const { ids } = await this._s.getAllIds();
+    return ids || [];
+  }
+
   async getRemote(id) {
     return this._s.get(id);
   }
 
+  getCustom(id) {
+    return themes_custom.find((t) => t.id == id);
+  }
+
   async save(theme) {
-    await this.stopIfInvalid(theme);
-    const response = await this._s.save(theme);
-    if (response.error) {
-      throw new Error(response.error);
+    try {
+      const t = this;
+      await t.stopIfInvalid(theme);
+      await t._s.save(theme);
+      await t.addOrUpdateTheme(theme);
+      itemFlashSave();
+    } catch (e) {
+      console.error("Failed to save theme:", e);
+      itemFlashWarning();
     }
   }
 
-  async validateRemote(theme, full = false) {
+  resetThemesOrig() {
+    themes.length = 0;
+    themes.push(...this.clone(themes_orig));
+  }
+  reset() {
+    const t = this;
+    t.resetThemesOrig();
+    t.set(t.id());
+  }
+
+  clone(obj) {
+    return JSON.parse(JSON.stringify(obj));
+  }
+
+  async validate(theme, full = false) {
     return this._s.validate(theme, full);
   }
 
+  async validateId(idTheme) {
+    return this._s.validateId(idTheme);
+  }
+
   async stopIfInvalid(data, full = false, colors = true, debug = "") {
-    const issues = await this.validateRemote(data, full);
+    const { issues } = await this.validate(data, full);
 
     if (isNotEmpty(issues)) {
       console.warn(`Invalid theme (full:${full}) `, issues);
@@ -113,15 +146,12 @@ class Theme extends EventSimple {
 
   /**
    * Update themes from remote server
-   * @param {boolean} skipUIUpdate - Prevents UI updates to avoid circular dependencies
    */
   async updateThemes() {
     const t = this;
     try {
       const remoteThemes = await t.listRemote();
-      if (isNotEmpty(remoteThemes)) {
-        await t.addThemes(remoteThemes);
-      }
+      await t.addThemes(remoteThemes);
     } catch (e) {
       console.warn("Failed to load remote themes:", e);
     }
@@ -231,19 +261,28 @@ class Theme extends EventSimple {
     return t.ids().includes(id);
   }
 
+  isExistingIdLocal(id) {
+    const t = this;
+    // Check if ID exists in either built-in or custom themes
+    return t
+      .listLocal()
+      .map((t) => t.id)
+      .includes(id);
+  }
+
   get(id) {
     const t = this;
     if (!id) {
       id = t.id();
     }
-    return t.listAsObject()[id];
+    return t.list().find((t) => t.id === id);
   }
 
   /**
    * Registered custom themes ids
    */
   idsCustom() {
-    return custom_themes.map((t) => t.id);
+    return themes_custom.map((t) => t.id);
   }
 
   /**
@@ -255,31 +294,22 @@ class Theme extends EventSimple {
 
   /**
    *
-   * @returns Object of themes with theme id as key
-   */
-  listAsObject() {
-    const allThemes = {};
-    const themes = this.list();
-    for (const theme of themes) {
-      allThemes[theme.id] = theme;
-    }
-    return allThemes;
-  }
-
-  /**
-   *
    * @returns array of themes
    */
   list() {
-    const all = [...Object.values(themes), ...custom_themes];
+    const all = [...themes_custom, ...themes];
     return all;
   }
 
-  async listClean(onlyPublic) {
-    const t = this;
-    const defaults = Object.values(themes);
-    const remote = await t.listRemote(onlyPublic);
-    return [...remote, ...defaults];
+  listLocal() {
+    return themes;
+  }
+  /**
+   * Services
+   */
+  async listRemote(onlyPublic = true) {
+    const response = await this._s.list(onlyPublic);
+    return response.themes || [];
   }
 
   /**
@@ -287,7 +317,7 @@ class Theme extends EventSimple {
    * Called when switching projects
    */
   clearCustomThemes() {
-    custom_themes.length = 0;
+    themes_custom.length = 0;
     t.fire("list_updated");
   }
 
@@ -300,7 +330,7 @@ class Theme extends EventSimple {
     const t = this;
     const p = [];
     for (const theme of themes) {
-      p.push(t.addTheme(theme, true));
+      p.push(t.addOrUpdateTheme(theme, true));
     }
     await Promise.all(p);
     if (!skipEvent) {
@@ -314,21 +344,66 @@ class Theme extends EventSimple {
    * @param {Boolean} skipEvent - skipEvent
    * @return {Promise<Boolean>} the set value
    */
-  async addTheme(theme, skipEvent = false) {
+  async addOrUpdateTheme(theme, skipEvent = false) {
     const t = this;
-    await this.stopIfInvalid(theme);
-    const existingIndex = t.idsCustom().indexOf(theme.id);
-    if (existingIndex >= 0) {
-      custom_themes[existingIndex] = theme;
+    await t.stopIfInvalid(theme);
+    const oldTheme = t.getCustom(theme.id);
+
+    if (oldTheme) {
+      patchObject(oldTheme, theme);
     } else {
-      custom_themes.push(theme);
+      themes_custom.push(theme);
     }
+
+    await t.set(theme);
 
     if (!skipEvent) {
       t.fire("list_updated");
     }
 
-    return await t.set(theme);
+    return true;
+  }
+
+  async deleteTheme(theme, skipEvent = false) {
+    try {
+      const t = this;
+
+      await t.stopIfInvalid(theme);
+      const oldTheme = t.getCustom(theme.id);
+
+      if (!oldTheme) {
+        itemFlashCancel();
+        console.warn("Theme not found");
+        return;
+      }
+
+      const confirmed = await modalConfirm({
+        title: tt("mx_theme_delete_button"),
+        content: `Are you sure you want to delete theme "${oldTheme.id}"?`,
+        confirm: tt("btn_delete"),
+        cancel: tt("btn_cancel"),
+      });
+
+      if (!confirmed) {
+        itemFlashCancel();
+        return;
+      }
+
+      await t._s.delete(oldTheme.id);
+
+      const pos = themes_custom.indexOf(oldTheme);
+      themes_custom.splice(pos, 1);
+
+      await t.set(t.getDefault());
+
+      if (!skipEvent) {
+        t.fire("list_updated");
+      }
+      itemFlashSave();
+    } catch (e) {
+      console.error("Failed to delete theme:", e);
+      itemFlashWarning();
+    }
   }
 
   updateBrowserThemeColor(color) {
@@ -358,7 +433,7 @@ class Theme extends EventSimple {
     const t = this;
 
     if (isEmpty(theme)) {
-      return;
+      theme = t.id();
     }
 
     opt = Object.assign(
@@ -380,6 +455,9 @@ class Theme extends EventSimple {
       }
 
       if (isId) {
+        if (theme === t.id()) {
+          return;
+        }
         theme = t.get(theme);
       }
 
@@ -388,8 +466,8 @@ class Theme extends EventSimple {
       }
 
       if (!theme?.id) {
-        console.log('Invalid theme, use default')
-        theme = themes[t._opt.id_default];
+        console.warn("Invalid theme, use default");
+        theme = t.getDefault();
       }
 
       await t.stopIfInvalid(theme);
@@ -805,6 +883,7 @@ class Theme extends EventSimple {
         t.off("list_updated", updateList);
         t.off("theme_changed", updateSelected);
         delete t._themeModal;
+        t.reset();
       },
     });
     t._themeModal.init().catch(console.error);
@@ -812,10 +891,10 @@ class Theme extends EventSimple {
     t.on("list_updated", updateList);
     t.on("theme_changed", updateSelected);
     function updateList() {
-      t._themeModal.buildSelect(true);
+      t._themeModal.update();
     }
-    function updateSelected(theme) {
-      t._themeModal.setSelected(theme?.id);
+    function updateSelected() {
+      t._themeModal.update();
     }
     t.on("close", t._themeModal.destroy);
   }
@@ -828,37 +907,25 @@ class Theme extends EventSimple {
   }
 
   /**
-   * Services
-   */
-  async listRemote(onlyPublic = true) {
-    const response = await this._s.list(onlyPublic);
-    if (response.error) {
-      console.warn("Failed to list remote themes:", response.error);
-      return [];
-    }
-    return response.themes || [];
-  }
-
-  /**
    * Resolve theme based on criteria : tree / dark / water
    * Prioritizes custom themes over built-in themes
    */
   resolver(opt) {
     const t = this;
-    const cTheme = custom_themes.find((theme) => {
+    const themes = t.list();
+    const theme = themes.find((theme) => {
       return t.filterTheme(theme, opt);
     });
-    if (cTheme) {
-      return cTheme;
+    if (theme) {
+      return theme;
     }
-    // Then check built-in themes
-    for (const theme of Object.values(themes)) {
-      if (t.filterTheme(theme, opt)) {
-        return theme;
-      }
-    }
-    console.warn("Theme not found, returning default");
-    return themes.color_light;
+    console.warn("resolver failed, use default");
+    return t.getDefault();
+  }
+
+  getDefault() {
+    const t = this;
+    return themes.find((theme) => theme.id === t._opt.id_default);
   }
 
   filterTheme(theme, opt) {
@@ -868,9 +935,9 @@ class Theme extends EventSimple {
     }
   }
 
-  inverseResolver(themeId) {
+  inverseResolver(idTheme) {
     const t = this;
-    const theme = t.get(themeId);
+    const theme = t.get(idTheme);
     if (!theme) {
       return def;
     }

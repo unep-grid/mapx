@@ -9756,8 +9756,8 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save",
-    "de": "Speichern"
+    "en": "Save or update...",
+    "de": "Speichern oder aktualisieren..."
   },
   {
     "id": "mx_theme_create_button",

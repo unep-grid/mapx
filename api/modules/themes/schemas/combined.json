@@ -1,55 +1,55 @@
 {
-  "$async": true,
-  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
+  "required": ["id", "label", "description"],
   "properties": {
     "id": {
       "type": "string",
       "minLength": 3,
-      "maxLength": 40
+      "maxLength": 40,
+      "pattern": "^[a-z_0-9]+$",
+      "title": "Theme ID",
+      "description": "Unique identifier for the theme"
     },
     "description": {
       "type": "object",
+      "title": "Description",
+      "description": "Theme description, purpose, etc",
       "properties": {
         "en": {
           "type": "string",
-          "minLength": 3,
+          "minLength": 10,
           "maxLength": 100
         }
       },
-      "required": [
-        "en"
-      ]
+      "required": ["en"]
     },
     "label": {
       "type": "object",
+      "title": "Label",
+      "description": "Theme label is displayed in UI : list, text",
       "properties": {
         "en": {
           "type": "string",
           "minLength": 3,
-          "maxLength": 40,
-          "title": "Label",
-          "description": "Label for the theme"
+          "maxLength": 40
         }
       },
-      "required": [
-        "en"
-      ]
+      "required": ["en"]
     },
     "dark": {
-      "type": "boolean"
+      "type": "boolean",
+      "format": "checkbox",
+      "description": "Optimized for low-light environments"
     },
     "tree": {
-      "type": "boolean"
+      "type": "boolean",
+      "format": "checkbox",
+      "description": "Emphasizes vegetation and forest cover"
     },
     "water": {
-      "type": "boolean"
-    },
-    "base": {
-      "type": "boolean"
-    },
-    "public": {
-      "type": "boolean"
+      "type": "boolean",
+      "format": "checkbox",
+      "description": "Emphasizes rivers, lakes, and water features"
     },
     "creator": {
       "type": "integer"
@@ -232,23 +232,13 @@
       }
     }
   },
-  "required": [
-    "id",
-    "description",
-    "creator",
-    "last_editor",
-    "colors"
-  ],
   "definitions": {
     "colorProperty": {
       "type": "object",
       "properties": {
         "visibility": {
           "type": "string",
-          "enum": [
-            "visible",
-            "none"
-          ]
+          "enum": ["visible", "none"]
         },
         "color": {
           "type": "string",
@@ -258,10 +248,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "visibility",
-        "color"
-      ],
+      "required": ["visibility", "color"],
       "additionalProperties": false
     }
   }

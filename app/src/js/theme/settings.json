@@ -2,7 +2,6 @@
   "elStyle": null,
   "elContainer": null,
   "map": null,
-  "themes": [],
   "fonts_enabled": {
     "css": ["mx_ui_text"],
     "map": [

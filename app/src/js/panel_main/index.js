@@ -5,8 +5,6 @@ import "./less/mx_panel.less";
 import { EventSimple } from "./../event_simple";
 import { modalChangelog } from "./../changelog";
 import { isShinyReady } from "../mx_helper_misc";
-import Logo from "../../svg/map-x-logo.svg";
-import { settings } from "../settings";
 
 /**
  * This is a partial implementation of the main MapX panel
@@ -72,16 +70,7 @@ class MainPanel extends EventSimple {
       },
       htmlImport,
     );
-    const elLogo = mp.elContent.querySelector("#logo");
 
-    // project logo could be set here
-    /*    if (settings.project.logo) {
-     *      elLogo.appendChild(el("span", settings.project.logo));
-     *    } else {
-     *      elLogo.appendChild(el("span", Logo));
-     *    }
-     */
-    elLogo.appendChild(el("span", Logo));
 
     mp.panel = new ButtonPanel(mp.opt.panel);
     mp.panel.elPanelContent.appendChild(mp.elContent);

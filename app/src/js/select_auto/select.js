@@ -31,7 +31,6 @@ export class SelectAuto extends EventSimple {
       Object.assign(se._opt.config, config);
     }
 
-
     se.destroy = se.destroy.bind(se);
   }
 
@@ -47,7 +46,7 @@ export class SelectAuto extends EventSimple {
 
   get value() {
     const se = this;
-    se._tom.getValue();
+    return se._tom.getValue();
   }
 
   set value(value) {
@@ -55,10 +54,15 @@ export class SelectAuto extends EventSimple {
     se._tom.setValue(value);
   }
 
-  update() {
+  get options() {
+    const se = this;
+    return se._tom.options;
+  }
+
+  update(value) {
     const se = this;
     if (se._tom._update) {
-      se._tom._update();
+      return se._tom._update(value);
     }
   }
 
@@ -88,7 +92,6 @@ export class SelectAuto extends EventSimple {
     const se = this;
     const TomSelect = await moduleLoad("tom-select");
     const config = await getConfig(se._opt.type, se._opt.config);
-
     se._tom = new TomSelect(se._opt.target, config);
 
     /**

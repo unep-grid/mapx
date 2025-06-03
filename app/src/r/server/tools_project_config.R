@@ -193,7 +193,7 @@ observeEvent(input$btnSaveProjectConfig, {
 
     # Appearance section
     logo <- .get(data, c("appearance", "logo"))
-    theme <- .get(data, c("appearance", "theme"))
+    theme <- .get(data, c("appearance", "theme"), config$themes$default)
     countries <- .get(data, c("appearance", "countries"), list())
 
     # Map settings section

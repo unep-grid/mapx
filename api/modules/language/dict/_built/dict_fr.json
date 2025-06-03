@@ -9756,8 +9756,8 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save",
-    "fr": "Sauvegarder"
+    "en": "Save or update...",
+    "fr": "Enregistrer ou mettre à jour..."
   },
   {
     "id": "mx_theme_create_button",

@@ -5,7 +5,6 @@
   "creator": 1,
   "last_editor": 1,
   "date_modified": "2025-05-27T10:00:00.000Z",
-  "public": true,
   "colors": {
     "mx_ui_link": {
       "visibility": "visible",
@@ -245,7 +244,6 @@
   "dark": false,
   "tree": true,
   "water": true,
-  "base": false,
   "description": {
     "en": "Professional UN-themed color scheme with signature blue tones, optimized for international mapping and data visualization applications"
   },

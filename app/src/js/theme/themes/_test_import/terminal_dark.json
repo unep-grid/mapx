@@ -245,7 +245,5 @@
       "visibility": "visible",
       "color": "rgb(255,100,0)"
     }
-  },
-  "base": false,
-  "public": false
+  }
 }

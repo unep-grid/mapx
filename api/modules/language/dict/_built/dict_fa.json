@@ -9756,8 +9756,8 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save",
-    "fa": "ذخیره"
+    "en": "Save or update...",
+    "fa": "ذخیره یا به‌روزرسانی..."
   },
   {
     "id": "mx_theme_create_button",
