@@ -53,7 +53,6 @@ function update() {
     // Add options directly
     tom.clearOptions();
     tom.addOptions(themes);
-    tom.refreshOptions(false);
     tom.setValue(id);
     tom.enable();
 

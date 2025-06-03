@@ -403,7 +403,7 @@ export class ThemeModal extends EventSimple {
      */
     function validateId(id, idThemes) {
       const loc = tm._theme.isExistingIdLocal(id);
-      
+
       if (loc && operation !== "export") {
         return "Reserved id";
       }
@@ -722,45 +722,48 @@ export class ThemeModal extends EventSimple {
       }
 
       // Assuming the imported file contains a single theme object
-      const importedTheme = data[0];
-
-      // Basic validation of file structure
-      if (!importedTheme || !importedTheme.colors) {
-        throw new Error("Invalid theme file structure");
-      }
-
-      // Extract metadata from imported theme for the editor
-      const startValues = {
-        id: importedTheme.id,
-        description: importedTheme.description || { en: "" },
-        label: importedTheme.label || { en: "" },
-        creator: importedTheme.creator || 1,
-        last_editor: importedTheme.last_editor || 1,
-        date_modified: importedTheme.date_modified || new Date().toISOString(),
-        dark: importedTheme.dark || false,
-        tree: importedTheme.tree || false,
-        water: importedTheme.water || false,
-        base: importedTheme.base || false,
-        public: importedTheme.public || false,
-      };
-
-      // Show metadata editor modal FIRST - allows user to resolve conflicts and customize
-      const metadata = await tm.showMetadataEditorModal("import", startValues);
+      const importedTheme = tm.cleanKeys(data[0]);
+      await tm._theme.stopIfInvalid(importedTheme, false, true);
+      const metadata = await tm.showMetadataEditorModal(
+        "import",
+        importedTheme,
+      );
 
       if (!metadata) {
         itemFlashCancel();
         return;
       }
 
-      // Create final theme object with updated metadata and original colors
-      const finalTheme = Object.assign({}, importedTheme, metadata);
-
-      // Register and preview the theme
-      await tm._theme.addOrUpdateTheme(finalTheme);
+      const theme = Object.assign({}, importedTheme, metadata);
+      await tm._theme.save(theme);
     } catch (e) {
       itemFlashWarning();
       console.error("Failed to import theme:", e);
     }
+  }
+
+  /**
+   * Workaround where keys in themes do not match current system, or
+   * when also containing metadata like $div, $order, etc..
+   */
+  cleanKeys(theme) {
+    const out = {};
+    const keys = [
+      "id",
+      "label",
+      "description",
+      "creator",
+      "last_editor",
+      "date_modified",
+      "dark",
+      "tree",
+      "water",
+      "colors",
+    ];
+    for (const key of keys) {
+      out[key] = theme[key];
+    }
+    return out;
   }
 
   async exportTheme() {
@@ -780,8 +783,8 @@ export class ThemeModal extends EventSimple {
 
       // Validate the theme object before export
       await tm._theme.stopIfInvalid(theme, false, true);
-
-      await downloadJSON(theme, `${makeSafeName(theme.id)}.json`);
+      const outTheme = tm.cleanKeys(theme);
+      await downloadJSON(outTheme, `${makeSafeName(theme.id)}.json`);
     } catch (e) {
       itemFlashWarning();
       console.error("Failed to export theme:", e);
