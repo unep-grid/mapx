@@ -1,3 +1,28 @@
+  - [1.13.18-alpha.0](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.0) 
+
+    - feat(844): added project update default theme feature
+    - feat(844): working version
+    - feat(844): fix import's unwanted theme key
+    - feat(844): refactor, use more stable approach
+    - feat(844): fixed some validation issues, still not stable
+    - feat(844): improved properties layout in manager
+    - feat(844): moved validation server side, simplified theme loading, visual glitches improvement
+    - feat(844): logic improvemnt for theme lifecycle
+    - feat(844): translations, comments set/get methods
+    - feat(844): theme manager improvement + style applied to logos
+    - feat(844): simplified theme modal and themes list, still unstable
+    - feat(844): themes can be imported and from project config - still unstable
+    - feat(844): added proper theme manager modal + label support + improve theme loading
+    - feat(844): partial theme rewrite before refactoring
+    - feat(844): project theme support improvement
+    - fix(jed): premature return in editor 'ready' callback
+    - feat(844): finalized lifecycle + display information panel
+    - feat(844): first working version
+    - Merge branch 'staging' into feature/project_config_844
+    - feat(844): unified project configuration in a single schema
+    - refactor(project_config): add SVG logo + UI + DB patch + svg json-editor editor
+
+
   - [1.13.17](https://github.com/unep-grid/mapx/tree/1.13.17) 
 
 
