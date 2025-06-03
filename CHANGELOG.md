@@ -1,3 +1,8 @@
+  - [1.13.18-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.1) 
+
+    - fix(index.html): typo
+
+
   - [1.13.18-alpha.0](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.0) 
 
     - feat(844): added project update default theme feature
