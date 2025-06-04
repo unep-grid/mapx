@@ -296,101 +296,7 @@ mapx.once("ready", async () => {
     ],
   });
 
-  t.check("highlighter", {
-    init: async () => {
-      const res = {};
-      const resp = await fetch("data/iceland_test.geojson");
-      const gj = await resp.json();
-      const view = await mapx.ask("view_geojson_create", { data: gj });
-      res.boundsOrig = await mapx.ask("map_get_bounds_array");
-      await mapx.ask("map_jump_to", {
-        center: [-18.785, 65.267],
-        zoom: 6,
-      });
-      res.view = view;
-      return res;
-    },
-    tests: [
-      {
-        name: "position wait",
-        test: () => {
-          // map_jump_to return after move_end
-          // the view is there, but queryRenderedFeatures returns nothing
-          return waitAsync(1000);
-        },
-      },
-      {
-        name: "filter none",
-        test: async (res) => {
-          const count = await mapx.ask("set_highlighter", {
-            filters: [
-              {
-                id: res.view.id,
-                filter: [
-                  "any",
-                  [">", ["get", "amount"], 100],
-                  ["in", ["get", "id_4"], ["literal", ["x", "y"]]],
-                ],
-              },
-            ],
-          });
-          return count === 0;
-        },
-      },
-      {
-        name: "filter all",
-        test: async () => {
-          const count = await mapx.ask("set_highlighter", {
-            all: true,
-          });
-          return count === 3;
-        },
-      },
-      {
-        name: "filter one",
-        test: async (res) => {
-          const count = await mapx.ask("set_highlighter", {
-            filters: [
-              {
-                id: res.view.id,
-                filter: [
-                  "all",
-                  [">", ["get", "amount"], 20],
-                  ["in", ["get", "id_4"], ["literal", ["a", "b"]]],
-                ],
-              },
-            ],
-          });
-          return count === 1;
-        },
-      },
-
-      {
-        name: "filter one update",
-        test: async () => {
-          const count = await mapx.ask("update_highlighter");
-          return count === 1;
-        },
-      },
-      {
-        name: "filter reset",
-        test: async () => {
-          const count = await mapx.ask("reset_highlighter");
-          return count === 0;
-        },
-      },
-      {
-        name: "Reset bounds",
-        test: async (res) => {
-          await mapx.ask("map_set_bounds_array", {
-            bounds: res.boundsOrig,
-          });
-          return true;
-        },
-      },
-    ],
-  });
-
+  
   t.check("Set theme", {
     init: async () => {
       const res = {};
@@ -1572,6 +1478,102 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
+  t.check("highlighter", {
+    init: async () => {
+      const res = {};
+      const resp = await fetch("data/iceland_test.geojson");
+      const gj = await resp.json();
+      const view = await mapx.ask("view_geojson_create", { data: gj });
+      res.boundsOrig = await mapx.ask("map_get_bounds_array");
+      await mapx.ask("map_jump_to", {
+        center: [-18.785, 65.267],
+        zoom: 6,
+      });
+      res.view = view;
+      return res;
+    },
+    tests: [
+      {
+        name: "position wait",
+        test: () => {
+          // map_jump_to return after move_end
+          // the view is there, but queryRenderedFeatures returns nothing
+          return waitAsync(1000);
+        },
+      },
+      {
+        name: "filter none",
+        test: async (res) => {
+          const count = await mapx.ask("set_highlighter", {
+            filters: [
+              {
+                id: res.view.id,
+                filter: [
+                  "any",
+                  [">", ["get", "amount"], 100],
+                  ["in", ["get", "id_4"], ["literal", ["x", "y"]]],
+                ],
+              },
+            ],
+          });
+          return count === 0;
+        },
+      },
+      {
+        name: "filter all",
+        test: async () => {
+          const count = await mapx.ask("set_highlighter", {
+            all: true,
+          });
+          return count === 3;
+        },
+      },
+      {
+        name: "filter one",
+        test: async (res) => {
+          const count = await mapx.ask("set_highlighter", {
+            filters: [
+              {
+                id: res.view.id,
+                filter: [
+                  "all",
+                  [">", ["get", "amount"], 20],
+                  ["in", ["get", "id_4"], ["literal", ["a", "b"]]],
+                ],
+              },
+            ],
+          });
+          return count === 1;
+        },
+      },
+
+      {
+        name: "filter one update",
+        test: async () => {
+          const count = await mapx.ask("update_highlighter");
+          return count === 1;
+        },
+      },
+      {
+        name: "filter reset",
+        test: async () => {
+          const count = await mapx.ask("reset_highlighter");
+          return count === 0;
+        },
+      },
+      {
+        name: "Reset bounds",
+        test: async (res) => {
+          await mapx.ask("map_set_bounds_array", {
+            bounds: res.boundsOrig,
+          });
+          return true;
+        },
+      },
+    ],
+  });
+
 
   t.check("Chaos views display 2", {
     tests: [

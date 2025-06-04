@@ -304,13 +304,16 @@ export class MapxResolversStatic extends MapxResolversPanels {
   get_themes_id() {
     return theme.ids();
   }
+  get_themes_ids() {
+    return theme.ids();
+  }
 
   /**
    * Get all themes
    * @return {Object} Themes object with themes id as key
    */
   get_themes() {
-    return theme.getAll();
+    return theme.list();
   }
 
   /**
@@ -322,14 +325,6 @@ export class MapxResolversStatic extends MapxResolversPanels {
   }
 
   /**
-   * Get all theme id
-   * @return {Array<string>} Theme ids
-   */
-  get_themes_ids() {
-    return theme.ids();
-  }
-
-  /**
    * Add a custom theme into mapx and use it.
    * @param {Object} opt Options
    * @param {String} opt.theme Valid theme (full).
@@ -337,7 +332,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
    */
   add_theme(opt) {
     opt = Object.assign({}, opt);
-    return theme.addTheme(opt.theme, { save_url: true });
+    return theme.addOrUpdateTheme(opt.theme, true, true);
   }
 
   /**
