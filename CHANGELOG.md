@@ -1,3 +1,8 @@
+  - [1.13.18-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.2) 
+
+    - feat(844): refactor project info panel + added terms_of_use
+
+
   - [1.13.18-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.1) 
 
     - fix(index.html): typo
