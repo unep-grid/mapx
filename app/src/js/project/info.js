@@ -4,7 +4,7 @@ import "./style.less";
 import { el, tt } from "../el_mapx";
 import { lo } from "../language";
 import { getArrayDistinct } from "../array_stat";
-import { asArray } from "../mx_helper_misc";
+import { asArray, formatDate } from "../mx_helper_misc";
 
 export async function showProjectInfo() {
   const elInfo = renderProjectInfo(settings.project);
@@ -13,6 +13,7 @@ export async function showProjectInfo() {
     title: elTitle,
     content: elInfo,
     addBackground: true,
+    style: { width: "640px" },
   });
 }
 
@@ -25,9 +26,9 @@ function renderProjectInfo(data) {
 
   const elOut = el("div", { class: "project-info" }, [
     el("div", { class: "well" }, [
+      el("div", { class: "project-info--logo well" }, data.logo),
       el("h3", el("span", lo(data.title))),
       el("p", el("span", lo(data.description))),
-      el("div", { style: { maxWidth: "200px" } }, data.logo),
       el("h4", [
         el("span", { class: ["fa", "fa-briefcase"] }),
         el("span", " "),
@@ -76,10 +77,9 @@ function renderProjectInfo(data) {
         el("dd", el("span", asArray(data.admins).length.toString())),
 
         el("dt", el("span", tt("project_date_created"))),
-        el("dd", el("span", { class: ["text-muted"] }, data.date_created)),
-
+        el("dd", el("span", formatDate(data.date_created))),
         el("dt", el("span", tt("project_date_modified"))),
-        el("dd", el("span", { class: ["text-muted"] }, data.date_modified)),
+        el("dd", el("span", formatDate(data.date_modified))),
       ]),
     ]),
 

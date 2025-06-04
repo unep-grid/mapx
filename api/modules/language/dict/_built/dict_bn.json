@@ -1430,11 +1430,6 @@
     "bn": "পার্থক্যসমূহ"
   },
   {
-    "id": "diff_modal_no_diff",
-    "en": "No differences found",
-    "bn": "কোন পার্থক্য পাওয়া যায়নি"
-  },
-  {
     "id": "diff_modal_legend",
     "en": "Legend",
     "bn": "সূচি"

@@ -1430,11 +1430,6 @@
     "zh": "差异"
   },
   {
-    "id": "diff_modal_no_diff",
-    "en": "No differences found",
-    "zh": "未发现差异"
-  },
-  {
     "id": "diff_modal_legend",
     "en": "Legend",
     "zh": "图例"

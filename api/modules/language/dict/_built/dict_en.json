@@ -1144,10 +1144,6 @@
     "en": "Differences"
   },
   {
-    "id": "diff_modal_no_diff",
-    "en": "No differences found"
-  },
-  {
     "id": "diff_modal_legend",
     "en": "Legend"
   },

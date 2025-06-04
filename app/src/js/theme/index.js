@@ -122,7 +122,7 @@ class Theme extends EventSimple {
       }
 
       await t._s.save({ theme, setAsProjectDefault });
-      await t.addOrUpdateTheme(theme);
+      await t.addOrUpdateTheme(theme, null, true);
 
       if (setAsProjectDefault) {
         settings.project.theme = theme.id;
@@ -374,7 +374,7 @@ class Theme extends EventSimple {
    * @param {Boolean} skipEvent - skipEvent
    * @return {Promise<Boolean>} the set value
    */
-  async addOrUpdateTheme(theme, skipEvent = false) {
+  async addOrUpdateTheme(theme, skipEvent = false, enable = false) {
     const t = this;
     await t.stopIfInvalid(theme);
     const oldTheme = t.getCustom(theme.id);
@@ -385,7 +385,9 @@ class Theme extends EventSimple {
       themes_custom.push(theme);
     }
 
-    await t.set(theme);
+    if (enable) {
+      await t.set(theme);
+    }
 
     if (!skipEvent) {
       t.fire("list_updated");
@@ -461,6 +463,12 @@ class Theme extends EventSimple {
    */
   async set(theme, opt) {
     const t = this;
+
+    if (t._updating) {
+      t._updating = false;
+      return;
+    }
+    t._updating = true;
 
     if (isEmpty(theme)) {
       theme = t.id();
@@ -549,8 +557,9 @@ class Theme extends EventSimple {
     } catch (e) {
       console.warn(e);
     } finally {
-      t._is_setting = false;
+      t._updating = false;
     }
+
     return false;
   }
 

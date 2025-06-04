@@ -1430,11 +1430,6 @@
     "de": "Unterschiede"
   },
   {
-    "id": "diff_modal_no_diff",
-    "en": "No differences found",
-    "de": "Keine Unterschiede gefunden"
-  },
-  {
     "id": "diff_modal_legend",
     "en": "Legend",
     "de": "Legende"

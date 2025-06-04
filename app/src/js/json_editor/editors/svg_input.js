@@ -105,6 +105,9 @@ JSONEditor.defaults.editors.svg_input = class mxeditors extends (
         borderRadius: "10px",
         backgroundColor: "var(--mx_ui_background)",
         backgroundImage: "var(--mx_ui_pattern_checker)",
+        maxWidth: "100%",
+        maxHeight : "300px",
+        overflow: "auto",
       },
     });
 
@@ -128,7 +131,7 @@ JSONEditor.defaults.editors.svg_input = class mxeditors extends (
   }
 
   async processFile(file) {
-    const maxSize = 100 * 1024; // 100 KB limit
+    const maxSize = 50 * 1024; // 50 KB limit
     if (file.size > maxSize) {
       this.showError(`SVG exceeds ${maxSize / 1024} KB limit.`);
       return;

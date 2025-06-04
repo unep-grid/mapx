@@ -1430,11 +1430,6 @@
     "ar": "الاختلافات"
   },
   {
-    "id": "diff_modal_no_diff",
-    "en": "No differences found",
-    "ar": "لم يتم العثور على اختلافات"
-  },
-  {
     "id": "diff_modal_legend",
     "en": "Legend",
     "ar": "مفتاح الرموز"

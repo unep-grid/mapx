@@ -1430,11 +1430,6 @@
     "fa": "تفاوت‌ها"
   },
   {
-    "id": "diff_modal_no_diff",
-    "en": "No differences found",
-    "fa": "هیچ تفاوتی یافت نشد"
-  },
-  {
     "id": "diff_modal_legend",
     "en": "Legend",
     "fa": "راهنما"

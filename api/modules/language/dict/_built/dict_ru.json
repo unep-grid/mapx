@@ -1430,11 +1430,6 @@
     "ru": "Различия"
   },
   {
-    "id": "diff_modal_no_diff",
-    "en": "No differences found",
-    "ru": "Различий не найдено"
-  },
-  {
     "id": "diff_modal_legend",
     "en": "Legend",
     "ru": "Легенда"

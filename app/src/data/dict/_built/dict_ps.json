@@ -1430,11 +1430,6 @@
     "ps": "توپيرونه"
   },
   {
-    "id": "diff_modal_no_diff",
-    "en": "No differences found",
-    "ps": "هیڅ توپیر ونه موندل شو"
-  },
-  {
     "id": "diff_modal_legend",
     "en": "Legend",
     "ps": "لیجنډ"

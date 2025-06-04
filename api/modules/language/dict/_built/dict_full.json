@@ -3718,19 +3718,6 @@
     "de": "Unterschiede"
   },
   {
-    "id": "diff_modal_no_diff",
-    "en": "No differences found",
-    "fr": "Aucune différence trouvée",
-    "es": "No se encontraron diferencias",
-    "ru": "Различий не найдено",
-    "zh": "未发现差异",
-    "ar": "لم يتم العثور على اختلافات",
-    "fa": "هیچ تفاوتی یافت نشد",
-    "ps": "هیڅ توپیر ونه موندل شو",
-    "bn": "কোন পার্থক্য পাওয়া যায়নি",
-    "de": "Keine Unterschiede gefunden"
-  },
-  {
     "id": "diff_modal_legend",
     "en": "Legend",
     "fr": "Légende",

@@ -24,7 +24,6 @@ import { jedInit } from "../json_editor"; // Import jedInit
 import { settings } from "../mx.js";
 import { getDictItem } from "../mx_helpers.js";
 import { SelectAuto } from "../select_auto";
-import { getArrayDiff } from "../array_stat/index.js";
 
 export class ThemeModal extends EventSimple {
   constructor(opt) {
@@ -326,7 +325,6 @@ export class ThemeModal extends EventSimple {
         show_errors: "always",
         no_additional_properties: true,
         prompt_before_delete: false,
-        show_errors: "interaction",
         custom_validators: [
           (_, value, path) => {
             const errors = [];

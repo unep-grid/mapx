@@ -42,7 +42,6 @@ export class DataDiffModal {
       useTarget: "diff_modal_use_target",
       cancel: "diff_modal_cancel",
       diffs: "diff_modal_diffs",
-      noDiffs: "diff_modal_no_diff",
       legend: "diff_modal_legend",
       legendSource: "diff_modal_legend_source",
       legendTarget: "diff_modal_legend_target",
@@ -79,10 +78,7 @@ export class DataDiffModal {
     const diff = await this.getDiff();
 
     if (!diff || Object.keys(diff).length === 0) {
-      await modalDialog({
-        title: this.t(this.langKeys.modalTitle),
-        content: this.t(this.langKeys.noDiffs),
-      });
+      console.log('Diff tool : no diff');
       return false;
     }
 
