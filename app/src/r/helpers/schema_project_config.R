@@ -77,6 +77,12 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
                 default = projectData$org_contact_email
               )
             )
+          ),
+          terms_of_use = list(
+            type = "string",
+            title = tt("project_terms_of_use"),
+            default = projectData$terms_of_use,
+            description = tt("project_terms_of_use_desc")
           )
         )
       ),
@@ -109,7 +115,7 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
               loader = "countries"
             )
           ),
-          theme= list(
+          theme = list(
             type = "string",
             title = tt("project_id_theme"),
             default = projectData$theme,
@@ -254,7 +260,8 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
         org_name = projectData$org_name,
         org_contact_name = projectData$org_contact_name,
         org_contact_email = projectData$org_contact_email
-      )
+      ),
+      terms_of_use = projectData$terms_of_use
     ),
     appearance = list(
       logo = projectData$logo,

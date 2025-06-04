@@ -434,6 +434,7 @@ mxDbSaveProjectData <- function(idProject, values = list(
   active = NULL,
   title = NULL,
   alias = NULL,
+  terms_of_use = NULL,
   description = NULL,
   admins = NULL,
   members = NULL,
@@ -515,6 +516,7 @@ mxDbSaveProjectData <- function(idProject, values = list(
 
   for (key in c(
     "alias",
+    "terms_of_use",
     "theme",
     "logo",
     "org_name",

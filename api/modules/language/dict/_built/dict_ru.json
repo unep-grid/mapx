@@ -8170,6 +8170,51 @@
     "ru": "Настройки доступа к проекту"
   },
   {
+    "id": "project_date_modified",
+    "en": "Date of the last modification",
+    "ru": "Дата последнего изменения"
+  },
+  {
+    "id": "project_date_created",
+    "en": "Date of creation",
+    "ru": "Дата создания"
+  },
+  {
+    "id": "project_stats",
+    "en": "Project stats",
+    "ru": "Статистика проекта"
+  },
+  {
+    "id": "project_members_count",
+    "en": "Number of members",
+    "ru": "Количество членов"
+  },
+  {
+    "id": "project_publishers_count",
+    "en": "Number of publishers",
+    "ru": "Количество издателей"
+  },
+  {
+    "id": "project_users_count",
+    "en": "Number of distinct registered users",
+    "ru": "Количество отдельных зарегистрированных пользователей"
+  },
+  {
+    "id": "project_admins_count",
+    "en": "Number of admins",
+    "ru": "Количество администраторов"
+  },
+  {
+    "id": "project_terms_of_use",
+    "en": "Terms of use",
+    "ru": "Условия эксплуатации"
+  },
+  {
+    "id": "project_terms_of_use_desc",
+    "en": "Additional terms of use for this project",
+    "ru": "Дополнительные условия использования этого проекта"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "ru": "Тема"

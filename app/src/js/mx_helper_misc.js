@@ -76,6 +76,17 @@ export function asBoolean(value) {
 }
 
 /**
+* Coerse value as an array 
+* @param {any} value 
+* @returns {Array} value or array with value
+*/ 
+export function asArray(value) {
+  if (isArray(value)) {
+    return value;
+  }
+  return [value];
+}
+/**
  * File selector hack
  * -> file input "cancel" event do not exists.
  * -> use focus on window to get the info that the dialog is gone

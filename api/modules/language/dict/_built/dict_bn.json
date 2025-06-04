@@ -8170,6 +8170,51 @@
     "bn": "প্রকল্প অ্যাক্সেস সেটিংস"
   },
   {
+    "id": "project_date_modified",
+    "en": "Date of the last modification",
+    "bn": "শেষ পরিবর্তনের তারিখ"
+  },
+  {
+    "id": "project_date_created",
+    "en": "Date of creation",
+    "bn": "সৃষ্টির তারিখ"
+  },
+  {
+    "id": "project_stats",
+    "en": "Project stats",
+    "bn": "প্রকল্পের পরিসংখ্যান"
+  },
+  {
+    "id": "project_members_count",
+    "en": "Number of members",
+    "bn": "সদস্য সংখ্যা"
+  },
+  {
+    "id": "project_publishers_count",
+    "en": "Number of publishers",
+    "bn": "প্রকাশকের সংখ্যা"
+  },
+  {
+    "id": "project_users_count",
+    "en": "Number of distinct registered users",
+    "bn": "স্বতন্ত্র নিবন্ধিত ব্যবহারকারীর সংখ্যা"
+  },
+  {
+    "id": "project_admins_count",
+    "en": "Number of admins",
+    "bn": "অ্যাডমিনের সংখ্যা"
+  },
+  {
+    "id": "project_terms_of_use",
+    "en": "Terms of use",
+    "bn": "ব্যবহারের শর্তাবলী"
+  },
+  {
+    "id": "project_terms_of_use_desc",
+    "en": "Additional terms of use for this project",
+    "bn": "এই প্রকল্পের ব্যবহারের অতিরিক্ত শর্তাবলী"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "bn": "থিম"

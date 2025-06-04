@@ -6536,6 +6536,42 @@
     "en": "Project access settings"
   },
   {
+    "id": "project_date_modified",
+    "en": "Date of the last modification"
+  },
+  {
+    "id": "project_date_created",
+    "en": "Date of creation"
+  },
+  {
+    "id": "project_stats",
+    "en": "Project stats"
+  },
+  {
+    "id": "project_members_count",
+    "en": "Number of members"
+  },
+  {
+    "id": "project_publishers_count",
+    "en": "Number of publishers"
+  },
+  {
+    "id": "project_users_count",
+    "en": "Number of distinct registered users"
+  },
+  {
+    "id": "project_admins_count",
+    "en": "Number of admins"
+  },
+  {
+    "id": "project_terms_of_use",
+    "en": "Terms of use"
+  },
+  {
+    "id": "project_terms_of_use_desc",
+    "en": "Additional terms of use for this project"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme"
   },

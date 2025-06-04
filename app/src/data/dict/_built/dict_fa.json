@@ -8170,6 +8170,51 @@
     "fa": "تنظیمات دسترسی پروژه"
   },
   {
+    "id": "project_date_modified",
+    "en": "Date of the last modification",
+    "fa": "تاریخ آخرین اصلاح"
+  },
+  {
+    "id": "project_date_created",
+    "en": "Date of creation",
+    "fa": "تاریخ ایجاد"
+  },
+  {
+    "id": "project_stats",
+    "en": "Project stats",
+    "fa": "آمار پروژه"
+  },
+  {
+    "id": "project_members_count",
+    "en": "Number of members",
+    "fa": "تعداد اعضا"
+  },
+  {
+    "id": "project_publishers_count",
+    "en": "Number of publishers",
+    "fa": "تعداد ناشران"
+  },
+  {
+    "id": "project_users_count",
+    "en": "Number of distinct registered users",
+    "fa": "تعداد کاربران ثبت‌شده‌ی مجزا"
+  },
+  {
+    "id": "project_admins_count",
+    "en": "Number of admins",
+    "fa": "تعداد مدیران"
+  },
+  {
+    "id": "project_terms_of_use",
+    "en": "Terms of use",
+    "fa": "شرایط استفاده"
+  },
+  {
+    "id": "project_terms_of_use_desc",
+    "en": "Additional terms of use for this project",
+    "fa": "شرایط اضافی استفاده از این پروژه"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "fa": "موضوع"

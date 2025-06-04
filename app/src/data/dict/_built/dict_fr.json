@@ -8170,6 +8170,51 @@
     "fr": "Paramètres d'accès au projet"
   },
   {
+    "id": "project_date_modified",
+    "en": "Date of the last modification",
+    "fr": "Date de la dernière modification"
+  },
+  {
+    "id": "project_date_created",
+    "en": "Date of creation",
+    "fr": "Date de création"
+  },
+  {
+    "id": "project_stats",
+    "en": "Project stats",
+    "fr": "Statistiques du projet"
+  },
+  {
+    "id": "project_members_count",
+    "en": "Number of members",
+    "fr": "Nombre de membres"
+  },
+  {
+    "id": "project_publishers_count",
+    "en": "Number of publishers",
+    "fr": "Nombre d'éditeurs"
+  },
+  {
+    "id": "project_users_count",
+    "en": "Number of distinct registered users",
+    "fr": "Nombre d'utilisateurs enregistrés distincts"
+  },
+  {
+    "id": "project_admins_count",
+    "en": "Number of admins",
+    "fr": "Nombre d'administrateurs"
+  },
+  {
+    "id": "project_terms_of_use",
+    "en": "Terms of use",
+    "fr": "Conditions d'utilisation"
+  },
+  {
+    "id": "project_terms_of_use_desc",
+    "en": "Additional terms of use for this project",
+    "fr": "Conditions d'utilisation supplémentaires pour ce projet"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "fr": "Thème"

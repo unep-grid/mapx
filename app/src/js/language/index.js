@@ -444,8 +444,20 @@ export function checkLanguage(opt) {
 export function getTranslationFromObject(o) {
   o = Object.assign({}, o);
   const lang = checkLanguage(o);
-  const out = path(o.obj, o.path + "." + lang, "");
+
+  const out = path(o.obj, o.path ? o.path + "." + lang : lang, "");
   return out;
+}
+
+/**
+ * Convenience fonction for getTranslationFromObject
+ * @param {object} base object
+ * @param {string} path for lookup
+ * @param {object} options additional options
+ * @returns {string} translated text if exists
+ */
+export function lo(data, path, options) {
+  return getTranslationFromObject({ obj: data, path, ...options });
 }
 
 /**

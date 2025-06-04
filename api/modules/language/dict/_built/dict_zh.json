@@ -8170,6 +8170,51 @@
     "zh": "项目访问设置"
   },
   {
+    "id": "project_date_modified",
+    "en": "Date of the last modification",
+    "zh": "最后修改日期"
+  },
+  {
+    "id": "project_date_created",
+    "en": "Date of creation",
+    "zh": "创建日期"
+  },
+  {
+    "id": "project_stats",
+    "en": "Project stats",
+    "zh": "项目统计"
+  },
+  {
+    "id": "project_members_count",
+    "en": "Number of members",
+    "zh": "会员数量"
+  },
+  {
+    "id": "project_publishers_count",
+    "en": "Number of publishers",
+    "zh": "出版商数量"
+  },
+  {
+    "id": "project_users_count",
+    "en": "Number of distinct registered users",
+    "zh": "不同注册用户数量"
+  },
+  {
+    "id": "project_admins_count",
+    "en": "Number of admins",
+    "zh": "管理员数量"
+  },
+  {
+    "id": "project_terms_of_use",
+    "en": "Terms of use",
+    "zh": "使用条款"
+  },
+  {
+    "id": "project_terms_of_use_desc",
+    "en": "Additional terms of use for this project",
+    "zh": "本项目的附加使用条款"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "zh": "主题"
