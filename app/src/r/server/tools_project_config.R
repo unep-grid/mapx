@@ -53,7 +53,10 @@ observeEvent(input$btnShowProjectConfig, {
       getValidationOnChange = TRUE,
       getValuesOnChange = TRUE,
       draftAutoSaveId = sprintf("jed_project_config_%s", project),
-      draftAutoSaveDbTimestamp = projectTimeStamp
+      draftAutoSaveDbTimestamp = projectTimeStamp,
+      disable_properties = TRUE,
+      no_additional_properties = TRUE,
+      show_errors = "always"
     )
   )
 })

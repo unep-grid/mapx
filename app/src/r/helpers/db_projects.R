@@ -461,6 +461,7 @@ mxDbSaveProjectData <- function(idProject, values = list(
     }
     return(isNotNull)
   }
+
   keys <- c(
     "title",
     "description",
@@ -542,7 +543,7 @@ mxDbSaveProjectData <- function(idProject, values = list(
       idCol = "id",
       id = idProject,
       column = "date_modified",
-      value = Sys.time()
+      value = mxDbTimeStamp()
     )
   }
 }

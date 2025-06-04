@@ -42,7 +42,6 @@ mxDbTest <- function(key) {
   return(ok)
 }
 
-
 #' Test Database Connection
 #'
 #' This internal function tests the active database connection.
@@ -193,155 +192,6 @@ mxDbSlimViews <- function(max = 10, daysback = 60) {
 }
 
 
-
-
-#' Update a single value of a table
-#' @param table Table to update
-#' @param column Column to update
-#' @param idCol Column of identification
-#' @param id Identification value
-#' @param value Replacement value
-#' @param expectedRowsAffected Number of row expected to be affected. If the update change a different number of row than expected, the function will rollback
-#' @return Boolean worked or not
-#' @export
-mxDbUpdate <- function(table, column, idCol = "id", id, value, path = NULL, expectedRowsAffected = 1) {
-  # explicit check
-  stopifnot(mxDbExistsTable(table))
-  stopifnot(mxDbExistsColumns(table, column))
-  # implicit check
-  stopifnot(!isEmpty(id))
-  stopifnot(!isEmpty(idCol))
-
-  # Use single connection for all
-  mxDbWithUniqueCon(function(con) {
-    # final query
-    query <- NULL
-
-    if (!is.null(path)) {
-      # if value has no json class, convert it (single value update)
-      valueIsJson <- isTRUE("json" %in% class(value))
-      if (valueIsJson) {
-        valueJson <- value
-      } else {
-        valueJson <- mxToJsonForDb(value)
-      }
-
-      #
-      # json update
-      #
-      pathIsJson <- isTRUE("json" %in% class(path))
-      if (pathIsJson) {
-        pathJson <- path
-      } else {
-        pathJson <- paste0("{", paste0(paste0("\"", path, "\""), collapse = ","), "}")
-      }
-
-      #
-      # test if the whole path exists and if value is there
-      #
-      isMissing <- sprintf(
-        "
-        SELECT NOT EXISTS(
-          SELECT \"%1$s\" from %2$s
-          WHERE \"%3$s\"='%4$s'
-          AND \"%1$s\"#>>'%5$s' IS NOT NULL
-          ) AS missing
-        ",
-        column,
-        table,
-        idCol,
-        id,
-        pathJson
-      ) %>%
-        mxDbGetQuery(., con = con) %>%
-        `[[`("missing")
-      #
-      # create missing if needed
-      #
-      if (isMissing) {
-        data <- sprintf(
-          "
-        SELECT \"%1$s\"
-        FROM %2$s
-        WHERE \"%3$s\"='%4$s'
-        ",
-          column,
-          table,
-          idCol,
-          id
-        ) %>%
-          mxDbGetQuery(., con = con) %>%
-          `[[`(column) %>%
-          jsonlite::fromJSON(., simplifyDataFrame = FALSE)
-
-        value <- mxSetListValue(data, path, value)
-      } else {
-        query <- sprintf(
-          "
-        UPDATE %1$s
-        SET \"%2$s\"= (
-        SELECT jsonb_set(
-          (
-            SELECT \"%2$s\"
-            FROM %1$s
-            WHERE \"%4$s\"='%5$s'
-            ) ,
-          '%6$s',
-          '%3$s'
-        )
-      )
-      WHERE \"%4$s\"='%5$s'",
-          table,
-          column,
-          valueJson,
-          idCol,
-          id,
-          pathJson
-        )
-      }
-    }
-    # End path
-
-
-    # default update
-    if (is.null(query)) {
-      # if it's a list, convert to json
-      if (is.list(value)) value <- mxToJsonForDb(value)
-      # standard update
-      query <- sprintf(
-        "
-        UPDATE %1$s
-        SET \"%2$s\"='%3$s'
-        WHERE \"%4$s\"='%5$s'",
-        table,
-        column,
-        value,
-        idCol,
-        id
-      )
-    }
-
-    isAsExpeced <- TRUE
-
-    tryCatch({
-      dbWithTransaction(con, {
-        rs <- dbSendStatement(con, query)
-        ra <- dbGetRowsAffected(rs)
-
-        isAsExpected <- isTRUE(ra == expectedRowsAffected)
-        if (!isAsExpected) {
-          dbBreak()
-          warning(sprintf(
-            "Warning, number of rows affected does not match expected rows affected %s vs %s. Rollback requested",
-            ra,
-            expectedRowsAffected
-          ))
-        }
-      })
-    })
-    return(isAsExpected)
-  })
-}
 
 #' Get layer extent
 #' @param table Table/layer from which extract extent
@@ -872,11 +722,19 @@ mxDbGetColumnsTypes <- function(table) {
 #' Format posix to timestamp template for postgres
 #' @param {Character} ts POSIXct object
 #' @return {Character} Timestamp postgres function
-mxDbTimeStampFormater <- function(ts) {
-  if (!isTRUE("POSIXct" %in% class(ts))) stop("need a POSIXct object")
-  ts <- format(ts, "%d-%m-%Y %H:%M:%S")
-  sprintf("to_timestamp('%1$s','dd-mm-yyyy hh24:mi:ss')", ts)
+mxDbTimeStampFormater <- function(ts, use_tz = TRUE) {
+  if (!inherits(ts, "POSIXct")) stop("Need a POSIXct object")
+  format(ts, "%Y-%m-%d %H:%M:%S%z")
 }
+
+#' Timestamp for db
+#'
+#' @return {Character} db timestamp
+mxDbTimeStamp <- function() {
+  mxDbTimeStampFormater(Sys.time())
+}
+
+
 
 
 #' Automatic add row to a table
@@ -884,11 +742,11 @@ mxDbTimeStampFormater <- function(ts) {
 #' @param {Character}
 mxDbAddRow <- function(data, table) {
   tExists <- mxDbExistsTable(table)
-  if (!tExists){
+  if (!tExists) {
     stop(sprintf("mxDbAddRow : table %s does not exists", table))
   }
 
-  if (!is.list(data)){
+  if (!is.list(data)) {
     data <- as.list(data)
   }
 
@@ -1201,6 +1059,21 @@ mxToJsonForDb <- function(listInput) {
     as.character()
 }
 
+#' Create pg compatible version of json, from a R list
+#' @param {list} listInput List to send in a pg table
+#' @export
+mxToJsonForDbParam <- function(listInput) {
+  if (isEmpty(names(listInput))) {
+    #
+    # Force names = null to avoid names = character(0),
+    # which translate in '{}' with toJSON
+    #
+    names(listInput) <- NULL
+  }
+  jsonlite::toJSON(listInput, auto_unbox = TRUE, simplifyVector = FALSE) %>%
+    gsub("[\x09\x01-\x08\x0b\x0c\x0e-\x1f\x7f]", " ", .) %>%
+    as.character()
+}
 
 
 #' Drop layer and associated views
