@@ -1,3 +1,10 @@
+  - [1.13.18-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.3) 
+
+    - fix(project): project info refactoring, various themes issues, svg hndling
+    - fix(db_update): fix issues when update query with data containing special character
+    - feat(844): udpate skd with current theme methods
+
+
   - [1.13.18-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.2) 
 
     - feat(844): refactor project info panel + added terms_of_use
