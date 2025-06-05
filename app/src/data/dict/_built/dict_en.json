@@ -7512,6 +7512,18 @@
     "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel."
   },
   {
+    "id": "mx_theme_error_id_pattern",
+    "en": "Only lowercase letters, numbers, and underscores are allowed."
+  },
+  {
+    "id": "mx_theme_error_id_exists",
+    "en": "ID already exists"
+  },
+  {
+    "id": "mx_theme_error_id_reserved",
+    "en": "ID Reserved"
+  },
+  {
     "id": "mx_theme_open_manager",
     "en": "Theme Manager"
   },
@@ -7862,6 +7874,50 @@
   {
     "id": "mx_theme_remote_empty_message",
     "en": "No themes found on the remote server."
+  },
+  {
+    "id": "mx_theme_schema_title",
+    "en": "Theme Configuration"
+  },
+  {
+    "id": "mx_theme_schema_description",
+    "en": "Configure theme properties and colors"
+  },
+  {
+    "id": "mx_theme_id_description",
+    "en": "Unique identifier for the theme"
+  },
+  {
+    "id": "mx_theme_label_title",
+    "en": "Label"
+  },
+  {
+    "id": "mx_theme_label_description",
+    "en": "Theme label is displayed in UI: list, text"
+  },
+  {
+    "id": "mx_theme_description_description",
+    "en": "Theme description, purpose, etc"
+  },
+  {
+    "id": "mx_theme_dark_description",
+    "en": "Optimized for low-light environments"
+  },
+  {
+    "id": "mx_theme_tree_description",
+    "en": "Emphasizes vegetation and forest cover"
+  },
+  {
+    "id": "mx_theme_water_description",
+    "en": "Emphasizes rivers, lakes, and water features"
+  },
+  {
+    "id": "mx_theme_colors_title",
+    "en": "Colors"
+  },
+  {
+    "id": "mx_ui_highlighter",
+    "en": "UI Highlighter"
   },
   {
     "id": "topic_biota",

@@ -89,10 +89,10 @@ export class ThemeService {
    * @param {boolean} full  - full or paritial / meta validation
    * @returns schema
    */
-  async getSchema(full) {
+  async getSchema(full, language = 'en') {
     const resp = await ws.emitAsync(
       "/client/theme/schema",
-      { full },
+      { full, language },
       10000,
       true,
     );

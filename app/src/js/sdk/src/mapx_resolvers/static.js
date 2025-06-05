@@ -332,7 +332,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
    */
   add_theme(opt) {
     opt = Object.assign({}, opt);
-    return theme.addOrUpdateTheme(opt.theme, true, true);
+    return theme.register(opt.theme, true, true);
   }
 
   /**

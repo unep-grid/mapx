@@ -9390,6 +9390,21 @@
     "zh": "当前分辨率取决于缩放级别和纬度。它表示一个像元覆盖的平均面积。"
   },
   {
+    "id": "mx_theme_error_id_pattern",
+    "en": "Only lowercase letters, numbers, and underscores are allowed.",
+    "zh": "仅允许使用小写字母、数字和下划线。"
+  },
+  {
+    "id": "mx_theme_error_id_exists",
+    "en": "ID already exists",
+    "zh": "ID已存在"
+  },
+  {
+    "id": "mx_theme_error_id_reserved",
+    "en": "ID Reserved",
+    "zh": "ID 保留"
+  },
+  {
     "id": "mx_theme_open_manager",
     "en": "Theme Manager",
     "zh": "主题管理器"
@@ -9828,6 +9843,61 @@
     "id": "mx_theme_remote_empty_message",
     "en": "No themes found on the remote server.",
     "zh": "在远程服务器上未找到主题。"
+  },
+  {
+    "id": "mx_theme_schema_title",
+    "en": "Theme Configuration",
+    "zh": "主题配置"
+  },
+  {
+    "id": "mx_theme_schema_description",
+    "en": "Configure theme properties and colors",
+    "zh": "配置主题属性和颜色"
+  },
+  {
+    "id": "mx_theme_id_description",
+    "en": "Unique identifier for the theme",
+    "zh": "主题的唯一标识符"
+  },
+  {
+    "id": "mx_theme_label_title",
+    "en": "Label",
+    "zh": "标签"
+  },
+  {
+    "id": "mx_theme_label_description",
+    "en": "Theme label is displayed in UI: list, text",
+    "zh": "主题标签显示在用户界面中：列表、文本"
+  },
+  {
+    "id": "mx_theme_description_description",
+    "en": "Theme description, purpose, etc",
+    "zh": "主题描述、目的等"
+  },
+  {
+    "id": "mx_theme_dark_description",
+    "en": "Optimized for low-light environments",
+    "zh": "针对低光环境优化"
+  },
+  {
+    "id": "mx_theme_tree_description",
+    "en": "Emphasizes vegetation and forest cover",
+    "zh": "强调植被和森林覆盖"
+  },
+  {
+    "id": "mx_theme_water_description",
+    "en": "Emphasizes rivers, lakes, and water features",
+    "zh": "强调河流、湖泊和水体特征"
+  },
+  {
+    "id": "mx_theme_colors_title",
+    "en": "Colors",
+    "zh": "颜色"
+  },
+  {
+    "id": "mx_ui_highlighter",
+    "en": "UI Highlighter",
+    "zh": "界面高亮器"
   },
   {
     "id": "topic_biota",

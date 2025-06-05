@@ -9390,6 +9390,21 @@
     "ps": "اوسنی حل د زوم کچه او عرض البلد پورې اړه لري. دا د اوسط ساحه نمایندګي کوي چې د یوه پکسل پوښل شوی. "
   },
   {
+    "id": "mx_theme_error_id_pattern",
+    "en": "Only lowercase letters, numbers, and underscores are allowed.",
+    "ps": "یوازې کوچني توري، شمېرې، او انډر سکورونه اجازه لري."
+  },
+  {
+    "id": "mx_theme_error_id_exists",
+    "en": "ID already exists",
+    "ps": "پېژندپاڼه لا دمخه شتون لري"
+  },
+  {
+    "id": "mx_theme_error_id_reserved",
+    "en": "ID Reserved",
+    "ps": "پېژندپاڼه خوندي ده"
+  },
+  {
     "id": "mx_theme_open_manager",
     "en": "Theme Manager",
     "ps": "د موضوع مدیر"
@@ -9828,6 +9843,61 @@
     "id": "mx_theme_remote_empty_message",
     "en": "No themes found on the remote server.",
     "ps": "په لرې پرتو سرور کې هیڅ موضوع ونه موندل شوه."
+  },
+  {
+    "id": "mx_theme_schema_title",
+    "en": "Theme Configuration",
+    "ps": "د موضوع ترتیب"
+  },
+  {
+    "id": "mx_theme_schema_description",
+    "en": "Configure theme properties and colors",
+    "ps": "د موضوع ځانګړتیاوې او رنګونه تنظیم کړئ"
+  },
+  {
+    "id": "mx_theme_id_description",
+    "en": "Unique identifier for the theme",
+    "ps": "د موضوع لپاره ځانګړی پیژندونکی"
+  },
+  {
+    "id": "mx_theme_label_title",
+    "en": "Label",
+    "ps": "لیبل"
+  },
+  {
+    "id": "mx_theme_label_description",
+    "en": "Theme label is displayed in UI: list, text",
+    "ps": "د موضوع لیبل په UI کې ښودل شوی: لیست، متن"
+  },
+  {
+    "id": "mx_theme_description_description",
+    "en": "Theme description, purpose, etc",
+    "ps": "د موضوع توضیحات، موخه، او نور"
+  },
+  {
+    "id": "mx_theme_dark_description",
+    "en": "Optimized for low-light environments",
+    "ps": "د ټیټ رڼا چاپیریال لپاره غوره شوی"
+  },
+  {
+    "id": "mx_theme_tree_description",
+    "en": "Emphasizes vegetation and forest cover",
+    "ps": "په نباتاتو او ځنګل پوښ ټینګار کوي"
+  },
+  {
+    "id": "mx_theme_water_description",
+    "en": "Emphasizes rivers, lakes, and water features",
+    "ps": "سیندونو، جهيلونو او د اوبو ځانګړتیاوو باندې ټینګار کوي"
+  },
+  {
+    "id": "mx_theme_colors_title",
+    "en": "Colors",
+    "ps": "رنګونه"
+  },
+  {
+    "id": "mx_ui_highlighter",
+    "en": "UI Highlighter",
+    "ps": "د UI روښانه کوونکی"
   },
   {
     "id": "topic_biota",

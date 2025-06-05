@@ -9390,6 +9390,21 @@
     "ru": "Текущее разрешение зависит от уровня масштабирования и широты. Он представляет собой среднюю площадь, покрытую одним пикселем. "
   },
   {
+    "id": "mx_theme_error_id_pattern",
+    "en": "Only lowercase letters, numbers, and underscores are allowed.",
+    "ru": "Разрешены только строчные буквы, цифры и символы подчеркивания."
+  },
+  {
+    "id": "mx_theme_error_id_exists",
+    "en": "ID already exists",
+    "ru": "ID уже существует"
+  },
+  {
+    "id": "mx_theme_error_id_reserved",
+    "en": "ID Reserved",
+    "ru": "Идентификатор зарезервирован"
+  },
+  {
     "id": "mx_theme_open_manager",
     "en": "Theme Manager",
     "ru": "Менеджер тем"
@@ -9828,6 +9843,61 @@
     "id": "mx_theme_remote_empty_message",
     "en": "No themes found on the remote server.",
     "ru": "На удаленном сервере темы не найдены."
+  },
+  {
+    "id": "mx_theme_schema_title",
+    "en": "Theme Configuration",
+    "ru": "Конфигурация темы"
+  },
+  {
+    "id": "mx_theme_schema_description",
+    "en": "Configure theme properties and colors",
+    "ru": "Настройте свойства и цвета темы"
+  },
+  {
+    "id": "mx_theme_id_description",
+    "en": "Unique identifier for the theme",
+    "ru": "Уникальный идентификатор темы"
+  },
+  {
+    "id": "mx_theme_label_title",
+    "en": "Label",
+    "ru": "Этикетка"
+  },
+  {
+    "id": "mx_theme_label_description",
+    "en": "Theme label is displayed in UI: list, text",
+    "ru": "Метка темы отображается в пользовательском интерфейсе: список, текст"
+  },
+  {
+    "id": "mx_theme_description_description",
+    "en": "Theme description, purpose, etc",
+    "ru": "Описание темы, цель и т.д."
+  },
+  {
+    "id": "mx_theme_dark_description",
+    "en": "Optimized for low-light environments",
+    "ru": "Оптимизирован для условий с низкой освещенностью"
+  },
+  {
+    "id": "mx_theme_tree_description",
+    "en": "Emphasizes vegetation and forest cover",
+    "ru": "Подчеркивает растительность и лесной покров"
+  },
+  {
+    "id": "mx_theme_water_description",
+    "en": "Emphasizes rivers, lakes, and water features",
+    "ru": "Подчеркивает реки, озера и водные объекты"
+  },
+  {
+    "id": "mx_theme_colors_title",
+    "en": "Colors",
+    "ru": "Цвета"
+  },
+  {
+    "id": "mx_ui_highlighter",
+    "en": "UI Highlighter",
+    "ru": "Подсветка пользовательского интерфейса"
   },
   {
     "id": "topic_biota",

@@ -8,6 +8,7 @@ import {
   isNotEmpty,
   isEmpty,
   isFunction,
+  isString,
 } from "../is_test/index.js";
 import { downloadJSON } from "../download";
 import {
@@ -329,11 +330,12 @@ export class ThemeModal extends EventSimple {
           (_, value, path) => {
             const errors = [];
             if (path === "root.id") {
-              const issue = validateId(value, idThemes);
-              if (issue) {
+              const elMessage = validateId(value, idThemes);
+              if (elMessage) {
                 errors.push({
                   path: path,
-                  message: `Invalid id: ${issue}`,
+                  elMessage: elMessage,
+                  message: elMessage.textContent,
                 });
               }
             }
@@ -403,13 +405,13 @@ export class ThemeModal extends EventSimple {
       const loc = tm._theme.isExistingIdLocal(id);
 
       if (loc && operation !== "export") {
-        return "Reserved id";
+        return tt("mx_theme_error_id_reserved");
       }
 
       if (operation === "import" || operation === "new" || metadata.id !== id) {
         const exists = idThemes.includes(id);
         if (exists) {
-          return "Aldready exists";
+          return tt("mx_theme_error_id_exists");
         }
       }
     }
@@ -429,8 +431,13 @@ export class ThemeModal extends EventSimple {
         class: ["list-group", "mx-error-list-container"],
       },
       errors.map((error) => {
+        if (isString(error.message) && error.message.includes("^[a-z_0-9]+$")) {
+          error.elMessage = tt("mx_theme_error_id_pattern");
+        }
+
         return el("li", { class: ["list-group-item", "mx-error-item"] }, [
-          el("span", `${error.message} (${error.path})`),
+          el("span", error.elMessage || error.message),
+          el("span", `( ${error.path} )`),
         ]);
       }),
     );
@@ -701,7 +708,7 @@ export class ThemeModal extends EventSimple {
       colors: tm.getColorsFromInputs(),
     });
 
-    await tm._theme.save(theme);
+    await tm._theme.upsert(theme);
   }
 
   async deleteTheme() {
@@ -721,7 +728,7 @@ export class ThemeModal extends EventSimple {
 
       // Assuming the imported file contains a single theme object
       const importedTheme = tm.cleanKeys(data[0]);
-      await tm._theme.stopIfInvalid(importedTheme, false, true);
+      await tm._theme.stopIfInvalidColors(importedTheme);
       const metadata = await tm.showMetadataEditorModal(
         "import",
         importedTheme,
@@ -733,7 +740,8 @@ export class ThemeModal extends EventSimple {
       }
 
       const theme = Object.assign({}, importedTheme, metadata);
-      await tm._theme.save(theme);
+
+      await tm._theme.upsert(theme);
     } catch (e) {
       itemFlashWarning();
       console.error("Failed to import theme:", e);
@@ -780,7 +788,7 @@ export class ThemeModal extends EventSimple {
       });
 
       // Validate the theme object before export
-      await tm._theme.stopIfInvalid(theme, false, true);
+      await tm._theme.stopIfInvalidMeta(theme);
       const outTheme = tm.cleanKeys(theme);
       await downloadJSON(outTheme, `${makeSafeName(theme.id)}.json`);
     } catch (e) {

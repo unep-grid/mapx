@@ -13,7 +13,6 @@ import { fontFamilies, fonts, loadFontFace } from "./fonts.js";
 import { Button } from "./../panel_controls/button.js";
 import { sounds } from "./sound/index.js";
 import { MapScaler } from "../map_scaler";
-
 import "./style.less";
 import { jsonDiff } from "../mx_helper_utils_json";
 import { ThemeService } from "./services";
@@ -26,6 +25,7 @@ import {
 } from "../mx_helper_misc";
 import { modalConfirm } from "../mx_helper_modal";
 import { settings } from "../settings";
+import { getLanguageCurrent } from "../language";
 
 const def = {
   tree: true,
@@ -66,7 +66,7 @@ class Theme extends EventSimple {
 
     if (settings.mode.app) {
       // load project's theme
-      await t.updateThemes();
+      await t.preloadThemes();
     }
 
     for (const k in Object.keys(t._opt.on)) {
@@ -81,7 +81,13 @@ class Theme extends EventSimple {
   }
 
   async getSchema(full) {
-    return this._s.getSchema(full);
+    try {
+      const language = getLanguageCurrent();
+      const { schema } = await this._s.getSchema(full, language);
+      return schema;
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   async getAllIds() {
@@ -91,8 +97,8 @@ class Theme extends EventSimple {
 
   async getRemote(idTheme) {
     try {
-      const resp = await this._s.get(idTheme);
-      return resp.theme;
+      const { theme } = await this._s.get(idTheme);
+      return theme;
     } catch (e) {
       console.error(e);
       return;
@@ -103,10 +109,10 @@ class Theme extends EventSimple {
     return themes_custom.find((t) => t.id == id);
   }
 
-  async save(theme) {
+  async upsert(theme) {
     try {
       const t = this;
-      await t.stopIfInvalid(theme);
+      await t.stopIfInvalidColors(theme);
       const notDefault = settings.project.theme != theme.id;
       let setAsProjectDefault = false;
       if (notDefault) {
@@ -122,7 +128,9 @@ class Theme extends EventSimple {
       }
 
       await t._s.save({ theme, setAsProjectDefault });
-      await t.addOrUpdateTheme(theme, null, true);
+      await t.register(theme);
+      await t.set(theme);
+      t.fire("list_updated");
 
       if (setAsProjectDefault) {
         settings.project.theme = theme.id;
@@ -157,17 +165,35 @@ class Theme extends EventSimple {
     return this._s.validateId(idTheme);
   }
 
-  async stopIfInvalid(data, full = false, colors = true, debug = "") {
+  async stopIfInvalidMeta(data) {
+    return this._stopIfInvalid(data, false, false);
+  }
+
+  async stopIfInvalidMeta(data) {
+    return this._stopIfInvalid(data, false, false);
+  }
+  async stopIfInvalidColors(data) {
+    return this._stopIfInvalid(data, false, true);
+  }
+
+  async stopIfInvalidFull(data) {
+    return this._stopIfInvalid(data, true, false);
+  }
+
+  async stopIfInvalidColorsFull(data) {
+    return this._stopIfInvalid(data, true, true);
+  }
+
+  async _stopIfInvalid(data, full = false, colors = true) {
     const { issues } = await this.validate(data, full);
 
     if (isNotEmpty(issues)) {
-      console.warn(`Invalid theme (full:${full}) `, issues);
+      console.trace(`Invalid theme (full:${full}, colors:${colors}) `, issues);
       throw new Error("Invalid theme");
     }
     if (colors) {
       const validColors = this.validateColors(data);
       if (!validColors) {
-        console.trace("invalid clors" + debug);
         throw new Error("Invalid theme colors");
       }
     }
@@ -177,11 +203,11 @@ class Theme extends EventSimple {
   /**
    * Update themes from remote server
    */
-  async updateThemes() {
+  async preloadThemes() {
     const t = this;
     try {
       const remoteThemes = await t.listRemote();
-      await t.addThemes(remoteThemes);
+      await t.registerBatch(remoteThemes);
     } catch (e) {
       console.warn("Failed to load remote themes:", e);
     }
@@ -356,16 +382,13 @@ class Theme extends EventSimple {
    * @param {Array<Object>} themes- Array of themes
    * @param {Boolean} skipEvent - skipEvent
    */
-  async addThemes(themes = [], skipEvent = false) {
+  async registerBatch(themes = []) {
     const t = this;
     const p = [];
     for (const theme of themes) {
-      p.push(t.addOrUpdateTheme(theme, true));
+      p.push(t.register(theme));
     }
     await Promise.all(p);
-    if (!skipEvent) {
-      t.fire("list_updated");
-    }
   }
 
   /**
@@ -374,25 +397,14 @@ class Theme extends EventSimple {
    * @param {Boolean} skipEvent - skipEvent
    * @return {Promise<Boolean>} the set value
    */
-  async addOrUpdateTheme(theme, skipEvent = false, enable = false) {
+  async register(theme) {
     const t = this;
-    await t.stopIfInvalid(theme);
     const oldTheme = t.getCustom(theme.id);
-
     if (oldTheme) {
       patchObject(oldTheme, theme);
     } else {
       themes_custom.push(theme);
     }
-
-    if (enable) {
-      await t.set(theme);
-    }
-
-    if (!skipEvent) {
-      t.fire("list_updated");
-    }
-
     return true;
   }
 
@@ -400,7 +412,7 @@ class Theme extends EventSimple {
     try {
       const t = this;
 
-      await t.stopIfInvalid(theme);
+      await t.stopIfInvalidMeta(theme);
       const oldTheme = t.getCustom(theme.id);
 
       if (!oldTheme) {
@@ -497,7 +509,6 @@ class Theme extends EventSimple {
 
       if (isId) {
         if (theme === t.id()) {
-          console.log("Set theme: no changes");
           return;
         }
         theme = t.get(theme);
@@ -507,7 +518,7 @@ class Theme extends EventSimple {
         theme = await t.getRemote(theme);
 
         if (theme) {
-          t.addOrUpdateTheme(theme, true);
+          await t.register(theme);
         }
       }
 
@@ -516,7 +527,7 @@ class Theme extends EventSimple {
         theme = t.getDefault();
       }
 
-      await t.stopIfInvalid(theme);
+      await t.stopIfInvalidColors(theme);
 
       const oldTheme = t.theme();
       const newTheme = theme;
@@ -921,7 +932,7 @@ class Theme extends EventSimple {
   openThemeManager() {
     const t = this;
     if (t._themeModal) {
-      console.log("Theme manager modal already open");
+      console.warn("Theme manager modal already open");
       return;
     }
     t._themeModal = new ThemeModal({

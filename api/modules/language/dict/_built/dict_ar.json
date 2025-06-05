@@ -9390,6 +9390,21 @@
     "ar": "تعتمد الدقة الحالية على مستوى التكبير / التصغير وخط العرض. يمثل متوسط المساحة التي يغطيها بكسل واحد. "
   },
   {
+    "id": "mx_theme_error_id_pattern",
+    "en": "Only lowercase letters, numbers, and underscores are allowed.",
+    "ar": "يُسمح فقط بالأحرف الصغيرة والأرقام والشرطات السفلية."
+  },
+  {
+    "id": "mx_theme_error_id_exists",
+    "en": "ID already exists",
+    "ar": "المعرف موجود بالفعل"
+  },
+  {
+    "id": "mx_theme_error_id_reserved",
+    "en": "ID Reserved",
+    "ar": "تم حجز الهوية"
+  },
+  {
     "id": "mx_theme_open_manager",
     "en": "Theme Manager",
     "ar": "مدير السمات"
@@ -9828,6 +9843,61 @@
     "id": "mx_theme_remote_empty_message",
     "en": "No themes found on the remote server.",
     "ar": "لم يتم العثور على أي مواضيع على الخادم البعيد."
+  },
+  {
+    "id": "mx_theme_schema_title",
+    "en": "Theme Configuration",
+    "ar": "تكوين السمة"
+  },
+  {
+    "id": "mx_theme_schema_description",
+    "en": "Configure theme properties and colors",
+    "ar": "تكوين خصائص السمة والألوان"
+  },
+  {
+    "id": "mx_theme_id_description",
+    "en": "Unique identifier for the theme",
+    "ar": "معرف فريد للموضوع"
+  },
+  {
+    "id": "mx_theme_label_title",
+    "en": "Label",
+    "ar": "ملصق"
+  },
+  {
+    "id": "mx_theme_label_description",
+    "en": "Theme label is displayed in UI: list, text",
+    "ar": "يتم عرض تسمية السمة في واجهة المستخدم: القائمة، النص"
+  },
+  {
+    "id": "mx_theme_description_description",
+    "en": "Theme description, purpose, etc",
+    "ar": "وصف الموضوع والغرض وما إلى ذلك"
+  },
+  {
+    "id": "mx_theme_dark_description",
+    "en": "Optimized for low-light environments",
+    "ar": "مُحسّن للبيئات ذات الإضاءة المنخفضة"
+  },
+  {
+    "id": "mx_theme_tree_description",
+    "en": "Emphasizes vegetation and forest cover",
+    "ar": "يؤكد على الغطاء النباتي والغابات"
+  },
+  {
+    "id": "mx_theme_water_description",
+    "en": "Emphasizes rivers, lakes, and water features",
+    "ar": "يؤكد على الأنهار والبحيرات والمعالم المائية"
+  },
+  {
+    "id": "mx_theme_colors_title",
+    "en": "Colors",
+    "ar": "الألوان"
+  },
+  {
+    "id": "mx_ui_highlighter",
+    "en": "UI Highlighter",
+    "ar": "مُميّز واجهة المستخدم"
   },
   {
     "id": "topic_biota",

@@ -9390,6 +9390,21 @@
     "fr": "La résolution dépend du niveau de zoom actuel ainsi que de la position latitudinale. Elle représente la surface couverte par un pixel. "
   },
   {
+    "id": "mx_theme_error_id_pattern",
+    "en": "Only lowercase letters, numbers, and underscores are allowed.",
+    "fr": "Seules les lettres minuscules, les chiffres et les traits de soulignement sont autorisés."
+  },
+  {
+    "id": "mx_theme_error_id_exists",
+    "en": "ID already exists",
+    "fr": "L'ID existe déjà"
+  },
+  {
+    "id": "mx_theme_error_id_reserved",
+    "en": "ID Reserved",
+    "fr": "ID réservé"
+  },
+  {
     "id": "mx_theme_open_manager",
     "en": "Theme Manager",
     "fr": "Gestionnaire de thèmes"
@@ -9828,6 +9843,61 @@
     "id": "mx_theme_remote_empty_message",
     "en": "No themes found on the remote server.",
     "fr": "Aucun thème trouvé sur le serveur distant."
+  },
+  {
+    "id": "mx_theme_schema_title",
+    "en": "Theme Configuration",
+    "fr": "Configuration du thème"
+  },
+  {
+    "id": "mx_theme_schema_description",
+    "en": "Configure theme properties and colors",
+    "fr": "Configurer les propriétés et couleurs du thème"
+  },
+  {
+    "id": "mx_theme_id_description",
+    "en": "Unique identifier for the theme",
+    "fr": "Identifiant unique pour le thème"
+  },
+  {
+    "id": "mx_theme_label_title",
+    "en": "Label",
+    "fr": "Étiquette"
+  },
+  {
+    "id": "mx_theme_label_description",
+    "en": "Theme label is displayed in UI: list, text",
+    "fr": "L'étiquette du thème est affichée dans l'interface utilisateur : liste, texte"
+  },
+  {
+    "id": "mx_theme_description_description",
+    "en": "Theme description, purpose, etc",
+    "fr": "Description du thème, objectif, etc"
+  },
+  {
+    "id": "mx_theme_dark_description",
+    "en": "Optimized for low-light environments",
+    "fr": "Optimisé pour les environnements à faible luminosité"
+  },
+  {
+    "id": "mx_theme_tree_description",
+    "en": "Emphasizes vegetation and forest cover",
+    "fr": "Met l'accent sur la végétation et la couverture forestière"
+  },
+  {
+    "id": "mx_theme_water_description",
+    "en": "Emphasizes rivers, lakes, and water features",
+    "fr": "Met l'accent sur les rivières, les lacs et les caractéristiques aquatiques"
+  },
+  {
+    "id": "mx_theme_colors_title",
+    "en": "Colors",
+    "fr": "Couleurs"
+  },
+  {
+    "id": "mx_ui_highlighter",
+    "en": "UI Highlighter",
+    "fr": "Surligneur d'interface"
   },
   {
     "id": "topic_biota",

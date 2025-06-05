@@ -9390,6 +9390,21 @@
     "fa": "وضوح فعلی به سطح زوم و عرض جغرافیایی بستگی دارد. این نشان دهنده مساحت متوسط تحت پوشش یک پیکسل است. "
   },
   {
+    "id": "mx_theme_error_id_pattern",
+    "en": "Only lowercase letters, numbers, and underscores are allowed.",
+    "fa": "فقط حروف کوچک، اعداد و زیرخط مجاز هستند."
+  },
+  {
+    "id": "mx_theme_error_id_exists",
+    "en": "ID already exists",
+    "fa": "شناسه از قبل وجود دارد"
+  },
+  {
+    "id": "mx_theme_error_id_reserved",
+    "en": "ID Reserved",
+    "fa": "شناسه محفوظ است"
+  },
+  {
     "id": "mx_theme_open_manager",
     "en": "Theme Manager",
     "fa": "مدیر قالب"
@@ -9828,6 +9843,61 @@
     "id": "mx_theme_remote_empty_message",
     "en": "No themes found on the remote server.",
     "fa": "هیچ قالبی روی سرور راه دور یافت نشد."
+  },
+  {
+    "id": "mx_theme_schema_title",
+    "en": "Theme Configuration",
+    "fa": "پیکربندی قالب"
+  },
+  {
+    "id": "mx_theme_schema_description",
+    "en": "Configure theme properties and colors",
+    "fa": "پیکربندی ویژگی‌ها و رنگ‌های قالب"
+  },
+  {
+    "id": "mx_theme_id_description",
+    "en": "Unique identifier for the theme",
+    "fa": "شناسه منحصر به فرد برای قالب"
+  },
+  {
+    "id": "mx_theme_label_title",
+    "en": "Label",
+    "fa": "برچسب"
+  },
+  {
+    "id": "mx_theme_label_description",
+    "en": "Theme label is displayed in UI: list, text",
+    "fa": "برچسب قالب در رابط کاربری نمایش داده می‌شود: فهرست، متن"
+  },
+  {
+    "id": "mx_theme_description_description",
+    "en": "Theme description, purpose, etc",
+    "fa": "شرح موضوع، هدف و غیره"
+  },
+  {
+    "id": "mx_theme_dark_description",
+    "en": "Optimized for low-light environments",
+    "fa": "بهینه شده برای محیط‌های کم‌نور"
+  },
+  {
+    "id": "mx_theme_tree_description",
+    "en": "Emphasizes vegetation and forest cover",
+    "fa": "تأکید بر پوشش گیاهی و جنگلی"
+  },
+  {
+    "id": "mx_theme_water_description",
+    "en": "Emphasizes rivers, lakes, and water features",
+    "fa": "بر رودخانه‌ها، دریاچه‌ها و ویژگی‌های آبی تأکید دارد"
+  },
+  {
+    "id": "mx_theme_colors_title",
+    "en": "Colors",
+    "fa": "رنگ‌ها"
+  },
+  {
+    "id": "mx_ui_highlighter",
+    "en": "UI Highlighter",
+    "fa": "هایلایت کننده رابط کاربری"
   },
   {
     "id": "topic_biota",

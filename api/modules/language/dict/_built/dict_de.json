@@ -9390,6 +9390,21 @@
     "de": "Die aktuelle Auflösung hängt von der Zoomstufe und dem Breitengrad ab. Es stellt die durchschnittliche Fläche dar, die von einem Pixel abgedeckt wird. "
   },
   {
+    "id": "mx_theme_error_id_pattern",
+    "en": "Only lowercase letters, numbers, and underscores are allowed.",
+    "de": "Es sind nur Kleinbuchstaben, Zahlen und Unterstriche zulässig."
+  },
+  {
+    "id": "mx_theme_error_id_exists",
+    "en": "ID already exists",
+    "de": "ID ist bereits vorhanden"
+  },
+  {
+    "id": "mx_theme_error_id_reserved",
+    "en": "ID Reserved",
+    "de": "ID reserviert"
+  },
+  {
     "id": "mx_theme_open_manager",
     "en": "Theme Manager",
     "de": "Themenmanager"
@@ -9828,6 +9843,61 @@
     "id": "mx_theme_remote_empty_message",
     "en": "No themes found on the remote server.",
     "de": "Auf dem Remote-Server wurden keine Designs gefunden."
+  },
+  {
+    "id": "mx_theme_schema_title",
+    "en": "Theme Configuration",
+    "de": "Themenkonfiguration"
+  },
+  {
+    "id": "mx_theme_schema_description",
+    "en": "Configure theme properties and colors",
+    "de": "Konfigurieren Sie Designeigenschaften und Farben"
+  },
+  {
+    "id": "mx_theme_id_description",
+    "en": "Unique identifier for the theme",
+    "de": "Eindeutige Kennung für das Thema"
+  },
+  {
+    "id": "mx_theme_label_title",
+    "en": "Label",
+    "de": "Etikett"
+  },
+  {
+    "id": "mx_theme_label_description",
+    "en": "Theme label is displayed in UI: list, text",
+    "de": "Die Themenbezeichnung wird in der Benutzeroberfläche angezeigt: Liste, Text"
+  },
+  {
+    "id": "mx_theme_description_description",
+    "en": "Theme description, purpose, etc",
+    "de": "Themenbeschreibung, Zweck usw."
+  },
+  {
+    "id": "mx_theme_dark_description",
+    "en": "Optimized for low-light environments",
+    "de": "Optimiert für Umgebungen mit wenig Licht"
+  },
+  {
+    "id": "mx_theme_tree_description",
+    "en": "Emphasizes vegetation and forest cover",
+    "de": "Betont Vegetation und Waldbedeckung"
+  },
+  {
+    "id": "mx_theme_water_description",
+    "en": "Emphasizes rivers, lakes, and water features",
+    "de": "Betont Flüsse, Seen und Wasserspiele"
+  },
+  {
+    "id": "mx_theme_colors_title",
+    "en": "Colors",
+    "de": "Farben"
+  },
+  {
+    "id": "mx_ui_highlighter",
+    "en": "UI Highlighter",
+    "de": "UI-Highlighter"
   },
   {
     "id": "topic_biota",

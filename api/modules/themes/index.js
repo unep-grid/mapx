@@ -1,11 +1,7 @@
 import { isRoot, isAdmin } from "#mapx/authentication";
 import { isEmpty } from "@fxi/mx_valid";
-import {
-  schemaFull,
-  schemaMeta,
-  validateFull,
-  validateMeta,
-} from "./validate.js";
+import { validateFull, validateMeta } from "./validate.js";
+import { getSchema } from "./schemas/combined.js";
 import { isNotEmpty } from "@fxi/mx_valid";
 import { pgRead, pgWrite } from "#mapx/db";
 
@@ -21,6 +17,7 @@ export async function ioThemeValidate(_, data, cb) {
     } else {
       data.issues = await validateMeta(data.theme);
     }
+
   } catch (e) {
     data.error = e?.message || e;
   } finally {
@@ -29,10 +26,13 @@ export async function ioThemeValidate(_, data, cb) {
 }
 
 export async function ioThemeGetSchema(_, data, cb) {
-  if (data.full) {
-    cb(schemaFull);
-  } else {
-    cb(schemaMeta);
+  try {
+    const language = data.language || "en";
+    data.schema = getSchema(language, data.full);
+  } catch (e) {
+    data.error = e?.message || e;
+  } finally {
+    cb(data);
   }
 }
 
@@ -63,6 +63,7 @@ export async function ioThemeCreate(socket, data, cb) {
       id_project: idProject,
       creator: idUser,
       last_editor: idUser,
+      date_modified: (new Date()).toISOString(),
       colors: theme.colors,
       dark: theme.dark || false,
       tree: theme.tree || false,
@@ -169,6 +170,7 @@ export async function ioThemeSave(socket, data, cb) {
     }
 
     const issues = await validateMeta(data.theme);
+
 
     if (isNotEmpty(issues)) {
       throw new Error("theme_data_not_valid");
