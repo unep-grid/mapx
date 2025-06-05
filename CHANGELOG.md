@@ -1,3 +1,8 @@
+  - [1.13.18-alpha.4](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.4) 
+
+    - fix(themes): refactor schema to support for service side schema translation + support for french
+
+
   - [1.13.18-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.3) 
 
     - fix(project): project info refactoring, various themes issues, svg hndling
