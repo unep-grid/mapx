@@ -207,7 +207,7 @@ function formatBboxString(coordinates, targetSrid, useLatLngOrder) {
 export function normalizeDestinationPos(dest = {}, key = "lng") {
   const map = getMap();
   const center = map.getCenter();
-  const deltaLng = Math.abs(center.lng - dest[key])
+  const deltaLng = center.lng - dest[key];
 
   const adjusted = { ...dest }; // avoid mutating the original object
 
