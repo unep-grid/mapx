@@ -50,7 +50,7 @@ async function addProject(idUser, name) {
     alias: "",
     states_views: [],
     logo : "",
-    theme : "", 
+    theme : "color_white", 
     org_name : "", 
     org_contact_name : "", 
     org_contact_email : "", 
