@@ -59,6 +59,7 @@ import {
   cssTransformFun,
   debounce,
   isShinyReady,
+  patchObject,
   //debouncePromise,
 } from "./../mx_helper_misc.js";
 import {
@@ -1922,7 +1923,7 @@ export function geolocateUser() {
 
 /**
  * Reset project : remove view, dashboards, etc
- * NOTE: Shiny require at least one argument. Not used, but, needed.
+ * NOTE:⚠️ Shiny require at least one argument. Not used, but, needed.
  *
  */
 export function viewsCloseAll(o) {
@@ -2122,9 +2123,11 @@ export async function getViewAuto(idView) {
   if (!valid) {
     throw new Error(`View not found: ${JSON.stringify(idView)}`);
   }
-  const views = getViews();
+  const existingView = getView(view);
 
-  if (!views.includes(view)) {
+  if (existingView) {
+    patchObject(existingView, view);
+  } else {
     views.push(view);
   }
 

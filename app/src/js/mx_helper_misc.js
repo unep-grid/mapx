@@ -76,10 +76,10 @@ export function asBoolean(value) {
 }
 
 /**
-* Coerse value as an array 
-* @param {any} value 
-* @returns {Array} value or array with value
-*/ 
+ * Coerse value as an array
+ * @param {any} value
+ * @returns {Array} value or array with value
+ */
 export function asArray(value) {
   if (isArray(value)) {
     return value;
@@ -256,17 +256,24 @@ export function updateIfEmpty(target, source) {
  * const result = patchObject(source, patch);
  * // result: { a: { b: 10, c: 2 }, d: 3, e: 4 }
  */
-export function patchObject(source, patch) {
+export function patchObject(source, patch, seen = new WeakMap()) {
   if (!isObject(source) || !isObject(patch)) {
     return source;
   }
 
+  // Prevent infinite recursion
+  if (seen.has(patch)) {
+    return seen.get(patch);
+  }
+
   const result = { ...source };
+  seen.set(patch, result);
 
   for (const key in patch) {
     if (!patch.hasOwnProperty(key)) {
       continue;
     }
+
     const patchValue = patch[key];
     const sourceValue = source[key];
 
@@ -279,11 +286,10 @@ export function patchObject(source, patch) {
     }
 
     if (patchIsObject && sourceIsObject) {
-      result[key] = patchObject(sourceValue, patchValue);
-      continue;
+      result[key] = patchObject(sourceValue, patchValue, seen);
+    } else {
+      result[key] = patchValue;
     }
-
-    result[key] = patchValue;
   }
 
   return result;
