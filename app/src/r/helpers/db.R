@@ -702,20 +702,22 @@ mxDbGetSourceLastDateModified <- function(idSource) {
   return(timeSourceDb)
 }
 
-#' List existing column type from postgresql table
-#'
-#' Shortcut to get column type for a table
-#'
-#' @param table Name of the table to evaluate
-#' @export
-mxDbGetColumnsTypes <- function(table) {
-  query <- sprintf(
-    "select data_type as res from information_schema.columns where table_schema='public' and table_name='%s'",
-    table
-  )
-  res <- mxDbGetQuery(query)$res
 
-  return(res)
+
+#' Get column types from database schema
+#' @param table Character - table name
+#' @return Named list of column types
+mxDbGetColumnsTypes <- function(table) {
+  # Use mxDbGetQuery with safe table name (already validated)
+  q <- sprintf("SELECT column_name, data_type
+               FROM information_schema.columns
+               WHERE table_name = '%s'", table)
+
+  result <- mxDbGetQuery(q)
+
+
+  types <- setNames(result$data_type, result$column_name)
+  return(types)
 }
 
 
@@ -736,91 +738,6 @@ mxDbTimeStamp <- function() {
 
 
 
-
-#' Automatic add row to a table
-#' @param {Any} data
-#' @param {Character}
-mxDbAddRow <- function(data, table) {
-  tExists <- mxDbExistsTable(table)
-  if (!tExists) {
-    stop(sprintf("mxDbAddRow : table %s does not exists", table))
-  }
-
-  if (!is.list(data)) {
-    data <- as.list(data)
-  }
-
-  data <- data[!names(data) == "pid"]
-  tClass <- sapply(data, class)
-
-  #
-  # Compare names in table vs names in db table
-  #
-  tName <- names(data)
-  rName <- mxDbGetTableColumnsNames(table)
-  # Subset only existing
-  data <- data[tName %in% rName]
-  fName <- names(data)
-
-  #
-  # ⚠️   Probably better to use mxDbGetColumnsTypes(table)
-  #   - use db type to ensure correct type matching
-  #   - avoid guessing
-  #   - postgres as more complex types : probably will lead to missmatch
-
-  dataProc <- lapply(data, function(x) {
-    if (length(x) > 1) {
-      x <- as.list(x)
-    }
-
-    switch(class(x)[[1]],
-      "list" = {
-        sprintf("'%s'", mxToJsonForDb(x))
-      },
-      "character" = {
-        sprintf("'%1$s'", gsub("'", "''", x))
-      },
-      "POSIXct" = {
-        mxDbTimeStampFormater(x)
-      },
-      "logical" = {
-        tolower(x)
-      },
-      "numeric" = {
-        sprintf("%i::numeric", x)
-      },
-      "integer" = {
-        sprintf("%i::integer", x)
-      },
-      sprintf("'%1$s'", x)
-    )
-  })
-
-  q <- sprintf(
-    "INSERT INTO %1$s (%2$s) VALUES (%3$s)",
-    table,
-    paste(paste0("\"", fName, "\""), collapse = ","),
-    paste(dataProc, collapse = ",")
-  )
-
-  pool <- mxDbGetPool()
-  res <- list()
-
-  #'
-  #' ⚠️ This should be set into a transaction and validated
-  #'
-  dbExecute(pool, q)
-}
-
-mxDbAddRowBatch <- function(df, table) {
-  stopifnot(is.data.frame(df))
-  stopifnot(mxDbExistsTable(table))
-
-  for (i in 1:nrow(df)) {
-    dat <- df[i, ]
-    mxDbAddRow(dat, table)
-  }
-}
 
 
 #' Clear db results
