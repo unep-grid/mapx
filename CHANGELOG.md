@@ -1,3 +1,9 @@
+  - [1.13.18-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.5) 
+
+    - fix(story): normalized latitude animation : prevent full rotation a distance is more than 180°
+    - fix(insert): wrong timestamp format in insert + solved sql injection issue in insert mode
+
+
   - [1.13.18-alpha.4](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.4) 
 
     - fix(themes): refactor schema to support for service side schema translation + support for french
