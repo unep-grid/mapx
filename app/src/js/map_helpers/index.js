@@ -1191,9 +1191,7 @@ export async function initMapx(o) {
   const idThemeQuery = getQueryParameter("theme")[0];
   if (isEmpty(idThemeQuery)) {
     const idTheme = o.idTheme;
-    if (theme.isValidId(idTheme)) {
-      await theme.set(idTheme, { save_url: true });
-    }
+    await theme.set(idTheme, { save_url: true });
   }
 
   if (!settings.mode.static) {

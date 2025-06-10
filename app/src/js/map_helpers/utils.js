@@ -194,3 +194,28 @@ function formatBboxString(coordinates, targetSrid, useLatLngOrder) {
   // Standard order for all other cases
   return `${val1},${val2},${val3},${val4}`;
 }
+
+/**
+ * Normalize longitude to ensure the shortest map transition path.
+ * Prevents mapbox-gl from animating across the entire globe
+ * when transitioning between longitudes like -179 to 179.
+ *
+ * @param {object} dest - Destination coordinates object (e.g., { lng: 179 } or { w: 179 }).
+ * @param {string} key - The key used for longitude in the dest object (default: 'lng').
+ * @returns {object} - A new destination object with adjusted longitude if needed.
+ */
+export function normalizeDestinationPos(dest = {}, key = "lng") {
+  const map = getMap();
+  const center = map.getCenter();
+  const deltaLng = Math.abs(center.lng - dest[key])
+
+  const adjusted = { ...dest }; // avoid mutating the original object
+
+  if (deltaLng > 180) {
+    adjusted[key] += 360;
+  } else if (deltaLng < -180) {
+    adjusted[key] -= 360;
+  }
+
+  return adjusted;
+}

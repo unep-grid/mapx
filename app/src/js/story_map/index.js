@@ -47,6 +47,7 @@ import {
   getViewAuto,
   getViewsActive,
 } from "./../map_helpers/index.js";
+import { normalizeDestinationPos } from "../map_helpers/utils";
 
 /**
  * Story and state storage
@@ -1169,12 +1170,12 @@ async function storyControlsEnable() {
 
 async function initTheme() {
   const s = getSettings();
-  const useTheme = theme.isValidId(s.theme);
+  const useTheme = isNotEmpty(s.theme) && s.theme !== "default";
   /*
    * Set theme
    */
   if (useTheme) {
-    theme.set(s.theme, { sound: false, save: false, save_url: false });
+    await theme.set(s.theme, { sound: false, save: false, save_url: false });
   }
 }
 
@@ -1659,22 +1660,24 @@ export async function storyPlayStep(stepNum) {
       for (const p of ["w", "e", "s", "n"]) {
         if (isEmpty(pos[p])) {
           pos[p] = 0;
-          console.error(`Missing position ${p} to fitbounds`);
+          console.warn(`Missing position ${p} to fitbounds`);
         }
       }
-      map.fitBounds([pos.w, pos.s, pos.e, pos.n], {
+      const posN = normalizeDestinationPos(pos, "w");
+      map.fitBounds([posN.w, posN.s, posN.e, posN.n], {
         duration: anim.duration,
-        pitch: pos.pitch,
+        pitch: posN.pitch,
         easing: easing,
       });
     } else {
+      const posN = normalizeDestinationPos(pos, "lng");
       map[anim.method]({
         duration: anim.duration,
-        zoom: pos.z,
+        zoom: posN.z,
         easing: easing,
-        bearing: pos.bearing,
-        pitch: pos.pitch,
-        center: [pos.lng, pos.lat],
+        bearing: posN.bearing,
+        pitch: posN.pitch,
+        center: [posN.lng, posN.lat],
       });
     }
 
