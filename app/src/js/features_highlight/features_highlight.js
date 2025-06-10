@@ -1,13 +1,13 @@
 import { bindAll } from "../bind_class_methods";
-import { clone, patchObject } from "../mx_helper_misc";
-import { isEmpty, isMap } from "./../is_test/index";
+import { clone, patchObject, updateIfEmpty } from "../mx_helper_misc";
+import { isEmpty, isMap, isNotEmpty } from "./../is_test/index";
 const def = {
   map: null, // Mapbox gl instance
   transition_duration: 180,
   transition_delay: 0,
   highlight_shadow_blur: 2,
   highlight_width: 3,
-  highlight_color: "#000",
+  highlight_color: "rgb(255,0,255)",
   highlight_opacity: 0.8,
   highlight_radius: 3,
   supported_types: ["circle", "symbol", "fill", "line"],
@@ -15,12 +15,12 @@ const def = {
   max_layers_render: 20,
 };
 
-const defConfig = {
+const defState = {
   filters: [],
 };
 
 class Highlighter {
-  constructor(opt) {
+  constructor(opt = {}) {
     const hl = this;
     /**
      * Bind
@@ -31,25 +31,40 @@ class Highlighter {
      * local store
      */
     hl._layers = {};
-    hl._config = clone(defConfig);
+    hl._state = clone(defState);
     hl._destroyed = false;
+    hl.opt = clone(def);
 
     /**
      * Set options
      */
-    hl.opt = Object.assign({}, def, opt);
+    hl.setOptions(opt);
   }
 
   /**
    * Update options
    */
-  setOptions(opt) {
+  setOptions(opt = {}) {
     const hl = this;
     if (hl.destroyed) {
       return;
     }
-    Object.assign(hl.opt, opt);
+    for(const k of Object.keys(def)){
+      const updated = opt[k];
+       if(isNotEmpty(updated)) {
+          hl.opt[k] = updated
+       }
+    }
+
+    console.log(hl.opt.highlight_color);
     hl.update();
+  }
+
+  /**
+   * Get current options
+   */
+  getOptions() {
+    return Object.assign({}, this.opt);
   }
 
   /**
@@ -68,32 +83,27 @@ class Highlighter {
   }
 
   /**
-   * Set hl config
+   * Set highlighting state
    *
-   * @param {Object} config - Configuration options for the highlighter.
-   * @param {Object} config.coord Location to query
-   * @param {Array.<Object>} config.filters - Array of filter objects to be applied.
-   * @param {String} config.filters[].id - Identifier of the view to which the filter applies.
-   * @param {Array} config.filters[].filter - MapboxGL expression
+   * @param {Object} state - State options for what to highlight.
+   * @param {Array.<Object>} state.filters - Array of filter objects to be applied.
+   * @param {String} state.filters[].id - Identifier of the view to which the filter applies.
+   * @param {Array} state.filters[].filter - MapboxGL expression
    * @returns {number} Number of matched feature
    * @example
-   * hl.set({
-   *   all: true,
-   * });
-   *
-   * hl.set({
+   * hl.setState({
    *   filters: [
    *     { id: "MX-TC0O1-34A9Y-RYDJG", filter: ["<", ["get", "year"], 2000] },
    *   ],
    * });
    *
-   * hl.set({
+   * hl.setState({
    *   filters: [
    *     { id: "MX-TC0O1-34A9Y-RYDJG", filter: [">=", ["get", "fatalities"], 7000] },
    *   ],
    * });
    *
-   * hl.set({
+   * hl.setState({
    *   filters: [
    *     {
    *       id: "MX-TC0O1-34A9Y-RYDJG",
@@ -106,32 +116,48 @@ class Highlighter {
    *   ],
    * });
    */
-  set(config) {
+  setState(state) {
     const hl = this;
     if (hl.destroyed) {
       return;
     }
 
-    if (isEmpty(config) || isEmpty(config.filters)) {
+    if (isEmpty(state) || isEmpty(state.filters)) {
       return;
     }
-    hl._config = patchObject(defConfig, hl._config || {});
+    hl._state = patchObject(defState, hl._state || {});
 
-    for (const item of config.filters) {
+    for (const item of state.filters) {
       const { id, filter } = item;
-      const previous = hl._config.filters.find((f) => f.id === id);
+      const previous = hl._state.filters.find((f) => f.id === id);
       if (previous) {
         previous.filter = filter;
       } else {
-        hl._config.filters.push(item);
+        hl._state.filters.push(item);
       }
     }
 
     return hl.update();
   }
 
+  /**
+   * Set highlighting state (legacy method for backward compatibility)
+   * @deprecated Use setState() instead
+   */
+  set(config) {
+    return this.setState(config);
+  }
+
+  getState() {
+    return clone(this._state);
+  }
+
+  /**
+   * Get highlighting state (legacy method for backward compatibility)
+   * @deprecated Use getState() instead
+   */
   get() {
-    return clone(this._config);
+    return this.getState();
   }
 
   get destroyed() {
@@ -150,14 +176,14 @@ class Highlighter {
     hl._clear();
   }
   /**
-   * Reset config and clear
+   * Reset state and clear
    */
   reset() {
     const hl = this;
     if (hl.destroyed || hl.has_no_filters) {
       return;
     }
-    hl._config = clone(defConfig);
+    hl._state = clone(defState);
     hl._clear();
   }
 
@@ -190,7 +216,7 @@ class Highlighter {
     const hl = this;
     hl._clear_layers_map();
     hl._layers = {};
-    hl._config;
+    hl._state = clone(defState);
   }
 
   /**
@@ -240,10 +266,10 @@ class Highlighter {
    */
   _update_layers() {
     const hl = this;
-    const config = patchObject(defConfig, hl._config);
+    const state = patchObject(defState, hl._state);
 
     const hl_layers = {};
-    for (const item of config.filters) {
+    for (const item of state.filters) {
       const { id, filter } = item;
 
       const layers = hl._get_layers_by_prefix(id);
@@ -280,8 +306,8 @@ class Highlighter {
 
   get has_no_filters() {
     const hl = this;
-    const config = hl._config;
-    return isEmpty(config.filters);
+    const state = hl._state;
+    return isEmpty(state.filters);
   }
 
   _create_layers(layer, filter) {
