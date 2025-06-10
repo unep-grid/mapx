@@ -1,3 +1,9 @@
+  - [1.13.18-alpha.7](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.7) 
+
+    - fix(#1062): story duplication caused by an internal function
+    - fix(json_escape): replaced sanitation function for json in r db operation
+
+
   - [1.13.18-alpha.6](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.6) 
 
     - fix(lng-normalizer): absolute diff not required
