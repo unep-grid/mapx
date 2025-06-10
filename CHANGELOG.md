@@ -1,3 +1,8 @@
+  - [1.13.18-alpha.6](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.6) 
+
+    - fix(lng-normalizer): absolute diff not required
+
+
   - [1.13.18-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.5) 
 
     - fix(story): normalized latitude animation : prevent full rotation a distance is more than 180°
