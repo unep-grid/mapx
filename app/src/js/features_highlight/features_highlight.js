@@ -1,16 +1,10 @@
-import { onNextFrame } from "../animation_frame";
 import { bindAll } from "../bind_class_methods";
-import { patchObject } from "../mx_helper_misc";
-import { isEmpty, isNotEmpty, isString } from "./../is_test/index";
+import { clone, patchObject } from "../mx_helper_misc";
+import { isEmpty, isMap } from "./../is_test/index";
 const def = {
   map: null, // Mapbox gl instance
-  use_animation: false, // Enable animation
-  register_listener: false, // If true highligther will be triggered by event "event_type". "false" set as default as highligther is triggered during popup handling
-  event_type: "mousemove", // click, mousemove. Does not work yet with mousemove
   transition_duration: 180,
   transition_delay: 0,
-  animation_duration: 200, // 0 unlimited
-  animation_on: "line-width", // only option now
   highlight_shadow_blur: 2,
   highlight_width: 3,
   highlight_color: "#000",
@@ -22,10 +16,7 @@ const def = {
 };
 
 const defConfig = {
-  coord: null,
   filters: [],
-  features: [],
-  all: false,
 };
 
 class Highlighter {
@@ -39,9 +30,9 @@ class Highlighter {
     /**
      * local store
      */
-    hl._layers = new Map();
-    hl._items = new Map();
-    hl._config = {};
+    hl._layers = {};
+    hl._config = clone(defConfig);
+    hl._destroyed = false;
 
     /**
      * Set options
@@ -54,19 +45,11 @@ class Highlighter {
    */
   setOptions(opt) {
     const hl = this;
-    Object.assign(hl.opt, opt);
-    hl.update({ animate: true });
-  }
-
-  /**
-   * Destroy : remove listener and clean
-   */
-  destroy() {
-    const hl = this;
-    if (hl._listener) {
-      hl._map.off(hl.opt.event_type, hl._listener);
+    if (hl.destroyed) {
+      return;
     }
-    hl._clear();
+    Object.assign(hl.opt, opt);
+    hl.update();
   }
 
   /**
@@ -74,15 +57,14 @@ class Highlighter {
    */
   init(map) {
     const hl = this;
-    if (!map) {
-      throw new Error("mapbox-gl map is required");
+    if (hl.destroyed) {
+      return;
     }
 
-    hl._map = map;
-    if (hl.opt.register_listener === true) {
-      hl._listener = hl.update;
-      hl._map.on(hl.opt.event_type, hl._listener);
+    if (!isMap(map)) {
+      throw new Error("mapbox-gl map is required");
     }
+    hl._map = map;
   }
 
   /**
@@ -126,51 +108,77 @@ class Highlighter {
    */
   set(config) {
     const hl = this;
-    console.log('hl set', config);
-    if (isEmpty(config)) {
-      hl.reset();
+    if (hl.destroyed) {
       return;
     }
-    hl._config = patchObject(defConfig, config);
-    return hl.update({ animate: true });
+
+    if (isEmpty(config) || isEmpty(config.filters)) {
+      return;
+    }
+    hl._config = patchObject(defConfig, hl._config || {});
+
+    for (const item of config.filters) {
+      const { id, filter } = item;
+      const previous = hl._config.filters.find((f) => f.id === id);
+      if (previous) {
+        previous.filter = filter;
+      } else {
+        hl._config.filters.push(item);
+      }
+    }
+
+    return hl.update();
   }
 
   get() {
-    return this._config;
+    return clone(this._config);
   }
 
+  get destroyed() {
+    return !!this._destroyed;
+  }
+
+  /**
+   * Destroy : remove listener and clean
+   */
+  destroy() {
+    const hl = this;
+    if (hl.destroyed) {
+      return;
+    }
+    hl._destroyed = true;
+    hl._clear();
+  }
   /**
    * Reset config and clear
    */
   reset() {
     const hl = this;
-    hl._config = defConfig;
+    if (hl.destroyed || hl.has_no_filters) {
+      return;
+    }
+    hl._config = clone(defConfig);
     hl._clear();
-    return hl.count();
-  }
-  clean() {
-    const hl = this;
-    return hl.reset();
   }
 
   /**
    * Update
-   * @returns {number} Number of matched features
    */
   update() {
     const hl = this;
-    hl._update_items();
+    if (hl.destroyed || hl.has_no_filters) {
+      return;
+    }
     hl._update_layers();
     hl._render();
-    const c = hl.count();
-    return c;
   }
 
   _clear_layers_map() {
     const hl = this;
-    for (const layers of hl._layers.values()) {
-      for (const layer of layers) {
-        hl.removeHighlightLayer(layer);
+    for (const layer of hl.layers) {
+      const mapLayer = hl._map.getLayer(layer.id);
+      if (mapLayer) {
+        hl._map.removeLayer(layer.id);
       }
     }
   }
@@ -181,8 +189,8 @@ class Highlighter {
   _clear() {
     const hl = this;
     hl._clear_layers_map();
-    hl._layers.clear();
-    hl._items.clear();
+    hl._layers = {};
+    hl._config;
   }
 
   /**
@@ -193,20 +201,12 @@ class Highlighter {
   _render() {
     const hl = this;
     const max = hl.opt.max_layers_render;
-    const animate = hl.opt.use_animation;
     let i = 0;
-    for (const layers of hl._layers.values()) {
+    for (const layer of hl.layers) {
       if (i++ >= max) {
         return;
       }
-      for (const layer of layers) {
-        hl._add_or_update_highlight_layer(layer);
-      }
-    }
-    if (animate) {
-      onNextFrame(() => {
-        hl.animate();
-      });
+      hl._add_or_update_highlight_layer(layer);
     }
   }
 
@@ -215,9 +215,6 @@ class Highlighter {
    */
   _add_or_update_highlight_layer(layer) {
     const hl = this;
-    if (layer?._animation instanceof Animate) {
-      layer._animation.stop();
-    }
     const mapLayer = hl._map.getLayer(layer.id);
 
     if (isEmpty(mapLayer)) {
@@ -231,201 +228,73 @@ class Highlighter {
     }
   }
 
-  /**
-   * Animate
-   */
-  animate() {
-    const hl = this;
-
-    for (const layers of hl._layers.values()) {
-      for (const layer of layers) {
-        if (layer._no_anim) {
-          continue;
-        }
-        if (!layer._animation) {
-          layer._animation = new Animate(hl, layer);
-        }
-        layer._animation.start();
-      }
-    }
-  }
-
-  /**
-   * Remove highlight layer
-   * - Remove layer
-   * - start animation
-   */
-  removeHighlightLayer(layer) {
-    const hl = this;
-    if (layer._animation instanceof Animate) {
-      layer._animation.stop();
-    }
-    const mapLayer = hl._map.getLayer(layer.id);
-    if (isEmpty(mapLayer)) {
-      console.warn("tried to remove non-existing layers", layer.id);
-      return;
-    }
-    hl._map.removeLayer(layer.id);
+  _get_layers_by_prefix(prefix) {
+    return this._map
+      .getStyle()
+      .layers.filter((layer) => layer.id.startsWith(prefix));
   }
 
   /**
    * Recreate items configuration
    * return {void}
    */
-  _update_items() {
+  _update_layers() {
     const hl = this;
     const config = patchObject(defConfig, hl._config);
 
-    if (hl.isNotSet()) {
-      return;
-    }
+    const hl_layers = {};
+    for (const item of config.filters) {
+      const { id, filter } = item;
 
-    const layers = hl._map
-      .getStyle()
-      .layers.map((l) => l.id)
-      .filter((id) => id.match(hl.opt.regex_layer_id));
+      const layers = hl._get_layers_by_prefix(id);
+      const gids = [];
 
-    const features = [];
+      const filter_gids = ["in", ["get", "gid"], ["literal", gids]];
 
-    if (config.all) {
-      /**
-       * All features in selected layers
-       */
-      const allFeatures = hl._map.queryRenderedFeatures(null, {
-        layers: layers,
-      });
-
-      features.push(...allFeatures);
-    } else if (isNotEmpty(config.filters)) {
-      /**
-       * All feature filtered by config
-       */
-      for (const filter of config.filters) {
-        const layersSelect = hl._filter_layer_by_prefix(filter.id, layers);
-        const featuresSelect = hl._map.queryRenderedFeatures(null, {
-          layers: layersSelect,
-          filter: filter.filter,
+      for (const layer of layers) {
+        const features = hl._map.queryRenderedFeatures(null, {
+          layers: [layer.id],
+          filter: filter,
         });
 
-        features.push(...featuresSelect);
+        /**
+         * Add gids for each visited layer
+         * but only create one highlight layer per source
+         */
+        gids.push(...features.map((f) => f.properties?.gid));
+
+        if (!layers[layer.source]) {
+          hl_layers[layer.source] = hl._create_layers(layer, filter_gids);
+        }
       }
-    } else {
-      features.push(...config.features);
     }
 
-    const items = features
-      .map((f) => hl._features_to_item(f))
-      .reduce((a, i) => hl._features_aggregate(a, i), new Map());
-
-    for (const [id, item] of items) {
-      hl._items.set(id, item);
-    }
+    hl._layers = hl_layers;
   }
 
-  /**
-   * Filter layer by view id as prefix
-   */
-  _filter_layer_by_prefix(id, layers) {
-    const reg = new RegExp(`^${id}`);
-    return layers.filter((id) => id.match(reg));
-  }
-
-  /**
-   * Count matched feeatures
-   */
-  count() {
+  get layers() {
     const hl = this;
-    let count = 0;
-    for (const [_, item] of hl._items) {
-      count += item.gids.size;
-    }
-    return count;
+    const out = Object.values(hl._layers || {}) || [];
+    return out.flat();
   }
 
-  isNotSet() {
+  get has_no_filters() {
     const hl = this;
     const config = hl._config;
-    return (
-      isEmpty(config.features) &&
-      isEmpty(config.coord) &&
-      isEmpty(config.filters) &&
-      !config.all
-    );
+    return isEmpty(config.filters);
   }
 
-  /**
-   * Create layers using items, matching gids
-   */
-  _update_layers() {
+  _create_layers(layer, filter) {
     const hl = this;
-    const items = hl._items;
-    for (const [id, item] of items) {
-      item.filter = [
-        "match",
-        ["get", "gid"],
-        [...Array.from(item.gids)],
-        true,
-        false,
-      ];
-      hl._layers.set(id, hl._item_to_layers(item));
-    }
-  }
-
-  /**
-   * Feature to item, keeps track of gid
-   */
-  _features_to_item(feature) {
-    return {
-      sourceLayer: feature.sourceLayer,
-      source: feature.source,
-      type: feature.layer.type,
-      gid: feature?.properties?.gid,
-    };
-  }
-
-  _features_aggregate(acc, item) {
-    if (isEmpty(item.gid)) {
-      console.warn(
-        "Missing gid / feature.properties.gid, skip item to highlight",
-        item,
-      );
-      return acc;
-    }
-    if (!acc.has(item.source)) {
-      acc.set(item.source, {
-        type: item.type,
-        gids: new Set([item.gid]),
-        source: item.source,
-        sourceLayer: item.sourceLayer,
-      });
-    } else {
-      acc.get(item.source).gids.add(item.gid);
-    }
-    return acc;
-  }
-
-  /**
-   * Build highlight layer:
-   */
-  _item_to_layers(item) {
-    const hl = this;
-    const idSource = item.source;
-    const idSourceLayer = item.sourceLayer;
-    const idLayer = `@hl-${idSource}`;
-    const type = item.type;
-    const filter = item.filter;
-
+    const idLayer = `@hl-${layer.source}`;
+    const layers = [];
     const baseLayer = {
       id: idLayer,
-      source: idSource,
+      source: layer.source,
+      "source-layer": layer["source-layer"],
       filter: filter,
     };
-
-    if (idSourceLayer) {
-      baseLayer["source-layer"] = idSourceLayer;
-    }
-
-    let layers = [];
+    const { type } = layer;
 
     switch (type) {
       case "fill":
@@ -480,8 +349,7 @@ class Highlighter {
           },
         };
 
-        shadowLayerLine._no_anim = true;
-        layers = [shadowLayerLine, lineLayerLine];
+        layers.push(...[shadowLayerLine, lineLayerLine]);
         break;
 
       case "symbol":
@@ -517,174 +385,14 @@ class Highlighter {
             "circle-radius": r2,
           },
         };
-        shadowCircleLayer._no_anim = true;
-        layers = [shadowCircleLayer, circleLayer];
+        layers.push(...[shadowCircleLayer, circleLayer]);
         break;
 
       default:
         console.warn(`Layer type ${type}`);
-        layers = [baseLayer];
+        layers.push(baseLayer);
     }
-
     return layers;
   }
-
-  /**
-   * Validators
-   */
-  isValidLayer(layer) {
-    const hl = this;
-    return layer && hl.isValidIdLayer(layer.id);
-  }
-  isValidIdLayer(idLayer) {
-    const hl = this;
-    const valid = isString(idLayer) && !!idLayer.match(hl.opt.regex_layer_id);
-    return valid;
-  }
-  isSupportedFeature(f) {
-    const hl = this;
-    return f && hl.isValidLayer(f.layer) && hl.isSupportedType(f);
-  }
-
-  isSupportedType(f) {
-    const hl = this;
-    const paint = f.layer.paint;
-    const types = hl.opt.supported_types;
-    const supported = types.includes(f.layer.type) && paint instanceof Object;
-    //paint[`${f.layer.type}-color`];
-    return supported;
-  }
-
-  toFeatureStateConditional(opt) {
-    opt = Object.assign({}, { on: 1, off: 0.5 }, opt);
-    return [
-      "case",
-      ["boolean", ["feature-state", "highlight"], false],
-      opt.on,
-      opt.off,
-    ];
-  }
 }
-
-class Animate {
-  constructor(hl, layer) {
-    const anim = this;
-    anim._opt = hl.opt;
-    anim._map = hl._map;
-    anim._dim = false;
-    anim._stopped = false;
-    anim._time_limit = anim._opt.animation_duration
-      ? Date.now() + anim._opt.animation_duration
-      : 0;
-
-    anim._idLayer = layer.id;
-
-    anim._t = {
-      duration: anim._opt.transition_duration,
-      delay: anim._opt.transition_delay,
-    };
-
-    /* set animation values */
-    anim._s = {
-      fill: {
-        param: "line-translate",
-        min: [0, 0],
-        max: [-3, -3],
-      },
-      line: {
-        param: "line-translate",
-        min: [0, 0],
-        max: [-3, -3],
-      },
-      circle: {
-        param: "circle-translate",
-        min: [0, 0],
-        max: [-3, -3],
-      },
-    }[layer.type];
-  }
-
-  /**
-   * Start animation
-   */
-  start() {
-    const anim = this;
-    if (anim._idInterval) {
-      return;
-    }
-    anim._idInterval = setInterval(
-      () => anim.animate(),
-      anim._opt.transition_duration,
-    );
-  }
-
-  /**
-   * Animation
-   */
-  animate() {
-    const anim = this;
-    const map = anim._map;
-    const now = Date.now();
-    try {
-      if (now >= anim._time_limit) {
-        anim.stop();
-        return;
-      }
-      if (!anim._stopped) {
-        if (!anim._transition_set) {
-          /* set transition parameters*/
-          const hasLayer = !!map.getLayer(anim._idLayer);
-          if (hasLayer) {
-            map.setPaintProperty(
-              anim._idLayer,
-              `${anim._s.param}-transition`,
-              anim._t,
-            );
-          }
-          anim._transition_set = true;
-        }
-        if (anim._dim) {
-          anim._toMin();
-        } else {
-          anim._toMax();
-        }
-
-        /* Inverse direction*/
-        anim._dim = !anim._dim;
-      }
-    } catch (e) {
-      anim.stop();
-      console.warn(e);
-    }
-  }
-
-  _toMax() {
-    const anim = this;
-    const map = anim._map;
-    const hasLayer = !!map.getLayer(anim._idLayer);
-    if (hasLayer) {
-      map.setPaintProperty(anim._idLayer, anim._s.param, anim._s.max);
-    }
-  }
-  _toMin() {
-    const anim = this;
-    const map = anim._map;
-    const hasLayer = !!map.getLayer(anim._idLayer);
-    if (hasLayer) {
-      map.setPaintProperty(anim._idLayer, anim._s.param, anim._s.min);
-    }
-  }
-
-  /**
-   * Stop animation and clean
-   */
-  stop() {
-    const anim = this;
-    window.clearInterval(anim._idInterval);
-    anim._idInterval = null;
-    anim._map.stop();
-    anim._stopped = true;
-  }
-}
-
 export { Highlighter };
