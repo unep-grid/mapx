@@ -118,7 +118,7 @@ mxDbCoerceValue <- function(x, dbType) {
     "json" = ,
     "jsonb" = {
       if (is.list(x)) {
-        mxToJsonForDb(x)
+        mxToJsonForDbParam(x)
       } else {
         as.character(x)
       }
