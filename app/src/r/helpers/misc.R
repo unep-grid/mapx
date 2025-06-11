@@ -617,22 +617,46 @@ mxDictTranslate <- function(
 d <- mxDictTranslate
 
 
-#' Create source named list from layer table
-#' @param layerTable {table} table with columns "id", "title", "date_modified"
+
+#' Create source named list from layer table with improved display
+#'
+#' @param layerTable A data frame with columns: "id", "title", "date_modified", "global"
+#' @return A named list of IDs with informative names sorted by global status, date, and title
 mxGetSourceNamedList <- function(layerTable) {
+  # Validate input
+  required_cols <- c("id", "title", "date_modified", "global")
+  if (!all(required_cols %in% names(layerTable))) {
+    stop("Missing required columns in layerTable.")
+  }
+
+  # Ensure proper types
+  layerTable$date_modified <- as.Date(layerTable$date_modified)
+  layerTable$global <- as.logical(layerTable$global)
+
+  # Generate parts of the name
+  global_icon <- ifelse(layerTable$global, "🌐", "")
+  formatted_date <- format(layerTable$date_modified, "%Y-%m-%d")
+  dims <- sprintf("[%d x %d]", nrow(layerTable), ncol(layerTable))
+
+  # Construct name string
+  display_names <- sprintf(
+    "%s — %s  %s %s",
+    trimws(layerTable$title),
+    formatted_date,
+    dims,
+    global_icon
+  )
+
+  # Combine with IDs
   out <- as.list(layerTable$id)
-  titles <- layerTable$title
-  date <- as.Date(layerTable$date_modified)
+  names(out) <- trimws(display_names)
 
-  titlesDate <- sprintf("%1$s ( %2$s )", titles, format(date, "%Y-%m-%d"))
+  # Order: global desc, date desc, title asc
+  ordering <- order(-as.integer(layerTable$global), -as.integer(layerTable$date_modified), tolower(layerTable$title))
+  out <- out[ordering]
 
-  names(out) <- trimws(titlesDate)
-
-  out <- out[order(names(out))]
-
-  return(as.list(out))
+  return(out)
 }
-
 
 #' Get title of source using its id
 #' @param id {String} Source id
@@ -1032,7 +1056,7 @@ mxCatchHandler <- function(type = "error", cond = NULL, session = shiny::getDefa
       content = content,
       useNotify = FALSE,
       # If the DB is down, encryption is down
-      #encrypt = FALSE
+      # encrypt = FALSE
     )
   })
 }
@@ -1106,7 +1130,6 @@ mxCatch <- function(
       captureStackTraces(eval(expression))
     },
     error = function(e) {
-      
       mxCatchHandler(
         type = "error",
         cond = e
