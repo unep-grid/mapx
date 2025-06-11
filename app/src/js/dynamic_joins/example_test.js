@@ -54,45 +54,47 @@ function handler() {
         stat: "quantile",
         classes: 5,
         color_na: "#ccc",
-        aggregation: "median", // sum, max, min, median, mode
+        aggregateFn: "max", // none, first, last, sum, max, min, median, mode
 
         // Data sources
         idSourceGeom: "mx_ympyi_yimwa_uvvlo_waygb_omaei",
         idSourceData: "mx_vxu1l_jzbse_gu2tq_f1b82_xc36u",
-        dataUrl: "https://api.staging.mapx.org/get/source/table/attribute?id=mx_vxu1l_jzbse_gu2tq_f1b82_xc36u&attributes=gid_1,scenario,parameter,value",
+        dataUrl: "https://api.staging.mapx.org/get/source/table/attribute?id=mx_vxu1l_jzbse_gu2tq_f1b82_xc36u&attributes=gid_1,scenario,parameter,value,year",
 
-        // Field configuration (NEW API)
-        fieldWhere: [], // Static filtering fields (can be extended for complex conditions)
-        fieldGroupBy: ["parameter", "scenario"], // Fields for grouping + aggregation
-        fieldValue: "value",
+        // Field configuration (NEW STREAMLINED API)
+        staticFilters: [
+          {
+            field: "parameter",
+            operator: "==",
+            value: "x"  
+          }
+        ], // Static filtering fields (can be extended for complex conditions)
+        aggregateBy: ["parameter", "scenario"], // Fields for grouping + aggregation
+        aggregateField: "value",
         fieldJoinOn: ["gid_1", "gid_1"], // [dataField, featureProperty]
 
         // Interactive filter inputs (NEW FEATURE)
-        filterInputs: [
-          {
-            name: "parameter",
-            type: "dropdown",
-            default: null // No default selection
-          },
+        dynamicFilters: [
+ 
           {
             name: "scenario",
             type: "dropdown",
-            default: "ssp126" // Default to specific scenario if available
-          }
-          // Example range slider (uncomment if you have numerical data):
-          // {
-          //   name: "year",
-          //   type: "range-slider",
-          //   min: 1980,
-          //   max: 2025,
-          //   step: 1,
-          //   mode: "integer",
-          //   default: [2000, 2020]
-          // }
+            default: "b" // Default to specific scenario if available
+          },
+        
+           {
+             name: "year",
+             type: "range-slider",
+             min: 1980,
+             max: 2000,
+             step: 1,
+             mode: "integer",
+             default: [1980, 2000]
+           }
         ],
 
         // Callback functions (NEW FEATURE)
-        onRender: function(table, filters, config) {
+        onRender: function (table, filters, config) {
           console.log("Data processed:", {
             aggregatedTable: table,
             currentFilters: filters,
@@ -101,7 +103,7 @@ function handler() {
           // You can pass this data to other tools or update other widgets
         },
 
-        onMapClick: function(features) {
+        onMapClick: function (features) {
           console.log("Map clicked, features:", features);
           // Handle map interactions, show popups, update other components, etc.
           if (features && features.length > 0) {
@@ -129,6 +131,7 @@ function handler() {
      * @param {Object} data - The new data for the widget.
      * @returns {Promise<void>}
      */
-    async onData(widget, data) {},
+    async onData(widget, data) { },
   };
 }
+

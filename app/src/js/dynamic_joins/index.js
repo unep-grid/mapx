@@ -5,9 +5,6 @@ import { moduleLoad } from "../modules_loader_async";
 import { isElement, isNotEmpty } from "../is_test";
 
 export class DynamicJoin {
-  /**
-   * @param {mapboxgl.Map} map – an already-initialized Mapbox GL map
-   */
   constructor(map) {
     window._dj = this;
     this._map = map;
@@ -15,15 +12,13 @@ export class DynamicJoin {
     this._rawTable = [];
     this._aggTable = [];
     this._colorScale = null;
-    // new API structure
-    this._fieldWhere = [];
-    this._fieldGroupBy = [];
-    this._filterInputs = [];
-    this._filterControls = {}; // stores TomSelect and noUiSlider instances
+    this._staticFilters = [];
+    this._aggregateBy = [];
+    this._dynamicFilters = [];
+    this._filterControls = {};
     this._currentFilters = {};
-    this._elLegendContainer = null; // DOM element for legend
-    this._visibleLegendClasses = new Set(); // Stores indices of visible classes + 'na'
-    // callbacks
+    this._elLegendContainer = null;
+    this._visibleLegendClasses = new Set();
     this._onRender = null;
     this._onMapClick = null;
   }
@@ -41,81 +36,78 @@ export class DynamicJoin {
    * @param {string} [opts.stat='quantile']    – 'quantile', 'equal', 'kmeans', etc.
    * @param {number} [opts.classes=5]          – number of classes/breaks
    * @param {string} [opts.color_na='#ccc']    – fallback color for missing joins
-   * @param {Array<string>} [opts.fieldWhere]  – array of field names for filtering data
-   * @param {Array<string>} [opts.fieldGroupBy] – array of field names for grouping + aggregation
-   * @param {string} [opts.fieldValue]         – value field
-   * @param {string} [opts.aggregation='sum']  – 'sum', 'median', 'max', 'min', or 'mode'
-   * @param {Array} [opts.filterInputs]        – array of input configurations
+   * @param {Array<string>} [opts.staticFilters]  – array of field names for static filtering
+   * @param {Array<string>} [opts.aggregateBy] – array of field names for grouping + aggregation
+   * @param {string} [opts.aggregateField]     – value field to aggregate
+   * @param {string} [opts.aggregateFn='none'] – 'none', 'first', 'last', 'sum', 'median', 'max', 'min', or 'mode'
+   * @param {Array} [opts.dynamicFilters]      – array of input configurations
    * @param {Function} [opts.onRender]         – callback after data processing
    * @param {Function} [opts.onMapClick]       – callback on map feature click
    * @param {HTMLElement} [opts.elSelectContainer]     – DOM element to append filter UI
    * @param {HTMLElement} [opts.elLegendContainer]     – DOM element to append the legend
    */
   async init(opts) {
-    // merge provided opts with defaults
     this._options = {
       palette: "OrRd",
       stat: "quantile",
       classes: 5,
       color_na: "#ccc",
-      aggregation: "sum",
-      fieldWhere: [],
-      fieldGroupBy: [],
-      filterInputs: [],
+      aggregateFn: "none",
+      staticFilters: [],
+      aggregateBy: [],
+      dynamicFilters: [],
       ...opts,
     };
 
-    // destruct for private props
     const {
       idSourceGeom,
       idSourceData,
       dataUrl,
       fieldJoinOn,
-      fieldWhere,
-      fieldGroupBy,
-      fieldValue,
-      filterInputs,
+      aggregateField,
+      aggregateBy,
+      staticFilters,
+      dynamicFilters,
       onRender,
       onMapClick,
       elSelectContainer,
       elLegendContainer,
     } = this._options;
 
-    // join fields
-    this._fieldValue = fieldValue;
+    this._aggregateField = aggregateField;
     this._fieldJoinData = fieldJoinOn[1];
     this._fieldJoinGeom = fieldJoinOn[0];
     this._idSourceGeom = idSourceGeom;
     this._sourceLayer = idSourceGeom;
     this._idSourceData = idSourceData;
-    this._fieldWhere = fieldWhere || [];
-    this._fieldGroupBy = fieldGroupBy || [];
-    this._filterInputs = filterInputs || [];
+    this._staticFilters = staticFilters || [];
+    this._aggregateBy = aggregateBy || [];
+    this._dynamicFilters = dynamicFilters || [];
     this._onRender = onRender;
     this._onMapClick = onMapClick;
+    this._elLegendContainer = elLegendContainer;
 
-    // initialize current filters for all filter inputs
-    for (const input of this._filterInputs) {
+    // initialize current filters for all dynamic filter inputs
+    for (const input of this._dynamicFilters) {
       this._currentFilters[input.name] = input.default || null;
     }
 
     this._idLayer = `${idSourceGeom}-dynamic-join`;
     this._idSource = `${idSourceGeom}-dynamic-join-src`;
     this._data_url = dataUrl;
-    this._elLegendContainer = elLegendContainer;
 
     // load raw data
     await this._loadData();
 
     // build filter UI if inputs are configured
-    if (isNotEmpty(this._filterInputs)) {
+    if (isNotEmpty(this._dynamicFilters)) {
       if (isElement(elSelectContainer)) {
         await this._buildFilterUI(elSelectContainer);
       }
     }
 
     // prepare aggregated values
-    this._prepareDataForStyling();
+    this._prepareData();
     this._computeColorScale();
 
     // Build legend and add layer
@@ -213,7 +205,7 @@ export class DynamicJoin {
 
       elItem.addEventListener("click", () =>
         this._toggleLegendClassSelection(i, elItem),
-      ); // Renamed handler
+      );
       this._elLegendContainer.appendChild(elItem);
     });
 
@@ -250,7 +242,7 @@ export class DynamicJoin {
       );
       elNaItem.addEventListener("click", () =>
         this._toggleLegendClassSelection(naIdentifier, elNaItem),
-      ); // Renamed handler
+      );
       this._elLegendContainer.appendChild(elNaItem);
     }
     // Initial style application reflects the default state (all visible as Set is empty)
@@ -258,7 +250,6 @@ export class DynamicJoin {
   }
 
   _toggleLegendClassSelection(classIdentifier, element) {
-    // Renamed method
     const wasVisible = this._visibleLegendClasses.has(classIdentifier);
 
     if (wasVisible) {
@@ -297,7 +288,7 @@ export class DynamicJoin {
 
   // helper to refresh styling and legend after filter change
   _refresh() {
-    this._prepareDataForStyling();
+    this._prepareData();
     this._computeColorScale();
     // Rebuild legend which also resets visibility state and applies style
     this._buildLegendUI();
@@ -318,10 +309,10 @@ export class DynamicJoin {
       // request data including all necessary fields
       const attrs = [
         this._fieldJoinData,
-        this._fieldValue,
-        ...this._fieldWhere,
-        ...this._fieldGroupBy,
-        ...this._filterInputs.map((input) => input.name),
+        this._aggregateField,
+        ...this._staticFilters.map((filter) => filter.field),
+        ...this._aggregateBy,
+        ...this._dynamicFilters.map((input) => input.name),
       ];
       // remove duplicates
       const uniqueAttrs = [...new Set(attrs)];
@@ -335,7 +326,7 @@ export class DynamicJoin {
     this._rawTable = Array.isArray(json.data) ? json.data : [];
   }
 
-  // build filter inputs based on filterInputs configuration
+  // build filter inputs based on dynamicFilters configuration
   async _buildFilterUI(elSelectContainer) {
     // clear any existing filter UI
     this._destroyFilterUI();
@@ -347,7 +338,7 @@ export class DynamicJoin {
     });
     elSelectContainer.appendChild(elWrapper);
 
-    for (const inputConfig of this._filterInputs) {
+    for (const inputConfig of this._dynamicFilters) {
       const { name, type, default: defaultValue } = inputConfig;
 
       if (type === "dropdown") {
@@ -489,21 +480,37 @@ export class DynamicJoin {
     this._filterControls[name] = slider;
   }
 
-  // prepare data for styling: apply fieldWhere filters, then group by fieldGroupBy and aggregate
-  _prepareDataForStyling() {
-    // Step 1: Apply fieldWhere filters (static filtering)
-    let filteredData = this._rawTable.filter((row) => {
-      for (const field of this._fieldWhere) {
-        // For fieldWhere, we might want to implement specific filter logic
-        // For now, we'll keep all data if fieldWhere is specified but no specific logic
-        // This can be extended later for more complex where conditions
-      }
-      return true; // keep all for now
-    });
+  // prepare data for styling: apply staticFilters, then group by aggregateBy and aggregate
+  _prepareData() {
+    // Step 1: Apply staticFilters (static filtering)
+    let filteredData = [...this._rawTable]; // Start with copy of raw data
+
+    for (const filter of this._staticFilters) {
+      const { field, operator, value } = filter;
+      filteredData = filteredData.filter((row) => {
+        const v = row[field];
+        switch (operator) {
+          case "==":
+            return v == value;
+          case "!=":
+            return v != value;
+          case ">":
+            return v > value;
+          case ">=":
+            return v >= value;
+          case "<":
+            return v < value;
+          case "<=":
+            return v <= value;
+          default:
+            return true;
+        }
+      });
+    }
 
     // Step 2: Apply dynamic filter inputs
     filteredData = filteredData.filter((row) => {
-      for (const inputConfig of this._filterInputs) {
+      for (const inputConfig of this._dynamicFilters) {
         const { name, type } = inputConfig;
         const filterValue = this._currentFilters[name];
 
@@ -524,14 +531,14 @@ export class DynamicJoin {
       return true;
     });
 
-    // Step 3: Group by fieldGroupBy fields and join key
+    // Step 3: Group by aggregateBy fields and join key
     const groups = {};
 
     for (const row of filteredData) {
-      // Create composite key from fieldGroupBy fields + join field
+      // Create composite key from aggregateBy fields + join field
       const groupKey =
-        this._fieldGroupBy.length > 0
-          ? this._fieldGroupBy.map((field) => row[field]).join("|")
+        this._aggregateBy.length > 0
+          ? this._aggregateBy.map((field) => row[field]).join("|")
           : "default";
 
       const joinKey = row[this._fieldJoinData];
@@ -544,36 +551,65 @@ export class DynamicJoin {
           values: [],
         };
       }
-      groups[compositeKey].values.push(row[this._fieldValue]);
+      groups[compositeKey].values.push(row[this._aggregateField]);
     }
 
-    // Step 4: Apply aggregation
+    // Step 4: Apply aggregation with enhanced 'none' handling
     const agg = (vals) => {
-      const { aggregation } = this._options;
-      switch (aggregation) {
+      const { aggregateFn } = this._options;
+
+      switch (aggregateFn) {
+        case "none":
+          if (vals.length === 1) {
+            return vals[0]; // Perfect - single value
+          } else if (vals.length > 1) {
+            console.warn(
+              `DynamicJoin: Expected single value but got ${vals.length} values. Using first value. Consider refining your filters.`,
+            );
+            return vals[0];
+          } else {
+            return null; // No values
+          }
+
+        case "first":
+          return vals.length > 0 ? vals[0] : null;
+
+        case "last":
+          return vals.length > 0 ? vals[vals.length - 1] : null;
+
         case "sum":
           return vals.reduce((a, b) => a + b, 0);
+
         case "max":
           return Math.max(...vals);
+
         case "min":
           return Math.min(...vals);
+
         case "median":
-          vals.sort((a, b) => a - b);
-          const mid = Math.floor(vals.length / 2);
-          return vals.length % 2 === 0
-            ? (vals[mid - 1] + vals[mid]) / 2
-            : vals[mid];
+          const sortedVals = vals.toSorted((a, b) => a - b);
+          const mid = Math.floor(sortedVals.length / 2);
+          return sortedVals.length % 2 === 0
+            ? (sortedVals[mid - 1] + sortedVals[mid]) / 2
+            : sortedVals[mid];
+
         case "mode":
           const counts = vals.reduce((c, v) => {
             c[v] = (c[v] || 0) + 1;
             return c;
           }, {});
-          return Object.entries(counts).reduce(
+          const modeValue = Object.entries(counts).reduce(
             (a, [v, c]) => (c > a[1] ? [v, c] : a),
             [null, 0],
           )[0];
-        default: // fallback to sum
-          return vals.reduce((a, b) => a + b, 0);
+          // Convert back to number if it's a numeric string
+          return isNaN(modeValue) ? modeValue : Number(modeValue);
+
+        default:
+          console.warn(
+            `DynamicJoin: Unknown aggregation function '${aggregateFn}'. Using 'none'.`,
+          );
+          return vals.length > 0 ? vals[0] : null;
       }
     };
 
@@ -605,17 +641,6 @@ export class DynamicJoin {
     this._colorScale = chroma.scale(this._options.palette).classes(limits);
   }
 
-  // build the Mapbox GL "match" expression
-  _buildMatchExpression() {
-    const expr = ["match", ["get", this._fieldJoinGeom]];
-    this._aggTable.forEach((row) => {
-      expr.push(row.key, this._colorScale(row.value).hex());
-    });
-    expr.push(this._options.color_na);
-    return expr;
-  }
-
-  // add the layer if not already present
   _addLayer() {
     const hasSource = this._map.getSource(this._idSource);
     const hasLayer = this._map.getLayer(this._idLayer);
@@ -641,46 +666,6 @@ export class DynamicJoin {
         },
       });
     }
-  }
-
-  // setup map click handler for onMapClick callback
-  _setupMapClickHandler() {
-    this._map.on("click", this._idLayer, this._onMapClick);
-  }
-
-  destroy() {
-    this._destroyFilterUI(); // Destroy filters
-    this._destroyLegendUI(); // Destroy legend
-
-    // remove map click handler
-    if (this._onMapClick) {
-      this._map.off("click", this._idLayer, this._onMapClick);
-    }
-
-    return this._removeLayer(); // Remove map layer/source
-  }
-
-  _removeLayer() {
-    const hasSource = this._map.getSource(this._idSource);
-    const hasLayer = this._map.getLayer(this._idLayer);
-
-    if (hasLayer) {
-      this._map.removeLayer(this._idLayer);
-    }
-    if (hasSource) {
-      this._map.removeSource(this._idSource);
-    }
-  }
-
-  _sourceUrlTiles(idSource) {
-    const urlBase = getApiUrl("getTile");
-    // URL API escapes {x}/{y}/{z}, use concat
-    const url = [
-      `${urlBase}?idSource=${idSource}`,
-      `attributes=${"gid"},${this._fieldJoinGeom}`,
-      `timestamp=${Date.now()}`,
-    ].join("&");
-    return [url, url];
   }
 
   // apply the dynamic style, considering the toggled legend classes
@@ -758,6 +743,45 @@ export class DynamicJoin {
     this._map.setPaintProperty(this._idLayer, "fill-opacity", 0.7); // Consistent opacity
   }
 
+  _setupMapClickHandler() {
+    this._map.on("click", this._idLayer, this._onMapClick);
+  }
+
+  _sourceUrlTiles(idSource) {
+    const urlBase = getApiUrl("getTile");
+    // URL API escapes {x}/{y}/{z}, use concat
+    const url = [
+      `${urlBase}?idSource=${idSource}`,
+      `attributes=${"gid"},${this._fieldJoinGeom}`,
+      `timestamp=${Date.now()}`,
+    ].join("&");
+    return [url, url];
+  }
+
+  destroy() {
+    this._destroyFilterUI(); // Destroy filters
+    this._destroyLegendUI(); // Destroy legend
+
+    // remove map click handler
+    if (this._onMapClick) {
+      this._map.off("click", this._idLayer, this._onMapClick);
+    }
+
+    return this._removeLayer(); // Remove map layer/source
+  }
+
+  _removeLayer() {
+    const hasSource = this._map.getSource(this._idSource);
+    const hasLayer = this._map.getLayer(this._idLayer);
+
+    if (hasLayer) {
+      this._map.removeLayer(this._idLayer);
+    }
+    if (hasSource) {
+      this._map.removeSource(this._idSource);
+    }
+  }
+
   /**
    * Update styling, optionally re-fetching data if the source changes.
    * @param {Object} newOpts – any of the same keys you passed into init()
@@ -765,11 +789,11 @@ export class DynamicJoin {
   async update(newOpts = {}) {
     // merge provided opts
     this._options = { ...this._options, ...newOpts };
-    // normalize filter fields (support legacy single filterField)
-    const { fieldsFilter, elSelectContainer } = this._options;
-    this._fieldsFilter = fieldsFilter;
+    // normalize filter fields
+    const { staticFilters, elSelectContainer } = this._options;
+    this._staticFilters = staticFilters;
     // reset new filters
-    for (const field of this._fieldsFilter) {
+    for (const field of this._staticFilters) {
       if (!(field in this._currentFilters)) {
         this._currentFilters[field] = null;
       }
@@ -779,14 +803,14 @@ export class DynamicJoin {
       this._idSourceData = this._options.idSourceData;
       this._data_url = this._options.dataUrl;
       await this._loadData();
-      if (this._fieldsFilter.length > 0 && elSelectContainer) {
+      if (this._dynamicFilters.length > 0 && elSelectContainer) {
         this._destroyFilterUI();
         await this._buildFilterUI(elSelectContainer);
       }
     }
     // if filter fields changed, rebuild filter UI
-    else if (newOpts.fieldsFilter) {
-      if (this._fieldsFilter.length > 0 && elSelectContainer) {
+    else if (newOpts.dynamicFilters) {
+      if (this._dynamicFilters.length > 0 && elSelectContainer) {
         this._destroyFilterUI();
         await this._buildFilterUI(elSelectContainer);
       }
@@ -801,7 +825,7 @@ export class DynamicJoin {
       this._elLegendContainer = this._options.elLegendContainer; // Update container ref
       if (isElement(this._elLegendContainer)) {
         // Data needs to be prepped and scale computed before building legend
-        this._prepareDataForStyling();
+        this._prepareData();
         this._computeColorScale();
         this._buildLegendUI();
       } else {
