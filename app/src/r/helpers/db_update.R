@@ -70,6 +70,9 @@ mxUpdateStandard <- function(
   if (is.list(value)) {
     value <- mxToJsonForDbParam(value)
   }
+  if(inherits(value,"POSIXt")){
+    value <- mxDbTimeStampFormater(value)
+  }
 
   query <- sprintf(
     "UPDATE %s SET \"%s\" = $1 WHERE \"%s\" = $2",

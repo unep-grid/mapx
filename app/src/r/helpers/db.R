@@ -85,7 +85,7 @@ mxDbTestCon <- function(con) {
 #' @param stringAsFactors Convert strings to factors, default is FALSE
 #' @param con Connection object (optional)
 #' @export
-mxDbGetQuery <- function(query, stringAsFactors = FALSE, con = NULL) {
+mxDbGetQuery <- function(query, stringAsFactors = FALSE, con = NULL, params = NULL) {
   hasCon <- isNotEmpty(con)
   res <- NULL
 
@@ -102,7 +102,7 @@ mxDbGetQuery <- function(query, stringAsFactors = FALSE, con = NULL) {
       # ⚠️  Impossible to produce parametrized requests. Does not work in RPostgreSQL_0.6-2
       #
       suppressWarnings({
-        res <- dbSendQuery(con, query)
+        res <- dbSendQuery(con, query, params = params)
         if (!dbHasCompleted(res)) {
           res <- dbFetch(res)
         }
@@ -961,13 +961,13 @@ mxDbCreateUser <- function(
 
 
 #' Create PostgreSQL-compatible JSON from R list
-#' 
+#'
 #' Converts an R list to a JSON string that can be safely stored in PostgreSQL
 #' by removing problematic control characters that may cause database issues.
-#' 
+#'
 #' @param listInput A list object to convert to PostgreSQL-compatible JSON
 #' @return A character string containing sanitized JSON suitable for database storage
-#' @details 
+#' @details
 #' This function performs the following operations:
 #' \itemize{
 #'   \item Removes names from unnamed lists to prevent empty object notation
@@ -979,7 +979,7 @@ mxDbCreateUser <- function(
 #' # Basic usage
 #' my_list <- list(name = "John", age = 30, active = TRUE)
 #' json_string <- mxToJsonForDbParam(my_list)
-#' 
+#'
 #' # With unnamed list
 #' unnamed_list <- list("apple", "banana", "cherry")
 #' json_array <- mxToJsonForDbParam(unnamed_list)
