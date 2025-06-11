@@ -1,3 +1,14 @@
+  - [1.13.18-alpha.8](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.8) 
+
+    - feat(1048): refactor for a cleaner implementation
+    - feat(1048): added slider support + improved filtering, still unstable
+    - feat(layers_list): indicate global source and table dimension in view editor
+    - fix(db_update): update query date formating  and introduced parameterized query for mxDbGetQuery
+    - feat: set default theme for new project
+    - fix(highlighter): solved setOption and improved states management
+    - chore(feature_highlight): removed old version
+
+
   - [1.13.18-alpha.7](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.7) 
 
     - fix(#1062): story duplication caused by an internal function
