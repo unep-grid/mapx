@@ -10,6 +10,7 @@ export class DynamicJoin {
     this._map = map;
     this._options = {};
     this._rawTable = [];
+    this._subsetTable = [];
     this._aggTable = [];
     this._colorScale = null;
     this._staticFilters = [];
@@ -326,6 +327,25 @@ export class DynamicJoin {
     this._rawTable = Array.isArray(json.data) ? json.data : [];
   }
 
+  _applyStaticFilters() {
+    const operators = new Map([
+      ["==", (a, b) => a == b],
+      ["!=", (a, b) => a != b],
+      [">", (a, b) => a > b],
+      [">=", (a, b) => a >= b],
+      ["<", (a, b) => a < b],
+      ["<=", (a, b) => a <= b],
+    ]);
+    const filteredData = (this._rawTable || []).filter((row) =>
+      this._staticFilters.every(({ field, operator, value }) => {
+        const operatorFn = operators.get(operator);
+        return operatorFn ? operatorFn(row[field], value) : true;
+      }),
+    );
+    this._subsetTable.length = 0;
+    this._subsetTable.push(...filteredData);
+  }
+
   // build filter inputs based on dynamicFilters configuration
   async _buildFilterUI(elSelectContainer) {
     // clear any existing filter UI
@@ -483,30 +503,7 @@ export class DynamicJoin {
   // prepare data for styling: apply staticFilters, then group by aggregateBy and aggregate
   _prepareData() {
     // Step 1: Apply staticFilters (static filtering)
-    let filteredData = [...this._rawTable]; // Start with copy of raw data
-
-    for (const filter of this._staticFilters) {
-      const { field, operator, value } = filter;
-      filteredData = filteredData.filter((row) => {
-        const v = row[field];
-        switch (operator) {
-          case "==":
-            return v == value;
-          case "!=":
-            return v != value;
-          case ">":
-            return v > value;
-          case ">=":
-            return v >= value;
-          case "<":
-            return v < value;
-          case "<=":
-            return v <= value;
-          default:
-            return true;
-        }
-      });
-    }
+    let filteredData = [...this._subsetTable];
 
     // Step 2: Apply dynamic filter inputs
     filteredData = filteredData.filter((row) => {
@@ -737,8 +734,13 @@ export class DynamicJoin {
     // Make them transparent as their class visibility cannot be determined
     fillColorExpr.push(transparentColor);
 
+    if (fillColorExpr.length < 4) {
+      this._map.setPaintProperty(this._idLayer, "fill-color", transparentColor);
+    } else {
+      this._map.setPaintProperty(this._idLayer, "fill-color", fillColorExpr);
+    }
+
     // Apply the calculated fill color expression
-    this._map.setPaintProperty(this._idLayer, "fill-color", fillColorExpr);
     // Set a consistent opacity for the layer
     this._map.setPaintProperty(this._idLayer, "fill-opacity", 0.7); // Consistent opacity
   }
@@ -803,6 +805,8 @@ export class DynamicJoin {
       this._idSourceData = this._options.idSourceData;
       this._data_url = this._options.dataUrl;
       await this._loadData();
+      this._applyStaticFilters()
+
       if (this._dynamicFilters.length > 0 && elSelectContainer) {
         this._destroyFilterUI();
         await this._buildFilterUI(elSelectContainer);
