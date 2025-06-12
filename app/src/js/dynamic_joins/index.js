@@ -3,25 +3,55 @@ import { getApiUrl } from "../api_routes";
 import { el } from "../el_mapx";
 import { moduleLoad } from "../modules_loader_async";
 import { isElement, isNotEmpty } from "../is_test";
+import { clone } from "../mx_helper_misc";
+import { buildRangeSlider } from "./build_slider";
+import { isUrl } from "../is_test";
+import {isArray} from "../is_test";
+
+const default_state = {
+  _options: { ...default_options },
+  _rawTable: [],
+  _subsetTable: [],
+  _aggTable: [],
+  _colorScale: null,
+  _staticFilters: [],
+  _aggregateBy: [],
+  _dynamicFilters: [],
+  _filterControls: {},
+  _currentFilters: {},
+  _elLegendContainer: null,
+  _visibleLegendClasses: new Set(),
+  _onRender: null,
+  _onMapClick: null,
+  _idLayer: null,
+  _idSource: null,
+  _data_url: null,
+};
+
+const default_options = {
+  elSelectContainer: null,
+  elLegendContainer: null,
+  idSourceGeom: null,
+  idSourceData: null,
+  dataUrl: null,
+
+  palette: "OrRd",
+  stat: "quantile",
+  color_na: "#ccc",
+  aggregateFn: "max",
+
+  staticFilters: [],
+  dynamicFilters: [],
+  fieldJoinOn: [],
+  onRender: console.log,
+  onMapClick: console.log,
+};
 
 export class DynamicJoin {
   constructor(map) {
     window._dj = this;
     this._map = map;
-    this._options = {};
-    this._rawTable = [];
-    this._subsetTable = [];
-    this._aggTable = [];
-    this._colorScale = null;
-    this._staticFilters = [];
-    this._aggregateBy = [];
-    this._dynamicFilters = [];
-    this._filterControls = {};
-    this._currentFilters = {};
-    this._elLegendContainer = null;
-    this._visibleLegendClasses = new Set();
-    this._onRender = null;
-    this._onMapClick = null;
+    this.resetStateAndOptions();
   }
 
   /**
@@ -47,84 +77,51 @@ export class DynamicJoin {
    * @param {HTMLElement} [opts.elSelectContainer]     – DOM element to append filter UI
    * @param {HTMLElement} [opts.elLegendContainer]     – DOM element to append the legend
    */
-  async init(opts) {
-    this._options = {
-      palette: "OrRd",
-      stat: "quantile",
-      classes: 5,
-      color_na: "#ccc",
-      aggregateFn: "none",
-      staticFilters: [],
-      aggregateBy: [],
-      dynamicFilters: [],
-      ...opts,
-    };
+  async init(opts = {}) {
+    this.setOptions(opts);
 
-    const {
-      idSourceGeom,
-      idSourceData,
-      dataUrl,
-      fieldJoinOn,
-      aggregateField,
-      aggregateBy,
-      staticFilters,
-      dynamicFilters,
-      onRender,
-      onMapClick,
-      elSelectContainer,
-      elLegendContainer,
-    } = this._options;
-
-    this._aggregateField = aggregateField;
-    this._fieldJoinData = fieldJoinOn[1];
-    this._fieldJoinGeom = fieldJoinOn[0];
-    this._idSourceGeom = idSourceGeom;
-    this._sourceLayer = idSourceGeom;
-    this._idSourceData = idSourceData;
-    this._staticFilters = staticFilters || [];
-    this._aggregateBy = aggregateBy || [];
-    this._dynamicFilters = dynamicFilters || [];
-    this._onRender = onRender;
-    this._onMapClick = onMapClick;
-    this._elLegendContainer = elLegendContainer;
-
-    // initialize current filters for all dynamic filter inputs
-    for (const input of this._dynamicFilters) {
-      this._currentFilters[input.name] = input.default || null;
+    for (const item of this._dynamicFilters) {
+      this._currentFilters[item.name] = item.default || null;
     }
+
+    const { idSourceGeom } = this.options;
 
     this._idLayer = `${idSourceGeom}-dynamic-join`;
     this._idSource = `${idSourceGeom}-dynamic-join-src`;
-    this._data_url = dataUrl;
-
-    // load raw data
-    await this._loadData();
-
-    // build filter UI if inputs are configured
-    if (isNotEmpty(this._dynamicFilters)) {
-      if (isElement(elSelectContainer)) {
-        await this._buildFilterUI(elSelectContainer);
-      }
-    }
-
-    // prepare aggregated values
-    this._prepareData();
-    this._computeColorScale();
-
-    // Build legend and add layer
     this._addLayer();
-    this._applyStyle();
+
+    await this._loadData();
+    await this._buildFilterUI();
+
+    this._setupMapClickHandler();
+  }
+
+  async _refresh() {
+    await this._aggregateData();
+    this._computeColorScale();
     this._buildLegendUI();
-
-    // setup map click handler if callback provided
-    if (this._onMapClick) {
-      this._setupMapClickHandler();
-    }
-
-    // trigger onRender callback
+    this._applyStyle();
     if (this._onRender) {
       this._onRender(this._aggTable, this._currentFilters, this._options);
     }
+  }
+
+  resetStateAndOptions() {
+    for (const key of Object.keys(default_state)) {
+      this[key] = clone(default_state[key]);
+    }
+  }
+
+  setOptions(opts = {}) {
+    this.resetStateAndOptions();
+    for (const key of Object.keys(default_options)) {
+      if (isNotEmpty(opts[key])) {
+        this._options[key] = opts[key];
+      }
+    }
+  }
+  get options() {
+    return this._options;
   }
 
   // --- Legend UI Methods ---
@@ -174,7 +171,6 @@ export class DynamicJoin {
       const labelText = `${formatNumber(lowerBound)} - ${formatNumber(
         upperBound,
       )}`;
-      const isActive = false; // Start inactive, selection set is empty
 
       const elItem = el(
         "div",
@@ -213,7 +209,6 @@ export class DynamicJoin {
     // Add NA item if applicable
     if (hasNaClass) {
       const naIdentifier = "na";
-      const isNaActive = false; // Start inactive
       const elNaItem = el(
         "div",
         {
@@ -270,12 +265,8 @@ export class DynamicJoin {
     this._applyStyle(); // Re-apply map style with the updated visibility set
   }
 
-  // --- End Legend UI Methods ---
-
-  // remove existing filter UI and control instances
   _destroyFilterUI() {
-    const elSelectContainer = this._options.elSelectContainer;
-    if (!elSelectContainer) return;
+    const { elSelectContainer } = this.options;
 
     for (const control of Object.values(this._filterControls)) {
       if (control.destroy) {
@@ -287,55 +278,19 @@ export class DynamicJoin {
     elSelectContainer.innerHTML = "";
   }
 
-  // helper to refresh styling and legend after filter change
-  _refresh() {
-    this._prepareData();
-    this._computeColorScale();
-    // Rebuild legend which also resets visibility state and applies style
-    this._buildLegendUI();
-
-    // trigger onRender callback
-    if (this._onRender) {
-      this._onRender(this._aggTable, this._currentFilters, this._options);
-    }
-  }
-
   // load your attribute table; include all necessary fields
   async _loadData() {
-    let url;
-
-    if (this._data_url) {
-      url = this._data_url;
-    } else {
-      // request data including all necessary fields
-      const attrs = [
-        this._fieldJoinData,
-        this._aggregateField,
-        ...this._staticFilters.map((filter) => filter.field),
-        ...this._aggregateBy,
-        ...this._dynamicFilters.map((input) => input.name),
-      ];
-      // remove duplicates
-      const uniqueAttrs = [...new Set(attrs)];
-      url = new URL(getApiUrl("getSourceTableAttribute"));
-      url.searchParams.set("id", this._idSourceData);
-      url.searchParams.set("attributes", uniqueAttrs);
+    const { dataUrl } = this.options;
+    if (!isUrl(dataUrl)) {
+      throw new Error("Missing valid URL");
     }
-    const resp = await fetch(url);
+    const resp = await fetch(dataUrl);
     const json = await resp.json();
-
-    this._rawTable = Array.isArray(json.data) ? json.data : [];
+    this._rawTable = isArray(json.data) ? json.data : [];
+    this._applyStaticFilters();
   }
 
   _applyStaticFilters() {
-    const operators = new Map([
-      ["==", (a, b) => a == b],
-      ["!=", (a, b) => a != b],
-      [">", (a, b) => a > b],
-      [">=", (a, b) => a >= b],
-      ["<", (a, b) => a < b],
-      ["<=", (a, b) => a <= b],
-    ]);
     const filteredData = (this._rawTable || []).filter((row) =>
       this._staticFilters.every(({ field, operator, value }) => {
         const operatorFn = operators.get(operator);
@@ -346,9 +301,13 @@ export class DynamicJoin {
     this._subsetTable.push(...filteredData);
   }
 
-  // build filter inputs based on dynamicFilters configuration
-  async _buildFilterUI(elSelectContainer) {
-    // clear any existing filter UI
+  async _buildFilterUI() {
+    const { elSelectContainer } = this.options;
+    if (!elSelectContainer) {
+      console.warn("missing filter container");
+      return;
+    }
+
     this._destroyFilterUI();
 
     const elWrapper = el("div", {
@@ -358,185 +317,86 @@ export class DynamicJoin {
     });
     elSelectContainer.appendChild(elWrapper);
 
-    for (const inputConfig of this._dynamicFilters) {
-      const { name, type, default: defaultValue } = inputConfig;
-
-      if (type === "dropdown") {
-        await this._buildDropdownInput(elWrapper, inputConfig);
-      } else if (type === "range-slider") {
-        await this._buildRangeSliderInput(elWrapper, inputConfig);
+    for (const config of this._dynamicFilters) {
+      const { type } = config;
+      switch (type) {
+        case "dropdown":
+          await this._buildDropdownInput(elWrapper, config);
+          break;
+        case "range-slider":
+          await this._buildRangeSliderInput(elWrapper, config);
+          break;
+        default:
+          console.warn(`Unsupported filter type: ${type}`);
+          break;
       }
     }
   }
 
   // build dropdown input using TomSelect
   async _buildDropdownInput(elWrapper, config) {
-    const TomSelect = await moduleLoad("tom-select");
-    const { name, default: defaultValue } = config;
-
-    // compute distinct values and counts
-    const counts = {};
-    for (const row of this._rawTable) {
-      const v = row[name];
-      if (v != null) {
-        const key = String(v);
-        counts[key] = (counts[key] || 0) + 1;
-      }
-    }
-    const options = Object.entries(counts)
-      .map(([value, count]) => ({ value, text: `${value} (${count})` }))
-      .sort((a, b) => (a.value > b.value ? 1 : a.value < b.value ? -1 : 0));
-
-    // create input element
-    const id = `dj_select_${name}`;
-    const elInput = el("select", { id });
-    const elLabel = el("label", { for: id }, name);
-    elWrapper.appendChild(elLabel);
-    elWrapper.appendChild(elInput);
-
-    // initialize TomSelect on input
-    const ts = new TomSelect(elInput, {
-      options,
-      create: false,
-      allowEmptyOption: true,
-      dropdownParent: "body",
-      closeAfterSelect: true,
-      placeholder: `Filter by ${name}`,
-      onChange: (val) => {
-        this._currentFilters[name] = val || null;
+    await buildTomSelect({
+      data: this._aggTable,
+      container: elWrapper,
+      config: config,
+      onBuilt: (ts, name) => {
+        this._filterControls[name] = ts;
+      },
+      onUpdate: (value, name) => {
+        this._currentFilters[name] = value;
         this._refresh();
       },
     });
-
-    // set default value if provided
-    if (defaultValue) {
-      ts.setValue(defaultValue);
-    }
-
-    this._filterControls[name] = ts;
   }
 
   // build range slider input using noUiSlider
   async _buildRangeSliderInput(elWrapper, config) {
-    const noUiSlider = await moduleLoad("nouislider");
-    const { name, default: defaultValue, min, max, step, mode } = config;
-
-    // auto-detect min/max if not provided
-    let actualMin = min;
-    let actualMax = max;
-    if (min === "auto" || max === "auto") {
-      const values = this._rawTable
-        .map((row) => row[name])
-        .filter((v) => v != null && !isNaN(v))
-        .map((v) => Number(v));
-
-      if (min === "auto") actualMin = Math.min(...values);
-      if (max === "auto") actualMax = Math.max(...values);
-    }
-
-    // create slider container
-    const id = `dj_slider_${name}`;
-    const elLabel = el("label", { for: id }, name);
-    const elSlider = el("div", {
-      id,
-      style: {
-        margin: "10px 0",
-        height: "10px",
+    await buildRangeSlider({
+      data: this._aggTable,
+      container: elWrapper,
+      config: config,
+      onBuilt: (slider, name) => {
+        this._filterControls[name] = slider;
+      },
+      onUpdate: (range, name) => {
+        this._currentFilters[name] = range;
+        this._refresh();
       },
     });
-    const elValues = el("div", {
-      style: {
-        display: "flex",
-        justifyContent: "space-between",
-        fontSize: "12px",
-        color: "#666",
-        marginTop: "5px",
-      },
-    });
-
-    elWrapper.classList.add("mx-slider-container");
-    elWrapper.appendChild(elLabel);
-    elWrapper.appendChild(elSlider);
-    elWrapper.appendChild(elValues);
-
-    // create slider
-    const slider = noUiSlider.create(elSlider, {
-      range: { min: actualMin, max: actualMax },
-      step: step || 1,
-      start: defaultValue || [actualMin, actualMax],
-      connect: true,
-      behaviour: "drag",
-      tooltips: false,
-      format:
-        mode === "integer"
-          ? {
-              to: (value) => Math.round(value),
-              from: (value) => Math.round(value),
-            }
-          : undefined,
-    });
-
-    // update display values
-    const updateValues = (values) => {
-      const [min, max] = values.map((v) =>
-        mode === "integer" ? Math.round(v) : parseFloat(v).toFixed(2),
-      );
-      elValues.innerHTML = `<span>${min}</span><span>${max}</span>`;
-    };
-
-    // set up event handlers
-    slider.on("update", (values) => {
-      updateValues(values);
-      const range = values.map((v) =>
-        mode === "integer" ? Math.round(parseFloat(v)) : parseFloat(v),
-      );
-      this._currentFilters[name] = range;
-      this._refresh();
-    });
-
-    // initial display
-    updateValues(slider.get());
-
-    this._filterControls[name] = slider;
   }
 
-  // prepare data for styling: apply staticFilters, then group by aggregateBy and aggregate
-  _prepareData() {
-    // Step 1: Apply staticFilters (static filtering)
-    let filteredData = [...this._subsetTable];
+  _filterRow(row) {
+    return this._dynamicFilters.every(({ name, type }) => {
+      const filterValue = this._currentFilters[name];
+      const value = row[name];
 
-    // Step 2: Apply dynamic filter inputs
-    filteredData = filteredData.filter((row) => {
-      for (const inputConfig of this._dynamicFilters) {
-        const { name, type } = inputConfig;
-        const filterValue = this._currentFilters[name];
-
-        if (filterValue == null) continue; // no filter applied
-
-        if (type === "dropdown") {
-          if (row[name] !== filterValue) {
-            return false;
-          }
-        } else if (type === "range-slider") {
-          const [min, max] = filterValue;
-          const value = Number(row[name]);
-          if (value < min || value > max) {
-            return false;
-          }
-        }
+      if (filterValue == null) {
+        return true;
       }
-      return true;
-    });
 
-    // Step 3: Group by aggregateBy fields and join key
+      switch (type) {
+        case "dropdown":
+          return value === filterValue;
+        case "range-slider":
+          const [min, max] = filterValue;
+          const numericValue = Number(value);
+          return numericValue >= min && numericValue <= max;
+        default:
+          return true;
+      }
+    });
+  }
+
+  async _aggregateData() {
+    const agg = aggregators[this._options.aggregateFn] || aggregators.none;
+    const filteredData = this._subsetTable.filter(this._filterRow);
     const groups = {};
+    const finalGroups = {};
 
     for (const row of filteredData) {
-      // Create composite key from aggregateBy fields + join field
       const groupKey =
-        this._aggregateBy.length > 0
-          ? this._aggregateBy.map((field) => row[field]).join("|")
-          : "default";
+        this._aggregateBy.map((field) => row[field] ?? "").join("|") ||
+        "default";
 
       const joinKey = row[this._fieldJoinData];
       const compositeKey = `${joinKey}::${groupKey}`;
@@ -551,77 +411,17 @@ export class DynamicJoin {
       groups[compositeKey].values.push(row[this._aggregateField]);
     }
 
-    // Step 4: Apply aggregation with enhanced 'none' handling
-    const agg = (vals) => {
-      const { aggregateFn } = this._options;
-
-      switch (aggregateFn) {
-        case "none":
-          if (vals.length === 1) {
-            return vals[0]; // Perfect - single value
-          } else if (vals.length > 1) {
-            console.warn(
-              `DynamicJoin: Expected single value but got ${vals.length} values. Using first value. Consider refining your filters.`,
-            );
-            return vals[0];
-          } else {
-            return null; // No values
-          }
-
-        case "first":
-          return vals.length > 0 ? vals[0] : null;
-
-        case "last":
-          return vals.length > 0 ? vals[vals.length - 1] : null;
-
-        case "sum":
-          return vals.reduce((a, b) => a + b, 0);
-
-        case "max":
-          return Math.max(...vals);
-
-        case "min":
-          return Math.min(...vals);
-
-        case "median":
-          const sortedVals = vals.toSorted((a, b) => a - b);
-          const mid = Math.floor(sortedVals.length / 2);
-          return sortedVals.length % 2 === 0
-            ? (sortedVals[mid - 1] + sortedVals[mid]) / 2
-            : sortedVals[mid];
-
-        case "mode":
-          const counts = vals.reduce((c, v) => {
-            c[v] = (c[v] || 0) + 1;
-            return c;
-          }, {});
-          const modeValue = Object.entries(counts).reduce(
-            (a, [v, c]) => (c > a[1] ? [v, c] : a),
-            [null, 0],
-          )[0];
-          // Convert back to number if it's a numeric string
-          return isNaN(modeValue) ? modeValue : Number(modeValue);
-
-        default:
-          console.warn(
-            `DynamicJoin: Unknown aggregation function '${aggregateFn}'. Using 'none'.`,
-          );
-          return vals.length > 0 ? vals[0] : null;
-      }
-    };
-
-    // Step 5: Create final aggregated table - consolidate by join key to ensure uniqueness
-    const finalGroups = {};
-
-    Object.values(groups).forEach((group) => {
+    for (const group of Object.values(groups)) {
       const joinKey = group.joinKey;
       if (!finalGroups[joinKey]) {
         finalGroups[joinKey] = [];
       }
       finalGroups[joinKey].push(...group.values);
-    });
+    }
 
-    this._aggTable = Object.entries(finalGroups).map(([joinKey, values]) => ({
+    const groupsEntries = Object.entries(finalGroups);
+
+    this._aggTable = groupsEntries.map(([joinKey, values]) => ({
       key: joinKey,
       value: agg(values),
     }));
@@ -746,7 +546,9 @@ export class DynamicJoin {
   }
 
   _setupMapClickHandler() {
-    this._map.on("click", this._idLayer, this._onMapClick);
+    if (this._onMapClick) {
+      this._map.on("click", this._idLayer, this._onMapClick);
+    }
   }
 
   _sourceUrlTiles(idSource) {
@@ -805,7 +607,6 @@ export class DynamicJoin {
       this._idSourceData = this._options.idSourceData;
       this._data_url = this._options.dataUrl;
       await this._loadData();
-      this._applyStaticFilters()
 
       if (this._dynamicFilters.length > 0 && elSelectContainer) {
         this._destroyFilterUI();
@@ -841,3 +642,45 @@ export class DynamicJoin {
     this._refresh();
   }
 }
+
+const aggregators = {
+  none: (vals) => {
+    if (vals.length === 1) return vals[0];
+    if (vals.length > 1) {
+      console.warn(`Expected single value, got ${vals.length}. Using first.`);
+      return vals[0];
+    }
+    return null;
+  },
+  first: (vals) => vals[0] ?? null,
+  last: (vals) => vals.at(-1) ?? null,
+  sum: (vals) => vals.reduce((a, b) => a + b, 0),
+  max: (vals) => Math.max(...vals),
+  min: (vals) => Math.min(...vals),
+  median: (vals) => {
+    const sorted = [...vals].sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+    return sorted.length % 2
+      ? sorted[mid]
+      : (sorted[mid - 1] + sorted[mid]) / 2;
+  },
+  mode: (vals) => {
+    const counts = vals.reduce((acc, v) => {
+      acc[v] = (acc[v] || 0) + 1;
+      return acc;
+    }, {});
+    return Object.entries(counts).reduce(
+      (a, [v, c]) => (c > a[1] ? [v, c] : a),
+      [null, 0],
+    )[0];
+  },
+};
+
+const operators = new Map([
+  ["==", (a, b) => a == b],
+  ["!=", (a, b) => a != b],
+  [">", (a, b) => a > b],
+  [">=", (a, b) => a >= b],
+  ["<", (a, b) => a < b],
+  ["<=", (a, b) => a <= b],
+]);
