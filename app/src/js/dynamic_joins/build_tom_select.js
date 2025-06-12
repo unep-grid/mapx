@@ -1,3 +1,4 @@
+import { el } from "../el_mapx";
 import { moduleLoad } from "../modules_loader_async";
 
 export async function buildTomSelectInput(options = {}) {
