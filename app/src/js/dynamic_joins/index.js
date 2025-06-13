@@ -1,13 +1,12 @@
 import chroma from "chroma-js";
 import { el } from "../el_mapx";
-import { isElement, isNotEmpty } from "../is_test";
+import { isElement, isNotEmpty, isEmpty } from "../is_test";
 import { clone } from "../mx_helper_misc";
 import { buildRangeSlider } from "./build_slider";
 import { buildLegendInput } from "./build_legend";
 import { isUrl } from "../is_test";
 import { isArray } from "../is_test";
 import { bindAll } from "../bind_class_methods";
-import { isEmpty } from "../is_test";
 
 const default_options = {
   elSelectContainer: null,
@@ -82,11 +81,23 @@ export class DynamicJoin {
   async init(opts = {}) {
     this.setOptions(opts);
 
+    // Validate required options
+    const { idSourceGeom, dataUrl, fieldJoinOn } = this.options;
+    if (!idSourceGeom) {
+      throw new Error("Missing required option: idSourceGeom");
+    }
+    if (!isUrl(dataUrl)) {
+      throw new Error("Missing required option: dataUrl (must be valid URL)");
+    }
+    if (isEmpty(fieldJoinOn) || fieldJoinOn.length < 2) {
+      throw new Error(
+        "Missing required option: fieldJoinOn (must be array with 2 elements)",
+      );
+    }
+
     for (const item of this.options.dynamicFilters) {
       this._current_filters[item.name] = item.default || null;
     }
-
-    const { idSourceGeom } = this.options;
 
     this._id_layer = `${idSourceGeom}-dynamic-join`;
     this._id_source = `${idSourceGeom}-dynamic-join-src`;
@@ -138,7 +149,10 @@ export class DynamicJoin {
   // --- Legend UI Methods ---
 
   _destroyLegendUI() {
-    if (this._filters_controls.legend && this._filters_controls.legend.destroy) {
+    if (
+      this._filters_controls.legend &&
+      this._filters_controls.legend.destroy
+    ) {
       this._filters_controls.legend.destroy();
       delete this._filters_controls.legend;
     }
@@ -147,14 +161,13 @@ export class DynamicJoin {
   }
 
   async _buildLegendUI() {
-    // Check prerequisites within the method as it doesn't take arguments
     if (!isElement(this.options.elLegendContainer) || !this._color_scale) {
       console.warn("Cannot build legend: Missing container or color scale.");
-      this._destroyLegendUI(); // Ensure cleanup even if prerequisites fail later
+      this._destroyLegendUI();
       return;
     }
 
-    this._destroyLegendUI(); // Clear previous legend and visibility state
+    this._destroyLegendUI();
 
     await buildLegendInput({
       elWrapper: this.options.elLegendContainer,
@@ -183,7 +196,10 @@ export class DynamicJoin {
     }
     this._filters_controls = {};
     this._current_filters = {};
-    elSelectContainer.innerHTML = "";
+
+    if (elSelectContainer) {
+      elSelectContainer.innerHTML = "";
+    }
   }
 
   // load your attribute table; include all necessary fields
@@ -297,49 +313,55 @@ export class DynamicJoin {
   async _aggregateData() {
     const agg = aggregators[this.options.aggregateFn] || aggregators.none;
     const filteredData = this._table_filtered.filter(this._filterRow);
-    const groups = {};
-    const finalGroups = {};
+    const groups = new Map();
+    this._table_aggregated.length = 0;
 
     for (const row of filteredData) {
-      const groupKey =
-        this.options.aggregateBy.map((field) => row[field] ?? "").join("|") ||
-        "default";
-
+      // get value
+      const value = row[this.options.aggregateField];
+      // key for join e.g. gid_1 -> AFG
       const joinKey = row[this.options.fieldJoinOn[0]];
-      const compositeKey = `${joinKey}::${groupKey}`;
 
-      if (!groups[compositeKey]) {
-        groups[compositeKey] = {
+      // key for groups, e.g. parameter=x, scenario=b -> x|b
+      const groupKey = isEmpty(this.options.aggregateBy)
+        ? "default"
+        : this.options.aggregateBy.map((field) => row[field] ?? "").join("|");
+
+      // composite key AFG::x|b
+      const compositeKey = `${joinKey}::${groupKey}`;
+      const group = groups.get(compositeKey);
+
+      // create or update group
+      if (isEmpty(group)) {
+        groups.set(compositeKey, {
           joinKey,
           groupKey,
-          values: [],
-        };
+          values: [value],
+        });
+      } else {
+        group.values.push(value);
       }
-      groups[compositeKey].values.push(row[this.options.aggregateField]);
     }
 
-    for (const group of Object.values(groups)) {
-      const joinKey = group.joinKey;
-      if (!finalGroups[joinKey]) {
-        finalGroups[joinKey] = [];
-      }
-      finalGroups[joinKey].push(...group.values);
-    }
-
-    const groupsEntries = Object.entries(finalGroups);
-
-    this._table_aggregated = groupsEntries.map(([joinKey, values]) => ({
-      key: joinKey,
-      value: agg(values),
-    }));
-    if (isEmpty(this._table_aggregated)) {
-      debugger;
+    // Aggregate each group separately, then combine by joinKey
+    for (const [compositeKey, group] of groups) {
+      const value = agg(group.values);
+      this._table_aggregated.push({ key: group.joinKey, value });
     }
   }
 
   // use chroma.limits + .scale().classes() to get a color function
   _computeColorScale() {
-    const values = this._table_aggregated.map((r) => r.value);
+    const values = this._table_aggregated
+      .map((r) => r.value)
+      .filter(isNotEmpty);
+
+    if (isEmpty(values)) {
+      console.warn("No valid values for color scale computation");
+      this._color_scale = null;
+      return;
+    }
+
     const limits = chroma.limits(
       values,
       this.options.stat,
@@ -444,7 +466,11 @@ export class DynamicJoin {
     fillColorExpr.push(transparentColor);
 
     if (fillColorExpr.length < 4) {
-      this._map.setPaintProperty(this._id_layer, "fill-color", transparentColor);
+      this._map.setPaintProperty(
+        this._id_layer,
+        "fill-color",
+        transparentColor,
+      );
     } else {
       this._map.setPaintProperty(this._id_layer, "fill-color", fillColorExpr);
     }
