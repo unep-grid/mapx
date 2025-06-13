@@ -6,7 +6,8 @@ import { buildRangeSlider } from "./build_slider";
 import { buildLegendInput } from "./build_legend";
 import { isUrl } from "../is_test";
 import { isArray } from "../is_test";
-import {bindAll} from "../bind_class_methods";
+import { bindAll } from "../bind_class_methods";
+import { isEmpty } from "../is_test";
 
 const default_options = {
   elSelectContainer: null,
@@ -34,15 +35,15 @@ const default_options = {
 
 const default_state = {
   _options: {},
-  _rawTable: [],
-  _subsetTable: [],
-  _aggTable: [],
-  _colorScale: null,
-  _filterControls: {},
-  _currentFilters: {},
-  _visibleLegendClasses: new Set(),
-  _idLayer: null,
-  _idSource: null,
+  _table_raw: [],
+  _table_filtered: [],
+  _table_aggregated: [],
+  _color_scale: null,
+  _filters_controls: {},
+  _current_filters: {},
+  _visible_legend_classes: new Set(),
+  _id_layer: null,
+  _id_source: null,
 };
 
 export class DynamicJoin {
@@ -82,29 +83,34 @@ export class DynamicJoin {
     this.setOptions(opts);
 
     for (const item of this.options.dynamicFilters) {
-      this._currentFilters[item.name] = item.default || null;
+      this._current_filters[item.name] = item.default || null;
     }
 
     const { idSourceGeom } = this.options;
 
-    this._idLayer = `${idSourceGeom}-dynamic-join`;
-    this._idSource = `${idSourceGeom}-dynamic-join-src`;
+    this._id_layer = `${idSourceGeom}-dynamic-join`;
+    this._id_source = `${idSourceGeom}-dynamic-join-src`;
     this._addLayer();
 
     await this._loadData();
+    await this._aggregateData();
     await this._buildFilterUI();
     await this._refresh();
     this._setupMapClickHandler();
-
   }
 
   async _refresh() {
     await this._aggregateData();
     this._computeColorScale();
+
     this._buildLegendUI();
     this._applyStyle();
     if (this.options.onRender) {
-      this.options.onRender(this._aggTable, this._currentFilters, this.options);
+      this.options.onRender(
+        this._table_aggregated,
+        this._current_filters,
+        this.options,
+      );
     }
   }
 
@@ -132,17 +138,17 @@ export class DynamicJoin {
   // --- Legend UI Methods ---
 
   _destroyLegendUI() {
-    if (this._filterControls.legend && this._filterControls.legend.destroy) {
-      this._filterControls.legend.destroy();
-      delete this._filterControls.legend;
+    if (this._filters_controls.legend && this._filters_controls.legend.destroy) {
+      this._filters_controls.legend.destroy();
+      delete this._filters_controls.legend;
     }
     // Clear the set of visible classes when destroying
-    this._visibleLegendClasses.clear();
+    this._visible_legend_classes.clear();
   }
 
   async _buildLegendUI() {
     // Check prerequisites within the method as it doesn't take arguments
-    if (!isElement(this.options.elLegendContainer) || !this._colorScale) {
+    if (!isElement(this.options.elLegendContainer) || !this._color_scale) {
       console.warn("Cannot build legend: Missing container or color scale.");
       this._destroyLegendUI(); // Ensure cleanup even if prerequisites fail later
       return;
@@ -153,15 +159,15 @@ export class DynamicJoin {
     await buildLegendInput({
       elWrapper: this.options.elLegendContainer,
       config: {
-        colorScale: this._colorScale,
+        colorScale: this._color_scale,
         color_na: this.options.color_na,
       },
-      data: this._aggTable,
+      data: this._table_aggregated,
       onBuilt: (legend) => {
-        this._filterControls.legend = legend;
+        this._filters_controls.legend = legend;
       },
       onUpdate: (classIndex, isVisible, allVisibleClasses) => {
-        this._visibleLegendClasses = allVisibleClasses;
+        this._visible_legend_classes = allVisibleClasses;
         this._applyStyle();
       },
     });
@@ -170,13 +176,13 @@ export class DynamicJoin {
   _destroyFilterUI() {
     const { elSelectContainer } = this.options;
 
-    for (const control of Object.values(this._filterControls)) {
+    for (const control of Object.values(this._filters_controls)) {
       if (control.destroy) {
-        control.destroy(); // TomSelect and noUiSlider both have destroy method
+        control.destroy();
       }
     }
-    this._filterControls = {};
-    this._currentFilters = {};
+    this._filters_controls = {};
+    this._current_filters = {};
     elSelectContainer.innerHTML = "";
   }
 
@@ -188,19 +194,17 @@ export class DynamicJoin {
     }
     const resp = await fetch(dataUrl);
     const json = await resp.json();
-    this._rawTable = isArray(json.data) ? json.data : [];
-    this._applyStaticFilters();
+    this._table_raw = isArray(json.data) ? json.data : [];
+    this._table_filtered = this._applyStaticFilters(this._table_raw);
   }
 
-  _applyStaticFilters() {
-    const filteredData = (this._rawTable || []).filter((row) =>
+  _applyStaticFilters(data = []) {
+    return (data || []).filter((row) =>
       this.options.staticFilters.every(({ field, operator, value }) => {
         const operatorFn = operators.get(operator);
         return operatorFn ? operatorFn(row[field], value) : true;
       }),
     );
-    this._subsetTable.length = 0;
-    this._subsetTable.push(...filteredData);
   }
 
   async _buildFilterUI() {
@@ -236,18 +240,17 @@ export class DynamicJoin {
     }
   }
 
-  // build dropdown input using TomSelect
   async _buildDropdownInput(elWrapper, config) {
     const { buildTomSelectInput } = await import("./build_tom_select");
     await buildTomSelectInput({
       elWrapper,
-      data: this._aggTable,
+      data: this._table_raw,
       config: config,
       onBuilt: (ts, name) => {
-        this._filterControls[name] = ts;
+        this._filters_controls[name] = ts;
       },
       onUpdate: (value, name) => {
-        this._currentFilters[name] = value;
+        this._current_filters[name] = value;
         this._refresh();
       },
     });
@@ -257,13 +260,13 @@ export class DynamicJoin {
   async _buildRangeSliderInput(elWrapper, config) {
     await buildRangeSlider({
       elWrapper,
-      data: this._aggTable,
+      data: this._table_raw,
       config: config,
       onBuilt: (slider, name) => {
-        this._filterControls[name] = slider;
+        this._filters_controls[name] = slider;
       },
       onUpdate: (range, name) => {
-        this._currentFilters[name] = range;
+        this._current_filters[name] = range;
         this._refresh();
       },
     });
@@ -271,7 +274,7 @@ export class DynamicJoin {
 
   _filterRow(row) {
     return this.options.dynamicFilters.every(({ name, type }) => {
-      const filterValue = this._currentFilters[name];
+      const filterValue = this._current_filters[name];
       const value = row[name];
 
       if (filterValue == null) {
@@ -293,7 +296,7 @@ export class DynamicJoin {
 
   async _aggregateData() {
     const agg = aggregators[this.options.aggregateFn] || aggregators.none;
-    const filteredData = this._subsetTable.filter(this._filterRow);
+    const filteredData = this._table_filtered.filter(this._filterRow);
     const groups = {};
     const finalGroups = {};
 
@@ -325,29 +328,32 @@ export class DynamicJoin {
 
     const groupsEntries = Object.entries(finalGroups);
 
-    this._aggTable = groupsEntries.map(([joinKey, values]) => ({
+    this._table_aggregated = groupsEntries.map(([joinKey, values]) => ({
       key: joinKey,
       value: agg(values),
     }));
+    if (isEmpty(this._table_aggregated)) {
+      debugger;
+    }
   }
 
   // use chroma.limits + .scale().classes() to get a color function
   _computeColorScale() {
-    const values = this._aggTable.map((r) => r.value);
+    const values = this._table_aggregated.map((r) => r.value);
     const limits = chroma.limits(
       values,
       this.options.stat,
       this.options.classes,
     );
-    this._colorScale = chroma.scale(this.options.palette).classes(limits);
+    this._color_scale = chroma.scale(this.options.palette).classes(limits);
   }
 
   _addLayer() {
-    const hasSource = this._map.getSource(this._idSource);
-    const hasLayer = this._map.getLayer(this._idLayer);
+    const hasSource = this._map.getSource(this._id_source);
+    const hasLayer = this._map.getLayer(this._id_layer);
 
     if (!hasSource) {
-      this._map.addSource(this._idSource, {
+      this._map.addSource(this._id_source, {
         type: "vector",
         tiles: this.options.tilesUrl,
       });
@@ -355,9 +361,9 @@ export class DynamicJoin {
 
     if (!hasLayer) {
       this._map.addLayer({
-        id: this._idLayer,
+        id: this._id_layer,
         type: "fill",
-        source: this._idSource,
+        source: this._id_source,
         "source-layer": this.options.sourceLayer,
         paint: {
           "fill-color": this.options.color_na,
@@ -370,29 +376,29 @@ export class DynamicJoin {
 
   // apply the dynamic style, considering the toggled legend classes
   _applyStyle() {
-    if (!this._map.getLayer(this._idLayer)) {
+    if (!this._map.getLayer(this._id_layer)) {
       console.warn(
         "Attempted to apply style to non-existent layer:",
-        this._idLayer,
+        this._id_layer,
       );
       return;
     }
-    if (!this._colorScale) {
+    if (!this._color_scale) {
       console.warn("Cannot apply style: Missing color scale.");
       // Set a default fallback color if scale is missing
       this._map.setPaintProperty(
-        this._idLayer,
+        this._id_layer,
         "fill-color",
         this.options.color_na || "#ccc",
       );
-      this._map.setPaintProperty(this._idLayer, "fill-opacity", 0.6);
+      this._map.setPaintProperty(this._id_layer, "fill-opacity", 0.6);
       return;
     }
 
     const transparentColor = "rgba(0, 0, 0, 0)";
-    const classes = this._colorScale.classes();
+    const classes = this._color_scale.classes();
     const fillColorExpr = ["match", ["get", this.options.fieldJoinOn[1]]];
-    const showAll = this._visibleLegendClasses.size === 0; // Check if selection set is empty
+    const showAll = this._visible_legend_classes.size === 0; // Check if selection set is empty
 
     // Helper to find class index for a value
     const getClassIndex = (value) => {
@@ -407,14 +413,14 @@ export class DynamicJoin {
       // If value is above the last upper bound, it might belong to the last class conceptually
       // or it might be an outlier. Check if it maps to a color.
       // If scale doesn't provide a color, treat as NA.
-      // Use optional chaining on _colorScale just in case it's null/undefined despite earlier check
-      return this._colorScale?.(value) ? classes.length - 1 : "na";
+      // Use optional chaining on _color_scale just in case it's null/undefined despite earlier check
+      return this._color_scale?.(value) ? classes.length - 1 : "na";
     };
 
-    this._aggTable.forEach((row) => {
+    this._table_aggregated.forEach((row) => {
       const value = row.value;
       const classIdentifier = getClassIndex(value); // Get index (0, 1, ...) or 'na'
-      const isSelected = this._visibleLegendClasses.has(classIdentifier);
+      const isSelected = this._visible_legend_classes.has(classIdentifier);
 
       let color;
       if (showAll || isSelected) {
@@ -422,7 +428,7 @@ export class DynamicJoin {
         color =
           classIdentifier === "na"
             ? this.options.color_na
-            : this._colorScale(value)?.hex();
+            : this._color_scale(value)?.hex();
         // Handle case where color scale might return undefined/null even for valid class
         if (!color) color = this.options.color_na; // Fallback to NA color if scale fails
       } else {
@@ -433,24 +439,24 @@ export class DynamicJoin {
       fillColorExpr.push(row.key, color);
     });
 
-    // Final fallback for features not in the aggTable
+    // Final fallback for features not in the table_aggregated
     // Make them transparent as their class visibility cannot be determined
     fillColorExpr.push(transparentColor);
 
     if (fillColorExpr.length < 4) {
-      this._map.setPaintProperty(this._idLayer, "fill-color", transparentColor);
+      this._map.setPaintProperty(this._id_layer, "fill-color", transparentColor);
     } else {
-      this._map.setPaintProperty(this._idLayer, "fill-color", fillColorExpr);
+      this._map.setPaintProperty(this._id_layer, "fill-color", fillColorExpr);
     }
 
     // Apply the calculated fill color expression
     // Set a consistent opacity for the layer
-    this._map.setPaintProperty(this._idLayer, "fill-opacity", 0.7); // Consistent opacity
+    this._map.setPaintProperty(this._id_layer, "fill-opacity", 0.7); // Consistent opacity
   }
 
   _setupMapClickHandler() {
     if (this.options.onMapClick) {
-      this._map.on("click", this._idLayer, this.options.onMapClick);
+      this._map.on("click", this._id_layer, this.options.onMapClick);
     }
   }
 
@@ -460,21 +466,21 @@ export class DynamicJoin {
 
     // remove map click handler
     if (this.options.onMapClick) {
-      this._map.off("click", this._idLayer, this.options.onMapClick);
+      this._map.off("click", this._id_layer, this.options.onMapClick);
     }
 
     return this._removeLayer(); // Remove map layer/source
   }
 
   _removeLayer() {
-    const hasSource = this._map.getSource(this._idSource);
-    const hasLayer = this._map.getLayer(this._idLayer);
+    const hasSource = this._map.getSource(this._id_source);
+    const hasLayer = this._map.getLayer(this._id_layer);
 
     if (hasLayer) {
-      this._map.removeLayer(this._idLayer);
+      this._map.removeLayer(this._id_layer);
     }
     if (hasSource) {
-      this._map.removeSource(this._idSource);
+      this._map.removeSource(this._id_source);
     }
   }
 }

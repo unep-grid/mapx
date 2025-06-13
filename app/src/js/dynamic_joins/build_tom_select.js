@@ -27,7 +27,7 @@ export async function buildTomSelectInput(options = {}) {
   elWrapper.appendChild(elInput);
 
   const ts = new TomSelect(elInput, {
-    options : tsOptions,
+    options: tsOptions,
     create: false,
     allowEmptyOption: true,
     dropdownParent: "body",
