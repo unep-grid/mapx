@@ -12,7 +12,7 @@ import { LegendUI } from "./legend_ui.js";
  * @param {Array} options.data - Aggregated data array
  * @returns {LegendUI} The legend instance
  */
-export async function buildLegendInput(options = {}) {
+export function buildLegendInput(options = {}) {
   const { elWrapper, config, onBuilt, onUpdate, data } = options;
   const { colorScale, color_na } = config;
 

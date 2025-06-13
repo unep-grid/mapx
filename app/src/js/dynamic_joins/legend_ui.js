@@ -1,4 +1,5 @@
 import { el } from "../el_mapx";
+import "./legend_style.less";
 
 /**
  * Core Legend UI class for managing interactive color legends
@@ -9,7 +10,7 @@ export class LegendUI {
     this.container = container;
     this.colorScale = options.colorScale;
     this.data = options.data || [];
-    this.colorNa = options.color_na || '#ccc';
+    this.colorNa = options.color_na || "#ccc";
     this.visibleClasses = new Set();
     this.onToggle = options.onToggle;
 
@@ -25,14 +26,14 @@ export class LegendUI {
   }
 
   setupEventDelegation() {
-    this.container.addEventListener('click', this.handleClick);
+    this.container.addEventListener("click", this.handleClick);
   }
 
   handleClick(event) {
-    const legendItem = event.target.closest('.legend-item');
+    const legendItem = event.target.closest(".dj-legend-item");
     if (legendItem) {
-      const classIndex = legendItem.dataset.legendClassIndex;
-      this.toggleClass(classIndex, legendItem);
+      const classIndex = legendItem.dataset.legend_class_index;
+      this.toggleClass(classIndex * 1, legendItem);
     }
   }
 
@@ -41,22 +42,16 @@ export class LegendUI {
 
     if (wasVisible) {
       this.visibleClasses.delete(classIdentifier);
-      element.classList.remove("legend-item-active");
-      element.style.opacity = "0.7"; // Inactive style
+      element.classList.remove("active");
     } else {
       this.visibleClasses.add(classIdentifier);
-      element.classList.add("legend-item-active");
-      element.style.opacity = "1"; // Active style
+      element.classList.add("active");
     }
-
-    console.log(
-      `Toggled selection for class ${classIdentifier}. Selected classes:`,
-      this.visibleClasses,
-    );
 
     // Notify parent of the change
     if (this.onToggle) {
-      this.onToggle(classIdentifier, !wasVisible, new Set(this.visibleClasses));
+      const allVisibleClasses = this.getVisibleClasses();
+      this.onToggle(classIdentifier, !wasVisible, allVisibleClasses);
     }
   }
 
@@ -85,8 +80,7 @@ export class LegendUI {
 
     // Check if we need an NA class
     const hasNaClass =
-      this.colorNa &&
-      this.data.some((row) => !this.colorScale(row.value));
+      this.colorNa && this.data.some((row) => !this.colorScale(row.value));
 
     // Add items for each class break
     classes.forEach((limit, i) => {
@@ -102,25 +96,16 @@ export class LegendUI {
       const elItem = el(
         "div",
         {
-          class: `legend-item legend-class-${i}`, // No active class initially
-          style: {
-            cursor: "pointer",
-            marginBottom: "5px",
-            display: "flex",
-            alignItems: "center",
-            opacity: "0.7", // Start slightly dimmed / inactive style
+          class: ["dj-legend-item", `legend-class-${i}`],
+          dataset: {
+            legend_class_index: i,
           },
-          "data-legend-class-index": i, // Store index for toggling
         },
         [
           el("span", {
+            class: "dj-legend-color",
             style: {
-              display: "inline-block",
-              width: "15px",
-              height: "15px",
               backgroundColor: color,
-              marginRight: "5px",
-              border: "1px solid #555",
             },
           }),
           el("span", {}, labelText),
@@ -136,25 +121,16 @@ export class LegendUI {
       const elNaItem = el(
         "div",
         {
-          class: `legend-item legend-na`, // No active class initially
-          style: {
-            cursor: "pointer", // Make NA clickable
-            marginBottom: "5px",
-            display: "flex",
-            alignItems: "center",
-            opacity: "0.7", // Start slightly dimmed / inactive style
+          class: "dj-legend-item",
+          dataset: {
+            legend_class_index: naIdentifier,
           },
-          "data-legend-class-index": naIdentifier, // Store 'na' identifier
         },
         [
           el("span", {
+            class: "dj-legend-color",
             style: {
-              display: "inline-block",
-              width: "15px",
-              height: "15px",
               backgroundColor: this.colorNa,
-              marginRight: "5px",
-              border: "1px solid #555",
             },
           }),
           el("span", {}, "N/A"),
@@ -189,33 +165,11 @@ export class LegendUI {
   }
 
   /**
-   * Set which classes should be visible
-   */
-  setVisibleClasses(classSet) {
-    this.visibleClasses = new Set(classSet);
-
-    // Update visual state of legend items
-    const legendItems = this.container.querySelectorAll('.legend-item');
-    legendItems.forEach(item => {
-      const classIndex = item.dataset.legendClassIndex;
-      const isVisible = this.visibleClasses.has(classIndex);
-
-      if (isVisible) {
-        item.classList.add("legend-item-active");
-        item.style.opacity = "1";
-      } else {
-        item.classList.remove("legend-item-active");
-        item.style.opacity = "0.7";
-      }
-    });
-  }
-
-  /**
    * Clean up event listeners and DOM
    */
   destroy() {
-    this.container.removeEventListener('click', this.handleClick);
-    this.container.innerHTML = '';
+    this.container.removeEventListener("click", this.handleClick);
+    this.container.innerHTML = "";
     this.visibleClasses.clear();
   }
 }
