@@ -1,17 +1,28 @@
 import chroma from "chroma-js";
+import type {
+  StaticFilter,
+  DynamicFilter,
+  PaintConfig,
+  DynamicJoinOptions,
+  DynamicJoinState,
+  AggregatedTableEntry,
+  FilterControl,
+  CompiledFilter,
+  AggregatorFunction,
+  MapInstance,
+} from "./types";
 import { el } from "../el_mapx";
-import { isElement, isNotEmpty, isEmpty } from "../is_test";
-import { clone, debounce, makeId } from "../mx_helper_misc";
-import { buildSlider } from "./build_slider";
-import { buildLegendInput } from "./build_legend";
-import { isUrl } from "../is_test";
-import { isArray } from "../is_test";
+import { isElement, isNotEmpty, isEmpty, isUrl, isArray } from "../is_test";
+import { clone, debounce, makeId } from "../mx_helper_misc.js";
+import { buildSlider } from "./build_slider.ts";
+import { buildLegendInput } from "./build_legend.ts";
 import { bindAll } from "../bind_class_methods";
 import { settings } from "../settings";
-import { generate_series } from "./generate_series";
+import { generate_series } from "./generate_series.ts";
 import { waitTimeoutAsync } from "../animation_frame";
+import { buildTomSelectInput } from "./build_tom_select.ts";
 
-const default_options = {
+const default_options: DynamicJoinOptions = {
   elSelectContainer: null,
   elLegendContainer: null,
   idSourceGeom: null,
@@ -22,7 +33,7 @@ const default_options = {
   tilesUrl: null,
 
   palette: "OrRd",
-  stat: "quantile",
+  stat: "q",
   classes: 5,
   color_na: "#ccc",
   aggregateFn: "max",
@@ -43,14 +54,14 @@ const default_options = {
   staticFilters: [],
   dynamicFilters: [],
 
-  onTableAggregated: console.log,
-  onTableReady: console.log,
-  onTableFiltered: console.log,
-  onMapClick: console.log,
+  onTableAggregated: () => {},
+  onTableReady: () => {},
+  onTableFiltered: () => {},
+  onMapClick: () => {},
 };
 
-const default_state = {
-  _options: {},
+const default_state: DynamicJoinState = {
+  _options: {} as DynamicJoinOptions,
   _table_raw: [],
   _table_filtered: [],
   _table_base: [],
@@ -64,13 +75,27 @@ const default_state = {
 };
 
 export class DynamicJoin {
-  constructor(map) {
-    window._dj = this;
+  private _map: MapInstance;
+  private _options: DynamicJoinOptions;
+  private _table_raw: any[];
+  private _table_filtered: any[];
+  private _table_base: any[];
+  private _aggregated_lookup: Map<string, any>;
+  private _color_scale: chroma.Scale | null;
+  private _filters_controls: Record<string, FilterControl>;
+  private _current_filters: Record<string, any>;
+  private _visible_legend_classes: Set<number | string>;
+  private _id_layer: string | null;
+  private _id_source: string | null;
+  private _id_source_layer: string | null;
+
+  constructor(map: MapInstance) {
+    (window as any)._dj = this;
     this._map = map;
     this.resetState();
     bindAll(this);
     this.resetOptions();
-    this.refresh = debounce(this.refresh, 200);
+    this.refresh = debounce(this.refresh, 200, false);
   }
 
   /**
@@ -100,7 +125,7 @@ export class DynamicJoin {
    * @param {HTMLElement} [opts.elSelectContainer]     – DOM element to append filter UI
    * @param {HTMLElement} [opts.elLegendContainer]     – DOM element to append the legend
    */
-  async init(opts = {}) {
+  async init(opts: Partial<DynamicJoinOptions> = {}): Promise<void> {
     this.setOptions(opts);
 
     // Validate required options
@@ -125,7 +150,7 @@ export class DynamicJoin {
     const id = crypto.randomUUID();
     this._id_layer = `${this.options.layer_prefix}-${id}`;
     this._id_source = `${this._id_layer}-src`;
-    this._id_source_layer =  this.options.sourceLayer;
+    this._id_source_layer = this.options.sourceLayer;
 
     this._add_layer();
     this._setup_map_event();
@@ -135,7 +160,7 @@ export class DynamicJoin {
     this.refresh();
   }
 
-  async refresh() {
+  refresh(): void {
     this._update_table_filtered();
     this._update_table_aggregated();
     this._update_color_scale();
@@ -143,30 +168,32 @@ export class DynamicJoin {
     this._apply_style();
   }
 
-  resetState() {
+  resetState(): void {
     for (const key of Object.keys(default_state)) {
-      this[key] = clone(default_state[key]);
+      (this as any)[key] = clone((default_state as any)[key]);
     }
   }
-  resetOptions() {
+
+  resetOptions(): void {
     this._options = clone(default_options);
   }
 
-  setOptions(opts = {}) {
-    const keys = Object.keys(default_options);
+  setOptions(opts: Partial<DynamicJoinOptions> = {}): void {
+    const keys = Object.keys(default_options) as (keyof DynamicJoinOptions)[];
     for (const key of keys) {
       if (isNotEmpty(opts[key]) || isElement(opts[key])) {
-        this._options[key] = opts[key];
+        (this._options as any)[key] = opts[key];
       }
     }
   }
-  get options() {
+
+  get options(): DynamicJoinOptions {
     return this._options;
   }
 
   // --- Legend UI Methods ---
 
-  _destroy_legend_ui() {
+  private _destroy_legend_ui(): void {
     if (
       this._filters_controls.legend &&
       this._filters_controls.legend.destroy
@@ -178,13 +205,13 @@ export class DynamicJoin {
     this._visible_legend_classes.clear();
   }
 
-  _get_aggregated_table() {
+  private _get_aggregated_table(): AggregatedTableEntry[] {
     return Array.from(this._aggregated_lookup.entries()).map(
       ([key, value]) => ({ key, value }),
     );
   }
 
-  _build_legend_ui() {
+  private _build_legend_ui(): void {
     const { elLegendContainer } = this.options;
     const cscale = this._color_scale;
     const valid = isElement(elLegendContainer) && !!cscale;
@@ -196,24 +223,23 @@ export class DynamicJoin {
     }
 
     buildLegendInput({
-      elWrapper: elLegendContainer,
+      elWrapper: elLegendContainer!,
       config: {
         colorScale: cscale,
         color_na: this.options.color_na,
       },
       data: this._get_aggregated_table(),
-      onBuilt: (legend) => {
+      onBuilt: (legend: any) => {
         this._filters_controls.legend = legend;
       },
-      onUpdate: (_, __, allVisibleClasses) => {
+      onUpdate: (_: any, __: any, allVisibleClasses: Set<number | string>) => {
         this._visible_legend_classes = allVisibleClasses;
-
         this._apply_style();
       },
     });
   }
 
-  _destroy_filter_ui() {
+  private _destroy_filter_ui(): void {
     const { elSelectContainer } = this.options;
 
     for (const control of Object.values(this._filters_controls)) {
@@ -230,7 +256,7 @@ export class DynamicJoin {
   }
 
   // load your attribute table; include all necessary fields
-  async _update_table_base() {
+  private async _update_table_base(): Promise<void> {
     const { dataUrl, data } = this.options;
 
     try {
@@ -240,7 +266,7 @@ export class DynamicJoin {
         if (!isUrl(dataUrl)) {
           throw new Error("Missing valid URL");
         }
-        const resp = await fetch(dataUrl);
+        const resp = await fetch(dataUrl as string);
         if (!resp.ok) {
           throw new Error(`HTTP ${resp.status}: ${resp.statusText}`);
         }
@@ -260,11 +286,11 @@ export class DynamicJoin {
     }
   }
 
-  _apply_static_filter(data = []) {
-    const compiledFilters = this.options.staticFilters.map(
+  private _apply_static_filter(data: any[] = []): any[] {
+    const compiledFilters: CompiledFilter[] = this.options.staticFilters.map(
       ({ field, operator, value }) => ({
         field,
-        op: operators.get(operator),
+        op: operators.get(operator) || ((a: any, b: any) => true),
         value,
       }),
     );
@@ -274,7 +300,7 @@ export class DynamicJoin {
     );
   }
 
-  async _build_filter_ui() {
+  private async _build_filter_ui(): Promise<void> {
     const { elSelectContainer } = this.options;
 
     if (!elSelectContainer) {
@@ -307,16 +333,18 @@ export class DynamicJoin {
     }
   }
 
-  async _build_drop_down_input(elWrapper, config) {
-    const { buildTomSelectInput } = await import("./build_tom_select");
+  private async _build_drop_down_input(
+    elWrapper: HTMLElement,
+    config: DynamicFilter,
+  ): Promise<void> {
     await buildTomSelectInput({
       elWrapper,
       data: this._table_raw,
       config: config,
-      onBuilt: (ts, name) => {
+      onBuilt: (ts: any, name: string) => {
         this._filters_controls[name] = ts;
       },
-      onUpdate: (value, name) => {
+      onUpdate: (value: any, name: string) => {
         this._current_filters[name] = value;
         this.refresh();
       },
@@ -324,22 +352,25 @@ export class DynamicJoin {
   }
 
   // build range slider input using noUiSlider
-  async _build_slider_input(elWrapper, config) {
+  private async _build_slider_input(
+    elWrapper: HTMLElement,
+    config: DynamicFilter,
+  ): Promise<void> {
     await buildSlider({
       elWrapper,
       data: this._table_raw,
       config: config,
-      onBuilt: (slider, name) => {
+      onBuilt: (slider: any, name: string) => {
         this._filters_controls[name] = slider;
       },
-      onUpdate: (range, name) => {
+      onUpdate: (range: any, name: string) => {
         this._current_filters[name] = range;
         this.refresh();
       },
     });
   }
 
-  _filter_row(row) {
+  private _filter_row = (row: any): boolean => {
     return this.options.dynamicFilters.every(({ name, type }) => {
       const filterValue = this._current_filters[name];
       const value = row[name];
@@ -366,28 +397,29 @@ export class DynamicJoin {
           return true;
       }
     });
-  }
+  };
 
-  getTableFitered() {
+  getTableFitered(): any[] {
     return clone(this._table_filtered);
   }
 
-  getTableBase() {
+  getTableBase(): any[] {
     return clone(this._table_base);
   }
 
-  getTableRaw() {
+  getTableRaw(): any[] {
     return clone(this._table_raw);
   }
-  getTableAggregated() {
+
+  getTableAggregated(): AggregatedTableEntry[] {
     return this._get_aggregated_table();
   }
-  getCurrentFilters() {
+
+  getCurrentFilters(): Record<string, any> {
     return clone(this._current_filters);
   }
 
-  _update_table_filtered() {
-    const agg = aggregators[this.options.aggregateFn] || aggregators.none;
+  private _update_table_filtered(): void {
     this._table_filtered = this._table_base.filter(this._filter_row);
 
     if (this.options.onTableFiltered) {
@@ -395,22 +427,22 @@ export class DynamicJoin {
     }
   }
 
-  _update_table_aggregated() {
+  private _update_table_aggregated(): void {
     const agg = aggregators[this.options.aggregateFn] || aggregators.none;
     const filteredData = this._table_filtered;
 
     // Group by joinKey only
-    const groups = new Map();
+    const groups = new Map<string, any[]>();
     this._aggregated_lookup.clear();
 
     for (const row of filteredData) {
-      const value = row[this.options.field];
-      const joinKey = row[this.options.fieldJoinData];
+      const value = row[this.options.field as string];
+      const joinKey = row[this.options.fieldJoinData as string];
 
       if (!groups.has(joinKey)) {
         groups.set(joinKey, []);
       }
-      groups.get(joinKey).push(value);
+      groups.get(joinKey)!.push(value);
     }
 
     for (const [joinKey, values] of groups) {
@@ -424,7 +456,7 @@ export class DynamicJoin {
   }
 
   // use chroma.limits + .scale().classes() to get a color function
-  _update_color_scale() {
+  private _update_color_scale(): void {
     const values = this._get_aggregated_table()
       .map((r) => r.value)
       .filter(isNotEmpty);
@@ -444,7 +476,7 @@ export class DynamicJoin {
     this._color_scale = chroma.scale(this.options.palette).classes(limits);
   }
 
-  _add_layer() {
+  private _add_layer(): void {
     const hasSource = this._map.getSource(this._id_source);
     const hasLayer = this._map.getLayer(this._id_layer);
 
@@ -467,13 +499,13 @@ export class DynamicJoin {
           "source-layer": this._id_source_layer,
           paint,
         },
-        settings.layerBefore,
+        (settings as any).layerBefore,
       );
     }
   }
 
   // apply the dynamic style, considering the toggled legend classes
-  _apply_style() {
+  private _apply_style(): void {
     if (!this._map.getLayer(this._id_layer)) {
       console.warn("Missing layer", this._id_layer);
       return;
@@ -495,12 +527,12 @@ export class DynamicJoin {
     }
 
     const transparentColor = "rgba(0, 0, 0, 0)";
-    const classes = this._color_scale.classes();
-    const colorExpr = ["match", ["get", this.options.fieldJoinGeom]];
+    const classes = (this._color_scale as any).classes();
+    const colorExpr: any[] = ["match", ["get", this.options.fieldJoinGeom]];
     const showAll = this._visible_legend_classes.size === 0; // Check if selection set is empty
 
     // Helper to find class index for a value
-    const getClassIndex = (value) => {
+    const getClassIndex = (value: any): number | string => {
       if (value === null || value === undefined) return "na"; // Handle null/undefined as NA case
       for (let i = 0; i < classes.length; i++) {
         const lowerBound = i === 0 ? -Infinity : classes[i - 1];
@@ -520,13 +552,13 @@ export class DynamicJoin {
       const classIdentifier = getClassIndex(value); // Get index (0, 1, ...) or 'na'
       const isSelected = this._visible_legend_classes.has(classIdentifier);
 
-      let color;
+      let color: string;
       if (showAll || isSelected) {
         // If showing all OR this class is selected, get original color
         color =
           classIdentifier === "na"
             ? this.options.color_na
-            : this._color_scale(value)?.hex();
+            : (this._color_scale(value) as any)?.hex();
         // Handle case where color scale might return undefined/null even for valid class
         if (!color) {
           color = this.options.color_na;
@@ -563,19 +595,20 @@ export class DynamicJoin {
     );
   }
 
-  _setup_map_event() {
+  private _setup_map_event(): void {
     this._map.on("click", this._id_layer, this._on_map_click);
   }
 
-  _on_map_click(ev) {
+  private _on_map_click = (ev: any): any => {
     if (this.options.onMapClick) {
       const map = ev.target;
       const idLayer = this._id_layer;
       const features = map.queryRenderedFeatures(ev.point, {
         layers: [idLayer],
       });
-      const enrichedFeatures = features.map((feature) => {
-        const geomJoinValue = feature.properties[this.options.fieldJoinGeom];
+      const enrichedFeatures = features.map((feature: any) => {
+        const geomJoinValue =
+          feature.properties[this.options.fieldJoinGeom as string];
         const value = this._aggregated_lookup.get(geomJoinValue);
         feature.properties.aggregated_value = value;
         return feature;
@@ -583,18 +616,18 @@ export class DynamicJoin {
 
       return this.options.onMapClick(enrichedFeatures, this, ev);
     }
-  }
+  };
 
-  destroy() {
+  destroy(): void {
     this._destroy_filter_ui(); // Destroy filters
     this._destroy_legend_ui(); // Destroy legend
 
-    this._map.off("click", this._id_layer, this._on_map_click);
+    (this._map as any).off("click", this._id_layer, this._on_map_click);
 
-    return this._remove_layer(); // Remove map layer/source
+    this._remove_layer(); // Remove map layer/source
   }
 
-  _remove_layer() {
+  private _remove_layer(): void {
     const hasSource = this._map.getSource(this._id_source);
     const hasLayer = this._map.getLayer(this._id_layer);
 
@@ -606,7 +639,7 @@ export class DynamicJoin {
     }
   }
 
-  async generateSeries() {
+  async generateSeries(): Promise<any> {
     // test network latency
     await waitTimeoutAsync(100);
     const data = generate_series();
@@ -614,8 +647,8 @@ export class DynamicJoin {
   }
 }
 
-const aggregators = {
-  none: (vals) => {
+const aggregators: Record<string, AggregatorFunction> = {
+  none: (vals: any[]) => {
     if (vals.length === 1) return vals[0];
     if (vals.length > 1) {
       console.warn(
@@ -625,31 +658,33 @@ const aggregators = {
     }
     return null;
   },
-  first: (vals) => vals[0] ?? null,
-  last: (vals) => vals.at(-1) ?? null,
-  sum: (vals) => vals.reduce((a, b) => a + b, 0),
-  max: (vals) => Math.max(...vals),
-  min: (vals) => Math.min(...vals),
-  median: (vals) => {
+  first: (vals: any[]) => vals[0] ?? null,
+  last: (vals: any[]) => vals.at(-1) ?? null,
+  sum: (vals: number[]) => vals.reduce((a, b) => a + b, 0),
+  max: (vals: number[]) => Math.max(...vals),
+  min: (vals: number[]) => Math.min(...vals),
+  median: (vals: number[]) => {
     const sorted = [...vals].sort((a, b) => a - b);
     const mid = Math.floor(sorted.length / 2);
     return sorted.length % 2
       ? sorted[mid]
       : (sorted[mid - 1] + sorted[mid]) / 2;
   },
-  mode: (vals) => {
-    const counts = vals.reduce((acc, v) => {
+  mode: (vals: any[]) => {
+    const counts = vals.reduce((acc: Record<string, number>, v) => {
       acc[v] = (acc[v] || 0) + 1;
       return acc;
     }, {});
-    return Object.entries(counts).reduce(
-      (a, [v, c]) => (c > a[1] ? [v, c] : a),
-      [null, 0],
+    return (
+      Object.entries(counts).reduce((a, [v, c]) => (c > a[1] ? [v, c] : a), [
+        null,
+        0,
+      ] as any) as any
     )[0];
   },
 };
 
-const operators = new Map([
+const operators = new Map<string, (a: any, b: any) => boolean>([
   ["==", (a, b) => a == b],
   ["!=", (a, b) => a != b],
   [">", (a, b) => a > b],

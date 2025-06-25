@@ -66,7 +66,7 @@ function waitFrameAsync() {
  * @param {Any} value Value to return default = true
  * @return {Promise<boolean>}
  */
-function waitTimeoutAsync(t, cb, value) {
+function waitTimeoutAsync(t, cb = null, value = true) {
   return new Promise((r) => {
     setTimeout(() => {
       let out = isEmpty(value) ? true : value;

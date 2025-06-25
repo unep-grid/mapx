@@ -119,6 +119,13 @@ module.exports = {
           loader: "tsx",
         },
       },
+      {
+        test: /\.ts?$/,
+        loader: "esbuild-loader",
+        options: {
+          loader: "ts",
+        },
+      },
       { test: /\.html$/, loader: "html-loader", options: {} },
       {
         test: /\.coffee$/,

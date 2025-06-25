@@ -1,8 +1,9 @@
 import { el } from "../el_mapx";
 import { isEmpty, isNotEmpty } from "../is_test";
 import { moduleLoad } from "../modules_loader_async";
+import type { BuildSliderOptions } from "./types.ts";
 
-export async function buildSlider(options = {}) {
+export async function buildSlider(options: BuildSliderOptions): Promise<void> {
   const noUiSlider = await moduleLoad("nouislider");
   const { elWrapper, config, onBuilt, onUpdate, data } = options;
   const {
@@ -16,14 +17,14 @@ export async function buildSlider(options = {}) {
   } = config;
 
   // auto-detect min/max if not provided
-  let actualMin = min;
-  let actualMax = max;
+  let actualMin: number = min as number;
+  let actualMax: number = max as number;
 
   const computeMin = min === "auto" || isEmpty(min);
   const computeMax = max === "auto" || isEmpty(max);
 
   if (computeMin || computeMax) {
-    const values = data.map((row) => row[name]).filter(isNotEmpty);
+    const values = data.map((row) => row[name]).filter(isNotEmpty).map(Number);
 
     if (computeMin) {
       actualMin = Math.min(...values);
@@ -33,15 +34,15 @@ export async function buildSlider(options = {}) {
     }
   }
 
-  const startValues = isNotEmpty(defaultValue)
-    ? defaultValue
+  const startValues: number[] = isNotEmpty(defaultValue)
+    ? Array.isArray(defaultValue) ? defaultValue : [defaultValue]
     : [actualMin, actualMax];
 
   if (single && startValues.length > 1) {
     startValues.splice(1, startValues.length);
   }
 
-  const formaters = integer
+  const formatters = integer
     ? {
         to: formatText,
         from: formatText,
@@ -57,8 +58,8 @@ export async function buildSlider(options = {}) {
       height: "10px",
     },
   });
-  const elMin = el("span", actualMin);
-  const elMax = el("span", actualMax);
+  const elMin = el("span", actualMin.toString());
+  const elMax = el("span", actualMax.toString());
   const elValue = el("span");
   const elValues = el(
     "div",
@@ -85,37 +86,38 @@ export async function buildSlider(options = {}) {
     connect: true,
     behaviour: "drag",
     tooltips: false,
-    format: formaters,
+    format: formatters,
   });
   onBuilt(slider, name);
 
-  // intial values to display
+  // initial values to display
   updateValues(slider.get());
 
   // set up event handlers
-  slider.on("update", (values) => {
+  slider.on("update", (values: string[] | number[]) => {
     updateValues(values);
     onUpdate(values.map(formatNum), name);
   });
 
   // update display values
-  function updateValues(values) {
+  function updateValues(values: string[] | number[]): void {
     elValue.replaceChildren();
 
     if (single) {
-      elValue.innerText = formatText(values);
+      elValue.innerText = formatText(values[0]);
     } else {
       const [min, max] = values.map(formatText);
-
       elValue.innerText = `${min} - ${max}`;
     }
   }
 
-  function formatText(value) {
-    return integer ? `${parseInt(value)}` : `${parseFloat(value).toFixed(2)}`;
+  function formatText(value: string | number): string {
+    const numValue = typeof value === 'string' ? parseFloat(value) : value;
+    return integer ? `${parseInt(numValue.toString())}` : `${numValue.toFixed(2)}`;
   }
 
-  function formatNum(value) {
-    return integer ? parseInt(value) : parseFloat(value);
+  function formatNum(value: string | number): number {
+    const numValue = typeof value === 'string' ? parseFloat(value) : value;
+    return integer ? parseInt(numValue.toString()) : numValue;
   }
 }

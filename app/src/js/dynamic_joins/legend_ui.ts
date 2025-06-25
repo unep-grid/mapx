@@ -1,4 +1,5 @@
 import { el } from "../el_mapx";
+import type { LegendUIOptions } from "./types";
 import "./legend_style.less";
 
 /**
@@ -6,7 +7,14 @@ import "./legend_style.less";
  * Handles DOM creation, event delegation, and visibility state management
  */
 export class LegendUI {
-  constructor(container, options = {}) {
+  private container: HTMLElement;
+  private colorScale?: chroma.Scale;
+  private data: Array<{ key: string; value: any }>;
+  private colorNa: string;
+  private visibleClasses: Set<number | string>;
+  private onToggle?: (classIdentifier: number | string, isVisible: boolean, allVisibleClasses: Set<number | string>) => void;
+
+  constructor(container: HTMLElement, options: LegendUIOptions = {}) {
     this.container = container;
     this.colorScale = options.colorScale;
     this.data = options.data || [];
@@ -20,24 +28,28 @@ export class LegendUI {
     this.init();
   }
 
-  init() {
+  private init(): void {
     this.setupEventDelegation();
     this.render();
   }
 
-  setupEventDelegation() {
+  private setupEventDelegation(): void {
     this.container.addEventListener("click", this.handleClick);
   }
 
-  handleClick(event) {
-    const legendItem = event.target.closest(".dj-legend-item");
+  private handleClick = (event: Event): void => {
+    const target = event.target as HTMLElement;
+    const legendItem = target.closest(".dj-legend-item") as HTMLElement;
     if (legendItem) {
       const classIndex = legendItem.dataset.legend_class_index;
-      this.toggleClass(classIndex * 1, legendItem);
+      if (classIndex !== undefined) {
+        const classIdentifier = isNaN(Number(classIndex)) ? classIndex : Number(classIndex);
+        this.toggleClass(classIdentifier, legendItem);
+      }
     }
-  }
+  };
 
-  toggleClass(classIdentifier, element) {
+  private toggleClass(classIdentifier: number | string, element: HTMLElement): void {
     const wasVisible = this.visibleClasses.has(classIdentifier);
 
     if (wasVisible) {
@@ -55,7 +67,7 @@ export class LegendUI {
     }
   }
 
-  render() {
+  private render(): void {
     // Clear previous content
     this.container.innerHTML = "";
     this.visibleClasses.clear();
@@ -70,7 +82,7 @@ export class LegendUI {
     const colors = this.colorScale.colors(classes.length);
 
     // Helper to format numbers nicely
-    const formatNumber = (num) => {
+    const formatNumber = (num: number): string => {
       if (num === undefined || num === null) return "N/A";
       return num.toLocaleString(undefined, {
         maximumFractionDigits: 2,
@@ -80,10 +92,10 @@ export class LegendUI {
 
     // Check if we need an NA class
     const hasNaClass =
-      this.colorNa && this.data.some((row) => !this.colorScale(row.value));
+      this.colorNa && this.data.some((row) => !this.colorScale!(row.value));
 
     // Add items for each class break
-    classes.forEach((limit, i) => {
+    classes.forEach((limit: number, i: number) => {
       // Determine bounds
       const lowerBound = i === 0 ? -Infinity : classes[i - 1];
       const upperBound = limit;
@@ -98,7 +110,7 @@ export class LegendUI {
         {
           class: ["dj-legend-item", `legend-class-${i}`],
           dataset: {
-            legend_class_index: i,
+            legend_class_index: i.toString(),
           },
         },
         [
@@ -143,7 +155,7 @@ export class LegendUI {
   /**
    * Update the legend with new data/color scale
    */
-  update(options = {}) {
+  update(options: LegendUIOptions = {}): void {
     if (options.colorScale) {
       this.colorScale = options.colorScale;
     }
@@ -160,14 +172,14 @@ export class LegendUI {
   /**
    * Get the current set of visible classes
    */
-  getVisibleClasses() {
+  getVisibleClasses(): Set<number | string> {
     return new Set(this.visibleClasses);
   }
 
   /**
    * Clean up event listeners and DOM
    */
-  destroy() {
+  destroy(): void {
     this.container.removeEventListener("click", this.handleClick);
     this.container.innerHTML = "";
     this.visibleClasses.clear();

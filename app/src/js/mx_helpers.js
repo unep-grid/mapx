@@ -31,7 +31,7 @@ export * from "./json_editor";
 export * from "./metadata/utils.js";
 export * from "./badges/index.js";
 export * from "./geoserver/index.js";
-export * from "./dynamic_joins/index.js";
+export * from "./dynamic_joins/index.ts";
 
 /**
  * Old modules that use global mx object
