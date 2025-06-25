@@ -373,7 +373,7 @@ export function isArrayOfSourceId(arr) {
  * @return {Boolean}
  */
 export function isViewId(idView) {
-  const expIdView = new RegExp("^MX-GJ-.{10}$|^MX-.{5}-.{5}-.{5}$");
+  const expIdView = new RegExp("^MX-GJ-.{10}$|^MX-DJ-.*$|^MX-.{5}-.{5}-.{5}$");
   return !!idView && isString(idView) && !!idView.match(expIdView);
 }
 /**
