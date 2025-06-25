@@ -1,3 +1,17 @@
+  - [1.13.18-alpha.9](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.9) 
+
+    - refactor(dynamic_join): refactor as typescrpt
+    - feat(dynamic_join): improvement
+    - fix(is_test): isViewId test should work with dj view – currently used as plugin DynamicJoin
+    - feat(widget): retrieve widget from the same dashboard by name
+    - fix(dynamic_join): logic issues + code improvement
+    - fix(dynamoc_join): performance and DRY approach on the aggregation table
+    - fix(dynamoc_join): logical issues
+    - feat: dedicated legend handler + refactor, simplify code
+    - refactor: partial implementation of the simplified approach
+    - feat(dynamic_join): static  filtering should be done once
+
+
   - [1.13.18-alpha.8](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.8) 
 
     - feat(1048): refactor for a cleaner implementation
