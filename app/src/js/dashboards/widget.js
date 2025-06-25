@@ -116,6 +116,17 @@ class Widget extends EventSimple {
   }
 
   /**
+   *
+   * @param {string} key name, key or id of the widget to find in the dashboard
+   * @returns Widget
+   */
+  findWidget(key) {
+    return this.dashboard.widgets.find(
+      (w) => w.id === key || w.config.name === key,
+    );
+  }
+
+  /**
    * Access to dashboard lazy-loaded modules.
    * @returns {Object} - Dashboard modules.
    * @public
