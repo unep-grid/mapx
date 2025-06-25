@@ -1,25 +1,52 @@
 import { el } from "../el_mapx";
-import { isNotEmpty } from "../is_test";
+import { isEmpty, isNotEmpty } from "../is_test";
 import { moduleLoad } from "../modules_loader_async";
 
-export async function buildRangeSlider(options = {}) {
+export async function buildSlider(options = {}) {
   const noUiSlider = await moduleLoad("nouislider");
   const { elWrapper, config, onBuilt, onUpdate, data } = options;
-  const { name, default: defaultValue, min, max, step, mode } = config;
+  const {
+    name,
+    default: defaultValue,
+    min,
+    max,
+    step,
+    integer,
+    single,
+  } = config;
 
   // auto-detect min/max if not provided
   let actualMin = min;
   let actualMax = max;
-  if (min === "auto" || max === "auto") {
+
+  const computeMin = min === "auto" || isEmpty(min);
+  const computeMax = max === "auto" || isEmpty(max);
+
+  if (computeMin || computeMax) {
     const values = data.map((row) => row[name]).filter(isNotEmpty);
 
-    if (min === "auto") {
+    if (computeMin) {
       actualMin = Math.min(...values);
     }
-    if (max === "auto") {
+    if (computeMax) {
       actualMax = Math.max(...values);
     }
   }
+
+  const startValues = isNotEmpty(defaultValue)
+    ? defaultValue
+    : [actualMin, actualMax];
+
+  if (single && startValues.length > 1) {
+    startValues.splice(1, startValues.length);
+  }
+
+  const formaters = integer
+    ? {
+        to: formatText,
+        from: formatText,
+      }
+    : undefined;
 
   const id = `dj_slider_${name}`;
   const elLabel = el("label", { for: id }, name);
@@ -30,13 +57,20 @@ export async function buildRangeSlider(options = {}) {
       height: "10px",
     },
   });
-  const elValues = el("div", {
-    style: {
-      display: "flex",
-      justifyContent: "space-between",
-      marginTop: "5px",
+  const elMin = el("span", actualMin);
+  const elMax = el("span", actualMax);
+  const elValue = el("span");
+  const elValues = el(
+    "div",
+    {
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        marginTop: "5px",
+      },
     },
-  });
+    [elMin, elValue, elMax],
+  );
 
   elWrapper.classList.add("mx-slider-container");
   elWrapper.appendChild(elLabel);
@@ -47,17 +81,11 @@ export async function buildRangeSlider(options = {}) {
   const slider = noUiSlider.create(elSlider, {
     range: { min: actualMin, max: actualMax },
     step: step || 1,
-    start: defaultValue || [actualMin, actualMax],
+    start: startValues,
     connect: true,
     behaviour: "drag",
     tooltips: false,
-    format:
-      mode === "integer"
-        ? {
-            to: (value) => Math.round(value),
-            from: (value) => Math.round(value),
-          }
-        : undefined,
+    format: formaters,
   });
   onBuilt(slider, name);
 
@@ -67,17 +95,27 @@ export async function buildRangeSlider(options = {}) {
   // set up event handlers
   slider.on("update", (values) => {
     updateValues(values);
-    const range = values.map((v) =>
-      mode === "integer" ? Math.round(parseFloat(v)) : parseFloat(v),
-    );
-    onUpdate(range, name);
+    onUpdate(values.map(formatNum), name);
   });
 
   // update display values
   function updateValues(values) {
-    const [min, max] = values.map((v) =>
-      mode === "integer" ? Math.round(v) : parseFloat(v).toFixed(2),
-    );
-    elValues.innerHTML = `<span>${min}</span><span>${max}</span>`;
+    elValue.replaceChildren();
+
+    if (single) {
+      elValue.innerText = formatText(values);
+    } else {
+      const [min, max] = values.map(formatText);
+
+      elValue.innerText = `${min} - ${max}`;
+    }
+  }
+
+  function formatText(value) {
+    return integer ? `${parseInt(value)}` : `${parseFloat(value).toFixed(2)}`;
+  }
+
+  function formatNum(value) {
+    return integer ? parseInt(value) : parseFloat(value);
   }
 }

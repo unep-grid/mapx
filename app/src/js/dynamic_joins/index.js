@@ -1,12 +1,15 @@
 import chroma from "chroma-js";
 import { el } from "../el_mapx";
 import { isElement, isNotEmpty, isEmpty } from "../is_test";
-import { clone } from "../mx_helper_misc";
-import { buildRangeSlider } from "./build_slider";
+import { clone, debounce, makeId } from "../mx_helper_misc";
+import { buildSlider } from "./build_slider";
 import { buildLegendInput } from "./build_legend";
 import { isUrl } from "../is_test";
 import { isArray } from "../is_test";
 import { bindAll } from "../bind_class_methods";
+import { settings } from "../settings";
+import { generate_series } from "./generate_series";
+import { waitTimeoutAsync } from "../animation_frame";
 
 const default_options = {
   elSelectContainer: null,
@@ -15,6 +18,7 @@ const default_options = {
   idSourceData: null,
   sourceLayer: null,
   dataUrl: null,
+  data: [],
   tilesUrl: null,
 
   palette: "OrRd",
@@ -22,21 +26,35 @@ const default_options = {
   classes: 5,
   color_na: "#ccc",
   aggregateFn: "max",
-  aggregateBy: [],
-  aggregateField: null,
-
+  layer_prefix: "MX-DJ",
+  field: null,
+  fieldJoinData: null,
+  fieldJoinGeom: null,
+  type: "fill",
+  paint: {
+    circle: {},
+    fill: {
+      "fill-color": "#000",
+      "fill-opacity": 0.6,
+      "fill-outline-color": "#333",
+    },
+    line: {},
+  },
   staticFilters: [],
   dynamicFilters: [],
-  fieldJoinOn: [],
-  onRender: console.log,
+
+  onTableAggregated: console.log,
+  onTableReady: console.log,
+  onTableFiltered: console.log,
   onMapClick: console.log,
 };
 
 const default_state = {
   _options: {},
   _table_raw: [],
+  _table_filtered: [],
   _table_base: [],
-  _table_aggregated: [],
+  _aggregated_lookup: new Map(),
   _color_scale: null,
   _filters_controls: {},
   _current_filters: {},
@@ -48,10 +66,11 @@ const default_state = {
 export class DynamicJoin {
   constructor(map) {
     window._dj = this;
-    bindAll(this);
     this._map = map;
     this.resetState();
+    bindAll(this);
     this.resetOptions();
+    this.refresh = debounce(this.refresh, 200);
   }
 
   /**
@@ -64,16 +83,19 @@ export class DynamicJoin {
    * @param {string} opts.idSourceData         – your attribute table id
    * @param {string} opts.dataUrl              – direct download link
    * @param {Array} opts.tilesUrl              – tile urls
-   * @param {Array}  opts.fieldJoinOn          – [ dataField, featureProperty ]
+   * @param {string}  opts.fieldJoinGeom       – join field for the geom matching the data
+   * @param {string}  opts.fieldJoinData       – join field matching geom id
+
    * @param {string} [opts.stat='quantile']    – 'quantile', 'equal', 'kmeans', etc.
    * @param {number} [opts.classes=5]          – number of classes/breaks
    * @param {string} [opts.color_na='#ccc']    – fallback color for missing joins
    * @param {Array<string>} [opts.staticFilters]  – array of field names for static filtering
-   * @param {Array<string>} [opts.aggregateBy] – array of field names for grouping + aggregation
-   * @param {string} [opts.aggregateField]     – value field to aggregate
+   * @param {string} [opts.field]     – value field -> aggregate
    * @param {string} [opts.aggregateFn='none'] – 'none', 'first', 'last', 'sum', 'median', 'max', 'min', or 'mode'
    * @param {Array} [opts.dynamicFilters]      – array of input configurations
-   * @param {Function} [opts.onRender]         – callback after data processing
+   * @param {Function} [opts.onTableAggregated]         – callback after data aggregated
+   * @param {Function} [opts.onTableReady]         – callback after data is filtered with static filters
+   * @param {Function} [opts.onTableFiltered]         – callback after data is filtered with dynamic filters
    * @param {Function} [opts.onMapClick]       – callback on map feature click
    * @param {HTMLElement} [opts.elSelectContainer]     – DOM element to append filter UI
    * @param {HTMLElement} [opts.elLegendContainer]     – DOM element to append the legend
@@ -82,16 +104,17 @@ export class DynamicJoin {
     this.setOptions(opts);
 
     // Validate required options
-    const { idSourceGeom, dataUrl, fieldJoinOn } = this.options;
+    const { idSourceGeom, dataUrl, data, fieldJoinData, fieldJoinGeom } =
+      this.options;
     if (!idSourceGeom) {
       throw new Error("Missing required option: idSourceGeom");
     }
-    if (!isUrl(dataUrl)) {
-      throw new Error("Missing required option: dataUrl (must be valid URL)");
+    if (!isUrl(dataUrl) && isEmpty(data)) {
+      throw new Error("Missing required option: dataUrl or data");
     }
-    if (isEmpty(fieldJoinOn) || fieldJoinOn.length < 2) {
+    if (isEmpty(fieldJoinData) || isEmpty(fieldJoinGeom)) {
       throw new Error(
-        "Missing required option: fieldJoinOn (must be array with 2 elements)",
+        "Both join id should be set: fieldJoinData, fieldJoinGeom",
       );
     }
 
@@ -99,30 +122,25 @@ export class DynamicJoin {
       this._current_filters[item.name] = item.default || null;
     }
 
-    this._id_layer = `${idSourceGeom}-dynamic-join`;
-    this._id_source = `${idSourceGeom}-dynamic-join-src`;
+    const id = crypto.randomUUID();
+    this._id_layer = `${this.options.layer_prefix}-${id}`;
+    this._id_source = `${this._id_layer}-src`;
+    this._id_source_layer =  this.options.sourceLayer;
+
     this._add_layer();
+    this._setup_map_event();
 
     await this._update_table_base();
-    this._update_table_aggregated();
     await this._build_filter_ui();
-    await this._refresh();
-    this._setup_map_event();
+    this.refresh();
   }
 
-  async _refresh() {
+  async refresh() {
+    this._update_table_filtered();
     this._update_table_aggregated();
     this._update_color_scale();
-
     this._build_legend_ui();
     this._apply_style();
-    if (this.options.onRender) {
-      this.options.onRender(
-        this._table_aggregated,
-        this._current_filters,
-        this.options,
-      );
-    }
   }
 
   resetState() {
@@ -160,26 +178,34 @@ export class DynamicJoin {
     this._visible_legend_classes.clear();
   }
 
+  _get_aggregated_table() {
+    return Array.from(this._aggregated_lookup.entries()).map(
+      ([key, value]) => ({ key, value }),
+    );
+  }
+
   _build_legend_ui() {
-    if (!isElement(this.options.elLegendContainer) || !this._color_scale) {
+    const { elLegendContainer } = this.options;
+    const cscale = this._color_scale;
+    const valid = isElement(elLegendContainer) && !!cscale;
+    this._destroy_legend_ui();
+
+    if (!valid) {
       console.warn("Cannot build legend: Missing container or color scale.");
-      this._destroy_legend_ui();
       return;
     }
 
-    this._destroy_legend_ui();
-
     buildLegendInput({
-      elWrapper: this.options.elLegendContainer,
+      elWrapper: elLegendContainer,
       config: {
-        colorScale: this._color_scale,
+        colorScale: cscale,
         color_na: this.options.color_na,
       },
-      data: this._table_aggregated,
+      data: this._get_aggregated_table(),
       onBuilt: (legend) => {
         this._filters_controls.legend = legend;
       },
-      onUpdate: (classIndex, isVisible, allVisibleClasses) => {
+      onUpdate: (_, __, allVisibleClasses) => {
         this._visible_legend_classes = allVisibleClasses;
 
         this._apply_style();
@@ -205,22 +231,46 @@ export class DynamicJoin {
 
   // load your attribute table; include all necessary fields
   async _update_table_base() {
-    const { dataUrl } = this.options;
-    if (!isUrl(dataUrl)) {
-      throw new Error("Missing valid URL");
+    const { dataUrl, data } = this.options;
+
+    try {
+      if (isNotEmpty(data)) {
+        this._table_raw = data;
+      } else {
+        if (!isUrl(dataUrl)) {
+          throw new Error("Missing valid URL");
+        }
+        const resp = await fetch(dataUrl);
+        if (!resp.ok) {
+          throw new Error(`HTTP ${resp.status}: ${resp.statusText}`);
+        }
+        const json = await resp.json();
+        this._table_raw = isArray(json.data) ? json.data : [];
+      }
+      this._table_base = this._apply_static_filter(this._table_raw);
+
+      if (this.options.onTableReady) {
+        this.options.onTableReady(this._table_base, this);
+      }
+    } catch (error) {
+      console.error("Failed to update table base:", error);
+      this._table_raw = [];
+      this._table_base = [];
+      throw error; // Re-throw if you want to handle it upstream
     }
-    const resp = await fetch(dataUrl);
-    const json = await resp.json();
-    this._table_raw = isArray(json.data) ? json.data : [];
-    this._table_base = this._apply_static_filter(this._table_raw);
   }
 
   _apply_static_filter(data = []) {
-    return (data || []).filter((row) =>
-      this.options.staticFilters.every(({ field, operator, value }) => {
-        const operatorFn = operators.get(operator);
-        return operatorFn ? operatorFn(row[field], value) : true;
+    const compiledFilters = this.options.staticFilters.map(
+      ({ field, operator, value }) => ({
+        field,
+        op: operators.get(operator),
+        value,
       }),
+    );
+
+    return data.filter((row) =>
+      compiledFilters.every(({ field, op, value }) => op(row[field], value)),
     );
   }
 
@@ -247,8 +297,8 @@ export class DynamicJoin {
         case "dropdown":
           await this._build_drop_down_input(elWrapper, config);
           break;
-        case "range-slider":
-          await this._build_range_slider_input(elWrapper, config);
+        case "slider":
+          await this._build_slider_input(elWrapper, config);
           break;
         default:
           console.warn(`Unsupported filter type: ${type}`);
@@ -268,14 +318,14 @@ export class DynamicJoin {
       },
       onUpdate: (value, name) => {
         this._current_filters[name] = value;
-        this._refresh();
+        this.refresh();
       },
     });
   }
 
   // build range slider input using noUiSlider
-  async _build_range_slider_input(elWrapper, config) {
-    await buildRangeSlider({
+  async _build_slider_input(elWrapper, config) {
+    await buildSlider({
       elWrapper,
       data: this._table_raw,
       config: config,
@@ -284,7 +334,7 @@ export class DynamicJoin {
       },
       onUpdate: (range, name) => {
         this._current_filters[name] = range;
-        this._refresh();
+        this.refresh();
       },
     });
   }
@@ -301,60 +351,81 @@ export class DynamicJoin {
       switch (type) {
         case "dropdown":
           return value === filterValue;
-        case "range-slider":
+        case "slider":
           const [min, max] = filterValue;
           const numericValue = Number(value);
+
+          if (isEmpty(max)) {
+            //single value
+            return numericValue === min;
+          }
+
           return numericValue >= min && numericValue <= max;
+
         default:
           return true;
       }
     });
   }
 
+  getTableFitered() {
+    return clone(this._table_filtered);
+  }
+
+  getTableBase() {
+    return clone(this._table_base);
+  }
+
+  getTableRaw() {
+    return clone(this._table_raw);
+  }
+  getTableAggregated() {
+    return this._get_aggregated_table();
+  }
+  getCurrentFilters() {
+    return clone(this._current_filters);
+  }
+
+  _update_table_filtered() {
+    const agg = aggregators[this.options.aggregateFn] || aggregators.none;
+    this._table_filtered = this._table_base.filter(this._filter_row);
+
+    if (this.options.onTableFiltered) {
+      this.options.onTableFiltered(this._table_filtered, this);
+    }
+  }
+
   _update_table_aggregated() {
     const agg = aggregators[this.options.aggregateFn] || aggregators.none;
-    const filteredData = this._table_base.filter(this._filter_row);
+    const filteredData = this._table_filtered;
 
+    // Group by joinKey only
     const groups = new Map();
-    this._table_aggregated.length = 0;
+    this._aggregated_lookup.clear();
 
     for (const row of filteredData) {
-      // get value
-      const value = row[this.options.aggregateField];
-      // key for join e.g. gid_1 -> AFG
-      const joinKey = row[this.options.fieldJoinOn[0]];
+      const value = row[this.options.field];
+      const joinKey = row[this.options.fieldJoinData];
 
-      // key for groups, e.g. parameter=x, scenario=b -> x|b
-      const groupKey = isEmpty(this.options.aggregateBy)
-        ? "default"
-        : this.options.aggregateBy.map((field) => row[field] ?? "").join("|");
-
-      // composite key AFG::x|b
-      const compositeKey = `${joinKey}::${groupKey}`;
-      const group = groups.get(compositeKey);
-
-      // create or update group
-      if (isEmpty(group)) {
-        groups.set(compositeKey, {
-          joinKey,
-          groupKey,
-          values: [value],
-        });
-      } else {
-        group.values.push(value);
+      if (!groups.has(joinKey)) {
+        groups.set(joinKey, []);
       }
+      groups.get(joinKey).push(value);
     }
 
-    // Aggregate each group separately, then combine by joinKey
-    for (const [compositeKey, group] of groups) {
-      const value = agg(group.values);
-      this._table_aggregated.push({ key: group.joinKey, value });
+    for (const [joinKey, values] of groups) {
+      const aggregatedValue = agg(values);
+      this._aggregated_lookup.set(joinKey, aggregatedValue);
+    }
+
+    if (this.options.onTableAggregated) {
+      this.options.onTableAggregated(this._get_aggregated_table(), this);
     }
   }
 
   // use chroma.limits + .scale().classes() to get a color function
   _update_color_scale() {
-    const values = this._table_aggregated
+    const values = this._get_aggregated_table()
       .map((r) => r.value)
       .filter(isNotEmpty);
 
@@ -369,6 +440,7 @@ export class DynamicJoin {
       this.options.stat,
       this.options.classes,
     );
+
     this._color_scale = chroma.scale(this.options.palette).classes(limits);
   }
 
@@ -384,17 +456,19 @@ export class DynamicJoin {
     }
 
     if (!hasLayer) {
-      this._map.addLayer({
-        id: this._id_layer,
-        type: "fill",
-        source: this._id_source,
-        "source-layer": this.options.sourceLayer,
-        paint: {
-          "fill-color": this.options.color_na,
-          "fill-opacity": 0.6,
-          "fill-outline-color": "#333",
+      const paint = this.options.paint[this.options.type] || {};
+      paint[`${this.options.type}-color`] = this.options.color_na;
+
+      this._map.addLayer(
+        {
+          id: this._id_layer,
+          source: this._id_source,
+          type: this.options.type,
+          "source-layer": this._id_source_layer,
+          paint,
         },
-      });
+        settings.layerBefore,
+      );
     }
   }
 
@@ -409,16 +483,20 @@ export class DynamicJoin {
       // Set a default fallback color if scale is missing
       this._map.setPaintProperty(
         this._id_layer,
-        "fill-color",
+        `${this.options.type}-color`,
         this.options.color_na || "#ccc",
       );
-      this._map.setPaintProperty(this._id_layer, "fill-opacity", 0.6);
+      this._map.setPaintProperty(
+        this._id_layer,
+        `${this.options.type}-opacity`,
+        0.6,
+      );
       return;
     }
 
     const transparentColor = "rgba(0, 0, 0, 0)";
     const classes = this._color_scale.classes();
-    const fillColorExpr = ["match", ["get", this.options.fieldJoinOn[1]]];
+    const colorExpr = ["match", ["get", this.options.fieldJoinGeom]];
     const showAll = this._visible_legend_classes.size === 0; // Check if selection set is empty
 
     // Helper to find class index for a value
@@ -438,8 +516,7 @@ export class DynamicJoin {
       return this._color_scale?.(value) ? classes.length - 1 : "na";
     };
 
-    for (const row of this._table_aggregated) {
-      const value = row.value;
+    for (const [key, value] of this._aggregated_lookup) {
       const classIdentifier = getClassIndex(value); // Get index (0, 1, ...) or 'na'
       const isSelected = this._visible_legend_classes.has(classIdentifier);
 
@@ -451,34 +528,60 @@ export class DynamicJoin {
             ? this.options.color_na
             : this._color_scale(value)?.hex();
         // Handle case where color scale might return undefined/null even for valid class
-        if (!color) color = this.options.color_na; // Fallback to NA color if scale fails
+        if (!color) {
+          color = this.options.color_na;
+        }
       } else {
         // If not showing all AND this class is not selected, make transparent
         color = transparentColor;
       }
 
-      fillColorExpr.push(row.key, color);
+      colorExpr.push(key, color);
     }
 
     // default
-    fillColorExpr.push(transparentColor);
+    colorExpr.push(transparentColor);
 
-    if (fillColorExpr.length < 4) {
+    if (colorExpr.length < 4) {
       this._map.setPaintProperty(
         this._id_layer,
-        "fill-color",
+        `${this.options.type}-color`,
         transparentColor,
       );
     } else {
-      this._map.setPaintProperty(this._id_layer, "fill-color", fillColorExpr);
+      this._map.setPaintProperty(
+        this._id_layer,
+        `${this.options.type}-color`,
+        colorExpr,
+      );
     }
 
-    this._map.setPaintProperty(this._id_layer, "fill-opacity", 0.7); // Consistent opacity
+    this._map.setPaintProperty(
+      this._id_layer,
+      `${this.options.type}-opacity`,
+      0.7,
+    );
   }
 
   _setup_map_event() {
+    this._map.on("click", this._id_layer, this._on_map_click);
+  }
+
+  _on_map_click(ev) {
     if (this.options.onMapClick) {
-      this._map.on("click", this._id_layer, this.options.onMapClick);
+      const map = ev.target;
+      const idLayer = this._id_layer;
+      const features = map.queryRenderedFeatures(ev.point, {
+        layers: [idLayer],
+      });
+      const enrichedFeatures = features.map((feature) => {
+        const geomJoinValue = feature.properties[this.options.fieldJoinGeom];
+        const value = this._aggregated_lookup.get(geomJoinValue);
+        feature.properties.aggregated_value = value;
+        return feature;
+      });
+
+      return this.options.onMapClick(enrichedFeatures, this, ev);
     }
   }
 
@@ -486,10 +589,7 @@ export class DynamicJoin {
     this._destroy_filter_ui(); // Destroy filters
     this._destroy_legend_ui(); // Destroy legend
 
-    // remove map click handler
-    if (this.options.onMapClick) {
-      this._map.off("click", this._id_layer, this.options.onMapClick);
-    }
+    this._map.off("click", this._id_layer, this._on_map_click);
 
     return this._remove_layer(); // Remove map layer/source
   }
@@ -505,13 +605,22 @@ export class DynamicJoin {
       this._map.removeSource(this._id_source);
     }
   }
+
+  async generateSeries() {
+    // test network latency
+    await waitTimeoutAsync(100);
+    const data = generate_series();
+    return data;
+  }
 }
 
 const aggregators = {
   none: (vals) => {
     if (vals.length === 1) return vals[0];
     if (vals.length > 1) {
-      console.warn(`Expected single value, got ${vals.length}. Using first.`);
+      console.warn(
+        `No aggregator set. Expected single value, got ${vals.length}. Using first.`,
+      );
       return vals[0];
     }
     return null;
