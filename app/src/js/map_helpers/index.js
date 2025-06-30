@@ -2567,6 +2567,9 @@ export async function viewClear(options) {
   if (!isView(view)) {
     return;
   }
+  if(!mx_local.views_active.has(view.id)){
+    return;
+  }
 
   const isStory = isViewSm(view);
   const now = Date.now();
