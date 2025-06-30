@@ -60,6 +60,7 @@ import {
   debounce,
   isShinyReady,
   patchObject,
+  quickHash,
   //debouncePromise,
 } from "./../mx_helper_misc.js";
 import {
@@ -5204,6 +5205,15 @@ export function getViewsList(o) {
  */
 export function getViewsListId() {
   return getViews().map((m) => m.id);
+}
+
+/**
+ * Get views list simple hash, e.g. for invalidate cache
+ * @return {string} hash string
+ */
+export function getViewsListHash() {
+  const list = getViewsListId();
+  return quickHash(list);
 }
 
 /**

@@ -1,6 +1,6 @@
 import { el } from "../../el_mapx";
 import { isViewId, isEmpty, isArrayOfViews } from "../../is_test_mapx";
-import { getViewAuto } from "../../map_helpers";
+import { getViewAuto, getViewsListHash } from "../../map_helpers";
 import { fetchViews } from "../../map_helpers/views_fetch";
 import { miniCacheGet, miniCacheSet } from "../../minicache";
 import { nc } from "../../mx";
@@ -191,5 +191,6 @@ async function fetchAndCacheViews(
 }
 
 function generateCacheKey(userId, projectId, language) {
-  return `ts_views_${projectId}_${userId}_${language}`;
+  const hash = getViewsListHash();
+  return `ts_views_${projectId}_${userId}_${language}_${hash}`;
 }

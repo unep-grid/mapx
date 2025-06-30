@@ -56,6 +56,24 @@ export function lerp(fromScale, toScale, minVal, maxVal, v) {
   return fromScale + normalizedV * (toScale - fromScale);
 }
 
+
+/**
+* Fast non-cryptographic hash for cache invalidation
+* djb2 (with XOR variant)
+* @param {Array} list - Array of items to hash
+* @returns {string} Hex hash string
+*/
+export function quickHash(data) {
+  data = asArray(data);
+
+  const str = data.join("|");
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash * 33) ^ str.charCodeAt(i);
+  }
+  return (hash >>> 0).toString(16);
+}
+
 /**
  * Coerse value to boolean, e.g. from url query string;
  * @param {String|Boolean} value Value coercible to boolean.
@@ -2558,6 +2576,7 @@ export function shareTwitter(id) {
 
   itemFlash("twitter");
 }
+
 
 export function updateLogScroll(selector) {
   selector = selector || ".mx-logs";
