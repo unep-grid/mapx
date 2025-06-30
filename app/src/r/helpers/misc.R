@@ -634,9 +634,9 @@ mxGetSourceNamedList <- function(layerTable) {
   layerTable$global <- as.logical(layerTable$global)
 
   # Generate parts of the name
-  global_icon <- ifelse(layerTable$global, "🌐", "")
+  global_icon <- ifelse(layerTable$global, "[g]", "")
   formatted_date <- format(layerTable$date_modified, "%Y-%m-%d")
-  dims <- sprintf("[%d x %d]", nrow(layerTable), ncol(layerTable))
+  dims <- sprintf("[%d x %d]",layerTable$nrow, layerTable$ncol)
 
   # Construct name string
   display_names <- sprintf(
