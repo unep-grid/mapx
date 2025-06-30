@@ -1,3 +1,10 @@
+  - [1.13.18-alpha.10](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.10) 
+
+    - fix(source_list): correct table dimention + indicate global as [g]
+    - fix(story_views):  bug preventing views to be removed after closing a story map
+    - fix(cache): views list for tom select invalidation
+
+
   - [1.13.18-alpha.9](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.9) 
 
     - refactor(dynamic_join): refactor as typescrpt
