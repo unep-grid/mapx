@@ -23,8 +23,8 @@ import { onNextFrame, waitFrameAsync } from "../animation_frame/index.js";
 import { fontFamilies, fonts } from "./fonts.js";
 import { jedInit } from "../json_editor"; // Import jedInit
 import { settings } from "../mx.js";
-import { getDictItem } from "../mx_helpers.js";
 import { SelectAuto } from "../select_auto";
+import { getDictItem } from "../language/index.js";
 
 export class ThemeModal extends EventSimple {
   constructor(opt) {
@@ -195,7 +195,7 @@ export class ThemeModal extends EventSimple {
     tm._el_filter_input = el("input", {
       type: "text",
       class: ["form-control", "mx-theme--manager-filter"],
-      placeholder: tt("mx_theme_manager_filter_placeholder"),
+      placeholder: await getDictItem("mx_theme_manager_filter_placeholder"),
     });
 
     tm._el_tools_bar = el("div", { class: "mx-theme--manager-bar" }, [

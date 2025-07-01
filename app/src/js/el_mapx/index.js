@@ -399,7 +399,7 @@ function elSpanTranslate(key, opt) {
 /**
  * Shorcut for elSpanTranslate
  */
-export function tt(txt, opt) {
+export async function tt(txt, opt) {
   const optTt = Object.assign({}, { tooltip: false }, opt);
   return elSpanTranslate(txt, optTt);
 }
