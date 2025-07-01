@@ -1,3 +1,8 @@
+  - [1.13.18-alpha.12](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.12) 
+
+    - fix(themes): dark/tree/water as required schema
+
+
   - [1.13.18-alpha.11](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.11) 
 
     - refactor(project_config): move map countries highlights in map section + better labels
