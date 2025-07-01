@@ -316,16 +316,11 @@ export function getSchema(language = "en", full = true) {
         additionalProperties: false,
       },
     },
-    required: ["id", "label", "description"],
+    required: ["id", "label", "description", "dark", "tree", "water"],
   };
 
   if (full) {
-    schema.required = [
-      ...schema.required,
-      "colors",
-      "creator",
-      "last_editor",
-    ];
+    schema.required = [...schema.required, "colors", "creator", "last_editor"];
   } else {
     const keys = Object.keys(schema.properties);
     const req = schema.required;
