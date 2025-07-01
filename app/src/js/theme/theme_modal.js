@@ -185,10 +185,6 @@ export class ThemeModal extends EventSimple {
 
     tm._el_inputs_container = el("div", {
       class: "mx-theme--inputs-container",
-      style: {
-        maxHeight: "400px",
-        overflowY: "auto",
-      },
     });
     tm._el_inputs_container.addEventListener("input", tm.updateFromInput);
 
@@ -208,7 +204,8 @@ export class ThemeModal extends EventSimple {
     tm._el_content.appendChild(tm._el_inputs_container);
 
     tm._filter = new TextFilter({
-      modeFlex: true,
+      //modeFlex: true,
+      modeGrid: true,
       selector: ".mx-theme--inputs",
       elInput: tm._el_filter_input,
       elContent: tm._el_inputs_container,

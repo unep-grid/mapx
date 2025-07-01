@@ -54,6 +54,9 @@ export class TextFilter {
     if (sr.opt.modeFlex) {
       sr._elContent.classList.add("txt-filter--content-flex");
     }
+    if (sr.opt.modeGrid) {
+      sr._elContent.classList.add("txt-filter--content-grid");
+    }
   }
 
   search() {
@@ -66,7 +69,7 @@ export class TextFilter {
     let count = 0;
     let elFirst = null;
     const substrings = txt.split(" ");
-    const regex = new RegExp(`${substrings.join("|")}`, 'i');
+    const regex = new RegExp(`${substrings.join("|")}`, "i");
 
     const max = sr._elsTarget.length;
     sr._search_to_id = setTimeout(() => {
