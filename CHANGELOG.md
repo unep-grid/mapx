@@ -1,3 +1,10 @@
+  - [1.13.18-alpha.11](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.11) 
+
+    - refactor(project_config): move map countries highlights in map section + better labels
+    - fix(themes): better inputs layout as grid and sticky search input
+    - fix(themes): placeholder text in rules filter
+
+
   - [1.13.18-alpha.10](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.10) 
 
     - fix(source_list): correct table dimention + indicate global as [g]
