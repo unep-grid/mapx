@@ -198,9 +198,9 @@ observeEvent(input$btnSaveProjectConfig, {
     # Appearance section
     logo <- .get(data, c("appearance", "logo"))
     theme <- .get(data, c("appearance", "theme"), config$themes$default)
-    countries <- .get(data, c("appearance", "countries"), list())
 
     # Map settings section
+    countries <- .get(data, c("map_settings", "countries"), list())
     mapPosition <- .get(data, c("map_settings", "map_position"))
     projectionName <- .get(data, c("map_settings", "projection", "name"), "mercator")
     projectionDisableGlobe <- .get(data, c("map_settings", "projection", "disableGlobe"), FALSE)

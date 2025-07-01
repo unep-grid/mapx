@@ -1184,16 +1184,16 @@
   },
   {
     "id": "project_access_settings",
-    "en": "Project access settings",
-    "fr": "Paramètres d'accès au projet",
-    "es": "Configuración de acceso al proyecto",
-    "ru": "Настройки доступа к проекту",
-    "zh": "项目访问设置",
-    "ar": "إعدادات الوصول إلى المشروع",
-    "fa": "تنظیمات دسترسی پروژه",
-    "ps": "د پروژې د لاسرسي تنظیمات",
-    "bn": "প্রকল্প অ্যাক্সেস সেটিংস",
-    "de": "Projektzugriffseinstellungen"
+    "en": "Access settings",
+    "fr": "Paramètres d'accès",
+    "es": "Configuración de acceso",
+    "ru": "Настройки доступа",
+    "zh": "访问设置",
+    "ar": "إعدادات الوصول",
+    "fa": "تنظیمات دسترسی",
+    "ps": "د لاسرسي تنظیمات",
+    "bn": "অ্যাক্সেস সেটিংস",
+    "de": "Zugriffseinstellungen"
   },
   {
     "id": "project_date_modified",

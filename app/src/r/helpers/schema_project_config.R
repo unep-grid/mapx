@@ -101,20 +101,6 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
             ),
             default = .get(projectData, c("logo"))
           ),
-          countries = list(
-            type = "array",
-            title = tt("project_countries_highlight"),
-            items = list(
-              type = "string"
-            ),
-            maxItems = 10,
-            minItems = 0,
-            default = projectData$countries,
-            mx_options = list(
-              renderer = "tom-select",
-              loader = "countries"
-            )
-          ),
           theme = list(
             type = "string",
             title = tt("project_id_theme"),
@@ -133,6 +119,20 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
         title = tt("project_map_settings"),
         options = list(collapsed = TRUE),
         properties = list(
+          countries = list(
+            type = "array",
+            title = tt("project_countries_highlight"),
+            items = list(
+              type = "string"
+            ),
+            maxItems = 10,
+            minItems = 0,
+            default = projectData$countries,
+            mx_options = list(
+              renderer = "tom-select",
+              loader = "countries"
+            )
+          ),
           map_position = list(
             type = "object",
             format = "position",
@@ -265,10 +265,10 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
     ),
     appearance = list(
       logo = projectData$logo,
-      countries = projectData$countries,
       theme = projectData$theme
     ),
     map_settings = list(
+      countries = projectData$countries,
       map_position = projectData$map_position,
       projection = list(
         name = .get(projection, "name", "mercator"),
