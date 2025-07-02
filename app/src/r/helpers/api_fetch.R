@@ -60,16 +60,18 @@ mxApiFetch <- function(route, listParam = NULL, asDataFrame = FALSE, debug = FAL
     }
 
     #
-    # ⚠️   default is `simplifyVector=TRUE` : 
-    #     - arrays will be converted as vector. 
-    #     - ["a"] in DB -> character("a") in R -> "a" in DB after save 
-    #       with auto_unbox=TRUE 
-    #    If simplifyVector=FALSE : 
-    #     - ["a"] in DB -> list("a") in R -> "a" in DB 
-    #     - but then ALL vector operations in R are no more possible. 
-    # 
-    data <- fromJSON(strData, simplifyDataFrame = asDataFrame)
-
+    # ⚠️   default is `simplifyVector=TRUE` :
+    #     - arrays will be converted as vector.
+    #     - ["a"] in DB -> character("a") in R -> "a" in DB after save
+    #       with auto_unbox=TRUE
+    #    If simplifyVector=FALSE :
+    #     - ["a"] in DB -> list("a") in R -> "a" in DB
+    #     - but then ALL vector operations in R are no more possible.
+    #
+    data <- fromJSON(strData,
+      simplifyDataFrame = asDataFrame,
+      simplifyVector = FALSE 
+    )
 
     if (isNotEmpty(data) && isTRUE(data$type == "error")) {
       stop(data$message)
@@ -127,7 +129,7 @@ mxApiPost <- function(route, listParam) {
       } else {
         out <- list(msg = cnt)
       }
-      out$status = req$status
+      out$status <- req$status
     },
     error = function(e) {
       mxKillProcess(sprintf("mxApiFetch: api issue, shut down. Details: %s", e$message))

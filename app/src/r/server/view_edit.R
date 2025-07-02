@@ -49,14 +49,13 @@ observe({
           return()
         }
 
-        if (length(viewData) > 1) {
-          #
-          # mxApiGetViews did not found the view and return everything.
-          #
-          return()
-        } else {
+        if (length(viewData) == 1) {
           viewData <- viewData[[1]]
+        } else {
+          # If more that one view returned, somthing went wrong
+          return()
         }
+
 
         if (isEmpty(viewData)) {
           return()
@@ -82,8 +81,10 @@ observe({
         #
         viewReadTarget <- c("self", "public", "members", "publishers", "admins")
         viewEditTarget <- c("self", "publishers", "admins")
-        viewReaders <- c("self", .get(viewData, c("readers")))
-        viewEditors <- c("self", .get(viewData, c("editors")))
+        
+
+        viewReaders <- as.character(c("self", .get(viewData, c("readers"))))
+        viewEditors <- as.character(c("self", .get(viewData, c("editors"))))
         viewEditors <- unique(c(viewEditors, .get(viewData, c("editor"))))
         viewReaders <- viewReaders[!viewReaders == idUser]
         viewEditors <- viewEditors[!viewEditors == idUser]
@@ -1132,6 +1133,7 @@ observeEvent(input$btnViewSave, {
     time <- Sys.time()
     view[["date_modified"]] <- time
     reactData$viewDataEdited$date_modified <- time
+    view <- mxPrepareViewForDb(view, editor, time)
 
     #
     # save a version in db

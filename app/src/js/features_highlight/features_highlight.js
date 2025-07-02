@@ -56,7 +56,6 @@ class Highlighter {
        }
     }
 
-    console.log(hl.opt.highlight_color);
     hl.update();
   }
 

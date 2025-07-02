@@ -200,12 +200,10 @@ observeEvent(input$styleEdit_values, {
       },
       "save" = {
         view[["_edit"]] <- NULL
-        view <- .set(view, c("date_modified"), time)
-        view <- .set(view, c("editor"), editor)
-        view <- .set(view, c("target"), as.list(.get(view, c("target"))))
-        view <- .set(view, c("readers"), as.list(.get(view, c("readers"))))
-        view <- .set(view, c("editors"), as.list(.get(view, c("editors"))))
-        view <- .set(view, c("data"), as.list(.get(view, "data")))
+        #
+        # Prepare view for database storage using centralized function
+        #
+        view <- mxPrepareViewForDb(view, editor, time)
 
         mxDbAddRow(
           data = view,

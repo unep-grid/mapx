@@ -168,3 +168,54 @@ mxDbGetViewsTitle <- function(idsViews, asNamedList = TRUE, language = "en", pre
 
   return(out)
 }
+
+
+#' Prepare view object for database storage
+#'
+#' This function ensures proper list conversion to prevent R's vector->string
+#' serialization issue when saving to the database. It centralizes all the
+#' repetitive conversion logic found across view edit files.
+#'
+#' @param view The view object to prepare
+#' @param editor Editor ID
+#' @param time Timestamp (optional, defaults to current time)
+#' @param additionalData Named list of additional data to set (optional)
+#'   Keys should use dot notation for nested paths (e.g., "data.dashboard")
+#' @return Prepared view object ready for mxDbAddRow
+#' @export
+mxPrepareViewForDb <- function(view, editor, time = Sys.time(), additionalData = NULL) {
+  # Remove edit flag
+  view[["_edit"]] <- NULL
+
+  # Set timestamp
+  view <- .set(view, c("date_modified"), time)
+
+  # Convert critical fields to lists to prevent vector->string conversion
+  # These fields are commonly arrays in the JSON schema but R tends to
+  # convert single-element lists to vectors
+  view <- .set(view, c("target"), as.list(.get(view, c("target"))))
+  view <- .set(view, c("readers"), as.list(.get(view, c("readers"))))
+  view <- .set(view, c("editors"), as.list(.get(view, c("editors"))))
+
+  # Set editor
+  view <- .set(view, c("editor"), editor)
+
+  # Handle additional data (dashboard, story, style, custom code, etc.)
+  if (!is.null(additionalData)) {
+    for (pathKey in names(additionalData)) {
+      # Convert dot notation to path vector (e.g., "data.dashboard" -> c("data", "dashboard"))
+      pathVector <- if (is.character(pathKey)) {
+        strsplit(pathKey, "\\.")[[1]]
+      } else {
+        pathKey
+      }
+      view <- .set(view, pathVector, additionalData[[pathKey]])
+    }
+  }
+
+  # Ensure data is a list (critical for JSON serialization)
+  # This must be done AFTER setting additional data to ensure nested data is preserved
+  view <- .set(view, c("data"), as.list(.get(view, "data")))
+
+  return(view)
+}

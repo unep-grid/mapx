@@ -367,15 +367,10 @@ observeEvent(input$dashboardEdit_values, {
         view[["type"]] %in% c("vt", "rt", "cc")
 
       if (isEditable) {
-        view[["_edit"]] <- NULL
-
-        view <- .set(view, c("date_modified"), time)
-        view <- .set(view, c("target"), as.list(.get(view, c("target"))))
-        view <- .set(view, c("readers"), as.list(.get(view, c("readers"))))
-        view <- .set(view, c("editors"), as.list(.get(view, c("editors"))))
-        view <- .set(view, c("data", "dashboard"), dashboard)
-        view <- .set(view, c("data"), as.list(.get(view, "data")))
-        view <- .set(view, c("editor"), editor)
+        #
+        # Prepare view for database storage using centralized function
+        #
+        view <- mxPrepareViewForDb(view, editor, time, list("data.dashboard" = dashboard))
 
         mxDbAddRow(
           data = view,
@@ -401,15 +396,10 @@ observeEvent(input$dashboardEdit_values, {
     },
     "remove" = {
       if (view[["_edit"]] && view[["type"]] %in% c("vt", "rt", "cc")) {
-        view[["_edit"]] <- NULL
-
-        view <- .set(view, c("date_modified"), time)
-        view <- .set(view, c("target"), as.list(.get(view, c("target"))))
-        view <- .set(view, c("readers"), as.list(.get(view, c("readers"))))
-        view <- .set(view, c("editors"), as.list(.get(view, c("editors"))))
-        view <- .set(view, c("data", "dashboard"), NULL)
-        view <- .set(view, c("data"), as.list(.get(view, "data")))
-        view <- .set(view, c("editor"), editor)
+        #
+        # Prepare view for database storage using centralized function
+        #
+        view <- mxPrepareViewForDb(view, editor, time, list("data.dashboard" = NULL))
 
         mxDbAddRow(
           data = view,
