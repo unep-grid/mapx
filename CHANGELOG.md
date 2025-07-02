@@ -1,3 +1,9 @@
+  - [1.13.18-alpha.13](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.13) 
+
+    - refactor(view_db_store): view handling + parsing
+    - fix(tt): removed async from non-async span translate function
+
+
   - [1.13.18-alpha.12](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.12) 
 
     - fix(themes): dark/tree/water as required schema
