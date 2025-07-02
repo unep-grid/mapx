@@ -398,8 +398,9 @@ function elSpanTranslate(key, opt) {
 
 /**
  * Shorcut for elSpanTranslate
+ * -> should not be async : promise handled by 'el'
  */
-export async function tt(txt, opt) {
+export function tt(txt, opt) {
   const optTt = Object.assign({}, { tooltip: false }, opt);
   return elSpanTranslate(txt, optTt);
 }
