@@ -2119,17 +2119,18 @@ export async function getViewRemote(idView) {
  * @return {Promise<Object>}
  */
 export async function getViewAuto(idView) {
-  const view = getView(idView) || (await getViewRemote(idView));
-  const valid = isView(view);
-  if (!valid) {
-    throw new Error(`View not found: ${JSON.stringify(idView)}`);
-  }
-  const existingView = getView(view);
+  let view = getView(idView);
+  const isLocalView = isView(view);
 
-  if (existingView) {
-    patchObject(existingView, view);
-  } else {
-    views.push(view);
+  if (!isLocalView) {
+    const views = getViews();
+    view = await getViewRemote(idView);
+    if (isView(view)) {
+      views.push(view);
+    }
+  }
+  if (!isView(view)) {
+    throw new Error(`View not found: ${JSON.stringify(idView)}`);
   }
 
   return view;
@@ -2561,13 +2562,21 @@ export async function viewDelete(view) {
  */
 export async function viewClear(options) {
   const { idView, view: providedView } = options;
+  /*
+   * Can't use getViewAuto :
+   * - viewClear expects local view only
+   */
   const view = providedView || getView(idView);
   const id = options.id || settings.map.id;
 
   if (!isView(view)) {
+    /*
+     * viewRender calls viewClear, but it could be a remote view,
+     * not yet there
+     */
     return;
   }
-  if(!mx_local.views_active.has(view.id)){
+  if (!mx_local.views_active.has(view.id)) {
     return;
   }
 

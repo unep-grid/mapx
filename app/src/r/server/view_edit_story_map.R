@@ -161,8 +161,6 @@ observeEvent(input$storyEdit_values, {
       #
       view <- mxPrepareViewForDb(view, editor, time, list("data.story" = story))
       
-      browser()
-
       mxDbAddRow(
         data = view,
         table = .get(config, c("pg", "tables", "views"))

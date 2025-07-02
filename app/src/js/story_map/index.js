@@ -331,7 +331,7 @@ export async function cleanRemoveViews() {
   const state = getState();
   const elLegendContainer = state?.button_legend?.elPanelContent;
   const idViews = getViewsActive();
-
+  
   for (const idView of idViews) {
     await viewClear({
       idView: idView,
