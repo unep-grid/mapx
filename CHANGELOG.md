@@ -1,3 +1,9 @@
+  - [1.13.18-alpha.14](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.14) 
+
+    - fix(project): creating a new project should correctly set a valid theme id
+    - fix(story): should fix remote view not being removed after story close
+
+
   - [1.13.18-alpha.13](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.13) 
 
     - refactor(view_db_store): view handling + parsing
