@@ -127,9 +127,13 @@ class Theme extends EventSimple {
         setAsProjectDefault = !!confirmed;
       }
 
-      await t._s.save({ theme, setAsProjectDefault });
-      await t.register(theme);
-      await t.set(theme);
+      const { theme: themeDb } = await t._s.save({
+        theme,
+        setAsProjectDefault,
+      });
+
+      await t.register(themeDb);
+      await t.set(themeDb);
       t.fire("list_updated");
 
       if (setAsProjectDefault) {
@@ -974,6 +978,7 @@ class Theme extends EventSimple {
     const theme = themes.find((theme) => {
       return t.filterTheme(theme, opt);
     });
+
     if (theme) {
       return theme;
     }

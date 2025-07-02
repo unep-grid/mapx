@@ -17,7 +17,6 @@ export async function ioThemeValidate(_, data, cb) {
     } else {
       data.issues = await validateMeta(data.theme);
     }
-
   } catch (e) {
     data.error = e?.message || e;
   } finally {
@@ -63,7 +62,7 @@ export async function ioThemeCreate(socket, data, cb) {
       id_project: idProject,
       creator: idUser,
       last_editor: idUser,
-      date_modified: (new Date()).toISOString(),
+      date_modified: new Date().toISOString(),
       colors: theme.colors,
       dark: theme.dark || false,
       tree: theme.tree || false,
@@ -103,11 +102,9 @@ export async function ioThemeCreate(socket, data, cb) {
       await updateThemeProject(themeInsert.id, idProject);
     }
 
-    data.theme = theme;
-    data.success = true;
+    return ioThemeGet(socket, { idTheme: themeInsert.id }, cb);
   } catch (e) {
     data.error = e?.message || e;
-  } finally {
     cb(data);
   }
 }
@@ -171,7 +168,6 @@ export async function ioThemeSave(socket, data, cb) {
 
     const issues = await validateMeta(data.theme);
 
-
     if (isNotEmpty(issues)) {
       throw new Error("theme_data_not_valid");
     }
@@ -226,10 +222,9 @@ export async function ioThemeSave(socket, data, cb) {
       await updateThemeProject(idTheme, idProject);
     }
 
-    data.success = true;
+    return ioThemeGet(socket, { idTheme }, cb);
   } catch (e) {
     data.error = e?.message || e;
-  } finally {
     cb(data);
   }
 }
@@ -324,7 +319,6 @@ export async function ioThemeGet(_, data, cb) {
     }
 
     const theme = rows[0];
-
     data.theme = theme;
     data.success = true;
   } catch (e) {
