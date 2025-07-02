@@ -1,3 +1,8 @@
+  - [1.13.18-alpha.15](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.15) 
+
+    - fix(theme): solved issue with theme not being resolved correctly after first upsert
+
+
   - [1.13.18-alpha.14](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.14) 
 
     - fix(project): creating a new project should correctly set a valid theme id
