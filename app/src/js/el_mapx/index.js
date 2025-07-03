@@ -361,9 +361,9 @@ function elPanel(opt) {
 /**
  * Create a tag and set translation item in it
  * @param {String} keys Key to look for in the dictionnary
- * @param {Object} opt Options 
- * @param {String} opt.lang Two letter code language 
- * @param {String} opt.tooltip Add tooltip (default:false) 
+ * @param {Object} opt Options
+ * @param {String} opt.lang Two letter code language
+ * @param {String} opt.tooltip Add tooltip (default:false)
  * @param {Object} opt.data Data for templating
 
  * @return {Element} span element with dataset-lang_key
@@ -545,8 +545,8 @@ export function elButtonFa(key, opt) {
  * @param {Boolean} opt.checked Checked at start (only for checkboxes)
  * @param {Boolean} opt.disabled Disabled at start
  * @param {Boolean} opt.tooltip Add tooltip (false)
- * @param {Boolean} opt.keyLabel Optional translation key for label
- * @param {Boolean} opt.keyDesc Optional translation key for description
+ * @param {String} opt.keyLabel Optional translation key for label
+ * @param {String} opt.keyDesc Optional translation key for description
  * @param {Object} opt.attributes Optional attributes
  * @param {String} opt.type Input type (text, number, checkbox, etc.)
  */
@@ -565,6 +565,7 @@ export function elInput(key, opt) {
       type: "text",
       class: null,
       attributes: {},
+      value: "", // Add default value here
     },
     opt,
   );
@@ -576,21 +577,29 @@ export function elInput(key, opt) {
       id: opt.id,
       type: opt.type,
       disabled: opt.disabled,
-      value: opt.value,
       on: ["change", opt.action],
       dataset: opt.dataset,
     },
     opt.attributes,
   );
 
+  // Handle value assignment based on input type
   if (opt.type === "checkbox") {
-    //only set checked attr if true
+    // Only set checked attr if true
     inputOptions.checked = opt.checked ? true : null;
-    // for form data. If not set, "on" will be returned.
+    // For form data. If not set, "on" will be returned.
     inputOptions.value = "true";
+  } else {
+    // For all other input types, use the provided value
+    inputOptions.value = opt.value;
   }
 
   const elInput = el("input", inputOptions);
+
+  // Special handling for range inputs - set DOM value after creation
+  if (opt.type === "range" && opt.value !== undefined) {
+    elInput.value = opt.value;
+  }
 
   const elLabelText = elSpanTranslate(
     opt.keyLabel ? opt.keyLabel : `${key}_label`,
@@ -598,6 +607,7 @@ export function elInput(key, opt) {
       tooltip: opt.tooltip,
     },
   );
+
   const elLabel = el("label", { for: opt.id });
 
   const elHelp = el(

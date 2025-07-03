@@ -276,6 +276,7 @@ export class AutoStyle {
    */
   buildOpacityInput() {
     const as = this;
+    debugger;
     as._elOpacity = elInput("auto_style_opacity", {
       type: "range",
       value: as._state.opacity,
