@@ -1,3 +1,8 @@
+  - [1.13.18-alpha.16](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.16) 
+
+    - feat(wms_time): created base class for both wms with time dimension + wmts/cmems specific
+
+
   - [1.13.18-alpha.15](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.15) 
 
     - fix(theme): solved issue with theme not being resolved correctly after first upsert
