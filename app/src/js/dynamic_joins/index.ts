@@ -261,7 +261,8 @@ export class DynamicJoin {
 
     try {
       if (isNotEmpty(data)) {
-        this._table_raw = data;
+        // Handle both [{},{}] and {data:[{},{}]} formats for direct data
+        this._table_raw = isArray(data) ? data : (isArray((data as any).data) ? (data as any).data : []);
       } else {
         if (!isUrl(dataUrl)) {
           throw new Error("Missing valid URL");
@@ -271,7 +272,8 @@ export class DynamicJoin {
           throw new Error(`HTTP ${resp.status}: ${resp.statusText}`);
         }
         const json = await resp.json();
-        this._table_raw = isArray(json.data) ? json.data : [];
+        // Handle both [{},{}] and {data:[{},{}]} formats for fetched data
+        this._table_raw = isArray(json) ? json : (isArray(json.data) ? json.data : []);
       }
       this._table_base = this._apply_static_filter(this._table_raw);
 
