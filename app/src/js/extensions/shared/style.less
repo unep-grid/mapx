@@ -1,0 +1,46 @@
+// Shared styles for all time map legend extensions
+.time_map_legend_extension {
+  .btn {
+    &.playing {
+      scale: 0.9;
+      box-shadow: var(--mx_ui_box_shadow_inset);
+    }
+    &:hover {
+      scale: 1.1;
+      z-index: 10;
+      box-shadow: var(--mx_ui_box_shadow);
+    }
+  }
+
+  .form-control {
+    margin-bottom: 10px;
+  }
+
+  label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  .input-group {
+    display: flex;
+    align-items: center;
+  }
+
+  .input-group-btn {
+    display: flex;
+    gap: 2px;
+    margin-left: 10px;
+  }
+
+  .text-muted {
+    color: var(--mx_ui_text_muted, #6c757d);
+    font-size: 0.9em;
+    margin-top: 5px;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}

@@ -1,4 +1,4 @@
-import { isArray, isString, isFunction } from "./../is_test/index.js";
+import { isArray, isString, isFunction, isEmpty } from "./../is_test/index.js";
 
 const modules = {
   csvjson: loadCsvJSON,
@@ -191,12 +191,16 @@ async function loadMonacoEditor() {
 
 async function loadExtension(id) {
   const m = await import("./../extensions/index.js");
-  return m[id];
+  const ext = m[id];
+  if (isEmpty(ext)) {
+    throw new Error(`Extension '${id}' not found`);
+  }
+  return ext;
 }
 
 /**
-* Webpack hot module replacement
-*/ 
+ * Webpack hot module replacement
+ */
 if (module.hot) {
   module.hot.accept("./../extensions/index.js", function () {
     console.log("Accepting the updated module!");
