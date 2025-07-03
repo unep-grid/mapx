@@ -1,3 +1,8 @@
+  - [1.13.18-alpha.17](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.17) 
+
+    - docs(dynamic_join): added readme general doc and solved data input wrapped in data param
+
+
   - [1.13.18-alpha.16](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.16) 
 
     - feat(wms_time): created base class for both wms with time dimension + wmts/cmems specific
