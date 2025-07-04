@@ -34,7 +34,7 @@ JSONEditor.defaults.editors.monaco = class mxeditors extends (
       return;
     }
 
-    if (value === null || typeof value === "undefined") {
+    if (isEmpty(value)) {
       value = "";
     } else if (typeof value === "object") {
       value = JSON.stringify(value);
@@ -48,10 +48,6 @@ JSONEditor.defaults.editors.monaco = class mxeditors extends (
 
     // Sanitize value before setting it
     const sanitized = editor.sanitize(value);
-
-    if (editor.input.value === sanitized) {
-      return;
-    }
 
     editor.value = sanitized;
 
