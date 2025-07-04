@@ -100,7 +100,7 @@ class Theme extends EventSimple {
       const { theme } = await this._s.get(idTheme);
       return theme;
     } catch (e) {
-      console.error(e);
+      console.error(`Error fetching remote theme ${idTheme}`, e);
       return;
     }
   }
