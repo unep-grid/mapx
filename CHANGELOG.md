@@ -1,3 +1,11 @@
+  - [1.13.18-alpha.18](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.18) 
+
+    - refactor(story_map): full style rewritten properly in less, and solved issue with card style presset
+    - fix(monaco): should solve issue  #1037 monaco editor not being updated
+    - fix(auto_style): debugger
+    - fix(auto_style): wrong range default value #1008
+
+
   - [1.13.18-alpha.17](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.17) 
 
     - docs(dynamic_join): added readme general doc and solved data input wrapped in data param
