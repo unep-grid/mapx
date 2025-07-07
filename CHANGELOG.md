@@ -1,3 +1,10 @@
+  - [1.13.18-alpha.20](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.20) 
+
+    - refactor: connect legend filtering to setFilter instead of colorNa
+    - fix(dynamic-joins): layer_prefix layerPrefix
+    - fix(dynamic-joins): fix first lower bound issue in legends
+
+
   - [1.13.18-alpha.19](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.19) 
 
     - refactor(dynamic-joins): simplify legend builder and fix chroma.js usage
