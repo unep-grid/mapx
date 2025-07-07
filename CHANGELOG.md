@@ -1,3 +1,8 @@
+  - [1.13.18-alpha.19](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.19) 
+
+    - refactor(dynamic-joins): simplify legend builder and fix chroma.js usage
+
+
   - [1.13.18-alpha.18](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.18) 
 
     - refactor(story_map): full style rewritten properly in less, and solved issue with card style presset
