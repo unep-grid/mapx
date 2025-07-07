@@ -103,7 +103,9 @@ export function getLegendClasses(
     const color = getColorForValue(representativeValue, colorScale, colorNa);
     const upperLabel = formatLegendNumber(upperBound);
     const lowerLabel = formatLegendNumber(lowerBound);
-    const label = `${lowerLabel} - ${upperLabel}`;
+
+    // For the first class, show "≤ upperBound" instead of "−∞ - upperBound"
+    const label = i === 0 ? `≤ ${upperLabel}` : `${lowerLabel} - ${upperLabel}`;
 
     return {
       index: i,
