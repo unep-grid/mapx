@@ -7,7 +7,7 @@ import type { BuildLegendOptions } from "./types.ts";
  * @param options.elWrapper - Container element for the legend
  * @param options.config - Legend configuration
  * @param options.config.colorScale - Chroma color scale object
- * @param options.config.color_na - Color for NA/missing values
+ * @param options.config.colorNa - Color for NA/missing values
  * @param options.onBuilt - Callback when legend is built (receives legend instance)
  * @param options.onUpdate - Callback when legend class is toggled (receives classIndex, isVisible, allVisibleClasses)
  * @param options.data - Aggregated data array
@@ -15,7 +15,7 @@ import type { BuildLegendOptions } from "./types.ts";
  */
 export function buildLegendInput(options: BuildLegendOptions): LegendUI {
   const { elWrapper, config, onBuilt, onUpdate, data } = options;
-  const { colorScale, color_na } = config;
+  const { colorScale, colorNa, joinType } = config;
 
   // Add legend-specific styling to wrapper
   elWrapper.classList.add("mx-legend-container");
@@ -23,8 +23,9 @@ export function buildLegendInput(options: BuildLegendOptions): LegendUI {
   // Create the legend instance
   const legend = new LegendUI(elWrapper, {
     colorScale,
-    color_na,
+    colorNa,
     data,
+    joinType,
     onToggle: (classIndex, isVisible, allVisibleClasses) => {
       if (onUpdate) {
         onUpdate(classIndex, isVisible, allVisibleClasses);

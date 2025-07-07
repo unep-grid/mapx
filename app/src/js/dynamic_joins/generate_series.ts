@@ -1,11 +1,33 @@
 import type { SeriesDataPoint } from "./types";
 
-export function generate_series(): SeriesDataPoint[] {
+export interface GenerateSeriesOptions {
+  /**
+   * Set to true to create data with missing matches for some sites.
+   * This allows you to demo the difference between left and inner joins:
+   * - Left join: shows all sites (1-8), unmatched sites get colorNa
+   * - Inner join: only shows sites with data matches, hides unmatched sites
+   */
+  includeMissingMatches?: boolean;
+  /**
+   * Array of site IDs to exclude from the generated data.
+   * Default: [3, 6, 7] - these sites will have no data matches
+   */
+  missingSites?: number[];
+}
+
+export function generate_series(options: GenerateSeriesOptions = {}): SeriesDataPoint[] {
+  const { includeMissingMatches = false, missingSites = [3, 6, 7] } = options;
+
   const scenarios = ["a", "b", "c", "d"];
   const variables = ["temp", "co2", "caco3"];
   const years = [2020, 2021, 2022, 2023, 2024, 2025];
   const teams = ["x", "y", "z"];
-  const sites = [1, 2, 3, 4, 5, 6, 7, 8];
+  const allSites = [1, 2, 3, 4, 5, 6, 7, 8];
+
+  // Filter out missing sites if includeMissingMatches is true
+  const sites = includeMissingMatches
+    ? allSites.filter(site => !missingSites.includes(site))
+    : allSites;
 
   const data: SeriesDataPoint[] = [];
 

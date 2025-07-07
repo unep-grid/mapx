@@ -54,7 +54,7 @@ export interface DynamicJoinOptions {
   palette: string;
   stat: 'q' | 'e' | 'l' | 'k';
   classes: number;
-  color_na: string;
+  colorNa: string;
   aggregateFn: string;
   layerPrefix: string;
   field: string | null;
@@ -64,6 +64,7 @@ export interface DynamicJoinOptions {
   paint: PaintConfig;
   staticFilters: StaticFilter[];
   dynamicFilters: DynamicFilter[];
+  joinType: 'left' | 'inner';
   onTableAggregated: (table: AggregatedTableEntry[], instance: DynamicJoin) => void;
   onTableReady: (table: any[], instance: DynamicJoin) => void;
   onTableFiltered: (table: any[], instance: DynamicJoin) => void;
@@ -94,7 +95,8 @@ export interface FilterControl {
 export interface LegendUIOptions {
   colorScale?: chroma.Scale;
   data?: Array<{ key: string; value: any }>;
-  color_na?: string;
+  colorNa?: string;
+  joinType?: 'left' | 'inner';
   onToggle?: (classIdentifier: number | string, isVisible: boolean, allVisibleClasses: Set<number | string>) => void;
 }
 
@@ -125,7 +127,8 @@ export interface BuildLegendOptions {
   elWrapper: HTMLElement;
   config: {
     colorScale: chroma.Scale;
-    color_na: string;
+    colorNa: string;
+    joinType?: 'left' | 'inner';
   };
   data: AggregatedTableEntry[];
   onBuilt: (legend: any) => void;

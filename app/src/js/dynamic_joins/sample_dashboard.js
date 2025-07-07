@@ -220,7 +220,7 @@ function handler() {
         palette: "OrRd",
         stat: "quantile",
         classes: 5,
-        color_na: "#ccc",
+        colorNa: "#ccc",
         aggregateFn: "none", // none, first, last, sum, max, min, median, mode
 
         idSourceGeom: idSourceGeom,

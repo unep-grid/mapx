@@ -12,6 +12,7 @@ export class LegendUI {
   private colorScale?: chroma.Scale;
   private data: Array<{ key: string; value: any }>;
   private colorNa: string;
+  private joinType: 'left' | 'inner';
   private visibleClasses: Set<number | string>;
   private onToggle?: (
     classIdentifier: number | string,
@@ -23,7 +24,8 @@ export class LegendUI {
     this.container = container;
     this.colorScale = options.colorScale;
     this.data = options.data || [];
-    this.colorNa = options.color_na || "#ccc";
+    this.colorNa = options.colorNa || "#ccc";
+    this.joinType = options.joinType || 'left';
     this.visibleClasses = new Set();
     this.onToggle = options.onToggle;
 
@@ -115,14 +117,8 @@ export class LegendUI {
       this.container.appendChild(elItem);
     }
 
-    // Check if we need an NA class - simplified logic
-    const hasNaValues = this.data.some((row) => {
-      const val = row.value;
-      return val === null || val === undefined || isNaN(Number(val));
-    });
-
-    // Add NA item if applicable
-    if (hasNaValues && this.colorNa) {
+    // Add NA item for left joins (features without matching data will show N/A color)
+    if (this.joinType === 'left' && this.colorNa) {
       const naIdentifier = "na";
       const elNaItem = el(
         "div",
@@ -156,8 +152,8 @@ export class LegendUI {
     if (options.data) {
       this.data = options.data;
     }
-    if (options.color_na) {
-      this.colorNa = options.color_na;
+    if (options.colorNa) {
+      this.colorNa = options.colorNa;
     }
 
     this.render();

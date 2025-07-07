@@ -34,7 +34,7 @@ const default_options: DynamicJoinOptions = {
   palette: "OrRd",
   stat: "q",
   classes: 5,
-  color_na: "#ccc",
+  colorNa: "#ccc",
   aggregateFn: "max",
   layerPrefix: "MX-DJ",
   field: null,
@@ -52,6 +52,7 @@ const default_options: DynamicJoinOptions = {
   },
   staticFilters: [],
   dynamicFilters: [],
+  joinType: "left",
 
   onTableAggregated: () => {},
   onTableReady: () => {},
@@ -112,7 +113,8 @@ export class DynamicJoin {
 
    * @param {string} [opts.stat='quantile']    – 'quantile', 'equal', 'kmeans', etc.
    * @param {number} [opts.classes=5]          – number of classes/breaks
-   * @param {string} [opts.color_na='#ccc']    – fallback color for missing joins
+   * @param {string} [opts.colorNa='#ccc']    – fallback color for missing joins
+   * @param {string} [opts.joinType='left']    – 'left' (show all features) or 'inner' (show only matched features)
    * @param {Array<string>} [opts.staticFilters]  – array of field names for static filtering
    * @param {string} [opts.field]     – value field -> aggregate
    * @param {string} [opts.aggregateFn='none'] – 'none', 'first', 'last', 'sum', 'median', 'max', 'min', or 'mode'
@@ -225,7 +227,8 @@ export class DynamicJoin {
       elWrapper: elLegendContainer!,
       config: {
         colorScale: cscale,
-        color_na: this.options.color_na,
+        colorNa: this.options.colorNa,
+        joinType: this.options.joinType,
       },
       data: this._get_aggregated_table(),
       onBuilt: (legend: any) => {
@@ -498,7 +501,7 @@ export class DynamicJoin {
 
     if (!hasLayer) {
       const paint = this.options.paint[this.options.type] || {};
-      paint[`${this.options.type}-color`] = this.options.color_na;
+      paint[`${this.options.type}-color`] = this.options.colorNa;
 
       this._map.addLayer(
         {
@@ -513,19 +516,108 @@ export class DynamicJoin {
     }
   }
 
-  // apply the dynamic style, considering the toggled legend classes
+  // Apply the dynamic style with clean separation of filtering and styling
   private _apply_style(): void {
     if (!this._map.getLayer(this._id_layer)) {
       console.warn("Missing layer", this._id_layer);
       return;
     }
+
+    this._apply_combined_filter();
+    this._apply_color_styling();
+  }
+
+  // Build and apply combined filter expression using single setFilter call
+  private _apply_combined_filter(): void {
+    const filterExpression: any[] = ["all"];
+
+    const joinFilter = this._build_join_filter();
+    if (joinFilter) {
+      filterExpression.push(joinFilter);
+    }
+
+    const legendFilter = this._build_legend_filter();
+    if (legendFilter) {
+      filterExpression.push(legendFilter);
+    }
+
+    // Single setFilter call with combined conditions
+    const finalFilter = filterExpression.length > 1 ? filterExpression : null;
+    this._map.setFilter(this._id_layer, finalFilter);
+  }
+
+  // Build filter for join type (inner vs left join)
+  private _build_join_filter(): any[] | null {
+    if (this.options.joinType === "inner") {
+      // Inner join: only show matched features
+      const matchedKeys = Array.from(this._aggregated_lookup.keys());
+      return [
+        "in",
+        ["get", this.options.fieldJoinGeom],
+        ["literal", matchedKeys],
+      ];
+    }
+    // Left join shows all features - no filter needed
+    return null;
+  }
+
+  // Build filter for legend visibility
+  private _build_legend_filter(): any[] | null {
+    const showAll = this._visible_legend_classes.size === 0;
+    if (showAll) {
+      return null; // No legend filtering needed
+    }
+
+    if (!this._color_scale) {
+      return null; // Cannot build legend filter without color scale
+    }
+
+    // Check if N/A class is visible
+    const showNaClass = this._visible_legend_classes.has("na");
+
+    // Build filter for visible data-based legend classes
+    const visibleKeys: string[] = [];
+    for (const [key, value] of this._aggregated_lookup) {
+      const classIdentifier = getClassIndex(value, this._color_scale);
+      if (this._visible_legend_classes.has(classIdentifier)) {
+        visibleKeys.push(key);
+      }
+    }
+
+    // Build combined filter expression
+    if (visibleKeys.length > 0 && showNaClass) {
+      // Show both matched features with visible classes AND unmatched features (N/A)
+      return [
+        "any",
+        ["in", ["get", this.options.fieldJoinGeom], ["literal", visibleKeys]],
+        ["!", ["in", ["get", this.options.fieldJoinGeom], ["literal", Array.from(this._aggregated_lookup.keys())]]]
+      ];
+    } else if (visibleKeys.length > 0) {
+      // Show only matched features with visible classes
+      return [
+        "in",
+        ["get", this.options.fieldJoinGeom],
+        ["literal", visibleKeys],
+      ];
+    } else if (showNaClass) {
+      // Show only unmatched features (N/A)
+      return [
+        "!",
+        ["in", ["get", this.options.fieldJoinGeom], ["literal", Array.from(this._aggregated_lookup.keys())]]
+      ];
+    }
+
+    return null;
+  }
+
+  // Apply pure color styling without filtering concerns
+  private _apply_color_styling(): void {
     if (!this._color_scale) {
       console.warn("Missing color scale, use default");
-      // Set a default fallback color if scale is missing
       this._map.setPaintProperty(
         this._id_layer,
         `${this.options.type}-color`,
-        this.options.color_na || "#ccc",
+        this.options.colorNa || "#ccc",
       );
       this._map.setPaintProperty(
         this._id_layer,
@@ -535,45 +627,31 @@ export class DynamicJoin {
       return;
     }
 
-    const transparentColor = "rgba(0, 0, 0, 0)";
-    const colorExpr: any[] = ["match", ["get", this.options.fieldJoinGeom]];
-    const showAll = this._visible_legend_classes.size === 0; // Check if selection set is empty
+    const colorExpression = ["match", ["get", this.options.fieldJoinGeom]];
 
     for (const [key, value] of this._aggregated_lookup) {
-      // Use the shared helper to get class index - ensures consistency with legend
-      const classIdentifier = getClassIndex(value, this._color_scale);
-      const isSelected = this._visible_legend_classes.has(classIdentifier);
-
-      let color: string;
-      if (showAll || isSelected) {
-        // If showing all OR this class is selected, get original color using shared helper
-        color = getColorForValue(
-          value,
-          this._color_scale,
-          this.options.color_na,
-        );
-      } else {
-        // If not showing all AND this class is not selected, make transparent
-        color = transparentColor;
-      }
-
-      colorExpr.push(key, color);
+      const color = getColorForValue(
+        value,
+        this._color_scale,
+        this.options.colorNa,
+      );
+      colorExpression.push(key, color);
     }
 
-    // default
-    colorExpr.push(transparentColor);
+    // Fallback color for unmatched features
+    colorExpression.push(this.options.colorNa);
 
-    if (colorExpr.length < 4) {
+    if (colorExpression.length < 4) {
       this._map.setPaintProperty(
         this._id_layer,
         `${this.options.type}-color`,
-        transparentColor,
+        this.options.colorNa,
       );
     } else {
       this._map.setPaintProperty(
         this._id_layer,
         `${this.options.type}-color`,
-        colorExpr,
+        colorExpression,
       );
     }
 
@@ -628,10 +706,13 @@ export class DynamicJoin {
     }
   }
 
-  async generateSeries(): Promise<any> {
+  async generateSeries(options?: {
+    includeMissingMatches?: boolean;
+    missingSites?: number[];
+  }): Promise<any> {
     // test network latency
     await waitTimeoutAsync(100);
-    const data = generate_series();
+    const data = generate_series(options);
     return data;
   }
 }

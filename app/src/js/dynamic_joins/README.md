@@ -75,6 +75,9 @@ await dynamicJoin.init({
   fieldJoinGeom: 'id',
   dataUrl: 'https://api.example.com/data.json',
 
+  // Join type
+  joinType: 'left',            // 'left' (show all) or 'inner' (matched only)
+
   // Styling
   stat: 'q',                   // quantile classification
   classes: 5,                  // number of color classes
@@ -108,7 +111,7 @@ await dynamicJoin.init({
 
 - `palette: string` - Chroma.js color palette name or array of colors
 - `classes: number` - Number of classification classes (default: 5)
-- `color_na: string` - Color for missing/null values (default: '#ccc')
+- `colorNa: string` - Color for missing/null values (default: '#ccc')
 - `paint: PaintConfig` - Mapbox GL paint properties per layer type
 
 ### Data Source
