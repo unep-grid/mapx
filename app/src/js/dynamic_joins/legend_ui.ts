@@ -1,5 +1,6 @@
 import { el } from "../el_mapx";
 import type { LegendUIOptions } from "./types";
+import { getLegendClasses } from "./helpers.ts";
 import "./legend_style.less";
 
 /**
@@ -12,7 +13,11 @@ export class LegendUI {
   private data: Array<{ key: string; value: any }>;
   private colorNa: string;
   private visibleClasses: Set<number | string>;
-  private onToggle?: (classIdentifier: number | string, isVisible: boolean, allVisibleClasses: Set<number | string>) => void;
+  private onToggle?: (
+    classIdentifier: number | string,
+    isVisible: boolean,
+    allVisibleClasses: Set<number | string>,
+  ) => void;
 
   constructor(container: HTMLElement, options: LegendUIOptions = {}) {
     this.container = container;
@@ -43,13 +48,18 @@ export class LegendUI {
     if (legendItem) {
       const classIndex = legendItem.dataset.legend_class_index;
       if (classIndex !== undefined) {
-        const classIdentifier = isNaN(Number(classIndex)) ? classIndex : Number(classIndex);
+        const classIdentifier = isNaN(Number(classIndex))
+          ? classIndex
+          : Number(classIndex);
         this.toggleClass(classIdentifier, legendItem);
       }
     }
   };
 
-  private toggleClass(classIdentifier: number | string, element: HTMLElement): void {
+  private toggleClass(
+    classIdentifier: number | string,
+    element: HTMLElement,
+  ): void {
     const wasVisible = this.visibleClasses.has(classIdentifier);
 
     if (wasVisible) {
@@ -78,57 +88,41 @@ export class LegendUI {
       return;
     }
 
-    const classes = this.colorScale.classes();
-    const colors = this.colorScale.colors(classes.length);
+    // Use the helper to get all legend class information
+    const legendClasses = getLegendClasses(this.colorScale, this.colorNa);
 
-    // Helper to format numbers nicely
-    const formatNumber = (num: number): string => {
-      if (num === undefined || num === null) return "N/A";
-      return num.toLocaleString(undefined, {
-        maximumFractionDigits: 2,
-        minimumFractionDigits: 0,
-      });
-    };
-
-    // Check if we need an NA class
-    const hasNaClass =
-      this.colorNa && this.data.some((row) => !this.colorScale!(row.value));
-
-    // Add items for each class break
-    classes.forEach((limit: number, i: number) => {
-      // Determine bounds
-      const lowerBound = i === 0 ? -Infinity : classes[i - 1];
-      const upperBound = limit;
-      const color = colors[i];
-
-      const labelText = `${formatNumber(lowerBound)} - ${formatNumber(
-        upperBound,
-      )}`;
-
+    // Create legend items for each class
+    for (const classInfo of legendClasses) {
       const elItem = el(
         "div",
         {
-          class: ["dj-legend-item", `legend-class-${i}`],
+          class: ["dj-legend-item", `legend-class-${classInfo.index}`],
           dataset: {
-            legend_class_index: i.toString(),
+            legend_class_index: classInfo.index.toString(),
           },
         },
         [
           el("span", {
             class: "dj-legend-color",
             style: {
-              backgroundColor: color,
+              backgroundColor: classInfo.color,
             },
           }),
-          el("span", {}, labelText),
+          el("span", {}, classInfo.label),
         ],
       );
 
       this.container.appendChild(elItem);
+    }
+
+    // Check if we need an NA class - simplified logic
+    const hasNaValues = this.data.some((row) => {
+      const val = row.value;
+      return val === null || val === undefined || isNaN(Number(val));
     });
 
     // Add NA item if applicable
-    if (hasNaClass) {
+    if (hasNaValues && this.colorNa) {
       const naIdentifier = "na";
       const elNaItem = el(
         "div",

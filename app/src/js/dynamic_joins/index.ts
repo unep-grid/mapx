@@ -1,8 +1,6 @@
 import chroma from "chroma-js";
 import type {
-  StaticFilter,
   DynamicFilter,
-  PaintConfig,
   DynamicJoinOptions,
   DynamicJoinState,
   AggregatedTableEntry,
@@ -21,6 +19,7 @@ import { settings } from "../settings";
 import { generate_series } from "./generate_series.ts";
 import { waitTimeoutAsync } from "../animation_frame";
 import { buildTomSelectInput } from "./build_tom_select.ts";
+import { getClassIndex, getColorForValue } from "./helpers.ts";
 
 const default_options: DynamicJoinOptions = {
   elSelectContainer: null,
@@ -47,7 +46,7 @@ const default_options: DynamicJoinOptions = {
     fill: {
       "fill-color": "#000",
       "fill-opacity": 0.6,
-      "fill-outline-color": "#333",
+      "fill-outline-color": `rgba(33,33,33,0.5)`,
     },
     line: {},
   },
@@ -262,7 +261,11 @@ export class DynamicJoin {
     try {
       if (isNotEmpty(data)) {
         // Handle both [{},{}] and {data:[{},{}]} formats for direct data
-        this._table_raw = isArray(data) ? data : (isArray((data as any).data) ? (data as any).data : []);
+        this._table_raw = isArray(data)
+          ? data
+          : isArray((data as any).data)
+            ? (data as any).data
+            : [];
       } else {
         if (!isUrl(dataUrl)) {
           throw new Error("Missing valid URL");
@@ -273,7 +276,11 @@ export class DynamicJoin {
         }
         const json = await resp.json();
         // Handle both [{},{}] and {data:[{},{}]} formats for fetched data
-        this._table_raw = isArray(json) ? json : (isArray(json.data) ? json.data : []);
+        this._table_raw = isArray(json)
+          ? json
+          : isArray(json.data)
+            ? json.data
+            : [];
       }
       this._table_base = this._apply_static_filter(this._table_raw);
 
@@ -529,42 +536,22 @@ export class DynamicJoin {
     }
 
     const transparentColor = "rgba(0, 0, 0, 0)";
-    const classes = (this._color_scale as any).classes();
     const colorExpr: any[] = ["match", ["get", this.options.fieldJoinGeom]];
     const showAll = this._visible_legend_classes.size === 0; // Check if selection set is empty
 
-    // Helper to find class index for a value
-    const getClassIndex = (value: any): number | string => {
-      if (value === null || value === undefined) return "na"; // Handle null/undefined as NA case
-      for (let i = 0; i < classes.length; i++) {
-        const lowerBound = i === 0 ? -Infinity : classes[i - 1];
-        // Upper bound is inclusive in chroma's classes definition
-        if (value > lowerBound && value <= classes[i]) {
-          return i;
-        }
-      }
-      // If value is above the last upper bound, it might belong to the last class conceptually
-      // or it might be an outlier. Check if it maps to a color.
-      // If scale doesn't provide a color, treat as NA.
-      // Use optional chaining on _color_scale just in case it's null/undefined despite earlier check
-      return this._color_scale?.(value) ? classes.length - 1 : "na";
-    };
-
     for (const [key, value] of this._aggregated_lookup) {
-      const classIdentifier = getClassIndex(value); // Get index (0, 1, ...) or 'na'
+      // Use the shared helper to get class index - ensures consistency with legend
+      const classIdentifier = getClassIndex(value, this._color_scale);
       const isSelected = this._visible_legend_classes.has(classIdentifier);
 
       let color: string;
       if (showAll || isSelected) {
-        // If showing all OR this class is selected, get original color
-        color =
-          classIdentifier === "na"
-            ? this.options.color_na
-            : (this._color_scale(value) as any)?.hex();
-        // Handle case where color scale might return undefined/null even for valid class
-        if (!color) {
-          color = this.options.color_na;
-        }
+        // If showing all OR this class is selected, get original color using shared helper
+        color = getColorForValue(
+          value,
+          this._color_scale,
+          this.options.color_na,
+        );
       } else {
         // If not showing all AND this class is not selected, make transparent
         color = transparentColor;
