@@ -36,7 +36,7 @@ const default_options: DynamicJoinOptions = {
   classes: 5,
   color_na: "#ccc",
   aggregateFn: "max",
-  layer_prefix: "MX-DJ",
+  layerPrefix: "MX-DJ",
   field: null,
   fieldJoinData: null,
   fieldJoinGeom: null,
@@ -147,7 +147,7 @@ export class DynamicJoin {
     }
 
     const id = crypto.randomUUID();
-    this._id_layer = `${this.options.layer_prefix}-${id}`;
+    this._id_layer = `${this.options.layerPrefix}-${id}`;
     this._id_source = `${this._id_layer}-src`;
     this._id_source_layer = this.options.sourceLayer;
 

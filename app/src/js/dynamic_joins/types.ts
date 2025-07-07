@@ -56,7 +56,7 @@ export interface DynamicJoinOptions {
   classes: number;
   color_na: string;
   aggregateFn: string;
-  layer_prefix: string;
+  layerPrefix: string;
   field: string | null;
   fieldJoinData: string | null;
   fieldJoinGeom: string | null;
