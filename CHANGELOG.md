@@ -1,3 +1,11 @@
+  - [1.13.18-alpha.21](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.21) 
+
+    - feat: add MapX integration with granular control flags
+    - Merge pull request #1065 from unep-grid/fix/update-sdk-readme
+    - Merge pull request #1059 from thomaspiller/sdk_doc
+    - Update links in the SDK documentation to point to docs.mapx.org. Should solve #1058
+
+
   - [1.13.18-alpha.20](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.20) 
 
     - refactor: connect legend filtering to setFilter instead of colorNa
