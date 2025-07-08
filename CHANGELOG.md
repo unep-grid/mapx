@@ -1,3 +1,7 @@
+  - [1.13.17](https://github.com/unep-grid/mapx/tree/1.13.17) 
+
+
+
   - [1.13.17-beta.1](https://github.com/unep-grid/mapx/tree/1.13.17-beta.1) 
 
     - fix(story): start() method launch an infinite animation rendering, don't await that
