@@ -20,6 +20,7 @@ import { generate_series } from "./generate_series.ts";
 import { waitTimeoutAsync } from "../animation_frame";
 import { buildTomSelectInput } from "./build_tom_select.ts";
 import { getClassIndex, getColorForValue } from "./helpers.ts";
+import { getApiUrl } from "./../api_routes";
 
 const default_options: DynamicJoinOptions = {
   elSelectContainer: null,
@@ -127,6 +128,11 @@ export class DynamicJoin {
    * @param {HTMLElement} [opts.elLegendContainer]     – DOM element to append the legend
    */
   async init(opts: Partial<DynamicJoinOptions> = {}): Promise<void> {
+    // Check if MapX API integration is enabled
+    if (opts.useApiMapxData || opts.useApiMapxTiles) {
+      await this._processMapxOptions(opts);
+    }
+
     this.setOptions(opts);
 
     // Validate required options
@@ -714,6 +720,101 @@ export class DynamicJoin {
     await waitTimeoutAsync(100);
     const data = generate_series(options);
     return data;
+  }
+
+  // --- MapX Integration Methods ---
+
+  /**
+   * Process MapX-specific options and build URLs/data
+   */
+  private async _processMapxOptions(opts: Partial<DynamicJoinOptions>): Promise<void> {
+    const { idSourceData, idSourceGeom, fieldsData, fieldsGeom, fieldMainData, useApiMapxData, useApiMapxTiles } = opts;
+
+    const promises: Promise<any>[] = [];
+
+    // Handle MapX tiles if enabled
+    if (useApiMapxTiles && idSourceGeom) {
+      promises.push(this._buildMapxTileUrls(idSourceGeom, fieldsGeom));
+    } else {
+      promises.push(Promise.resolve(null));
+    }
+
+    // Handle MapX data if enabled
+    if (useApiMapxData && idSourceData) {
+      promises.push(this._fetchMapxTableData(idSourceData, fieldsData));
+    } else {
+      promises.push(Promise.resolve(null));
+    }
+
+    // Execute in parallel
+    const [tilesUrls, data] = await Promise.all(promises);
+
+    // Override options with MapX-generated values
+    if (useApiMapxTiles && tilesUrls) {
+      opts.tilesUrl = tilesUrls;
+      opts.sourceLayer = idSourceGeom;
+      debugger;
+    }
+
+    if (useApiMapxData && data) {
+      opts.data = data;
+      opts.field = fieldMainData || opts.field;
+      opts.dataUrl = null; // We provide data directly
+    }
+  }
+
+  /**
+   * Build tile URLs for MapX geometry source
+   */
+  private async _buildMapxTileUrls(idSourceGeom: string, fieldsGeom?: string[]): Promise<string[]> {
+    const tilesUrlBase = getApiUrl("getTile");
+
+    const params = [
+      `idSource=${idSourceGeom}`,
+      fieldsGeom?.length ? `attributes=${fieldsGeom.join(",")}` : null,
+      `timestamp=${Date.now()}`
+    ].filter(Boolean);
+
+    const tilesUrl = `${tilesUrlBase}?${params.join("&")}`;
+
+    // Return array of tile URLs (MapX pattern uses duplicate URLs)
+    return [tilesUrl, tilesUrl];
+  }
+
+  /**
+   * Fetch tabular data from MapX backend
+   */
+  private async _fetchMapxTableData(idSourceData: string, fieldsData?: string[]): Promise<any[]> {
+    const urlTable = getApiUrl('getSourceTableAttribute');
+
+    const params = [
+      `id=${idSourceData}`,
+      fieldsData?.length ? `attributes=${fieldsData.join(",")}` : null
+    ].filter(Boolean);
+
+    const dataUrl = `${urlTable}?${params.join("&")}`;
+
+    try {
+      const response = await fetch(dataUrl);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+
+      // Handle both [{},{}] and {data:[{},{}]} formats
+      const data = isArray(result) ? result : isArray(result.data) ? result.data : [];
+
+      if (isEmpty(data)) {
+        console.warn(`No data returned for source: ${idSourceData}`);
+      }
+
+      return data;
+    } catch (error) {
+      console.error(`Failed to fetch MapX table data for ${idSourceData}:`, error);
+      throw new Error(`Failed to fetch MapX table data: ${error.message}`);
+    }
   }
 }
 

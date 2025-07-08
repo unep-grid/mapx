@@ -63,6 +63,8 @@ Interactive filter controls:
 
 ## Basic Usage
 
+### Standard Usage
+
 ```typescript
 import { DynamicJoin } from './dynamic_joins';
 
@@ -104,6 +106,68 @@ await dynamicJoin.init({
   elSelectContainer: document.getElementById('filters')
 });
 ```
+
+### MapX Integration (NEW)
+
+For MapX projects, you can use the simplified API with automatic URL construction and data fetching using granular control flags:
+
+```typescript
+// Both MapX data and tiles
+await dynamicJoin.init({
+  useApiMapxData: true,   // Enable MapX data fetching
+  useApiMapxTiles: true,  // Enable MapX tile URL construction
+
+  // Required MapX options
+  idSourceData: 'mx_data_source_id',
+  idSourceGeom: 'mx_geom_source_id',
+  fieldJoinData: 'region_id',
+  fieldJoinGeom: 'id',
+  field: 'population',
+
+  // Optional: specify fields to fetch
+  fieldsData: ['region_id', 'population', 'year'],
+  fieldsGeom: ['id', 'name'],
+
+  // All other options work the same
+  stat: 'q',
+  classes: 5,
+  palette: 'OrRd',
+  dynamicFilters: [
+    { name: 'year', type: 'dropdown' }
+  ]
+});
+```
+
+**Edge Cases - Mixed Data Sources:**
+
+```typescript
+// MapX data + External tiles
+await dynamicJoin.init({
+  useApiMapxData: true,
+  useApiMapxTiles: false,
+  idSourceData: 'mx_data_id',
+  tilesUrl: ['https://external-tiles.com/{z}/{x}/{y}'],
+  sourceLayer: 'external_layer',
+  // ...
+});
+
+// External data + MapX tiles
+await dynamicJoin.init({
+  useApiMapxData: false,
+  useApiMapxTiles: true,
+  dataUrl: 'https://external-api.com/data.json',
+  idSourceGeom: 'mx_geom_id',
+  // ...
+});
+```
+
+**Benefits of MapX Integration:**
+- **Granular Control**: Separate flags for data and tiles
+- **Mixed Sources**: Support for real-world edge cases
+- **Automatic URL Construction**: Using MapX API routes when enabled
+- **Automatic Data Fetching**: From MapX backend when enabled
+- **No Manual Setup**: Eliminates boilerplate code
+- **Backward Compatible**: Existing configurations continue to work
 
 ## Configuration Options
 

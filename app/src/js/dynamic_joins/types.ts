@@ -69,6 +69,13 @@ export interface DynamicJoinOptions {
   onTableReady: (table: any[], instance: DynamicJoin) => void;
   onTableFiltered: (table: any[], instance: DynamicJoin) => void;
   onMapClick: (features: any[], instance: DynamicJoin, event: any) => void;
+
+  // MapX-specific options (optional, higher priority when provided)
+  useApiMapxData?: boolean;  // Enable MapX data fetching
+  useApiMapxTiles?: boolean; // Enable MapX tile URL construction
+  fieldsData?: string[];     // Optional: specific fields to fetch from data
+  fieldsGeom?: string[];     // Optional: specific fields to fetch from geometry
+  fieldMainData?: string;    // Optional: main field for data (same as field)
 }
 
 // Internal state interface
