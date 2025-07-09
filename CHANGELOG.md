@@ -1,3 +1,9 @@
+  - [1.13.18-alpha.22](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.22) 
+
+    - fix(sdk): doc built at each update
+    - fix(sharing_manager): updated methods #956 + solved bug in iframe mode
+
+
   - [1.13.18-alpha.21](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.21) 
 
     - feat: add MapX integration with granular control flags
