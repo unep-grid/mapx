@@ -26,7 +26,7 @@ export function getServiceUrl(id, route) {
 
 /**
  * Get api route by id
- * @param {String} id Route id 
+ * @param {String} id Route id
  */
 export function getApiRoute(id) {
   const s = settings;
@@ -61,26 +61,29 @@ export function setApiUrlAuto() {
    * if has default subdomain, webpack variables OR
    * modified url based on standard
    */
-  if (hasDefaultSubDomain) {
-    /**
-     * If no webpack variables found, replace by defaults
-     */
-    const apiHost =
-      typeof API_HOST_PUBLIC === "undefined"
-        ? loc.hostname.replace(/^(app|dev)\./, "api.")
-        : API_HOST_PUBLIC;
-    const apiPortPublic =
-      typeof API_PORT_PUBLIC === "undefined" ? loc.port : API_PORT_PUBLIC;
-
-    /**
-     * Set API url based on current location
-     */
-    Object.assign(settings.api, {
-      host_public: apiHost,
-      protocol: loc.protocol,
-      port_public: apiPortPublic,
-    });
+  if (!hasDefaultSubDomain) {
+    return;
   }
+  /**
+   * If no webpack variables found, replace by defaults
+   * -> dev use webpack.DefinePlugin to inject variables
+   * -> in prod, use the hostname 
+   */
+  const apiHost =
+    typeof API_HOST_PUBLIC === "undefined"
+      ? loc.hostname.replace(/^(app|dev)\./, "api.")
+      : API_HOST_PUBLIC;
+  const apiPortPublic =
+    typeof API_PORT_PUBLIC === "undefined" ? loc.port : API_PORT_PUBLIC;
+
+  /**
+   * Set API url based on current location
+   */
+  Object.assign(settings.api, {
+    host_public: apiHost,
+    protocol: loc.protocol,
+    port_public: apiPortPublic,
+  });
 }
 
 /**
