@@ -134,6 +134,7 @@ class Theme extends EventSimple {
 
       await t.register(themeDb);
       await t.set(themeDb);
+
       t.fire("list_updated");
 
       if (setAsProjectDefault) {
@@ -404,11 +405,12 @@ class Theme extends EventSimple {
   async register(theme) {
     const t = this;
     const oldTheme = t.getCustom(theme.id);
-    if (oldTheme) {
-      patchObject(oldTheme, theme);
-    } else {
-      themes_custom.push(theme);
+
+    const pos = themes_custom.indexOf(oldTheme);
+    if (pos > -1) {
+      themes_custom.splice(pos, 1);
     }
+    themes_custom.unshift(theme);
     return true;
   }
 
