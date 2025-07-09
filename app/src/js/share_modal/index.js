@@ -188,9 +188,10 @@ export class ShareModal extends EventSimple {
     sm._update_options_visibility();
     /* result update */
     sm._update_messages();
-    sm._update_buttons();
     sm._update_url();
     sm._update_template();
+    /* update button once all prevent flags set */
+    sm._update_buttons();
     sm.fire("updated");
     return true;
   }
@@ -556,6 +557,7 @@ export class ShareModal extends EventSimple {
     state.shareString = txt;
     sm._el_input.value = txt;
     sm.fire("share_code_updated");
+
     if (disableLink || disableLinkApp) {
       state.prevent.add("open");
     }
