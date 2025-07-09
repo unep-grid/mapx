@@ -25,6 +25,7 @@
     "build:local": "npm run build:app_local && npm run build:api_local",
     "init": "npm install && npm run init:app && npm run build:local",
     "init:app": "cd app && npm run init:all",
+    "doc:sdk": "cd app/src/js/sdk && npm run jsdoc",
     "ci": "npm install && npm run ci:app && npm run ci:api",
     "ci:app": "cd app && npm run ci",
     "ci:api": "cd api && npm run ci"

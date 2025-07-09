@@ -9,8 +9,15 @@
     "publish": false
   },
   "hooks": {
-    "before:init": ["npm run test:app"],
-    "before:bump": ["./release_scripts/update_versions.sh ${version}"],
-    "after:bump": ["./release_scripts/update_changelog.sh ${version}"]
+    "before:init": [
+      "npm run test:app",
+      "npm run doc:sdk"
+    ],
+    "before:bump": [
+      "./release_scripts/update_versions.sh ${version}"
+    ],
+    "after:bump": [
+      "./release_scripts/update_changelog.sh ${version}"
+    ]
   }
 }

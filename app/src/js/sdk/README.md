@@ -5,13 +5,13 @@
 The MapX SDK enables developers to seamlessly integrate the [MapX](https://unepgrid.ch/en/mapx) single page application into web projects, providing access to comprehensive geospatial environmental data. Key MapX features include:
 
 - Scientific and geospatial visualizations
-- Curated list of thousands of [views](https://github.com/unep-grid/mapx/wiki/Views), including [geological maps](https://app.mapx.org/static.html?language=en&views=MX-JH8E4-MZKY6-WNG6M&zoomToViews=true&p=0&b=0&z=3.195&lat=37.95&lng=43.542&t3d=false&sat=false&theme=water_dark&globe=true), or near real-time data, e.g., [Active Fires Assessment](https://app.mapx.org/static.html?language=en&views=MX-CY3C3-R9YDU-EXGPW&zoomToViews=true&p=0&b=0&z=2.063&lat=-0.799&lng=46.195&t3d=false&sat=false&theme=water_light&globe=true), or [Near Real-Time Active Fires](https://app.mapx.org/static.html?views=MX-6BI2W-R1HNH-THYSG&zoomToViews=true&theme=water_dark&globe=true) 
+- Curated list of thousands of [views](https://docs.mapx.org/docs/views/index.html), including [geological maps](https://app.mapx.org/static.html?language=en&views=MX-JH8E4-MZKY6-WNG6M&zoomToViews=true&p=0&b=0&z=3.195&lat=37.95&lng=43.542&t3d=false&sat=false&theme=water_dark&globe=true), or near real-time data, e.g., [Active Fires Assessment](https://app.mapx.org/static.html?language=en&views=MX-CY3C3-R9YDU-EXGPW&zoomToViews=true&p=0&b=0&z=2.063&lat=-0.799&lng=46.195&t3d=false&sat=false&theme=water_light&globe=true), or [Near Real-Time Active Fires](https://app.mapx.org/static.html?views=MX-6BI2W-R1HNH-THYSG&zoomToViews=true&theme=water_dark&globe=true) 
 - UN official boundaries base maps, customizable themes, styles, and fonts, including GL fonts
-- [Dashboards](https://github.com/unep-grid/mapx/wiki/Views#dashboards)
-- [Story maps](https://github.com/unep-grid/mapx/wiki/Story-maps)
-- [Vector drawing tools](https://github.com/unep-grid/mapx/wiki/Draw-tool)
-- [Multi-user, real-time attribute table editing](https://github.com/unep-grid/mapx/wiki/Attribute-table-edition)
-- Many more : [projects](https://github.com/unep-grid/mapx/wiki/Project-management), [users management](https://github.com/unep-grid/mapx/wiki/Introduction#roles), [complex join](https://github.com/unep-grid/mapx/wiki/Table-join-tool), [upload](https://github.com/unep-grid/mapx/wiki/Sources#publication-of-new-sources), [download](https://github.com/unep-grid/mapx/wiki/Download-tool), [metadata](https://github.com/unep-grid/mapx/wiki/Metadata), [WMS](https://github.com/unep-grid/mapx/wiki/Sources#tips--tricks:~:text=the%20data%20catalog.-,Enable%20WMS%20services,-%3A%20In%20a%20public) ... 
+- [Dashboards](https://docs.mapx.org/docs/views/dashboard.html)
+- [Story maps](https://docs.mapx.org/docs/story-maps/index.html)
+- [Vector drawing tools](https://docs.mapx.org/docs/user-interface/draw-tool.html)
+- [Multi-user, real-time attribute table editing](https://docs.mapx.org/docs/sources/edit-vector-source.html)
+- Many more : [projects](https://docs.mapx.org/docs/project-management/index.html), [users management](https://docs.mapx.org/docs/introduction/mapx-key-concepts.html#roles), [complex join](https://docs.mapx.org/docs/sources/table-join-tool.html), [upload](https://docs.mapx.org/docs/sources/publication-new-sources.html), [download](https://docs.mapx.org/docs/views/download-tool.html), [metadata](https://docs.mapx.org/docs/metadata/index.html), [WMS](https://docs.mapx.org/docs/views/publication-new-view.html#raster-views) ... 
 
 The SDK aims to embed MapX and simplify interaction with it. Although it doesn't include all of MapX's functionalities, it offers most features essential for seamless integration into other web applications.
 
@@ -23,7 +23,7 @@ The MapX SDK is provided under an MIT license
 
 ## Resources
 
-- [Mapx Documentation](https://github.com/unep-grid/mapx/wiki)
+- [Mapx Documentation](https://docs.mapx.org/index.html)
 - [Demo site with example of integration in React, JQuery or Vanilla JS, with a link to the source code](https://unep-grid.github.io/mapx-demo/index.html)
 - [Observable collection / Showcase](https://observablehq.com/collection/@trepmag/mapx-sdk)
 - [Starter project example](https://git.unepgrid.ch/drikc/mapx-sdk-starter-project)
@@ -290,6 +290,9 @@ MapX resolvers available in app only
     * [.set_mode_3d(opt)](#MapxResolversStatic+set_mode_3d)
     * [.set_3d_terrain()](#MapxResolversStatic+set_3d_terrain)
     * [.set_mode_aerial(opt)](#MapxResolversStatic+set_mode_aerial)
+    * [.show_modal_geocoder()](#MapxResolversStatic+show_modal_geocoder)
+    * [.close_modal_geocoder()](#MapxResolversStatic+close_modal_geocoder)
+    * [.is_geocoder_visble()](#MapxResolversStatic+is_geocoder_visble)
     * [.show_modal_share(opt)](#MapxResolversStatic+show_modal_share) ⇒ <code>Boolean</code>
     * [.close_modal_share()](#MapxResolversStatic+close_modal_share) ⇒ <code>Boolean</code>
     * [.get_modal_share_string()](#MapxResolversStatic+get_modal_share_string) ⇒ <code>String</code>
@@ -298,7 +301,6 @@ MapX resolvers available in app only
     * [.get_themes_id()](#MapxResolversStatic+get_themes_id) ⇒ <code>Array</code>
     * [.get_themes()](#MapxResolversStatic+get_themes) ⇒ <code>Object</code>
     * [.get_theme_id()](#MapxResolversStatic+get_theme_id) ⇒ <code>string</code>
-    * [.get_themes_ids()](#MapxResolversStatic+get_themes_ids) ⇒ <code>Array.&lt;string&gt;</code>
     * [.add_theme(opt)](#MapxResolversStatic+add_theme) ⇒ <code>Boolean</code>
     * [.has_el_id(opt)](#MapxResolversStatic+has_el_id)
     * [.set_dashboard_visibility(opt)](#MapxResolversStatic+set_dashboard_visibility) ⇒ <code>Boolean</code>
@@ -865,6 +867,26 @@ Set related layers visibility, change control buttons state
 | opt | <code>Object</code> | Options |
 | opt.action | <code>String</code> | Action to perform: 'show','hide','toggle' |
 
+<a name="MapxResolversStatic+show_modal_geocoder"></a>
+
+#### mapxResolversApp.show\_modal\_geocoder()
+Show geocoder
+Display the geocoder tool
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+<a name="MapxResolversStatic+close_modal_geocoder"></a>
+
+#### mapxResolversApp.close\_modal\_geocoder()
+Close geocoder
+Close the geocoder tool
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+<a name="MapxResolversStatic+is_geocoder_visble"></a>
+
+#### mapxResolversApp.is\_geocoder\_visble()
+Test if geocoder is visible
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
 <a name="MapxResolversStatic+show_modal_share"></a>
 
 #### mapxResolversApp.show\_modal\_share(opt) ⇒ <code>Boolean</code>
@@ -935,13 +957,6 @@ Get current theme id
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
 **Returns**: <code>string</code> - Theme id  
-<a name="MapxResolversStatic+get_themes_ids"></a>
-
-#### mapxResolversApp.get\_themes\_ids() ⇒ <code>Array.&lt;string&gt;</code>
-Get all theme id
-
-**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
-**Returns**: <code>Array.&lt;string&gt;</code> - Theme ids  
 <a name="MapxResolversStatic+add_theme"></a>
 
 #### mapxResolversApp.add\_theme(opt) ⇒ <code>Boolean</code>
@@ -1984,6 +1999,9 @@ MapX resolvers available in static and app
     * [.set_mode_3d(opt)](#MapxResolversStatic+set_mode_3d)
     * [.set_3d_terrain()](#MapxResolversStatic+set_3d_terrain)
     * [.set_mode_aerial(opt)](#MapxResolversStatic+set_mode_aerial)
+    * [.show_modal_geocoder()](#MapxResolversStatic+show_modal_geocoder)
+    * [.close_modal_geocoder()](#MapxResolversStatic+close_modal_geocoder)
+    * [.is_geocoder_visble()](#MapxResolversStatic+is_geocoder_visble)
     * [.show_modal_share(opt)](#MapxResolversStatic+show_modal_share) ⇒ <code>Boolean</code>
     * [.close_modal_share()](#MapxResolversStatic+close_modal_share) ⇒ <code>Boolean</code>
     * [.get_modal_share_string()](#MapxResolversStatic+get_modal_share_string) ⇒ <code>String</code>
@@ -1992,7 +2010,6 @@ MapX resolvers available in static and app
     * [.get_themes_id()](#MapxResolversStatic+get_themes_id) ⇒ <code>Array</code>
     * [.get_themes()](#MapxResolversStatic+get_themes) ⇒ <code>Object</code>
     * [.get_theme_id()](#MapxResolversStatic+get_theme_id) ⇒ <code>string</code>
-    * [.get_themes_ids()](#MapxResolversStatic+get_themes_ids) ⇒ <code>Array.&lt;string&gt;</code>
     * [.add_theme(opt)](#MapxResolversStatic+add_theme) ⇒ <code>Boolean</code>
     * [.has_el_id(opt)](#MapxResolversStatic+has_el_id)
     * [.set_dashboard_visibility(opt)](#MapxResolversStatic+set_dashboard_visibility) ⇒ <code>Boolean</code>
@@ -2159,6 +2176,26 @@ Set related layers visibility, change control buttons state
 | opt | <code>Object</code> | Options |
 | opt.action | <code>String</code> | Action to perform: 'show','hide','toggle' |
 
+<a name="MapxResolversStatic+show_modal_geocoder"></a>
+
+#### mapxResolversStatic.show\_modal\_geocoder()
+Show geocoder
+Display the geocoder tool
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+<a name="MapxResolversStatic+close_modal_geocoder"></a>
+
+#### mapxResolversStatic.close\_modal\_geocoder()
+Close geocoder
+Close the geocoder tool
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+<a name="MapxResolversStatic+is_geocoder_visble"></a>
+
+#### mapxResolversStatic.is\_geocoder\_visble()
+Test if geocoder is visible
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 <a name="MapxResolversStatic+show_modal_share"></a>
 
 #### mapxResolversStatic.show\_modal\_share(opt) ⇒ <code>Boolean</code>
@@ -2229,13 +2266,6 @@ Get current theme id
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>string</code> - Theme id  
-<a name="MapxResolversStatic+get_themes_ids"></a>
-
-#### mapxResolversStatic.get\_themes\_ids() ⇒ <code>Array.&lt;string&gt;</code>
-Get all theme id
-
-**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: <code>Array.&lt;string&gt;</code> - Theme ids  
 <a name="MapxResolversStatic+add_theme"></a>
 
 #### mapxResolversStatic.add\_theme(opt) ⇒ <code>Boolean</code>
