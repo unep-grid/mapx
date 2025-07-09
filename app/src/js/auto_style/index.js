@@ -282,7 +282,7 @@ export class AutoStyle {
       attributes: {
         min: 0,
         max: 1,
-        step: 0.05,
+        step: 0.1,
       },
       class: "auto_style__input_opacity",
       action: async (e) => {
