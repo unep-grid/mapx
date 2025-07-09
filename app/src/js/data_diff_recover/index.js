@@ -1,9 +1,10 @@
 import { isFunction, isJson } from "./../is_test_mapx";
 import { el } from "../el/src/index.js";
-import { modalDialog, modalSimple } from "../mx_helper_modal";
+import { modalSimple } from "../mx_helper_modal";
 import { jsonDiff } from "../mx_helper_utils_json";
 import { elSpanTranslate } from "../el_mapx";
 import "./style.css";
+import {clone} from "../mx_helper_misc";
 
 /**
  * Class for handling data diff inspection with configurable context labels and callbacks
@@ -78,7 +79,6 @@ export class DataDiffModal {
     const diff = await this.getDiff();
 
     if (!diff || Object.keys(diff).length === 0) {
-      console.log('Diff tool : no diff');
       return false;
     }
 
@@ -251,7 +251,7 @@ export class DataDiffModal {
    */
   accept() {
     // Create a clean copy of the target data
-    const cleanData = { ...this.dataTarget };
+    const cleanData = clone(this.dataTarget);
     delete cleanData._timestamp;
 
     // Call the onAccept callback if provided
