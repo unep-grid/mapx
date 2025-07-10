@@ -559,7 +559,9 @@ mxDbGetProjectMembers <- function(idProject) {
     'publishers', publishers || admins,
     'admins', admins,
     'contacts', contacts
-    ) as members from mx_projects where id='" + idProject + "'")
+    ) as members from mx_projects where id= $1",
+    params = list(idProject)
+  )
 
   members <- fromJSON(members$members)
 
@@ -580,7 +582,7 @@ mxDbGetProjectMembers <- function(idProject) {
 #' @param idProject {Character} Id of the project
 #' @return {Boolean} project public status.
 mxDbGetProjectIsPublic <- function(idProject) {
-  isTRUE(mxDbGetQuery("SELECT public FROM mx_projects where id='" + idProject + "'")$public)
+  isTRUE(mxDbGetQuery("SELECT public FROM mx_projects where id= $1", params = list(idProject))$public)
 }
 
 #' Check if project title exists
