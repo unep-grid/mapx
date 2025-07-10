@@ -116,7 +116,6 @@ export async function ioThemeList(socket, data, cb) {
   try {
     const idProject = socket.session.project_id;
 
-    // Use parameterized query to prevent SQL injection
     const query = `
       SELECT * FROM mx_themes
       WHERE
@@ -135,14 +134,14 @@ export async function ioThemeList(socket, data, cb) {
 }
 
 /**
- * Lit all themes ids
+ * List themes id by project
  */
-export async function ioThemeListIds(_, data, cb) {
+export async function ioThemeListIds(socket, data, cb) {
   try {
-    // Use parameterized query to prevent SQL injection
-    const query = `SELECT id FROM mx_themes`;
+    const idProject = socket.session.project_id;
+    const query = `SELECT id FROM mx_themes where id_project = $1`;
 
-    const { rows } = await pgRead.query(query);
+    const { rows } = await pgRead.query(query, [idProject]);
     data.ids = rows.map((r) => r.id);
     data.success = true;
   } catch (e) {
