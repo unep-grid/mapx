@@ -8210,6 +8210,11 @@
     "zh": "本项目的附加使用条款"
   },
   {
+    "id": "project_delete_table_themes",
+    "en": "Table of themes to delete",
+    "zh": "要删除的主题表"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "zh": "主题"

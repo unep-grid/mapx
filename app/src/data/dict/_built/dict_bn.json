@@ -8210,6 +8210,11 @@
     "bn": "এই প্রকল্পের ব্যবহারের অতিরিক্ত শর্তাবলী"
   },
   {
+    "id": "project_delete_table_themes",
+    "en": "Table of themes to delete",
+    "bn": "মুছে ফেলার জন্য থিমগুলির তালিকা"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "bn": "থিম"

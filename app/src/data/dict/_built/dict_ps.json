@@ -8210,6 +8210,11 @@
     "ps": "د دې پروژې لپاره د کارولو اضافي شرایط"
   },
   {
+    "id": "project_delete_table_themes",
+    "en": "Table of themes to delete",
+    "ps": "د حذف کولو لپاره د موضوعاتو جدول"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "ps": "موضوع"

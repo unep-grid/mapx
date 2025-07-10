@@ -21217,16 +21217,16 @@
   },
   {
     "id": "project_access_settings",
-    "en": "Project access settings",
-    "fr": "Paramètres d'accès au projet",
-    "es": "Configuración de acceso al proyecto",
-    "ru": "Настройки доступа к проекту",
-    "zh": "项目访问设置",
-    "ar": "إعدادات الوصول إلى المشروع",
-    "fa": "تنظیمات دسترسی پروژه",
-    "ps": "د پروژې د لاسرسي تنظیمات",
-    "bn": "প্রকল্প অ্যাক্সেস সেটিংস",
-    "de": "Projektzugriffseinstellungen"
+    "en": "Access settings",
+    "fr": "Paramètres d'accès",
+    "es": "Configuración de acceso",
+    "ru": "Настройки доступа",
+    "zh": "访问设置",
+    "ar": "إعدادات الوصول",
+    "fa": "تنظیمات دسترسی",
+    "ps": "د لاسرسي تنظیمات",
+    "bn": "অ্যাক্সেস সেটিংস",
+    "de": "Zugriffseinstellungen"
   },
   {
     "id": "project_date_modified",
@@ -21344,6 +21344,19 @@
     "ps": "د دې پروژې لپاره د کارولو اضافي شرایط",
     "bn": "এই প্রকল্পের ব্যবহারের অতিরিক্ত শর্তাবলী",
     "de": "Zusätzliche Nutzungsbedingungen für dieses Projekt"
+  },
+  {
+    "id": "project_delete_table_themes",
+    "en": "Table of themes to delete",
+    "fr": "Tableau des thèmes à supprimer",
+    "es": "Tabla de temas a eliminar",
+    "ru": "Таблица тем для удаления",
+    "zh": "要删除的主题表",
+    "ar": "جدول المواضيع المراد حذفها",
+    "fa": "جدول تم‌هایی که باید حذف شوند",
+    "ps": "د حذف کولو لپاره د موضوعاتو جدول",
+    "bn": "মুছে ফেলার জন্য থিমগুলির তালিকা",
+    "de": "Tabelle der zu löschenden Themen"
   },
   {
     "id": "schema_story_theme",

@@ -8210,6 +8210,11 @@
     "ru": "Дополнительные условия использования этого проекта"
   },
   {
+    "id": "project_delete_table_themes",
+    "en": "Table of themes to delete",
+    "ru": "Таблица тем для удаления"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "ru": "Тема"

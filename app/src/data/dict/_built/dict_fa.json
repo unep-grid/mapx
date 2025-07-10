@@ -8210,6 +8210,11 @@
     "fa": "شرایط اضافی استفاده از این پروژه"
   },
   {
+    "id": "project_delete_table_themes",
+    "en": "Table of themes to delete",
+    "fa": "جدول تم‌هایی که باید حذف شوند"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "fa": "موضوع"

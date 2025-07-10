@@ -21,7 +21,6 @@ import {
   itemFlashCancel,
   itemFlashSave,
   itemFlashWarning,
-  patchObject,
 } from "../mx_helper_misc";
 import { modalConfirm } from "../mx_helper_modal";
 import { settings } from "../settings";

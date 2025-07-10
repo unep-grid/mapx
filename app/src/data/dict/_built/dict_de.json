@@ -8210,6 +8210,11 @@
     "de": "Zusätzliche Nutzungsbedingungen für dieses Projekt"
   },
   {
+    "id": "project_delete_table_themes",
+    "en": "Table of themes to delete",
+    "de": "Tabelle der zu löschenden Themen"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "de": "Thema"

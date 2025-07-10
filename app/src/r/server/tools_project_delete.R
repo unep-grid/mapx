@@ -130,7 +130,14 @@ observeEvent(input$btnDeleteProject, {
 
       queryViews <- sprintf(mxReadText("src/sql/get_projects_views_extended.sql"), project)
 
+      queryThemes <- sprintf(
+        "SELECT id, label FROM mx_themes WHERE id_project = '%s'",
+        project
+      )
+
       tableViewsProject <- mxDbGetQuery(queryViews)
+
+      tableThemesProject <- mxDbGetQuery(queryThemes)
 
       sourcesToRemove <- mxDbGetQuery(querySource)
 
@@ -175,6 +182,7 @@ observeEvent(input$btnDeleteProject, {
       hasViewsDep <- isNotEmpty(tableViewsDep)
       hasSources <- isNotEmpty(tableSourcesProject)
       hasSourcesDep <- isNotEmpty(tableSourcesDep)
+      hasThemes <- isNotEmpty(tableThemesProject)
 
       if (hasViewsDep) {
         filter <-
@@ -215,6 +223,11 @@ observeEvent(input$btnDeleteProject, {
 
       reactData$projectDeleteSourcesDep <- if (hasSourcesDep) {
         tableSourcesDep$id
+      } else {
+        NULL
+      }
+      reactData$projectDeleteThemes <- if (hasThemes) {
+        tableThemesProject$id
       } else {
         NULL
       }
@@ -335,6 +348,13 @@ observeEvent(input$btnDeleteProject, {
         )
       }
 
+      if (hasThemes) {
+        names(tableThemesProject) <- c(
+          dd("mx_theme_manager_id"),
+          dd("mx_theme_label_title")
+        )
+      }
+
       ui <- tags$ul(
 
         # For Views
@@ -363,6 +383,13 @@ observeEvent(input$btnDeleteProject, {
           tags$b(dd("project_delete_table_sources_dep", language)),
           ":",
           if (hasSourcesDep) mxTableToHtml(tableSourcesDep)
+        ),
+
+        # For Themes
+        tags$li(
+          tags$b(dd("project_delete_table_themes", language)),
+          ":",
+          if (hasThemes) mxTableToHtml(tableThemesProject)
         )
       )
 
@@ -499,6 +526,19 @@ observeEvent(input$btnDeleteProjectConfirm, {
         #
         mxDebugMsg("Reset views external")
         mxDbProjectResetViewsExternal(con)
+
+        #
+        # Delete themes associated with the project
+        #
+        themes <- reactData$projectDeleteThemes
+        if (length(themes) > 0) {
+
+          queryThemeDelete <- sprintf(
+            "DELETE FROM mx_themes WHERE id IN ('%s')",
+            paste(themes, collapse = "','")
+          )
+          dbExecute(con, queryThemeDelete)
+        }
 
         #
         # Delete project

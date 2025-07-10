@@ -21346,6 +21346,19 @@
     "de": "Zusätzliche Nutzungsbedingungen für dieses Projekt"
   },
   {
+    "id": "project_delete_table_themes",
+    "en": "Table of themes to delete",
+    "fr": "Tableau des thèmes à supprimer",
+    "es": "Tabla de temas a eliminar",
+    "ru": "Таблица тем для удаления",
+    "zh": "要删除的主题表",
+    "ar": "جدول المواضيع المراد حذفها",
+    "fa": "جدول تم‌هایی که باید حذف شوند",
+    "ps": "د حذف کولو لپاره د موضوعاتو جدول",
+    "bn": "মুছে ফেলার জন্য থিমগুলির তালিকা",
+    "de": "Tabelle der zu löschenden Themen"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "fr": "Thème",
