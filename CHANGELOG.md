@@ -1,3 +1,16 @@
+  - [1.13.18-beta.0](https://github.com/unep-grid/mapx/tree/1.13.18-beta.0) 
+
+    - feat(docs): implemented #1046
+    - fix(project): added theme deletion UI and logic when deleting a project
+    - fix(theme): correctly list of theme for the current project
+    - fix(project): add prepared statement to member list db query
+    - fix(theme): correct register or re-register theme
+    - refactor(json_editor_monaco): theme + default issue
+    - feat(docs): added env var for mapx docs partial implementation of #1046 TBC
+    - feat(download_source): keep the gid column for downloaded layer #934
+    - fix(auto_style): opacity step should be 0.1
+
+
   - [1.13.18-alpha.22](https://github.com/unep-grid/mapx/tree/1.13.18-alpha.22) 
 
     - fix(sdk): doc built at each update
