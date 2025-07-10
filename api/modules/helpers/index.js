@@ -406,10 +406,15 @@ function findValues(obj, key) {
 }
 
 /**
- * Get map config from client
+ * Get config update for client
+ * - settings required in static mode, set as env var 
  */
-function mwGetConfigServices(_, res) {
-  return sendJSON(res, settings.services);
+function mwGetConfigUpdate(_, res) {
+  const update = {
+    links: settings.links,
+    services: settings.services,
+  };
+  return sendJSON(res, update);
 }
 
 /**
@@ -625,7 +630,7 @@ export {
   /**
    * Middleware
    */
-  mwGetConfigServices,
+  mwGetConfigUpdate,
   mwGetConfigGeoServer,
   mwSetHeaders,
   /** probably not used **/

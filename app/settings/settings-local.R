@@ -39,6 +39,8 @@ config[["dev"]][["members"]] <- usersDev
 config[["services"]][["maptiler"]][["token"]] <- Sys.getenv("MAPTILER_TOKEN") 
 config[["services"]][["mapbox"]][["token"]] <- Sys.getenv("MAPX_MAPBOX_TOKEN")
 
+config[["links"]][["doc_base"]] <- Sys.getenv("MAPX_DOCS_URL")
+
 config[["mode"]] <- Sys.getenv("MAPX_MODE")
 
 

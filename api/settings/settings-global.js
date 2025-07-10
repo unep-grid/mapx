@@ -54,9 +54,9 @@ const settings_global = {
   services: {
     mapbox: { token: 1234 },
     maptiler: { token: 1234 },
-    docs: {
-      url: "https://docs.mapx.org",
-    },
+  },
+  links: {
+    doc_base: "https://docs.mapx.org",
   },
   mirror: {
     rateLimit: 2000,

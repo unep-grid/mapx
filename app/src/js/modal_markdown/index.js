@@ -11,6 +11,11 @@ const def = {
   content: "",
 };
 
+/**
+ * ⚠️ wiki doc replaced by sphynx doc e.g. docs.mapx.org & modalIframe
+ * ->  deprecated, but could still be useful in some cases, e.g. parameters
+ * -> mardown could also read readme.md ,e.g sdk readme 
+ */
 function wikiUrl(id) {
   return `${settings.links.repositoryWiki}${id}`;
 }

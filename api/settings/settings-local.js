@@ -37,9 +37,9 @@ const settings = Object.assign({}, settings_global, {
     maptiler: {
       token: env.MAPTILER_TOKEN,
     },
-    docs: {
-      url: env.MAPX_DOCS_URL,
-    },
+  },
+  links: {
+    doc_base: env.MAPX_DOCS_URL,
   },
   mirror: {
     rateLimit: env.MAPX_MIRROR_RATE_LIMIT,

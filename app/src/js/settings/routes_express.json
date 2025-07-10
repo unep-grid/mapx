@@ -4,7 +4,7 @@
   "getMirror": "/get/mirror",
   "getView": "/get/view/item/",
   "getSearchKey": "/get/search/key",
-  "getConfigServices": "/get/config/services",
+  "getConfigUpdate": "/get/config/update",
   "getSourceDownload": "/get/source/",
   "getTile": "/get/tile/{x}/{y}/{z}.mvt",
   "getSourceSummary": "/get/source/summary/",

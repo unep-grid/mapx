@@ -26,7 +26,7 @@ import { ioUploadSource } from "#mapx/upload";
 import { ioIssueReport } from "#mapx/issue_reporter";
 import {
   mwSetHeaders,
-  mwGetConfigServices,
+  mwGetConfigUpdate,
   mwGetConfigGeoServer,
 } from "#mapx/helpers";
 import {
@@ -166,7 +166,7 @@ app.get("/get/query/", query.mwGet);
 app.get("/get/sql/", query.mwGet);
 app.get("/get/mirror/", mirror.mwGet);
 
-app.get("/get/config/services", mwGetConfigServices);
+app.get("/get/config/update", mwGetConfigUpdate);
 app.get("/get/config/geoserver", mwGetConfigGeoServer);
 app.get("/get/epsg/codes/full", mwGetEpsgCodesFull);
 app.get("/get/file/formats/list", mwGetFormatsList);
