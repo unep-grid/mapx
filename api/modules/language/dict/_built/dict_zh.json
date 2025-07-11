@@ -8215,6 +8215,91 @@
     "zh": "要删除的主题表"
   },
   {
+    "id": "project_roles_matrix_title",
+    "en": "Project Roles Matrix",
+    "zh": "项目角色矩阵"
+  },
+  {
+    "id": "project_roles_matrix_info",
+    "en": "Manage user roles for this project",
+    "zh": "管理此项目的用户角色"
+  },
+  {
+    "id": "project_roles_no_users",
+    "en": "No users found in this project",
+    "zh": "未找到此项目中的用户"
+  },
+  {
+    "id": "project_role_contact",
+    "en": "Contact",
+    "zh": "接触"
+  },
+  {
+    "id": "project_role_admin",
+    "en": "Admin",
+    "zh": "行政"
+  },
+  {
+    "id": "project_role_publisher",
+    "en": "Publisher",
+    "zh": "出版商"
+  },
+  {
+    "id": "project_role_member",
+    "en": "Member",
+    "zh": "成员"
+  },
+  {
+    "id": "validation_errors",
+    "en": "Validation Errors:",
+    "zh": "验证错误："
+  },
+  {
+    "id": "project_roles_error_multiple_contacts",
+    "en": "Only one contact is allowed per project",
+    "zh": "每个项目只允许一个联系人"
+  },
+  {
+    "id": "project_roles_error_contact_inheritance",
+    "en": "Contact must have all other roles (admin, publisher, member)",
+    "zh": "联系人必须具有所有其他角色（管理员、发布者、成员）"
+  },
+  {
+    "id": "project_roles_error_admin_inheritance",
+    "en": "Admin must have publisher and member roles",
+    "zh": "管理员必须具有发布者和成员角色"
+  },
+  {
+    "id": "project_roles_error_publisher_inheritance",
+    "en": "Publisher must have member role",
+    "zh": "发布者必须具有成员角色"
+  },
+  {
+    "id": "project_roles_confirm_changes",
+    "en": "Confirm Role Changes",
+    "zh": "确认角色变更"
+  },
+  {
+    "id": "project_roles_changes_summary",
+    "en": "The following changes will be applied:",
+    "zh": "将实施以下变更："
+  },
+  {
+    "id": "role_added",
+    "en": "added",
+    "zh": "额外"
+  },
+  {
+    "id": "role_removed",
+    "en": "removed",
+    "zh": "已删除"
+  },
+  {
+    "id": "project_roles_saved_successfully",
+    "en": "Role changes have been saved successfully",
+    "zh": "角色更改已成功保存"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "zh": "主题"

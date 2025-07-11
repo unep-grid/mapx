@@ -8215,6 +8215,91 @@
     "ar": "جدول المواضيع المراد حذفها"
   },
   {
+    "id": "project_roles_matrix_title",
+    "en": "Project Roles Matrix",
+    "ar": "مصفوفة أدوار المشروع"
+  },
+  {
+    "id": "project_roles_matrix_info",
+    "en": "Manage user roles for this project",
+    "ar": "إدارة أدوار المستخدم لهذا المشروع"
+  },
+  {
+    "id": "project_roles_no_users",
+    "en": "No users found in this project",
+    "ar": "لم يتم العثور على مستخدمين في هذا المشروع"
+  },
+  {
+    "id": "project_role_contact",
+    "en": "Contact",
+    "ar": "اتصال"
+  },
+  {
+    "id": "project_role_admin",
+    "en": "Admin",
+    "ar": "مسؤل"
+  },
+  {
+    "id": "project_role_publisher",
+    "en": "Publisher",
+    "ar": "الناشر"
+  },
+  {
+    "id": "project_role_member",
+    "en": "Member",
+    "ar": "عضو"
+  },
+  {
+    "id": "validation_errors",
+    "en": "Validation Errors:",
+    "ar": "أخطاء التحقق:"
+  },
+  {
+    "id": "project_roles_error_multiple_contacts",
+    "en": "Only one contact is allowed per project",
+    "ar": "يُسمح بجهة اتصال واحدة فقط لكل مشروع"
+  },
+  {
+    "id": "project_roles_error_contact_inheritance",
+    "en": "Contact must have all other roles (admin, publisher, member)",
+    "ar": "يجب أن يكون لدى جهة الاتصال جميع الأدوار الأخرى (المسؤول، الناشر، العضو)"
+  },
+  {
+    "id": "project_roles_error_admin_inheritance",
+    "en": "Admin must have publisher and member roles",
+    "ar": "يجب أن يكون لدى المسؤول أدوار الناشر والعضو"
+  },
+  {
+    "id": "project_roles_error_publisher_inheritance",
+    "en": "Publisher must have member role",
+    "ar": "يجب أن يكون لدى الناشر دور عضو"
+  },
+  {
+    "id": "project_roles_confirm_changes",
+    "en": "Confirm Role Changes",
+    "ar": "تأكيد تغييرات الدور"
+  },
+  {
+    "id": "project_roles_changes_summary",
+    "en": "The following changes will be applied:",
+    "ar": "سيتم تطبيق التغييرات التالية:"
+  },
+  {
+    "id": "role_added",
+    "en": "added",
+    "ar": "تمت الإضافة"
+  },
+  {
+    "id": "role_removed",
+    "en": "removed",
+    "ar": "تمت إزالته"
+  },
+  {
+    "id": "project_roles_saved_successfully",
+    "en": "Role changes have been saved successfully",
+    "ar": "تم حفظ تغييرات الأدوار بنجاح"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "ar": "سمة"

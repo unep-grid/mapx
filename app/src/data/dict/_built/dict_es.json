@@ -8215,6 +8215,91 @@
     "es": "Tabla de temas a eliminar"
   },
   {
+    "id": "project_roles_matrix_title",
+    "en": "Project Roles Matrix",
+    "es": "Matriz de roles del proyecto"
+  },
+  {
+    "id": "project_roles_matrix_info",
+    "en": "Manage user roles for this project",
+    "es": "Administrar roles de usuario para este proyecto"
+  },
+  {
+    "id": "project_roles_no_users",
+    "en": "No users found in this project",
+    "es": "No se encontraron usuarios en este proyecto"
+  },
+  {
+    "id": "project_role_contact",
+    "en": "Contact",
+    "es": "Contacto"
+  },
+  {
+    "id": "project_role_admin",
+    "en": "Admin",
+    "es": "Administración"
+  },
+  {
+    "id": "project_role_publisher",
+    "en": "Publisher",
+    "es": "Editor"
+  },
+  {
+    "id": "project_role_member",
+    "en": "Member",
+    "es": "Miembro"
+  },
+  {
+    "id": "validation_errors",
+    "en": "Validation Errors:",
+    "es": "Errores de validación:"
+  },
+  {
+    "id": "project_roles_error_multiple_contacts",
+    "en": "Only one contact is allowed per project",
+    "es": "Sólo se permite un contacto por proyecto."
+  },
+  {
+    "id": "project_roles_error_contact_inheritance",
+    "en": "Contact must have all other roles (admin, publisher, member)",
+    "es": "El contacto debe tener todos los demás roles (administrador, editor, miembro)"
+  },
+  {
+    "id": "project_roles_error_admin_inheritance",
+    "en": "Admin must have publisher and member roles",
+    "es": "El administrador debe tener roles de editor y miembro"
+  },
+  {
+    "id": "project_roles_error_publisher_inheritance",
+    "en": "Publisher must have member role",
+    "es": "El editor debe tener rol de miembro"
+  },
+  {
+    "id": "project_roles_confirm_changes",
+    "en": "Confirm Role Changes",
+    "es": "Confirmar cambios de rol"
+  },
+  {
+    "id": "project_roles_changes_summary",
+    "en": "The following changes will be applied:",
+    "es": "Se aplicarán los siguientes cambios:"
+  },
+  {
+    "id": "role_added",
+    "en": "added",
+    "es": "agregado"
+  },
+  {
+    "id": "role_removed",
+    "en": "removed",
+    "es": "remoto"
+  },
+  {
+    "id": "project_roles_saved_successfully",
+    "en": "Role changes have been saved successfully",
+    "es": "Los cambios de rol se han guardado correctamente"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "es": "Tema"

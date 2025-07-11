@@ -6,6 +6,7 @@ import { bindAll } from "../bind_class_methods";
 import { setProject } from "../map_helpers";
 import { tt } from "../el_mapx";
 import { getDictItem } from "./../language";
+import { RoleMatrix } from "./roles_matrix.js";
 
 const options = {
   roles : [ "root", "project_creator"]
@@ -89,7 +90,7 @@ export class ProjectManager {
   async validateCreatePrompt(name, btnCreate, elMessage) {
     const pm = this;
     const result = await pm.validate(name);
-    
+
     const elFrag = document.createDocumentFragment();
     if (!result.valid) {
       for (const issue of result.issues) {
@@ -134,6 +135,30 @@ export class ProjectManager {
 
   async open(idProject) {
     await setProject(idProject);
+  }
+
+  /**
+   * Show role matrix modal for current project
+   * Only available to admin users
+   */
+  async showRoleMatrix() {
+    const pm = this;
+
+    try {
+      // Check if user is admin
+      const isAdmin = settings.user.roles?.admin;
+      if (!isAdmin) {
+        throw new Error("project_roles_access_denied");
+      }
+
+      // Create and show role matrix
+      const roleMatrix = new RoleMatrix(pm);
+      await roleMatrix.show();
+
+    } catch (e) {
+      console.error("Role matrix error:", e);
+      // Could show error modal here if needed
+    }
   }
 
   async delete() {}

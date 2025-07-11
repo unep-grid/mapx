@@ -8215,6 +8215,91 @@
     "fr": "Tableau des thèmes à supprimer"
   },
   {
+    "id": "project_roles_matrix_title",
+    "en": "Project Roles Matrix",
+    "fr": "Matrice des rôles du projet"
+  },
+  {
+    "id": "project_roles_matrix_info",
+    "en": "Manage user roles for this project",
+    "fr": "Gérer les rôles des utilisateurs pour ce projet"
+  },
+  {
+    "id": "project_roles_no_users",
+    "en": "No users found in this project",
+    "fr": "Aucun utilisateur trouvé dans ce projet"
+  },
+  {
+    "id": "project_role_contact",
+    "en": "Contact",
+    "fr": "Contact"
+  },
+  {
+    "id": "project_role_admin",
+    "en": "Admin",
+    "fr": "Administrateur"
+  },
+  {
+    "id": "project_role_publisher",
+    "en": "Publisher",
+    "fr": "Éditeur"
+  },
+  {
+    "id": "project_role_member",
+    "en": "Member",
+    "fr": "Membre"
+  },
+  {
+    "id": "validation_errors",
+    "en": "Validation Errors:",
+    "fr": "Erreurs de validation :"
+  },
+  {
+    "id": "project_roles_error_multiple_contacts",
+    "en": "Only one contact is allowed per project",
+    "fr": "Un seul contact est autorisé par projet"
+  },
+  {
+    "id": "project_roles_error_contact_inheritance",
+    "en": "Contact must have all other roles (admin, publisher, member)",
+    "fr": "Le contact doit avoir tous les autres rôles (administrateur, éditeur, membre)"
+  },
+  {
+    "id": "project_roles_error_admin_inheritance",
+    "en": "Admin must have publisher and member roles",
+    "fr": "L'administrateur doit avoir les rôles d'éditeur et de membre"
+  },
+  {
+    "id": "project_roles_error_publisher_inheritance",
+    "en": "Publisher must have member role",
+    "fr": "L'éditeur doit avoir un rôle de membre"
+  },
+  {
+    "id": "project_roles_confirm_changes",
+    "en": "Confirm Role Changes",
+    "fr": "Confirmer les changements de rôle"
+  },
+  {
+    "id": "project_roles_changes_summary",
+    "en": "The following changes will be applied:",
+    "fr": "Les modifications suivantes seront appliquées :"
+  },
+  {
+    "id": "role_added",
+    "en": "added",
+    "fr": "ajouté"
+  },
+  {
+    "id": "role_removed",
+    "en": "removed",
+    "fr": "supprimé"
+  },
+  {
+    "id": "project_roles_saved_successfully",
+    "en": "Role changes have been saved successfully",
+    "fr": "Les modifications de rôle ont été enregistrées avec succès"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "fr": "Thème"

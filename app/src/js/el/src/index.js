@@ -185,6 +185,10 @@ export class ElementCreator {
           elOut.disabled = true;
         }
         break;
+      case "checked":
+        // Set checked property directly to avoid HTML attribute issues
+        elOut.checked = !!value;
+        break;
       default:
         if (svgMode) {
           elOut.setAttributeNS(null, key, value);

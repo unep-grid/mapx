@@ -8215,6 +8215,91 @@
     "bn": "মুছে ফেলার জন্য থিমগুলির তালিকা"
   },
   {
+    "id": "project_roles_matrix_title",
+    "en": "Project Roles Matrix",
+    "bn": "প্রকল্প ভূমিকা ম্যাট্রিক্স"
+  },
+  {
+    "id": "project_roles_matrix_info",
+    "en": "Manage user roles for this project",
+    "bn": "এই প্রকল্পের জন্য ব্যবহারকারীর ভূমিকা পরিচালনা করুন"
+  },
+  {
+    "id": "project_roles_no_users",
+    "en": "No users found in this project",
+    "bn": "এই প্রকল্পে কোনও ব্যবহারকারী খুঁজে পাওয়া যায়নি"
+  },
+  {
+    "id": "project_role_contact",
+    "en": "Contact",
+    "bn": "যোগাযোগ"
+  },
+  {
+    "id": "project_role_admin",
+    "en": "Admin",
+    "bn": "অ্যাডমিন"
+  },
+  {
+    "id": "project_role_publisher",
+    "en": "Publisher",
+    "bn": "প্রকাশক"
+  },
+  {
+    "id": "project_role_member",
+    "en": "Member",
+    "bn": "সদস্য"
+  },
+  {
+    "id": "validation_errors",
+    "en": "Validation Errors:",
+    "bn": "যাচাইকরণ ত্রুটি:"
+  },
+  {
+    "id": "project_roles_error_multiple_contacts",
+    "en": "Only one contact is allowed per project",
+    "bn": "প্রতি প্রকল্পে শুধুমাত্র একজনের সাথে যোগাযোগের অনুমতি আছে"
+  },
+  {
+    "id": "project_roles_error_contact_inheritance",
+    "en": "Contact must have all other roles (admin, publisher, member)",
+    "bn": "পরিচিতির অন্যান্য সকল ভূমিকা থাকতে হবে (অ্যাডমিন, প্রকাশক, সদস্য)।"
+  },
+  {
+    "id": "project_roles_error_admin_inheritance",
+    "en": "Admin must have publisher and member roles",
+    "bn": "অ্যাডমিনের অবশ্যই প্রকাশক এবং সদস্যের ভূমিকা থাকতে হবে"
+  },
+  {
+    "id": "project_roles_error_publisher_inheritance",
+    "en": "Publisher must have member role",
+    "bn": "প্রকাশকের সদস্য ভূমিকা থাকতে হবে"
+  },
+  {
+    "id": "project_roles_confirm_changes",
+    "en": "Confirm Role Changes",
+    "bn": "ভূমিকা পরিবর্তন নিশ্চিত করুন"
+  },
+  {
+    "id": "project_roles_changes_summary",
+    "en": "The following changes will be applied:",
+    "bn": "নিম্নলিখিত পরিবর্তনগুলি প্রয়োগ করা হবে:"
+  },
+  {
+    "id": "role_added",
+    "en": "added",
+    "bn": "যোগ করা হয়েছে"
+  },
+  {
+    "id": "role_removed",
+    "en": "removed",
+    "bn": "সরানো হয়েছে"
+  },
+  {
+    "id": "project_roles_saved_successfully",
+    "en": "Role changes have been saved successfully",
+    "bn": "ভূমিকা পরিবর্তনগুলি সফলভাবে সংরক্ষণ করা হয়েছে।"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "bn": "থিম"

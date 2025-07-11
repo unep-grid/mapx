@@ -46,7 +46,7 @@ import {
   ioSourceMetadata,
   ioSourceAttributesAlias,
 } from "#mapx/source";
-import { ioProjectNameValidate, ioProjectCreate } from "#mapx/project";
+import { ioProjectNameValidate, ioProjectCreate, ioProjectRolesGet, ioProjectRolesUpdate } from "#mapx/project";
 import { ioKeywordsSearch } from "#mapx/keywords";
 import {
   ioCreateAdapter,
@@ -132,6 +132,8 @@ io.use((socket, next) => {
   socket.on("/client/view/update/extent", use(ioSetViewSourceMetaBbox));
   socket.on("/client/project/validate/name", use(ioProjectNameValidate));
   socket.on("/client/project/create", use(ioProjectCreate));
+  socket.on("/client/project/roles/get", use(ioProjectRolesGet));
+  socket.on("/client/project/roles/update", use(ioProjectRolesUpdate));
   socket.on("/client/issue/report", use(ioIssueReport));
   socket.on(
     "/client/source/get/attributes/alias",
