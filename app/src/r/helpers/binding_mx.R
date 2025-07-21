@@ -13,6 +13,20 @@ mxProjectAdd <- function(
   )
 }
 
+#' Edit project role 
+#'
+#' @param session Shiny session object.
+#' @export
+mxProjectManageRoles <- function(
+  session = shiny:::getDefaultReactiveDomain()
+) {
+  session$sendCustomMessage(
+    type = "mxProjectManageRoles",
+    list(
+      update = runif(1)
+    )
+  )
+}
 
 
 

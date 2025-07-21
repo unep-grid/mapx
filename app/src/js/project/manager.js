@@ -9,7 +9,7 @@ import { getDictItem } from "./../language";
 import { RoleMatrix } from "./roles_matrix.js";
 
 const options = {
-  roles : [ "root", "project_creator"]
+  roles: ["root", "project_creator"],
 };
 
 export class ProjectManager {
@@ -60,7 +60,7 @@ export class ProjectManager {
         {
           name,
         },
-        60 * 1e3
+        60 * 1e3,
       );
 
       if (project.error) {
@@ -106,7 +106,7 @@ export class ProjectManager {
       btnCreate.classList.remove("disabled");
       pm.enable();
     }
-    elMessage.innerHTML="";
+    elMessage.innerHTML = "";
     elMessage.appendChild(elFrag);
     return result.valid;
   }
@@ -128,7 +128,7 @@ export class ProjectManager {
     const valid = await ws.emitAsync(
       "/client/project/validate/name",
       { name },
-      100
+      100,
     );
     return valid;
   }
@@ -140,8 +140,9 @@ export class ProjectManager {
   /**
    * Show role matrix modal for current project
    * Only available to admin users
+   * -requires one argument for shiny binding
    */
-  async showRoleMatrix() {
+  async showRoleMatrix(_) {
     const pm = this;
 
     try {
@@ -154,7 +155,6 @@ export class ProjectManager {
       // Create and show role matrix
       const roleMatrix = new RoleMatrix(pm);
       await roleMatrix.show();
-
     } catch (e) {
       console.error("Role matrix error:", e);
       // Could show error modal here if needed
@@ -167,7 +167,7 @@ export class ProjectManager {
 
   testAuth() {
     return new Promise((resolve, reject) => {
-      const isAuthorized = options.roles.find(r => settings.user.roles[r])
+      const isAuthorized = options.roles.find((r) => settings.user.roles[r]);
       if (!isAuthorized) {
         return reject("project_manage_not_allowed");
       }

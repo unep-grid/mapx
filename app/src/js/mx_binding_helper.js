@@ -113,6 +113,7 @@ function mapxBindings() {
   bind("mxGeomTools", geomTools);
   bind("mxUploader", uploadSource);
   bind("mxProjectAdd", project.create);
+  bind("mxProjectManageRoles", project.showRoleMatrix);
   /**
    * Mapx map and view related binding
    */

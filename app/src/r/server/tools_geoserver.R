@@ -1,6 +1,5 @@
 
 
-
 observeEvent(input$btnRebuildGeoserver, {
   userRole <- getUserRole()
   idUser <- .get(reactUser$data, c("id"))
