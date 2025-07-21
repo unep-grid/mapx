@@ -348,6 +348,7 @@ MapX resolvers available in app only
     * [.set_highlighter(opt)](#MapxResolversStatic+set_highlighter) ⇒ <code>number</code>
     * [.update_highlighter()](#MapxResolversStatic+update_highlighter) ⇒ <code>number</code>
     * [.reset_highlighter()](#MapxResolversStatic+reset_highlighter) ⇒ <code>number</code>
+    * [.set_country_highlight(countries)](#MapxResolversStatic+set_country_highlight) ⇒ <code>MapboxFilterExpression</code>
     * [.view_geojson_create(opt)](#MapxResolversStatic+view_geojson_create) ⇒ <code>Object</code>
     * [.view_geojson_set_style(opt)](#MapxResolversStatic+view_geojson_set_style) ⇒ <code>Boolean</code>
     * [.view_geojson_delete(opt)](#MapxResolversStatic+view_geojson_delete) ⇒ <code>Boolean</code>
@@ -1536,10 +1537,6 @@ Set the highlighter with the provided options.
 **Example**  
 ```js
 mapx.ask('set_highlighter',{
-  all: true,
-});
-
-mapx.ask('set_highlighter',{
   filters: [
     { id: "MX-TC0O1-34A9Y-RYDJG", filter: ["<", ["get", "year"], 2000] },
   ],
@@ -1578,6 +1575,18 @@ Clear all highlighted features and reset config
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
 **Returns**: <code>number</code> - Feature count  
+<a name="MapxResolversStatic+set_country_highlight"></a>
+
+#### mapxResolversApp.set\_country\_highlight(countries) ⇒ <code>MapboxFilterExpression</code>
+Highlights the specified countries on the map by graying out all others.
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+**Returns**: <code>MapboxFilterExpression</code> - Filter to highlight specified countries  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| countries | <code>Array.&lt;string&gt;</code> | ISO 3166-1 alpha-3 country codes to highlight |
+
 <a name="MapxResolversStatic+view_geojson_create"></a>
 
 #### mapxResolversApp.view\_geojson\_create(opt) ⇒ <code>Object</code>
@@ -2057,6 +2066,7 @@ MapX resolvers available in static and app
     * [.set_highlighter(opt)](#MapxResolversStatic+set_highlighter) ⇒ <code>number</code>
     * [.update_highlighter()](#MapxResolversStatic+update_highlighter) ⇒ <code>number</code>
     * [.reset_highlighter()](#MapxResolversStatic+reset_highlighter) ⇒ <code>number</code>
+    * [.set_country_highlight(countries)](#MapxResolversStatic+set_country_highlight) ⇒ <code>MapboxFilterExpression</code>
     * [.view_geojson_create(opt)](#MapxResolversStatic+view_geojson_create) ⇒ <code>Object</code>
     * [.view_geojson_set_style(opt)](#MapxResolversStatic+view_geojson_set_style) ⇒ <code>Boolean</code>
     * [.view_geojson_delete(opt)](#MapxResolversStatic+view_geojson_delete) ⇒ <code>Boolean</code>
@@ -2845,10 +2855,6 @@ Set the highlighter with the provided options.
 **Example**  
 ```js
 mapx.ask('set_highlighter',{
-  all: true,
-});
-
-mapx.ask('set_highlighter',{
   filters: [
     { id: "MX-TC0O1-34A9Y-RYDJG", filter: ["<", ["get", "year"], 2000] },
   ],
@@ -2887,6 +2893,18 @@ Clear all highlighted features and reset config
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>number</code> - Feature count  
+<a name="MapxResolversStatic+set_country_highlight"></a>
+
+#### mapxResolversStatic.set\_country\_highlight(countries) ⇒ <code>MapboxFilterExpression</code>
+Highlights the specified countries on the map by graying out all others.
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>MapboxFilterExpression</code> - Filter to highlight specified countries  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| countries | <code>Array.&lt;string&gt;</code> | ISO 3166-1 alpha-3 country codes to highlight |
+
 <a name="MapxResolversStatic+view_geojson_create"></a>
 
 #### mapxResolversStatic.view\_geojson\_create(opt) ⇒ <code>Object</code>
