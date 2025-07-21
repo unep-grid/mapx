@@ -1,3 +1,14 @@
+  - [1.13.18-beta.1](https://github.com/unep-grid/mapx/tree/1.13.18-beta.1) 
+
+    - docs(sdk): updated
+    - fix(highlighter): reset method should trigger a render
+    - fix(highlighter): geojson highlight layer should not have source-layer key set
+    - fix(monaco_editor): monaco json editor init default value
+    - fix(download_source): revert  #934
+    - feat(role_matrix): added binding and removed legacy handlers
+    - feat(role_matrix): full implementation, need refinement #1067
+
+
   - [1.13.18-beta.0](https://github.com/unep-grid/mapx/tree/1.13.18-beta.0) 
 
     - feat(docs): implemented #1046
