@@ -3,7 +3,6 @@ import {
   isArray,
   isEmpty,
   isFunction,
-  isJson,
   isNotEmpty,
   isObject,
 } from "./../is_test_mapx";

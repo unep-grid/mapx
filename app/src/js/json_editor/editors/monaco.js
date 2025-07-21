@@ -5,9 +5,7 @@ import { textToDom } from "./../../mx_helper_misc.js";
 import { el, elSpanTranslate, elButtonFa } from "./../../el_mapx/index.js";
 import { theme } from "./../../mx.js";
 import { jed } from "./../index.js";
-import { DataDiffModal } from "../../data_diff_recover/index.js";
-import { isEmpty } from "../../is_test/index.js";
-import { isObject } from "highcharts";
+import { isEmpty, isObject } from "../../is_test/index.js";
 
 // Helper functions
 function safeJsonParse(value, fallback = '""') {
@@ -215,8 +213,11 @@ JSONEditor.defaults.editors.monaco = class MonacoEditor extends (
 
     try {
       // Create Monaco editor instance
-      const def = editor.schema.default;
-      const value = editor.getValue() || def;
+      let value = editor.getValue();
+      if (isEmpty(value)) {
+        value = editor.schema.default;
+        editor.value = editor.sanitize(value);
+      }
 
       let formattedValue = value;
       if (mode === "json") {
@@ -267,6 +268,7 @@ JSONEditor.defaults.editors.monaco = class MonacoEditor extends (
       // Setup additional features
       setupToolbar(editor);
       setupHelpPanel(editor);
+      editor.onChange(true);
     } catch (error) {
       console.error("Failed to initialize Monaco editor:", error);
       // Fallback to showing the original input
