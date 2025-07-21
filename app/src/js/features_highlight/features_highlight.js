@@ -49,11 +49,11 @@ class Highlighter {
     if (hl.destroyed) {
       return;
     }
-    for(const k of Object.keys(def)){
+    for (const k of Object.keys(def)) {
       const updated = opt[k];
-       if(isNotEmpty(updated)) {
-          hl.opt[k] = updated
-       }
+      if (isNotEmpty(updated)) {
+        hl.opt[k] = updated;
+      }
     }
 
     hl.update();
@@ -183,19 +183,21 @@ class Highlighter {
       return;
     }
     hl._state = clone(defState);
-    hl._clear();
+    return hl._clear();
   }
 
   /**
    * Update
+   * @returns {Integer} feature count
    */
   update() {
     const hl = this;
     if (hl.destroyed || hl.has_no_filters) {
-      return;
+      return 0;
     }
     hl._update_layers();
     hl._render();
+    return hl._feature_count;
   }
 
   _clear_layers_map() {
@@ -216,6 +218,7 @@ class Highlighter {
     hl._clear_layers_map();
     hl._layers = {};
     hl._state = clone(defState);
+    return hl.update();
   }
 
   /**
@@ -261,12 +264,12 @@ class Highlighter {
 
   /**
    * Recreate items configuration
-   * return {void}
+   * return {integer} feature  count
    */
   _update_layers() {
     const hl = this;
     const state = patchObject(defState, hl._state);
-
+    hl._feature_count = 0;
     const hl_layers = {};
     for (const item of state.filters) {
       const { id, filter } = item;
@@ -281,7 +284,7 @@ class Highlighter {
           layers: [layer.id],
           filter: filter,
         });
-
+        hl._feature_count += features.length;
         /**
          * Add gids for each visited layer
          * but only create one highlight layer per source
@@ -313,12 +316,18 @@ class Highlighter {
     const hl = this;
     const idLayer = `@hl-${layer.source}`;
     const layers = [];
+    const sourceLayer = layer["source-layer"];
+
     const baseLayer = {
       id: idLayer,
       source: layer.source,
-      "source-layer": layer["source-layer"],
       filter: filter,
     };
+
+    if (isNotEmpty(sourceLayer)) {
+      baseLayer["source-layer"] = sourceLayer;
+    }
+
     const { type } = layer;
 
     switch (type) {
