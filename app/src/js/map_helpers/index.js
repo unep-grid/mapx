@@ -4111,6 +4111,7 @@ export function setFilter(o) {
  * @param {string} o.id Map id
  * @param {string} o.idLayer layer id
  * @param {array} o.countries Array of countries code
+ * @returns {Array}
  */
 export function setHighlightedCountries(o) {
   o = Object.assign(
@@ -4136,7 +4137,8 @@ export function setHighlightedCountries(o) {
     filter.push(["!", ["in", ["get", "iso3code"], ["literal", countries]]]);
   }
 
-  return m.setFilter(o.idLayer, filter);
+  m.setFilter(o.idLayer, filter);
+  return m.getFilter(o.idLayer, filter);
 }
 
 /**

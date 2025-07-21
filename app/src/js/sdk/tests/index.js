@@ -93,6 +93,25 @@ mapx.once("ready", async () => {
     ],
   });
 
+  t.check("Countries highlight", {
+    tests: [
+      {
+        name: "creates expected filters",
+        test: async () => {
+          const filter = await mapx.ask("set_country_highlight", [
+            "CHE",
+            "FRA",
+          ]);
+          return t.valid.isEqual(filter, [
+            "any",
+            ["==", ["get", "iso3code"], ""],
+            ["!", ["in", ["get", "iso3code"], ["literal", ["CHE", "FRA"]]]],
+          ]);
+        },
+      },
+    ],
+  });
+
   t.check("Geocoder modal", {
     tests: [
       {
@@ -106,7 +125,7 @@ mapx.once("ready", async () => {
         name: "geocoder is removed",
         test: async () => {
           await mapx.ask("close_modal_geocoder");
-          return ! await mapx.ask("is_geocoder_visble");
+          return !(await mapx.ask("is_geocoder_visble"));
         },
       },
     ],
@@ -296,7 +315,6 @@ mapx.once("ready", async () => {
     ],
   });
 
-  
   t.check("Set theme", {
     init: async () => {
       const res = {};
@@ -315,16 +333,19 @@ mapx.once("ready", async () => {
       {
         name: "all themes",
         test: async (res) => {
+          const themeOrig = res.themes.find((theme) => theme.id == res.idTheme);
           // all themes
           for (const id of res.idThemes) {
+            const theme = res.themes.find((theme) => theme.id == id);
             await mapx.ask("add_theme", {
-              theme: res.themes[id],
+              theme: theme,
             });
-            await waitAsync(200);
+            // note: will be debounced. Maybe not a  good test
+            await waitAsync(100);
           }
           // orig theme
           await mapx.ask("add_theme", {
-            theme: res.themes[res.idTheme],
+            theme: themeOrig,
           });
           return true;
         },
@@ -1521,15 +1542,6 @@ mapx.once("ready", async () => {
         },
       },
       {
-        name: "filter all",
-        test: async () => {
-          const count = await mapx.ask("set_highlighter", {
-            all: true,
-          });
-          return count === 3;
-        },
-      },
-      {
         name: "filter one",
         test: async (res) => {
           const count = await mapx.ask("set_highlighter", {
@@ -1573,7 +1585,6 @@ mapx.once("ready", async () => {
       },
     ],
   });
-
 
   t.check("Chaos views display 2", {
     tests: [

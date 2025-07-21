@@ -26,6 +26,7 @@ import {
   validateBounds,
   viewsLayersOrderUpdate,
   viewAddAuto,
+  setHighlightedCountries,
 } from "../../../map_helpers/index.js";
 
 import {
@@ -934,9 +935,6 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * @param {Array} opt.filters[].filter - MapboxGl filter expression 
    * @returns {number} Feature count
    * @example
-   * mapx.ask('set_highlighter',{
-   *   all: true,
-   * });
    * 
    * mapx.ask('set_highlighter',{
    *   filters: [
@@ -964,8 +962,8 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * });
 
    */
-  set_highlighter(opt) {
-    return highlighter.set(opt);
+  set_highlighter(config) {
+    return highlighter.setState(config);
   }
 
   /**
@@ -982,6 +980,16 @@ export class MapxResolversStatic extends MapxResolversPanels {
    */
   reset_highlighter() {
     return highlighter.reset();
+  }
+
+  /**
+   * Highlights the specified countries on the map by graying out all others.
+   *
+   * @param {Array<string>} countries - ISO 3166-1 alpha-3 country codes to highlight
+   * @returns {MapboxFilterExpression} Filter to highlight specified countries
+   */
+  set_country_highlight(countries = []) {
+    return setHighlightedCountries({ countries });
   }
 
   /**

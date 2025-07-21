@@ -31,9 +31,9 @@ class Highlighter {
      * local store
      */
     hl._layers = {};
-    hl._state = clone(defState);
+    hl._state = hl._def_state();
     hl._destroyed = false;
-    hl.opt = clone(def);
+    hl.opt = hl._def_opt();
 
     /**
      * Set options
@@ -55,8 +55,7 @@ class Highlighter {
         hl.opt[k] = updated;
       }
     }
-
-    hl.update();
+    return hl.update();
   }
 
   /**
@@ -117,6 +116,7 @@ class Highlighter {
    */
   setState(state) {
     const hl = this;
+    const def = hl._def_state();
     if (hl.destroyed) {
       return;
     }
@@ -124,7 +124,7 @@ class Highlighter {
     if (isEmpty(state) || isEmpty(state.filters)) {
       return;
     }
-    hl._state = patchObject(defState, hl._state || {});
+    hl._state = patchObject(def, hl._state || {});
 
     for (const item of state.filters) {
       const { id, filter } = item;
@@ -182,8 +182,8 @@ class Highlighter {
     if (hl.destroyed || hl.has_no_filters) {
       return;
     }
-    hl._state = clone(defState);
-    return hl._clear();
+    hl._clear();
+    return hl._feature_count;
   }
 
   /**
@@ -192,7 +192,7 @@ class Highlighter {
    */
   update() {
     const hl = this;
-    if (hl.destroyed || hl.has_no_filters) {
+    if (hl.destroyed) {
       return 0;
     }
     hl._update_layers();
@@ -217,8 +217,8 @@ class Highlighter {
     const hl = this;
     hl._clear_layers_map();
     hl._layers = {};
-    hl._state = clone(defState);
-    return hl.update();
+    hl._state = hl._def_state();
+    return hl.update(true);
   }
 
   /**
@@ -262,13 +262,21 @@ class Highlighter {
       .layers.filter((layer) => layer.id.startsWith(prefix));
   }
 
+  _def_state() {
+    return clone(defState);
+  }
+  _def_opt() {
+    return clone(def);
+  }
+
   /**
    * Recreate items configuration
    * return {integer} feature  count
    */
   _update_layers() {
     const hl = this;
-    const state = patchObject(defState, hl._state);
+    const def = hl._def_state();
+    const state = patchObject(def, hl._state);
     hl._feature_count = 0;
     const hl_layers = {};
     for (const item of state.filters) {
