@@ -76,7 +76,6 @@ async function extractFromPostgres(res, config) {
   const idProgressConversion = randomString("progress");
   const idProgressCompression = randomString("progress");
 
-  let keepGid = true;
   let isShapefile = false;
   let {
     email,
@@ -214,10 +213,6 @@ async function extractFromPostgres(res, config) {
 
   if (isShapefile) {
     args.push(...["-lco", "ENCODING=UTF-8"]);
-  }
-
-  if (keepGid) {
-    args.push(...["-lco", "FID=gid"]);
   }
 
   /**
