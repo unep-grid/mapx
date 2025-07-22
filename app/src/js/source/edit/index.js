@@ -753,7 +753,7 @@ export class EditTableSessionClient extends EditTableBase {
     column._pg_type = pg_type;
     column._pos = 0;
     column.data = name;
-    column.type = typeConvert(pg_type, "mx_handsontable");
+    column.type = typeConvert(pg_type, "mx_table_editor");
     et._column_set_readonly(column);
     return column;
   }

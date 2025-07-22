@@ -22,7 +22,7 @@ const pgTypes = Object.keys(pgTypesData);
 /**
  * Convert cell type
  * @param {String} pg_type pg type
- * @param {String} format 'json','handsontable','postgres'. Default: postgres
+ * @param {String} format 'json','table_editor','mx_table_editor','postgres'. Default: postgres
  * @return {String} type
  */
 export function typeConvert(pg_type, format) {
@@ -31,8 +31,8 @@ export function typeConvert(pg_type, format) {
   }
   switch (format) {
     case "json":
-    case "handsontable":
-    case "mx_handsontable":
+    case "table_editor":
+    case "mx_table_editor":
       return pgTypesData[pg_type][format];
     case "postgres":
       return pg_type;

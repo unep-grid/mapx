@@ -205,7 +205,7 @@ async function showSourceTableAttributeModal(opt) {
         }
       }
       return {
-        type: typeConvert(out.type || "text", "handsontable"),
+        type: typeConvert(out.type || "text", "table_editor"),
         data: name,
         readOnly: true,
         _label: labels[i],
