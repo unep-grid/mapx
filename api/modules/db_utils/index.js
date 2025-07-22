@@ -14,7 +14,7 @@ import {
 } from "@fxi/mx_valid";
 import { isLayerValid, areLayersValid } from "./geom_validation.js";
 import { insertRow } from "./insert.js";
-import { getSourceSummary, hasSourceDependencies } from "#mapx/source";
+import { hasSourceDependencies } from "#mapx/source";
 export * from "./metadata.js";
 
 /**
@@ -1110,15 +1110,29 @@ async function removeTableColumn(idTable, column, pgClient = pgWrite) {
   await pgClient.query(qSql);
 }
 
-async function addTableColumn(idTable, column, type, pgClient = pgWrite) {
+async function addTableColumn(
+  idTable,
+  column,
+  type,
+  identity = false,
+  pgClient = pgWrite
+) {
+  let columnType;
+  
+  if (identity) {
+    columnType = `INTEGER GENERATED ALWAYS AS IDENTITY`;
+  } else {
+    columnType = type;
+  }
+
   const qSql = parseTemplate(templates.updateTableAddColumn, {
     id_table: idTable,
     column_name: column,
-    column_type: type,
+    column_type: columnType,
   });
+  
   await pgClient.query(qSql);
 }
-
 async function updateTableCellByGid(
   id_table,
   gid,

@@ -1705,6 +1705,11 @@
     "fr": "Ajouter une colonne"
   },
   {
+    "id": "btn_edit_add_identity_column",
+    "en": "Add identity column",
+    "fr": "Ajouter une colonne d'identité"
+  },
+  {
     "id": "btn_edit_remove_column",
     "en": "Remove column",
     "fr": "Supprimer la colonne"

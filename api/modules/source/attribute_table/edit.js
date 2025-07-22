@@ -715,7 +715,7 @@ class EditTableSession {
             break;
           case "add_column":
             {
-              const { column_type } = update;
+              const { column_type, identity } = update;
               const colExists = await columnExists(
                 column_name,
                 id_table,
@@ -731,6 +731,7 @@ class EditTableSession {
                   id_table,
                   column_name,
                   column_type,
+                  identity,
                   client
                 );
 

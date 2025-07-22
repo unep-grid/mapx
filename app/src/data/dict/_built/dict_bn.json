@@ -1705,6 +1705,11 @@
     "bn": "কলাম যোগ করুন"
   },
   {
+    "id": "btn_edit_add_identity_column",
+    "en": "Add identity column",
+    "bn": "পরিচয় কলাম যোগ করুন"
+  },
+  {
     "id": "btn_edit_remove_column",
     "en": "Remove column",
     "bn": "কলাম সরান"

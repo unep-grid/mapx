@@ -1364,6 +1364,10 @@
     "en": "Add column"
   },
   {
+    "id": "btn_edit_add_identity_column",
+    "en": "Add identity column"
+  },
+  {
     "id": "btn_edit_remove_column",
     "en": "Remove column"
   },

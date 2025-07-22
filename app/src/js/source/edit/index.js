@@ -411,6 +411,13 @@ export class EditTableSessionClient extends EditTableBase {
       icon: "plus-circle",
       action: et._l(et.dialogAddColumn),
     });
+    et._el_button_add_column_identity = elButtonFa(
+      "btn_edit_add_identity_column",
+      {
+        icon: "plus-circle",
+        action: et._l(et.dialogAddColumnIdentity),
+      },
+    );
     et._el_button_remove_column = elButtonFa("btn_edit_remove_column", {
       icon: "minus-circle",
       action: et._l(et.dialogRemoveColumn),
@@ -464,6 +471,7 @@ export class EditTableSessionClient extends EditTableBase {
       position: "top",
       content: [
         et._el_button_add_column,
+        et._el_button_add_column_identity,
         et._el_button_remove_column,
         et._el_button_rename_column,
         et._el_button_duplicate_column,
@@ -2591,9 +2599,17 @@ export class EditTableSessionClient extends EditTableBase {
   }
 
   /*
+   * Interactive identity column add
+   */
+  async dialogAddColumnIdentity() {
+    const et = this;
+    return et.dialogAddColumn(true);
+  }
+
+  /*
    * Interactive column add
    */
-  async dialogAddColumn() {
+  async dialogAddColumn(identity = false) {
     const et = this;
     const source = et._config.id_source_dialog;
 
@@ -2614,37 +2630,40 @@ export class EditTableSessionClient extends EditTableBase {
      * Last sanitation
      */
     const columnNameSafe = makeSafeName(columnName);
+    let columnType = "integer";
 
-    /**
-     * Ask the user for a column type
-     */
-    const types = getPgTypes();
-    const typeOptions = [];
-    for (const type of types) {
-      const elOption = el("option", { value: type }, type);
-      typeOptions.push(elOption);
-    }
+    if (!identity) {
+      /**
+       * Ask the user for a column type
+       */
+      const types = getPgTypes();
+      const typeOptions = [];
+      for (const type of types) {
+        const elOption = el("option", { value: type }, type);
+        typeOptions.push(elOption);
+      }
 
-    const columnType = await modalPrompt({
-      title: tt("edit_table_modal_add_column_type_title"),
-      label: tt("edit_table_modal_add_column_type_label"),
-      confirm: tt("btn_next"),
-      inputTag: "select",
-      inputOptions: {
-        type: "select",
-        value: types[0],
-        placeholder: "Column type",
-      },
-      inputChildren: typeOptions,
-    });
+      columnType = await modalPrompt({
+        title: tt("edit_table_modal_add_column_type_title"),
+        label: tt("edit_table_modal_add_column_type_label"),
+        confirm: tt("btn_next"),
+        inputTag: "select",
+        inputOptions: {
+          type: "select",
+          value: types[0],
+          placeholder: "Column type",
+        },
+        inputChildren: typeOptions,
+      });
 
-    if (columnType === false) {
-      return;
-    }
-    const isValidColumnType = isPgType(columnType);
+      if (columnType === false) {
+        return;
+      }
+      const isValidColumnType = isPgType(columnType);
 
-    if (!isValidColumnType) {
-      throw new Error(`Invalid column type: ${columnType}`);
+      if (!isValidColumnType) {
+        throw new Error(`Invalid column type: ${columnType}`);
+      }
     }
 
     /**
@@ -2669,6 +2688,7 @@ export class EditTableSessionClient extends EditTableBase {
       id_table: et._id_table,
       column_name: columnNameSafe,
       column_type: columnType,
+      identity: identity,
     };
 
     return et.handlerUpdateColumnAdd(update, source);

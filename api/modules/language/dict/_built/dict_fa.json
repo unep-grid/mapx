@@ -1705,6 +1705,11 @@
     "fa": "اضافه کردن ستون"
   },
   {
+    "id": "btn_edit_add_identity_column",
+    "en": "Add identity column",
+    "fa": "اضافه کردن ستون هویت"
+  },
+  {
     "id": "btn_edit_remove_column",
     "en": "Remove column",
     "fa": "حذف ستون"
