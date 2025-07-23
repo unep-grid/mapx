@@ -605,7 +605,8 @@ export class EditTableSessionClient extends EditTableBase {
        * Invalid name = not editable. See :
        * https://github.com/handsontable/handsontable/issues/5439
        */
-      const column = et._column_create(update.column_name, update.column_type);
+      const { column_name, column_type, is_identity } = update;
+      const column = et._column_create(column_name, column_type, is_identity);
       column._pos = singleCol
         ? nColumns
         : column._invalid
@@ -628,12 +629,10 @@ export class EditTableSessionClient extends EditTableBase {
     const isValid = isValidName && isPgType(update.column_type);
 
     if (!isValid) {
-      console.warn(
-        `Invalid column. Name: ${update.column_name} Type: ${update.column_type}`,
-      );
       return false;
     }
     et._add_columns([update]);
+    et.updateTableColumns();
     return true;
   }
 
@@ -751,7 +750,7 @@ export class EditTableSessionClient extends EditTableBase {
     return [...optionColumnNames, ...optionColumnNamesDisabled];
   }
 
-  _column_create(name, pg_type) {
+  _column_create(name, pg_type, is_identity) {
     const et = this;
     const column = {};
     const isOkType = isPgType(pg_type);
@@ -761,7 +760,8 @@ export class EditTableSessionClient extends EditTableBase {
     column._pg_type = pg_type;
     column._pos = 0;
     column.data = name;
-    column.type = typeConvert(pg_type, "mx_table_editor");
+    column.type = typeConvert(pg_type, "mx");
+    column._is_identity = is_identity;
     et._column_set_readonly(column);
     return column;
   }
@@ -773,7 +773,8 @@ export class EditTableSessionClient extends EditTableBase {
     }
     const name = column.data;
     column._invalid = !isSafeName(name);
-    column.readOnly = et.isReadOnly(name) || column._invalid;
+    column.readOnly =
+      et.isReadOnly(name) || column._invalid || column._is_identity;
     return column;
   }
 
@@ -994,7 +995,7 @@ export class EditTableSessionClient extends EditTableBase {
   formatColumns(pos, element) {
     const et = this;
     if (pos >= 0) {
-      const type = et.getColumnTypeById(pos);
+      const type = et.getColumnTypeByIndex(pos);
       element.classList.add(`edit-table--header`);
       element.classList.add(`edit-table--header-${type}`);
       element.title = type;
@@ -1203,7 +1204,7 @@ export class EditTableSessionClient extends EditTableBase {
   async isValidName(name, checks) {
     const et = this;
     checks = isEmpty(checks)
-      ? ["is_safe", "is_not_used", "is_not_reserved"]
+      ? ["is_safe", "is_not_used", "is_not_reserved", "is_not_local"]
       : checks;
     const valid = await et.validateName(name);
     const ok = checks.reduce((a, c) => a && valid[c], true);
@@ -1216,15 +1217,18 @@ export class EditTableSessionClient extends EditTableBase {
    */
   async validateName(name) {
     const et = this;
+    const isNotLocal = !et.columnExists(name);
     const isSafe = isSafeName(name);
     const isUsed = await et.isColumnUsed(name);
     const isNotUsed = !isUsed;
     const isNotReserved = !et.isColumnReserved(name);
-    return {
+    const res = {
+      is_not_local: isNotLocal,
       is_safe: isSafe,
       is_not_used: isNotUsed,
       is_not_reserved: isNotReserved,
     };
+    return res;
   }
 
   /**
@@ -1490,7 +1494,7 @@ export class EditTableSessionClient extends EditTableBase {
     return et._handsontable && et._ht instanceof et._handsontable;
   }
 
-  getSelectedRowsId() {
+  getSelectedRowsIndex() {
     const ht = this._ht;
     const selected = ht.getSelected();
 
@@ -1515,7 +1519,7 @@ export class EditTableSessionClient extends EditTableBase {
 
   async dialogRemoveRows() {
     const et = this;
-    const ids = et.getSelectedRowsId();
+    const ids = et.getSelectedRowsIndex();
     const source = et._config.id_source_dialog;
 
     if (isEmpty(ids)) {
@@ -1582,7 +1586,6 @@ export class EditTableSessionClient extends EditTableBase {
       clearTimeout(grid._id_ro);
       grid._id_ro = setTimeout(() => {
         grid.refreshItems().layout();
-        console.log("layout");
       }, 200);
     });
 
@@ -1784,7 +1787,6 @@ export class EditTableSessionClient extends EditTableBase {
       if (message.id_table !== et._id_table) {
         return;
       }
-      et._log_dispatch("received", message);
       et.setProgressMessage(message, 1, 50);
       et.addDispached(message);
 
@@ -1805,7 +1807,6 @@ export class EditTableSessionClient extends EditTableBase {
         et.setProgressMessage(message, 51, 100);
         // wait for progress animation
         await waitFrameAsync();
-        et._log_dispatch("process", message);
 
         if (isNotEmpty(message.updates)) {
           for (const update of message.updates) {
@@ -1957,7 +1958,7 @@ export class EditTableSessionClient extends EditTableBase {
   async handlerUpdateCellsCollect(update) {
     const et = this;
     const idRow = update.row_id;
-    const idCol = et.getColumnId(update.column_name);
+    const idCol = et.getColumnIndex(update.column_name);
     et.addBatchCell([idRow, idCol, update.value_new]);
   }
 
@@ -2450,12 +2451,26 @@ export class EditTableSessionClient extends EditTableBase {
   async handlerUpdateColumnAdd(update, source) {
     const et = this;
     try {
-      const done = await et._add_column_strict(update);
+      await et._add_column_strict(update);
 
-      if (!done) {
-        return;
+      if (isNotEmpty(update._column_config)) {
+        const { type, rows } = update._column_config;
+        const cells = [];
+        const idCol = et.getColumnIndex(update.column_name);
+        const gidRows = et._ht.getDataAtProp(et.column_index);
+
+        for (const row of rows) {
+          const idRow = gidRows.indexOf(row.gid);
+          if (idRow !== -1) {
+            cells.push([idRow, idCol, row.value]);
+          }
+        }
+
+        et.setCells({
+          cells: cells,
+          source: source,
+        });
       }
-      et.updateTableColumns();
 
       if (et.isFromDispatch(source)) {
         /**
@@ -2688,7 +2703,7 @@ export class EditTableSessionClient extends EditTableBase {
       id_table: et._id_table,
       column_name: columnNameSafe,
       column_type: columnType,
-      identity: identity,
+      is_identity: identity,
     };
 
     return et.handlerUpdateColumnAdd(update, source);
@@ -2708,22 +2723,22 @@ export class EditTableSessionClient extends EditTableBase {
   }
 
   /**
-   * Get column json type using column position
-   * @param {Integer} column id / position
+   * Get column json type using column index
+   * @param {Integer} column index
    * @return {String} type
    */
-  getColumnTypeById(columnId) {
+  getColumnTypeByIndex(index) {
     const et = this;
-    const type = et._columns[columnId]?._pg_type;
+    const type = et._columns[index]?._pg_type;
     return typeConvert(type, "json");
   }
 
   /**
-   * Get column id
+   * Get column index
    * @param {String} columnName Column name
    * @return {Integer} column id
    */
-  getColumnId(columnName) {
+  getColumnIndex(columnName) {
     const et = this;
     for (let i = 0; i < et._columns.length; i++) {
       const col = et._columns[i];
@@ -3395,7 +3410,7 @@ export class EditTableSessionClient extends EditTableBase {
       /**
        * Format cell as [2307, '_mx_valid', true]
        */
-      const idCol = et.getColumnId(et._config.id_column_valid);
+      const idCol = et.getColumnIndex(et._config.id_column_valid);
 
       const cells = validValues.map((v) => {
         const idRow = gidRows.indexOf(v.gid);
@@ -3647,7 +3662,7 @@ export class EditTableSessionClient extends EditTableBase {
        *     -> cells valid
        */
       for (const update of sanitized) {
-        const id_col = et.getColumnId(update.column_name);
+        const id_col = et.getColumnIndex(update.column_name);
 
         const invalid =
           isEmpty(update.value_sanitized) && isNotEmpty(update.value_new);
@@ -3778,18 +3793,6 @@ export class EditTableSessionClient extends EditTableBase {
         className: c.className,
         allowInvalid: true,
       });
-    }
-  }
-
-  /**
-   * Debug dispatch helper
-   */
-  _log_dispatch(label, message) {
-    const et = this;
-    if (et._config.debug) {
-      console.log(
-        `dispatch, ${label}: ${message?.part}/${message?.nParts} updates:${message?.updates?.length} type : ${message?.updates[0]?.type} `,
-      );
     }
   }
 }

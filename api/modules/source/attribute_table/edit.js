@@ -18,6 +18,7 @@ import {
   // update metadata
   renameColumnMetadata,
   addColumnMetadata,
+  getColumnCells,
   duplicateColumnMetadata,
   removeColumnMetadata,
   updateTableCellByGid,
@@ -308,7 +309,11 @@ class EditTableSession {
 
   dispatch(message) {
     const et = this;
-    et.emitRoom(events.server_dispatch, message);
+    if (message._include_sender) {
+      et.emitAll(events.server_dispatch, message);
+    } else {
+      et.emitRoom(events.server_dispatch, message);
+    }
   }
 
   onExit(message, callback) {
@@ -458,7 +463,7 @@ class EditTableSession {
       et.error("Not allowed");
       return;
     }
-    await et.writePostgres(updates);
+    await et.writePostgres(message);
     et.perfEnd("write");
   }
 
@@ -642,8 +647,9 @@ class EditTableSession {
     return true;
   }
 
-  async writePostgres(updates) {
+  async writePostgres(message) {
     const et = this;
+    const { updates } = message;
     if (isEmpty(updates)) {
       return;
     }
@@ -715,7 +721,7 @@ class EditTableSession {
             break;
           case "add_column":
             {
-              const { column_type, identity } = update;
+              const { column_type, is_identity } = update;
               const colExists = await columnExists(
                 column_name,
                 id_table,
@@ -731,13 +737,21 @@ class EditTableSession {
                   id_table,
                   column_name,
                   column_type,
-                  identity,
+                  is_identity,
                   client
                 );
 
                 await addColumnMetadata(id_table, column_name, client);
 
                 tables_update.add(id_table);
+
+                if (is_identity) {
+                  update._column_config = {
+                    type: await getColumnsTypesSimple(id_table, column_name),
+                    rows: await getColumnCells(id_table, column_name, client),
+                  };
+                  message._include_sender = true;
+                }
               }
             }
             break;
@@ -836,7 +850,7 @@ class EditTableSession {
             {
               const { id_rows } = update;
               await deleteRowByGid(id_table, id_rows);
-              await updateLayerExtentMeta(id_table); 
+              await updateLayerExtentMeta(id_table);
               tables_update.add(id_table);
             }
             break;

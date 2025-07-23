@@ -1110,6 +1110,19 @@ async function removeTableColumn(idTable, column, pgClient = pgWrite) {
   await pgClient.query(qSql);
 }
 
+async function getColumnCells(id_table, column_name, client) {
+  const { rows } = await client.query(
+    `SELECT gid, "${column_name}" FROM ${id_table} ORDER BY gid`
+  );
+
+  const cells = rows.map((row) => ({
+    gid: row.gid,
+    column_name: column_name,
+    value: row[column_name],
+  }));
+  return cells;
+}
+
 async function addTableColumn(
   idTable,
   column,
@@ -1118,7 +1131,7 @@ async function addTableColumn(
   pgClient = pgWrite
 ) {
   let columnType;
-  
+
   if (identity) {
     columnType = `INTEGER GENERATED ALWAYS AS IDENTITY`;
   } else {
@@ -1130,7 +1143,7 @@ async function addTableColumn(
     column_name: column,
     column_type: columnType,
   });
-  
+
   await pgClient.query(qSql);
 }
 async function updateTableCellByGid(
@@ -1251,6 +1264,7 @@ export {
   duplicateTableColumn,
   removeTableColumn,
   addTableColumn,
+  getColumnCells,
   updateTableCellByGid,
   getRows,
 };
