@@ -1,3 +1,10 @@
+  - [1.13.18-beta.2](https://github.com/unep-grid/mapx/tree/1.13.18-beta.2) 
+
+    - feat(1071): completed crud + concurrent op support
+    - feat(1071): added identity column support, missing dispatch
+    - refactor(table_editor): rename typeConvert types to generic names
+
+
   - [1.13.18-beta.1](https://github.com/unep-grid/mapx/tree/1.13.18-beta.1) 
 
     - docs(sdk): updated
