@@ -6,7 +6,7 @@ This guide explains how to access various OGC (Open Geospatial Consortium) servi
 
 ### WMS (Web Map Service)
 
-WMS provides map images.
+WMS provides map <a href={{host}}/{{project}}/wms?STYLES=&LAYERS={{layer}}&FORMAT=image/png&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&CRS=EPSG:4326&BBOX={{bbox}}&WIDTH={{widthTile}}&HEIGHT={{heightTile}} target='_blank'>images</a>
 
 
 ```
@@ -19,9 +19,16 @@ VERSION=1.3.0&
 REQUEST=GetMap&
 CRS=EPSG:4326&
 BBOX={{bbox}}&
-WIDTH=512&HEIGHT=512
+WIDTH={{widthTile}}&HEIGHT={{heightTile}}
 
 ```
+Preview
+<div style="display:flex;justify-content:center; padding:10px">
+<img src="{{host}}/{{project}}/wms?STYLES=&LAYERS={{layer}}&FORMAT=image/png&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&CRS=EPSG:4326&BBOX={{bbox}}&WIDTH={{widthTile}}&HEIGHT={{heightTile}}" 
+  alt="WMS Preview of {{layer}}" 
+  style="max-width: 50%; border: 1px solid var(--mx_ui_border); border-radius: 5px;" 
+  loading="lazy" />
+</div>
 
 ### WFS (Web Feature Service)
 
