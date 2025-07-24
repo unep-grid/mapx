@@ -59,9 +59,7 @@ import {
   cssTransformFun,
   debounce,
   isShinyReady,
-  patchObject,
   quickHash,
-  //debouncePromise,
 } from "./../mx_helper_misc.js";
 import {
   modal,
@@ -1748,6 +1746,7 @@ export async function handleClickEvent(event, idMap) {
   });
 
   const attributes_flat = { ...attributes.vector, ...attributes.raster };
+
 
   if (isEmpty(attributes_flat)) {
     return;
