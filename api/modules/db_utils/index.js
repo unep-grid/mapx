@@ -1133,7 +1133,7 @@ async function addTableColumn(
   let columnType;
 
   if (identity) {
-    columnType = `INTEGER GENERATED ALWAYS AS IDENTITY`;
+    columnType = `INTEGER GENERATED ALWAYS AS IDENTITY UNIQUE`;
   } else {
     columnType = type;
   }
