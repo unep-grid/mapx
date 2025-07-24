@@ -1,29 +1,29 @@
-import {isUrl} from './../is_test/index.js';
-import {modal} from './../mx_helper_modal.js';
-import {moduleLoad} from './../modules_loader_async';
-import {setBusy} from './../mx_helper_misc.js';
-import {el, elSpanTranslate} from './../el_mapx/index.js';
-import {wmsGetLayers, urlTile, urlLegend} from './index.js';
-import {errorFormater} from '../error_handler/index.js';
+import { isUrl } from "./../is_test/index.js";
+import { modal } from "./../mx_helper_modal.js";
+import { moduleLoad } from "./../modules_loader_async";
+import { setBusy } from "./../mx_helper_misc.js";
+import { el, elSpanTranslate } from "./../el_mapx/index.js";
+import { wmsGetLayers, urlTile, urlLegend } from "./index.js";
+import { errorFormater } from "../error_handler/index.js";
 
 export async function wmsBuildQueryUi(opt) {
   opt = Object.assign(
     {},
-    {useMirror: false, useCache: false, timestamp: null},
-    opt
+    { useMirror: false, useCache: false, timestamp: null },
+    opt,
   );
 
-  await moduleLoad('selectize');
+  const TomSelect = await moduleLoad("tom-select");
   const elInputTiles = document.querySelector(opt.selectorTileInput);
   const elInputLegend = document.querySelector(opt.selectorLegendInput);
   const elInputAddMirror = document.querySelector(opt.selectorUseMirror);
   const elInputTileSize = document.querySelector(opt.selectorTileSizeInput);
 
   const elParent =
-    document.querySelector(opt.selectorParent) || elInputTile.parentElement;
+    document.querySelector(opt.selectorParent) || elInputTiles.parentElement;
   const services = opt.services;
 
-  var selectLayer, selectServices;
+  let selectLayer, selectServices;
 
   if (!elInputTiles || !elInputLegend) {
     return;
@@ -33,73 +33,73 @@ export async function wmsBuildQueryUi(opt) {
    * Build
    */
 
-  const elSelectServices = el('select', {
-    class: 'form-control'
+  const elSelectServices = el("select", {
+    class: "form-control",
   });
-  const elSelectLayer = el('select', {
-    class: 'form-control'
+  const elSelectLayer = el("select", {
+    class: "form-control",
   });
 
   const elSelectServicesGroup = el(
-    'div',
-    {class: ['form-group']},
-    el('label', elSpanTranslate('wms_select_reviewed_service')),
-    el('div', elSelectServices)
+    "div",
+    { class: ["form-group"] },
+    el("label", elSpanTranslate("wms_select_reviewed_service")),
+    el("div", elSelectServices),
   );
 
-  const elInputService = el('input', {
-    type: 'text',
-    class: ['form-control'],
+  const elInputService = el("input", {
+    type: "text",
+    class: ["form-control"],
     on: {
       change: initSelectLayer,
-      input: checkDisableBtnUpdateLayerList
-    }
+      input: checkDisableBtnUpdateLayerList,
+    },
   });
 
   const elButtonGetLayers = el(
-    'button',
+    "button",
     {
-      class: ['btn', 'btn-default'],
+      class: ["btn", "btn-default"],
       on: {
-        click: getLayers
-      }
+        click: getLayers,
+      },
     },
-    elSpanTranslate('wms_btn_get_layers')
+    elSpanTranslate("wms_btn_get_layers"),
   );
 
   const elInputServiceGroup = el(
-    'div',
-    {class: ['form-group']},
-    el('label', elSpanTranslate('wms_input_service_url')),
+    "div",
+    { class: ["form-group"] },
+    el("label", elSpanTranslate("wms_input_service_url")),
     el(
-      'div',
+      "div",
       {
-        class: 'input-group'
+        class: "input-group",
       },
       elInputService,
       el(
-        'span',
+        "span",
         {
-          class: 'input-group-btn'
+          class: "input-group-btn",
         },
-        elButtonGetLayers
-      )
-    )
+        elButtonGetLayers,
+      ),
+    ),
   );
 
-  const elButtonUpdate = el('button', elSpanTranslate('wms_btn_generate_url'), {
-    class: ['btn', 'btn-default'],
+  const elButtonUpdate = el("button", elSpanTranslate("wms_btn_generate_url"), {
+    class: ["btn", "btn-default"],
     on: {
-      click: updateInput
-    }
+      click: updateInput,
+    },
   });
 
   const elInputLayerGroup = el(
-    'div',
-    {class: ['form-group']},
-    el('label', elSpanTranslate('wms_select_layer')),
+    "div",
+    { class: ["form-group"] },
+    el("label", elSpanTranslate("wms_select_layer")),
     elSelectLayer,
-    elButtonUpdate
+    elButtonUpdate,
   );
 
   elParent.appendChild(elSelectServicesGroup);
@@ -121,23 +121,23 @@ export async function wmsBuildQueryUi(opt) {
     const url = elInputService.value;
     try {
       if (!isUrl(url)) {
-        throw new Error('Not a valid url');
+        throw new Error("Not a valid url");
       }
 
       const layers = await wmsGetLayers(url, {
         optGetCapabilities: {
           searchParams: {
-            timestamp: opt.timestamp
+            timestamp: opt.timestamp,
           },
           useMirror: useMirror(),
-          useCache: opt.useCache
-        }
+          useCache: opt.useCache,
+        },
       });
       if (layers.length === 0) {
         modal({
-          title: 'No layer found',
-          content: el('p', `No layer found`),
-          addBackground: true
+          title: "No layer found",
+          content: el("p", `No layer found`),
+          addBackground: true,
         });
       } else {
         initSelectLayer(layers);
@@ -148,13 +148,13 @@ export async function wmsBuildQueryUi(opt) {
       e = errorFormater(e);
 
       modal({
-        title: 'Issue when fetching layers',
+        title: "Issue when fetching layers",
         content: el(
-          'div',
-          el('p', `Issue when fetching layers`),
-          el('pre', `${e.message}`)
+          "div",
+          el("p", `Issue when fetching layers`),
+          el("pre", `${e.message}`),
         ),
-        addBackground: true
+        addBackground: true,
       });
     }
   }
@@ -162,77 +162,89 @@ export async function wmsBuildQueryUi(opt) {
   function initSelectLayer(data) {
     data = data || [];
     const def = data[0] && data[0].Name ? data[0].Name : data[0];
-    if (typeof selectLayer !== 'undefined' && selectLayer.destroy) {
+
+    if (selectLayer && selectLayer.destroy) {
       selectLayer.destroy();
     }
-    const $elSelectLayer = $(elSelectLayer).selectize({
-      options: data,
+
+    // Clear existing options
+    elSelectLayer.innerHTML = "";
+
+    selectLayer = new TomSelect(elSelectLayer, {
+      options: data.map((item) => ({
+        value: item.Name || item,
+        text: item.Title || item.Name || item,
+        name: item.Name || item,
+        title: item.Title || item.Name || item,
+        abstract: item.Abstract || "",
+      })),
+      valueField: "value",
+      labelField: "text",
+      searchField: ["name", "title", "abstract"],
       onChange: checkDisableBtnUpdate,
-      valueField: 'Name',
-      labelField: 'Title',
-      searchField: ['Name', 'Title', 'Abstract'],
       render: {
-        item: function(item, escape) {
+        item: function (data, escape) {
           const content = [];
-          if (item.Title) {
-            content.push(el('span', {class: 'item-label'}, escape(item.Title)));
+          if (data.title) {
+            content.push(
+              `<span class="item-label">${escape(data.title)}</span>`,
+            );
           }
-          if (item.Name) {
-            content.push(el('span', {class: 'item-desc'}, escape(item.Name)));
+          if (data.name) {
+            content.push(`<span class="item-desc">${escape(data.name)}</span>`);
           }
-          return el(
-            'div',
-            {
-              class: ['item-desc'],
-              title: escape(item.Abstract)
-            },
-            content
-          );
+          return `<div class="item-desc" title="${escape(
+            data.abstract,
+          )}">${content.join("")}</div>`;
         },
-        option: function(item, escape) {
+        option: function (data, escape) {
           const content = [];
-          if (item.Title) {
-            content.push(el('span', {class: 'item-label'}, escape(item.Title)));
+          if (data.title) {
+            content.push(
+              `<span class="item-label">${escape(data.title)}</span>`,
+            );
           }
-          if (item.Name) {
-            content.push(el('span', {class: 'item-desc'}, escape(item.Name)));
+          if (data.name) {
+            content.push(`<span class="item-desc">${escape(data.name)}</span>`);
           }
-          return el(
-            'div',
-            {
-              class: ['item-desc'],
-              title: escape(item.Abstract)
-            },
-            content
-          );
-        }
-      }
+          return `<div class="item-desc" title="${escape(
+            data.abstract,
+          )}">${content.join("")}</div>`;
+        },
+      },
     });
-    selectLayer = $elSelectLayer[0].selectize;
-    selectLayer.setValue(def);
+
+    if (def) {
+      selectLayer.setValue(def);
+    }
     checkDisableBtnUpdateLayerList();
     checkDisableBtnUpdate();
   }
 
   function initSelectServices() {
-    const $elSelectServices = $(elSelectServices).selectize({
-      options: services,
-      labelField: 'label',
-      valueField: 'value',
-      onChange: updateServiceValue
+    selectServices = new TomSelect(elSelectServices, {
+      options: services.map((service) => ({
+        value: service.value,
+        text: service.label,
+      })),
+      valueField: "value",
+      labelField: "text",
+      onChange: updateServiceValue,
     });
-    selectServices = $elSelectServices[0].selectize;
-    selectServices.setValue(services[0].value);
+
+    if (services.length > 0) {
+      selectServices.setValue(services[0].value);
+    }
     selectServices.refreshOptions();
   }
 
   function updateInput() {
-    const layer = $(elSelectLayer).val();
+    const layer = selectLayer.getValue();
     if (!layer) {
       modal({
-        title: 'No layer set',
-        content: el('p', 'No layer set: ignoring request'),
-        addBackground: true
+        title: "No layer set",
+        content: el("p", "No layer set: ignoring request"),
+        addBackground: true,
       });
       return;
     }
@@ -240,14 +252,14 @@ export async function wmsBuildQueryUi(opt) {
       layer: layer,
       url: elInputService.value,
       width: elInputTileSize.value || 512,
-      height: elInputTileSize.value || 512
+      height: elInputTileSize.value || 512,
     });
     elInputLegend.value = urlLegend({
       url: elInputService.value,
-      layer: $(elSelectLayer).val()
+      layer: selectLayer.getValue(),
     });
-    elInputTiles.dispatchEvent(new Event('change'));
-    elInputLegend.dispatchEvent(new Event('change'));
+    elInputTiles.dispatchEvent(new Event("change"));
+    elInputLegend.dispatchEvent(new Event("change"));
   }
 
   function updateServiceValue(value) {
@@ -260,26 +272,27 @@ export async function wmsBuildQueryUi(opt) {
     const url = elInputService.value;
     const valid = isUrl(url);
     if (valid) {
-      elButtonGetLayers.removeAttribute('disabled');
+      elButtonGetLayers.removeAttribute("disabled");
     } else {
-      elButtonGetLayers.setAttribute('disabled', true);
+      elButtonGetLayers.setAttribute("disabled", true);
     }
   }
+
   function checkDisableBtnUpdate() {
-    const layer = $(elSelectLayer).val();
+    const layer = selectLayer ? selectLayer.getValue() : null;
     if (layer) {
-      elButtonUpdate.removeAttribute('disabled', false);
+      elButtonUpdate.removeAttribute("disabled");
     } else {
-      elButtonUpdate.setAttribute('disabled', true);
+      elButtonUpdate.setAttribute("disabled", true);
     }
   }
 
   function busy(busy) {
     if (busy) {
       setBusy(true);
-      elInputService.setAttribute('disabled', true);
-      elButtonGetLayers.setAttribute('disabled', true);
-      elButtonUpdate.setAttribute('disabled', true);
+      elInputService.setAttribute("disabled", true);
+      elButtonGetLayers.setAttribute("disabled", true);
+      elButtonUpdate.setAttribute("disabled", true);
       if (selectServices && selectServices.disable) {
         selectServices.disable();
       }
@@ -288,9 +301,9 @@ export async function wmsBuildQueryUi(opt) {
       }
     } else {
       setBusy(false);
-      elInputService.removeAttribute('disabled');
-      elButtonGetLayers.removeAttribute('disabled', true);
-      elButtonUpdate.removeAttribute('disabled', true);
+      elInputService.removeAttribute("disabled");
+      elButtonGetLayers.removeAttribute("disabled");
+      elButtonUpdate.removeAttribute("disabled");
       if (selectServices && selectServices.enable) {
         selectServices.enable();
       }
