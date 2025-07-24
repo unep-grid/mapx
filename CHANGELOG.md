@@ -1,3 +1,11 @@
+  - [1.13.18-beta.3](https://github.com/unep-grid/mapx/tree/1.13.18-beta.3) 
+
+    - feat(ogc_doc): added wms image preview + solved tile extent issue in template, #1025
+    - refactor(wms_ui): remove selectize dependency and refactor with tom-select
+    - fix(unused): rm unused import
+    - feat(1071): ensure uniqueness of new identity column
+
+
   - [1.13.18-beta.2](https://github.com/unep-grid/mapx/tree/1.13.18-beta.2) 
 
     - feat(1071): completed crud + concurrent op support
