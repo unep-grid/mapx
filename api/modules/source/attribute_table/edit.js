@@ -486,6 +486,7 @@ class EditTableSession {
         fullTable: true,
         dateAsString: true,
         jsonAsString: true,
+        arrayAsString: true,
       });
       const data = pgRes.rows;
       const nRow = pgRes.rowCount;

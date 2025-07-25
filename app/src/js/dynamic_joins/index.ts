@@ -753,7 +753,6 @@ export class DynamicJoin {
     if (useApiMapxTiles && tilesUrls) {
       opts.tilesUrl = tilesUrls;
       opts.sourceLayer = idSourceGeom;
-      debugger;
     }
 
     if (useApiMapxData && data) {

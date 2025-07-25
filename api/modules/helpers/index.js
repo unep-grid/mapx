@@ -9,25 +9,26 @@ import crypto from "crypto";
 import he from "he";
 
 /**
- * Conversion of array of column names to pg columns
- * @param {Array} array of attibutes string
- * @param {Object} opt options
- * @param {Array} opt.castText Optional list  of attributes to cast as text
- * @return {String} String usable in posgres query
+ * Conversion of array of column names to pg columns with casting
+ * @param {Array<string>} arr - list of column names
+ * @param {Object} [opt={}] - options
+ * @param {Array<string>} [opt.castText=[]] - attributes to cast as text
+ * @returns {String} - String usable in Postgres query
  */
-function toPgColumn(arr, opt) {
-  if (isEmpty(opt?.castText)) {
-    return `"${arr.join('","')}"`;
-  }
-  const ct = opt.castText;
-  const inner = arr.map((a) => {
-    if (ct.includes(a)) {
-      return `"${a}"::text`;
-    } else {
-      return `"${a}"`;
-    }
-  });
-  return `${inner.join(",")}`;
+function toPgColumn(arr, opt = {}) {
+  const ct = new Set(opt.castText || []);
+
+  return arr
+    .map((a) => {
+      const toT = ct.has(a);
+      
+      if (toT) {
+        return `${a}::text`;
+      }
+
+      return a;
+    })
+    .join(", ");
 }
 
 /**
@@ -407,7 +408,7 @@ function findValues(obj, key) {
 
 /**
  * Get config update for client
- * - settings required in static mode, set as env var 
+ * - settings required in static mode, set as env var
  */
 function mwGetConfigUpdate(_, res) {
   const update = {

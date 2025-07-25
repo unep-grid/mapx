@@ -30,7 +30,7 @@ export function typeConvert(pg_type, format) {
     throw new Error(`typeConvert, unexpected pg type : ${pg_type}`);
   }
   switch (format) {
-    case "json":
+    case "css":
     case "table_editor":
     case "mx":
       return pgTypesData[pg_type][format];

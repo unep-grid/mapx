@@ -74,6 +74,7 @@
   --mx_ui_type_number: #00ffff59;
   --mx_ui_type_boolean: #95ff0059;
   --mx_ui_type_object: #dd511159;
+  --mx_ui_type_array: #99511159;
 
   /**
   * Patterns

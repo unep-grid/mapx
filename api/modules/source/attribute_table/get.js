@@ -41,8 +41,10 @@ async function getSourceAttributeTableHandler(req, res) {
  * @param {String} opt.id Id of the source / table / layer
  * @param {Boolean} opt.fullTable returns all atributes
  * @param {Boolean} opt.dateAsString coerce date as string
- * @param {Boolean} opt.jsonAsString coerce date as string
+ * @param {Boolean} opt.jsonAsString coerce json as string
+ * @param {Boolean} opt.arrayAsString coerce array as string
  * @param {Array} opt.attributes List of atributes to fetch
+ * @param {Integer} opt.maxRows Maximum of rows default 1e6
  * @return {Object} pg.Result or empty object
  */
 export async function getSourceAttributeTable(opt) {
@@ -52,6 +54,8 @@ export async function getSourceAttributeTable(opt) {
   const fullTable = opt.fullTable || false;
   const dateAsString = opt.dateAsString || false;
   const jsonAsString = opt.jsonAsString || false;
+  const arrayAsString = opt.arrayAsString || false;
+  const maxRows = opt.maxRows || 1e6;
   let attributes = opt.attributes || [];
 
   if (isString(attributes)) {
@@ -96,18 +100,24 @@ export async function getSourceAttributeTable(opt) {
    * see https://node-postgres.com/features/types#strings-by-default
    */
   const attributesAsText = [];
-  if (dateAsString || jsonAsString) {
+
+  if (dateAsString || jsonAsString || arrayAsString) {
     const colMap = new Map();
     const columns = await getColumnsTypesSimple(idSource, attributesSelect);
 
     for (const c of columns) {
       colMap.set(c.column_name, c.column_type);
     }
-
     for (const a of attributesSelect) {
       const type = colMap.get(a);
-
       switch (type) {
+        case "double precision[]":
+        case "integer[]":
+        case "text[]":
+          if (arrayAsString) {
+            attributesAsText.push(a);
+          }
+          break;
         case "json":
         case "jsonb":
           if (jsonAsString) {
@@ -133,6 +143,6 @@ export async function getSourceAttributeTable(opt) {
     castText: attributesAsText,
   });
 
-  const query = `SELECT ${attributesSelectSql} FROM ${idSource} ORDER BY gid LIMIT 1e6`;
+  const query = `SELECT ${attributesSelectSql} FROM ${idSource} ORDER BY gid LIMIT ${maxRows}`;
   return pgRead.query(query);
 }

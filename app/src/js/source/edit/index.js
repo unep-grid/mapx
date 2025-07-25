@@ -768,6 +768,7 @@ export class EditTableSessionClient extends EditTableBase {
 
   _column_set_readonly(column) {
     const et = this;
+
     if (isEmpty(column)) {
       return;
     }
@@ -995,10 +996,11 @@ export class EditTableSessionClient extends EditTableBase {
   formatColumns(pos, element) {
     const et = this;
     if (pos >= 0) {
-      const type = et.getColumnTypeByIndex(pos);
+      const type = et.getColumnTypeByIndex(pos, "css");
+      const type_pg = et.getColumnTypeByIndex(pos, "postgres");
       element.classList.add(`edit-table--header`);
       element.classList.add(`edit-table--header-${type}`);
-      element.title = type;
+      element.title = type_pg;
     }
   }
 
@@ -2712,14 +2714,15 @@ export class EditTableSessionClient extends EditTableBase {
   /**
    * Get column pg type
    * @param {String} columnName Column name
-   * @param {String} mode mode : postgres, json, input. Default = 'json'
+   * @param {String} format : postgres, css, input. Default = 'css'
    * @return {String} type
    */
-  getColumnType(columnName, mode) {
+  getColumnType(columnName, format = "css") {
     const et = this;
-    mode = mode || "json";
-    const type = et.getColumns().find((c) => c.data === columnName)?._pg_type;
-    return typeConvert(type, mode);
+    const { _pg_type: type } = et
+      .getColumns()
+      .find((c) => c.data === columnName);
+    return typeConvert(type, format);
   }
 
   /**
@@ -2727,10 +2730,10 @@ export class EditTableSessionClient extends EditTableBase {
    * @param {Integer} column index
    * @return {String} type
    */
-  getColumnTypeByIndex(index) {
+  getColumnTypeByIndex(index, format = "css") {
     const et = this;
-    const type = et._columns[index]?._pg_type;
-    return typeConvert(type, "json");
+    const { _pg_type: type } = et._columns[index];
+    return typeConvert(type, format);
   }
 
   /**
@@ -3713,6 +3716,7 @@ export class EditTableSessionClient extends EditTableBase {
    */
   beforeChange(changes, source) {
     const et = this;
+
     const skip =
       et.isFromSanitize(source) ||
       et.isFromDispatch(source) ||
@@ -3786,6 +3790,7 @@ export class EditTableSessionClient extends EditTableBase {
 
     for (const type of Object.keys(types)) {
       const c = types[type];
+
       handsontable.cellTypes.registerCellType(type, {
         editor: c.editor,
         renderer: c.renderer,

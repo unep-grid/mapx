@@ -27,26 +27,7 @@ const gid = def.tables.layer_id_col;
 const geom = def.tables.layer_id_geom;
 const languages = def.languages.codes;
 
-/**
- * Types, should matches "app/src/js/handsontable/types.js"
- */
-const pgTypesData = [
-  "jsonb",
-  "boolean",
-  "bigint",
-  "double precision",
-  "integer",
-  "numeric",
-  "real",
-  "smallint",
-  "text",
-  "date",
-  "character varying",
-  "time with time zone",
-  "time without time zone",
-  "timestamp with time zone",
-  "timestamp without time zone",
-];
+import { pgTypesData } from "./pg_types.js";
 
 /**
  * Check if type is know
@@ -54,7 +35,8 @@ const pgTypesData = [
  * @return {Boolean} ok
  */
 function isTypeValid(type) {
-  return pgTypesData.includes(type);
+  const tt = type.toLowerCase();
+  return pgTypesData.includes(tt);
 }
 
 /**
@@ -70,6 +52,14 @@ async function sanitize(value, type) {
   if (!tok) {
     throw new Error("Type not registered: " + type);
   }
+
+  /**
+   * Use generic array type text for arrays
+   */
+  if (type.toLowerCase() === "array") {
+    type = "text[]";
+  }
+
   const r = await pgTest.query(
     `SELECT mx_try_cast($1,cast(NULL as ${type}))::text casted`,
     [value]
@@ -127,7 +117,7 @@ async function tableExists(idTable, schema = "public", client = pgRead) {
   const sqlExists = `
   SELECT EXISTS (
    SELECT 1
-   FROM   information_schema.tables 
+   FROM   information_schema.tables
    WHERE  table_schema = '${schema}'
    AND    table_name = '${idTable}'
    )`;
@@ -159,10 +149,10 @@ async function getRows(query, pgClient = pgRead) {
 async function columnExists(idColumn, idTable, client = pgRead) {
   try {
     const sql = `
-    SELECT EXISTS ( 
+    SELECT EXISTS (
     SELECT 1
-    FROM information_schema.columns 
-    WHERE table_name=$1 
+    FROM information_schema.columns
+    WHERE table_name=$1
     AND column_name=$2
     )`;
     const res = await client.query(sql, [idTable, idColumn]);
@@ -446,7 +436,7 @@ export async function setMxSourceData(idSource, path, value) {
 export async function getMxSourceData(idSource, path) {
   const pathJSON = path.map((item) => `"${item}"`).join(",");
   const res = await pgRead.query(`
-SELECT data #> '{${pathJSON}}' as value 
+SELECT data #> '{${pathJSON}}' as value
 FROM mx_sources
 WHERE id = '${idSource}'
 LIMIT 1`);
@@ -666,8 +656,8 @@ async function removeView(idView) {
  */
 async function getColumnsNames(idLayer) {
   var queryAttributes = {
-    text: `SELECT column_name AS names 
-    FROM information_schema.columns 
+    text: `SELECT column_name AS names
+    FROM information_schema.columns
     WHERE table_name=$1`,
     values: [idLayer],
   };
@@ -734,7 +724,7 @@ async function deleteRowByGid(idTable, idsRow) {
 async function getColumnsTypesSimple(
   idSource,
   idAttr,
-  idAttrExclude = ["gid", "geom"]
+  idAttrExclude = ["geom"]
 ) {
   if (!isSourceId(idSource)) {
     return [];
@@ -785,8 +775,8 @@ async function getSourceType(idSource, client = pgRead) {
   }
   const q = `
     SELECT type
-    FROM mx_sources 
-    WHERE id = $1 
+    FROM mx_sources
+    WHERE id = $1
   `;
   const data = await client.query(q, [idSource]);
   const [row] = data.rows;
@@ -880,7 +870,7 @@ from
 async function getLayerTitle(idLayer, language) {
   language = language || "en";
   var queryAttributes = {
-    text: `SELECT 
+    text: `SELECT
     data#>>'{"meta","text","title","${language}"}' AS title_lang,
     data#>>'{"meta","text","title","en"}' AS title_en
     FROM mx_sources
@@ -903,8 +893,8 @@ async function getLayerViewsAttributes(idLayer) {
   const sql = `
   SELECT DISTINCT
   jsonb_array_elements(
-    data #> '{attribute,names}' || 
-    jsonb_build_array(data #> '{attribute,name}') 
+    data #> '{attribute,names}' ||
+    jsonb_build_array(data #> '{attribute,name}')
   ) column_name
   FROM mx_views_latest
   WHERE data #>> '{source,layerInfo,name}' = $1`;
@@ -988,8 +978,8 @@ async function renameTableColumn(
      * ( using template literral, as new/old name should be valid
      */
     await pgClient.query(
-      `ALTER TABLE ${idSource} 
-      RENAME COLUMN "${oldName}" 
+      `ALTER TABLE ${idSource}
+      RENAME COLUMN "${oldName}"
       TO "${newName}"`
     );
   } catch (error) {
@@ -1092,7 +1082,7 @@ async function duplicateTableColumn(
 
     const columnType = columnTypes[0].column_type;
     await pgClient.query(`
-      ALTER TABLE "${idSource}" 
+      ALTER TABLE "${idSource}"
       ADD COLUMN IF NOT EXISTS "${newColumn}" ${columnType};
       UPDATE "${idSource}" SET "${newColumn}" = "${sourceColumn}";
     `);
@@ -1146,6 +1136,8 @@ async function addTableColumn(
 
   await pgClient.query(qSql);
 }
+
+const regDatePg = new RegExp("^date|^timestamp");
 async function updateTableCellByGid(
   id_table,
   gid,
@@ -1154,14 +1146,20 @@ async function updateTableCellByGid(
   value_new = null,
   client = pgRead
 ) {
+  const isArrayType = column_type.toLowerCase() === "array";
+  const isDate = regDatePg.test(column_type);
+
+  if (isArrayType) {
+    // use valid postgres type
+    column_type = "text[]";
+  }
+
   const qSql = parseTemplate(templates.updateTableCellByGid, {
     id_table,
     gid,
     column_name,
     column_type,
   });
-  const regDatePg = new RegExp("^date|^timestamp");
-  const isDate = regDatePg.test(column_type);
   if (isDate) {
     /**
      * Date time conversion
