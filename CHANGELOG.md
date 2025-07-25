@@ -1,3 +1,8 @@
+  - [1.13.18-beta.4](https://github.com/unep-grid/mapx/tree/1.13.18-beta.4) 
+
+    - fix(table_editor): fix type issues
+
+
   - [1.13.18-beta.3](https://github.com/unep-grid/mapx/tree/1.13.18-beta.3) 
 
     - feat(ogc_doc): added wms image preview + solved tile extent issue in template, #1025
