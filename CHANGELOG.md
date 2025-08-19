@@ -1,3 +1,10 @@
+  - [1.13.18-beta.5](https://github.com/unep-grid/mapx/tree/1.13.18-beta.5) 
+
+    - fix: settings in ws_handler
+    - test: dynamic join basic tests
+    - fix: dynamic join filter by legend
+
+
   - [1.13.18-beta.4](https://github.com/unep-grid/mapx/tree/1.13.18-beta.4) 
 
     - fix(table_editor): fix type issues
