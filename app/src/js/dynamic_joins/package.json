@@ -1,0 +1,16 @@
+{
+  "name": "dynamic_joins",
+  "version": "1.0.0",
+  "description": "dynamic join tool in mapx",
+  "main": "index.ts",
+  "devDependencies": {
+    "chroma-js": "^3.1.2",
+    "vitest": "^3.2.4"
+  },
+  "scripts": {
+    "test": "vitest --run",
+    "test:manual": "vitest"
+  },
+  "author": "",
+  "license": "MIT"
+}

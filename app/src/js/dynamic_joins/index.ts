@@ -6,7 +6,6 @@ import type {
   AggregatedTableEntry,
   FilterControl,
   CompiledFilter,
-  AggregatorFunction,
   MapInstance,
   LegendClasses,
 } from "./types";
@@ -20,7 +19,7 @@ import { settings } from "../settings";
 import { generate_series } from "./generate_series.ts";
 import { waitTimeoutAsync } from "../animation_frame";
 import { buildTomSelectInput } from "./build_tom_select.ts";
-import { getClassIndex, getColorForValue } from "./helpers.ts";
+import { aggregators, operators, getColorForValue } from "./helpers.ts";
 import { getApiUrl } from "./../api_routes";
 
 const default_options: DynamicJoinOptions = {
@@ -870,49 +869,3 @@ export class DynamicJoin {
     }
   }
 }
-
-const aggregators: Record<string, AggregatorFunction> = {
-  none: (vals: any[]) => {
-    if (vals.length === 1) return vals[0];
-    if (vals.length > 1) {
-      console.warn(
-        `No aggregator set. Expected single value, got ${vals.length}. Using first.`,
-      );
-      return vals[0];
-    }
-    return null;
-  },
-  first: (vals: any[]) => vals[0] ?? null,
-  last: (vals: any[]) => vals.at(-1) ?? null,
-  sum: (vals: number[]) => vals.reduce((a, b) => a + b, 0),
-  max: (vals: number[]) => Math.max(...vals),
-  min: (vals: number[]) => Math.min(...vals),
-  median: (vals: number[]) => {
-    const sorted = [...vals].sort((a, b) => a - b);
-    const mid = Math.floor(sorted.length / 2);
-    return sorted.length % 2
-      ? sorted[mid]
-      : (sorted[mid - 1] + sorted[mid]) / 2;
-  },
-  mode: (vals: any[]) => {
-    const counts = vals.reduce((acc: Record<string, number>, v) => {
-      acc[v] = (acc[v] || 0) + 1;
-      return acc;
-    }, {});
-    return (
-      Object.entries(counts).reduce((a, [v, c]) => (c > a[1] ? [v, c] : a), [
-        null,
-        0,
-      ] as any) as any
-    )[0];
-  },
-};
-
-const operators = new Map<string, (a: any, b: any) => boolean>([
-  ["==", (a, b) => a == b],
-  ["!=", (a, b) => a != b],
-  [">", (a, b) => a > b],
-  [">=", (a, b) => a >= b],
-  ["<", (a, b) => a < b],
-  ["<=", (a, b) => a <= b],
-]);
