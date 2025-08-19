@@ -108,6 +108,7 @@ function handler() {
               },
               properties: {
                 title: "Map-x Home",
+                gid: 1,
               },
             };
             return resolve(data);

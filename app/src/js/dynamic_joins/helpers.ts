@@ -1,6 +1,7 @@
-
-
-import type { LegendClasses,AggregatorFunction } from "./types";
+import { getArrayStat } from "../array_stat";
+import { isEmpty } from "../is_test";
+import { isNumeric } from "../is_test";
+import type { LegendClasses, AggregatorFunction } from "./types";
 /**
  * Shared helpers for dynamic joins - color scale and legend utilities
  * These functions ensure consistency between map styling and legend rendering
@@ -39,27 +40,47 @@ export function getClassIndex(
  * Handles NA values with fallback color
  */
 export function getColorForValue(
-  values: number[],
+  value: number,
   colorScale: chroma.Scale,
   colorNa: string,
 ): string {
-  const nums = values.filter((v) => Number.isFinite(v));
-  if (nums.length === 0) {
-    return colorNa;
-  }
-
-  // sort and pick median
-  const sorted = [...nums].sort((a, b) => a - b);
-  const mid = Math.floor(sorted.length / 2);
-  const median =
-    sorted.length % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
-
   try {
-    return colorScale(median).hex();
+    if (!isNumeric(value) || isEmpty(value)) {
+      return colorNa;
+    }
+    return colorScale(value).hex();
   } catch {
     return colorNa;
   }
 }
+
+/**
+ * Gets color for value 
+ */
+export function getColorFromClassesLinear(
+  value: number,
+  legendClasses: LegendClasses,
+  colorNa: string,
+): string {
+  
+  if (!isNumeric(value) || isEmpty(value)) {
+    return colorNa;
+  }
+
+  for (const classInfo of legendClasses) {
+    const inLowerBound = classInfo.isFirst 
+      ? value >= classInfo.lowerBound 
+      : value > classInfo.lowerBound;
+    const inUpperBound = value <= classInfo.upperBound;
+    
+    if (inLowerBound && inUpperBound) {
+      return classInfo.color;
+    }
+  }
+  
+  return colorNa;
+}
+
 
 /**
  * Gets legend class information from a chroma scale
@@ -80,11 +101,8 @@ export function getLegendClasses(
     const isFirst = i === 0;
     const lowerBound = classes[i];
     const upperBound = classes[i + 1];
-    const color = getColorForValue(
-      [lowerBound, upperBound],
-      colorScale,
-      colorNa,
-    );
+    const middle = (lowerBound + upperBound) / 2;
+    const color = getColorForValue(middle, colorScale, colorNa);
     const label = formatIntervalLabel(lowerBound, upperBound, isFirst);
     out.push({
       index: i,
@@ -98,6 +116,11 @@ export function getLegendClasses(
 
   return out;
 }
+
+
+
+
+
 
 /**
  * Formats interval notation label

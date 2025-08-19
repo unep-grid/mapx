@@ -19,7 +19,12 @@ import { settings } from "../settings";
 import { generate_series } from "./generate_series.ts";
 import { waitTimeoutAsync } from "../animation_frame";
 import { buildTomSelectInput } from "./build_tom_select.ts";
-import { aggregators, operators, getColorForValue } from "./helpers.ts";
+import {
+  aggregators,
+  getColorForValue,
+  getColorFromClassesLinear,
+  operators,
+} from "./helpers.ts";
 import { getApiUrl } from "./../api_routes";
 
 const default_options: DynamicJoinOptions = {
@@ -424,7 +429,7 @@ export class DynamicJoin {
     });
   };
 
-  getTableFitered(): any[] {
+  getTableFiltered(): any[] {
     return clone(this._table_filtered);
   }
 
@@ -666,11 +671,12 @@ export class DynamicJoin {
     const colorExpression = ["match", ["get", this.options.fieldJoinGeom]];
 
     for (const [key, value] of this._aggregated_lookup) {
-      const color = getColorForValue(
-        [value],
-        this._color_scale,
+      const color = getColorFromClassesLinear(
+        value,
+        this._legend_classes,
         this.options.colorNa,
       );
+
       colorExpression.push(key, color);
     }
 

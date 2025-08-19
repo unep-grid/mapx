@@ -23,7 +23,7 @@ export function buildLegendInput(options: BuildLegendOptions): LegendUI {
     colorScale,
     colorNa,
     joinType,
-    onToggle: (allVisibleClasses, legendClasses) => {
+    onUpdate: (allVisibleClasses, legendClasses) => {
       if (onUpdate) {
         onUpdate(allVisibleClasses, legendClasses);
       }

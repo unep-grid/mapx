@@ -13,7 +13,7 @@ export class LegendUI {
   private colorNa: string;
   private joinType: "left" | "inner";
   private visibleClasses: Set<number | string>;
-  private onToggle?: (
+  private onUpdate?: (
     visibleClasses: Set<number | string>,
     legendClasses: LegendClasses,
   ) => void;
@@ -24,7 +24,7 @@ export class LegendUI {
     this.colorNa = options.colorNa || "#ccc";
     this.joinType = options.joinType || "left";
     this.visibleClasses = new Set();
-    this.onToggle = options.onToggle;
+    this.onUpdate = options.onUpdate;
 
     // Bind event handler
     this.handleClick = this.handleClick.bind(this);
@@ -35,6 +35,7 @@ export class LegendUI {
   private init(): void {
     this.setupEventDelegation();
     this.render();
+    this.callback();
   }
 
   private setupEventDelegation(): void {
@@ -64,10 +65,7 @@ export class LegendUI {
       element.classList.add("active");
     }
 
-    // Notify parent of the change
-    if (this.onToggle) {
-      this.onToggle(this.visibleClasses, this.legendClasses);
-    }
+    this.callback();
   }
 
   get legendClasses(): LegendClasses {
@@ -75,6 +73,12 @@ export class LegendUI {
       return [];
     }
     return getLegendClasses(this.colorScale, this.colorNa);
+  }
+
+  private callback(): void {
+    if (this.onUpdate) {
+      this.onUpdate(this.visibleClasses, this.legendClasses);
+    }
   }
 
   private render(): void {
@@ -143,14 +147,12 @@ export class LegendUI {
     if (options.colorScale) {
       this.colorScale = options.colorScale;
     }
-    if (options.data) {
-      this.data = options.data;
-    }
     if (options.colorNa) {
       this.colorNa = options.colorNa;
     }
 
     this.render();
+    this.callback();
   }
 
   /**

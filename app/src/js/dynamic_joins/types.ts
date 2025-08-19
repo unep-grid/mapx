@@ -109,7 +109,7 @@ export interface LegendUIOptions {
   dataBounds?: [number, number];
   colorNa?: string;
   joinType?: "left" | "inner";
-  onToggle?: (
+  onUpdate?: (
     visibleClasses: Set<number | string>,
     legendClasses: LegendClasses,
   ) => void;
