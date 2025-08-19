@@ -1,5 +1,5 @@
 import { el } from "../el_mapx";
-import type { LegendUIOptions } from "./types";
+import type { LegendClasses, LegendUIOptions } from "./types";
 import { getLegendClasses } from "./helpers.ts";
 import "./legend_style.less";
 
@@ -10,22 +10,19 @@ import "./legend_style.less";
 export class LegendUI {
   private container: HTMLElement;
   private colorScale?: chroma.Scale;
-  private data: Array<{ key: string; value: any }>;
   private colorNa: string;
-  private joinType: 'left' | 'inner';
+  private joinType: "left" | "inner";
   private visibleClasses: Set<number | string>;
   private onToggle?: (
-    classIdentifier: number | string,
-    isVisible: boolean,
-    allVisibleClasses: Set<number | string>,
+    visibleClasses: Set<number | string>,
+    legendClasses: LegendClasses,
   ) => void;
 
   constructor(container: HTMLElement, options: LegendUIOptions = {}) {
     this.container = container;
     this.colorScale = options.colorScale;
-    this.data = options.data || [];
     this.colorNa = options.colorNa || "#ccc";
-    this.joinType = options.joinType || 'left';
+    this.joinType = options.joinType || "left";
     this.visibleClasses = new Set();
     this.onToggle = options.onToggle;
 
@@ -48,13 +45,8 @@ export class LegendUI {
     const target = event.target as HTMLElement;
     const legendItem = target.closest(".dj-legend-item") as HTMLElement;
     if (legendItem) {
-      const classIndex = legendItem.dataset.legend_class_index;
-      if (classIndex !== undefined) {
-        const classIdentifier = isNaN(Number(classIndex))
-          ? classIndex
-          : Number(classIndex);
-        this.toggleClass(classIdentifier, legendItem);
-      }
+      const index = legendItem.dataset.legend_class_index;
+      this.toggleClass(index!, legendItem);
     }
   };
 
@@ -74,9 +66,15 @@ export class LegendUI {
 
     // Notify parent of the change
     if (this.onToggle) {
-      const allVisibleClasses = this.getVisibleClasses();
-      this.onToggle(classIdentifier, !wasVisible, allVisibleClasses);
+      this.onToggle(this.visibleClasses, this.legendClasses);
     }
+  }
+
+  get legendClasses(): LegendClasses {
+    if (!this.colorScale) {
+      return [];
+    }
+    return getLegendClasses(this.colorScale, this.colorNa);
   }
 
   private render(): void {
@@ -90,11 +88,8 @@ export class LegendUI {
       return;
     }
 
-    // Use the helper to get all legend class information
-    const legendClasses = getLegendClasses(this.colorScale, this.colorNa);
-
     // Create legend items for each class
-    for (const classInfo of legendClasses) {
+    for (const classInfo of this.legendClasses) {
       const elItem = el(
         "div",
         {
@@ -118,14 +113,13 @@ export class LegendUI {
     }
 
     // Add NA item for left joins (features without matching data will show N/A color)
-    if (this.joinType === 'left' && this.colorNa) {
-      const naIdentifier = "na";
+    if (this.joinType === "left" && this.colorNa) {
       const elNaItem = el(
         "div",
         {
           class: "dj-legend-item",
           dataset: {
-            legend_class_index: naIdentifier,
+            legend_class_index: "na",
           },
         },
         [
@@ -157,13 +151,6 @@ export class LegendUI {
     }
 
     this.render();
-  }
-
-  /**
-   * Get the current set of visible classes
-   */
-  getVisibleClasses(): Set<number | string> {
-    return new Set(this.visibleClasses);
   }
 
   /**

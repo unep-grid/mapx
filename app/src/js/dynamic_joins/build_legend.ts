@@ -5,17 +5,15 @@ import type { BuildLegendOptions } from "./types.ts";
  * Build a legend input following the same pattern as buildRangeSlider and buildTomSelectInput
  * @param options - Configuration options
  * @param options.elWrapper - Container element for the legend
- * @param options.config - Legend configuration
- * @param options.config.colorScale - Chroma color scale object
- * @param options.config.colorNa - Color for NA/missing values
+ * @param options.colorScale - Chroma color scale object
+ * @param options.colorNa - Color for NA/missing values
  * @param options.onBuilt - Callback when legend is built (receives legend instance)
- * @param options.onUpdate - Callback when legend class is toggled (receives classIndex, isVisible, allVisibleClasses)
- * @param options.data - Aggregated data array
+ * @param options.onUpdate - Callback when legend class is toggled (allVisibleClasses)
  * @returns The legend instance
  */
 export function buildLegendInput(options: BuildLegendOptions): LegendUI {
-  const { elWrapper, config, onBuilt, onUpdate, data } = options;
-  const { colorScale, colorNa, joinType } = config;
+  const { elWrapper, onBuilt, onUpdate, colorScale, colorNa, joinType } =
+    options;
 
   // Add legend-specific styling to wrapper
   elWrapper.classList.add("mx-legend-container");
@@ -24,11 +22,10 @@ export function buildLegendInput(options: BuildLegendOptions): LegendUI {
   const legend = new LegendUI(elWrapper, {
     colorScale,
     colorNa,
-    data,
     joinType,
-    onToggle: (classIndex, isVisible, allVisibleClasses) => {
+    onToggle: (allVisibleClasses, legendClasses) => {
       if (onUpdate) {
-        onUpdate(classIndex, isVisible, allVisibleClasses);
+        onUpdate(allVisibleClasses, legendClasses);
       }
     },
   });

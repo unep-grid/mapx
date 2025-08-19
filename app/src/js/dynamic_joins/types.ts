@@ -7,7 +7,7 @@ export interface StaticFilter {
 
 export interface DynamicFilter {
   name: string;
-  type: 'dropdown' | 'slider';
+  type: "dropdown" | "slider";
   default?: any;
   [key: string]: any;
 }
@@ -22,9 +22,9 @@ export interface CompiledFilter {
 export interface PaintConfig {
   circle?: Record<string, any>;
   fill?: {
-    'fill-color'?: string;
-    'fill-opacity'?: number;
-    'fill-outline-color'?: string;
+    "fill-color"?: string;
+    "fill-opacity"?: number;
+    "fill-outline-color"?: string;
     [key: string]: any;
   };
   line?: Record<string, any>;
@@ -52,7 +52,7 @@ export interface DynamicJoinOptions {
   data: any[];
   tilesUrl: string[] | null;
   palette: string;
-  stat: 'q' | 'e' | 'l' | 'k';
+  stat: "q" | "e" | "l" | "k";
   classes: number;
   colorNa: string;
   aggregateFn: string;
@@ -60,22 +60,25 @@ export interface DynamicJoinOptions {
   field: string | null;
   fieldJoinData: string | null;
   fieldJoinGeom: string | null;
-  type: 'fill' | 'circle' | 'line';
+  type: "fill" | "circle" | "line";
   paint: PaintConfig;
   staticFilters: StaticFilter[];
   dynamicFilters: DynamicFilter[];
-  joinType: 'left' | 'inner';
-  onTableAggregated: (table: AggregatedTableEntry[], instance: DynamicJoin) => void;
+  joinType: "left" | "inner";
+  onTableAggregated: (
+    table: AggregatedTableEntry[],
+    instance: DynamicJoin,
+  ) => void;
   onTableReady: (table: any[], instance: DynamicJoin) => void;
   onTableFiltered: (table: any[], instance: DynamicJoin) => void;
   onMapClick: (features: any[], instance: DynamicJoin, event: any) => void;
 
   // MapX-specific options (optional, higher priority when provided)
-  useApiMapxData?: boolean;  // Enable MapX data fetching
+  useApiMapxData?: boolean; // Enable MapX data fetching
   useApiMapxTiles?: boolean; // Enable MapX tile URL construction
-  fieldsData?: string[];     // Optional: specific fields to fetch from data
-  fieldsGeom?: string[];     // Optional: specific fields to fetch from geometry
-  fieldMainData?: string;    // Optional: main field for data (same as field)
+  fieldsData?: string[]; // Optional: specific fields to fetch from data
+  fieldsGeom?: string[]; // Optional: specific fields to fetch from geometry
+  fieldMainData?: string; // Optional: main field for data (same as field)
 }
 
 // Internal state interface
@@ -89,6 +92,7 @@ export interface DynamicJoinState {
   _filters_controls: Record<string, any>;
   _current_filters: Record<string, any>;
   _visible_legend_classes: Set<number | string>;
+  _legend_classes: LegendClasses;
   _id_layer: string | null;
   _id_source: string | null;
 }
@@ -102,9 +106,13 @@ export interface FilterControl {
 export interface LegendUIOptions {
   colorScale?: chroma.Scale;
   data?: Array<{ key: string; value: any }>;
+  dataBounds?: [number, number];
   colorNa?: string;
-  joinType?: 'left' | 'inner';
-  onToggle?: (classIdentifier: number | string, isVisible: boolean, allVisibleClasses: Set<number | string>) => void;
+  joinType?: "left" | "inner";
+  onToggle?: (
+    visibleClasses: Set<number | string>,
+    legendClasses: LegendClasses,
+  ) => void;
 }
 
 // Builder function options
@@ -112,8 +120,8 @@ export interface BuildSliderOptions {
   elWrapper: HTMLElement;
   data: any[];
   config: DynamicFilter & {
-    min?: number | 'auto';
-    max?: number | 'auto';
+    min?: number | "auto";
+    max?: number | "auto";
     step?: number;
     integer?: boolean;
     single?: boolean;
@@ -132,14 +140,14 @@ export interface BuildTomSelectOptions {
 
 export interface BuildLegendOptions {
   elWrapper: HTMLElement;
-  config: {
-    colorScale: chroma.Scale;
-    colorNa: string;
-    joinType?: 'left' | 'inner';
-  };
-  data: AggregatedTableEntry[];
+  colorScale: chroma.Scale;
+  colorNa: string;
+  joinType?: "left" | "inner";
   onBuilt: (legend: any) => void;
-  onUpdate: (classIndex: any, isVisible: any, allVisibleClasses: Set<number | string>) => void;
+  onUpdate: (
+    visibleClasses: Set<number | string>,
+    legendClasses: LegendClasses,
+  ) => void;
 }
 
 // Data series types
@@ -157,3 +165,14 @@ export type AggregatorFunction = (vals: any[]) => any;
 
 // Map type - using any for now to avoid complex Mapbox GL JS typing
 export type MapInstance = any;
+
+export interface LegendClass {
+  index: number;
+  lowerBound: number;
+  upperBound: number;
+  color: string;
+  label: string;
+  isFirst: boolean;
+}
+
+export type LegendClasses = LegendClass[];

@@ -1,9 +1,8 @@
+import type { LegendClasses } from "./types";
 /**
  * Shared helpers for dynamic joins - color scale and legend utilities
  * These functions ensure consistency between map styling and legend rendering
  */
-
-import { isNumeric } from "../is_test";
 
 /**
  * Determines which class index a value belongs to based on chroma scale classes
@@ -38,41 +37,26 @@ export function getClassIndex(
  * Handles NA values with fallback color
  */
 export function getColorForValue(
-  value: any,
+  values: number[],
   colorScale: chroma.Scale,
   colorNa: string,
 ): string {
-  if (!isNumeric(value)) {
+  const nums = values.filter((v) => Number.isFinite(v));
+  if (nums.length === 0) {
     return colorNa;
   }
+
+  // sort and pick median
+  const sorted = [...nums].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  const median =
+    sorted.length % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+
   try {
-    const color = colorScale(value);
-    return color ? (color as any).hex() : colorNa;
+    return colorScale(median).hex();
   } catch {
     return colorNa;
   }
-}
-
-/**
- * Formats numbers consistently for legend display
- */
-export function formatLegendNumber(num: number): string {
-  if (!isNumeric(num)) {
-    return "N/A";
-  }
-
-  if (num === -Infinity) {
-    return "−∞";
-  }
-
-  if (num === Infinity) {
-    return "∞";
-  }
-
-  return num.toLocaleString(undefined, {
-    maximumFractionDigits: 2,
-    minimumFractionDigits: 0,
-  });
 }
 
 /**
@@ -82,37 +66,47 @@ export function formatLegendNumber(num: number): string {
 export function getLegendClasses(
   colorScale: chroma.Scale,
   colorNa: string,
-): Array<{
-  index: number;
-  lowerBound: number;
-  upperBound: number;
-  color: string;
-  label: string;
-}> {
+): LegendClasses {
   const classes = (colorScale as any).classes();
+  //colorScale.domain() -> 12, 26
+  // colorScale.classes() ->
+  // [12, 14.8, 17.6, 20.4, 23.2, 26]
 
-  // e.g. (6) [12, 14.8, 17.6, 20.4, 23.2, 26]
+  const out: any[] = [];
 
-  return classes.map((upperBound: number, i: number) => {
-    const lowerBound = i === 0 ? -Infinity : classes[i - 1];
-
-    // Get color by using a representative value from the middle of the range e.g. 5,10 -> ~7
-    const representativeValue =
-      lowerBound === -Infinity ? upperBound - 1 : (lowerBound + upperBound) / 2;
-
-    const color = getColorForValue(representativeValue, colorScale, colorNa);
-    const upperLabel = formatLegendNumber(upperBound);
-    const lowerLabel = formatLegendNumber(lowerBound);
-
-    // For the first class, show "≤ upperBound" instead of "−∞ - upperBound"
-    const label = i === 0 ? `≤ ${upperLabel}` : `${lowerLabel} - ${upperLabel}`;
-
-    return {
+  for (let i = 0; i < classes.length - 1; i++) {
+    const isFirst = i === 0;
+    const lowerBound = classes[i];
+    const upperBound = classes[i + 1];
+    const color = getColorForValue(
+      [lowerBound, upperBound],
+      colorScale,
+      colorNa,
+    );
+    const label = formatIntervalLabel(lowerBound, upperBound, isFirst);
+    out.push({
       index: i,
       lowerBound,
       upperBound,
       color,
       label,
-    };
-  });
+      isFirst,
+    });
+  }
+
+  return out;
+}
+
+/**
+ * Formats interval notation label
+ */
+function formatIntervalLabel(
+  lower: number,
+  upper: number,
+  isFirstBin: boolean,
+) {
+  const leftBracket = isFirstBin ? "[" : "(";
+  const lowerStr = parseFloat(lower.toFixed(2)).toString();
+  const upperStr = parseFloat(upper.toFixed(2)).toString();
+  return `${leftBracket}${lowerStr}, ${upperStr}]`;
 }

@@ -8,10 +8,11 @@ import type {
   CompiledFilter,
   AggregatorFunction,
   MapInstance,
+  LegendClasses,
 } from "./types";
 import { el } from "../el_mapx";
 import { isElement, isNotEmpty, isEmpty, isUrl, isArray } from "../is_test";
-import { clone, debounce, makeId } from "../mx_helper_misc.js";
+import { clone, debounce } from "../mx_helper_misc.js";
 import { buildSlider } from "./build_slider.ts";
 import { buildLegendInput } from "./build_legend.ts";
 import { bindAll } from "../bind_class_methods";
@@ -71,6 +72,7 @@ const default_state: DynamicJoinState = {
   _filters_controls: {},
   _current_filters: {},
   _visible_legend_classes: new Set(),
+  _legend_classes: [],
   _id_layer: null,
   _id_source: null,
 };
@@ -86,6 +88,7 @@ export class DynamicJoin {
   private _filters_controls: Record<string, FilterControl>;
   private _current_filters: Record<string, any>;
   private _visible_legend_classes: Set<number | string>;
+  private _legend_classes: LegendClasses;
   private _id_layer: string | null;
   private _id_source: string | null;
   private _id_source_layer: string | null;
@@ -231,20 +234,25 @@ export class DynamicJoin {
 
     buildLegendInput({
       elWrapper: elLegendContainer!,
-      config: {
-        colorScale: cscale,
-        colorNa: this.options.colorNa,
-        joinType: this.options.joinType,
-      },
-      data: this._get_aggregated_table(),
+      colorScale: cscale,
+      colorNa: this.options.colorNa,
+      joinType: this.options.joinType,
       onBuilt: (legend: any) => {
         this._filters_controls.legend = legend;
       },
-      onUpdate: (_: any, __: any, allVisibleClasses: Set<number | string>) => {
-        this._visible_legend_classes = allVisibleClasses;
-        this._apply_style();
+      onUpdate: (visibleClasses, legendClasses) => {
+        this._update_visible_classes(visibleClasses, legendClasses);
       },
     });
+  }
+
+  private _update_visible_classes(
+    visibleClasses: Set<string | number>,
+    legendClasses: LegendClasses,
+  ) {
+    this._visible_legend_classes = visibleClasses;
+    this._legend_classes = legendClasses;
+    this._apply_style();
   }
 
   private _destroy_filter_ui(): void {
@@ -570,23 +578,34 @@ export class DynamicJoin {
   // Build filter for legend visibility
   private _build_legend_filter(): any[] | null {
     const showAll = this._visible_legend_classes.size === 0;
+
     if (showAll) {
       return null; // No legend filtering needed
     }
 
-    if (!this._color_scale) {
-      return null; // Cannot build legend filter without color scale
+    const showNaClass = this._visible_legend_classes.has("na");
+    const visibleKeys: string[] = [];
+
+    // Get the visible legend classes based on the selection
+    const visibleLegendClasses = this._legend_classes.filter((lc) =>
+      this._visible_legend_classes.has(lc.index.toString()),
+    );
+
+    // If no classes are visible (except possibly N/A), there's nothing to show
+    if (visibleLegendClasses.length === 0 && !showNaClass) {
+      // Return a filter that shows nothing
+      return ["in", ["get", this.options.fieldJoinGeom], ""];
     }
 
-    // Check if N/A class is visible
-    const showNaClass = this._visible_legend_classes.has("na");
-
-    // Build filter for visible data-based legend classes
-    const visibleKeys: string[] = [];
+    // Find all keys that fall within the bounds of any visible class
     for (const [key, value] of this._aggregated_lookup) {
-      const classIdentifier = getClassIndex(value, this._color_scale);
-      if (this._visible_legend_classes.has(classIdentifier)) {
-        visibleKeys.push(key);
+      for (const lc of visibleLegendClasses) {
+        const selectMain = value > lc.lowerBound && value <= lc.upperBound;
+        const selectFirst = lc.isFirst ? value === lc.lowerBound : false;
+        if (selectMain || selectFirst) {
+          visibleKeys.push(key);
+          break; // Move to the next key once a match is found
+        }
       }
     }
 
@@ -596,7 +615,14 @@ export class DynamicJoin {
       return [
         "any",
         ["in", ["get", this.options.fieldJoinGeom], ["literal", visibleKeys]],
-        ["!", ["in", ["get", this.options.fieldJoinGeom], ["literal", Array.from(this._aggregated_lookup.keys())]]]
+        [
+          "!",
+          [
+            "in",
+            ["get", this.options.fieldJoinGeom],
+            ["literal", Array.from(this._aggregated_lookup.keys())],
+          ],
+        ],
       ];
     } else if (visibleKeys.length > 0) {
       // Show only matched features with visible classes
@@ -609,11 +635,16 @@ export class DynamicJoin {
       // Show only unmatched features (N/A)
       return [
         "!",
-        ["in", ["get", this.options.fieldJoinGeom], ["literal", Array.from(this._aggregated_lookup.keys())]]
+        [
+          "in",
+          ["get", this.options.fieldJoinGeom],
+          ["literal", Array.from(this._aggregated_lookup.keys())],
+        ],
       ];
     }
 
-    return null;
+    // If no keys matched and N/A is not selected, effectively hide all data-driven features
+    return ["in", ["get", this.options.fieldJoinGeom], ""];
   }
 
   // Apply pure color styling without filtering concerns
@@ -637,7 +668,7 @@ export class DynamicJoin {
 
     for (const [key, value] of this._aggregated_lookup) {
       const color = getColorForValue(
-        value,
+        [value],
         this._color_scale,
         this.options.colorNa,
       );
@@ -727,8 +758,18 @@ export class DynamicJoin {
   /**
    * Process MapX-specific options and build URLs/data
    */
-  private async _processMapxOptions(opts: Partial<DynamicJoinOptions>): Promise<void> {
-    const { idSourceData, idSourceGeom, fieldsData, fieldsGeom, fieldMainData, useApiMapxData, useApiMapxTiles } = opts;
+  private async _processMapxOptions(
+    opts: Partial<DynamicJoinOptions>,
+  ): Promise<void> {
+    const {
+      idSourceData,
+      idSourceGeom,
+      fieldsData,
+      fieldsGeom,
+      fieldMainData,
+      useApiMapxData,
+      useApiMapxTiles,
+    } = opts;
 
     const promises: Promise<any>[] = [];
 
@@ -765,13 +806,16 @@ export class DynamicJoin {
   /**
    * Build tile URLs for MapX geometry source
    */
-  private async _buildMapxTileUrls(idSourceGeom: string, fieldsGeom?: string[]): Promise<string[]> {
+  private async _buildMapxTileUrls(
+    idSourceGeom: string,
+    fieldsGeom?: string[],
+  ): Promise<string[]> {
     const tilesUrlBase = getApiUrl("getTile");
 
     const params = [
       `idSource=${idSourceGeom}`,
       fieldsGeom?.length ? `attributes=${fieldsGeom.join(",")}` : null,
-      `timestamp=${Date.now()}`
+      `timestamp=${Date.now()}`,
     ].filter(Boolean);
 
     const tilesUrl = `${tilesUrlBase}?${params.join("&")}`;
@@ -783,12 +827,15 @@ export class DynamicJoin {
   /**
    * Fetch tabular data from MapX backend
    */
-  private async _fetchMapxTableData(idSourceData: string, fieldsData?: string[]): Promise<any[]> {
-    const urlTable = getApiUrl('getSourceTableAttribute');
+  private async _fetchMapxTableData(
+    idSourceData: string,
+    fieldsData?: string[],
+  ): Promise<any[]> {
+    const urlTable = getApiUrl("getSourceTableAttribute");
 
     const params = [
       `id=${idSourceData}`,
-      fieldsData?.length ? `attributes=${fieldsData.join(",")}` : null
+      fieldsData?.length ? `attributes=${fieldsData.join(",")}` : null,
     ].filter(Boolean);
 
     const dataUrl = `${urlTable}?${params.join("&")}`;
@@ -803,7 +850,11 @@ export class DynamicJoin {
       const result = await response.json();
 
       // Handle both [{},{}] and {data:[{},{}]} formats
-      const data = isArray(result) ? result : isArray(result.data) ? result.data : [];
+      const data = isArray(result)
+        ? result
+        : isArray(result.data)
+          ? result.data
+          : [];
 
       if (isEmpty(data)) {
         console.warn(`No data returned for source: ${idSourceData}`);
@@ -811,7 +862,10 @@ export class DynamicJoin {
 
       return data;
     } catch (error) {
-      console.error(`Failed to fetch MapX table data for ${idSourceData}:`, error);
+      console.error(
+        `Failed to fetch MapX table data for ${idSourceData}:`,
+        error,
+      );
       throw new Error(`Failed to fetch MapX table data: ${error.message}`);
     }
   }
