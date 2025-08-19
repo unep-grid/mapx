@@ -1,7 +1,7 @@
 import { Manager } from "socket.io-client";
-import { isObject, isFunction, isEmpty } from "../is_test/index.js";
+import { isObject, isFunction } from "../is_test/index.js";
 import { bindAll } from "../bind_class_methods";
-import { settings } from "./../mx.js";
+import { settings } from "../settings";
 
 const cache = new Map();
 
@@ -149,7 +149,7 @@ class WsHandler {
   getCacheStats() {
     return {
       size: cache.size,
-      keys: Array.from(cache.keys())
+      keys: Array.from(cache.keys()),
     };
   }
 
@@ -235,7 +235,7 @@ function createCacheKey(path, params) {
 
   // Create a stable string representation
   let stableParams;
-  if (typeof params === 'object' && params !== null) {
+  if (typeof params === "object" && params !== null) {
     // Sort object keys for consistent ordering
     stableParams = JSON.stringify(params, Object.keys(params).sort());
   } else {
