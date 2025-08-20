@@ -1,9 +1,9 @@
 #
 #  SERVER FUNCTION
 #
-server <- function(input, output, session) {
-  isMaintenance <- isTRUE(.get(config, c("mode")) == "MAINTENANCE")
-
+server <- function(input, output, session){
+     isMaintenance <- isTRUE(.get(config, c("mode")) == "MAINTENANCE")
+ 
   if (isMaintenance) {
     #
     # Set maintenance mode, ignore everything else
@@ -56,7 +56,13 @@ server <- function(input, output, session) {
       #
       # Countries iso3 code
       #
-      countries = .get(config, c("countries", "table", "id"))
+      countries = .get(config, c("countries", "table", "id")),
+      #
+      # Docs links 
+      #
+      links = list(
+        doc_base = .get(config, c("links","doc_base")
+      )
     )
   )
 
