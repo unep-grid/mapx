@@ -1,3 +1,8 @@
+  - [1.13.18-beta.7](https://github.com/unep-grid/mapx/tree/1.13.18-beta.7) 
+
+    - feat: highlighter as as option 'use_highlighter' in dynamic joins
+
+
   - [1.13.18-beta.6](https://github.com/unep-grid/mapx/tree/1.13.18-beta.6) 
 
     - fix: dynamic joins, use classes to color features instead of computing a color
