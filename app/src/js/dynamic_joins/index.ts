@@ -21,12 +21,14 @@ import { waitTimeoutAsync } from "../animation_frame";
 import { buildTomSelectInput } from "./build_tom_select.ts";
 import {
   aggregators,
-  getColorForValue,
   getColorFromClassesLinear,
   operators,
 } from "./helpers.ts";
 import { getApiUrl } from "./../api_routes";
+import { highlighter } from "../mx.js";
+import { isEqual, isTrue } from "../is_test/index.js";
 
+const defaultFn = () => {};
 const default_options: DynamicJoinOptions = {
   elSelectContainer: null,
   elLegendContainer: null,
@@ -60,10 +62,11 @@ const default_options: DynamicJoinOptions = {
   dynamicFilters: [],
   joinType: "left",
 
-  onTableAggregated: () => {},
-  onTableReady: () => {},
-  onTableFiltered: () => {},
-  onMapClick: () => {},
+  onTableAggregated: defaultFn,
+  onTableReady: defaultFn,
+  onTableFiltered: defaultFn,
+  onMapClick: defaultFn,
+  useHighlighter: false,
 };
 
 const default_state: DynamicJoinState = {
@@ -79,6 +82,7 @@ const default_state: DynamicJoinState = {
   _legend_classes: [],
   _id_layer: null,
   _id_source: null,
+  _highlight_gids: [],
 };
 
 export class DynamicJoin {
@@ -96,6 +100,7 @@ export class DynamicJoin {
   private _id_layer: string | null;
   private _id_source: string | null;
   private _id_source_layer: string | null;
+  private _highlight_gids: number[];
 
   constructor(map: MapInstance) {
     (window as any)._dj = this;
@@ -245,6 +250,7 @@ export class DynamicJoin {
         this._filters_controls.legend = legend;
       },
       onUpdate: (visibleClasses, legendClasses) => {
+        this._remove_highlighter();
         this._update_visible_classes(visibleClasses, legendClasses);
       },
     });
@@ -708,13 +714,22 @@ export class DynamicJoin {
     this._map.on("click", this._id_layer, this._on_map_click);
   }
 
-  private _on_map_click = (ev: any): any => {
-    if (this.options.onMapClick) {
-      const map = ev.target;
-      const idLayer = this._id_layer;
-      const features = map.queryRenderedFeatures(ev.point, {
-        layers: [idLayer],
-      });
+  private _on_map_click = (ev: any): void => {
+    const useMapClick = this.options.onMapClick != defaultFn;
+    const useHighlighter = isTrue(this.options.useHighlighter);
+    const render = useMapClick || useHighlighter;
+
+    if (!render) {
+      return;
+    }
+
+    const map = ev.target;
+    const idLayer = this._id_layer;
+    const features = map.queryRenderedFeatures(ev.point, {
+      layers: [idLayer],
+    });
+
+    if (useMapClick) {
       const enrichedFeatures = features.map((feature: any) => {
         const geomJoinValue =
           feature.properties[this.options.fieldJoinGeom as string];
@@ -723,17 +738,48 @@ export class DynamicJoin {
         return feature;
       });
 
-      return this.options.onMapClick(enrichedFeatures, this, ev);
+      this._remove_highlighter();
+      this.options.onMapClick(enrichedFeatures, this, ev);
+    }
+    /**
+     * handle highlighter after map click, if removed by mapclick
+     */
+    if (useHighlighter) {
+      const gids = features.map((f: GeoJSON.Feature) => f?.properties?.gid);
+      const isToggle = isEqual(gids, this._highlight_gids);
+
+      if (isToggle) {
+        this._remove_highlighter();
+        this._highlight_gids = [];
+      } else {
+        highlighter.setState({
+          filters: [
+            {
+              id: idLayer,
+              filter: ["in", ["get", "gid"], ["literal", gids]],
+            },
+          ],
+        });
+
+        this._highlight_gids = gids;
+      }
     }
   };
 
+  private _remove_highlighter() {
+    const useHighlighter = isTrue(this.options.useHighlighter);
+    const idLayer = this._id_layer;
+    if (useHighlighter && idLayer) {
+      highlighter.resetLayer(idLayer);
+    }
+  }
+
   destroy(): void {
-    this._destroy_filter_ui(); // Destroy filters
-    this._destroy_legend_ui(); // Destroy legend
-
+    this._destroy_filter_ui();
+    this._destroy_legend_ui();
     (this._map as any).off("click", this._id_layer, this._on_map_click);
-
-    this._remove_layer(); // Remove map layer/source
+    this._remove_highlighter();
+    this._remove_layer();
   }
 
   private _remove_layer(): void {

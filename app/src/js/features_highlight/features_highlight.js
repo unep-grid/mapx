@@ -1,5 +1,5 @@
 import { bindAll } from "../bind_class_methods";
-import { clone, patchObject, updateIfEmpty } from "../mx_helper_misc";
+import { clone, patchObject } from "../mx_helper_misc";
 import { isEmpty, isMap, isNotEmpty } from "./../is_test/index";
 const def = {
   map: null, // Mapbox gl instance
@@ -187,6 +187,26 @@ class Highlighter {
   }
 
   /**
+   * Reset highlighting for a specific layer
+   * @param {String} layerId - The layer ID to reset (e.g., "MX-TC0O1-34A9Y-RYDJG")
+   * @returns {Number} Number of remaining highlighted features after reset
+   */
+  resetLayer(layerId) {
+    const hl = this;
+    if (hl.destroyed || !layerId) {
+      return hl._feature_count || 0;
+    }
+    const initialFilters = hl._state.filters.length;
+    hl._state.filters = hl._state.filters.filter((f) => f.id !== layerId);
+
+    if (hl._state.filters.length === initialFilters) {
+      return hl._feature_count;
+    }
+
+    return hl.update();
+  }
+
+  /**
    * Update
    * @returns {Integer} feature count
    */
@@ -200,22 +220,12 @@ class Highlighter {
     return hl._feature_count;
   }
 
-  _clear_layers_map() {
-    const hl = this;
-    for (const layer of hl.layers) {
-      const mapLayer = hl._map.getLayer(layer.id);
-      if (mapLayer) {
-        hl._map.removeLayer(layer.id);
-      }
-    }
-  }
-
   /**
    * Clear
    */
   _clear() {
     const hl = this;
-    hl._clear_layers_map();
+    hl._remove_highlight_layers();
     hl._layers = {};
     hl._state = hl._def_state();
     return hl.update(true);
@@ -256,6 +266,34 @@ class Highlighter {
     }
   }
 
+  _remove_highlight_layers(sources) {
+    const hl = this;
+    const sourcesToRemove = [];
+
+    if (isEmpty(sources)) {
+      sourcesToRemove.push(...Object.keys(hl._layers));
+    } else if (Array.isArray(sources)) {
+      sourcesToRemove.push(...sources);
+    } else {
+      sourcesToRemove.push(sources);
+    }
+
+    for (const source of sourcesToRemove) {
+      const idLayer = `@hl-${source}`;
+      const shadowId = `${idLayer}-shadow`;
+
+      const mapLayer = hl._map.getLayer(idLayer);
+      if (mapLayer) {
+        hl._map.removeLayer(idLayer);
+      }
+
+      const shadowMapLayer = hl._map.getLayer(shadowId);
+      if (shadowMapLayer) {
+        hl._map.removeLayer(shadowId);
+      }
+    }
+  }
+
   _get_layers_by_prefix(prefix) {
     return this._map
       .getStyle()
@@ -275,6 +313,7 @@ class Highlighter {
    */
   _update_layers() {
     const hl = this;
+    const oldSources = Object.keys(hl._layers);
     const def = hl._def_state();
     const state = patchObject(def, hl._state);
     hl._feature_count = 0;
@@ -306,6 +345,13 @@ class Highlighter {
     }
 
     hl._layers = hl_layers;
+    const newSources = Object.keys(hl._layers);
+    const sourcesToRemove = oldSources.filter(
+      (s) => !newSources.includes(s)
+    );
+    if (sourcesToRemove.length > 0) {
+      hl._remove_highlight_layers(sourcesToRemove);
+    }
   }
 
   get layers() {

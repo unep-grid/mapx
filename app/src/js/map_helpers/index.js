@@ -164,6 +164,15 @@ const mx_local = {
 };
 
 /**
+ * Export current map sources;
+ * @returns {Object} Object of sources and config, with source id as config
+ */
+export function getMapSources() {
+  const sources = getMap().getStyle()?.sources;
+  return sources;
+}
+
+/**
  * Export style basemap
  * @param {Object} opt Options
  * @param {String} opt.sourcePrefixToKeep Prefix of source layers id to keep;
@@ -1747,14 +1756,13 @@ export async function handleClickEvent(event, idMap) {
 
   const attributes_flat = { ...attributes.vector, ...attributes.raster };
 
-
   if (isEmpty(attributes_flat)) {
     return;
   }
 
   if (addHighlight) {
     const filters = await layersAttributesToFilters(attributes.vector);
-    highlighter.set({ filters });
+    highlighter.setState({ filters });
   }
 
   if (addWidget) {
@@ -4289,7 +4297,7 @@ export function getLayersPropertiesAtBbox(opt) {
 
   const idViewsSorted = sortByOrder(idViews, idViewsOrder);
 
-  const sources = getMap().getStyle()?.sources;
+  const sources = getMapSources();
 
   /**
    * Fetch view data for one or many views

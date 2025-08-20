@@ -76,6 +76,7 @@ export interface DynamicJoinOptions {
   // MapX-specific options (optional, higher priority when provided)
   useApiMapxData?: boolean; // Enable MapX data fetching
   useApiMapxTiles?: boolean; // Enable MapX tile URL construction
+  useHighlighter?: boolean; // Enable highlighter
   fieldsData?: string[]; // Optional: specific fields to fetch from data
   fieldsGeom?: string[]; // Optional: specific fields to fetch from geometry
   fieldMainData?: string; // Optional: main field for data (same as field)
@@ -95,6 +96,7 @@ export interface DynamicJoinState {
   _legend_classes: LegendClasses;
   _id_layer: string | null;
   _id_source: string | null;
+  _highlight_gids: number[];
 }
 
 // UI control types
