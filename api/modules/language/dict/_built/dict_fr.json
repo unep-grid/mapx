@@ -6565,36 +6565,6 @@
     "fr": "Intervalle égal"
   },
   {
-    "id": "roles_updated_mail_title",
-    "en": "Roles updated",
-    "fr": "Roles mis à jours"
-  },
-  {
-    "id": "roles_updated_mail_subject",
-    "en": "Roles updated in project {{nameProject}}",
-    "fr": "Roles mis à jour dans le projet {{nameProject}}"
-  },
-  {
-    "id": "roles_updated_mail_content",
-    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "fr": "<p>Bonjour,</p><p>Un administrateur a changé vos roles pour le projet {{projectLink}}.</p> <p> Voici la liste des changements:</p><p>{{txtRoleChange}}</p><p>Bonne journée !</p> <i style='float:right'>L'équipe Mapx.</i>"
-  },
-  {
-    "id": "roles_updated_mail_content_admin_summary",
-    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "fr": "<p>Bonjour,</p><p>Les roles du projet {{projectLink}} ont changés.</p> <p> Voici la liste des changements:</p><p>{{changes}}</p><p>Bonne journée !</p> "
-  },
-  {
-    "id": "added_to_group",
-    "en": "added to: {{group}} \n",
-    "fr": "ajouté a: {{group}} \n"
-  },
-  {
-    "id": "removed_from_group",
-    "en": "removed from: {{group}} \n",
-    "fr": "enlevé de: {{group}} \n"
-  },
-  {
     "id": "get_source_meta_extracted",
     "en": "Metadata extracted",
     "fr": "Métadonnées extraites "
@@ -8303,6 +8273,36 @@
     "id": "project_roles_saved_successfully",
     "en": "Role changes have been saved successfully",
     "fr": "Les modifications de rôle ont été enregistrées avec succès"
+  },
+  {
+    "id": "project_roles_updated_mail_title",
+    "en": "Roles updated",
+    "fr": "Roles mis à jours"
+  },
+  {
+    "id": "project_roles_updated_mail_subject",
+    "en": "Roles updated in project {{nameProject}}",
+    "fr": "Roles mis à jour dans le projet {{nameProject}}"
+  },
+  {
+    "id": "project_roles_updated_mail_content",
+    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
+    "fr": "<p>Bonjour,</p><p>Un administrateur a changé vos roles pour le projet {{projectLink}}.</p> <p> Voici la liste des changements:</p><p>{{txtRoleChange}}</p><p>Bonne journée !</p> <i style='float:right'>L'équipe Mapx.</i>"
+  },
+  {
+    "id": "project_roles_updated_mail_content_admin_summary",
+    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
+    "fr": "<p>Bonjour,</p><p>Les roles du projet {{projectLink}} ont changés.</p> <p> Voici la liste des changements:</p><p>{{changes}}</p><p>Bonne journée !</p> "
+  },
+  {
+    "id": "project_added_to_group",
+    "en": "added to: {{group}} \n",
+    "fr": "ajouté a: {{group}} \n"
+  },
+  {
+    "id": "project_removed_from_group",
+    "en": "removed from: {{group}} \n",
+    "fr": "enlevé de: {{group}} \n"
   },
   {
     "id": "schema_story_theme",

@@ -1,50 +1,29 @@
 import { isAdmin } from "#mapx/authentication";
 import { isEmpty, isNotEmpty, isArray } from "@fxi/mx_valid";
 import { pgRead, pgWrite } from "#mapx/db";
+import { templates } from "#mapx/template";
 
 /**
- * Get project roles matrix data
- * Fetches all users in the project with their current roles
+ * Get project roles matrix data with inheritance
+ * Role hierarchy: contact > admin > publisher > member
  */
 export async function ioProjectRolesGet(socket, data, cb) {
   try {
     const isUserAllowed = isAdmin(socket);
-
     if (!isUserAllowed) {
       throw new Error("project_roles_access_denied");
     }
-
     const idProject = socket.session.project_id;
     const currentUserId = socket.session.user_id;
-
     if (!idProject) {
       throw new Error("project_id_required");
     }
 
-    // Get all users who have any role in this project
-    const query = `
-SELECT
-  u.id,
-  u.email,
-  COALESCE(p.contacts, '[]'::jsonb) @> jsonb_build_array(u.id) AS is_contact,
-  COALESCE(p.admins, '[]'::jsonb) @> jsonb_build_array(u.id) AS is_admin,
-  COALESCE(p.publishers, '[]'::jsonb) @> jsonb_build_array(u.id) AS is_publisher,
-  COALESCE(p.members, '[]'::jsonb) @> jsonb_build_array(u.id) AS is_member
-FROM mx_users u
-JOIN mx_projects p ON p.id = $1
-WHERE u.id IN (
-    SELECT jsonb_array_elements_text(COALESCE(p.contacts, '[]'::jsonb))::integer
-    UNION
-    SELECT jsonb_array_elements_text(COALESCE(p.admins, '[]'::jsonb))::integer
-    UNION
-    SELECT jsonb_array_elements_text(COALESCE(p.publishers, '[]'::jsonb))::integer
-    UNION
-    SELECT jsonb_array_elements_text(COALESCE(p.members, '[]'::jsonb))::integer
-)
-ORDER BY u.email;
-    `;
+    // Get all users with their highest role
+    const query = templates.getProjectRoleMatrix;
 
     const { rows } = await pgRead.query(query, [idProject]);
+
     data.users = rows;
     data.currentUserId = currentUserId;
     data.success = true;
@@ -83,7 +62,7 @@ export async function ioProjectRolesUpdate(socket, data, cb) {
     const validation = await validateRoleChanges(
       roleChanges,
       idProject,
-      currentUserId
+      currentUserId,
     );
 
     if (!validation.valid) {
@@ -113,7 +92,7 @@ async function validateRoleChanges(roleChanges, idProject, currentUserId) {
     // Get current project state
     const { rows } = await pgRead.query(
       `SELECT contacts, admins, publishers, members FROM mx_projects WHERE id = $1`,
-      [idProject]
+      [idProject],
     );
 
     if (isEmpty(rows)) {
@@ -223,7 +202,7 @@ async function updateProjectRoles(idProject, roleChanges) {
     // Get current state
     const { rows } = await client.query(
       `SELECT contacts, admins, publishers, members FROM mx_projects WHERE id = $1`,
-      [idProject]
+      [idProject],
     );
 
     const currentRoles = rows[0];
@@ -269,7 +248,7 @@ async function updateProjectRoles(idProject, roleChanges) {
         JSON.stringify(newRoles.publishers),
         JSON.stringify(newRoles.members),
         idProject,
-      ]
+      ],
     );
 
     await client.query("COMMIT");
@@ -307,8 +286,8 @@ async function reportRolesChange(changes, idProject, currentUserId) {
     const uniqueUserIds = [...new Set(allUserIds)];
 
     const { rows } = await pgRead.query(
-      `SELECT id, email FROM mx_users WHERE id = ANY($1)`,
-      [uniqueUserIds]
+      `SELECT id, email, data #>> '{user,cache,last_language}' as language FROM mx_users WHERE id = ANY($1)`,
+      [uniqueUserIds],
     );
 
     const userEmails = {};
@@ -346,6 +325,7 @@ async function reportRolesChange(changes, idProject, currentUserId) {
       }
     }
 
+    debugger; 
     // TODO: Send emails to admins and affected users
     console.log("Role changes to be notified:", notificationData);
 

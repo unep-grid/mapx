@@ -4,7 +4,6 @@ import { ws } from "../mx.js";
 import { settings } from "../settings";
 import { bindAll } from "../bind_class_methods";
 import { tt } from "../el_mapx";
-import { getDictItem } from "../language";
 import { isEmpty, isNotEmpty } from "../is_test/index.js";
 
 /**
@@ -52,8 +51,6 @@ export class RoleMatrix {
    * Fetch role data from server
    */
   async fetchRoleData() {
-    const rm = this;
-
     return ws.emitAsync("/client/project/roles/get", {}, 30 * 1000);
   }
 
@@ -523,19 +520,21 @@ export class RoleMatrix {
             elRoleAction,
             el("span", ": "),
           ]),
-          el("span", `${user.email}(${user.id})`),
+          el("span", `${user.email} [${user.id}]`),
         ],
       );
 
       elChanges.push(elChange);
     }
 
+    const ulChanges = el("ul", [...elChanges]);
+
     return el(
       "div",
       {
         class: "role-changes-summary",
       },
-      [el("ul", tt("project_roles_changes_summary")), ...elChanges],
+      [tt("project_roles_changes_summary"), ulChanges],
     );
   }
 

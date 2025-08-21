@@ -6565,36 +6565,6 @@
     "ps": "مساوي وقفه "
   },
   {
-    "id": "roles_updated_mail_title",
-    "en": "Roles updated",
-    "ps": "رولونه نوي شوي "
-  },
-  {
-    "id": "roles_updated_mail_subject",
-    "en": "Roles updated in project {{nameProject}}",
-    "ps": "رولونه په پروژه کې نوي شوي {{nameProject}} "
-  },
-  {
-    "id": "roles_updated_mail_content",
-    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "ps": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> یوه مدیر ستاسو په پروژې کې رول بدل کړ {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> دلته د بدلونونو لیست دی:</p><p style=\";text-align:right;direction:rtl\"> {{txtRoleChange}}</p><p style=\";text-align:right;direction:rtl\"> ښه ورځ ولرئ !</p> <i style=\"float:right\">د میپ ایکس ټیم.</i> "
-  },
-  {
-    "id": "roles_updated_mail_content_admin_summary",
-    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "ps": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> ستاسو په پروژه کې رولونه بدل شوي دي {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> دلته د بدلونونو لیست دی: {{changes}}</p><p style=\";text-align:right;direction:rtl\"> ښه ورځ ولرئ !</p> "
-  },
-  {
-    "id": "added_to_group",
-    "en": "added to: {{group}} \n",
-    "ps": "ورزياته شوي: {{group}}\n "
-  },
-  {
-    "id": "removed_from_group",
-    "en": "removed from: {{group}} \n",
-    "ps": "د دې څخه لرې شوی: {{group}}\n "
-  },
-  {
     "id": "get_source_meta_extracted",
     "en": "Metadata extracted",
     "ps": "میٹاਡੇټا ایستل شوی "
@@ -8303,6 +8273,36 @@
     "id": "project_roles_saved_successfully",
     "en": "Role changes have been saved successfully",
     "ps": "د رول بدلونونه په بریالیتوب سره خوندي شوي دي"
+  },
+  {
+    "id": "project_roles_updated_mail_title",
+    "en": "Roles updated",
+    "ps": "رولونه تازه شوي"
+  },
+  {
+    "id": "project_roles_updated_mail_subject",
+    "en": "Roles updated in project {{nameProject}}",
+    "ps": "په پروژه کې رولونه تازه شوي {{nameProject}}"
+  },
+  {
+    "id": "project_roles_updated_mail_content",
+    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
+    "ps": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> یو مدیر په پروژه کې ستاسو رولونه بدل کړل. {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> دلته د بدلونونو لیست دی:</p><p style=\";text-align:right;direction:rtl\"> {{txtRoleChange}}</p><p style=\";text-align:right;direction:rtl\"> ښه ورځ ولرئ !</p> <i style=\"float:right\">د میپ ایکس ټیم.</i>"
+  },
+  {
+    "id": "project_roles_updated_mail_content_admin_summary",
+    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
+    "ps": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> ستاسو په پروژه کې رولونه بدل شوي دي {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> دلته د بدلونونو لیست دی: {{changes}}</p><p style=\";text-align:right;direction:rtl\"> ښه ورځ ولرئ !</p>"
+  },
+  {
+    "id": "project_added_to_group",
+    "en": "added to: {{group}} \n",
+    "ps": "اضافه شوی: {{group}}\n"
+  },
+  {
+    "id": "project_removed_from_group",
+    "en": "removed from: {{group}} \n",
+    "ps": "لرې شوی له: {{group}}\n"
   },
   {
     "id": "schema_story_theme",

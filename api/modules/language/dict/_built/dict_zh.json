@@ -6565,36 +6565,6 @@
     "zh": "相等间隔"
   },
   {
-    "id": "roles_updated_mail_title",
-    "en": "Roles updated",
-    "zh": "角色已更新 "
-  },
-  {
-    "id": "roles_updated_mail_subject",
-    "en": "Roles updated in project {{nameProject}}",
-    "zh": "项目中的角色已更新 {{nameProject}} "
-  },
-  {
-    "id": "roles_updated_mail_content",
-    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "zh": "<p>你好，</p><p>管理员更改了您在项目中的角色 {{projectLink}}。</p><p>以下是更改列表：</p><p> {{txtRoleChange}}</p><p>祝你今天过得愉快 ！</p> <i style=\"float:right\">MapX小组。</i> "
-  },
-  {
-    "id": "roles_updated_mail_content_admin_summary",
-    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "zh": "<p>你好，</p><p>项目中的角色已更改 {{projectLink}}。</p><p>以下是更改列表： {{changes}}</p><p>祝你今天过得愉快 ！</p> "
-  },
-  {
-    "id": "added_to_group",
-    "en": "added to: {{group}} \n",
-    "zh": "添加到： {{group}}\n "
-  },
-  {
-    "id": "removed_from_group",
-    "en": "removed from: {{group}} \n",
-    "zh": "已经从...删除： {{group}}\n "
-  },
-  {
     "id": "get_source_meta_extracted",
     "en": "Metadata extracted",
     "zh": "提取元数据 "
@@ -8303,6 +8273,36 @@
     "id": "project_roles_saved_successfully",
     "en": "Role changes have been saved successfully",
     "zh": "角色更改已成功保存"
+  },
+  {
+    "id": "project_roles_updated_mail_title",
+    "en": "Roles updated",
+    "zh": "角色已更新"
+  },
+  {
+    "id": "project_roles_updated_mail_subject",
+    "en": "Roles updated in project {{nameProject}}",
+    "zh": "项目中的角色已更新 {{nameProject}}"
+  },
+  {
+    "id": "project_roles_updated_mail_content",
+    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
+    "zh": "<p>你好，</p><p>管理员更改了您在项目中的角色 {{projectLink}}。</p><p>以下是变更列表：</p><p> {{txtRoleChange}}</p><p>祝你今天过得愉快 ！</p> <i style=\"float:right\">MapX 团队。</i>"
+  },
+  {
+    "id": "project_roles_updated_mail_content_admin_summary",
+    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
+    "zh": "<p>你好，</p><p>您的项目中的角色已发生变化 {{projectLink}}。</p><p>以下是变更列表： {{changes}}</p><p>祝你今天过得愉快 ！</p>"
+  },
+  {
+    "id": "project_added_to_group",
+    "en": "added to: {{group}} \n",
+    "zh": "添加到： {{group}}\n"
+  },
+  {
+    "id": "project_removed_from_group",
+    "en": "removed from: {{group}} \n",
+    "zh": "已从以下位置移除： {{group}}\n"
   },
   {
     "id": "schema_story_theme",

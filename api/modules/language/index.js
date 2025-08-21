@@ -1,3 +1,11 @@
+/**
+ * @module language
+ * @description This module handles language translations for the application.
+ * It initializes an in-memory dictionary from JSON files and provides
+ * functions to translate strings, import dictionary data into a PostgreSQL
+ * database, and retrieve specific translations.
+ */
+
 import { readTxt, parseTemplate } from "#mapx/helpers";
 import { pgAdmin, pgRead } from "#mapx/db";
 
@@ -24,7 +32,8 @@ for (const file of dicts_lang) {
 }
 
 /**
- * Init language;
+ * Initializes the language module by importing the dictionary into the database.
+ * @returns {Promise<void>}
  */
 export async function init() {
   try {
@@ -42,11 +51,11 @@ export async function init() {
 }
 
 /**
- * Simple translate + template function
- * @param {String} lang Two letter code language. e.g. 'en'
- * @param {String} id Dictionary entry id
- * @param {Object} data Data used for templating e.g. 'User name is {{name}}' + {name:'bob'} = 'User name is bob'
- * @return {String}
+ * Translates a given ID into a specified language and optionally applies template data.
+ * @param {string} id - The dictionary entry ID to translate.
+ * @param {string} [lang='en'] - The two-letter language code (e.g., 'en', 'fr'). Defaults to 'en'.
+ * @param {Object<string, any>} [data] - Data for templating, where keys in the object match placeholders in the translation string (e.g., { name: 'Bob' } for 'User name is {{name}}').
+ * @returns {string} The translated and templated string, or the original ID if no translation is found.
  */
 export function translate(id, lang, data) {
   let item;
@@ -63,7 +72,10 @@ export function translate(id, lang, data) {
 export const t = translate;
 
 /**
- * Import dict CSV
+ * Imports the full dictionary from a JSON file into the PostgreSQL database.
+ * It performs a full replacement of the `mx_dict_translate` table.
+ * @private
+ * @returns {Promise<boolean>} Returns `true` if the import was successful, otherwise `undefined`.
  */
 async function importDict() {
   const fileExists = fs.existsSync(dict_full);
@@ -94,7 +106,8 @@ async function importDict() {
 }
 
 /**
- * Get m49 and iso3 countries translation
+ * Retrieves translations for M49 and ISO3 country codes from the database.
+ * @returns {Promise<Array<Object<string, any>>>|undefined>} A promise that resolves to an array of translation objects, or undefined on error.
  */
 export async function getDictM49iso3() {
   try {

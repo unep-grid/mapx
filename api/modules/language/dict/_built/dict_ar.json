@@ -6565,36 +6565,6 @@
     "ar": "الفاصل الزمني المتساوي "
   },
   {
-    "id": "roles_updated_mail_title",
-    "en": "Roles updated",
-    "ar": "تم تحديث الأدوار "
-  },
-  {
-    "id": "roles_updated_mail_subject",
-    "en": "Roles updated in project {{nameProject}}",
-    "ar": "تم تحديث الأدوار في المشروع {{nameProject}} "
-  },
-  {
-    "id": "roles_updated_mail_content",
-    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "ar": "<p style=\";text-align:right;direction:rtl\">مرحبا،</p><p style=\";text-align:right;direction:rtl\"> قام المسؤول بتغيير أدوارك في المشروع {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> فيما يلي قائمة التغييرات:</p><p style=\";text-align:right;direction:rtl\"> {{txtRoleChange}}</p><p style=\";text-align:right;direction:rtl\"> طاب يومك !</p> <i style=\"float:right\">فريق MapX.</i> "
-  },
-  {
-    "id": "roles_updated_mail_content_admin_summary",
-    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "ar": "<p style=\";text-align:right;direction:rtl\">مرحبا،</p><p style=\";text-align:right;direction:rtl\"> لقد تغيرت الأدوار في مشروعك {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> فيما يلي قائمة التغييرات: {{changes}}</p><p style=\";text-align:right;direction:rtl\"> طاب يومك !</p> "
-  },
-  {
-    "id": "added_to_group",
-    "en": "added to: {{group}} \n",
-    "ar": "مضاف إلى: {{group}}\n "
-  },
-  {
-    "id": "removed_from_group",
-    "en": "removed from: {{group}} \n",
-    "ar": "تمت إزالته من: {{group}}\n "
-  },
-  {
     "id": "get_source_meta_extracted",
     "en": "Metadata extracted",
     "ar": "استخراج البيانات الوصفية "
@@ -8303,6 +8273,36 @@
     "id": "project_roles_saved_successfully",
     "en": "Role changes have been saved successfully",
     "ar": "تم حفظ تغييرات الأدوار بنجاح"
+  },
+  {
+    "id": "project_roles_updated_mail_title",
+    "en": "Roles updated",
+    "ar": "تم تحديث الأدوار"
+  },
+  {
+    "id": "project_roles_updated_mail_subject",
+    "en": "Roles updated in project {{nameProject}}",
+    "ar": "تم تحديث الأدوار في المشروع {{nameProject}}"
+  },
+  {
+    "id": "project_roles_updated_mail_content",
+    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
+    "ar": "<p style=\";text-align:right;direction:rtl\">مرحبًا،</p><p style=\";text-align:right;direction:rtl\"> قام أحد المسؤولين بتغيير أدوارك في المشروع {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> وهنا قائمة التغييرات:</p><p style=\";text-align:right;direction:rtl\"> {{txtRoleChange}}</p><p style=\";text-align:right;direction:rtl\"> طاب يومك !</p> <i style=\"float:right\">فريق MapX.</i>"
+  },
+  {
+    "id": "project_roles_updated_mail_content_admin_summary",
+    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
+    "ar": "<p style=\";text-align:right;direction:rtl\">مرحبًا،</p><p style=\";text-align:right;direction:rtl\"> لقد تغيرت الأدوار في مشروعك {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> وهنا قائمة التغييرات: {{changes}}</p><p style=\";text-align:right;direction:rtl\"> طاب يومك !</p>"
+  },
+  {
+    "id": "project_added_to_group",
+    "en": "added to: {{group}} \n",
+    "ar": "تمت الإضافة إلى: {{group}}\n"
+  },
+  {
+    "id": "project_removed_from_group",
+    "en": "removed from: {{group}} \n",
+    "ar": "تمت إزالته من: {{group}}\n"
   },
   {
     "id": "schema_story_theme",
