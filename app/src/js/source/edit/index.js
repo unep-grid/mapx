@@ -54,6 +54,7 @@ const defaults = {
   id_column_main: "gid",
   id_column_valid: "_mx_valid",
   id_columns_reserved: ["gid", "_mx_valid", "geom"],
+  id_columns_hidden: ["gid"],
   max_changes: 1e5, //max one column at max rows
   min_columns: 3,
   max_changes_large: 1e3,
@@ -1039,6 +1040,16 @@ export class EditTableSessionClient extends EditTableBase {
   }
 
   /**
+   * Column name validation : columns used internally
+   * @param {String} name
+   * @return {Boolean}
+   */
+  isColumnHidden(name) {
+    const et = this;
+    return et._config.id_columns_hidden.includes(name);
+  }
+
+  /**
    * Column name validation : columns used in style and secondary attributes
    * @param {String} name
    * @return {Promise<Boolean>}
@@ -1440,7 +1451,7 @@ export class EditTableSessionClient extends EditTableBase {
       allowInsertRow: false,
       renderAllRows: false,
       maxRows: table.data.length,
-
+      manualColumnResize: true,
       copyPaste: {
         rowsLimit: table.data.length,
       },
@@ -1464,6 +1475,7 @@ export class EditTableSessionClient extends EditTableBase {
       disableVisualSelection: false,
       outsideClickDeselects: false,
       comment: false,
+      colWidths: et._get_col_width(table),
     });
 
     /**
@@ -3734,6 +3746,38 @@ export class EditTableSessionClient extends EditTableBase {
     et.sanitize([...changes]);
 
     return false;
+  }
+
+  _get_col_width(table) {
+    const { data } = table;
+    const sampleSize = Math.min(100, data.length);
+    const columns = this.getColumns();
+    const colWidths = columns.map((c) => {
+      if (this.isColumnHidden(c.data)) {
+        return 0.1;
+      }
+      let maxWidth = c.data.length * 10;
+      for (let i = 0; i < sampleSize; i++) {
+        const row = data[i];
+        const value = row[c.data];
+        if (isNotEmpty(value)) {
+          const valueWidth = value.toString().length * 10;
+          if (valueWidth > maxWidth) {
+            maxWidth = valueWidth;
+          }
+        }
+      }
+
+      const padding = 30; // Base padding
+      const calculatedWidth = maxWidth + padding;
+
+      // Set reasonable bounds
+      const minWidth = 80;
+      const maxWidthAllowed = 400;
+
+      return Math.max(minWidth, Math.min(maxWidthAllowed, calculatedWidth));
+    });
+    return colWidths;
   }
 
   /**
