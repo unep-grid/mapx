@@ -2,6 +2,8 @@ import { isAdmin } from "#mapx/authentication";
 import { isEmpty, isNotEmpty, isArray } from "@fxi/mx_valid";
 import { pgRead, pgWrite } from "#mapx/db";
 import { templates } from "#mapx/template";
+import { sendMailAuto } from "#mapx/mail";
+import { translate } from "#mapx/language";
 
 /**
  * Get project roles matrix data with inheritance
@@ -46,9 +48,11 @@ export async function ioProjectRolesUpdate(socket, data, cb) {
       throw new Error("project_roles_access_denied");
     }
 
+    const origin = socket.handshake.headers.origin;//https://app.mapx.org ...
     const idProject = socket.session.project_id;
     const currentUserId = socket.session.user_id;
     const { roleChanges } = data;
+    const originProject =`${origin}?project=${idProject}`
 
     if (!idProject) {
       throw new Error("project_id_required");
@@ -73,7 +77,7 @@ export async function ioProjectRolesUpdate(socket, data, cb) {
     const changes = await updateProjectRoles(idProject, roleChanges);
 
     // Prepare notification data (for future email implementation)
-    await reportRolesChange(changes, idProject, currentUserId);
+    await reportRolesChange(changes, idProject, currentUserId, originProject);
 
     data.changes = changes;
     data.success = true;
@@ -263,11 +267,9 @@ async function updateProjectRoles(idProject, roleChanges) {
 
 /**
  * Report role changes for future email notifications
- * TODO: Implement email sending in future version
  */
-async function reportRolesChange(changes, idProject, currentUserId) {
+async function reportRolesChange(changes, idProject, currentUserId, originProject) {
   try {
-    // Get user emails for the changes
     const allUserIds = [
       ...changes.added.contacts,
       ...changes.added.admins,
@@ -285,51 +287,141 @@ async function reportRolesChange(changes, idProject, currentUserId) {
 
     const uniqueUserIds = [...new Set(allUserIds)];
 
-    const { rows } = await pgRead.query(
-      `SELECT id, email, data #>> '{user,cache,last_language}' as language FROM mx_users WHERE id = ANY($1)`,
-      [uniqueUserIds],
-    );
+    // Get project details and user details in parallel
+    const [projectResult, usersResult] = await Promise.all([
+      pgRead.query(`SELECT title FROM mx_projects WHERE id = $1`, [idProject]),
+      pgRead.query(
+        `SELECT id,
+        email,
+        data #>> '{user,cache,last_language}' as language
+        FROM mx_users
+        WHERE id = ANY($1)`,
+        [uniqueUserIds.concat(currentUserId)],
+      ),
+    ]);
 
-    const userEmails = {};
-    for (const user of rows) {
-      userEmails[user.id] = user.email;
+    if (isEmpty(projectResult.rows)) {
+      console.error("Project not found for notifications:", idProject);
+      return;
+    }
+    const projectTitle = projectResult.rows[0].title;
+
+    const users = {};
+    for (const user of usersResult.rows) {
+      users[user.id] = { email: user.email, language: user.language || "en" };
     }
 
-    // Prepare notification data structure
-    const notificationData = {
-      projectId: idProject,
-      changedBy: currentUserId,
-      timestamp: new Date().toISOString(),
-      changes: {
-        added: {},
-        removed: {},
-      },
-    };
+    // Group changes by user
+    const userChanges = {};
+    for (const userId of uniqueUserIds) {
+      userChanges[userId] = { added: [], removed: [] };
+    }
 
-    // Format changes with email addresses
     for (const [role, userIds] of Object.entries(changes.added)) {
-      if (isNotEmpty(userIds)) {
-        notificationData.changes.added[role] = userIds.map((id) => ({
-          id,
-          email: userEmails[id],
-        }));
+      for (const userId of userIds) {
+        if (userChanges[userId])
+          userChanges[userId].added.push(role.slice(0, -1));
       }
     }
-
     for (const [role, userIds] of Object.entries(changes.removed)) {
-      if (isNotEmpty(userIds)) {
-        notificationData.changes.removed[role] = userIds.map((id) => ({
-          id,
-          email: userEmails[id],
-        }));
+      for (const userId of userIds) {
+        if (userChanges[userId])
+          userChanges[userId].removed.push(role.slice(0, -1));
       }
     }
 
-    debugger; 
-    // TODO: Send emails to admins and affected users
-    console.log("Role changes to be notified:", notificationData);
+    // Send emails to affected users
+    for (const [userId, change] of Object.entries(userChanges)) {
+      const user = users[userId];
+      if (!user) continue;
 
-    return notificationData;
+      const lang = user.language;
+      const nameProject = projectTitle[lang] || projectTitle.en || idProject;
+
+      let roleChangesList = '<ul style="list-style-type: none; padding-left: 0;">';
+      if (isNotEmpty(change.added)) {
+        const addedRoles = change.added.map(role => translate(`project_role_${role}`, lang)).join(', ');
+        roleChangesList += `<li style="margin: 5px 0;"><span style="color: #28a745;">✓ ${translate('role_added', lang)}:</span> ${addedRoles}</li>`;
+      }
+      if (isNotEmpty(change.removed)) {
+        const removedRoles = change.removed.map(role => translate(`project_role_${role}`, lang)).join(', ');
+        roleChangesList += `<li style="margin: 5px 0;"><span style="color: #dc3545;">✗ ${translate('role_removed', lang)}:</span> ${removedRoles}</li>`;
+      }
+      roleChangesList += '</ul>';
+
+      if (isEmpty(change.added) && isEmpty(change.removed)) continue;
+
+      const mailOptions = {
+        to: user.email,
+        subject: translate("project_roles_updated_mail_subject", lang, {
+          nameProject,
+        }),
+        title: translate("project_roles_updated_mail_title", lang),
+        content: translate("project_roles_updated_mail_content", lang, {
+          projectUrl: originProject,
+          projectName: nameProject,
+          roleChangesList,
+        }),
+      };
+      sendMailAuto(mailOptions);
+    }
+
+    // Send summary email to all project admins
+    const { rows: adminRows } = await pgRead.query(
+      `SELECT admins FROM mx_projects WHERE id = $1`,
+      [idProject],
+    );
+    if (isNotEmpty(adminRows) && isNotEmpty(adminRows[0].admins)) {
+      const adminIds = adminRows[0].admins;
+      const { rows: adminUsers } = await pgRead.query(
+        `SELECT id, email, data #>> '{user,cache,last_language}' as language FROM mx_users WHERE id = ANY($1)`,
+        [adminIds],
+      );
+
+      for (const admin of adminUsers) {
+        const lang = admin.language || "en";
+        let changesSummary = '<ul style="list-style-type: none; padding-left: 0;">';
+        for (const [userId, change] of Object.entries(userChanges)) {
+          const user = users[userId];
+          if (!user) continue;
+          changesSummary += `<li style="margin-bottom: 10px;"><strong>User:</strong> ${user.email}`;
+          changesSummary += '<ul style="list-style-type: none; padding-left: 15px;">';
+          if (isNotEmpty(change.added)) {
+            changesSummary += `<li style="margin: 5px 0;"><span style="color: #28a745;">✓ ${translate('role_added', lang)}:</span> ${change.added.join(', ')}</li>`;
+          }
+          if (isNotEmpty(change.removed)) {
+            changesSummary += `<li style="margin: 5px 0;"><span style="color: #dc3545;">✗ ${translate('role_removed', lang)}:</span> ${change.removed.join(', ')}</li>`;
+          }
+          changesSummary += '</ul></li>';
+        }
+        changesSummary += '</ul>';
+
+        if (Object.values(userChanges).every(c => isEmpty(c.added) && isEmpty(c.removed))) return;
+
+        const nameProject =
+          projectTitle[lang] || projectTitle.en || idProject;
+        const subject =
+          translate("project_roles_updated_mail_subject", lang, {
+            nameProject,
+          }) + (admin.id === currentUserId ? " (by you)" : "");
+
+        const mailOptions = {
+          to: admin.email,
+          subject: subject,
+          title: translate("project_roles_updated_mail_title", lang),
+          content: translate(
+            "project_roles_updated_mail_content_admin_summary",
+            lang,
+            {
+              projectUrl: originProject,
+              projectName: nameProject,
+              changesSummary,
+            },
+          ),
+        };
+        sendMailAuto(mailOptions);
+      }
+    }
   } catch (e) {
     console.error("Error preparing role change notifications:", e);
   }

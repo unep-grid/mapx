@@ -67,7 +67,7 @@ export function setApiUrlAuto() {
   /**
    * If no webpack variables found, replace by defaults
    * -> dev use webpack.DefinePlugin to inject variables
-   * -> in prod, use the hostname 
+   * -> in prod, use the hostname
    */
   const apiHost =
     typeof API_HOST_PUBLIC === "undefined"
@@ -92,9 +92,15 @@ export function setApiUrlAuto() {
  * @return {String}
  */
 export function getAppPathUrl(id) {
+  const base = window.location.origin;
+  if (!id) {
+    return base;
+  }
   /**
    * mapbox requires templates such as /fontstack/{range} : this prevents
    * from using URL API. Using templates litterals instead.
    */
-  return `${window.location.origin}/${settings.paths[id]}`;
+  return `${base}/${settings.paths[id]}`;
 }
+
+

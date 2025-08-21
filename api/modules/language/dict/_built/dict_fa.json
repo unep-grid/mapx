@@ -8286,13 +8286,13 @@
   },
   {
     "id": "project_roles_updated_mail_content",
-    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "fa": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> یک مدیر نقش‌های شما را در پروژه تغییر داده است {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> در اینجا لیست تغییرات آمده است:</p><p style=\";text-align:right;direction:rtl\"> {{txtRoleChange}}</p><p style=\";text-align:right;direction:rtl\"> روز خوبی داشته باشید!</p> <i style=\"float:right\">تیم مپ ایکس</i>"
+    "en": "<p>Hello,</p><p>An administrator changed your roles in the project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{roleChangesList}}<p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
+    "fa": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> یک مدیر نقش‌های شما را در پروژه تغییر داده است <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> .</p><p style=\";text-align:right;direction:rtl\"> لیست تغییرات به شرح زیر است:</p> {{roleChangesList}}<p style=\";text-align:right;direction:rtl\"> روز خوبی داشته باشید!</p> <i style=\"float:right\">تیم مپ ایکس</i>"
   },
   {
     "id": "project_roles_updated_mail_content_admin_summary",
-    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "fa": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> نقش‌ها در پروژه شما تغییر کرده‌اند {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> در اینجا لیست تغییرات آمده است: {{changes}}</p><p style=\";text-align:right;direction:rtl\"> روز خوبی داشته باشید!</p>"
+    "en": "<p>Hello,</p><p>Roles have changed in your project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{changesSummary}}<p>Have a nice day !</p>",
+    "fa": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> نقش‌ها در پروژه شما تغییر کرده‌اند <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> .</p><p style=\";text-align:right;direction:rtl\"> لیست تغییرات به شرح زیر است:</p> {{changesSummary}}<p style=\";text-align:right;direction:rtl\"> روز خوبی داشته باشید!</p>"
   },
   {
     "id": "project_added_to_group",

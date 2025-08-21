@@ -8286,13 +8286,13 @@
   },
   {
     "id": "project_roles_updated_mail_content",
-    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "fr": "<p>Bonjour,</p><p>Un administrateur a changé vos roles pour le projet {{projectLink}}.</p> <p> Voici la liste des changements:</p><p>{{txtRoleChange}}</p><p>Bonne journée !</p> <i style='float:right'>L'équipe Mapx.</i>"
+    "en": "<p>Hello,</p><p>An administrator changed your roles in the project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{roleChangesList}}<p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
+    "fr": "<p>Bonjour,</p><p>Un administrateur a changé vos roles pour le projet <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Voici la liste des changements:</p>{{roleChangesList}}<p>Bonne journée !</p> <i style='float:right'>L'équipe Mapx.</i>"
   },
   {
     "id": "project_roles_updated_mail_content_admin_summary",
-    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "fr": "<p>Bonjour,</p><p>Les roles du projet {{projectLink}} ont changés.</p> <p> Voici la liste des changements:</p><p>{{changes}}</p><p>Bonne journée !</p> "
+    "en": "<p>Hello,</p><p>Roles have changed in your project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{changesSummary}}<p>Have a nice day !</p>",
+    "fr": "<p>Bonjour,</p><p>Les roles du projet <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a> ont changés.</p> <p> Voici la liste des changements:</p>{{changesSummary}}<p>Bonne journée !</p> "
   },
   {
     "id": "project_added_to_group",

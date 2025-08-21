@@ -8286,13 +8286,13 @@
   },
   {
     "id": "project_roles_updated_mail_content",
-    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "ru": "<p>Привет,</p><p> Администратор изменил ваши роли в проекте. {{projectLink}} .</p><p> Вот список изменений:</p><p> {{txtRoleChange}}</p><p> Хорошего дня !</p> <i style=\"float:right\">Команда MapX.</i>"
+    "en": "<p>Hello,</p><p>An administrator changed your roles in the project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{roleChangesList}}<p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
+    "ru": "<p>Привет,</p><p> Администратор изменил ваши роли в проекте. <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> .</p><p> Вот список изменений:</p> {{roleChangesList}}<p> Хорошего дня !</p> <i style=\"float:right\">Команда MapX.</i>"
   },
   {
     "id": "project_roles_updated_mail_content_admin_summary",
-    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "ru": "<p>Привет,</p><p> Роли в вашем проекте изменились {{projectLink}} .</p><p> Вот список изменений: {{changes}}</p><p> Хорошего дня !</p>"
+    "en": "<p>Hello,</p><p>Roles have changed in your project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{changesSummary}}<p>Have a nice day !</p>",
+    "ru": "<p>Привет,</p><p> Роли в вашем проекте изменились <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> .</p><p> Вот список изменений:</p> {{changesSummary}}<p> Хорошего дня !</p>"
   },
   {
     "id": "project_added_to_group",

@@ -8286,13 +8286,13 @@
   },
   {
     "id": "project_roles_updated_mail_content",
-    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "es": "<p>Hola,</p><p> Un administrador cambió sus roles en el proyecto {{projectLink}} .</p><p> Aquí está la lista de cambios:</p><p> {{txtRoleChange}}</p><p> Que tenga un lindo día !</p> <i style=\"float:right\">El equipo de MapX.</i>"
+    "en": "<p>Hello,</p><p>An administrator changed your roles in the project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{roleChangesList}}<p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
+    "es": "<p>Hola,</p><p> Un administrador cambió sus roles en el proyecto <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> .</p><p> Aquí está la lista de cambios:</p> {{roleChangesList}}<p> Que tenga un lindo día !</p> <i style=\"float:right\">El equipo de MapX.</i>"
   },
   {
     "id": "project_roles_updated_mail_content_admin_summary",
-    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "es": "<p>Hola,</p><p> Los roles han cambiado en tu proyecto {{projectLink}} .</p><p> Aquí está la lista de cambios: {{changes}}</p><p> Que tenga un lindo día !</p>"
+    "en": "<p>Hello,</p><p>Roles have changed in your project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{changesSummary}}<p>Have a nice day !</p>",
+    "es": "<p>Hola,</p><p> Los roles han cambiado en tu proyecto <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> .</p><p> Aquí está la lista de cambios:</p> {{changesSummary}}<p> Que tenga un lindo día !</p>"
   },
   {
     "id": "project_added_to_group",

@@ -8286,13 +8286,13 @@
   },
   {
     "id": "project_roles_updated_mail_content",
-    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "ar": "<p style=\";text-align:right;direction:rtl\">مرحبًا،</p><p style=\";text-align:right;direction:rtl\"> قام أحد المسؤولين بتغيير أدوارك في المشروع {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> وهنا قائمة التغييرات:</p><p style=\";text-align:right;direction:rtl\"> {{txtRoleChange}}</p><p style=\";text-align:right;direction:rtl\"> طاب يومك !</p> <i style=\"float:right\">فريق MapX.</i>"
+    "en": "<p>Hello,</p><p>An administrator changed your roles in the project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{roleChangesList}}<p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
+    "ar": "<p style=\";text-align:right;direction:rtl\">مرحبًا،</p><p style=\";text-align:right;direction:rtl\"> قام أحد المسؤولين بتغيير أدوارك في المشروع <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> .</p><p style=\";text-align:right;direction:rtl\"> وفيما يلي قائمة التغييرات:</p> {{roleChangesList}}<p style=\";text-align:right;direction:rtl\"> طاب يومك !</p> <i style=\"float:right\">فريق MapX.</i>"
   },
   {
     "id": "project_roles_updated_mail_content_admin_summary",
-    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "ar": "<p style=\";text-align:right;direction:rtl\">مرحبًا،</p><p style=\";text-align:right;direction:rtl\"> لقد تغيرت الأدوار في مشروعك {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> وهنا قائمة التغييرات: {{changes}}</p><p style=\";text-align:right;direction:rtl\"> طاب يومك !</p>"
+    "en": "<p>Hello,</p><p>Roles have changed in your project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{changesSummary}}<p>Have a nice day !</p>",
+    "ar": "<p style=\";text-align:right;direction:rtl\">مرحبًا،</p><p style=\";text-align:right;direction:rtl\"> لقد تغيرت الأدوار في مشروعك <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> .</p><p style=\";text-align:right;direction:rtl\"> وفيما يلي قائمة التغييرات:</p> {{changesSummary}}<p style=\";text-align:right;direction:rtl\"> طاب يومك !</p>"
   },
   {
     "id": "project_added_to_group",

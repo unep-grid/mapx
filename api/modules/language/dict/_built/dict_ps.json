@@ -8286,13 +8286,13 @@
   },
   {
     "id": "project_roles_updated_mail_content",
-    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "ps": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> یو مدیر په پروژه کې ستاسو رولونه بدل کړل. {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> دلته د بدلونونو لیست دی:</p><p style=\";text-align:right;direction:rtl\"> {{txtRoleChange}}</p><p style=\";text-align:right;direction:rtl\"> ښه ورځ ولرئ !</p> <i style=\"float:right\">د میپ ایکس ټیم.</i>"
+    "en": "<p>Hello,</p><p>An administrator changed your roles in the project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{roleChangesList}}<p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
+    "ps": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> یو مدیر په پروژه کې ستاسو رولونه بدل کړل. <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> .</p><p style=\";text-align:right;direction:rtl\"> دلته د بدلونونو لیست دی:</p> {{roleChangesList}}<p style=\";text-align:right;direction:rtl\"> ښه ورځ ولرئ !</p> <i style=\"float:right\">د میپ ایکس ټیم.</i>"
   },
   {
     "id": "project_roles_updated_mail_content_admin_summary",
-    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "ps": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> ستاسو په پروژه کې رولونه بدل شوي دي {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> دلته د بدلونونو لیست دی: {{changes}}</p><p style=\";text-align:right;direction:rtl\"> ښه ورځ ولرئ !</p>"
+    "en": "<p>Hello,</p><p>Roles have changed in your project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{changesSummary}}<p>Have a nice day !</p>",
+    "ps": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> ستاسو په پروژه کې رولونه بدل شوي دي <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> .</p><p style=\";text-align:right;direction:rtl\"> دلته د بدلونونو لیست دی:</p> {{changesSummary}}<p style=\";text-align:right;direction:rtl\"> ښه ورځ ولرئ !</p>"
   },
   {
     "id": "project_added_to_group",
