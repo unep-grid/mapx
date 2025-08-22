@@ -105,6 +105,9 @@ export class FeaturesToWidget extends EventSimple {
   get attributes() {
     return this._attributes;
   }
+  get ids() {
+    return Object.keys(this.attributes);
+  }
   get widget() {
     return this._widget;
   }
@@ -200,7 +203,7 @@ export class FeaturesToWidget extends EventSimple {
     this._highlighter = null;
     this._highlighter_config_init = null;
 
-    this.fire("destroyed");
+    this.fire("destroyed", this);
   }
 
   async elIssueMessage(idMsg) {

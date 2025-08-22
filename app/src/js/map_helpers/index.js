@@ -1435,16 +1435,10 @@ export async function initMapListener(map) {
   });
 
   events.on({
-    type: [
-      "view_add",
-      "view_remove",
-      "story_step",
-      "story_close",
-      //"view_panel_click",
-    ],
+    type: ["view_add", "view_remove", "story_step", "story_close"],
     idGroup: "highlight_reset",
-    callback: () => {
-      highlighter.reset();
+    callback: (opt, x) => {
+      highlighter.resetLayer(opt.idView);
     },
   });
 
@@ -1771,8 +1765,11 @@ export async function handleClickEvent(event, idMap) {
 
     if (!hasFeatureWidget) {
       mx_local.features_widget = new FeaturesToWidget({ highlighter });
-      mx_local.features_widget.on("destroyed", () => {
-        highlighter.reset();
+      mx_local.features_widget.on("destroyed", (fw) => {
+        const ids = fw.ids;
+        for (const id of ids) {
+          highlighter.resetLayer(id);
+        }
         delete mx_local.features_widget;
       });
     }
@@ -3599,8 +3596,13 @@ async function viewRenderCc(o) {
 
   function clear() {
     listeners.removeListenerByGroup(idListener);
+    removeHighlight();
     removeLayers();
     removeSource();
+  }
+
+  function removeHighlight() {
+    highlighter.resetLayer(opt.idView);
   }
 
   function removeSource() {
