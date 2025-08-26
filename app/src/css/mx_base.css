@@ -1075,6 +1075,17 @@ input[type="checkbox"] {
   margin: 4px;
 }
 
+.mx-text-truncate-2-lines {
+  display: -webkit-box;        
+  -webkit-line-clamp: 2;       
+  -webkit-box-orient: vertical;
+  display: box;                
+  box-orient: vertical;
+  line-clamp: 2;               
+  overflow: hidden;            
+}
+
+
 /**
 * EPSG epsg ; projection code select group list
 */

@@ -5,6 +5,7 @@ import { setBusy } from "./../mx_helper_misc.js";
 import { el, elSpanTranslate } from "./../el_mapx/index.js";
 import { wmsGetLayers, urlTile, urlLegend } from "./index.js";
 import { errorFormater } from "../error_handler/index.js";
+import { sanitize } from "../el/src/index.js";
 
 export async function wmsBuildQueryUi(opt) {
   opt = Object.assign(
@@ -182,34 +183,38 @@ export async function wmsBuildQueryUi(opt) {
       labelField: "text",
       searchField: ["name", "title", "abstract"],
       onChange: checkDisableBtnUpdate,
+
       render: {
         item: function (data, escape) {
-          const content = [];
-          if (data.title) {
-            content.push(
-              `<span class="item-label">${escape(data.title)}</span>`,
-            );
+          return `
+      <div class="item-desc" title="${escape(data.abstract)}">
+        <ul class="list-unstyled">
+          <li>${escape(data.title || data.name || data.value)}</li>
+          ${
+            data.name
+              ? `<li class="text-muted small">${escape(data.name)}</li>`
+              : ""
           }
-          if (data.name) {
-            content.push(`<span class="item-desc">${escape(data.name)}</span>`);
-          }
-          return `<div class="item-desc" title="${escape(
-            data.abstract,
-          )}">${content.join("")}</div>`;
+        </ul>
+      </div>
+    `;
         },
         option: function (data, escape) {
-          const content = [];
-          if (data.title) {
-            content.push(
-              `<span class="item-label">${escape(data.title)}</span>`,
-            );
+          return `
+      <div class="item-desc" title="${escape(data.abstract)}">
+        <ul class="m-0 p-0 list-unstyled">
+          <li>${escape(data.title || data.name || data.value)}</li>
+          ${data.name ? `<li class="text-muted">${escape(data.name)}</li>` : ""}
+          ${
+            data.abstract
+              ? `<li class="text-muted small mx-text-truncate-2-lines">${escape(
+                  sanitize(data.abstract.substr(0, 300)),
+                )}</li>`
+              : ""
           }
-          if (data.name) {
-            content.push(`<span class="item-desc">${escape(data.name)}</span>`);
-          }
-          return `<div class="item-desc" title="${escape(
-            data.abstract,
-          )}">${content.join("")}</div>`;
+        </ul>
+      </div>
+    `;
         },
       },
     });
