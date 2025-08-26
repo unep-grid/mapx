@@ -125,6 +125,7 @@ export class ThemeModal extends EventSimple {
     const tm = this;
     const currentTheme = tm._theme.theme();
     const isLocal = tm.isLocalTheme(currentTheme.id);
+    const isDefault = settings.project.theme;
     const hasPublisherRole = settings.user.roles?.publisher === true;
 
     tm._el_button_save.setAttribute("disabled", "disabled");
@@ -132,7 +133,7 @@ export class ThemeModal extends EventSimple {
 
     if (hasPublisherRole) {
       tm._el_button_save.removeAttribute("disabled");
-      if (!isLocal) {
+      if (!isLocal && !isDefault) {
         tm._el_button_delete.removeAttribute("disabled");
       }
     }
