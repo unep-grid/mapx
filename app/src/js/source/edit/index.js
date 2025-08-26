@@ -666,6 +666,7 @@ export class EditTableSessionClient extends EditTableBase {
     if (opt.duplicate) {
       const newColumn = clone(columns[posData]);
       newColumn.data = newColumnName;
+      newColumn._is_identity = false;// duplicate  remove the identity
       columns.push(newColumn);
       et._column_set_readonly(newColumn);
     } else {
