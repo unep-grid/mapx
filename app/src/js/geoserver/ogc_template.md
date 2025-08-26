@@ -1,49 +1,31 @@
 # OGC Services Documentation
 
-This guide explains how to access various OGC (Open Geospatial Consortium) services.
+This guide explains how to access various OGC (Open Geospatial Consortium) services for layer: `{{layerName}}`
 
 ## Services
 
 ### WMS (Web Map Service)
 
-WMS provides map <a href={{host}}/{{project}}/wms?STYLES=&LAYERS={{layer}}&FORMAT=image/png&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&CRS=EPSG:4326&BBOX={{bbox}}&WIDTH={{widthTile}}&HEIGHT={{heightTile}} target='_blank'>images</a>
-
-
-```
-{{host}}/{{project}}/wms?
-STYLES=&
-LAYERS={{layer}}&
-FORMAT=image/png&
-SERVICE=WMS&
-VERSION=1.3.0&
-REQUEST=GetMap&
-CRS=EPSG:4326&
-BBOX={{bbox}}&
-WIDTH={{widthTile}}&HEIGHT={{heightTile}}
+WMS provides map <a href="{{wmsUrl}}" target="_blank">images</a>
 
 ```
-Preview
+{{wmsUrlFormat}}
+```
+
+**Preview:**
 <div style="display:flex;justify-content:center; padding:10px">
-<img src="{{host}}/{{project}}/wms?STYLES=&LAYERS={{layer}}&FORMAT=image/png&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&CRS=EPSG:4326&BBOX={{bbox}}&WIDTH={{widthTile}}&HEIGHT={{heightTile}}" 
-  alt="WMS Preview of {{layer}}" 
-  style="max-width: 50%; border: 1px solid var(--mx_ui_border); border-radius: 5px;" 
+<img src="{{wmsUrl}}"
+  alt="WMS Preview of {{layerName}}"
+  style="max-width: 50%; border: 1px solid var(--mx_ui_border); border-radius: 5px;"
   loading="lazy" />
 </div>
 
 ### WFS (Web Feature Service)
 
-WFS provides access to actual geographic feature data. Be cautious when requesting large areas or datasets.
+WFS provides access to actual geographic feature data. <a href="{{wfsUrl}}" target="_blank">Try this example</a>
 
 ```
-{{host}}/wfs?
-  service=WFS&
-  version=2.0.0&
-  request=GetFeature&
-  typeName={{layer}}&
-  bbox={{bbox}},EPSG:4326&
-  outputFormat=application/json&
-  &count=1
-  &startIndex=0
+{{wfsUrlFormat}}
 ```
 
 **Best Practices for WFS:**
@@ -60,13 +42,14 @@ WFS provides access to actual geographic feature data. Be cautious when requesti
     ```
     &propertyName=attribute1,attribute2
     ```
+4. **Always use a small bounding box** to prevent large data transfers that could impact server performance.
 
 ### TMS (Tile Map Service)
 
 TMS provides access to cartographic maps divided into tiles.
 
 ```
-{{host}}/gwc/service/tms/1.0.0/{{layer}}@EPSG:4326@png/{z}/{x}/{y}.png
+{{tmsUrlFormat}}
 ```
 
 ### WMTS (Web Map Tile Service)
@@ -74,17 +57,7 @@ TMS provides access to cartographic maps divided into tiles.
 WMTS also provides access to tiled maps.
 
 ```
-{{host}}/gwc/service/wmts?
-  layer={{layer}}&
-  style=&
-  tilematrixset=EPSG:4326&
-  Service=WMTS&
-  Request=GetTile&
-  Version=1.0.0&
-  Format=image/png&
-  TileMatrix={z}&
-  TileCol={x}&
-  TileRow={y}
+{{wmtsUrlFormat}}
 ```
 
 ## Important Considerations
