@@ -1439,7 +1439,11 @@ export async function initMapListener(map) {
     type: ["view_add", "view_remove", "story_step", "story_close"],
     idGroup: "highlight_reset",
     callback: (opt, x) => {
-      highlighter.resetLayer(opt.idView);
+      if (opt?.idView) {
+        highlighter.resetLayer(opt.idView);
+      } else {
+        highlighter.reset();
+      }
     },
   });
 
