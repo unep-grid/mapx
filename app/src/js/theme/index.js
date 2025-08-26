@@ -210,6 +210,8 @@ class Theme extends EventSimple {
   async preloadThemes() {
     const t = this;
     try {
+      console.log("preload custom theme");
+      t._clear_custom_themes();
       const remoteThemes = await t.listRemote();
       await t.registerBatch(remoteThemes);
     } catch (e) {
@@ -376,7 +378,9 @@ class Theme extends EventSimple {
    * Clear custom themes
    * Called when switching projects
    */
-  clearCustomThemes() {
+  _clear_custom_themes() {
+    const t = this;
+    console.log("clear custom theme");
     themes_custom.length = 0;
     t.fire("list_updated");
   }

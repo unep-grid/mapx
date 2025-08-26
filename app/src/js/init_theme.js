@@ -1,3 +1,4 @@
+import { events } from "./mx";
 import { Theme } from "./theme";
 import { getQueryParameter } from "./url_utils";
 /**
@@ -12,3 +13,5 @@ export const theme = new Theme({
   id: idTheme,
   colors: colors,
 });
+
+

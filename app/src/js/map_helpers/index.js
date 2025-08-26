@@ -833,8 +833,9 @@ export function initListenersApp() {
   events.on({
     type: "project_changed",
     idGroup: "project_change",
-    callback: () => {
+    callback: async () => {
       mx_local.button_filter.close();
+      await theme.preloadThemes();
     },
   });
 
