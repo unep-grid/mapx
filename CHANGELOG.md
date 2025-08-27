@@ -1,3 +1,22 @@
+  - [1.13.18-beta.8](https://github.com/unep-grid/mapx/tree/1.13.18-beta.8) 
+
+    - fix(features_to_widget): large text not displayed and issue with column width  #1068
+    - fix(upload): missing title / filename in mail title template
+    - fix(story_dashboard): #1075 open/close manually dashboard not updating layout
+    - fix(story): step should reset highlighter, not view highlighter
+    - fix(themes): themes list not properly realoaded after projct change
+    - fix(theme_manager): prevent removing default theme
+    - fix(table_editor): duplicate an identity column should remove the identity constraint
+    - fix(wms_generator_ui): https://github.com/unep-grid/mapx-test-tracker/issues/8
+    - fix(ogc_template): https://github.com/unep-grid/mapx-test-tracker/issues/9
+    - fix: cc highlight issue https://github.com/unep-grid/mapx-test-tracker/issues/5
+    - feat: hidden "gid" + automatic  column width based on sampling. follow up #1071
+    - feat: role matrix email repporting https://github.com/unep-grid/mapx-test-tracker/issues/4
+    - fix: typo
+    - fix: role matrix UI feedback, dict update
+    - fix: doc_base url
+
+
   - [1.13.18-beta.7](https://github.com/unep-grid/mapx/tree/1.13.18-beta.7) 
 
     - feat: highlighter as as option 'use_highlighter' in dynamic joins
