@@ -1,3 +1,8 @@
+  - [1.13.18-beta.9](https://github.com/unep-grid/mapx/tree/1.13.18-beta.9) 
+
+    - fix: nc panel cb
+
+
   - [1.13.18-beta.8](https://github.com/unep-grid/mapx/tree/1.13.18-beta.8) 
 
     - fix(features_to_widget): large text not displayed and issue with column width  #1068
