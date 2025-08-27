@@ -8,7 +8,7 @@
   padding: 5px;
   display: flex;
   flex-direction: column;
-  
+
   .mx-feature-widget--item {
     padding: 10px;
     color: #fff;
@@ -27,12 +27,16 @@
       flex-direction: column;
       padding: 10px;
       overflow: hidden;
-      
+
       .mx-feature-widget--table {
         width: 100%;
         margin-top: 8px;
         border-radius: 5px;
         overflow: hidden;
+        .tabulator-cell {
+          overflow: auto;
+          max-width: 300px;
+        }
       }
     }
   }

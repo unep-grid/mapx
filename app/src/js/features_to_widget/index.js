@@ -23,6 +23,7 @@ import { onNextFrame, waitTimeoutAsync } from "../animation_frame/index.js";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
 import "tabulator-tables/dist/css/tabulator.min.css";
 import "./tabulator.less";
+import { settings } from "../mx.js";
 
 const defaults = {
   fw_timeout: {
@@ -306,6 +307,13 @@ export class FeaturesToWidget extends EventSimple {
           headerTooltip: true,
           vertAlign: "middle",
           tooltip: false,
+          formatter: (cell) => {
+            const v = cell.getValue();
+            if (v === settings.valuesMap.null) {
+              return "";
+            }
+            return v;
+          },
           cellClick: (_, cell) => {
             if (isVector) {
               fw._handleCellClick(idView, cell);
