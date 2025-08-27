@@ -214,13 +214,21 @@ export class NotifCenter {
       nc.elContainer.replaceChildren();
     }
   }
+  isOpen() {
+    const nc = this;
+    return nc.panel.isActive();
+  }
   open() {
     const nc = this;
-    nc.panel.open();
+    if (!nc.isOpen()) {
+      nc.panel.open();
+    }
   }
   close() {
     const nc = this;
-    nc.panel.close();
+    if (nc.isOpen()) {
+      nc.panel.close();
+    }
   }
   clearHistory() {
     const nc = this;
