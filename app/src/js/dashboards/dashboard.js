@@ -117,11 +117,11 @@ class Dashboard extends EventSimple {
     /**
      * Handle events
      */
-    d.panel.on("open", () => {
-      d.show();
+    d.panel.on("open", async () => {
+      await d.show();
     });
-    d.panel.on("close", () => {
-      d.hide();
+    d.panel.on("close", async () => {
+      await d.hide();
     });
 
     /**
@@ -276,15 +276,20 @@ class Dashboard extends EventSimple {
    */
   async show() {
     const d = this;
-    if (d.isOpen()) {
-      return true;
-    }
     return new Promise((resolve) => {
-      d.panel.once("open", () => {
+      if (d.isOpen()) {
+        d.fire("show");
         resolve(true);
-      });
-      d.panel.open();
-      d.fire("show");
+      } else {
+        d.panel.once("open", () => {
+          d.updatePanelLayout();
+
+          d.fire("show");
+          resolve(true);
+        });
+
+        d.panel.open();
+      }
     });
   }
 
@@ -294,15 +299,17 @@ class Dashboard extends EventSimple {
    */
   async hide() {
     const d = this;
-    if (!d.isOpen()) {
-      return true;
-    }
     return new Promise((resolve) => {
-      d.panel.once("close", () => {
+      if (!d.isOpen()) {
+        d.fire("hide");
         resolve(true);
-      });
-      d.panel.close();
-      d.fire("hide");
+      } else {
+        d.panel.once("close", () => {
+          d.fire("hide");
+          resolve(true);
+        });
+        d.panel.close();
+      }
     });
   }
 

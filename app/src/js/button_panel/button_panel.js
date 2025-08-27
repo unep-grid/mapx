@@ -759,8 +759,13 @@ export class ButtonPanel extends EventSimple {
 
   open(skipFire) {
     const panel = this;
+
     if (panel.isActive()) {
-      return;
+      if (!skipFire) {
+
+        panel.fire("open");
+        return;
+      }
     }
 
     if (panel.exclusiveMode) {
@@ -784,6 +789,9 @@ export class ButtonPanel extends EventSimple {
   close(skipFire) {
     const panel = this;
     if (!panel.isActive()) {
+      if (!skipFire) {
+        panel.fire("close");
+      }
       return;
     }
     panel.elContainer.classList.remove("active");
