@@ -150,6 +150,8 @@ async function handleSuccess(socket, config) {
 
     const msgSubject = t("upl_api_save_success_title", config.language, {
       filename,
+      idSource,
+      title: config.title,
     });
 
     socket.notifyInfoSuccess({
@@ -289,12 +291,12 @@ async function ioAddSource(socket, config) {
     title,
     sourceType,
     enable_download,
-    enable_wms
+    enable_wms,
   );
 
   if (!reg.registered) {
     throw Error(
-      "The layer can't be registered, check if the table has at least one row with valid values"
+      "The layer can't be registered, check if the table has at least one row with valid values",
     );
   }
 
@@ -475,14 +477,14 @@ export async function fileToPostgres(config) {
       try {
         if (code !== 0) {
           throw Error(
-            `The import function exited with code ${code} ( ${signal} )`
+            `The import function exited with code ${code} ( ${signal} )`,
           );
         }
         const hasValues = await tableHasValues(idSource);
 
         if (!hasValues) {
           throw Error(
-            `The table ${idSource} is not valid. At least one attribute with value is required.`
+            `The table ${idSource} is not valid. At least one attribute with value is required.`,
           );
         }
 
