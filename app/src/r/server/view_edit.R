@@ -1132,7 +1132,6 @@ observeEvent(input$btnViewSave, {
     #
     time <- Sys.time()
     view[["date_modified"]] <- time
-    reactData$viewDataEdited$date_modified <- time
     view <- mxPrepareViewForDb(view, editor, time)
 
     #
@@ -1145,6 +1144,7 @@ observeEvent(input$btnViewSave, {
 
     # edit flag
     view$`_edit` <- TRUE
+    reactData$viewDataEdited <- view
 
     if (!hideView) {
       mglUpdateView(view)

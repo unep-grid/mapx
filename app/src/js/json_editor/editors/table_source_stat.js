@@ -45,8 +45,8 @@ JSONEditor.defaults.editors.tableSourceAutoStyle = class mxeditors extends (
         const schema = editor.getItemSchema();
         const style = editor.parent.getValue();
         const idView = path(schema, "options.idView");
-        const idState = `auto_style@${idView}`;
         const geomType = path(schema, "options.geomType", "point");
+        const idState = `auto_style@${idView}@${geomType}`;
         const oldState = await dbAutoStyle.getItem(idState);
         const nullValue = style?.nulls[0]?.value || null;
         const editorUpperBound =
@@ -60,7 +60,6 @@ JSONEditor.defaults.editors.tableSourceAutoStyle = class mxeditors extends (
 
         const state = Object.assign({}, initState, oldState);
         const as = new AutoStyle();
-
         await as.init(state, update);
 
         /**

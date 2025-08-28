@@ -379,6 +379,7 @@ observeEvent(input$dashboardEdit_values, {
 
         # edit flag
         view$`_edit` <- TRUE
+        reactData$viewDataEdited <- view
 
         mglUpdateView(view)
 
@@ -400,7 +401,6 @@ observeEvent(input$dashboardEdit_values, {
         # Prepare view for database storage using centralized function
         #
         view <- mxPrepareViewForDb(view, editor, time, list("data.dashboard" = NULL))
-
         mxDbAddRow(
           data = view,
           table = .get(config, c("pg", "tables", "views"))
@@ -408,6 +408,7 @@ observeEvent(input$dashboardEdit_values, {
 
         # edit flag
         view$`_edit` <- TRUE
+        reactData$viewDataEdited <- view
 
         mglUpdateView(view)
 

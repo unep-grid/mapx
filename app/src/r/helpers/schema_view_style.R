@@ -275,8 +275,6 @@ mxSchemaViewStyle <- function(
   )
 
 
-
-
   #
   #  set rules list
   #

@@ -212,6 +212,7 @@ observeEvent(input$styleEdit_values, {
 
         # edit flag
         view$`_edit` <- TRUE
+        reactData$viewDataEdited <- view
 
         mglUpdateView(view)
 
