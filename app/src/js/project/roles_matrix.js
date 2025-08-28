@@ -93,7 +93,7 @@ export class RoleMatrix {
         width: "80%",
         maxWidth: "900px",
       },
-      onClose: rm.cleanup,
+      removeCloseButton: true,
     });
   }
 
@@ -438,35 +438,34 @@ export class RoleMatrix {
   async handleSave() {
     const rm = this;
 
-    if (isEmpty(rm.changes)) {
-      rm.modal.close();
-      return;
-    }
-
-    // Validate before showing summary
-    const issues = rm.getValidationIssues();
-    if (isNotEmpty(issues)) {
-      return; // Validation errors are already shown
-    }
-
-    // Show changes summary
-    const confirmed = await rm.showChangesSummary();
-
-    if (!confirmed) {
-      return;
-    }
-
     try {
+      if (isEmpty(rm.changes)) {
+        throw new Error("No change");
+      }
+
+      // Validate before showing summary
+      const issues = rm.getValidationIssues();
+      if (isNotEmpty(issues)) {
+        return; // Validation errors are already shown
+      }
+
+      // Show changes summary
+      const confirmed = await rm.showChangesSummary();
+
+      if (!confirmed) {
+        return;
+      }
+
       // Submit changes
       const result = await rm.submitChanges();
 
       if (result.error) {
+        debugger;
         throw new Error(result.error);
       }
 
       // Show success and close
       await rm.showSuccess();
-      rm.modal.close();
     } catch (e) {
       console.error("Save error:", e);
       await rm.showError(e.message || "Failed to save changes");
@@ -559,6 +558,7 @@ export class RoleMatrix {
   handleCancel() {
     const rm = this;
     rm.modal.close();
+    rm.cleanup();
   }
 
   /**

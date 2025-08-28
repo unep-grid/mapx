@@ -48,11 +48,11 @@ export async function ioProjectRolesUpdate(socket, data, cb) {
       throw new Error("project_roles_access_denied");
     }
 
-    const origin = socket.handshake.headers.origin;//https://app.mapx.org ...
+    const origin = socket.handshake.headers.origin; //https://app.mapx.org ...
     const idProject = socket.session.project_id;
     const currentUserId = socket.session.user_id;
     const { roleChanges } = data;
-    const originProject =`${origin}?project=${idProject}`
+    const originProject = `${origin}?project=${idProject}`;
 
     if (!idProject) {
       throw new Error("project_id_required");
@@ -104,11 +104,17 @@ async function validateRoleChanges(roleChanges, idProject, currentUserId) {
     }
 
     const currentRoles = rows[0];
+
+    const contacts = new Set(currentRoles.contacts);
+    const admins = new Set([...currentRoles.admins, ...contacts]);
+    const publishers = new Set([...currentRoles.publishers, ...admins]);
+    const members = new Set([...currentRoles.members, ...publishers]);
+
     const newRoles = {
-      contacts: [...(currentRoles.contacts || [])],
-      admins: [...(currentRoles.admins || [])],
-      publishers: [...(currentRoles.publishers || [])],
-      members: [...(currentRoles.members || [])],
+      contacts: [...contacts],
+      admins: [...admins],
+      publishers: [...publishers],
+      members: [...members],
     };
 
     let contactCount = currentRoles.contacts?.length || 0;
@@ -268,7 +274,12 @@ async function updateProjectRoles(idProject, roleChanges) {
 /**
  * Report role changes for future email notifications
  */
-async function reportRolesChange(changes, idProject, currentUserId, originProject) {
+async function reportRolesChange(
+  changes,
+  idProject,
+  currentUserId,
+  originProject,
+) {
   try {
     const allUserIds = [
       ...changes.added.contacts,
@@ -338,16 +349,21 @@ async function reportRolesChange(changes, idProject, currentUserId, originProjec
       const lang = user.language;
       const nameProject = projectTitle[lang] || projectTitle.en || idProject;
 
-      let roleChangesList = '<ul style="list-style-type: none; padding-left: 0;">';
+      let roleChangesList =
+        '<ul style="list-style-type: none; padding-left: 0;">';
       if (isNotEmpty(change.added)) {
-        const addedRoles = change.added.map(role => translate(`project_role_${role}`, lang)).join(', ');
-        roleChangesList += `<li style="margin: 5px 0;"><span style="color: #28a745;">✓ ${translate('role_added', lang)}:</span> ${addedRoles}</li>`;
+        const addedRoles = change.added
+          .map((role) => translate(`project_role_${role}`, lang))
+          .join(", ");
+        roleChangesList += `<li style="margin: 5px 0;"><span style="color: #28a745;">✓ ${translate("role_added", lang)}:</span> ${addedRoles}</li>`;
       }
       if (isNotEmpty(change.removed)) {
-        const removedRoles = change.removed.map(role => translate(`project_role_${role}`, lang)).join(', ');
-        roleChangesList += `<li style="margin: 5px 0;"><span style="color: #dc3545;">✗ ${translate('role_removed', lang)}:</span> ${removedRoles}</li>`;
+        const removedRoles = change.removed
+          .map((role) => translate(`project_role_${role}`, lang))
+          .join(", ");
+        roleChangesList += `<li style="margin: 5px 0;"><span style="color: #dc3545;">✗ ${translate("role_removed", lang)}:</span> ${removedRoles}</li>`;
       }
-      roleChangesList += '</ul>';
+      roleChangesList += "</ul>";
 
       if (isEmpty(change.added) && isEmpty(change.removed)) continue;
 
@@ -380,26 +396,32 @@ async function reportRolesChange(changes, idProject, currentUserId, originProjec
 
       for (const admin of adminUsers) {
         const lang = admin.language || "en";
-        let changesSummary = '<ul style="list-style-type: none; padding-left: 0;">';
+        let changesSummary =
+          '<ul style="list-style-type: none; padding-left: 0;">';
         for (const [userId, change] of Object.entries(userChanges)) {
           const user = users[userId];
           if (!user) continue;
           changesSummary += `<li style="margin-bottom: 10px;"><strong>User:</strong> ${user.email}`;
-          changesSummary += '<ul style="list-style-type: none; padding-left: 15px;">';
+          changesSummary +=
+            '<ul style="list-style-type: none; padding-left: 15px;">';
           if (isNotEmpty(change.added)) {
-            changesSummary += `<li style="margin: 5px 0;"><span style="color: #28a745;">✓ ${translate('role_added', lang)}:</span> ${change.added.join(', ')}</li>`;
+            changesSummary += `<li style="margin: 5px 0;"><span style="color: #28a745;">✓ ${translate("role_added", lang)}:</span> ${change.added.join(", ")}</li>`;
           }
           if (isNotEmpty(change.removed)) {
-            changesSummary += `<li style="margin: 5px 0;"><span style="color: #dc3545;">✗ ${translate('role_removed', lang)}:</span> ${change.removed.join(', ')}</li>`;
+            changesSummary += `<li style="margin: 5px 0;"><span style="color: #dc3545;">✗ ${translate("role_removed", lang)}:</span> ${change.removed.join(", ")}</li>`;
           }
-          changesSummary += '</ul></li>';
+          changesSummary += "</ul></li>";
         }
-        changesSummary += '</ul>';
+        changesSummary += "</ul>";
 
-        if (Object.values(userChanges).every(c => isEmpty(c.added) && isEmpty(c.removed))) return;
+        if (
+          Object.values(userChanges).every(
+            (c) => isEmpty(c.added) && isEmpty(c.removed),
+          )
+        )
+          return;
 
-        const nameProject =
-          projectTitle[lang] || projectTitle.en || idProject;
+        const nameProject = projectTitle[lang] || projectTitle.en || idProject;
         const subject =
           translate("project_roles_updated_mail_subject", lang, {
             nameProject,
