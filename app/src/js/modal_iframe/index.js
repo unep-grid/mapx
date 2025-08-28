@@ -1,4 +1,4 @@
-import { modalConfirm, modalDialog } from "./../mx_helper_modal.js";
+import { modalDialog } from "./../mx_helper_modal.js";
 import { isUrl } from "./../is_test";
 import { el, elButtonFa } from "../el_mapx";
 import { settings } from "../settings";

@@ -255,6 +255,10 @@ export function modal(o) {
     }
   }
 
+  if (isFunction(o.cbInit)) {
+    o.cbInit(elModal, elContent);
+  }
+
   /**
    * Move modal programatically
    */
@@ -598,7 +602,6 @@ export function modalDialog(opt) {
  * Simple async confirm modal : confirm / cancel
  * @param {Object} opt Options
  * @param {Function} opt.cbData If set, cb to set the returning value. arg: elModal, elContent
- * @param {Function} opt.cbInit If set, cb after init. arg:  elModal,elContent
  * @param {String|Promise|Element} opt.title Title
  * @param {String|Promise|Element} opt.content Title
  * @param {String|Promise|Element} opt.cancel Cancel text
@@ -614,7 +617,6 @@ export function modalConfirm(opt) {
       : el("div", opt.content);
     const hasCbData = isFunction(opt.cbData);
     const hasOnClose = isFunction(opt.onClose);
-    const hasCbInit = isFunction(opt.cbInit);
     const hasCbValidate = isFunction(opt.cbValidate);
     const elBtnCancel = el(
       "button",
@@ -668,10 +670,6 @@ export function modalConfirm(opt) {
         }
       },
     });
-
-    if (hasCbInit) {
-      opt.cbInit(elModal, elContent);
-    }
 
     if (hasCbValidate) {
       opt.cbValidate(elBtnConfirm);

@@ -60,8 +60,11 @@ server <- function(input, output, session) {
       #
       # Docs links
       #
-      links = list(
-        doc_base = .get(config, c("links", "doc_base"))
+      links = modifyList(
+        .get(config, c("links")),
+        list(
+          doc_base = .get(config, c("links", "doc_base"))
+        )
       )
     )
   )

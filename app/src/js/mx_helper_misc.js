@@ -56,13 +56,12 @@ export function lerp(fromScale, toScale, minVal, maxVal, v) {
   return fromScale + normalizedV * (toScale - fromScale);
 }
 
-
 /**
-* Fast non-cryptographic hash for cache invalidation
-* djb2 (with XOR variant)
-* @param {Array} list - Array of items to hash
-* @returns {string} Hex hash string
-*/
+ * Fast non-cryptographic hash for cache invalidation
+ * djb2 (with XOR variant)
+ * @param {Array} list - Array of items to hash
+ * @returns {string} Hex hash string
+ */
 export function quickHash(data) {
   data = asArray(data);
 
@@ -2549,6 +2548,17 @@ export function copyText(id) {
   itemFlash("clipboard");
 }
 
+// Function to copy to clipboard
+export async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    itemFlash("clipboard");
+  } catch (err) {
+    itemFlash("times");
+    console.error("Failed to copy text: ", err);
+  }
+}
+
 export function shareTwitter(id) {
   var elText = document.getElementById(id);
   if (!elText) {
@@ -2576,7 +2586,6 @@ export function shareTwitter(id) {
 
   itemFlash("twitter");
 }
-
 
 export function updateLogScroll(selector) {
   selector = selector || ".mx-logs";

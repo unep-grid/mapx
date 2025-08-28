@@ -20,7 +20,11 @@ import {
   isEqual,
   isTrue,
 } from "../is_test/index.js";
-import { debouncePromise, parseTemplate } from "../mx_helper_misc.js";
+import {
+  copyToClipboard,
+  debouncePromise,
+  parseTemplate,
+} from "../mx_helper_misc.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { getQueryParametersAsObject } from "../url_utils";
 
@@ -642,8 +646,7 @@ export class ShareModal extends EventSimple {
     const elTemp = el("input", { type: "text" });
     elTemp.value = sm.getShareCode();
     elTemp.select();
-    navigator.clipboard.writeText(elTemp.value);
-    new FlashItem("clipboard");
+    copyToClipboard(elTemp.value);
     sm.fire("copied");
   }
 

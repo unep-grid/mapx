@@ -8,25 +8,31 @@ This guide explains how to access various OGC (Open Geospatial Consortium) servi
 
 WMS provides map <a href="{{wmsUrl}}" target="_blank">images</a>
 
-```
+<div class="well">
+<button class="btn_action btn btn-default btn-small" id="ogc_wms_copy">Copy</button>
+<div class="mx-code">
 {{wmsUrlFormat}}
-```
+</div>
+</div>
 
 **Preview:**
+
 <div style="display:flex;justify-content:center; padding:10px">
 <img src="{{wmsUrl}}"
   alt="WMS Preview of {{layerName}}"
-  style="max-width: 50%; border: 1px solid var(--mx_ui_border); border-radius: 5px;"
-  loading="lazy" />
+  style="max-width: 50%; border: 1px solid var(--mx_ui_border); border-radius: 5px;" />
 </div>
 
 ### WFS (Web Feature Service)
 
 WFS provides access to actual geographic feature data. <a href="{{wfsUrl}}" target="_blank">Try this example</a>
 
-```
+<div class="well">
+<button class="btn_action btn btn-default btn-small" id="ogc_wfs_copy">Copy</button>
+<div class="mx-code">
 {{wfsUrlFormat}}
-```
+</div>
+</div>
 
 **Best Practices for WFS:**
 
@@ -48,17 +54,23 @@ WFS provides access to actual geographic feature data. <a href="{{wfsUrl}}" targ
 
 TMS provides access to cartographic maps divided into tiles.
 
-```
+<div class="well">
+<button class="btn_action btn btn-default btn-small" id="ogc_tms_copy">Copy</button>
+<div class="mx-code">
 {{tmsUrlFormat}}
-```
+</div>
+</div>
 
 ### WMTS (Web Map Tile Service)
 
 WMTS also provides access to tiled maps.
 
-```
+<div class="well">
+<button class="btn_action btn btn-default btn-small" id="ogc_wmts_copy">Copy</button>
+<div class="mx-code">
 {{wmtsUrlFormat}}
-```
+</div>
+</div>
 
 ## Important Considerations
 

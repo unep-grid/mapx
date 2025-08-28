@@ -3,6 +3,7 @@ import { getViewExtent } from "../map_helpers/index.js";
 import { getGeoserverUrl } from "./config.js";
 import { modalMarkdown } from "../modal_markdown/index.js";
 import { templateHandler } from "../language/index.js";
+import { copyToClipboard } from "../mx_helpers.js";
 
 /** Normalize to (-180, 180] with -180 pushed to +180 for stability */
 function norm180(x) {
@@ -233,10 +234,8 @@ function buildWmtsUrl(geoserverBase, layerName) {
   url.searchParams.set("Request", "GetTile");
   url.searchParams.set("Version", "1.0.0");
   url.searchParams.set("Format", "image/png");
-  url.searchParams.set("TileMatrix", "{z}");
-  url.searchParams.set("TileCol", "{x}");
-  url.searchParams.set("TileRow", "{y}");
-  const urlStr = url.toString();
+  const xyz = "&TileMatrix={z}&TileCol={x}&TileRow={x}";
+  const urlStr = url.toString() + xyz;
   return {
     wmtsUrl: urlStr,
     wmtsUrlFormat: formatUrl(urlStr),
@@ -287,6 +286,44 @@ export async function viewOgcDoc(idView) {
   return modalMarkdown({
     title: "OGC Doc",
     txt: doc,
+    cbInit: (elModal) => {
+      const elButtons = elModal.querySelectorAll(".btn_action");
+      for (const elButton of [...elButtons]) {
+        const id = elButton.id;
+        switch (id) {
+          case "ogc_wms_copy":
+            {
+              elButton.addEventListener("click", async () => {
+                await copyToClipboard(wmsUrl);
+              });
+            }
+            break;
+          case "ogc_wfs_copy":
+            {
+              elButton.addEventListener("click", async () => {
+                await copyToClipboard(wfsUrl);
+              });
+            }
+            break;
+          case "ogc_tms_copy":
+            {
+              elButton.addEventListener("click", async () => {
+                await copyToClipboard(tmsUrl);
+              });
+            }
+            break;
+          case "ogc_wmts_copy":
+            {
+              elButton.addEventListener("click", async () => {
+                await copyToClipboard(wmtsUrl);
+              });
+            }
+            break;
+          default:
+            null;
+        }
+      }
+    },
   });
 }
 
