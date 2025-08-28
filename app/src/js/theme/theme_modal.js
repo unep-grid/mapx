@@ -119,13 +119,22 @@ export class ThemeModal extends EventSimple {
   }
 
   /**
+   * Check if a theme is the project default theme
+   * @param {string} idTheme - Theme ID to check
+   * @returns {boolean} - True if theme is local/built-in
+   */
+  isProjectTheme(idTheme) {
+    return settings.project.theme === idTheme;
+  }
+
+  /**
    * Update button states based on current theme and user roles
    */
   async updateButtonStates() {
     const tm = this;
     const currentTheme = tm._theme.theme();
     const isLocal = tm.isLocalTheme(currentTheme.id);
-    const isDefault = settings.project.theme;
+    const isDefault = tm.isProjectTheme(currentTheme.id);
     const hasPublisherRole = settings.user.roles?.publisher === true;
 
     tm._el_button_save.setAttribute("disabled", "disabled");
@@ -707,12 +716,17 @@ export class ThemeModal extends EventSimple {
     });
 
     await tm._theme.upsert(theme);
+    await tm.update();
   }
 
   async deleteTheme() {
     const tm = this;
     const currentTheme = tm._theme.theme();
+    if (tm.isProjectTheme(currentTheme)) {
+      return;
+    }
     await tm._theme.deleteTheme(currentTheme);
+    await tm.update();
   }
 
   async importTheme() {
@@ -740,6 +754,8 @@ export class ThemeModal extends EventSimple {
       const theme = Object.assign({}, importedTheme, metadata);
 
       await tm._theme.upsert(theme);
+
+      await tm.update();
     } catch (e) {
       itemFlashWarning();
       console.error("Failed to import theme:", e);
