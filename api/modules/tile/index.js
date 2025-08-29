@@ -79,6 +79,7 @@ export async function handlerTile(req, res) {
     data.x = req.params.x * 1;
     data.y = req.params.y * 1;
     data.attributes = asArray(data.attributes);
+    
     data.attributes_pg = attrToPgCol([
       data.attribute,
       ...data.attributes,

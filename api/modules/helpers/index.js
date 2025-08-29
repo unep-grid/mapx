@@ -9,29 +9,6 @@ import crypto from "crypto";
 import he from "he";
 
 /**
- * Conversion of array of column names to pg columns with casting
- * @param {Array<string>} arr - list of column names
- * @param {Object} [opt={}] - options
- * @param {Array<string>} [opt.castText=[]] - attributes to cast as text
- * @returns {String} - String usable in Postgres query
- */
-function toPgColumn(arr, opt = {}) {
-  const ct = new Set(opt.castText || []);
-
-  return arr
-    .map((a) => {
-      const toT = ct.has(a);
-      
-      if (toT) {
-        return `${a}::text`;
-      }
-
-      return a;
-    })
-    .join(", ");
-}
-
-/**
  * Get distinct value in array
  */
 function getDistinct(arr) {
@@ -292,6 +269,28 @@ function attrToPgCol(attribute = "gid", attributes = [], opt) {
   attributes = attributes.filter(isNotEmpty);
   return toPgColumn(getDistinct(attributes));
 }
+/**
+ * Conversion of array of column names to pg columns with casting
+ * @param {Array<string>} arr - list of column names
+ * @param {Object} [opt={}] - options
+ * @param {Array<string>} [opt.castText=[]] - attributes to cast as text
+ * @returns {String} - String usable in Postgres query
+ */
+function toPgColumn(arr, opt = {}) {
+  const ct = new Set(opt.castText || []);
+
+  return arr
+    .map((a) => {
+      const toT = ct.has(a);
+
+      if (toT) {
+        return `${a}::text`;
+      }
+
+      return `"${a}"`;
+    })
+    .join(", ");
+}
 
 /**
  * Convert js array [1,2,3] to pg array ('1','2','5');
@@ -533,7 +532,7 @@ function mwSetHeaders(_, res, next) {
   res.header("Access-Control-Expose-Headers", "Mapx-Content-Length");
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    "Origin, X-Requested-With, Content-Type, Accept",
   );
   next();
 }
