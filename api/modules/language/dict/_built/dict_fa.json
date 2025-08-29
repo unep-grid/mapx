@@ -9995,6 +9995,41 @@
     "fa": "هایلایت کننده رابط کاربری"
   },
   {
+    "id": "mx_theme_storage_description",
+    "en": "Choose where to store your theme",
+    "fa": "محل ذخیره قالب خود را انتخاب کنید"
+  },
+  {
+    "id": "mx_theme_save_storage_title",
+    "en": "Save Theme - Storage Location",
+    "fa": "ذخیره قالب - محل ذخیره‌سازی"
+  },
+  {
+    "id": "mx_theme_import_storage_title",
+    "en": "Import Theme - Storage Location",
+    "fa": "وارد کردن قالب - محل ذخیره‌سازی"
+  },
+  {
+    "id": "mx_theme_select_storage",
+    "en": "Select storage location...",
+    "fa": "انتخاب محل ذخیره ..."
+  },
+  {
+    "id": "mx_theme_save_db",
+    "en": "Database (shared with all users)",
+    "fa": "پایگاه داده (به اشتراک گذاشته شده با همه کاربران)"
+  },
+  {
+    "id": "mx_theme_save_local",
+    "en": "Browser (your device only)",
+    "fa": "مرورگر (فقط دستگاه شما)"
+  },
+  {
+    "id": "mx_theme_save_session",
+    "en": "Session (temporary)",
+    "fa": "جلسه (موقت)"
+  },
+  {
     "id": "topic_biota",
     "en": "Biota",
     "fa": "زیست‌بوم"

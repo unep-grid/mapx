@@ -9995,6 +9995,41 @@
     "fr": "Surligneur d'interface"
   },
   {
+    "id": "mx_theme_storage_description",
+    "en": "Choose where to store your theme",
+    "fr": "Choisissez où stocker votre thème"
+  },
+  {
+    "id": "mx_theme_save_storage_title",
+    "en": "Save Theme - Storage Location",
+    "fr": "Enregistrer le thème - Emplacement de stockage"
+  },
+  {
+    "id": "mx_theme_import_storage_title",
+    "en": "Import Theme - Storage Location",
+    "fr": "Thème d'importation - Emplacement de stockage"
+  },
+  {
+    "id": "mx_theme_select_storage",
+    "en": "Select storage location...",
+    "fr": "Sélectionnez l'emplacement de stockage..."
+  },
+  {
+    "id": "mx_theme_save_db",
+    "en": "Database (shared with all users)",
+    "fr": "Base de données (partagée avec tous les utilisateurs)"
+  },
+  {
+    "id": "mx_theme_save_local",
+    "en": "Browser (your device only)",
+    "fr": "Navigateur (votre appareil uniquement)"
+  },
+  {
+    "id": "mx_theme_save_session",
+    "en": "Session (temporary)",
+    "fr": "Session (temporaire)"
+  },
+  {
     "id": "topic_biota",
     "en": "Biota",
     "fr": "Biote"

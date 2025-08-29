@@ -9995,6 +9995,41 @@
     "ps": "د UI روښانه کوونکی"
   },
   {
+    "id": "mx_theme_storage_description",
+    "en": "Choose where to store your theme",
+    "ps": "غوره کړئ چې خپل موضوع چیرته وساتئ"
+  },
+  {
+    "id": "mx_theme_save_storage_title",
+    "en": "Save Theme - Storage Location",
+    "ps": "د موضوع خوندي کول - د ذخیره کولو ځای"
+  },
+  {
+    "id": "mx_theme_import_storage_title",
+    "en": "Import Theme - Storage Location",
+    "ps": "د واردولو موضوع - د ذخیره کولو ځای"
+  },
+  {
+    "id": "mx_theme_select_storage",
+    "en": "Select storage location...",
+    "ps": "د ذخیره کولو ځای غوره کړئ..."
+  },
+  {
+    "id": "mx_theme_save_db",
+    "en": "Database (shared with all users)",
+    "ps": "ډیټابیس (د ټولو کاروونکو سره شریک شوی)"
+  },
+  {
+    "id": "mx_theme_save_local",
+    "en": "Browser (your device only)",
+    "ps": "براوزر (یوازې ستاسو وسیله)"
+  },
+  {
+    "id": "mx_theme_save_session",
+    "en": "Session (temporary)",
+    "ps": "غونډه (لنډمهاله)"
+  },
+  {
     "id": "topic_biota",
     "en": "Biota",
     "ps": "ژوندي موجودات"

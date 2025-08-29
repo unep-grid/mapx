@@ -147,6 +147,133 @@ class Theme extends EventSimple {
     }
   }
 
+  /**
+   * Save theme to database (publishers only)
+   * @param {Object} theme - Theme object to save
+   * @param {boolean} setAsProjectDefault - Whether to set as project default
+   */
+  async upsertDatabase(theme, setAsProjectDefault = false) {
+    try {
+      const t = this;
+      await t.stopIfInvalidColors(theme);
+
+      const { theme: themeDb } = await t._s.save({
+        theme,
+        setAsProjectDefault,
+      });
+
+      await t.register(themeDb);
+      await t.set(themeDb);
+
+      t.fire("list_updated");
+
+      if (setAsProjectDefault) {
+        settings.project.theme = theme.id;
+      }
+
+      itemFlashSave();
+    } catch (e) {
+      console.error("Failed to save theme to database:", e);
+      itemFlashWarning();
+    }
+  }
+
+  /**
+   * Save theme to localStorage (all users)
+   * @param {Object} theme - Theme object to save
+   */
+  async upsertLocalStorage(theme) {
+    try {
+      const t = this;
+      await t.stopIfInvalidColors(theme);
+
+      // Add storage metadata
+      const themeWithStorage = Object.assign({}, theme, {
+        _storage: "save_local",
+        date_modified: new Date().toISOString(),
+      });
+
+      // Save to localStorage
+      const key = `mx_theme_custom_${theme.id}`;
+      localStorage.setItem(key, JSON.stringify(themeWithStorage));
+
+      // Register in memory
+      await t.register(themeWithStorage);
+      await t.set(themeWithStorage);
+
+      t.fire("list_updated");
+      itemFlashSave();
+    } catch (e) {
+      console.error("Failed to save theme to localStorage:", e);
+      itemFlashWarning();
+    }
+  }
+
+  /**
+   * Save theme to session memory only (all users)
+   * @param {Object} theme - Theme object to save
+   */
+  async upsertSession(theme) {
+    try {
+      const t = this;
+      await t.stopIfInvalidColors(theme);
+
+      // Add storage metadata
+      const themeWithStorage = Object.assign({}, theme, {
+        _storage: "save_session",
+        date_modified: new Date().toISOString(),
+      });
+
+      // Register in memory only (no persistence)
+      await t.register(themeWithStorage);
+      await t.set(themeWithStorage);
+
+      t.fire("list_updated");
+      itemFlashSave();
+    } catch (e) {
+      console.error("Failed to save theme to session:", e);
+      itemFlashWarning();
+    }
+  }
+
+  /**
+   * Load themes from localStorage on initialization
+   */
+  async loadFromLocalStorage() {
+    try {
+      const t = this;
+      const localThemes = [];
+
+      // Iterate through localStorage to find theme keys
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith("mx_theme_custom_")) {
+          try {
+            const themeData = localStorage.getItem(key);
+            const theme = JSON.parse(themeData);
+
+            // Validate theme before adding
+            await t.stopIfInvalidColors(theme);
+            localThemes.push(theme);
+          } catch (e) {
+            console.warn(`Invalid theme in localStorage: ${key}`, e);
+            // Remove invalid theme from localStorage
+            localStorage.removeItem(key);
+          }
+        }
+      }
+
+      // Register all valid localStorage themes
+      await t.registerBatch(localThemes);
+
+      if (localThemes.length > 0) {
+        console.log(`Loaded ${localThemes.length} themes from localStorage`);
+      }
+    } catch (e) {
+      console.warn("Failed to load themes from localStorage:", e);
+    }
+  }
+
   resetThemesOrig() {
     themes.length = 0;
     themes.push(...this.clone(themes_orig));
@@ -205,13 +332,18 @@ class Theme extends EventSimple {
   }
 
   /**
-   * Update themes from remote server
+   * Update themes from remote server and localStorage
    */
   async preloadThemes() {
     const t = this;
     try {
       console.log("preload custom theme");
       t._clear_custom_themes();
+
+      // Load themes from localStorage first
+      await t.loadFromLocalStorage();
+
+      // Then load remote themes
       const remoteThemes = await t.listRemote();
       await t.registerBatch(remoteThemes);
     } catch (e) {

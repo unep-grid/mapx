@@ -7996,6 +7996,34 @@
     "en": "UI Highlighter"
   },
   {
+    "id": "mx_theme_storage_description",
+    "en": "Choose where to store your theme"
+  },
+  {
+    "id": "mx_theme_save_storage_title",
+    "en": "Save Theme - Storage Location"
+  },
+  {
+    "id": "mx_theme_import_storage_title",
+    "en": "Import Theme - Storage Location"
+  },
+  {
+    "id": "mx_theme_select_storage",
+    "en": "Select storage location..."
+  },
+  {
+    "id": "mx_theme_save_db",
+    "en": "Database (shared with all users)"
+  },
+  {
+    "id": "mx_theme_save_local",
+    "en": "Browser (your device only)"
+  },
+  {
+    "id": "mx_theme_save_session",
+    "en": "Session (temporary)"
+  },
+  {
     "id": "topic_biota",
     "en": "Biota"
   },

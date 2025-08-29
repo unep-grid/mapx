@@ -1,4 +1,4 @@
-import { modal, modalConfirm } from "../mx_helper_modal.js";
+import { modal, modalConfirm, modalPrompt } from "../mx_helper_modal.js";
 import { EventSimple } from "../event_simple/index.js";
 import { el, elButtonFa, elSelect, tt } from "../el_mapx";
 import { bindAll } from "../bind_class_methods/index.js";
@@ -137,11 +137,12 @@ export class ThemeModal extends EventSimple {
     const isDefault = tm.isProjectTheme(currentTheme.id);
     const hasPublisherRole = settings.user.roles?.publisher === true;
 
-    tm._el_button_save.setAttribute("disabled", "disabled");
+    // Always enable save button - storage location will be determined in the save flow
+    tm._el_button_save.removeAttribute("disabled");
+
     tm._el_button_delete.setAttribute("disabled", "disabled");
 
     if (hasPublisherRole) {
-      tm._el_button_save.removeAttribute("disabled");
       if (!isLocal && !isDefault) {
         tm._el_button_delete.removeAttribute("disabled");
       }
@@ -450,6 +451,53 @@ export class ThemeModal extends EventSimple {
     );
   }
 
+  /**
+   * Show storage location selector modal
+   * @param {string} operation - The operation type (save, import)
+   * @returns {Promise<string|null>} - Storage location or null if cancelled
+   */
+  async showStorageLocationModal(operation = "save") {
+    const tm = this;
+    const hasPublisherRole = settings.user.roles?.publisher === true;
+
+    const options = [
+      // Session option (always available)
+      el("option", { value: "save_session" }, [
+        await getDictItem("mx_theme_save_session"),
+      ]),
+
+      // LocalStorage option (always available)
+      el("option", { value: "save_local" }, [
+        await getDictItem("mx_theme_save_local"),
+      ]),
+    ];
+
+    // Database option (publishers only)
+    if (hasPublisherRole) {
+      options.unshift(
+        el("option", { value: "save_db" }, [
+          await getDictItem("mx_theme_save_db"),
+        ]),
+      );
+    }
+
+    const storageChoice = await modalPrompt({
+      title: tt(`mx_theme_${operation}_storage_title`),
+      label: tt("mx_theme_storage_description"),
+      confirm: tt("btn_next"),
+      cancel: tt("btn_cancel"),
+      inputTag: "select",
+      inputOptions: {
+        type: "select",
+        placeholder: tt("mx_theme_select_storage"),
+        value: hasPublisherRole ? "save_db" : "save_local", // Smart default
+      },
+      inputChildren: options,
+    });
+
+    return storageChoice;
+  }
+
   async buildColorsItems() {
     return new Promise((resolve, reject) => {
       try {
@@ -704,18 +752,43 @@ export class ThemeModal extends EventSimple {
     const tm = this;
     const currentTheme = tm._theme.theme();
 
+    // Step 1: Get metadata
     const metadata = await tm.showMetadataEditorModal("save", currentTheme);
-
     if (!metadata) {
       itemFlashCancel();
       return;
     }
 
+    // Step 2: Choose storage location
+    const storageLocation = await tm.showStorageLocationModal("save");
+    if (!storageLocation) {
+      itemFlashCancel();
+      return;
+    }
+
+    // Step 3: Handle project default for database saves
+    let setAsProjectDefault = false;
+    if (storageLocation === "save_db") {
+      const notDefault = settings.project.theme !== metadata.id;
+      if (notDefault) {
+        setAsProjectDefault = await modalConfirm({
+          title: tt("mx_theme_update_project"),
+          content: tt("mx_theme_update_project_desc", {
+            data: { idTheme: metadata.id },
+          }),
+          confirm: tt("btn_confirm"),
+          cancel: tt("btn_cancel"),
+        });
+      }
+    }
+
+    // Step 4: Save to chosen location
     const theme = Object.assign({}, metadata, {
       colors: tm.getColorsFromInputs(),
+      _storage: storageLocation, // Track storage location
     });
 
-    await tm._theme.upsert(theme);
+    await tm.saveToLocation(theme, storageLocation, setAsProjectDefault);
     await tm.update();
   }
 
@@ -732,33 +805,83 @@ export class ThemeModal extends EventSimple {
   async importTheme() {
     const tm = this;
     try {
-      // Select JSON file to import
+      // Step 1: Select JSON file to import
       const data = await fileSelectorJSON({ multiple: false });
       if (isEmpty(data)) {
         return;
       }
 
-      // Assuming the imported file contains a single theme object
+      // Step 2: Validate and prepare theme
       const importedTheme = tm.cleanKeys(data[0]);
       await tm._theme.stopIfInvalidColors(importedTheme);
+
+      // Step 3: Get metadata
       const metadata = await tm.showMetadataEditorModal(
         "import",
         importedTheme,
       );
-
       if (!metadata) {
         itemFlashCancel();
         return;
       }
 
-      const theme = Object.assign({}, importedTheme, metadata);
+      // Step 4: Choose storage location
+      const storageLocation = await tm.showStorageLocationModal("import");
+      if (!storageLocation) {
+        itemFlashCancel();
+        return;
+      }
 
-      await tm._theme.upsert(theme);
+      // Step 5: Handle project default for database saves
+      let setAsProjectDefault = false;
+      if (storageLocation === "save_db") {
+        const notDefault = settings.project.theme !== metadata.id;
+        if (notDefault) {
+          setAsProjectDefault = await modalConfirm({
+            title: tt("mx_theme_update_project"),
+            content: tt("mx_theme_update_project_desc", {
+              data: { idTheme: metadata.id },
+            }),
+            confirm: tt("btn_confirm"),
+            cancel: tt("btn_cancel"),
+          });
+        }
+      }
 
+      // Step 6: Save to chosen location
+      const theme = Object.assign({}, importedTheme, metadata, {
+        _storage: storageLocation, // Track storage location
+      });
+
+      await tm.saveToLocation(theme, storageLocation, setAsProjectDefault);
       await tm.update();
     } catch (e) {
       itemFlashWarning();
       console.error("Failed to import theme:", e);
+    }
+  }
+
+  /**
+   * Save theme to the specified storage location
+   * @param {Object} theme - Theme object to save
+   * @param {string} location - Storage location (save_db, save_local, save_session)
+   * @param {boolean} setAsProjectDefault - Whether to set as project default (DB only)
+   */
+  async saveToLocation(theme, location, setAsProjectDefault = false) {
+    const tm = this;
+
+    switch (location) {
+      case "save_db":
+        await tm._theme.upsertDatabase(theme, setAsProjectDefault);
+        break;
+      case "save_local":
+        await tm._theme.upsertLocalStorage(theme);
+        break;
+      case "save_session":
+        await tm._theme.upsertSession(theme);
+        break;
+      default:
+        throw new Error(`Unknown storage location: ${location}`);
     }
   }
 

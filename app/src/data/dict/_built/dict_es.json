@@ -9995,6 +9995,41 @@
     "es": "Resaltador de interfaz"
   },
   {
+    "id": "mx_theme_storage_description",
+    "en": "Choose where to store your theme",
+    "es": "Elige dónde almacenar tu tema"
+  },
+  {
+    "id": "mx_theme_save_storage_title",
+    "en": "Save Theme - Storage Location",
+    "es": "Guardar tema - Ubicación de almacenamiento"
+  },
+  {
+    "id": "mx_theme_import_storage_title",
+    "en": "Import Theme - Storage Location",
+    "es": "Importar tema - Ubicación de almacenamiento"
+  },
+  {
+    "id": "mx_theme_select_storage",
+    "en": "Select storage location...",
+    "es": "Seleccionar ubicación de almacenamiento..."
+  },
+  {
+    "id": "mx_theme_save_db",
+    "en": "Database (shared with all users)",
+    "es": "Base de datos (compartida con todos los usuarios)"
+  },
+  {
+    "id": "mx_theme_save_local",
+    "en": "Browser (your device only)",
+    "es": "Navegador (solo su dispositivo)"
+  },
+  {
+    "id": "mx_theme_save_session",
+    "en": "Session (temporary)",
+    "es": "Sesión (temporal)"
+  },
+  {
     "id": "topic_biota",
     "en": "Biota",
     "es": "Biota"

@@ -9995,6 +9995,41 @@
     "bn": "UI হাইলাইটার"
   },
   {
+    "id": "mx_theme_storage_description",
+    "en": "Choose where to store your theme",
+    "bn": "আপনার থিম কোথায় সংরক্ষণ করবেন তা বেছে নিন"
+  },
+  {
+    "id": "mx_theme_save_storage_title",
+    "en": "Save Theme - Storage Location",
+    "bn": "থিম সংরক্ষণ করুন - স্টোরেজ অবস্থান"
+  },
+  {
+    "id": "mx_theme_import_storage_title",
+    "en": "Import Theme - Storage Location",
+    "bn": "থিম আমদানি করুন - স্টোরেজ লোকেশন"
+  },
+  {
+    "id": "mx_theme_select_storage",
+    "en": "Select storage location...",
+    "bn": "স্টোরেজের অবস্থান নির্বাচন করুন..."
+  },
+  {
+    "id": "mx_theme_save_db",
+    "en": "Database (shared with all users)",
+    "bn": "ডাটাবেস (সকল ব্যবহারকারীর সাথে ভাগ করা)"
+  },
+  {
+    "id": "mx_theme_save_local",
+    "en": "Browser (your device only)",
+    "bn": "ব্রাউজার (শুধুমাত্র আপনার ডিভাইস)"
+  },
+  {
+    "id": "mx_theme_save_session",
+    "en": "Session (temporary)",
+    "bn": "অধিবেশন (অস্থায়ী)"
+  },
+  {
     "id": "topic_biota",
     "en": "Biota",
     "bn": "জীবজগৎ"

@@ -9995,6 +9995,41 @@
     "de": "UI-Highlighter"
   },
   {
+    "id": "mx_theme_storage_description",
+    "en": "Choose where to store your theme",
+    "de": "Wählen Sie, wo Ihr Design gespeichert werden soll"
+  },
+  {
+    "id": "mx_theme_save_storage_title",
+    "en": "Save Theme - Storage Location",
+    "de": "Thema speichern - Speicherort"
+  },
+  {
+    "id": "mx_theme_import_storage_title",
+    "en": "Import Theme - Storage Location",
+    "de": "Design importieren - Speicherort"
+  },
+  {
+    "id": "mx_theme_select_storage",
+    "en": "Select storage location...",
+    "de": "Speicherort auswählen..."
+  },
+  {
+    "id": "mx_theme_save_db",
+    "en": "Database (shared with all users)",
+    "de": "Datenbank (für alle Benutzer freigegeben)"
+  },
+  {
+    "id": "mx_theme_save_local",
+    "en": "Browser (your device only)",
+    "de": "Browser (nur Ihr Gerät)"
+  },
+  {
+    "id": "mx_theme_save_session",
+    "en": "Session (temporary)",
+    "de": "Sitzung (temporär)"
+  },
+  {
     "id": "topic_biota",
     "en": "Biota",
     "de": "Biota"

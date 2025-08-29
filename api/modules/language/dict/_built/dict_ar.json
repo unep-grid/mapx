@@ -9995,6 +9995,41 @@
     "ar": "مُميّز واجهة المستخدم"
   },
   {
+    "id": "mx_theme_storage_description",
+    "en": "Choose where to store your theme",
+    "ar": "اختر مكان تخزين موضوعك"
+  },
+  {
+    "id": "mx_theme_save_storage_title",
+    "en": "Save Theme - Storage Location",
+    "ar": "حفظ السمة - موقع التخزين"
+  },
+  {
+    "id": "mx_theme_import_storage_title",
+    "en": "Import Theme - Storage Location",
+    "ar": "استيراد السمة - موقع التخزين"
+  },
+  {
+    "id": "mx_theme_select_storage",
+    "en": "Select storage location...",
+    "ar": "حدد موقع التخزين..."
+  },
+  {
+    "id": "mx_theme_save_db",
+    "en": "Database (shared with all users)",
+    "ar": "قاعدة البيانات (مشتركة مع جميع المستخدمين)"
+  },
+  {
+    "id": "mx_theme_save_local",
+    "en": "Browser (your device only)",
+    "ar": "المتصفح (جهازك فقط)"
+  },
+  {
+    "id": "mx_theme_save_session",
+    "en": "Session (temporary)",
+    "ar": "جلسة (مؤقتة)"
+  },
+  {
     "id": "topic_biota",
     "en": "Biota",
     "ar": "الكائنات الحية"

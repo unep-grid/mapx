@@ -9995,6 +9995,41 @@
     "ru": "Подсветка пользовательского интерфейса"
   },
   {
+    "id": "mx_theme_storage_description",
+    "en": "Choose where to store your theme",
+    "ru": "Выберите, где сохранить вашу тему"
+  },
+  {
+    "id": "mx_theme_save_storage_title",
+    "en": "Save Theme - Storage Location",
+    "ru": "Сохранить тему - Место хранения"
+  },
+  {
+    "id": "mx_theme_import_storage_title",
+    "en": "Import Theme - Storage Location",
+    "ru": "Импорт темы - Место хранения"
+  },
+  {
+    "id": "mx_theme_select_storage",
+    "en": "Select storage location...",
+    "ru": "Выберите место хранения..."
+  },
+  {
+    "id": "mx_theme_save_db",
+    "en": "Database (shared with all users)",
+    "ru": "База данных (общая для всех пользователей)"
+  },
+  {
+    "id": "mx_theme_save_local",
+    "en": "Browser (your device only)",
+    "ru": "Браузер (только ваше устройство)"
+  },
+  {
+    "id": "mx_theme_save_session",
+    "en": "Session (temporary)",
+    "ru": "Сессия (временная)"
+  },
+  {
     "id": "topic_biota",
     "en": "Biota",
     "ru": "Биота"
