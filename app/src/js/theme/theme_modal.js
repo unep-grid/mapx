@@ -462,12 +462,12 @@ export class ThemeModal extends EventSimple {
 
     const options = [
       // Session option (always available)
-      el("option", { value: "save_session" }, [
+      el("option", { value: "session" }, [
         await getDictItem("mx_theme_save_session"),
       ]),
 
       // LocalStorage option (always available)
-      el("option", { value: "save_local" }, [
+      el("option", { value: "local" }, [
         await getDictItem("mx_theme_save_local"),
       ]),
     ];
@@ -475,7 +475,7 @@ export class ThemeModal extends EventSimple {
     // Database option (publishers only)
     if (hasPublisherRole) {
       options.unshift(
-        el("option", { value: "save_db" }, [
+        el("option", { value: "db" }, [
           await getDictItem("mx_theme_save_db"),
         ]),
       );
@@ -490,7 +490,7 @@ export class ThemeModal extends EventSimple {
       inputOptions: {
         type: "select",
         placeholder: tt("mx_theme_select_storage"),
-        value: hasPublisherRole ? "save_db" : "save_local", // Smart default
+        value: hasPublisherRole ? "db" : "local", // Smart default
       },
       inputChildren: options,
     });
@@ -768,7 +768,7 @@ export class ThemeModal extends EventSimple {
 
     // Step 3: Handle project default for database saves
     let setAsProjectDefault = false;
-    if (storageLocation === "save_db") {
+    if (storageLocation === "db") {
       const notDefault = settings.project.theme !== metadata.id;
       if (notDefault) {
         setAsProjectDefault = await modalConfirm({
@@ -834,7 +834,7 @@ export class ThemeModal extends EventSimple {
 
       // Step 5: Handle project default for database saves
       let setAsProjectDefault = false;
-      if (storageLocation === "save_db") {
+      if (storageLocation === "db") {
         const notDefault = settings.project.theme !== metadata.id;
         if (notDefault) {
           setAsProjectDefault = await modalConfirm({
@@ -864,20 +864,20 @@ export class ThemeModal extends EventSimple {
   /**
    * Save theme to the specified storage location
    * @param {Object} theme - Theme object to save
-   * @param {string} location - Storage location (save_db, save_local, save_session)
+   * @param {string} location - Storage location (db, local, session)
    * @param {boolean} setAsProjectDefault - Whether to set as project default (DB only)
    */
   async saveToLocation(theme, location, setAsProjectDefault = false) {
     const tm = this;
 
     switch (location) {
-      case "save_db":
+      case "db":
         await tm._theme.upsertDatabase(theme, setAsProjectDefault);
         break;
-      case "save_local":
+      case "local":
         await tm._theme.upsertLocalStorage(theme);
         break;
-      case "save_session":
+      case "session":
         await tm._theme.upsertSession(theme);
         break;
       default:

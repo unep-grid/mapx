@@ -124,7 +124,12 @@ export async function ioThemeList(socket, data, cb) {
     `;
 
     const { rows } = await pgRead.query(query, [idProject]);
-    data.themes = rows;
+    // Add _storage property to each theme for frontend icon display
+    const themesWithStorage = rows.map(theme => ({
+      ...theme,
+      _storage: "db"
+    }));
+    data.themes = themesWithStorage;
     data.success = true;
   } catch (e) {
     data.error = e?.message || e;
@@ -318,6 +323,8 @@ export async function ioThemeGet(_, data, cb) {
     }
 
     const theme = rows[0];
+    // Add _storage property for frontend icon display
+    theme._storage = "db";
     data.theme = theme;
     data.success = true;
   } catch (e) {

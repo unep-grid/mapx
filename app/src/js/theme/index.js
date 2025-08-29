@@ -189,7 +189,7 @@ class Theme extends EventSimple {
 
       // Add storage metadata
       const themeWithStorage = Object.assign({}, theme, {
-        _storage: "save_local",
+        _storage: "local",
         date_modified: new Date().toISOString(),
       });
 
@@ -220,7 +220,7 @@ class Theme extends EventSimple {
 
       // Add storage metadata
       const themeWithStorage = Object.assign({}, theme, {
-        _storage: "save_session",
+        _storage: "session",
         date_modified: new Date().toISOString(),
       });
 
@@ -277,6 +277,9 @@ class Theme extends EventSimple {
   resetThemesOrig() {
     themes.length = 0;
     themes.push(...this.clone(themes_orig));
+    for (const theme of themes) {
+      theme._storage = "base";
+    }
   }
   reset() {
     const t = this;
@@ -502,8 +505,11 @@ class Theme extends EventSimple {
    * Services
    */
   async listRemote(onlyPublic = true) {
-    const response = await this._s.list(onlyPublic);
-    return response.themes || [];
+    const { themes } = await this._s.list(onlyPublic);
+    for (const theme of themes) {
+      theme._storage = "db";
+    }
+    return themes || [];
   }
 
   /**

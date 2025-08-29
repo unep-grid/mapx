@@ -1,6 +1,25 @@
 import { el } from "../../el_mapx";
 import { theme } from "../../init_theme";
 
+/**
+ * Get FontAwesome icon classes for theme storage type
+ * @param {string} storage - Storage type (base, db, local, session, save_db, save_local, save_session)
+ * @returns {Array} FontAwesome class array
+ */
+function getStorageIcon(storage) {
+  // Normalize storage key by removing 'save_' prefix if present
+  const normalizedStorage = storage?.replace(/^save_/, '') || '';
+
+  const iconMap = {
+    base: ["fa", "fa-globe"],
+    db: ["fa", "fa-database"],
+    local: ["fa", "fa-laptop"],
+    session: ["fa", "fa-clock-o"],
+  };
+
+  return iconMap[normalizedStorage] || ["fa", "fa-question-circle"]; // fallback icon
+}
+
 export const config = {
   valueField: "id",
   searchField: ["label", "description", "id"],
@@ -19,14 +38,33 @@ export const config = {
   },
   render: {
     option: (data, escape) => {
+      const storageIconClasses = getStorageIcon(data._storage);
       return el(
         "div",
-        el("h4", escape(data.label.en)),
-        el("small", `${escape(data.description.en)}`),
+        { style: { display: "flex", alignItems: "center", gap: "8px" } },
+        el("i", {
+          class: [...storageIconClasses, "fa-sm"],
+          style: {  minWidth: "16px" },
+        }),
+        el(
+          "div",
+          { style: { flex: 1 } },
+          el("h4", { style: { margin: 0 } }, escape(data.label.en)),
+          el("small", `${escape(data.description.en)}`),
+        ),
       );
     },
     item: (data, escape) => {
-      return el("div", el("span", escape(data.label.en)));
+      const storageIconClasses = getStorageIcon(data._storage);
+      return el(
+        "div",
+        { style: { display: "flex", alignItems: "center", gap: "6px" } },
+        el("i", {
+          class: [...storageIconClasses, "fa-sm"],
+          style: { },
+        }),
+        el("span", escape(data.label.en)),
+      );
     },
   },
   // internal config
@@ -55,7 +93,6 @@ function update() {
     tom.addOptions(themes);
     tom.setValue(id);
     tom.enable();
-
   } catch (e) {
     console.error(e);
     tom.enable(); // Make sure to re-enable even if there's an error
