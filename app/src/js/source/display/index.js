@@ -245,6 +245,7 @@ async function showSourceTableAttributeModal(opt) {
       afterFilter: handleViewFilter,
       renderAllRows: false,
       disableVisualSelection: !allowDownload,
+      colWidths: getColWidths(table, columns),
     });
 
     addTitle();
@@ -262,6 +263,52 @@ async function showSourceTableAttributeModal(opt) {
       enable: false,
     });
   }
+  /**
+   * Check if column should be hidden
+   * @param {String} name Column name
+   * @return {Boolean} is hidden
+   */
+  function isColumnHidden(name) {
+    return config.hiddenColumns && config.hiddenColumns.includes(name);
+  }
+
+  /**
+   * Calculate column widths based on content and hidden columns
+   * @param {Object} table Table data object
+   * @param {Array} columns Array of column definitions
+   * @return {Array} Array of column widths
+   */
+  function getColWidths(table, columns) {
+    const { data } = table;
+    const sampleSize = Math.min(100, data.length);
+    const colWidths = columns.map((c) => {
+      if (isColumnHidden(c.data)) {
+        return 0.1;
+      }
+      let maxWidth = c.data.length * 10;
+      for (let i = 0; i < sampleSize; i++) {
+        const row = data[i];
+        const value = row[c.data];
+        if (value != null && value !== '') {
+          const valueWidth = value.toString().length * 10;
+          if (valueWidth > maxWidth) {
+            maxWidth = valueWidth;
+          }
+        }
+      }
+
+      const padding = 30; // Base padding
+      const calculatedWidth = maxWidth + padding;
+
+      // Set reasonable bounds
+      const minWidth = 80;
+      const maxWidthAllowed = 400;
+
+      return Math.max(minWidth, Math.min(maxWidthAllowed, calculatedWidth));
+    });
+    return colWidths;
+  }
+
   /**
    * Helpers
    */
@@ -398,6 +445,7 @@ export async function getTableAttributeConfigFromView(view) {
     idSource: idSource,
     labels: labels,
     attributes: attributes,
+    hiddenColumns: ['gid'],
   };
 }
 
