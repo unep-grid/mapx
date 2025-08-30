@@ -1,3 +1,19 @@
+  - [1.13.18-beta.10](https://github.com/unep-grid/mapx/tree/1.13.18-beta.10) 
+
+    - fix(dynamic_joins): filters https://github.com/unep-grid/mapx-test-tracker/issues/14
+    - feat: hide gid in table preview https://github.com/unep-grid/mapx-test-tracker/issues/12
+    - feat(theme): theme storage improvemnt + gradient colors fingerprint
+    - feat(theme): better UI for theme list
+    - feat(theme): improved list
+    - fix(tile): column name with slash in name failed to render
+    - feat(themes): browser local theme and 'save' issue for non-member
+    - fix: role matrix
+    - fix: theme default delete issue
+    - fix(docs): missing list merge #1046
+    - fix: cache issue in auto style editor #1072
+    - chore: ignore lintr casing check
+
+
   - [1.13.18-beta.9](https://github.com/unep-grid/mapx/tree/1.13.18-beta.9) 
 
     - fix: nc panel cb
