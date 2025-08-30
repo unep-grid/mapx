@@ -375,7 +375,7 @@ export class DynamicJoin {
   ): Promise<void> {
     await buildTomSelectInput({
       elWrapper,
-      data: this._table_raw,
+      data: this._table_base,
       config: config,
       onBuilt: (ts: any, name: string) => {
         this._filters_controls[name] = ts;
@@ -394,7 +394,7 @@ export class DynamicJoin {
   ): Promise<void> {
     await buildSlider({
       elWrapper,
-      data: this._table_raw,
+      data: this._table_base,
       config: config,
       onBuilt: (slider: any, name: string) => {
         this._filters_controls[name] = slider;
