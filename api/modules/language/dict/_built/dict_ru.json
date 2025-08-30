@@ -10016,18 +10016,23 @@
   },
   {
     "id": "mx_theme_save_db",
-    "en": "Database (shared with all users)",
-    "ru": "База данных (общая для всех пользователей)"
+    "en": "Database, for this project",
+    "ru": "База данных для этого проекта"
   },
   {
     "id": "mx_theme_save_local",
-    "en": "Browser (your device only)",
-    "ru": "Браузер (только ваше устройство)"
+    "en": "This device, any project",
+    "ru": "Это устройство, любой проект"
   },
   {
     "id": "mx_theme_save_session",
-    "en": "Session (temporary)",
-    "ru": "Сессия (временная)"
+    "en": "Session, temporary",
+    "ru": "Сессия, временная"
+  },
+  {
+    "id": "mx_theme_error_id_too_long",
+    "en": "Theme ID must be less than 30 characters",
+    "ru": "Идентификатор темы должен быть короче 30 символов."
   },
   {
     "id": "topic_biota",

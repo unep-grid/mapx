@@ -25,6 +25,7 @@ import {
 import { modalConfirm } from "../mx_helper_modal";
 import { settings } from "../settings";
 import { getLanguageCurrent } from "../language";
+import { createColorFingerprint } from "./fingerprint.js";
 
 const def = {
   tree: true,
@@ -96,12 +97,31 @@ class Theme extends EventSimple {
 
   async getRemote(idTheme) {
     try {
-      const { theme } = await this._s.get(idTheme);
+      const t = this;
+      const { theme } = await t._s.get(idTheme);
+
+      // Check for ID collision before setting storage property
+      if (t.isExistingId(theme.id)) {
+        console.warn(
+          `Remote theme "${theme.id}" rejected due to ID collision with existing theme`,
+        );
+        return null;
+      }
+
+      t._setStorageProperty(theme, "db_external");
       return theme;
     } catch (e) {
       console.error(`Error fetching remote theme ${idTheme}`, e);
-      return;
+      return null;
     }
+  }
+
+  getFingerpintGradient(theme) {
+    const t = this;
+    if (!theme) {
+      theme = t.get();
+    }
+    return createColorFingerprint(theme);
   }
 
   getCustom(id) {
@@ -189,9 +209,11 @@ class Theme extends EventSimple {
 
       // Add storage metadata
       const themeWithStorage = Object.assign({}, theme, {
-        _storage: "local",
         date_modified: new Date().toISOString(),
       });
+
+      // Set storage property using helper
+      t._setStorageProperty(themeWithStorage, "local");
 
       // Save to localStorage
       const key = `mx_theme_custom_${theme.id}`;
@@ -220,9 +242,11 @@ class Theme extends EventSimple {
 
       // Add storage metadata
       const themeWithStorage = Object.assign({}, theme, {
-        _storage: "session",
         date_modified: new Date().toISOString(),
       });
+
+      // Set storage property using helper
+      t._setStorageProperty(themeWithStorage, "session");
 
       // Register in memory only (no persistence)
       await t.register(themeWithStorage);
@@ -275,10 +299,11 @@ class Theme extends EventSimple {
   }
 
   resetThemesOrig() {
+    const t = this;
     themes.length = 0;
-    themes.push(...this.clone(themes_orig));
+    themes.push(...t.clone(themes_orig));
     for (const theme of themes) {
-      theme._storage = "base";
+      t._setStorageProperty(theme, "base");
     }
   }
   reset() {
@@ -291,16 +316,23 @@ class Theme extends EventSimple {
     return JSON.parse(JSON.stringify(obj));
   }
 
+  /**
+   * Set storage property on theme with warning if already set
+   * @param {Object} theme - Theme object
+   * @param {string} type - Storage type ('base', 'db', 'db_external', 'local', 'session')
+   * @returns {Object} Theme object with _storage property set
+   */
+  _setStorageProperty(theme, type) {
+    theme._storage = type;
+    return theme;
+  }
+
   async validate(theme, full = false) {
     return this._s.validate(theme, full);
   }
 
   async validateId(idTheme) {
     return this._s.validateId(idTheme);
-  }
-
-  async stopIfInvalidMeta(data) {
-    return this._stopIfInvalid(data, false, false);
   }
 
   async stopIfInvalidMeta(data) {
@@ -348,6 +380,7 @@ class Theme extends EventSimple {
 
       // Then load remote themes
       const remoteThemes = await t.listRemote();
+
       await t.registerBatch(remoteThemes);
     } catch (e) {
       console.warn("Failed to load remote themes:", e);
@@ -506,9 +539,6 @@ class Theme extends EventSimple {
    */
   async listRemote(onlyPublic = true) {
     const { themes } = await this._s.list(onlyPublic);
-    for (const theme of themes) {
-      theme._storage = "db";
-    }
     return themes || [];
   }
 
@@ -538,19 +568,35 @@ class Theme extends EventSimple {
   }
 
   /**
-   * Add new theme
+   * Add new theme with ID collision prevention
    * @param {Object} theme - Theme
    * @param {Boolean} skipEvent - skipEvent
-   * @return {Promise<Boolean>} the set value
+   * @return {Promise<Boolean>} true if registered, false if rejected due to collision
    */
   async register(theme) {
     const t = this;
-    const oldTheme = t.getCustom(theme.id);
 
-    const pos = themes_custom.indexOf(oldTheme);
-    if (pos > -1) {
-      themes_custom.splice(pos, 1);
+    // Check for ID collision with existing themes (including base themes)
+    if (t.isExistingId(theme.id)) {
+      // Allow replacement of existing custom themes (same behavior as before)
+      const oldTheme = t.getCustom(theme.id);
+      if (oldTheme) {
+        const pos = themes_custom.indexOf(oldTheme);
+        if (pos > -1) {
+          themes_custom.splice(pos, 1);
+        }
+        themes_custom.unshift(theme);
+        return true;
+      } else {
+        // Collision with base theme or other storage type - reject
+        console.warn(
+          `Theme registration rejected: ID collision detected for "${theme.id}"`,
+        );
+        return false;
+      }
     }
+
+    // No collision, add new theme
     themes_custom.unshift(theme);
     return true;
   }
@@ -560,17 +606,52 @@ class Theme extends EventSimple {
       const t = this;
 
       await t.stopIfInvalidMeta(theme);
-      const oldTheme = t.getCustom(theme.id);
+      const targetTheme = t.get(theme.id);
 
-      if (!oldTheme) {
+      if (!targetTheme) {
         itemFlashCancel();
         console.warn("Theme not found");
         return;
       }
 
+      // Route to appropriate deletion method based on storage type
+      switch (targetTheme._storage) {
+        case "db":
+          return await t.deleteDatabase(targetTheme, skipEvent);
+        case "local":
+          return await t.deleteLocalStorage(targetTheme, skipEvent);
+        case "session":
+          return await t.deleteSession(targetTheme, skipEvent);
+        case "base":
+          itemFlashWarning();
+          throw new Error("Cannot delete built-in themes");
+        case "db_external":
+          itemFlashWarning();
+          throw new Error(
+            "Cannot delete external themes - they belong to another project",
+          );
+        default:
+          itemFlashWarning();
+          throw new Error(`Unknown storage type: ${targetTheme._storage}`);
+      }
+    } catch (e) {
+      console.error("Failed to delete theme:", e);
+      itemFlashWarning();
+    }
+  }
+
+  /**
+   * Delete theme from database (publishers only)
+   * @param {Object} theme - Theme object to delete
+   * @param {boolean} skipEvent - Whether to skip firing events
+   */
+  async deleteDatabase(theme, skipEvent = false) {
+    try {
+      const t = this;
+
       const confirmed = await modalConfirm({
         title: tt("mx_theme_delete_button"),
-        content: `Are you sure you want to delete theme "${oldTheme.id}"?`,
+        content: `Are you sure you want to delete theme "${theme.id}" from the database?`,
         confirm: tt("btn_delete"),
         cancel: tt("btn_cancel"),
       });
@@ -580,10 +661,14 @@ class Theme extends EventSimple {
         return;
       }
 
-      await t._s.delete(oldTheme.id);
+      // Delete from database via service
+      await t._s.delete(theme.id);
 
-      const pos = themes_custom.indexOf(oldTheme);
-      themes_custom.splice(pos, 1);
+      // Remove from custom themes array
+      const pos = themes_custom.indexOf(theme);
+      if (pos > -1) {
+        themes_custom.splice(pos, 1);
+      }
 
       await t.set(t.getDefault());
 
@@ -592,8 +677,93 @@ class Theme extends EventSimple {
       }
       itemFlashSave();
     } catch (e) {
-      console.error("Failed to delete theme:", e);
+      console.error("Failed to delete theme from database:", e);
       itemFlashWarning();
+      throw e;
+    }
+  }
+
+  /**
+   * Delete theme from localStorage
+   * @param {Object} theme - Theme object to delete
+   * @param {boolean} skipEvent - Whether to skip firing events
+   */
+  async deleteLocalStorage(theme, skipEvent = false) {
+    try {
+      const t = this;
+
+      const confirmed = await modalConfirm({
+        title: tt("mx_theme_delete_button"),
+        content: `Are you sure you want to delete theme "${theme.id}" from local storage?`,
+        confirm: tt("btn_delete"),
+        cancel: tt("btn_cancel"),
+      });
+
+      if (!confirmed) {
+        itemFlashCancel();
+        return;
+      }
+
+      // Remove from localStorage
+      const key = `mx_theme_custom_${theme.id}`;
+      localStorage.removeItem(key);
+
+      // Remove from custom themes array
+      const pos = themes_custom.indexOf(theme);
+      if (pos > -1) {
+        themes_custom.splice(pos, 1);
+      }
+
+      await t.set(t.getDefault());
+
+      if (!skipEvent) {
+        t.fire("list_updated");
+      }
+      itemFlashSave();
+    } catch (e) {
+      console.error("Failed to delete theme from localStorage:", e);
+      itemFlashWarning();
+      throw e;
+    }
+  }
+
+  /**
+   * Delete theme from session (memory only)
+   * @param {Object} theme - Theme object to delete
+   * @param {boolean} skipEvent - Whether to skip firing events
+   */
+  async deleteSession(theme, skipEvent = false) {
+    try {
+      const t = this;
+
+      const confirmed = await modalConfirm({
+        title: tt("mx_theme_delete_button"),
+        content: `Are you sure you want to delete session theme "${theme.id}"?`,
+        confirm: tt("btn_delete"),
+        cancel: tt("btn_cancel"),
+      });
+
+      if (!confirmed) {
+        itemFlashCancel();
+        return;
+      }
+
+      // Remove from custom themes array (session themes only exist in memory)
+      const pos = themes_custom.indexOf(theme);
+      if (pos > -1) {
+        themes_custom.splice(pos, 1);
+      }
+
+      await t.set(t.getDefault());
+
+      if (!skipEvent) {
+        t.fire("list_updated");
+      }
+      itemFlashSave();
+    } catch (e) {
+      console.error("Failed to delete session theme:", e);
+      itemFlashWarning();
+      throw e;
     }
   }
 
@@ -724,8 +894,11 @@ class Theme extends EventSimple {
   setThemeUrl(id) {
     const t = this;
     const url = new URL(location.href);
-    url.searchParams.set("theme", id || t._opt.id_default);
-    history.replaceState(null, null, url);
+    const theme = t.get(id);
+    if (theme) {
+      url.searchParams.set("theme", theme.id);
+      history.replaceState(null, null, url);
+    }
   }
 
   async sanitizeColors(colors) {

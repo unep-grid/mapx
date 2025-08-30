@@ -42,7 +42,7 @@
     &-properties {
       display: grid;
       grid-template-columns: auto 1fr;
-      gap: 12px 20px;
+      gap: 5px 5x;
       padding: 20px;
       margin-bottom: 15px;
       border-bottom: 1px solid var(--mx_ui_border);
@@ -114,11 +114,13 @@
     // Individual color input groups
     .mx-theme--inputs {
       padding: 10px;
-      margin-bottom: 10px;
-      border: 1px solid var(--mx_ui_border);
+      border: 1px solid #0000002e;
       border-radius: 4px;
       background: white !important;
-
+      transition: all 75ms;
+      &:hover {
+        scale: 1.01;
+      }
       * {
         color: black !important;
         background: white !important;
@@ -150,4 +152,19 @@
       }
     }
   }
+}
+
+.mx-theme--storage-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 6px;
+}
+
+.mx-theme--storage-label {
+  flex: 1;
+}
+
+.mx-theme--storage-icon {
+  margin-left: 10px;
 }

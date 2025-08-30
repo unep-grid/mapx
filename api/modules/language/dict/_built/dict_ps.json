@@ -10016,18 +10016,23 @@
   },
   {
     "id": "mx_theme_save_db",
-    "en": "Database (shared with all users)",
-    "ps": "ډیټابیس (د ټولو کاروونکو سره شریک شوی)"
+    "en": "Database, for this project",
+    "ps": "د دې پروژې لپاره ډیټابیس"
   },
   {
     "id": "mx_theme_save_local",
-    "en": "Browser (your device only)",
-    "ps": "براوزر (یوازې ستاسو وسیله)"
+    "en": "This device, any project",
+    "ps": "دا وسیله، هره پروژه"
   },
   {
     "id": "mx_theme_save_session",
-    "en": "Session (temporary)",
-    "ps": "غونډه (لنډمهاله)"
+    "en": "Session, temporary",
+    "ps": "غونډه، لنډمهاله"
+  },
+  {
+    "id": "mx_theme_error_id_too_long",
+    "en": "Theme ID must be less than 30 characters",
+    "ps": "د موضوع ID باید د 30 حروفو څخه کم وي"
   },
   {
     "id": "topic_biota",

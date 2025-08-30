@@ -8013,15 +8013,19 @@
   },
   {
     "id": "mx_theme_save_db",
-    "en": "Database (shared with all users)"
+    "en": "Database, for this project"
   },
   {
     "id": "mx_theme_save_local",
-    "en": "Browser (your device only)"
+    "en": "This device, any project"
   },
   {
     "id": "mx_theme_save_session",
-    "en": "Session (temporary)"
+    "en": "Session, temporary"
+  },
+  {
+    "id": "mx_theme_error_id_too_long",
+    "en": "Theme ID must be less than 30 characters"
   },
   {
     "id": "topic_biota",

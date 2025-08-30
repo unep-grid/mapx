@@ -10016,18 +10016,23 @@
   },
   {
     "id": "mx_theme_save_db",
-    "en": "Database (shared with all users)",
-    "de": "Datenbank (für alle Benutzer freigegeben)"
+    "en": "Database, for this project",
+    "de": "Datenbank für dieses Projekt"
   },
   {
     "id": "mx_theme_save_local",
-    "en": "Browser (your device only)",
-    "de": "Browser (nur Ihr Gerät)"
+    "en": "This device, any project",
+    "de": "Dieses Gerät, jedes Projekt"
   },
   {
     "id": "mx_theme_save_session",
-    "en": "Session (temporary)",
-    "de": "Sitzung (temporär)"
+    "en": "Session, temporary",
+    "de": "Sitzung, vorübergehend"
+  },
+  {
+    "id": "mx_theme_error_id_too_long",
+    "en": "Theme ID must be less than 30 characters",
+    "de": "Die Themen-ID muss weniger als 30 Zeichen lang sein"
   },
   {
     "id": "topic_biota",

@@ -10016,18 +10016,23 @@
   },
   {
     "id": "mx_theme_save_db",
-    "en": "Database (shared with all users)",
-    "zh": "数据库（与所有用户共享）"
+    "en": "Database, for this project",
+    "zh": "数据库，对于这个项目"
   },
   {
     "id": "mx_theme_save_local",
-    "en": "Browser (your device only)",
-    "zh": "浏览器（仅限您的设备）"
+    "en": "This device, any project",
+    "zh": "此设备，任何项目"
   },
   {
     "id": "mx_theme_save_session",
-    "en": "Session (temporary)",
-    "zh": "会话（临时）"
+    "en": "Session, temporary",
+    "zh": "临时会议"
+  },
+  {
+    "id": "mx_theme_error_id_too_long",
+    "en": "Theme ID must be less than 30 characters",
+    "zh": "主题ID必须少于30个字符"
   },
   {
     "id": "topic_biota",

@@ -1,3 +1,4 @@
+import chroma from "chroma-js";
 import { el } from "../../el_mapx";
 import { theme } from "../../init_theme";
 
@@ -13,35 +14,44 @@ function getStorageIcon(storage) {
   const iconMap = {
     base: ["fa", "fa-globe"],
     db: ["fa", "fa-database"],
+    db_exernal: ["fa", "fa-external-link-square"],
     local: ["fa", "fa-laptop"],
     session: ["fa", "fa-clock-o"],
   };
-  console.log("storage", storage);
 
   return iconMap[normalizedStorage] || ["fa", "fa-question-circle"]; // fallback icon
 }
-
 /**
- * Generate CSS linear gradient from theme colors
- * @param {Object} themeData - Theme object with colors property
- * @returns {string} CSS linear gradient string
+ * Build a CSS gradient from an array of colors.
+ * @param {string[]} colors - Any CSS colors (hex, rgb(a), hsl(a), named).
+ * @param {object} [opts]
+ * @param {"to right"|"to left"|"to top"|"to bottom"|`${number}deg`} [opts.direction="to right"]
+ * @param {number} [opts.steps=24] - Number of interpolated stops for smoothness.
+ * @param {"lch"|"oklch"|"lab"|"oklab"|"hsl"|"hsv"|"rgb"} [opts.mode="lch"] - Interpolation color space.
+ * @returns {string} - A CSS linear-gradient(...) string.
  */
-function generateThemeGradient(themeData) {
-  if (!themeData.colors) {
-    return "linear-gradient(90deg, #ccc, #999)"; // fallback gradient
-  }
+export function colorsToGradient(
+  colors,
+  { direction = "to right", steps = 5, mode = "lch" } = {},
+) {
+  // Keep only valid colors; bail gracefully if none/one provided
+  const valid = (colors || []).filter(chroma.valid);
+  if (valid.length === 0) return "none";
+  if (valid.length === 1)
+    return `linear-gradient(${direction}, ${valid[0]}, ${valid[0]})`;
 
-  const colors = Object.values(themeData.colors)
-    .map((c) => c.color)
-    .filter(
-      (color) => color && color !== "transparent" && color !== "rgba(0,0,0,0)",
-    );
+  // Build a perceptual scale and gently normalize lightness
+  const scale = chroma.scale(valid).mode(mode).correctLightness(true);
 
-  if (colors.length === 0) {
-    return "linear-gradient(90deg, #ccc, #999)"; // fallback gradient
-  }
+  // Create evenly spaced stops across 0..100%
+  const stops = Array.from({ length: Math.max(2, steps) }, (_, i) => {
+    const t = i / (Math.max(2, steps) - 1);
+    const pct = (t * 100).toFixed(2) + "%";
+    // .css() yields rgba(...) when alpha < 1, otherwise rgb(...)
+    return `${scale(t).css()} ${pct}`;
+  });
 
-  return `linear-gradient(90deg, ${colors.join(", ")})`;
+  return `linear-gradient(${direction}, ${stops.join(", ")})`;
 }
 
 /**
@@ -87,7 +97,8 @@ export const config = {
     option: (data, escape) => {
       const storageIconClasses = getStorageIcon(data._storage);
       const themeModeIconClasses = getThemeModeIcon(data.dark);
-      const gradientStyle = generateThemeGradient(data);
+      const gradientStyle = theme.getFingerpintGradient(data);
+
 
       return el(
         "div",
@@ -184,11 +195,10 @@ export const config = {
         // Color gradient bar
         el("div", {
           style: {
-            height: "3px",
+            height: "10px",
             width: "100%",
             background: gradientStyle,
-            border: "1px solid var(--mx_ui_border, #ddd)",
-            borderRadius: "2px",
+            borderRadius: "5px",
             marginTop: "2px",
           },
         }),

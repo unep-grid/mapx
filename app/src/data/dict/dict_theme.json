@@ -1381,7 +1381,7 @@
   },
   {
     "id": "mx_theme_save_db",
-    "en": "Database (shared with all users)",
+    "en": "Database, for this project",
     "fr": "",
     "es": "",
     "ru": "",
@@ -1394,7 +1394,7 @@
   },
   {
     "id": "mx_theme_save_local",
-    "en": "Browser (your device only)",
+    "en": "This device, any project",
     "fr": "",
     "es": "",
     "ru": "",
@@ -1407,7 +1407,20 @@
   },
   {
     "id": "mx_theme_save_session",
-    "en": "Session (temporary)",
+    "en": "Session, temporary",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "mx_theme_error_id_too_long",
+    "en": "Theme ID must be less than 30 characters",
     "fr": "",
     "es": "",
     "ru": "",

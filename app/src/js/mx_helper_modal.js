@@ -615,6 +615,7 @@ export function modalConfirm(opt) {
     const elContent = isElement(opt.content)
       ? opt.content
       : el("div", opt.content);
+
     const hasCbData = isFunction(opt.cbData);
     const hasOnClose = isFunction(opt.onClose);
     const hasCbValidate = isFunction(opt.cbValidate);

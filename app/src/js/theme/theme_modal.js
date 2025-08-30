@@ -1,4 +1,5 @@
 import { modal, modalConfirm, modalPrompt } from "../mx_helper_modal.js";
+import { modalRadio } from "../modal_radio/index.js";
 import { EventSimple } from "../event_simple/index.js";
 import { el, elButtonFa, elSelect, tt } from "../el_mapx";
 import { bindAll } from "../bind_class_methods/index.js";
@@ -107,6 +108,7 @@ export class ThemeModal extends EventSimple {
     });
 
     await tm.buildContent();
+
   }
 
   /**
@@ -410,6 +412,11 @@ export class ThemeModal extends EventSimple {
      * @returns string Invalid message
      */
     function validateId(id, idThemes) {
+      // Check ID length first - must be less than 30 characters
+      if (id && id.length >= 30) {
+        return tt("mx_theme_error_id_too_long");
+      }
+
       const loc = tm._theme.isExistingIdLocal(id);
 
       if (loc && operation !== "export") {
@@ -462,37 +469,45 @@ export class ThemeModal extends EventSimple {
 
     const options = [
       // Session option (always available)
-      el("option", { value: "session" }, [
-        await getDictItem("mx_theme_save_session"),
-      ]),
+      {
+        value: "session",
+        label: el("div", { class: "mx-theme--storage-option" }, [
+          tt("mx_theme_save_session"),
+          el("span", { class: ["fa", "fa-clock-o", "mx-theme--storage-icon"] }),
+        ]),
+      },
 
       // LocalStorage option (always available)
-      el("option", { value: "local" }, [
-        await getDictItem("mx_theme_save_local"),
-      ]),
+      {
+        value: "local",
+        checked: true,
+        label: el("div", { class: "mx-theme--storage-option" }, [
+          tt("mx_theme_save_local"),
+          el("span", { class: ["fa", "fa-hdd-o", "mx-theme--storage-icon"] }),
+        ]),
+      },
     ];
 
     // Database option (publishers only)
     if (hasPublisherRole) {
-      options.unshift(
-        el("option", { value: "db" }, [
-          await getDictItem("mx_theme_save_db"),
+      options.unshift({
+        value: "db",
+        label: el("div", { class: "mx-theme--storage-option" }, [
+          tt("mx_theme_save_db"),
+          el("span", {
+            class: ["fa", "fa-database", "mx-theme--storage-icon"],
+          }),
         ]),
-      );
+      });
     }
 
-    const storageChoice = await modalPrompt({
+    const storageChoice = await modalRadio({
       title: tt(`mx_theme_${operation}_storage_title`),
-      label: tt("mx_theme_storage_description"),
+      description: tt("mx_theme_storage_description"),
       confirm: tt("btn_next"),
       cancel: tt("btn_cancel"),
-      inputTag: "select",
-      inputOptions: {
-        type: "select",
-        placeholder: tt("mx_theme_select_storage"),
-        value: hasPublisherRole ? "db" : "local", // Smart default
-      },
-      inputChildren: options,
+      options: options,
+      defaultValue: hasPublisherRole ? "db" : "local", // Smart default
     });
 
     return storageChoice;
@@ -688,9 +703,16 @@ export class ThemeModal extends EventSimple {
       await waitFrameAsync();
       const colors = tm.getColorsFromInputs();
       await tm._theme.setColors(colors);
+      tm.updateGradient();
     } catch (e) {
       console.error("Update from input", e);
     }
+  }
+
+  updateGradient() {
+    const tm = this;
+    tm._el_inputs_container.style.background =
+      tm._theme.getFingerpintGradient();
   }
 
   getColorsFromInputs() {
@@ -743,6 +765,7 @@ export class ThemeModal extends EventSimple {
     await tm.buildProperties();
     await tm.buildColorsItems();
     await tm.updateButtonStates();
+    tm.updateGradient();
   }
 
   /**

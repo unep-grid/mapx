@@ -25,7 +25,6 @@ import {
   debouncePromise,
   parseTemplate,
 } from "../mx_helper_misc.js";
-import { FlashItem } from "../icon_flash/index.js";
 import { getQueryParametersAsObject } from "../url_utils";
 
 import {
@@ -62,6 +61,10 @@ const def = {
   throttle: 50,
 };
 
+export const share_modal = {
+  instance: null,
+};
+
 export class ShareModal extends EventSimple {
   constructor(opt) {
     super();
@@ -79,11 +82,11 @@ export class ShareModal extends EventSimple {
    */
   async init(opt) {
     const sm = this;
-    if (window._share_modal) {
-      window._share_modal.reset();
+    if (share_modal.instance) {
+      share_modal.instance.reset();
       return;
     }
-    window._share_modal = sm;
+    share_modal.instance = sm;
     sm._init_state(opt);
     sm._validate_opt();
     sm._init_modal();
@@ -176,7 +179,7 @@ export class ShareModal extends EventSimple {
     sm._modal.close();
     sm.fire("closed");
     sm.destroy(); //events
-    delete window._share_modal;
+    delete share_modal.instance;
   }
 
   /**

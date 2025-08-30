@@ -10016,18 +10016,23 @@
   },
   {
     "id": "mx_theme_save_db",
-    "en": "Database (shared with all users)",
-    "bn": "ডাটাবেস (সকল ব্যবহারকারীর সাথে ভাগ করা)"
+    "en": "Database, for this project",
+    "bn": "এই প্রকল্পের জন্য ডাটাবেস"
   },
   {
     "id": "mx_theme_save_local",
-    "en": "Browser (your device only)",
-    "bn": "ব্রাউজার (শুধুমাত্র আপনার ডিভাইস)"
+    "en": "This device, any project",
+    "bn": "এই ডিভাইস, যেকোনো প্রকল্প"
   },
   {
     "id": "mx_theme_save_session",
-    "en": "Session (temporary)",
-    "bn": "অধিবেশন (অস্থায়ী)"
+    "en": "Session, temporary",
+    "bn": "অধিবেশন, অস্থায়ী"
+  },
+  {
+    "id": "mx_theme_error_id_too_long",
+    "en": "Theme ID must be less than 30 characters",
+    "bn": "থিম আইডি অবশ্যই ৩০টি অক্ষরের কম হতে হবে"
   },
   {
     "id": "topic_biota",

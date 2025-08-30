@@ -43,6 +43,7 @@ import {
 import { updateViewsFilter, viewsListAddSingle } from "./../views_list_manager";
 import { initLog } from "./../mx_helper_log.js";
 import { dashboard } from "./../dashboards/index.js";
+import { share_modal } from "../share_modal/index.js";
 import {
   updateIfEmpty,
   round,
@@ -748,13 +749,13 @@ export function initListenerGlobal() {
   }
 
   function updateSharingTool() {
-    if (window._share_modal) {
-      window._share_modal.update();
+    if (share_modal.instance) {
+      share_modal.instance.update();
     }
   }
   function resetSharingTool() {
-    if (window._share_modal) {
-      window._share_modal.reset();
+    if (share_modal.instance) {
+      share_modal.instance.reset();
     }
   }
 }
@@ -835,6 +836,9 @@ export function initListenersApp() {
     idGroup: "project_change",
     callback: async () => {
       mx_local.button_filter.close();
+      //reset theme in url
+      theme.setThemeUrl();
+      // reload theme
       await theme.preloadThemes();
     },
   });
