@@ -1,3 +1,8 @@
+  - [1.13.18-beta.12](https://github.com/unep-grid/mapx/tree/1.13.18-beta.12) 
+
+    - feat(dynamic_joins): boolean showLegendNA option
+
+
   - [1.13.18-beta.11](https://github.com/unep-grid/mapx/tree/1.13.18-beta.11) 
 
     - fix(theme): delete button not being enabled for local/session themes for guest
