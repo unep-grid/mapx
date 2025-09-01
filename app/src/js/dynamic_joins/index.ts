@@ -61,6 +61,7 @@ const default_options: DynamicJoinOptions = {
   staticFilters: [],
   dynamicFilters: [],
   joinType: "left",
+  showLegendNA: true,
 
   onTableAggregated: defaultFn,
   onTableReady: defaultFn,
@@ -128,6 +129,7 @@ export class DynamicJoin {
    * @param {number} [opts.classes=5]          – number of classes/breaks
    * @param {string} [opts.colorNa='#ccc']    – fallback color for missing joins
    * @param {string} [opts.joinType='left']    – 'left' (show all features) or 'inner' (show only matched features)
+   * @param {boolean} [opts.showLegendNA=true] – whether to show N/A class in legend
    * @param {Array<string>} [opts.staticFilters]  – array of field names for static filtering
    * @param {string} [opts.field]     – value field -> aggregate
    * @param {string} [opts.aggregateFn='none'] – 'none', 'first', 'last', 'sum', 'median', 'max', 'min', or 'mode'
@@ -246,6 +248,7 @@ export class DynamicJoin {
       colorScale: cscale,
       colorNa: this.options.colorNa,
       joinType: this.options.joinType,
+      showLegendNA: this.options.showLegendNA,
       onBuilt: (legend: any) => {
         this._filters_controls.legend = legend;
       },

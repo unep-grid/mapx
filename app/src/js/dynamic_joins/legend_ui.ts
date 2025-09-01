@@ -12,6 +12,7 @@ export class LegendUI {
   private colorScale?: chroma.Scale;
   private colorNa: string;
   private joinType: "left" | "inner";
+  private showLegendNA: boolean;
   private visibleClasses: Set<number | string>;
   private onUpdate?: (
     visibleClasses: Set<number | string>,
@@ -23,6 +24,7 @@ export class LegendUI {
     this.colorScale = options.colorScale;
     this.colorNa = options.colorNa || "#ccc";
     this.joinType = options.joinType || "left";
+    this.showLegendNA = options.showLegendNA ?? true;
     this.visibleClasses = new Set();
     this.onUpdate = options.onUpdate;
 
@@ -116,8 +118,8 @@ export class LegendUI {
       this.container.appendChild(elItem);
     }
 
-    // Add NA item for left joins (features without matching data will show N/A color)
-    if (this.joinType === "left" && this.colorNa) {
+    // Add NA item when showLegendNA is enabled (features without matching data will show N/A color)
+    if (this.showLegendNA && this.colorNa) {
       const elNaItem = el(
         "div",
         {

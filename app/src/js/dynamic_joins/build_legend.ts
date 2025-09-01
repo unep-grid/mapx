@@ -12,7 +12,7 @@ import type { BuildLegendOptions } from "./types.ts";
  * @returns The legend instance
  */
 export function buildLegendInput(options: BuildLegendOptions): LegendUI {
-  const { elWrapper, onBuilt, onUpdate, colorScale, colorNa, joinType } =
+  const { elWrapper, onBuilt, onUpdate, colorScale, colorNa, joinType, showLegendNA } =
     options;
 
   // Add legend-specific styling to wrapper
@@ -23,6 +23,7 @@ export function buildLegendInput(options: BuildLegendOptions): LegendUI {
     colorScale,
     colorNa,
     joinType,
+    showLegendNA,
     onUpdate: (allVisibleClasses, legendClasses) => {
       if (onUpdate) {
         onUpdate(allVisibleClasses, legendClasses);

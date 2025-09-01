@@ -65,6 +65,7 @@ export interface DynamicJoinOptions {
   staticFilters: StaticFilter[];
   dynamicFilters: DynamicFilter[];
   joinType: "left" | "inner";
+  showLegendNA: boolean;
   onTableAggregated: (
     table: AggregatedTableEntry[],
     instance: DynamicJoin,
@@ -111,6 +112,7 @@ export interface LegendUIOptions {
   dataBounds?: [number, number];
   colorNa?: string;
   joinType?: "left" | "inner";
+  showLegendNA?: boolean;
   onUpdate?: (
     visibleClasses: Set<number | string>,
     legendClasses: LegendClasses,
@@ -145,6 +147,7 @@ export interface BuildLegendOptions {
   colorScale: chroma.Scale;
   colorNa: string;
   joinType?: "left" | "inner";
+  showLegendNA?: boolean;
   onBuilt: (legend: any) => void;
   onUpdate: (
     visibleClasses: Set<number | string>,
