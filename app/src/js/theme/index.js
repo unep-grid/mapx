@@ -531,9 +531,19 @@ class Theme extends EventSimple {
     return all;
   }
 
+  /*
+   * local changed meaning : used to be the base theme
+   */
   listLocal() {
     return themes;
   }
+
+  /* type = db,base, local */
+  listByStorageTypes(types = ["db"]) {
+    const t = this;
+    return t.list().filter((t) => types.includes(t._storage));
+  }
+
   /**
    * Services
    */

@@ -108,16 +108,26 @@ export class ThemeModal extends EventSimple {
     });
 
     await tm.buildContent();
-
   }
 
   /**
-   * Check if a theme is a local/built-in theme
+   * Check if a theme is local: session, local
    * @param {string} idTheme - Theme ID to check
-   * @returns {boolean} - True if theme is local/built-in
+   * @returns {boolean} - True if local
    */
   isLocalTheme(idTheme) {
-    return this._theme.isExistingIdLocal(idTheme);
+    const themes = this._theme.listByStorageTypes(["local", "session"]);
+    return themes.map((t) => t.id).includes(idTheme);
+  }
+
+  /**
+   * Check if a theme is stored in db
+   * @param {string} idTheme - Theme ID to check
+   * @returns {boolean} - True if stored in db
+   */
+  isDbTheme(idTheme) {
+    const themes = this._theme.listByStorageTypes(["db"]);
+    return themes.map((t) => t.id).includes(idTheme);
   }
 
   /**
@@ -135,19 +145,21 @@ export class ThemeModal extends EventSimple {
   async updateButtonStates() {
     const tm = this;
     const currentTheme = tm._theme.theme();
-    const isLocal = tm.isLocalTheme(currentTheme.id);
-    const isDefault = tm.isProjectTheme(currentTheme.id);
+    const idTheme = currentTheme.id;
+    const isLocalTheme = tm.isLocalTheme(idTheme);
+    const isDbTheme = tm.isDbTheme(idTheme);
+    const isDefaultTheme = tm.isProjectTheme(currentTheme.id);
     const hasPublisherRole = settings.user.roles?.publisher === true;
+    const isAuthorized = (isDbTheme && hasPublisherRole) || isLocalTheme;
+    const isRemovable = !isDefaultTheme && isAuthorized;
 
     // Always enable save button - storage location will be determined in the save flow
     tm._el_button_save.removeAttribute("disabled");
-
+    // Always disable delete
     tm._el_button_delete.setAttribute("disabled", "disabled");
 
-    if (hasPublisherRole) {
-      if (!isLocal && !isDefault) {
-        tm._el_button_delete.removeAttribute("disabled");
-      }
+    if (isRemovable) {
+      tm._el_button_delete.removeAttribute("disabled");
     }
   }
 
@@ -201,6 +213,17 @@ export class ThemeModal extends EventSimple {
     });
     tm._el_inputs_container.addEventListener("input", tm.updateFromInput);
 
+    tm._el_gradient_preview = el("div", {
+      class: "mx-theme--gradient-preview",
+    });
+    tm._el_gradient_container = el(
+      "div",
+      {
+        class: "mx-theme--gradient-container",
+      },
+      [tm._el_gradient_preview],
+    );
+
     tm._el_filter_input = el("input", {
       type: "text",
       class: ["form-control", "mx-theme--manager-filter"],
@@ -215,6 +238,7 @@ export class ThemeModal extends EventSimple {
     tm._el_content.appendChild(tm._el_properties_container);
     tm._el_content.appendChild(tm._el_tools_bar);
     tm._el_content.appendChild(tm._el_inputs_container);
+    tm._el_content.appendChild(tm._el_gradient_container);
 
     tm._filter = new TextFilter({
       //modeFlex: true,
@@ -711,7 +735,7 @@ export class ThemeModal extends EventSimple {
 
   updateGradient() {
     const tm = this;
-    tm._el_inputs_container.style.background =
+    tm._el_gradient_preview.style.background =
       tm._theme.getFingerpintGradient();
   }
 
