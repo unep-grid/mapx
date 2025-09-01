@@ -1,3 +1,9 @@
+  - [1.13.18-beta.11](https://github.com/unep-grid/mapx/tree/1.13.18-beta.11) 
+
+    - fix(theme): delete button not being enabled for local/session themes for guest
+    - fix: project create, set correct roles
+
+
   - [1.13.18-beta.10](https://github.com/unep-grid/mapx/tree/1.13.18-beta.10) 
 
     - fix(dynamic_joins): filters https://github.com/unep-grid/mapx-test-tracker/issues/14
