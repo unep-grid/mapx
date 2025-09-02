@@ -1,3 +1,10 @@
+  - [1.13.18-beta.13](https://github.com/unep-grid/mapx/tree/1.13.18-beta.13) 
+
+    - test(color-swatches): add basic vitest suite for color-swatches components
+    - feat(theme): swatches preview and theme input link
+    - fix(theme): local theme should not be available in project default selection
+
+
   - [1.13.18-beta.12](https://github.com/unep-grid/mapx/tree/1.13.18-beta.12) 
 
     - feat(dynamic_joins): boolean showLegendNA option
