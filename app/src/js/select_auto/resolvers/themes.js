@@ -65,7 +65,7 @@ export const config = {
     option: (data, escape) => {
       const storageIconClasses = getStorageIcon(data._storage);
       const themeModeIconClasses = getThemeModeIcon(data.dark);
-      const gradientStyle = theme.getFingerpintGradient(data);
+      const colors = theme.colorsArray(data);
 
       return el(
         "div",
@@ -160,14 +160,12 @@ export const config = {
           ].filter((child) => child.textContent || child.innerText), // Filter out empty elements
         ),
         // Color gradient bar
-        el("div", {
-          style: {
-            height: "10px",
-            width: "100%",
-            background: gradientStyle,
-            borderRadius: "5px",
-            marginTop: "2px",
-          },
+        el("color-swatches", {
+          height: "10px",
+          width: "100%",
+          borderRadius: "5px",
+          marginTop: "2px",
+          colors: JSON.stringify(colors),
         }),
       );
     },

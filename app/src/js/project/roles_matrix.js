@@ -460,7 +460,6 @@ export class RoleMatrix {
       const result = await rm.submitChanges();
 
       if (result.error) {
-        debugger;
         throw new Error(result.error);
       }
 

@@ -25,7 +25,6 @@ import {
 import { modalConfirm } from "../mx_helper_modal";
 import { settings } from "../settings";
 import { getLanguageCurrent } from "../language";
-import { createColorFingerprint } from "./fingerprint.js";
 
 const def = {
   tree: true,
@@ -114,14 +113,6 @@ class Theme extends EventSimple {
       console.error(`Error fetching remote theme ${idTheme}`, e);
       return null;
     }
-  }
-
-  getFingerpintGradient(theme) {
-    const t = this;
-    if (!theme) {
-      theme = t.get();
-    }
-    return createColorFingerprint(theme);
   }
 
   getCustom(id) {
@@ -470,6 +461,17 @@ class Theme extends EventSimple {
 
   colors() {
     return this.theme().colors || {};
+  }
+
+  colorsArray(theme) {
+    if (!theme) {
+      theme = this.get();
+    }
+    const { colors } = theme;
+    const ids = Object.keys(colors);
+    return ids.map((id) => {
+      return { id, ...colors[id] };
+    });
   }
 
   mode() {

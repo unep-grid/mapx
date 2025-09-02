@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Color Swatches Custom Elements Demo</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        background: #0f0f0f;
+        color: #ddd;
+        font-family: system-ui, sans-serif;
+        gap: 2rem;
+        padding: 2rem;
+      }
+
+      .demo-section {
+        background: #222;
+        border: 1px solid #3a2d22;
+        padding: 20px;
+        border-radius: 12px;
+        width: min(900px, 90vw);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+      }
+
+      .demo-section h2 {
+        margin-top: 0;
+        color: #ff8a3d;
+      }
+
+      .demo-section p {
+        margin-bottom: 1rem;
+        opacity: 0.8;
+      }
+
+      .code-block {
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 6px;
+        padding: 1rem;
+        margin: 1rem 0;
+        font-family: "Monaco", "Menlo", monospace;
+        font-size: 0.9rem;
+        overflow-x: auto;
+      }
+
+      .swatch-container {
+        margin: 1rem 0;
+      }
+
+      #console-output {
+        background: #000;
+        border: 1px solid #333;
+        border-radius: 6px;
+        padding: 1rem;
+        margin-top: 1rem;
+        font-family: monospace;
+        font-size: 0.85rem;
+        color: #0f0;
+        min-height: 100px;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-section">
+      <h2>Declarative Usage</h2>
+      <p>Using HTML markup directly:</p>
+      <div class="code-block">
+        &lt;color-swatches slant="12px" style="height: 42px;"&gt;
+        &lt;color-swatch color="red" id="a"&gt;&lt;/color-swatch&gt;
+        &lt;color-swatch color="green" id="b"&gt;&lt;/color-swatch&gt;
+        &lt;color-swatch color="blue" id="c"&gt;&lt;/color-swatch&gt;
+        &lt;/color-swatches&gt;
+      </div>
+      <div class="swatch-container">
+        <color-swatches slant="12px" style="height: 42px">
+          <color-swatch color="red" id="a"></color-swatch>
+          <color-swatch color="green" id="b"></color-swatch>
+          <color-swatch color="blue" id="c"></color-swatch>
+        </color-swatches>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>Programmatic Usage</h2>
+      <p>Created dynamically with JavaScript (as shown in plan.md):</p>
+      <div class="code-block">
+        const elSwatches = document.querySelector("#swatches"); const items =
+        [{color:"red",id:"a"},{color:"green", id:"b"},{color:"blue",id:"c"}];
+        for(const item of items){ const elSwatch =
+        document.createElement("color-swatch"); elSwatch.color = item.color;
+        elSwatch.id = item.id; elSwatches.appendChild(elSwatch); }
+      </div>
+      <div class="swatch-container">
+        <color-swatches
+          id="swatches"
+          slant="12px"
+          style="height: 42px"></color-swatches>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>Advanced Example</h2>
+      <p>Multiple color palettes with different slant values:</p>
+      <div class="swatch-container">
+        <h3>Earth Tones (slant: 8px)</h3>
+        <color-swatches slant="8px" style="height: 30px">
+          <color-swatch color="#8B4513" id="saddle-brown"></color-swatch>
+          <color-swatch color="#A0522D" id="sienna"></color-swatch>
+          <color-swatch color="#CD853F" id="peru"></color-swatch>
+          <color-swatch color="#DEB887" id="burlywood"></color-swatch>
+          <color-swatch color="#F4A460" id="sandy-brown"></color-swatch>
+        </color-swatches>
+      </div>
+
+      <div class="swatch-container">
+        <h3>Ocean Blues (slant: 16px)</h3>
+        <color-swatches slant="10px" style="height: 50px">
+          <color-swatch color="#191970" id="midnight-blue"></color-swatch>
+          <color-swatch color="#0000CD" id="medium-blue"></color-swatch>
+          <color-swatch color="#4169E1" id="royal-blue"></color-swatch>
+          <color-swatch color="#1E90FF" id="dodger-blue"></color-swatch>
+          <color-swatch color="#87CEEB" id="sky-blue"></color-swatch>
+          <color-swatch color="#B0E0E6" id="powder-blue"></color-swatch>
+        </color-swatches>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>Click Events</h2>
+      <p>Click any swatch to see the event output:</p>
+      <div id="console-output">Console output will appear here...</div>
+    </div>
+
+    <script type="module">
+      // Import the custom elements
+      import "./color-swatches.js";
+
+      // Programmatic creation (from plan.md)
+      const elSwatches = document.querySelector("#swatches");
+      const items = [
+        { color: "red", id: "a" },
+        { color: "green", id: "b" },
+        { color: "blue", id: "c" },
+      ];
+
+      for (const item of items) {
+        const elSwatch = document.createElement("color-swatch");
+        elSwatch.color = item.color;
+        elSwatch.id = item.id;
+        elSwatches.appendChild(elSwatch);
+      }
+
+      // Event handling
+      const consoleOutput = document.getElementById("console-output");
+
+      // Override console.log to show in our demo
+      const originalLog = console.log;
+      console.log = function (...args) {
+        originalLog.apply(console, args);
+        const message = args.join(" ");
+        consoleOutput.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${message}</div>`;
+        consoleOutput.scrollTop = consoleOutput.scrollHeight;
+      };
+
+      // Listen for custom swatch-click events
+      document.addEventListener("swatch-click", (event) => {
+        console.log(
+          `Custom event: Swatch ${event.detail.id} clicked (${event.detail.color})`,
+        );
+      });
+
+      // Initial message
+      console.log(
+        "Color Swatches Demo loaded! Click any swatch to test events.",
+      );
+    </script>
+  </body>
+</html>

@@ -1,3 +1,4 @@
+import { isEmpty } from "../is_test";
 import { isStringRange, isElement } from "../is_test";
 import { el } from "./../el/src";
 import "./style.css";
@@ -20,7 +21,7 @@ export class TextFilter {
     if (!isElement(sr.opt.elInput)) {
       throw new Error("elInput required");
     }
-    sr.search = sr.search.bind(sr);
+    sr.process = sr.process.bind(sr);
     sr.init();
   }
   init() {
@@ -33,7 +34,7 @@ export class TextFilter {
     sr._elContent = sr.opt.elContent;
     sr._elInput = sr.opt.elInput;
     sr._mode_container = isElement(sr._elContainer);
-    sr._elInput.addEventListener("keyup", sr.search);
+    sr._elInput.addEventListener("keyup", sr.process);
     sr.build();
     sr.update();
   }
@@ -59,7 +60,16 @@ export class TextFilter {
     }
   }
 
-  search() {
+  search(txt) {
+    const sr = this;
+    if (isEmpty(txt)) {
+      sr.reset();
+    }
+    sr._elInput.value = txt;
+    sr.process();
+  }
+
+  process() {
     const sr = this;
     const txt = sr._elInput.value;
     clearTimeout(sr._search_to_id);
@@ -76,7 +86,8 @@ export class TextFilter {
       sr.reset();
       for (const elTarget of sr._elsTarget) {
         if (!elTarget.dataset.cache) {
-          elTarget.dataset.cache = elTarget.textContent || elTarget.innerText;
+          elTarget.dataset.cache =
+            elTarget.textContent + elTarget.innerText + elTarget.id;
         }
         const match = regex.test(elTarget.dataset.cache);
 
@@ -109,6 +120,7 @@ export class TextFilter {
           }
         }
       }
+
       if (count === 0) {
         sr.reset();
       }
@@ -141,7 +153,7 @@ export class TextFilter {
 
   destroy() {
     const sr = this;
-    sr._elInput.removeEventListener("keyup", sr.search);
+    sr._elInput.removeEventListener("keyup", sr.process);
     if (sr._mode_container) {
       sr._elContainer.innerHTML = "";
       sr._elContainer.classList.remove("txt-filter--wrapper");

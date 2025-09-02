@@ -1,4 +1,4 @@
-import { modal, modalConfirm, modalPrompt } from "../mx_helper_modal.js";
+import { modal, modalConfirm } from "../mx_helper_modal.js";
 import { modalRadio } from "../modal_radio/index.js";
 import { EventSimple } from "../event_simple/index.js";
 import { el, elButtonFa, elSelect, tt } from "../el_mapx";
@@ -26,6 +26,7 @@ import { jedInit } from "../json_editor"; // Import jedInit
 import { settings } from "../mx.js";
 import { SelectAuto } from "../select_auto";
 import { getDictItem } from "../language/index.js";
+import "../color_swatches/color-swatches.js";
 
 export class ThemeModal extends EventSimple {
   constructor(opt) {
@@ -213,8 +214,17 @@ export class ThemeModal extends EventSimple {
     });
     tm._el_inputs_container.addEventListener("input", tm.updateFromInput);
 
-    tm._el_gradient_preview = el("div", {
+    tm._el_gradient_preview = el("color-swatches", {
       class: "mx-theme--gradient-preview",
+      on: [
+        "swatch-click",
+        (ev) => {
+          const { id } = ev.detail;
+          const reset = tm._id_gradient_previous === id;
+          tm._filter.search(reset ? "" : id);
+          tm._id_gradient_previous = id;
+        },
+      ],
     });
     tm._el_gradient_container = el(
       "div",
@@ -238,7 +248,7 @@ export class ThemeModal extends EventSimple {
     tm._el_content.appendChild(tm._el_properties_container);
     tm._el_content.appendChild(tm._el_tools_bar);
     tm._el_content.appendChild(tm._el_inputs_container);
-    tm._el_content.appendChild(tm._el_gradient_container);
+    tm._el_tools_bar.appendChild(tm._el_gradient_container);
 
     tm._filter = new TextFilter({
       //modeFlex: true,
@@ -735,8 +745,7 @@ export class ThemeModal extends EventSimple {
 
   updateGradient() {
     const tm = this;
-    tm._el_gradient_preview.style.background =
-      tm._theme.getFingerpintGradient();
+    tm._el_gradient_preview.colors = tm._theme.colorsArray();
   }
 
   getColorsFromInputs() {
