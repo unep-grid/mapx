@@ -109,7 +109,10 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
             minItems = 0,
             mx_options = list(
               renderer = "tom-select",
-              loader = "themes"
+              loader = "themes",
+              loader_config = list(
+                types = list("db","base")
+              )
             )
           )
         )

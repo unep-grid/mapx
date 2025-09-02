@@ -21,38 +21,6 @@ function getStorageIcon(storage) {
 
   return iconMap[normalizedStorage] || ["fa", "fa-question-circle"]; // fallback icon
 }
-/**
- * Build a CSS gradient from an array of colors.
- * @param {string[]} colors - Any CSS colors (hex, rgb(a), hsl(a), named).
- * @param {object} [opts]
- * @param {"to right"|"to left"|"to top"|"to bottom"|`${number}deg`} [opts.direction="to right"]
- * @param {number} [opts.steps=24] - Number of interpolated stops for smoothness.
- * @param {"lch"|"oklch"|"lab"|"oklab"|"hsl"|"hsv"|"rgb"} [opts.mode="lch"] - Interpolation color space.
- * @returns {string} - A CSS linear-gradient(...) string.
- */
-export function colorsToGradient(
-  colors,
-  { direction = "to right", steps = 5, mode = "lch" } = {},
-) {
-  // Keep only valid colors; bail gracefully if none/one provided
-  const valid = (colors || []).filter(chroma.valid);
-  if (valid.length === 0) return "none";
-  if (valid.length === 1)
-    return `linear-gradient(${direction}, ${valid[0]}, ${valid[0]})`;
-
-  // Build a perceptual scale and gently normalize lightness
-  const scale = chroma.scale(valid).mode(mode).correctLightness(true);
-
-  // Create evenly spaced stops across 0..100%
-  const stops = Array.from({ length: Math.max(2, steps) }, (_, i) => {
-    const t = i / (Math.max(2, steps) - 1);
-    const pct = (t * 100).toFixed(2) + "%";
-    // .css() yields rgba(...) when alpha < 1, otherwise rgb(...)
-    return `${scale(t).css()} ${pct}`;
-  });
-
-  return `linear-gradient(${direction}, ${stops.join(", ")})`;
-}
 
 /**
  * Get theme mode icon (dark/light)
@@ -98,7 +66,6 @@ export const config = {
       const storageIconClasses = getStorageIcon(data._storage);
       const themeModeIconClasses = getThemeModeIcon(data.dark);
       const gradientStyle = theme.getFingerpintGradient(data);
-
 
       return el(
         "div",
@@ -227,21 +194,23 @@ export const config = {
     },
   },
   // internal config
-  loader_config: {},
+  loader_config: {
+    types: ["local", "db", "session", "db_exernal", "base"],
+  },
 };
 
 function update() {
   const tom = this;
   try {
+    const { types } = tom.settings.loader_config;
+
     const placeholder_wait = "Loading themes...";
     const placeholder_ready = "Select theme...";
 
-    // Provide UI feedback during loading
     tom.disable();
     tom.control_input.placeholder = placeholder_wait;
-    const {} = this.settings.loader_config;
-    const themes = theme.list();
     const id = theme.id();
+    const themes = theme.listByStorageTypes(types);
 
     // Update UI after loading
     tom.control_input.placeholder = placeholder_ready;

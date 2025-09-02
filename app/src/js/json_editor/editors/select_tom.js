@@ -97,7 +97,7 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
   }
 
   _get_config_patch(options) {
-    const { maxItems, watch, loader } = options;
+    const { maxItems, watch, loader, loader_config } = options;
 
     switch (loader) {
       case "countries":
@@ -107,7 +107,7 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
       case "themes":
         return {
           maxItems,
-          loader_config: { },
+          loader_config,
         };
       case "views":
         const { includeAllPublic } = options;
