@@ -10000,6 +10000,16 @@
     "bn": "আপনার থিম কোথায় সংরক্ষণ করবেন তা বেছে নিন"
   },
   {
+    "id": "mx_theme_storage_db_only_description",
+    "en": "Save to DB is the only choice for DB theme. Change the id if you want to save somewhere else",
+    "bn": "ডিবি থিমের জন্য সেভ টু ডিবি একমাত্র পছন্দ। অন্য কোথাও সেভ করতে চাইলে আইডি পরিবর্তন করুন।"
+  },
+  {
+    "id": "mx_theme_storage_id_changed_description",
+    "en": "Choose where to store your theme with a new ID",
+    "bn": "নতুন আইডি দিয়ে আপনার থিম কোথায় সংরক্ষণ করবেন তা বেছে নিন"
+  },
+  {
     "id": "mx_theme_save_storage_title",
     "en": "Save Theme - Storage Location",
     "bn": "থিম সংরক্ষণ করুন - স্টোরেজ অবস্থান"

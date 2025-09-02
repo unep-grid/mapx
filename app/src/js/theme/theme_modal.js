@@ -495,53 +495,93 @@ export class ThemeModal extends EventSimple {
   /**
    * Show storage location selector modal
    * @param {string} operation - The operation type (save, import)
+   * @param {Object} metadata - Theme metadata (including potentially changed ID)
    * @returns {Promise<string|null>} - Storage location or null if cancelled
    */
-  async showStorageLocationModal(operation = "save") {
+  async showStorageLocationModal(operation = "save", metadata = {}) {
     const tm = this;
     const hasPublisherRole = settings.user.roles?.publisher === true;
+    const currentTheme = tm._theme.theme();
+    const currentStorageType = currentTheme._storage;
+    const isIdChanged = metadata.id && metadata.id !== currentTheme.id;
+    const isDbTheme = currentStorageType === "db";
 
-    const options = [
-      // Session option (always available)
-      {
-        value: "session",
-        label: el("div", { class: "mx-theme--storage-option" }, [
-          tt("mx_theme_save_session"),
-          el("span", { class: ["fa", "fa-clock-o", "mx-theme--storage-icon"] }),
-        ]),
-      },
+    // Check if we should restrict storage options
+    const shouldRestrictToDb = isDbTheme && !isIdChanged;
 
-      // LocalStorage option (always available)
-      {
-        value: "local",
-        checked: true,
-        label: el("div", { class: "mx-theme--storage-option" }, [
-          tt("mx_theme_save_local"),
-          el("span", { class: ["fa", "fa-hdd-o", "mx-theme--storage-icon"] }),
-        ]),
-      },
-    ];
+    let options = [];
+    let description = tt("mx_theme_storage_description");
+    let defaultValue = "local";
 
-    // Database option (publishers only)
-    if (hasPublisherRole) {
-      options.unshift({
-        value: "db",
-        label: el("div", { class: "mx-theme--storage-option" }, [
-          tt("mx_theme_save_db"),
-          el("span", {
-            class: ["fa", "fa-database", "mx-theme--storage-icon"],
-          }),
-        ]),
-      });
+    if (shouldRestrictToDb) {
+      // DB theme with unchanged ID - only allow DB storage
+      if (hasPublisherRole) {
+        options = [{
+          value: "db",
+          checked: true,
+          label: el("div", { class: "mx-theme--storage-option" }, [
+            tt("mx_theme_save_db"),
+            el("span", {
+              class: ["fa", "fa-database", "mx-theme--storage-icon"],
+            }),
+          ]),
+        }];
+        defaultValue = "db";
+        description = tt("mx_theme_storage_db_only_description");
+      } else {
+        // Non-publisher trying to save DB theme - this shouldn't happen in normal flow
+        throw new Error("Cannot save database theme without publisher permissions");
+      }
+    } else {
+      // Normal flow - show available options based on permissions
+      options = [
+        // Session option (always available)
+        {
+          value: "session",
+          label: el("div", { class: "mx-theme--storage-option" }, [
+            tt("mx_theme_save_session"),
+            el("span", { class: ["fa", "fa-clock-o", "mx-theme--storage-icon"] }),
+          ]),
+        },
+
+        // LocalStorage option (always available)
+        {
+          value: "local",
+          checked: true,
+          label: el("div", { class: "mx-theme--storage-option" }, [
+            tt("mx_theme_save_local"),
+            el("span", { class: ["fa", "fa-hdd-o", "mx-theme--storage-icon"] }),
+          ]),
+        },
+      ];
+
+      // Database option (publishers only)
+      if (hasPublisherRole) {
+        options.unshift({
+          value: "db",
+          label: el("div", { class: "mx-theme--storage-option" }, [
+            tt("mx_theme_save_db"),
+            el("span", {
+              class: ["fa", "fa-database", "mx-theme--storage-icon"],
+            }),
+          ]),
+        });
+        defaultValue = "db";
+      }
+
+      // Add explanation if ID was changed from a DB theme
+      if (isDbTheme && isIdChanged) {
+        description = tt("mx_theme_storage_id_changed_description");
+      }
     }
 
     const storageChoice = await modalRadio({
       title: tt(`mx_theme_${operation}_storage_title`),
-      description: tt("mx_theme_storage_description"),
+      description: description,
       confirm: tt("btn_next"),
       cancel: tt("btn_cancel"),
       options: options,
-      defaultValue: hasPublisherRole ? "db" : "local", // Smart default
+      defaultValue: defaultValue,
     });
 
     return storageChoice;
@@ -815,11 +855,11 @@ export class ThemeModal extends EventSimple {
       return;
     }
 
-    // Step 2: Choose storage location
-    const storageLocation = await tm.showStorageLocationModal("save");
+    // Step 2: Choose storage location (pass metadata to check for ID changes)
+    const storageLocation = await tm.showStorageLocationModal("save", metadata);
     if (!storageLocation) {
       itemFlashCancel();
-      return;
+      return this.upsertTheme()
     }
 
     // Step 3: Handle project default for database saves
@@ -881,8 +921,8 @@ export class ThemeModal extends EventSimple {
         return;
       }
 
-      // Step 4: Choose storage location
-      const storageLocation = await tm.showStorageLocationModal("import");
+      // Step 4: Choose storage location (pass metadata to check for ID changes)
+      const storageLocation = await tm.showStorageLocationModal("import", metadata);
       if (!storageLocation) {
         itemFlashCancel();
         return;

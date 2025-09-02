@@ -10000,6 +10000,16 @@
     "ps": "غوره کړئ چې خپل موضوع چیرته وساتئ"
   },
   {
+    "id": "mx_theme_storage_db_only_description",
+    "en": "Save to DB is the only choice for DB theme. Change the id if you want to save somewhere else",
+    "ps": "د DB موضوع لپاره یوازینۍ انتخاب په DB کې خوندي کول دي. که تاسو غواړئ په بل ځای کې خوندي کړئ نو ID بدل کړئ."
+  },
+  {
+    "id": "mx_theme_storage_id_changed_description",
+    "en": "Choose where to store your theme with a new ID",
+    "ps": "غوره کړئ چې خپل موضوع د نوي ID سره چیرته وساتئ"
+  },
+  {
     "id": "mx_theme_save_storage_title",
     "en": "Save Theme - Storage Location",
     "ps": "د موضوع خوندي کول - د ذخیره کولو ځای"

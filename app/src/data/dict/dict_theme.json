@@ -1341,6 +1341,32 @@
     "de": ""
   },
   {
+    "id": "mx_theme_storage_db_only_description",
+    "en": "Save to DB is the only choice for DB theme. Change the id if you want to save somewhere else",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "mx_theme_storage_id_changed_description",
+    "en": "Choose where to store your theme with a new ID",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "mx_theme_save_storage_title",
     "en": "Save Theme - Storage Location",
     "fr": "",

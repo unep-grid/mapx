@@ -10000,6 +10000,16 @@
     "fr": "Choisissez où stocker votre thème"
   },
   {
+    "id": "mx_theme_storage_db_only_description",
+    "en": "Save to DB is the only choice for DB theme. Change the id if you want to save somewhere else",
+    "fr": "Enregistrer dans la base de données est le seul choix pour le thème de la base de données. Modifiez l'identifiant si vous souhaitez enregistrer ailleurs."
+  },
+  {
+    "id": "mx_theme_storage_id_changed_description",
+    "en": "Choose where to store your theme with a new ID",
+    "fr": "Choisissez où stocker votre thème avec un nouvel ID"
+  },
+  {
     "id": "mx_theme_save_storage_title",
     "en": "Save Theme - Storage Location",
     "fr": "Enregistrer le thème - Emplacement de stockage"

@@ -10000,6 +10000,16 @@
     "ru": "Выберите, где сохранить вашу тему"
   },
   {
+    "id": "mx_theme_storage_db_only_description",
+    "en": "Save to DB is the only choice for DB theme. Change the id if you want to save somewhere else",
+    "ru": "Сохранить в базе данных — единственный вариант для темы DB. Измените идентификатор, если хотите сохранить в другом месте."
+  },
+  {
+    "id": "mx_theme_storage_id_changed_description",
+    "en": "Choose where to store your theme with a new ID",
+    "ru": "Выберите, где сохранить вашу тему с новым идентификатором."
+  },
+  {
     "id": "mx_theme_save_storage_title",
     "en": "Save Theme - Storage Location",
     "ru": "Сохранить тему - Место хранения"

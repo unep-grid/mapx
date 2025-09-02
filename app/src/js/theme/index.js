@@ -590,9 +590,18 @@ class Theme extends EventSimple {
 
     // Check for ID collision with existing themes (including base themes)
     if (t.isExistingId(theme.id)) {
-      // Allow replacement of existing custom themes (same behavior as before)
+      // Allow replacement of existing custom themes with same storage type
       const oldTheme = t.getCustom(theme.id);
       if (oldTheme) {
+        // Check for storage type consistency
+        if (oldTheme._storage !== theme._storage) {
+          console.warn(
+            `Theme registration rejected: Storage type mismatch for "${theme.id}". ` +
+            `Existing: ${oldTheme._storage}, New: ${theme._storage}`,
+          );
+          return false;
+        }
+
         const pos = themes_custom.indexOf(oldTheme);
         if (pos > -1) {
           themes_custom.splice(pos, 1);

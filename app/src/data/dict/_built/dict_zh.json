@@ -10000,6 +10000,16 @@
     "zh": "选择主题的存储位置"
   },
   {
+    "id": "mx_theme_storage_db_only_description",
+    "en": "Save to DB is the only choice for DB theme. Change the id if you want to save somewhere else",
+    "zh": "保存到数据库是数据库主题的唯一选择。如果您想保存到其他地方，请更改 ID"
+  },
+  {
+    "id": "mx_theme_storage_id_changed_description",
+    "en": "Choose where to store your theme with a new ID",
+    "zh": "选择使用新 ID 存储主题的位置"
+  },
+  {
     "id": "mx_theme_save_storage_title",
     "en": "Save Theme - Storage Location",
     "zh": "保存主题 - 存储位置"

@@ -26000,6 +26000,32 @@
     "de": "Wählen Sie, wo Ihr Design gespeichert werden soll"
   },
   {
+    "id": "mx_theme_storage_db_only_description",
+    "en": "Save to DB is the only choice for DB theme. Change the id if you want to save somewhere else",
+    "fr": "Enregistrer dans la base de données est le seul choix pour le thème de la base de données. Modifiez l'identifiant si vous souhaitez enregistrer ailleurs.",
+    "es": "Guardar en la base de datos es la única opción para el tema de la base de datos. Cambia el ID si quieres guardarlo en otro lugar.",
+    "ru": "Сохранить в базе данных — единственный вариант для темы DB. Измените идентификатор, если хотите сохранить в другом месте.",
+    "zh": "保存到数据库是数据库主题的唯一选择。如果您想保存到其他地方，请更改 ID",
+    "ar": "الحفظ في قاعدة البيانات هو الخيار الوحيد لسمة قاعدة البيانات. غيّر المعرف إذا أردت الحفظ في مكان آخر.",
+    "fa": "ذخیره در پایگاه داده تنها گزینه برای قالب پایگاه داده است. اگر می‌خواهید در جای دیگری ذخیره کنید، شناسه را تغییر دهید.",
+    "ps": "د DB موضوع لپاره یوازینۍ انتخاب په DB کې خوندي کول دي. که تاسو غواړئ په بل ځای کې خوندي کړئ نو ID بدل کړئ.",
+    "bn": "ডিবি থিমের জন্য সেভ টু ডিবি একমাত্র পছন্দ। অন্য কোথাও সেভ করতে চাইলে আইডি পরিবর্তন করুন।",
+    "de": "Speichern in DB ist die einzige Option für das DB-Thema. Ändern Sie die ID, wenn Sie woanders speichern möchten"
+  },
+  {
+    "id": "mx_theme_storage_id_changed_description",
+    "en": "Choose where to store your theme with a new ID",
+    "fr": "Choisissez où stocker votre thème avec un nouvel ID",
+    "es": "Elige dónde almacenar tu tema con una nueva ID",
+    "ru": "Выберите, где сохранить вашу тему с новым идентификатором.",
+    "zh": "选择使用新 ID 存储主题的位置",
+    "ar": "اختر مكان تخزين السمة الخاصة بك باستخدام معرف جديد",
+    "fa": "محل ذخیره قالب خود را با شناسه جدید انتخاب کنید",
+    "ps": "غوره کړئ چې خپل موضوع د نوي ID سره چیرته وساتئ",
+    "bn": "নতুন আইডি দিয়ে আপনার থিম কোথায় সংরক্ষণ করবেন তা বেছে নিন",
+    "de": "Wählen Sie, wo Ihr Design mit einer neuen ID gespeichert werden soll"
+  },
+  {
     "id": "mx_theme_save_storage_title",
     "en": "Save Theme - Storage Location",
     "fr": "Enregistrer le thème - Emplacement de stockage",

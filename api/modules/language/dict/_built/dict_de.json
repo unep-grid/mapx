@@ -10000,6 +10000,16 @@
     "de": "Wählen Sie, wo Ihr Design gespeichert werden soll"
   },
   {
+    "id": "mx_theme_storage_db_only_description",
+    "en": "Save to DB is the only choice for DB theme. Change the id if you want to save somewhere else",
+    "de": "Speichern in DB ist die einzige Option für das DB-Thema. Ändern Sie die ID, wenn Sie woanders speichern möchten"
+  },
+  {
+    "id": "mx_theme_storage_id_changed_description",
+    "en": "Choose where to store your theme with a new ID",
+    "de": "Wählen Sie, wo Ihr Design mit einer neuen ID gespeichert werden soll"
+  },
+  {
     "id": "mx_theme_save_storage_title",
     "en": "Save Theme - Storage Location",
     "de": "Thema speichern - Speicherort"

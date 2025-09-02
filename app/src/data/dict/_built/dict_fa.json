@@ -10000,6 +10000,16 @@
     "fa": "محل ذخیره قالب خود را انتخاب کنید"
   },
   {
+    "id": "mx_theme_storage_db_only_description",
+    "en": "Save to DB is the only choice for DB theme. Change the id if you want to save somewhere else",
+    "fa": "ذخیره در پایگاه داده تنها گزینه برای قالب پایگاه داده است. اگر می‌خواهید در جای دیگری ذخیره کنید، شناسه را تغییر دهید."
+  },
+  {
+    "id": "mx_theme_storage_id_changed_description",
+    "en": "Choose where to store your theme with a new ID",
+    "fa": "محل ذخیره قالب خود را با شناسه جدید انتخاب کنید"
+  },
+  {
     "id": "mx_theme_save_storage_title",
     "en": "Save Theme - Storage Location",
     "fa": "ذخیره قالب - محل ذخیره‌سازی"
