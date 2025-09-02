@@ -1,3 +1,8 @@
+  - [1.13.18-beta.14](https://github.com/unep-grid/mapx/tree/1.13.18-beta.14) 
+
+    - fix(theme): prevent saving db theme as local/session theme creating conflict
+
+
   - [1.13.18-beta.13](https://github.com/unep-grid/mapx/tree/1.13.18-beta.13) 
 
     - test(color-swatches): add basic vitest suite for color-swatches components
