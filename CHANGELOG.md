@@ -1,3 +1,9 @@
+  - [1.13.18-beta.15](https://github.com/unep-grid/mapx/tree/1.13.18-beta.15) 
+
+    - fix(theme): theme registering have now a level based test to know which one can be overwritten
+    - fix(project): project deletion should clear theme url param to prevent 'theme_no_found'
+
+
   - [1.13.18-beta.14](https://github.com/unep-grid/mapx/tree/1.13.18-beta.14) 
 
     - fix(theme): prevent saving db theme as local/session theme creating conflict
