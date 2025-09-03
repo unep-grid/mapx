@@ -356,7 +356,6 @@ observeEvent(input$btnDeleteProject, {
       }
 
       ui <- tags$ul(
-
         # For Views
         tags$li(
           tags$b(dd("project_delete_table_views", language)),
@@ -532,7 +531,6 @@ observeEvent(input$btnDeleteProjectConfirm, {
         #
         themes <- reactData$projectDeleteThemes
         if (length(themes) > 0) {
-
           queryThemeDelete <- sprintf(
             "DELETE FROM mx_themes WHERE id IN ('%s')",
             paste(themes, collapse = "','")
@@ -559,7 +557,6 @@ observeEvent(input$btnDeleteProjectConfirm, {
         }
 
 
-
         # If everything went well, commit the transaction
         dbCommit(con)
       },
@@ -576,7 +573,8 @@ observeEvent(input$btnDeleteProjectConfirm, {
     # Clear query parameters
     #
     mxUpdateQueryParameters(list(
-      project = ""
+      project = "",
+      theme = ""
     ))
 
     #
