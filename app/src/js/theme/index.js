@@ -50,6 +50,17 @@ class Theme extends EventSimple {
     t._inputs = [];
     t.resetThemesOrig();
   }
+
+  get opt() {
+    return this._opt || {};
+  }
+
+  log(x) {
+    const t = this;
+    if (t.opt.debug) {
+      console.log(x);
+    }
+  }
   /**
    * Init
    * see also init_themes.js
@@ -68,11 +79,11 @@ class Theme extends EventSimple {
       await t.preloadThemes();
     }
 
-    for (const k in Object.keys(t._opt.on)) {
-      t.on(k, t._opt.on[k]);
+    for (const k in Object.keys(t.opt.on)) {
+      t.on(k, t.opt.on[k]);
     }
 
-    const ok = await t.set(t._opt.id, {
+    const ok = await t.set(t.opt.id, {
       sound: false,
       save_url: true,
     });
@@ -282,7 +293,7 @@ class Theme extends EventSimple {
       await t.registerBatch(localThemes);
 
       if (localThemes.length > 0) {
-        console.log(`Loaded ${localThemes.length} themes from localStorage`);
+        t.log(`Loaded ${localThemes.length} themes from localStorage`);
       }
     } catch (e) {
       console.warn("Failed to load themes from localStorage:", e);
@@ -316,6 +327,28 @@ class Theme extends EventSimple {
   _setStorageProperty(theme, type) {
     theme._storage = type;
     return theme;
+  }
+
+  /**
+   * Validate if new storage type can overwrite existing storage type
+   * Storage priority: session > db > local > db_external > base
+   * @param {string} existingStorage - Current storage type
+   * @param {string} newStorage - New storage type
+   * @returns {boolean} True if overwrite is allowed
+   */
+  _validateStorageOverwrite(existingStorage, newStorage) {
+    const priorities = {
+      base: 1,
+      db_external: 2,
+      local: 3,
+      db: 4,
+      session: 5,
+    };
+
+    const existingPriority = priorities[existingStorage] || 0;
+    const newPriority = priorities[newStorage] || 0;
+
+    return newPriority >= existingPriority;
   }
 
   async validate(theme, full = false) {
@@ -363,7 +396,7 @@ class Theme extends EventSimple {
   async preloadThemes() {
     const t = this;
     try {
-      console.log("preload custom theme");
+      t.log("preload custom theme");
       t._clear_custom_themes();
 
       // Load themes from localStorage first
@@ -560,7 +593,7 @@ class Theme extends EventSimple {
    */
   _clear_custom_themes() {
     const t = this;
-    console.log("clear custom theme");
+    t.log("clear custom theme");
     themes_custom.length = 0;
     t.fire("list_updated");
   }
@@ -580,7 +613,7 @@ class Theme extends EventSimple {
   }
 
   /**
-   * Add new theme with ID collision prevention
+   * Add new theme with storage priority-based collision handling
    * @param {Object} theme - Theme
    * @param {Boolean} skipEvent - skipEvent
    * @return {Promise<Boolean>} true if registered, false if rejected due to collision
@@ -588,30 +621,38 @@ class Theme extends EventSimple {
   async register(theme) {
     const t = this;
 
-    // Check for ID collision with existing themes (including base themes)
+    // Check for ID collision with existing themes
     if (t.isExistingId(theme.id)) {
-      // Allow replacement of existing custom themes with same storage type
-      const oldTheme = t.getCustom(theme.id);
-      if (oldTheme) {
-        // Check for storage type consistency
-        if (oldTheme._storage !== theme._storage) {
-          console.warn(
-            `Theme registration rejected: Storage type mismatch for "${theme.id}". ` +
-            `Existing: ${oldTheme._storage}, New: ${theme._storage}`,
-          );
-          return false;
-        }
+      const existingTheme = t.get(theme.id); // Gets ANY theme type
 
-        const pos = themes_custom.indexOf(oldTheme);
+      // Base themes cannot be overridden - early exit
+      if (existingTheme._storage === "base") {
+        console.warn(`Cannot override built-in theme "${theme.id}"`);
+        return false;
+      }
+
+      // Use storage priority for all other cases
+      const canOverwrite = t._validateStorageOverwrite(
+        existingTheme._storage,
+        theme._storage,
+      );
+
+      if (canOverwrite) {
+        t.log(
+          `Theme "${theme.id}" overridden: ${existingTheme._storage} → ${theme._storage}`,
+        );
+
+        // Remove existing custom theme if it exists
+        const pos = themes_custom.findIndex((t) => t.id === theme.id);
         if (pos > -1) {
           themes_custom.splice(pos, 1);
         }
+
         themes_custom.unshift(theme);
         return true;
       } else {
-        // Collision with base theme or other storage type - reject
         console.warn(
-          `Theme registration rejected: ID collision detected for "${theme.id}"`,
+          `Cannot override "${theme.id}" (${existingTheme._storage} has higher priority than ${theme._storage})`,
         );
         return false;
       }
@@ -961,9 +1002,7 @@ class Theme extends EventSimple {
         layer_resolver(colors) &&
         (await css_resolver(colors)) &&
         true;
-      if (t._opt.debug) {
-        console.log(`Validated in ${performance.now() - start} [ms]`);
-      }
+      t.log(`Validated in ${performance.now() - start} [ms]`);
       return valid;
     } catch (e) {
       console.warn("Invalid colors.", e);
@@ -1001,7 +1040,7 @@ class Theme extends EventSimple {
     const new_colors = Object.assign(
       {},
       default_theme.colors,
-      colors || t._opt.colors,
+      colors || t.opt.colors,
     );
     const validColors = await t.validateColors(new_colors);
     if (!validColors) {
@@ -1085,9 +1124,9 @@ class Theme extends EventSimple {
     }
 
     if (isDark) {
-      map.setFog(t._opt.fog.dark);
+      map.setFog(t.opt.fog.dark);
     } else {
-      map.setFog(t._opt.fog.light);
+      map.setFog(t.opt.fog.light);
     }
     return true;
   }
@@ -1110,8 +1149,8 @@ class Theme extends EventSimple {
     const conf = colors[cid];
     const color = chroma(conf.color);
     const visible = conf.visibility === "visible";
-    const isTextMap = t._opt.fonts_enabled.map.includes(cid);
-    const isTextCss = t._opt.fonts_enabled.css.includes(cid);
+    const isTextMap = t.opt.fonts_enabled.map.includes(cid);
+    const isTextCss = t.opt.fonts_enabled.css.includes(cid);
 
     const elLabel = el(
       "label",
@@ -1325,7 +1364,7 @@ class Theme extends EventSimple {
 
   getDefault() {
     const t = this;
-    return themes.find((theme) => theme.id === t._opt.id_default);
+    return themes.find((theme) => theme.id === t.opt.id_default);
   }
 
   filterTheme(theme, opt) {
