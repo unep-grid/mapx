@@ -9906,8 +9906,8 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save or update...",
-    "fa": "ذخیره یا به‌روزرسانی..."
+    "en": "Save",
+    "fa": "ذخیره"
   },
   {
     "id": "mx_theme_create_button",
@@ -9921,8 +9921,8 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{idTheme}} as default theme ?",
-    "fa": "تنظیم {{idTheme}} به عنوان تم پیش‌فرض؟"
+    "en": "Set {{theme}} as default theme ?",
+    "fa": "تنظیم {{theme}} به عنوان تم پیش‌فرض؟"
   },
   {
     "id": "mx_theme_delete_button",
@@ -10010,14 +10010,9 @@
     "fa": "محل ذخیره قالب خود را با شناسه جدید انتخاب کنید"
   },
   {
-    "id": "mx_theme_save_storage_title",
-    "en": "Save Theme - Storage Location",
-    "fa": "ذخیره قالب - محل ذخیره‌سازی"
-  },
-  {
-    "id": "mx_theme_import_storage_title",
-    "en": "Import Theme - Storage Location",
-    "fa": "وارد کردن قالب - محل ذخیره‌سازی"
+    "id": "mx_theme_storage_title",
+    "en": "Theme Storage Location",
+    "fa": "محل ذخیره سازی قالب"
   },
   {
     "id": "mx_theme_select_storage",

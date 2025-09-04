@@ -7925,7 +7925,7 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save or update..."
+    "en": "Save"
   },
   {
     "id": "mx_theme_create_button",
@@ -7937,7 +7937,7 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{idTheme}} as default theme ?"
+    "en": "Set {{theme}} as default theme ?"
   },
   {
     "id": "mx_theme_delete_button",
@@ -8008,12 +8008,8 @@
     "en": "Choose where to store your theme with a new ID"
   },
   {
-    "id": "mx_theme_save_storage_title",
-    "en": "Save Theme - Storage Location"
-  },
-  {
-    "id": "mx_theme_import_storage_title",
-    "en": "Import Theme - Storage Location"
+    "id": "mx_theme_storage_title",
+    "en": "Theme Storage Location"
   },
   {
     "id": "mx_theme_select_storage",

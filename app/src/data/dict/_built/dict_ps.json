@@ -9906,8 +9906,8 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save or update...",
-    "ps": "خوندي کړئ یا تازه کړئ..."
+    "en": "Save",
+    "ps": "خوندي کړئ"
   },
   {
     "id": "mx_theme_create_button",
@@ -9921,8 +9921,8 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{idTheme}} as default theme ?",
-    "ps": "ټاکل شوی {{idTheme}} د ډیفالټ موضوع په توګه؟"
+    "en": "Set {{theme}} as default theme ?",
+    "ps": "ټاکل شوی {{theme}} د ډیفالټ موضوع په توګه؟"
   },
   {
     "id": "mx_theme_delete_button",
@@ -10010,14 +10010,9 @@
     "ps": "غوره کړئ چې خپل موضوع د نوي ID سره چیرته وساتئ"
   },
   {
-    "id": "mx_theme_save_storage_title",
-    "en": "Save Theme - Storage Location",
-    "ps": "د موضوع خوندي کول - د ذخیره کولو ځای"
-  },
-  {
-    "id": "mx_theme_import_storage_title",
-    "en": "Import Theme - Storage Location",
-    "ps": "د واردولو موضوع - د ذخیره کولو ځای"
+    "id": "mx_theme_storage_title",
+    "en": "Theme Storage Location",
+    "ps": "د موضوع د ذخیره کولو ځای"
   },
   {
     "id": "mx_theme_select_storage",

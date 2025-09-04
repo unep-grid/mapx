@@ -129,74 +129,6 @@ export async function jedInit(o) {
    * Test for readyness
    */
 
-  editor.on("ready", async function () {
-    const hasShiny = isShinyReady();
-
-    /**
-     * Auto save draft
-     */
-    if (idDraft) {
-      try {
-        const draft = await mx_storage.draft.getItem(idDraft);
-        draftLock = false;
-        const validDraft = isNotEmpty(draft) && draft?.type === "draft";
-
-        if (validDraft) {
-          const draftClientTimeStamp = draft.timestamp;
-          // add 5 sec margin
-          const moreRecent = draftClientTimeStamp > draftDbTimeStamp;
-
-          if (moreRecent) {
-            const recovery = new DataDiffModal({
-              contextLabel: "Draft",
-              dataSource: opt_final.startval,
-              dataTarget: draft.data,
-              timestampSource: opt_final.draftAutoSaveDbTimestamp,
-              timestampTarget: draft.timestamp,
-              onAccept: (recoveredData) => {
-                editor.setValue(recoveredData);
-              },
-            });
-
-            await recovery.start();
-          }
-        }
-      } catch (e) {
-        draftLock = false;
-        throw new Error(e);
-      }
-    }
-
-    /**
-     * Add search item
-     */
-
-    if (opt_final.addSearch) {
-      const elInput = el("input", {
-        type: "text",
-        class: ["form-control"],
-        placeholder: "Search",
-      });
-
-      jed.search[id] = new TextFilter({
-        selector: "[data-schematype=object]",
-        elInput: elInput,
-        elContent: elJed,
-        elContainer: elJed.parentElement,
-        timeout: 50,
-      });
-    }
-
-    /**
-     * Report ready state to shiny
-     */
-    if (hasShiny) {
-      Shiny.onInputChange(id + "_ready", new Date());
-    } else {
-      console.log(id + "_ready");
-    }
-  });
-
   /**
    * On editor change
    */
@@ -229,7 +161,82 @@ export async function jedInit(o) {
     }
   });
 
-  return editor;
+  return new Promise((resolve) => {
+    /**
+    * The jedInit should return only on the editor ready 
+    *  - apparently, only one cb can be set on 'ready' event
+    *  - this should probably be refactored
+    */ 
+    editor.on("ready", async function () {
+      const hasShiny = isShinyReady();
+
+      /**
+       * Auto save draft
+       */
+      if (idDraft) {
+        try {
+          const draft = await mx_storage.draft.getItem(idDraft);
+          draftLock = false;
+          const validDraft = isNotEmpty(draft) && draft?.type === "draft";
+
+          if (validDraft) {
+            const draftClientTimeStamp = draft.timestamp;
+            // add 5 sec margin
+            const moreRecent = draftClientTimeStamp > draftDbTimeStamp;
+
+            if (moreRecent) {
+              const recovery = new DataDiffModal({
+                contextLabel: "Draft",
+                dataSource: opt_final.startval,
+                dataTarget: draft.data,
+                timestampSource: opt_final.draftAutoSaveDbTimestamp,
+                timestampTarget: draft.timestamp,
+                onAccept: (recoveredData) => {
+                  editor.setValue(recoveredData);
+                },
+              });
+
+              await recovery.start();
+            }
+          }
+        } catch (e) {
+          draftLock = false;
+          throw new Error(e);
+        }
+      }
+
+      /**
+       * Add search item
+       */
+
+      if (opt_final.addSearch) {
+        const elInput = el("input", {
+          type: "text",
+          class: ["form-control"],
+          placeholder: "Search",
+        });
+
+        jed.search[id] = new TextFilter({
+          selector: "[data-schematype=object]",
+          elInput: elInput,
+          elContent: elJed,
+          elContainer: elJed.parentElement,
+          timeout: 50,
+        });
+      }
+
+      /**
+       * Report ready state to shiny
+       */
+      if (hasShiny) {
+        Shiny.onInputChange(id + "_ready", new Date());
+      } else {
+        console.log(id + "_ready");
+      }
+    });
+
+    resolve(editor);
+  });
 }
 
 async function jedValidateSize(editor) {

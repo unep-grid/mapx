@@ -110,15 +110,23 @@ class Theme extends EventSimple {
       const t = this;
       const { theme } = await t._s.get(idTheme);
 
+      if (isEmpty(theme)) {
+        console.warn(
+          `Empty response. ${idTheme} was not found. Probably deleted or a session theme`,
+        );
+        return null;
+      }
+
       // Check for ID collision before setting storage property
       if (t.isExistingId(theme.id)) {
         console.warn(
-          `Remote theme "${theme.id}" rejected due to ID collision with existing theme`,
+          `Remote theme "${idTheme}" rejected due to ID collision with existing theme`,
         );
         return null;
       }
 
       t._setStorageProperty(theme, "db_external");
+
       return theme;
     } catch (e) {
       console.error(`Error fetching remote theme ${idTheme}`, e);
@@ -526,11 +534,11 @@ class Theme extends EventSimple {
     return t.ids().includes(id);
   }
 
-  isExistingIdLocal(id) {
+  isExistingIdBase(id) {
     const t = this;
     // Check if ID exists in either built-in or custom themes
     return t
-      .listLocal()
+      .listBase()
       .map((t) => t.id)
       .includes(id);
   }
@@ -569,7 +577,7 @@ class Theme extends EventSimple {
   /*
    * local changed meaning : used to be the base theme
    */
-  listLocal() {
+  listBase() {
     return themes;
   }
 

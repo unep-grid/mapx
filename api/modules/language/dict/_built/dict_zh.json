@@ -9906,8 +9906,8 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save or update...",
-    "zh": "保存或更新..."
+    "en": "Save",
+    "zh": "节省"
   },
   {
     "id": "mx_theme_create_button",
@@ -9921,8 +9921,8 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{idTheme}} as default theme ?",
-    "zh": "放 {{idTheme}}作为默认主题？"
+    "en": "Set {{theme}} as default theme ?",
+    "zh": "放 {{theme}}作为默认主题？"
   },
   {
     "id": "mx_theme_delete_button",
@@ -10010,14 +10010,9 @@
     "zh": "选择使用新 ID 存储主题的位置"
   },
   {
-    "id": "mx_theme_save_storage_title",
-    "en": "Save Theme - Storage Location",
-    "zh": "保存主题 - 存储位置"
-  },
-  {
-    "id": "mx_theme_import_storage_title",
-    "en": "Import Theme - Storage Location",
-    "zh": "导入主题 - 存储位置"
+    "id": "mx_theme_storage_title",
+    "en": "Theme Storage Location",
+    "zh": "主题存储位置"
   },
   {
     "id": "mx_theme_select_storage",

@@ -9906,8 +9906,8 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save or update...",
-    "es": "Guardar o actualizar..."
+    "en": "Save",
+    "es": "Ahorrar"
   },
   {
     "id": "mx_theme_create_button",
@@ -9921,8 +9921,8 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{idTheme}} as default theme ?",
-    "es": "Colocar {{idTheme}} ¿como tema predeterminado?"
+    "en": "Set {{theme}} as default theme ?",
+    "es": "Colocar {{theme}} ¿como tema predeterminado?"
   },
   {
     "id": "mx_theme_delete_button",
@@ -10010,14 +10010,9 @@
     "es": "Elige dónde almacenar tu tema con una nueva ID"
   },
   {
-    "id": "mx_theme_save_storage_title",
-    "en": "Save Theme - Storage Location",
-    "es": "Guardar tema - Ubicación de almacenamiento"
-  },
-  {
-    "id": "mx_theme_import_storage_title",
-    "en": "Import Theme - Storage Location",
-    "es": "Importar tema - Ubicación de almacenamiento"
+    "id": "mx_theme_storage_title",
+    "en": "Theme Storage Location",
+    "es": "Ubicación de almacenamiento del tema"
   },
   {
     "id": "mx_theme_select_storage",

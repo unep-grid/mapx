@@ -317,13 +317,7 @@ export async function ioThemeGet(_, data, cb) {
       `SELECT * FROM mx_themes WHERE id = $1 LIMIT 1`,
       [idTheme]
     );
-
-    if (rows.length === 0) {
-      throw new Error("theme_not_found");
-    }
-
-    const theme = rows[0];
-    // Add _storage property for frontend icon display
+    const theme = rows.length === 0 ? {}: rows[0];
     theme._storage = "db";
     data.theme = theme;
     data.success = true;

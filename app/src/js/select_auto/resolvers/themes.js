@@ -197,7 +197,7 @@ export const config = {
   },
 };
 
-function update() {
+function update(value) {
   const tom = this;
   try {
     const { types } = tom.settings.loader_config;
@@ -207,7 +207,7 @@ function update() {
 
     tom.disable();
     tom.control_input.placeholder = placeholder_wait;
-    const id = theme.id();
+    const id = value || theme.id();
     const themes = theme.listByStorageTypes(types);
 
     // Update UI after loading
@@ -215,6 +215,9 @@ function update() {
     tom.settings.placeholder = placeholder_ready;
 
     // Add options directly
+    if (value) {
+      tom.clear();
+    }
     tom.clearOptions();
     tom.addOptions(themes);
     tom.setValue(id);

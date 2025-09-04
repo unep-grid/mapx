@@ -9906,8 +9906,8 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save or update...",
-    "bn": "সংরক্ষণ বা আপডেট করুন..."
+    "en": "Save",
+    "bn": "সংরক্ষণ করুন"
   },
   {
     "id": "mx_theme_create_button",
@@ -9921,8 +9921,8 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{idTheme}} as default theme ?",
-    "bn": "সেট {{idTheme}} ডিফল্ট থিম হিসেবে?"
+    "en": "Set {{theme}} as default theme ?",
+    "bn": "সেট {{theme}} ডিফল্ট থিম হিসেবে?"
   },
   {
     "id": "mx_theme_delete_button",
@@ -10010,14 +10010,9 @@
     "bn": "নতুন আইডি দিয়ে আপনার থিম কোথায় সংরক্ষণ করবেন তা বেছে নিন"
   },
   {
-    "id": "mx_theme_save_storage_title",
-    "en": "Save Theme - Storage Location",
-    "bn": "থিম সংরক্ষণ করুন - স্টোরেজ অবস্থান"
-  },
-  {
-    "id": "mx_theme_import_storage_title",
-    "en": "Import Theme - Storage Location",
-    "bn": "থিম আমদানি করুন - স্টোরেজ লোকেশন"
+    "id": "mx_theme_storage_title",
+    "en": "Theme Storage Location",
+    "bn": "থিম স্টোরেজ লোকেশন"
   },
   {
     "id": "mx_theme_select_storage",

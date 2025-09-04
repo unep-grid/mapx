@@ -1095,7 +1095,7 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save or update...",
+    "en": "Save",
     "fr": "",
     "es": "",
     "ru": "",
@@ -1134,7 +1134,7 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{idTheme}} as default theme ?",
+    "en": "Set {{theme}} as default theme ?",
     "fr": "",
     "es": "",
     "ru": "",
@@ -1367,21 +1367,8 @@
     "de": ""
   },
   {
-    "id": "mx_theme_save_storage_title",
-    "en": "Save Theme - Storage Location",
-    "fr": "",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "mx_theme_import_storage_title",
-    "en": "Import Theme - Storage Location",
+    "id": "mx_theme_storage_title",
+    "en": "Theme Storage Location",
     "fr": "",
     "es": "",
     "ru": "",

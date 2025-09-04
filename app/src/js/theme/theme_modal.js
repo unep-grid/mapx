@@ -13,6 +13,7 @@ import {
 } from "../is_test/index.js";
 import { downloadJSON } from "../download";
 import {
+  clone,
   fileSelectorJSON,
   itemFlashCancel,
   itemFlashWarning,
@@ -68,11 +69,17 @@ export class ThemeModal extends EventSimple {
       action: tm.exportTheme,
       title: tt("mx_theme_export_button"),
     });
+    tm._el_button_create = elButtonFa("mx_theme_create_button", {
+      icon: "file",
+      action: tm.createTheme,
+      title: tt("mx_theme_create_button"),
+    });
     tm._el_button_save = elButtonFa("mx_theme_save_button", {
       icon: "save",
-      action: tm.upsertTheme,
+      action: tm.saveTheme,
       title: tt("mx_theme_save_button"),
     });
+
     tm._el_button_delete = elButtonFa("mx_theme_delete_button", {
       icon: "trash",
       action: tm.deleteTheme,
@@ -83,6 +90,7 @@ export class ThemeModal extends EventSimple {
       tm._el_button_close,
       tm._el_button_import,
       tm._el_button_export,
+      tm._el_button_create,
       tm._el_button_save,
       tm._el_button_delete,
     ];
@@ -122,6 +130,16 @@ export class ThemeModal extends EventSimple {
   }
 
   /**
+   * Check if a theme is base
+   * @param {string} idTheme - Theme ID to check
+   * @returns {boolean} - True if base
+   */
+  isBaseTheme(idTheme) {
+    const themes = this._theme.listByStorageTypes(["base"]);
+    return themes.map((t) => t.id).includes(idTheme);
+  }
+
+  /**
    * Check if a theme is stored in db
    * @param {string} idTheme - Theme ID to check
    * @returns {boolean} - True if stored in db
@@ -148,19 +166,22 @@ export class ThemeModal extends EventSimple {
     const currentTheme = tm._theme.theme();
     const idTheme = currentTheme.id;
     const isLocalTheme = tm.isLocalTheme(idTheme);
+    const isBaseTheme = tm.isBaseTheme(idTheme);
     const isDbTheme = tm.isDbTheme(idTheme);
     const isDefaultTheme = tm.isProjectTheme(currentTheme.id);
     const hasPublisherRole = settings.user.roles?.publisher === true;
     const isAuthorized = (isDbTheme && hasPublisherRole) || isLocalTheme;
-    const isRemovable = !isDefaultTheme && isAuthorized;
+    const isRemovable = !isBaseTheme && !isDefaultTheme && isAuthorized;
+    const isSavable = !isBaseTheme;
 
-    // Always enable save button - storage location will be determined in the save flow
-    tm._el_button_save.removeAttribute("disabled");
-    // Always disable delete
+    tm._el_button_save.setAttribute("disabled", "disabled");
     tm._el_button_delete.setAttribute("disabled", "disabled");
 
     if (isRemovable) {
       tm._el_button_delete.removeAttribute("disabled");
+    }
+    if (isSavable) {
+      tm._el_button_save.removeAttribute("disabled");
     }
   }
 
@@ -173,8 +194,7 @@ export class ThemeModal extends EventSimple {
      * Update
      */
     if (exists) {
-      tm._auto_select.update();
-      tm._auto_select.value = idTheme;
+      tm._auto_select.update(idTheme);
       return;
     }
 
@@ -321,10 +341,10 @@ export class ThemeModal extends EventSimple {
   /**
    * Initialize JSON Editor for theme metadata in a separate modal
    * @param {string} operation - The operation type (create, update, export)
-   * @param {Object} startValues - Initial values for the editor
+   * @param {Object} theme - Initial values for the editor or theme
    * @returns {Promise<Object|null>} - Metadata object or null if cancelled
    */
-  async showMetadataEditorModal(operation, startValues = {}) {
+  async showMetadataEditorModal(operation, theme = {}) {
     const tm = this;
 
     // Create container for JSON Editor
@@ -337,10 +357,7 @@ export class ThemeModal extends EventSimple {
 
     const elContainer = el("div", [elErrors, elMetadataEditor]);
 
-    // Get current theme for default values
-    const theme = tm._theme.theme();
-
-    const def = {
+    const startValues = {
       id: theme.id,
       description: theme.description || { en: "" },
       label: theme.label || { en: "" },
@@ -349,10 +366,6 @@ export class ThemeModal extends EventSimple {
       water: theme.water || false,
     };
 
-    // Prepare metadata with defaults from current theme
-    const metadata = patchObject(def, startValues);
-
-    const idThemes = await tm._theme.getAllIds();
     const schemaMeta = await tm._theme.getSchema(false);
 
     // Initialize JSON Editor with custom validators
@@ -360,7 +373,7 @@ export class ThemeModal extends EventSimple {
       id: "theme_meta",
       schema: schemaMeta,
       target: elMetadataEditor,
-      startVal: metadata,
+      startVal: startValues,
       options: {
         disable_properties: true,
         disable_collapse: true,
@@ -374,7 +387,7 @@ export class ThemeModal extends EventSimple {
           (_, value, path) => {
             const errors = [];
             if (path === "root.id") {
-              const elMessage = validateId(value, idThemes);
+              const elMessage = validateId(value);
               if (elMessage) {
                 errors.push({
                   path: path,
@@ -389,12 +402,18 @@ export class ThemeModal extends EventSimple {
       },
     });
 
+    const editorId = editor.getEditor("root.id");
+
+    if (operation === "save") {
+      editorId.disable();
+    }
+
     // Get appropriate title and button text based on operation
     let title, confirmText;
     switch (operation) {
-      case "new":
-        title = tt("mx_theme_new_button");
-        confirmText = tt("btn_new");
+      case "create":
+        title = tt("mx_theme_create_button");
+        confirmText = tt("btn_create");
         break;
       case "save":
         title = tt("mx_theme_save_button");
@@ -446,24 +465,28 @@ export class ThemeModal extends EventSimple {
      * @returns string Invalid message
      */
     function validateId(id, idThemes) {
-      // Check ID length first - must be less than 30 characters
-      if (id && id.length >= 30) {
+      if (!id || (id && id.length >= 30)) {
         return tt("mx_theme_error_id_too_long");
       }
 
-      const loc = tm._theme.isExistingIdLocal(id);
+      const exists = tm._theme.isExistingId(id);
+      const existsBase = tm._theme.isExistingIdBase(id);
 
-      if (loc && operation !== "export") {
+      if (!exists && operation === "save") {
+        return tt("mx_theme_error_id_must_exist");
+      }
+
+      if (existsBase && operation !== "export") {
         return tt("mx_theme_error_id_reserved");
       }
 
-      if (operation === "import" || operation === "new" || metadata.id !== id) {
-        const exists = idThemes.includes(id);
+      if (operation === "import" || operation === "create") {
         if (exists) {
           return tt("mx_theme_error_id_exists");
         }
       }
     }
+
     /**
      * Update sticky errors
      */
@@ -494,99 +517,58 @@ export class ThemeModal extends EventSimple {
 
   /**
    * Show storage location selector modal
-   * @param {string} operation - The operation type (save, import)
-   * @param {Object} metadata - Theme metadata (including potentially changed ID)
-   * @returns {Promise<string|null>} - Storage location or null if cancelled
    */
-  async showStorageLocationModal(operation = "save", metadata = {}) {
-    const tm = this;
+  async showStorageLocationModal() {
     const hasPublisherRole = settings.user.roles?.publisher === true;
-    const currentTheme = tm._theme.theme();
-    const currentStorageType = currentTheme._storage;
-    const isIdChanged = metadata.id && metadata.id !== currentTheme.id;
-    const isDbTheme = currentStorageType === "db";
 
-    // Check if we should restrict storage options
-    const shouldRestrictToDb = isDbTheme && !isIdChanged;
+    const options = [
+      {
+        value: "session",
+        checked: true,
+        label: el("div", { class: "mx-theme--storage-option" }, [
+          tt("mx_theme_save_session"),
+          el("span", {
+            class: ["fa", "fa-clock-o", "mx-theme--storage-icon"],
+          }),
+        ]),
+      },
+      {
+        value: "local",
+        label: el("div", { class: "mx-theme--storage-option" }, [
+          tt("mx_theme_save_local"),
+          el("span", { class: ["fa", "fa-hdd-o", "mx-theme--storage-icon"] }),
+        ]),
+      },
+      hasPublisherRole
+        ? {
+            value: "db",
 
-    let options = [];
-    let description = tt("mx_theme_storage_description");
-    let defaultValue = "local";
-
-    if (shouldRestrictToDb) {
-      // DB theme with unchanged ID - only allow DB storage
-      if (hasPublisherRole) {
-        options = [{
-          value: "db",
-          checked: true,
-          label: el("div", { class: "mx-theme--storage-option" }, [
-            tt("mx_theme_save_db"),
-            el("span", {
-              class: ["fa", "fa-database", "mx-theme--storage-icon"],
-            }),
-          ]),
-        }];
-        defaultValue = "db";
-        description = tt("mx_theme_storage_db_only_description");
-      } else {
-        // Non-publisher trying to save DB theme - this shouldn't happen in normal flow
-        throw new Error("Cannot save database theme without publisher permissions");
-      }
-    } else {
-      // Normal flow - show available options based on permissions
-      options = [
-        // Session option (always available)
-        {
-          value: "session",
-          label: el("div", { class: "mx-theme--storage-option" }, [
-            tt("mx_theme_save_session"),
-            el("span", { class: ["fa", "fa-clock-o", "mx-theme--storage-icon"] }),
-          ]),
-        },
-
-        // LocalStorage option (always available)
-        {
-          value: "local",
-          checked: true,
-          label: el("div", { class: "mx-theme--storage-option" }, [
-            tt("mx_theme_save_local"),
-            el("span", { class: ["fa", "fa-hdd-o", "mx-theme--storage-icon"] }),
-          ]),
-        },
-      ];
-
-      // Database option (publishers only)
-      if (hasPublisherRole) {
-        options.unshift({
-          value: "db",
-          label: el("div", { class: "mx-theme--storage-option" }, [
-            tt("mx_theme_save_db"),
-            el("span", {
-              class: ["fa", "fa-database", "mx-theme--storage-icon"],
-            }),
-          ]),
-        });
-        defaultValue = "db";
-      }
-
-      // Add explanation if ID was changed from a DB theme
-      if (isDbTheme && isIdChanged) {
-        description = tt("mx_theme_storage_id_changed_description");
-      }
-    }
+            label: el("div", { class: "mx-theme--storage-option" }, [
+              tt("mx_theme_save_db"),
+              el("span", {
+                class: ["fa", "fa-database", "mx-theme--storage-icon"],
+              }),
+            ]),
+          }
+        : null,
+    ];
 
     const storageChoice = await modalRadio({
-      title: tt(`mx_theme_${operation}_storage_title`),
-      description: description,
+      title: tt(`mx_theme_storage_title`),
+      description: tt("mx_theme_storage_description"),
       confirm: tt("btn_next"),
       cancel: tt("btn_cancel"),
       options: options,
-      defaultValue: defaultValue,
+      defaultValue: "session",
     });
 
     return storageChoice;
   }
 
+  /**
+   *   Render color input
+   *
+   */
   async buildColorsItems() {
     return new Promise((resolve, reject) => {
       try {
@@ -842,52 +824,8 @@ export class ThemeModal extends EventSimple {
   }
 
   /**
-   * Unified save method - handles both create and update based on theme ID existence
+   * Delete theme
    */
-  async upsertTheme() {
-    const tm = this;
-    const currentTheme = tm._theme.theme();
-
-    // Step 1: Get metadata
-    const metadata = await tm.showMetadataEditorModal("save", currentTheme);
-    if (!metadata) {
-      itemFlashCancel();
-      return;
-    }
-
-    // Step 2: Choose storage location (pass metadata to check for ID changes)
-    const storageLocation = await tm.showStorageLocationModal("save", metadata);
-    if (!storageLocation) {
-      itemFlashCancel();
-      return this.upsertTheme()
-    }
-
-    // Step 3: Handle project default for database saves
-    let setAsProjectDefault = false;
-    if (storageLocation === "db") {
-      const notDefault = settings.project.theme !== metadata.id;
-      if (notDefault) {
-        setAsProjectDefault = await modalConfirm({
-          title: tt("mx_theme_update_project"),
-          content: tt("mx_theme_update_project_desc", {
-            data: { idTheme: metadata.id },
-          }),
-          confirm: tt("btn_confirm"),
-          cancel: tt("btn_cancel"),
-        });
-      }
-    }
-
-    // Step 4: Save to chosen location
-    const theme = Object.assign({}, metadata, {
-      colors: tm.getColorsFromInputs(),
-      _storage: storageLocation, // Track storage location
-    });
-
-    await tm.saveToLocation(theme, storageLocation, setAsProjectDefault);
-    await tm.update();
-  }
-
   async deleteTheme() {
     const tm = this;
     const currentTheme = tm._theme.theme();
@@ -898,63 +836,87 @@ export class ThemeModal extends EventSimple {
     await tm.update();
   }
 
+  /**
+   * Create theme
+   */
+  async createTheme() {
+    const tm = this;
+    const themeToCopy = clone(tm._theme.theme());
+    return tm.upsertTheme(true, themeToCopy);
+  }
+
+  async saveTheme() {
+    const tm = this;
+    const themeToSave = clone(tm._theme.theme());
+    return tm.upsertTheme(false, themeToSave);
+  }
+
   async importTheme() {
     const tm = this;
-    try {
-      // Step 1: Select JSON file to import
-      const data = await fileSelectorJSON({ multiple: false });
-      if (isEmpty(data)) {
-        return;
-      }
+    const data = await fileSelectorJSON({ multiple: false });
+    if (isEmpty(data)) {
+      itemFlashCancel();
+      return;
+    }
+    const importedTheme = tm.cleanKeys(data[0]);
+    await tm._theme.stopIfInvalidColors(importedTheme);
+    return tm.upsertTheme(true, importedTheme);
+  }
 
-      // Step 2: Validate and prepare theme
-      const importedTheme = tm.cleanKeys(data[0]);
-      await tm._theme.stopIfInvalidColors(importedTheme);
+  /**
+   * Unified save method
+   */
+  async upsertTheme(create = false, theme = null) {
+    const tm = this;
+    const themeUpsert = theme || clone(tm._theme.theme());
 
-      // Step 3: Get metadata
-      const metadata = await tm.showMetadataEditorModal(
-        "import",
-        importedTheme,
-      );
-      if (!metadata) {
-        itemFlashCancel();
-        return;
-      }
+    if (create) {
+      themeUpsert.id = `${themeUpsert.id}_copy`;
+    }
 
-      // Step 4: Choose storage location (pass metadata to check for ID changes)
-      const storageLocation = await tm.showStorageLocationModal("import", metadata);
+    const metadata = await tm.showMetadataEditorModal(
+      create ? "create" : "save",
+      themeUpsert,
+    );
+
+    const notDefault = settings.project.theme !== metadata.id;
+
+    if (!metadata) {
+      itemFlashCancel();
+      return;
+    }
+
+    let storageLocation = theme._storage;
+    
+    if (create) {
+      storageLocation = await tm.showStorageLocationModal();
       if (!storageLocation) {
         itemFlashCancel();
-        return;
+        return tm.upsertTheme(create, theme);
       }
-
-      // Step 5: Handle project default for database saves
-      let setAsProjectDefault = false;
-      if (storageLocation === "db") {
-        const notDefault = settings.project.theme !== metadata.id;
-        if (notDefault) {
-          setAsProjectDefault = await modalConfirm({
-            title: tt("mx_theme_update_project"),
-            content: tt("mx_theme_update_project_desc", {
-              data: { idTheme: metadata.id },
-            }),
-            confirm: tt("btn_confirm"),
-            cancel: tt("btn_cancel"),
-          });
-        }
-      }
-
-      // Step 6: Save to chosen location
-      const theme = Object.assign({}, importedTheme, metadata, {
-        _storage: storageLocation, // Track storage location
-      });
-
-      await tm.saveToLocation(theme, storageLocation, setAsProjectDefault);
-      await tm.update();
-    } catch (e) {
-      itemFlashWarning();
-      console.error("Failed to import theme:", e);
     }
+
+    let setAsProjectDefault = false;
+    if (create && storageLocation === "db") {
+      if (notDefault) {
+        setAsProjectDefault = await modalConfirm({
+          title: tt("mx_theme_update_project"),
+          content: tt("mx_theme_update_project_desc", {
+            data: { theme: metadata?.label?.en || metadata.id },
+          }),
+          confirm: tt("btn_confirm"),
+          cancel: tt("btn_cancel"),
+        });
+      }
+    }
+
+    const themeUpdated = Object.assign({}, metadata, {
+      colors: tm.getColorsFromInputs(),
+      _storage: storageLocation,
+    });
+
+    await tm.saveToLocation(themeUpdated, storageLocation, setAsProjectDefault);
+    await tm.update();
   }
 
   /**
@@ -1011,7 +973,7 @@ export class ThemeModal extends EventSimple {
       const currentTheme = tm._theme.theme();
 
       // Show metadata editor modal for exporting
-      const metadata = await tm.showMetadataEditorModal("export");
+      const metadata = await tm.showMetadataEditorModal("export", currentTheme);
 
       if (!metadata) return; // User cancelled
 

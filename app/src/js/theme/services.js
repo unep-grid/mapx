@@ -21,12 +21,8 @@ export class ThemeService {
    * List available themes (filtered by permissions)
    * @returns {Promise<Object>} Response with array of themes
    */
-  async list(onlyPublic) {
-    const resp = await ws.emitAsync(
-      "/client/theme/list",
-      { onlyPublic },
-      10000,
-    );
+  async list() {
+    const resp = await ws.emitAsync("/client/theme/list", {}, 10000);
     return this._handle_error(resp);
   }
 
@@ -89,7 +85,7 @@ export class ThemeService {
    * @param {boolean} full  - full or paritial / meta validation
    * @returns schema
    */
-  async getSchema(full, language = 'en') {
+  async getSchema(full, language = "en") {
     const resp = await ws.emitAsync(
       "/client/theme/schema",
       { full, language },

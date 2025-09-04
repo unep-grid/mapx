@@ -9906,8 +9906,8 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save or update...",
-    "ru": "Сохранить или обновить..."
+    "en": "Save",
+    "ru": "Сохранять"
   },
   {
     "id": "mx_theme_create_button",
@@ -9921,8 +9921,8 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{idTheme}} as default theme ?",
-    "ru": "Набор {{idTheme}} как тема по умолчанию?"
+    "en": "Set {{theme}} as default theme ?",
+    "ru": "Набор {{theme}} как тема по умолчанию?"
   },
   {
     "id": "mx_theme_delete_button",
@@ -10010,14 +10010,9 @@
     "ru": "Выберите, где сохранить вашу тему с новым идентификатором."
   },
   {
-    "id": "mx_theme_save_storage_title",
-    "en": "Save Theme - Storage Location",
-    "ru": "Сохранить тему - Место хранения"
-  },
-  {
-    "id": "mx_theme_import_storage_title",
-    "en": "Import Theme - Storage Location",
-    "ru": "Импорт темы - Место хранения"
+    "id": "mx_theme_storage_title",
+    "en": "Theme Storage Location",
+    "ru": "Место хранения темы"
   },
   {
     "id": "mx_theme_select_storage",
