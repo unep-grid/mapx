@@ -1,3 +1,9 @@
+  - [1.13.18-beta.16](https://github.com/unep-grid/mapx/tree/1.13.18-beta.16) 
+
+    - feat(theme): create mode + prevent duplicate + refactor
+    - chore: remove unused fingerprint file
+
+
   - [1.13.18-beta.15](https://github.com/unep-grid/mapx/tree/1.13.18-beta.15) 
 
     - fix(theme): theme registering have now a level based test to know which one can be overwritten
