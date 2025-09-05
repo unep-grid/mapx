@@ -70,7 +70,7 @@ export class ThemeModal extends EventSimple {
       title: tt("mx_theme_export_button"),
     });
     tm._el_button_create = elButtonFa("mx_theme_create_button", {
-      icon: "file",
+      icon: "files-o",
       action: tm.createTheme,
       title: tt("mx_theme_create_button"),
     });

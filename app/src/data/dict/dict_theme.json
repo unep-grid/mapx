@@ -1095,7 +1095,7 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save",
+    "en": "Update...",
     "fr": "",
     "es": "",
     "ru": "",
@@ -1108,7 +1108,7 @@
   },
   {
     "id": "mx_theme_create_button",
-    "en": "Create New",
+    "en": "Duplicate...",
     "fr": "",
     "es": "",
     "ru": "",

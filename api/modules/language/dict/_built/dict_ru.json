@@ -9906,13 +9906,13 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save",
-    "ru": "Сохранять"
+    "en": "Update...",
+    "ru": "Обновлять..."
   },
   {
     "id": "mx_theme_create_button",
-    "en": "Create New",
-    "ru": "Создать новый"
+    "en": "Duplicate...",
+    "ru": "Дубликат..."
   },
   {
     "id": "mx_theme_update_project",

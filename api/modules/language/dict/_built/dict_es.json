@@ -9906,13 +9906,13 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save",
-    "es": "Ahorrar"
+    "en": "Update...",
+    "es": "Actualizar..."
   },
   {
     "id": "mx_theme_create_button",
-    "en": "Create New",
-    "es": "Crear nuevo"
+    "en": "Duplicate...",
+    "es": "Duplicado..."
   },
   {
     "id": "mx_theme_update_project",

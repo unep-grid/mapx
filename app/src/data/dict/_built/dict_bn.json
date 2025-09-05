@@ -9906,13 +9906,13 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save",
-    "bn": "সংরক্ষণ করুন"
+    "en": "Update...",
+    "bn": "আপডেট..."
   },
   {
     "id": "mx_theme_create_button",
-    "en": "Create New",
-    "bn": "নতুন তৈরি করুন"
+    "en": "Duplicate...",
+    "bn": "ডুপ্লিকেট..."
   },
   {
     "id": "mx_theme_update_project",

@@ -9906,13 +9906,13 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save",
-    "fa": "ذخیره"
+    "en": "Update...",
+    "fa": "به‌روزرسانی..."
   },
   {
     "id": "mx_theme_create_button",
-    "en": "Create New",
-    "fa": "ایجاد جدید"
+    "en": "Duplicate...",
+    "fa": "تکراری..."
   },
   {
     "id": "mx_theme_update_project",

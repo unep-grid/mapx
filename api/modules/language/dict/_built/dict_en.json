@@ -7925,11 +7925,11 @@
   },
   {
     "id": "mx_theme_save_button",
-    "en": "Save"
+    "en": "Update..."
   },
   {
     "id": "mx_theme_create_button",
-    "en": "Create New"
+    "en": "Duplicate..."
   },
   {
     "id": "mx_theme_update_project",
