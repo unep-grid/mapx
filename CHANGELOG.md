@@ -1,3 +1,7 @@
+  - [1.13.18](https://github.com/unep-grid/mapx/tree/1.13.18) 
+
+
+
   - [1.13.18-beta.17](https://github.com/unep-grid/mapx/tree/1.13.18-beta.17) 
 
     - feat(themes): improve buttons save/duplicate save/update
