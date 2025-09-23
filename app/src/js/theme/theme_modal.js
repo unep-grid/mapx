@@ -17,7 +17,6 @@ import {
   fileSelectorJSON,
   itemFlashCancel,
   itemFlashWarning,
-  patchObject,
 } from "../mx_helper_misc";
 import { TextFilter } from "../text_filter_simple";
 import chroma from "chroma-js";
@@ -860,6 +859,7 @@ export class ThemeModal extends EventSimple {
     }
     const importedTheme = tm.cleanKeys(data[0]);
     await tm._theme.stopIfInvalidColors(importedTheme);
+    debugger;
     return tm.upsertTheme(true, importedTheme);
   }
 
@@ -887,7 +887,7 @@ export class ThemeModal extends EventSimple {
     }
 
     let storageLocation = theme._storage;
-    
+
     if (create) {
       storageLocation = await tm.showStorageLocationModal();
       if (!storageLocation) {
@@ -910,8 +910,9 @@ export class ThemeModal extends EventSimple {
       }
     }
 
+    const colors = theme?.colors || tm.getColorsFromInputs();
     const themeUpdated = Object.assign({}, metadata, {
-      colors: tm.getColorsFromInputs(),
+      colors: colors,
       _storage: storageLocation,
     });
 
