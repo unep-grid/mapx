@@ -41,7 +41,7 @@ import {
   handleMapDrop,
 } from "./../mx_helper_map_dragdrop.js";
 import { updateViewsFilter, viewsListAddSingle } from "./../views_list_manager";
-import { initLog } from "./../mx_helper_log.js";
+import { initLog } from "./../logger/instance.js";
 import { dashboard } from "./../dashboards/index.js";
 import { share_modal } from "../share_modal/index.js";
 import {

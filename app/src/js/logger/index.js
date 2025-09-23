@@ -1,5 +1,6 @@
-const settings = {
-  url: '',
+import {ws} from "../mx";
+
+const opt_default = {
   onCollect: () => {},
   onResponse: () => {},
   validate: () => {
@@ -7,43 +8,44 @@ const settings = {
   },
   timeCollect: 15000,
   baseForm: {},
-  baseLog: {}
+  baseLog: {},
 };
 
 class Logger {
   constructor(opt) {
     const lgr = this;
-    lgr.opt = Object.assign({}, settings, opt);
-    lgr.queue = [];
-    lgr.timer = null;
-    lgr.url = null;
+    lgr._opt = Object.assign({}, opt_default, opt);
+    lgr._queue = [];
+    lgr._timer = null;
     lgr.init();
   }
 
+  get opt() {
+    return this._opt;
+  }
   destroy() {
-    removeInterval(lgr.timer);
+    removeInterval(lgr._timer);
   }
 
   init() {
     const lgr = this;
-    if (!lgr.timer) {
-      lgr.url = new URL(lgr.opt.url);
-      lgr.timer = setInterval(lgr.collect.bind(lgr), lgr.opt.timeCollect);
+    if (!lgr._timer) {
+      lgr._timer = setInterval(lgr.collect.bind(lgr), lgr.opt.timeCollect);
     }
   }
 
   add(dataLog) {
     const lgr = this;
     const log = Object.assign(
-      {date_modified: Date.now()},
+      { date_modified: Date.now() },
       lgr.baseLog,
-      dataLog
+      dataLog,
     );
     const isValid = lgr.validate(log);
     if (isValid) {
-      lgr.queue.push(log);
+      lgr._queue.push(log);
     } else {
-      console.warn('Ignore invalid log', log);
+      console.warn("Ignore invalid log", log);
     }
   }
 
@@ -52,36 +54,29 @@ class Logger {
     return lgr.opt.validate(log);
   }
 
-  collect() {
+  async collect() {
     const lgr = this;
     try {
-      if (lgr.queue.length > 0 && lgr.url instanceof URL) {
-        const dataOut = Object.assign({logs: lgr.queue.map(l=>l)}, lgr.opt.baseForm);
-        lgr.queue.length = 0;
+      if (lgr._queue.length > 0) {
+        const dataOut = Object.assign(
+          { logs: lgr._queue.map((l) => l) },
+          lgr.opt.baseForm,
+        );
+        lgr._queue.length = 0;
         lgr.opt.onCollect(dataOut);
-        postData(lgr.url, dataOut);
+        await lgr.emit(dataOut);
       }
     } catch (error) {
       console.error(error);
     }
   }
+
+  async emit(data) {
+    const resp = await ws.emitAsync("/client/logs/collect", data);
+    if (resp?.errors) {
+      console.error(resp.errors);
+    }
+  }
 }
 
-export {Logger};
-
-function postData(url = '', data = {}) {
-  return fetch(url, {
-    method: 'POST',
-    mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    redirect: 'follow',
-    referrer: 'no-referrer',
-    body: JSON.stringify(data)
-  });
-}
-
-
+export { Logger };

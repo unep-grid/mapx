@@ -1,9 +1,8 @@
-import { Logger } from "./logger";
-import { getApiUrl } from "./api_routes";
-import { isViewId } from "./is_test";
-import { updateIfEmpty } from "./mx_helper_misc.js";
-import { settings } from "./settings";
-import { events } from "./mx";
+import { Logger } from ".";
+import { isViewId } from "./../is_test_mapx";
+import { updateIfEmpty } from "./../mx_helper_misc.js";
+import { settings } from "./../settings";
+import { events } from "./../mx";
 
 let logger;
 
@@ -14,7 +13,6 @@ export function initLog() {
   const isStatic = settings.mode.static === true;
   if (!logger) {
     logger = new Logger({
-      url: getApiUrl("collectLogs"),
       timeCollect: 15000,
       baseForm: {},
       validate: formatValidateLog,

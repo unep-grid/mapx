@@ -8,7 +8,6 @@ import mirror from "#mapx/mirror";
 import { mwSendMail } from "#mapx/mail";
 import ip from "#mapx/ip";
 import tile from "#mapx/tile";
-import log from "#mapx/log";
 import * as upload from "#mapx/upload";
 import * as view from "#mapx/view";
 import * as source from "#mapx/source";
@@ -24,6 +23,7 @@ import { ioEcho } from "#mapx/io";
 import { ioTestSum, ioTestEcho } from "#mapx/io";
 import { ioUploadSource } from "#mapx/upload";
 import { ioIssueReport } from "#mapx/issue_reporter";
+import { ioCollecLogs } from "#mapx/log";
 import {
   mwSetHeaders,
   mwGetConfigUpdate,
@@ -46,7 +46,12 @@ import {
   ioSourceMetadata,
   ioSourceAttributesAlias,
 } from "#mapx/source";
-import { ioProjectNameValidate, ioProjectCreate, ioProjectRolesGet, ioProjectRolesUpdate } from "#mapx/project";
+import {
+  ioProjectNameValidate,
+  ioProjectCreate,
+  ioProjectRolesGet,
+  ioProjectRolesUpdate,
+} from "#mapx/project";
 import { ioKeywordsSearch } from "#mapx/keywords";
 import {
   ioCreateAdapter,
@@ -137,7 +142,7 @@ io.use((socket, next) => {
   socket.on("/client/issue/report", use(ioIssueReport));
   socket.on(
     "/client/source/get/attributes/alias",
-    use(ioSourceAttributesAlias)
+    use(ioSourceAttributesAlias),
   );
   socket.on("/client/metadata/keywords/search", use(ioKeywordsSearch));
   socket.on("/client/theme/list", use(ioThemeList));
@@ -148,6 +153,7 @@ io.use((socket, next) => {
   socket.on("/client/theme/schema", use(ioThemeGetSchema));
   socket.on("/client/theme/get", use(ioThemeGet));
   socket.on("/client/theme/delete", use(ioThemeDelete));
+  socket.on("/client/logs/collect", use(ioCollecLogs));
 
   // tests
   socket.on("echo", use(ioEcho));
@@ -188,7 +194,6 @@ app.get("/get/project/search", project.mwProjectSearchText);
 app.post("/upload/image/", upload.mwImage);
 app.post("/upload/vector/", upload.mwVector);
 app.post("/send/mail/", mwSendMail);
-app.post("/collect/logs/", log.mwCollect);
 
 server.listen(port);
 console.log("listen to " + port);

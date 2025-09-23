@@ -40,7 +40,6 @@ export * from "./dynamic_joins/index.ts";
  */
 export * from "./mx_helper_settings.js";
 export * from "./mx_helper_cookies.js";
-export * from "./mx_helper_log.js";
 export * from "./mx_helper_utils_xml.js";
 export * from "./mx_helper_utils_json.js";
 export * from "./mx_helper_misc.js";

@@ -1,3 +1,4 @@
+import { getGeoInfo, getRealIp } from "#mapx/ip";
 import { validateToken, validateUser, getUserRoles } from "./helpers.js";
 
 /**
@@ -15,6 +16,9 @@ export async function ioMwAuthenticate(socket, next) {
       auth: { idUser, idProject, token: userToken } = {},
       headers: { origin } = {},
     } = handshake;
+
+    const ip = getRealIp(handshake.headers, handshake.address);
+    const ipGeo = await getGeoInfo(ip);
 
     // Validate the token
     const { key, isValid: isKeyValid } = await validateToken(userToken);
@@ -36,8 +40,10 @@ export async function ioMwAuthenticate(socket, next) {
       user_email: email,
       user_id: idUser,
       project_id: idProject,
-      origin: origin,
+      origin: origin, // e.g. 'http://dev.mapx.localhost:8880'
+      ip_geo: ipGeo, // {ip:'0.0.0.0',country_name:'xx',country_code:'xx',...}
     };
+
     // Populate socket data, for remote session object, e.g. multi user table editor
     Object.assign(socket.data, socket.session);
 

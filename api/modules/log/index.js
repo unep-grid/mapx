@@ -27,7 +27,7 @@ const tblLogs = sql.define({
     "is_guest",
     "is_static",
     "data",
-    "country_code"
+    "country_code",
   ],
 });
 
@@ -56,6 +56,25 @@ async function mwCollectHelper(req, res) {
   } catch (e) {
     console.error(e);
     res.status(500).end(); // Internal Server Error status
+  }
+}
+
+export async function ioCollecLogs(socket, data, cb) {
+  try {
+    const ipGeo = socket.session?.ip_geo || {};
+    const errors = await validate(data.logs);
+    const hasErrors = isNotEmpty(errors);
+    if (hasErrors) {
+      throw new Error(errors);
+    } else {
+      debugger;
+      await saveLogs(data.logs, ipGeo);
+      cb();
+    }
+  } catch (e) {
+    cb({
+      errors: e.message,
+    });
   }
 }
 
