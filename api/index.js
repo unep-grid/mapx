@@ -6,7 +6,7 @@ import query from "#mapx/query";
 import * as project from "#mapx/project";
 import mirror from "#mapx/mirror";
 import { mwSendMail } from "#mapx/mail";
-import ip from "#mapx/ip";
+import * as ip from "#mapx/ip";
 import tile from "#mapx/tile";
 import * as upload from "#mapx/upload";
 import * as view from "#mapx/view";

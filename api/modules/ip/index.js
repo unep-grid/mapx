@@ -7,6 +7,8 @@ const outDefault = {
   country_name: "",
 };
 
+export { updateGeoIpTable };
+
 function getGeoIP(req, res) {
   sendJSON(res, req._ip_geo, { end: true });
 }
@@ -109,5 +111,3 @@ export async function getGeoInfo(ip) {
 
 export const mwSet = [setGeoIP];
 export const mwGet = [setGeoIP, getGeoIP];
-
-export default { mwGet, mwSet, updateGeoIpTable };
