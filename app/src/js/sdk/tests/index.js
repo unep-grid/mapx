@@ -616,7 +616,7 @@ mapx.once("ready", async () => {
 
           const column_id = await mapx.ask("table_editor_exec", {
             id_table: res._id_table,
-            method: "getColumnId",
+            method: "getColumnIndex",
             value: res._column_add,
           });
 
