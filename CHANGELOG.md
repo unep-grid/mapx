@@ -1,3 +1,13 @@
+  - [1.13.19-beta.0](https://github.com/unep-grid/mapx/tree/1.13.19-beta.0) 
+
+    - fix(tests): getColumnId -> getColumnIndex
+    - fix(routine): export updateGeoIpTable
+    - feat(logs): added hostname column in logs and forward the upstream hostname
+    - fix(base_css): truncate-2-lines
+    - fix(logs): unsecure exposed post handler remplaced by a websocket method
+    - fix(themes): upsert overwritting imported theme colors
+
+
   - [1.13.18](https://github.com/unep-grid/mapx/tree/1.13.18) 
 
 
