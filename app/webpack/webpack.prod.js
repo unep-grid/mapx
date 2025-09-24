@@ -34,13 +34,13 @@ module.exports = merge(common, {
       meta: meta,
       template: "./src/html/static.html",
       filename: "./static.html",
-      chunks: ["sw", "mx", "theme", "static", "jquery"],
+      chunks: ["sw", "mx", "theme", "static", "jquery", "sdk"],
     }),
     new HtmlWebpackPlugin({
       meta: meta,
       template: "./src/html/index.html",
       filename: "./index.html",
-      chunks: ["sw", "mx", "theme", "jquery", "shiny"],
+      chunks: ["sw", "mx", "theme", "jquery", "shiny", "sdk"],
     }),
     new CopyWebpackPlugin([
       {

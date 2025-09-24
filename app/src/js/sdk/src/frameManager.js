@@ -5,10 +5,10 @@ import { parse, stringify, patchObject, isObject } from "./helpers.js";
 import { version } from "../package.json";
 
 /**
-*
-* ⚠️  importing module from the codebase could trigger recursively importing 
-* many unwanted modules
-*/ 
+ *
+ * ⚠️  importing module from the codebase could trigger recursively importing
+ * many unwanted modules
+ */
 
 /**
  * Class to create a manager to build an iframe and post message to a worker inside
@@ -89,6 +89,7 @@ class FrameManager extends Events {
     fm.setUrl();
     fm.setParams();
     fm.setParam("sdkToken", fm._sdkToken);
+    fm.setParam("sdkHostname", fm.hostname);
     fm._initListener();
     fm._init_done = true;
     fm._destroyed = false;
@@ -96,6 +97,24 @@ class FrameManager extends Events {
       fm.setVerbose(true);
     }
     fm.render();
+  }
+
+  get nested() {
+    try {
+      return window.self !== window.top;
+    } catch {
+      return true;
+    }
+  }
+
+  get hostname() {
+    const fm = this;
+    if (fm.nested) {
+      if (document.referrer) {
+        return new URL(document.referrer).hostname || null;
+      }
+    }
+    return window.location.hostname;
   }
 
   /**

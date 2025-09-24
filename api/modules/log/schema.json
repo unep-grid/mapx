@@ -2,6 +2,7 @@
   "type": "object",
   "required": [
     "date_modified",
+    "hostname",
     "side",
     "level",
     "id_log",
@@ -72,6 +73,14 @@
       "examples": ["MX-T6R-PJF-2DF-3OI-LBF"],
       "minLength": 22,
       "maxLength": 22
+    },
+    "hostname": {
+      "type": "string",
+      "title": "Integration hostname (RFC 1123)",
+      "default": null,
+      "examples": ["app.mapx.org"],
+      "minLength": 0,
+      "maxLength": 253
     }
   }
 }

@@ -38,6 +38,9 @@
     "maxZoom": 20,
     "minZoom": 0
   },
+  "integration": {
+    "hostname": "0.0.0.0"
+  },
   "search": {
     "host": "localhost",
     "port": "8880",
@@ -70,6 +73,7 @@
     "theme",
     "colors",
     "sdkToken",
+    "sdkHostname",
     "hidePrivacyModal"
   ],
   "mode": {

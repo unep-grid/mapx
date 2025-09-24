@@ -16,6 +16,7 @@ export function initLog() {
       timeCollect: 15000,
       baseForm: {},
       validate: formatValidateLog,
+      integration_hostname: settings.integration.hostname,
     });
   }
 
@@ -151,7 +152,7 @@ function formatValidateLog(log) {
   const s = settings.logs;
   if (s.disabled) {
     /**
-     * User should be able to disable logs (e.g. in a cookie);
+     * If the user disabled logs, do nothing;
      */
     return false;
   }

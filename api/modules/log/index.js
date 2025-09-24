@@ -18,6 +18,7 @@ const tblLogs = sql.define({
   name: "mx_logs",
   columns: [
     "date_modified",
+    "hostname",
     "side",
     "level",
     "id_log",
@@ -67,7 +68,6 @@ export async function ioCollecLogs(socket, data, cb) {
     if (hasErrors) {
       throw new Error(errors);
     } else {
-      debugger;
       await saveLogs(data.logs, ipGeo);
       cb();
     }

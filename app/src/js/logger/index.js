@@ -1,4 +1,4 @@
-import {ws} from "../mx";
+import { ws } from "../mx";
 
 const opt_default = {
   onCollect: () => {},
@@ -9,6 +9,7 @@ const opt_default = {
   timeCollect: 15000,
   baseForm: {},
   baseLog: {},
+  integration_hostname: "0.0.0.0",
 };
 
 class Logger {
@@ -37,7 +38,10 @@ class Logger {
   add(dataLog) {
     const lgr = this;
     const log = Object.assign(
-      { date_modified: Date.now() },
+      {
+        date_modified: Date.now(),
+        hostname: lgr.opt.integration_hostname,
+      },
       lgr.baseLog,
       dataLog,
     );

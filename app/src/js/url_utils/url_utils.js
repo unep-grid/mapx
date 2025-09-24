@@ -12,7 +12,7 @@ import {
   isArrayOfNumber,
   isBooleanCoercible,
 } from "./../is_test";
-import { isJSON, isJSONObject, isNotEmpty } from "../is_test/index.js";
+import { isJSONObject, isNotEmpty } from "../is_test/index.js";
 
 /**
  * Set url init param
@@ -31,6 +31,26 @@ export function setQueryParametersInit(param = null, opt = { reset: false }) {
   for (const [key, value] of Object.entries(param)) {
     init[key] = asArray(value);
   }
+}
+
+export function isNested() {
+  try {
+    return window.self !== window.top;
+  } catch {
+    return true;
+  }
+}
+
+export function getDocumentHostname() {
+  const nested = isNested();
+  if (nested) {
+    if (document.referrer) {
+      return new URL(document.referrer).hostname || null;
+    } else {
+      return null;
+    }
+  }
+  return window.location.hostname;
 }
 
 /**

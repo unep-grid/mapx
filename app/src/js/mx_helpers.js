@@ -36,7 +36,7 @@ export * from "./dynamic_joins/index.ts";
 /**
  * Old modules that use global mx object
  * TODO: convert as independent modules, as
- * modules above
+ * modules above ꜛ
  */
 export * from "./mx_helper_settings.js";
 export * from "./mx_helper_cookies.js";
@@ -61,6 +61,5 @@ export * from "./mx_helper_source_summary.js";
 export * from "./mx_helper_fetch_progress.js";
 export * from "./mx_helper_root_mode.js";
 export * from "./mx_helper_ip.js";
-export * from "./mx_helper_sdk.js";
 export * from "./mx_helper_issues.js";
 export * from "./mx_helper_views_state_shiny.js";

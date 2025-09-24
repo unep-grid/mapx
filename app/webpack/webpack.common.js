@@ -24,6 +24,7 @@ module.exports = {
     static: "./src/js/init_static.js",
     theme: "./src/js/init_theme.js",
     sw: "./src/js/init_sw.js",
+    sdk: "./src/js/init_sdk.js",
   },
   output: {
     filename: "[name].[chunkhash].bundle.js",

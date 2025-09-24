@@ -21,6 +21,7 @@
     "zoom": null,
     "language": null,
     "sdkToken": null,
+    "sdkHostname": null,
     "hidePrivacyModal": true
   },
   "container": "body",

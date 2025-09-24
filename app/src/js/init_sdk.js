@@ -1,4 +1,8 @@
-import { getQueryParameter } from "./url_utils";
+import {
+  getDocumentHostname,
+  getQueryParameter,
+  isNested,
+} from "./url_utils";
 import { Worker } from "./sdk/src/index.js";
 import { settings } from "./settings";
 import {
@@ -7,15 +11,21 @@ import {
 } from "./sdk/src/mapx_resolvers";
 import { events } from "./mx";
 
+console.log("INIT SDK");
+
 window.addEventListener("load", () => {
+  const nested = isNested();
+
+  const hostnameSdk = getQueryParameter("sdkHostname")[0];
+  const hostname = getDocumentHostname();
+
+  settings.integration.hostname = hostnameSdk || hostname;
+
   events.once({
     type: ["mapx_ready"],
     idGroup: "sdk_binding",
     callback: () => {
-      if (window.parent === window) {
-        /*
-         * Not nested
-         */
+      if (!nested) {
         return;
       }
 

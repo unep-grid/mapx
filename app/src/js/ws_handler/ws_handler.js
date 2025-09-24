@@ -176,44 +176,46 @@ class WsHandler {
     const ws = this;
     return new Promise((resolve, reject) => {
       const maxTime = timeout || ws._opt.timeout;
-      /**
-       * Resolve in all case
-       * ( ignored if already resolved )
-       */
-      const to = setTimeout(() => {
-        return resolve(null);
-      }, maxTime + 10);
 
       const key = cache ? createCacheKey(type, data) : null;
-
       if (key) {
         const res = getCache(key);
         if (res) {
-          clearTimeout(to);
           return resolve(res);
         }
       }
-      if (maxTime > 0) {
-        ws.socket.timeout(maxTime).emit(type, data, (error, response) => {
-          clearTimeout(to);
-          if (error instanceof Error) {
-            return reject(error);
-          }
 
+      let isResolved = false;
+
+      const handleResponse = (response) => {
+        if (!isResolved) {
+          isResolved = true;
           if (cache) {
             setCache(key, response);
           }
+          resolve(response);
+        }
+      };
 
-          return resolve(response);
+      if (maxTime > 0) {
+        // console.log(`emitAsync with ${maxTime} for ${type}`);
+        const timeoutId = setTimeout(() => {
+          if (!isResolved) {
+            isResolved = true;
+            reject(
+              new Error(
+                `ws.emitAsync timeout after ${maxTime}ms for event: ${type}`,
+              ),
+            );
+          }
+        }, maxTime);
+
+        ws.socket.emit(type, data, (response) => {
+          clearTimeout(timeoutId);
+          handleResponse(response);
         });
       } else {
-        ws.socket.emit(type, data, (response) => {
-          clearTimeout(to);
-          if (cache) {
-            setCache(key, response);
-          }
-          return resolve(response);
-        });
+        ws.socket.emit(type, data, handleResponse);
       }
     });
   }
