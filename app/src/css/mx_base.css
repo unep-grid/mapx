@@ -1079,9 +1079,6 @@ input[type="checkbox"] {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  display: box;
-  box-orient: vertical;
-  line-clamp: 2;
   overflow: hidden;
 }
 
