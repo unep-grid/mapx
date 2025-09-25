@@ -1,8 +1,8 @@
 #
 # MapX base image, without code
 #
-ARG R_VERSION=4.5.0
-ARG R_DATE=2025-02-10
+ARG R_VERSION=4.5.1
+ARG R_DATE=2025-08-31
 
 ARG MAPX_HOME=/app
 ARG R_LIBS="/usr/local/R/library"
