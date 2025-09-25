@@ -1,7 +1,7 @@
 #
 # MapX base image, without code
 #
-ARG R_VERSION=4.4.1
+ARG R_VERSION=4.5.0
 ARG R_DATE=2025-02-10
 
 ARG MAPX_HOME=/app
@@ -20,8 +20,9 @@ ENV R_LIBS=$R_LIBS
 WORKDIR $R_LIBS
 
 # System dependencies
+#  removed dep 'r-base-dev' to prevent 'r-base' update
+
 ENV r_deps_dev="\
-    r-base-dev \
     libcurl4-openssl-dev \
     libxml2-dev \
     libssl-dev \
