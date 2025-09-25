@@ -34,6 +34,9 @@ ENV r_deps_sys="\
     libxml2 \
     libpq5 \
     ca-certificates"
+ENV r_deps_rm="\
+    r-base-dev
+    "
 
 # Install system dependencies and clean up in a single layer
 RUN apt-get update && \
@@ -63,7 +66,7 @@ RUN Rscript -e 'pak::pkg_install("shiny")'
 
 # Cleanup development dependencies
 RUN apt-get update && \
-    apt-get remove -y $r_deps_dev && \
+    apt-get remove -y $r_deps_dev $r_deps_rm && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
