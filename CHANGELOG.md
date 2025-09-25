@@ -1,3 +1,8 @@
+  - [1.13.19-beta.1](https://github.com/unep-grid/mapx/tree/1.13.19-beta.1) 
+
+    - fix(docker): r-base-dev install upgraded r-base too, bypassing fixed version
+
+
   - [1.13.19-beta.0](https://github.com/unep-grid/mapx/tree/1.13.19-beta.0) 
 
     - fix(tests): getColumnId -> getColumnIndex
