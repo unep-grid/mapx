@@ -666,7 +666,7 @@ export class EditTableSessionClient extends EditTableBase {
     if (opt.duplicate) {
       const newColumn = clone(columns[posData]);
       newColumn.data = newColumnName;
-      newColumn._is_identity = false;// duplicate  remove the identity
+      newColumn._is_identity = false; // duplicate  remove the identity
       columns.push(newColumn);
       et._column_set_readonly(newColumn);
     } else {
@@ -3808,6 +3808,12 @@ export class EditTableSessionClient extends EditTableBase {
 
     const types = {
       mx_jsonb: {
+        editor: te,
+        renderer: tr,
+        validator: null,
+        className: null,
+      },
+      mx_json: {
         editor: te,
         renderer: tr,
         validator: null,

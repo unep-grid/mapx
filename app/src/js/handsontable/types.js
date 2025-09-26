@@ -9,6 +9,11 @@ const pgTypesData = {
     table_editor: "text",
     mx: "mx_jsonb",
   },
+  json: {
+    css: "object",
+    table_editor: "text",
+    mx: "mx_json",
+  },
   date: {
     css: "string",
     table_editor: "text",
