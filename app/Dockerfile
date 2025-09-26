@@ -1,13 +1,15 @@
 #
-# MapX base image, without code
+# MapX base image - Multi-stage approach
 #
 ARG R_VERSION=4.5.1
-ARG R_DATE=2025-08-31
-
+ARG R_DATE=2025-09-01
 ARG MAPX_HOME=/app
 ARG R_LIBS="/usr/local/R/library"
 
-FROM r-base:${R_VERSION} AS builder
+#
+# Build stage: Compile R packages
+#
+FROM rocker/r-ver:$R_VERSION AS r-builder
 
 LABEL maintainer="Fred Moser <frederic.moser@unepgrid.ch>"
 ENV DEBIAN_FRONTEND=noninteractive
@@ -17,73 +19,75 @@ ARG R_DATE
 ARG R_LIBS
 ENV R_LIBS=$R_LIBS
 
-WORKDIR $R_LIBS
-
-# System dependencies
-#  removed dep 'r-base-dev' to prevent 'r-base' update
-
-ENV r_deps_dev="\
+# Install R and ALL dependencies (runtime + build-time)
+ENV r_deps_all="\
+    build-essential \
+    gfortran \
+    zlib1g-dev \
+    make \
     libcurl4-openssl-dev \
     libxml2-dev \
+    libxml2 \
     libssl-dev \
     libcairo2-dev \
     libxt-dev \
     libpq-dev \
-    libsodium-dev"
-ENV r_deps_sys="\
-    libxml2 \
     libpq5 \
+    libsodium-dev \
     ca-certificates"
-ENV r_deps_rm="\
-    r-base-dev
-    "
 
-# Install system dependencies and clean up in a single layer
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends usrmerge && \
-    apt-get install -y --no-install-recommends $r_deps_sys && \
-    apt-get install -y --no-install-recommends $r_deps_dev && \
+    apt-get install -y --no-install-recommends $r_deps_all && \
     rm -rf /var/lib/apt/lists/*
 
+WORKDIR $R_LIBS
 
 # Configure R repository
 RUN echo 'rep <- getOption("repos"); \
     rep["CRAN"] <- "https://packagemanager.posit.co/cran/'$R_DATE'"; \
     options(Ncpus = 4);\
-    options(repos = rep)' > .Rprofile
+    '>>"${R_HOME}/etc/Rprofile.site"
 
-# install pak
-RUN Rscript -e 'install.packages("pak")';
+# Install R packages
+RUN Rscript -e 'install.packages(c("xml2", "curl", "pool", "RPostgreSQL", "memoise", "magrittr", "shiny"))'
 
-# Install R packages individually for better error handling and caching
-RUN Rscript -e 'pak::pkg_install("xml2")'
-RUN Rscript -e 'pak::pkg_install("curl")'
-RUN Rscript -e 'pak::pkg_install("pool")'
-RUN Rscript -e 'pak::pkg_install("RPostgreSQL")'
-RUN Rscript -e 'pak::pkg_install("memoise")'
-RUN Rscript -e 'pak::pkg_install("magrittr")'
-RUN Rscript -e 'pak::pkg_install("shiny")'
-
-# Cleanup development dependencies
-RUN apt-get update && \
-    apt-get remove -y $r_deps_dev $r_deps_rm && \
-    apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Smoke test
+RUN Rscript --vanilla -e '\
+   library(xml2); \
+   library(curl); \
+   library(pool); \
+   library(RPostgreSQL); \
+   library(memoise); \
+   library(magrittr); \
+   library(shiny)'
 
 #
-# Final stage
+# Runtime stage: Clean Debian + R + compiled packages
 #
-FROM scratch AS final
+FROM rocker/r-ver:$R_VERSION AS final
 
 ARG MAPX_HOME
 ARG R_LIBS
 ENV R_LIBS=$R_LIBS
 
-COPY --from=builder / /
+# Install ONLY runtime dependencies
+ENV r_deps_runtime="\
+    libxml2 \
+    libpq5 \
+    libcurl4 \
+    libssl3 \
+    libcairo2 \
+    libsodium23 \
+    ca-certificates"
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends $r_deps_runtime && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy compiled R packages from builder
+COPY --from=r-builder $R_LIBS $R_LIBS
 
 WORKDIR $MAPX_HOME
-
 COPY . .
 
 # System user configuration
@@ -93,7 +97,8 @@ ENV USER=app \
     GID=101 \
     DATADIR=/shared
 
-RUN groupadd \
+RUN userdel messagebus  &&\
+    groupadd \
     --system \
     --gid $GID \
     $GROUP && \

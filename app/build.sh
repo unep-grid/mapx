@@ -10,6 +10,7 @@ echo "Building app image with tag: $TAG"
 docker build \
   --progress plain \
   --tag fredmoser/mapx_app:$TAG \
+  --load \
   .
 
 echo "Build complete. Image: fredmoser/mapx_app:$TAG"
