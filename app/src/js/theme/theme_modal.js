@@ -538,19 +538,20 @@ export class ThemeModal extends EventSimple {
           el("span", { class: ["fa", "fa-hdd-o", "mx-theme--storage-icon"] }),
         ]),
       },
-      hasPublisherRole
-        ? {
-            value: "db",
-
-            label: el("div", { class: "mx-theme--storage-option" }, [
-              tt("mx_theme_save_db"),
-              el("span", {
-                class: ["fa", "fa-database", "mx-theme--storage-icon"],
-              }),
-            ]),
-          }
-        : null,
     ];
+
+    if (hasPublisherRole) {
+      options.push({
+        value: "db",
+        label: el("div", { class: "mx-theme--storage-option" }, [
+          tt("mx_theme_save_db"),
+          el("span", {
+            class: ["fa", "fa-database", "mx-theme--storage-icon"],
+          }),
+        ]),
+      });
+    }
+
 
     const storageChoice = await modalRadio({
       title: tt(`mx_theme_storage_title`),

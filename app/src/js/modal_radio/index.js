@@ -1,6 +1,7 @@
 import { modalConfirm } from "../mx_helper_modal.js";
 import { el } from "../el_mapx";
 import "./style.less";
+import {makeId} from "../mx_helper_misc.js";
 
 /**
  * Modal with radio button options
@@ -21,7 +22,7 @@ import "./style.less";
 export function modalRadio(opt) {
   const def = {
     options: [],
-    name: `radio_${Math.random().toString(36).substr(2, 9)}`,
+    name: `radio_${makeId()}`,
     addBackground: true,
   };
 
@@ -90,7 +91,7 @@ function buildRadioGroup(options, name) {
         type: "radio",
         id: radioId,
         name: name,
-        value: option.value,
+        value: option?.value,
         class: ["mx-radio-input"],
         disabled: option.disabled,
         checked: option.checked,
