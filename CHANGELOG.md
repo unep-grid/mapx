@@ -1,3 +1,15 @@
+  - [1.13.19-beta.2](https://github.com/unep-grid/mapx/tree/1.13.19-beta.2) 
+
+    - ci(test): test with app built
+    - fix(typo):  #1086
+    - fix(table_editor): add json type support #1082
+    - fix(themes): solves guest theme save #1088
+    - fix(themes): if a remote theme is loaded and is part of the project, set storage type as 'db'
+    - fix(docker): refactor app Dockerfile and use r-ver. Should solve missing libxml shared object
+    - fix(docker): updating R deps and pak date
+    - fix(docker): removing r-base-dev manually
+
+
   - [1.13.19-beta.1](https://github.com/unep-grid/mapx/tree/1.13.19-beta.1) 
 
     - fix(docker): r-base-dev install upgraded r-base too, bypassing fixed version
