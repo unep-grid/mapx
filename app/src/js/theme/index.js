@@ -124,8 +124,11 @@ class Theme extends EventSimple {
         );
         return null;
       }
-
-      t._setStorageProperty(theme, "db_external");
+      if (settings?.project?.id === theme.id_project) {
+        t._setStorageProperty(theme, "db");
+      } else {
+        t._setStorageProperty(theme, "db_external");
+      }
 
       return theme;
     } catch (e) {

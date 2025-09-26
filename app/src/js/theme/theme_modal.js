@@ -859,7 +859,6 @@ export class ThemeModal extends EventSimple {
     }
     const importedTheme = tm.cleanKeys(data[0]);
     await tm._theme.stopIfInvalidColors(importedTheme);
-    debugger;
     return tm.upsertTheme(true, importedTheme);
   }
 
