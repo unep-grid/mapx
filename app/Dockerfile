@@ -98,6 +98,10 @@ ENV USER=app \
     GID=101 \
     DATADIR=/shared
 
+# NOTE: messagebus GID conflicts with USER GID.
+# -> userdel is a hack. Better ways 
+#    a) set a USER GID > 1000 to prevent conflict. Impacts Kubernetes config.
+#    b) remove dbus* package + deamon. Non working dpkg/apt.. 
 RUN userdel messagebus  &&\
     groupadd \
     --system \
