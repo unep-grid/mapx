@@ -72,6 +72,7 @@ ENV R_LIBS=$R_LIBS
 
 # Install ONLY runtime dependencies
 ENV r_deps_runtime="\
+    wget \
     libxml2 \
     libpq5 \
     libcurl4 \
