@@ -5,7 +5,7 @@ networks:
   frontend:
 services:
   traefik:
-    image: traefik:v2.3.2
+    image: traefik:v3.6.7
     ports:
       - target: 80
         published: 8880
@@ -23,7 +23,8 @@ services:
       - --providers.docker.exposedbydefault=false
       - --entrypoints.web.address=:80
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      #- /var/run/docker.sock:/var/run/docker.sock
+      - ~/.docker/run/docker.sock:/var/run/docker.sock
       - ./_shared/traefik/certs:/certs
   search:
     image: fredmoser/meili:0.20.0-alpine
@@ -63,7 +64,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.middlewares.cors.headers.accesscontrolallowmethods: GET
-      traefik.http.middlewares.cors.headers.accesscontrolalloworigin: "*"
+      traefik.http.middlewares.cors.headers.accesscontrolalloworiginlist: "*"
       traefik.http.middlewares.cors.headers.accesscontrolmaxage: 100
       traefik.http.middlewares.cors.headers.addvaryheader: true
       traefik.http.middlewares.nocache.headers.customresponseheaders.CACHE-CONTROL: no-cache
@@ -95,7 +96,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.middlewares.cors.headers.accesscontrolallowmethods: GET
-      traefik.http.middlewares.cors.headers.accesscontrolalloworigin: "*"
+      traefik.http.middlewares.cors.headers.accesscontrolalloworiginlist: "*"
       traefik.http.middlewares.cors.headers.accesscontrolmaxage: 100
       traefik.http.middlewares.cors.headers.addvaryheader: true
       traefik.http.middlewares.nocache.headers.customresponseheaders.CACHE-CONTROL: no-cache
