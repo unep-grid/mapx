@@ -1,3 +1,13 @@
+  - [1.13.19-beta.3](https://github.com/unep-grid/mapx/tree/1.13.19-beta.3) 
+
+    - fix(view metadata): fix missing 'lock' symbol issue #1015
+    - fix(privacy): updated text issue 1085
+    - fix(project config): removed 10 countries limit highlight issue #1096
+    - chore: update traefik image docker compose
+    - docs(docker): added comment for the GID workaround
+    - fix(docker): missing wget in final image
+
+
   - [1.13.19-beta.2](https://github.com/unep-grid/mapx/tree/1.13.19-beta.2) 
 
     - ci(test): test with app built
