@@ -340,6 +340,7 @@ async function buildViewMetaUi(meta) {
        * Add project link
        */
       if (row.key === "project_title") {
+        const isPublic = !!meta.project_public;
         const linkProj = new URL(window.location.origin);
         const sp = linkProj.searchParams;
         sp.set("project", meta.project);
@@ -350,8 +351,14 @@ async function buildViewMetaUi(meta) {
           {
             href: linkProj,
             target: "_blank",
+            style: {
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            },
           },
-          getLanguageItem(row.value),
+          el("span", getLanguageItem(row.value)),
+          isPublic ? null : el("i", { class: ["fa", "fa-lock"] }),
         );
       }
 
