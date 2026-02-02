@@ -128,7 +128,6 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
             items = list(
               type = "string"
             ),
-            maxItems = 10,
             minItems = 0,
             default = projectData$countries,
             mx_options = list(

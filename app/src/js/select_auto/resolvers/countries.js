@@ -12,7 +12,6 @@ export const config = {
   sortField: { field: "en" },
   preload: "focus",
   dropdownParent: "body",
-  maxItems: 10,
   maxOptions: 300,
   plugins: ["remove_button"],
   load: null,
