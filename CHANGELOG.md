@@ -1,3 +1,8 @@
+  - [1.13.19-beta.4](https://github.com/unep-grid/mapx/tree/1.13.19-beta.4) 
+
+    - fix(privacy): updated text issue 1085
+
+
   - [1.13.19-beta.3](https://github.com/unep-grid/mapx/tree/1.13.19-beta.3) 
 
     - fix(view metadata): fix missing 'lock' symbol issue #1015
