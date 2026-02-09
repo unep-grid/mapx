@@ -23,7 +23,7 @@ attr_as_text AS (
       ELSE "{{idAttr}}"::text
     END AS value
   FROM {{idSource}}
-  ORDER BY "{{idAttr}}"
+  ORDER BY value
 ),
 attr_without_null as (
   SELECT
