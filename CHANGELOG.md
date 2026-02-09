@@ -1,3 +1,11 @@
+  - [1.13.19-beta.5](https://github.com/unep-grid/mapx/tree/1.13.19-beta.5) 
+
+    - docs(arco): add a initial plan, for review
+    - fix(privacy): updated text issue 1085
+    - fix(typeCovert): strip length qualifier from pg type base name. unep-grid/mapx-internal-tracker#20
+    - fix(source stats): when attribute was JSON, failed to order
+
+
   - [1.13.19-beta.4](https://github.com/unep-grid/mapx/tree/1.13.19-beta.4) 
 
     - fix(privacy): updated text issue 1085
