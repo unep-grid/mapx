@@ -20,24 +20,33 @@ export function getHandsonLanguageCode() {
 const pgTypes = Object.keys(pgTypesData);
 
 /**
+ * Strip parenthesized qualifiers from pg types
+ * e.g. "character varying(40)" -> "character varying"
+ */
+function pgTypeBase(pg_type) {
+  return pg_type.replace(/\(.*\)/, "").trim();
+}
+
+/**
  * Convert cell type
  * @param {String} pg_type pg type
  * @param {String} format 'json','table_editor','mx','postgres'. Default: postgres
  * @return {String} type
  */
 export function typeConvert(pg_type, format) {
-  if (!isPgType(pg_type)) {
+  const base = pgTypeBase(pg_type);
+  if (!isPgType(base)) {
     throw new Error(`typeConvert, unexpected pg type : ${pg_type}`);
   }
   switch (format) {
     case "css":
     case "table_editor":
     case "mx":
-      return pgTypesData[pg_type][format];
+      return pgTypesData[base][format];
     case "postgres":
-      return pg_type;
+      return base;
     default:
-      return pg_type;
+      return base;
   }
 }
 
@@ -55,12 +64,12 @@ export function getPgTypes() {
  * @return {Boolean}
  */
 export function isPgType(type) {
-  return pgTypes.includes(type);
+  return pgTypes.includes(pgTypeBase(type));
 }
 
 const regDatePg = new RegExp("^date|^timestamp");
 export function isPgTypeDate(type) {
-  return regDatePg.test(type);
+  return regDatePg.test(pgTypeBase(type));
 }
 
 export class TableResizer {
