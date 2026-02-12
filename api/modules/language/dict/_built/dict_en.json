@@ -6137,7 +6137,7 @@
   },
   {
     "id": "privacy_notice_html",
-    "en": "<div class='privacy-notice'><p><em>Summary of key points from our privacy policy and terms of use. For complete details, please review the full documents linked below.</em></p><p>MapX data handling:<ul><li>Collects usage logs for project statistics</li><li>Does not share data with third-party organizations</li><li>Stores email addresses only for authenticated sessions</li><li>Uses one-time passwords, which are never stored in the database</li><li>Relies on browser cache for performance optimization</li><li>Allows users to log out and clear cache, session data, and other stored information from the <em>Clear cached data</em>, in the utilities section of the toolbox</li><li>Third-party visualization tools may set additional cookies when displaying external data</li></ul></p></div>"
+    "en": "<div class='privacy-notice'><p><em>Summary of key points from our privacy policy and terms of use. For complete details, please review the full documents linked below.</em></p><p>MapX data handling:<ul><li>Collects usage logs for project statistics</li><li>Does not share data with third-party organizations</li><li>Stores email addresses only for authenticated sessions</li><li>Uses one-time passwords, which are never stored in the database</li><li>Relies on browser cache for performance optimization</li><li>Allows users to log out and clear cache, session data, and other stored information from the <em>Clear cached data</em> tool, in the <em>Utilities</em> section of the <em>Toolbox</em></li><li>Third-party visualization tools may set additional cookies when displaying external data</li></ul></p></div>"
   },
   {
     "id": "privacy_consent",
