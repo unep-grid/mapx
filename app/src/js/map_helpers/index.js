@@ -4662,8 +4662,8 @@ export async function getViewsBounds(views) {
   }, init);
 
   return [
-    [extent.lng1, extent.lat1],
-    [extent.lng2, extent.lat2],
+    [extent.lng1, extent.lat2],
+    [extent.lng2, extent.lat1],
   ];
 }
 
