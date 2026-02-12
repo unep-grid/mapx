@@ -1,3 +1,8 @@
+  - [1.13.19](https://github.com/unep-grid/mapx/tree/1.13.19) 
+
+    - fix(dic): generate dict items
+
+
   - [1.13.19-beta.7](https://github.com/unep-grid/mapx/tree/1.13.19-beta.7) 
 
     - fix(viewsGetBounds): alternative approach for #1099
