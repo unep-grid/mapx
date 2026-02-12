@@ -1,3 +1,10 @@
+  - [1.13.19-beta.6](https://github.com/unep-grid/mapx/tree/1.13.19-beta.6) 
+
+    - fix(getViewsBounds): should fix getViewsBounds used in static mode #1099
+    - fix(attribute_table): display json value #1082
+    - docs: arco plan replaced by a working prototype to showcase the approach
+
+
   - [1.13.19-beta.5](https://github.com/unep-grid/mapx/tree/1.13.19-beta.5) 
 
     - docs(arco): add a initial plan, for review
