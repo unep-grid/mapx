@@ -4520,8 +4520,8 @@ export async function zoomToViewId(o) {
     const ext = await getViewExtent(view);
 
     const llb = new mapboxgl.LngLatBounds(
-      [ext.lng1, ext.lat2],
-      [ext.lng2, ext.lat1],
+      [ext.lng1, ext.lat1],
+      [ext.lng2, ext.lat2],
     );
 
     const done = fitMaxBounds(llb);
@@ -4651,7 +4651,7 @@ export async function getViewsBounds(views) {
 
   const extents = await Promise.all(views.map((view) => getViewExtent(view)));
 
-  const extent = extents.reduce((a, ext) => {
+  const ext = extents.reduce((a, ext) => {
     if (ext) {
       a.lat1 = ext.lat1 < a.lat1 ? ext.lat1 : a.lat1;
       a.lat2 = ext.lat2 > a.lat2 ? ext.lat2 : a.lat2;
@@ -4661,10 +4661,7 @@ export async function getViewsBounds(views) {
     return a;
   }, init);
 
-  return [
-    [extent.lng1, extent.lat2],
-    [extent.lng2, extent.lat1],
-  ];
+  return new mapboxgl.LngLatBounds([ext.lng1, ext.lat1], [ext.lng2, ext.lat2]);
 }
 
 /**
