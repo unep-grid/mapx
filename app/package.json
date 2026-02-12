@@ -1,6 +1,6 @@
 {
   "name": "mapx",
-  "version": "1.13.19-beta.6",
+  "version": "1.13.19-beta.7",
   "description": "",
   "main": "./src/js/mx.js",
   "engines": {

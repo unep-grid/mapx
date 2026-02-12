@@ -1,3 +1,8 @@
+  - [1.13.19-beta.7](https://github.com/unep-grid/mapx/tree/1.13.19-beta.7) 
+
+    - fix(viewsGetBounds): alternative approach for #1099
+
+
   - [1.13.19-beta.6](https://github.com/unep-grid/mapx/tree/1.13.19-beta.6) 
 
     - fix(getViewsBounds): should fix getViewsBounds used in static mode #1099
