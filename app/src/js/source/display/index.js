@@ -204,11 +204,30 @@ async function showSourceTableAttributeModal(opt) {
           out.type = type.column_type;
         }
       }
+      const pgType = out.type || "text";
+      const isJson = ["json", "jsonb"].includes(pgType);
       return {
-        type: typeConvert(out.type || "text", "table_editor"),
+        type: typeConvert(pgType, "table_editor"),
         data: name,
         readOnly: true,
         _label: labels[i],
+        ...(isJson && {
+          renderer(instance, td, row, col, prop, value, cellProperties) {
+            const display =
+              value != null && typeof value === "object"
+                ? JSON.stringify(value)
+                : value;
+            handsontable.renderers.TextRenderer(
+              instance,
+              td,
+              row,
+              col,
+              prop,
+              display,
+              cellProperties,
+            );
+          },
+        }),
       };
     });
 
