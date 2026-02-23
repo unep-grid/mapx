@@ -7,7 +7,6 @@ import {
   sendError,
   sendJSON,
   sortObjectByKeys,
-  wait,
 } from "#mapx/helpers";
 import { templates } from "#mapx/template";
 import { settings } from "#root/settings";
@@ -71,7 +70,6 @@ async function updateIndexForLanguage(language, documents, cid) {
     primaryKey: cid.primaryKey,
   });
 
-  await indexView.deleteAllDocuments();
   await indexView.updateAttributesForFaceting(cid.atributesForFaceting);
   await indexView.updateSettings({
     rankingRules: cid.rankingRules,
@@ -81,10 +79,31 @@ async function updateIndexForLanguage(language, documents, cid) {
   const locsyn = generateLocaleSynonyms(language);
   await indexView.updateSynonyms(locsyn);
 
-  const docsToIndex = documents.map((doc) => processDocuments(doc, language));
-  await indexView.addDocuments(docsToIndex);
+  /**
+   * Fetch existing IDs before upserting, so we can prune stale docs afterward.
+   * The index stays live throughout — no empty-window risk.
+   */
+  const existingDocs = await indexView.getDocuments({
+    limit: 10000,
+    attributesToRetrieve: [cid.primaryKey],
+  });
+  const existingIds = new Set(existingDocs.map((d) => d[cid.primaryKey]));
 
-  await wait(5000);
+  const docsToIndex = documents.map((doc) => processDocuments(doc, language));
+  const newIds = new Set(docsToIndex.map((d) => d[cid.primaryKey]));
+
+  const { updateId: addUpdateId } = await indexView.addDocuments(docsToIndex);
+  await indexView.waitForPendingUpdate(addUpdateId, { timeOutMs: 60000 });
+
+  /**
+   * Delete only documents no longer present in the source.
+   */
+  const staleIds = [...existingIds].filter((id) => !newIds.has(id));
+  if (staleIds.length > 0) {
+    const { updateId: deleteUpdateId } =
+      await indexView.deleteDocuments(staleIds);
+    await indexView.waitForPendingUpdate(deleteUpdateId, { timeOutMs: 30000 });
+  }
 }
 
 /**
