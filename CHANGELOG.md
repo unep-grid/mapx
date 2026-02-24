@@ -1,3 +1,9 @@
+  - [1.13.20-alpha.0](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.0) 
+
+    - fix(routines): send an email to global admin in case of failure
+    - fix(search_indexes): should handle #1102 network issue, solved by improving how upsert are made
+
+
   - [1.13.19](https://github.com/unep-grid/mapx/tree/1.13.19) 
 
     - fix(dic): generate dict items
