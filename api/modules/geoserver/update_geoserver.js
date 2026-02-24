@@ -130,6 +130,7 @@ async function rebuildHandler(socket, options) {
       message: e.message || e,
       data: e.stack,
     });
+    throw e;
   } finally {
     stateGlobal.running = false;
     await redisSetJSON(state_key, stateGlobal);

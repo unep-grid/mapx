@@ -47,6 +47,7 @@ export async function init() {
     }
   } catch (e) {
     console.error(e);
+    throw e;
   }
 }
 

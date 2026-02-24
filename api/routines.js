@@ -5,6 +5,8 @@ import { updateGeoIpTable } from "#mapx/ip";
 import { updateGeoserver } from "#mapx/geoserver";
 import { clearDownload } from "#mapx/helpers";
 import { once, onceInterval } from "#mapx/helpers";
+import { sendMailAuto } from "#mapx/mail";
+import { settings } from "#root/settings";
 
 /**
  * Rountines' scripts
@@ -34,8 +36,16 @@ const optCommon = {
     console.log(`Update success for ${str}`);
   },
   onError: (cbs, e) => {
-    const str = cbs.map((cb) => cb.name).join(",");
+    const str = cbs.map((cb) => cb.name).join(", ");
     console.error(`Update for ${str} had issue`, e);
+    sendMailAuto({
+      from: settings.contact.email_bot,
+      to: settings.contact.email_admin,
+      subject: `Routine failure: ${str}`,
+      content: `<p>Routine <strong>${str}</strong> failed.</p><pre>${e?.stack || e?.message || e}</pre>`,
+    }).catch((mailErr) => {
+      console.error("Failed to send routine error notification", mailErr);
+    });
   },
 };
 const optHourly = {

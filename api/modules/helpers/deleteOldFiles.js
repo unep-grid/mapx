@@ -40,6 +40,7 @@ export async function deleteOldFiles(
     }
   } catch (error) {
     console.error(`Error deleting old files and folders: ${error.message}`);
+    throw error;
   }
 }
 

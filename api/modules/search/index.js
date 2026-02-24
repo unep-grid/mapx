@@ -54,8 +54,8 @@ async function updateIndexes() {
     console.log(`Created search index in ${Date.now() - start} ms`);
   } catch (e) {
     console.error("Failed to create search index", e);
+    throw e;
   }
-  return true;
 }
 
 /**

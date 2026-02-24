@@ -75,9 +75,11 @@ async function update(url) {
       console.error("Err during zip stream to DB", e);
       await dropTemp();
       zip.close();
+      throw e;
     }
   } catch (e) {
     console.error("Err during download files ", e);
+    throw e;
   }
 }
 
