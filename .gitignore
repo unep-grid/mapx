@@ -8,6 +8,9 @@ _logs.txt
 _shared
 _data
 _postgres
+_style
+.claude
+claude
 
 # Env variable
 *.env
