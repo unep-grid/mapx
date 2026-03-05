@@ -1,3 +1,4 @@
+@import '../../css/mx_icon_mixin.less';
 .button-panel--main {
   z-index: 1000;
   pointer-events: none;
@@ -281,35 +282,35 @@
             &[data-id="half-height"] {
               > .button-panel--item-handle-icon {
                 &:before {
-                  icon-font: url(./svg/resize_auto_half_height.svg);
+                  .mx-icon-mask(url('../../svg/icons/resize_auto_half_height.svg'));
                 }
               }
             }
             &[data-id="half-width"] {
               > .button-panel--item-handle-icon {
                 &:before {
-                  icon-font: url(./svg/resize_auto_half_width.svg);
+                  .mx-icon-mask(url('../../svg/icons/resize_auto_half_width.svg'));
                 }
               }
             }
             &[data-id="full"] {
               > .button-panel--item-handle-icon {
                 &:before {
-                  icon-font: url(./svg/resize_auto_full.svg);
+                  .mx-icon-mask(url('../../svg/icons/resize_auto_full.svg'));
                 }
               }
             }
             &[data-id="content"] {
               > .button-panel--item-handle-icon {
                 &:before {
-                  icon-font: url(./svg/resize_auto_content.svg);
+                  .mx-icon-mask(url('../../svg/icons/resize_auto_content.svg'));
                 }
               }
             }
             &[data-id="reset"] {
               > .button-panel--item-handle-icon {
                 &:before {
-                  icon-font: url(./svg/resize_auto_reset.svg);
+                  .mx-icon-mask(url('../../svg/icons/resize_auto_reset.svg'));
                 }
               }
             }

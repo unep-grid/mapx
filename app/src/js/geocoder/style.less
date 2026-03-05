@@ -1,3 +1,4 @@
+@import '../../css/mx_icon_mixin.less';
 .gcm_container {
   .panel {
     margin-bottom: 0;
@@ -32,20 +33,17 @@
     gap: 10px;
     .gcm--node {
       &:before {
-        content: "";
-        icon-font: url("./svg/node.svg");
+        .mx-icon-mask(url('../../svg/icons/node.svg'));
       }
     }
     .gcm--way {
       &:before {
-        content: "";
-        icon-font: url("./svg/way.svg");
+        .mx-icon-mask(url('../../svg/icons/way.svg'));
       }
     }
     .gcm--relation {
       &:before {
-        content: "";
-        icon-font: url("./svg/relation.svg");
+        .mx-icon-mask(url('../../svg/icons/relation.svg'));
       }
     }
   }

@@ -1,3 +1,4 @@
+@import '../../../css/mx_icon_mixin.less';
 .li-item {
   width: 100%;
   max-height: 1000px;
@@ -198,7 +199,7 @@
 }
 .li-arrow-bottom {
   &:before {
-    icon-font: url(./svg/arrow_bottom.svg);
+    .mx-icon-mask(url('../../../svg/icons/arrow_bottom.svg'));
     font-size: 0.6em;
   }
 }

@@ -1,0 +1,27 @@
+// Shared base properties (no URL). Use when grouping multiple icons together.
+.mx-icon-mask-base() {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: var(--mx_ui_text);
+  mask-mode: alpha;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+// URL-only mixin. Pair with .mx-icon-mask-base() on a shared selector.
+.mx-icon-mask-url(@url) {
+  -webkit-mask-image: @url;
+  mask-image: @url;
+}
+
+// Combined shorthand. Usage: .mx-icon-mask(url('path/to/icon.svg'));
+.mx-icon-mask(@url) {
+  .mx-icon-mask-base();
+  .mx-icon-mask-url(@url);
+}

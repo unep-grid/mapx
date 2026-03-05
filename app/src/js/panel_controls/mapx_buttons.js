@@ -69,7 +69,7 @@ export function generateButtons() {
     }),
     new Button({
       key: "btn_north_arrow",
-      classesIcon: ["mx-north-arrow"],
+      classesIcon: ["mx-north-arrow", "mx-icon"],
       action: () => {
         const map = getMap();
         map.easeTo({ bearing: 0, pitch: 0 });
@@ -107,14 +107,14 @@ export function generateButtons() {
     }),
     new Button({
       key: "btn_toggle_theme_water",
-      classesIcon: ["mx-water"],
+      classesIcon: ["mx-water","mx-icon"],
       onInit: (btn) => {
         theme.registerButton(btn, "water");
       },
     }),
     new Button({
       key: "btn_3d_terrain",
-      classesIcon: ["mx-mountain"],
+      classesIcon: ["mx-mountain","mx-icon"],
       action: function (cmd) {
         const btn = this;
         const map = getMap();
@@ -189,7 +189,7 @@ export function generateButtons() {
     }),
     new Button({
       key: "draw_btn_toggle",
-      classesIcon: "mx-draw--btn-edit",
+      classesIcon: ["mx-draw--btn-edit","mx-icon"],
       classesButton: ["btn-ctrl--item-no-mobile"],
       action: () => {
         draw.toggle();

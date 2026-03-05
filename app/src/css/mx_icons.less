@@ -1,0 +1,21 @@
+@import 'mx_icon_mixin.less';
+
+// Shared base properties for all map-control icons
+.mx-icon.mx-north-arrow,
+.mx-icon.mx-mountain,
+.mx-icon.mx-water {
+  &:before {
+    .mx-icon-mask-base();
+  }
+}
+
+// Per-icon mask URLs
+.mx-north-arrow:before {
+  .mx-icon-mask-url(url('../svg/icons/arrow-north.svg'));
+}
+.mx-mountain:before {
+  .mx-icon-mask-url(url('../svg/icons/mountain.svg'));
+}
+.mx-water:before {
+  .mx-icon-mask-url(url('../svg/icons/water.svg'));
+}

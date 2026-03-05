@@ -1,3 +1,4 @@
+@import '../../css/mx_icon_mixin.less';
 /*.mx-draw--btn-edit {*/
 /*&:before {*/
 /*icon-font: url('./svg/edit.svg');*/
@@ -5,11 +6,10 @@
 /*}*/
 .mx-draw--btn-edit {
   &:before {
-    icon-font: url('./svg/vertices.svg');
+    .mx-icon-mask(url('../../svg/icons/vertices.svg'));
   }
   &:after {
-    content: '';
-    icon-font: url('./svg/pointer.svg');
+    .mx-icon-mask(url('../../svg/icons/pointer.svg'));
     position: absolute;
     top: 3px;
     left: 3px;
@@ -17,7 +17,7 @@
 }
 .mx-draw--btn-point {
   &:before {
-    icon-font: url('./svg/point.svg');
+    .mx-icon-mask(url('../../svg/icons/point.svg'));
   }
   &:after {
     content: '+';
@@ -28,7 +28,7 @@
 }
 .mx-draw--btn-line {
   &:before {
-    icon-font: url('./svg/line.svg');
+    .mx-icon-mask(url('../../svg/icons/line.svg'));
   }
   &:after {
     content: '+';
@@ -39,7 +39,7 @@
 }
 .mx-draw--btn-polygon {
   &:before {
-    icon-font: url('./svg/polygon.svg');
+    .mx-icon-mask(url('../../svg/icons/polygon.svg'));
   }
   &:after {
     content: '+';
@@ -50,7 +50,7 @@
 }
 .mx-draw--btn-circle {
   &:before {
-    icon-font: url('./svg/circle.svg');
+    .mx-icon-mask(url('../../svg/icons/circle.svg'));
   }
   &:after {
     content: '+';
@@ -61,29 +61,29 @@
 }
 .mx-draw--btn-trash {
   &:before {
-    icon-font: url('./svg/trash.svg');
+    .mx-icon-mask(url('../../svg/icons/trash.svg'));
   }
 }
 .mx-draw--btn-save {
   &:before {
-    icon-font: url('./svg/floppy.svg');
+    .mx-icon-mask(url('../../svg/icons/floppy.svg'));
   }
 }
 
 .mx-draw--btn-combine {
   &:before {
-    icon-font: url('./svg/combine.svg');
+    .mx-icon-mask(url('../../svg/icons/combine.svg'));
   }
 }
 
 .mx-draw--btn-uncombine {
   &:before {
-    icon-font: url('./svg/uncombine.svg');
+    .mx-icon-mask(url('../../svg/icons/uncombine.svg'));
   }
 }
 .mx-draw--btn-help {
   &:before {
-    icon-font: url('./svg/vertices.svg');
+    .mx-icon-mask(url('../../svg/icons/vertices.svg'));
   }
   &:after {
     content: '?';

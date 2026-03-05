@@ -260,26 +260,40 @@ span.mx-badge-role {
   text-shadow: none;
 }
 
-.mx .btn-circle,
-.mx .btn-circle:hover > i,
-.mx .btn-circle:hover > i:before {
+/* Default */
+.mx .btn-circle {
   background-color: var(--mx_ui_background);
   color: var(--mx_ui_text);
 }
-
-.mx .btn-circle:hover,
-.mx .btn-circle:hover > i,
-.mx .btn-circle:hover > i:before {
-  background-color: var(--mx_ui_background_contrast);
+.mx .btn-circle > i {
+  color: var(--mx_ui_text);
+}
+.mx .btn-circle > i.svg-mask:before {
+  background-color: var(--mx_ui_text);
 }
 
-.mx .btn-circle.active,
-.mx .btn-circle.active > i,
-.mx .btn-circle.active > i:before {
+/* Hover */
+.mx .btn-circle:hover {
+  background-color: var(--mx_ui_background_contrast);
+}
+.mx .btn-circle:hover > i {
+  color: var(--mx_ui_text);
+}
+.mx .btn-circle:hover > i.mx-icon:before {
+  background-color: var(--mx_ui_text);
+}
+
+/* Active */
+.mx .btn-circle.active {
   background-color: var(--mx_ui_text);
   color: var(--mx_ui_background);
 }
-
+.mx .btn-circle.active > i {
+  color: var(--mx_ui_background);
+}
+.mx .btn-circle.active > i.mx-icon:before {
+  background-color: var(--mx_ui_background);
+}
 /**
 * Progress bar
 */
@@ -325,7 +339,6 @@ span.mx-badge-role {
 .mx .mx-story-legend {
   background: var(--mx_ui_background);
 }
-
 
 /**
 * Boostrap fixes
