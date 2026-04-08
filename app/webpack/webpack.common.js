@@ -67,6 +67,14 @@ module.exports = {
       languages: ["typescript", "html", "json", "javascript"],
     }),
   ],
+  resolve: {
+    alias: {
+      "@unepgrid-mapx/theme-core": path.resolve(
+        __dirname,
+        "../../submodules/mapx-style/packages/theme-core/src/index.js",
+      ),
+    },
+  },
   module: {
     rules: [
       {
