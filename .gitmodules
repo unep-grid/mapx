@@ -1,0 +1,3 @@
+[submodule "submodules/mapx-style"]
+	path = submodules/mapx-style
+	url = https://github.com/unep-grid/mapx-style
