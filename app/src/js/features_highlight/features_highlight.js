@@ -75,7 +75,7 @@ class Highlighter {
     }
 
     if (!isMap(map)) {
-      throw new Error("mapbox-gl map is required");
+      throw new Error("maplibre-gl map is required");
     }
     hl._map = map;
   }

@@ -8,7 +8,7 @@ import {
 import { isView, isJson, isString } from "./is_test";
 import { viewsListAddSingle } from "./views_list_manager";
 import { moduleLoad } from "./modules_loader_async/index.js";
-import { settings, data as mx_storage, mapboxgl } from "./mx.js";
+import { settings, data as mx_storage, maplibregl } from "./mx.js";
 
 import {
   viewAdd,
@@ -246,9 +246,9 @@ export async function spatialDataToView(opt) {
           m.extent[1] -= 1;
         }
 
-        const a = new mapboxgl.LngLatBounds(
-          new mapboxgl.LngLat(m.extent[0], m.extent[1]),
-          new mapboxgl.LngLat(m.extent[2], m.extent[3]),
+        const a = new maplibregl.LngLatBounds(
+          new maplibregl.LngLat(m.extent[0], m.extent[1]),
+          new maplibregl.LngLat(m.extent[2], m.extent[3]),
         );
         fitMaxBounds(a);
       }

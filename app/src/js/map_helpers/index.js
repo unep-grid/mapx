@@ -6,8 +6,9 @@ import {
   data as mx_storage,
   listeners,
   theme,
+  mapxStyle,
   draw,
-  mapboxgl,
+  maplibregl,
   maps,
   highlighter,
   spotlight,
@@ -1023,7 +1024,7 @@ export async function initMapx(o) {
   /**
    * Set mapbox gl token
    */
-  mapboxgl.accessToken = settings.services.mapbox.token;
+  maplibregl.accessToken = settings.services.mapbox.token;
 
   /**
    * MapX map data : views, config, etc..
@@ -1074,11 +1075,9 @@ export async function initMapx(o) {
   }
 
   /**
-   * Update  sprites path
-   * -> glyphs are hosted with mapbox. If self hosted:
-   * settings.style.glyphs = getAppPathUrl("fontstack");
+   * Style and sprites are now served from S3 via MapxStyle.
+   * settings.style.sprite is no longer used.
    */
-  settings.style.sprite = getAppPathUrl("sprites");
 
   /**
    * WS connect + authentication
@@ -1094,7 +1093,7 @@ export async function initMapx(o) {
   /*
    * test if mapbox gl is supported
    */
-  if (!mapboxgl.supported()) {
+  if (!maplibregl.supported()) {
     alert(
       "This website will not work with your browser. Please upgrade it or use a compatible one.",
     );
@@ -1155,7 +1154,8 @@ export async function initMapx(o) {
   /* map options */
   const mapOptions = {
     container: o.id, // container id
-    style: settings.style, // mx default style
+    style: mapxStyle.getStyle(),
+    transformRequest: mapxStyle.transformRequest,
     maxZoom: settings.map.maxZoom,
     minZoom: settings.map.minZoom,
     bounds: mp.bounds || null,
@@ -1175,7 +1175,7 @@ export async function initMapx(o) {
   /*
    * Create map object
    */
-  const map = new mapboxgl.Map(mapOptions);
+  const map = new maplibregl.Map(mapOptions);
   const elCanvas = map.getCanvas();
   elCanvas.setAttribute("tabindex", "-1");
 
@@ -1191,9 +1191,10 @@ export async function initMapx(o) {
   await map.once("load");
 
   /**
-   * Link theme to map
+   * Attach MapxStyle to the map (registers pitchend/error handlers,
+   * applies the current theme to basemap layers, and loads the mask).
    */
-  theme.linkMap(map);
+  mapxStyle.attachMap(map);
 
   /**
    * Update theme, if required by init opt
@@ -1201,11 +1202,16 @@ export async function initMapx(o) {
    *   in init_theme.js
    * - Use the project theme if it's valid
    * - Use theme default if none exists.
+   * theme.set() fires events, saves URL, updates buttons, and via
+   * setColors() also calls mapxStyle.setTheme() to apply to the map.
    */
   const idThemeQuery = getQueryParameter("theme")[0];
   if (isEmpty(idThemeQuery)) {
     const idTheme = o.idTheme;
     await theme.set(idTheme, { save_url: true });
+  } else {
+    // Query param theme was already applied via theme.init(); sync mapxStyle.
+    mapxStyle.setTheme(theme.id());
   }
 
   if (!settings.mode.static) {
@@ -4519,7 +4525,7 @@ export async function zoomToViewId(o) {
 
     const ext = await getViewExtent(view);
 
-    const llb = new mapboxgl.LngLatBounds(
+    const llb = new maplibregl.LngLatBounds(
       [ext.lng1, ext.lat1],
       [ext.lng2, ext.lat2],
     );
@@ -4661,7 +4667,7 @@ export async function getViewsBounds(views) {
     return a;
   }, init);
 
-  return new mapboxgl.LngLatBounds([ext.lng1, ext.lat1], [ext.lng2, ext.lat2]);
+  return new maplibregl.LngLatBounds([ext.lng1, ext.lat1], [ext.lng2, ext.lat2]);
 }
 
 /**
@@ -4697,9 +4703,9 @@ export async function zoomToViewIdVisible(o) {
   let done;
   if (geomTemp.features.length > 0) {
     const bbx = bbox(geomTemp);
-    const sw = new mapboxgl.LngLat(bbx[0], bbx[1]);
-    const ne = new mapboxgl.LngLat(bbx[2], bbx[3]);
-    const llb = new mapboxgl.LngLatBounds(sw, ne);
+    const sw = new maplibregl.LngLat(bbx[0], bbx[1]);
+    const ne = new maplibregl.LngLat(bbx[2], bbx[3]);
+    const llb = new maplibregl.LngLatBounds(sw, ne);
     done = fitMaxBounds(llb);
   } else {
     done = zoomToViewId(o);
@@ -4761,12 +4767,12 @@ export async function setMapPos(opt) {
       p.jump = true;
     }
     const duration = p.jump ? 0 : isNotEmpty(p.duration) ? o.duration : 1000;
-    const bounds = new mapboxgl.LngLatBounds([
+    const bounds = new maplibregl.LngLatBounds([
       [p.w || 0, p.s || 0],
       [p.e || 0, p.n || 0],
     ]);
 
-    const center = new mapboxgl.LngLat(p.lng || 0, p.lat || 0);
+    const center = new maplibregl.LngLat(p.lng || 0, p.lat || 0);
     map.setMaxBounds(null);
 
     if (isBoolean(p.globe)) {
@@ -4837,10 +4843,10 @@ export async function setMapPos(opt) {
  */
 export function fitMaxBounds(bounds, opt) {
   const map = getMap();
-  const validBBounds = bounds instanceof mapboxgl.LngLatBounds;
+  const validBBounds = bounds instanceof maplibregl.LngLatBounds;
   if (!validBBounds) {
     bounds = validateBounds(bounds);
-    bounds = new mapboxgl.LngLatBounds(bounds);
+    bounds = new maplibregl.LngLatBounds(bounds);
   }
   let valid = true;
   const maxBounds = map.getMaxBounds();
@@ -4927,14 +4933,14 @@ export function validateBounds(bounds) {
 
 /**
  * Calculates the angle in degrees between the centroids of two LngLatBounds.
- * @param {mapboxgl.LngLatBounds} bounds1 - First LngLatBounds.
- * @param {mapboxgl.LngLatBounds} bounds2 - Second LngLatBounds.
+ * @param {maplibregl.LngLatBounds} bounds1 - First LngLatBounds.
+ * @param {maplibregl.LngLatBounds} bounds2 - Second LngLatBounds.
  * @returns {number} Angle in degrees between the centroids of the bounds.
  */
 export function boundsAngleRelation(bounds1, bounds2) {
   if (
-    !(bounds1 instanceof mapboxgl.LngLatBounds) ||
-    !(bounds2 instanceof mapboxgl.LngLatBounds)
+    !(bounds1 instanceof maplibregl.LngLatBounds) ||
+    !(bounds2 instanceof maplibregl.LngLatBounds)
   ) {
     throw new Error(
       "Invalid input: both arguments must be LngLatBounds instances.",

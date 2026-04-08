@@ -1,4 +1,4 @@
-import mapboxgl from "mapbox-gl";
+import maplibregl from "maplibre-gl";
 import { el } from "../../el/src/index.js";
 import { MapScaler } from "../../map_scaler/index.js";
 import { cloneNodeClean } from "../../mx_helper_misc.js";
@@ -150,7 +150,7 @@ class Item extends Box {
       item._config.options,
     );
 
-    item.map = new mapboxgl.Map(mapOptions);
+    item.map = new maplibregl.Map(mapOptions);
     item.map.addControl(
       new MapControlScale({ mode: "center" }),
       "bottom-right",

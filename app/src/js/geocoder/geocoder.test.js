@@ -3,7 +3,7 @@ import { Geocoder } from './index.js';
 
 // Mock mapboxgl
 vi.mock('../mx', () => ({
-  mapboxgl: {
+  maplibregl: {
     Marker: class {
       constructor() {
         this.element = document.createElement('div');

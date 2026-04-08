@@ -1,5 +1,5 @@
 import { el, elButtonFa } from "../el_mapx";
-import { mapboxgl } from "../mx";
+import { maplibregl } from "../mx";
 import { isEmpty } from "../is_test";
 import { shake } from "../elshake";
 import { getDictItem } from "../language";
@@ -372,7 +372,7 @@ export class Geocoder {
   }
 
   addMarker(result) {
-    const { Marker } = mapboxgl;
+    const { Marker } = maplibregl;
     const marker = new Marker({
       color: "var(--mx_ui_link)",
     })

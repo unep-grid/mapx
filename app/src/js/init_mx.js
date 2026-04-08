@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import 'maplibre-gl/dist/maplibre-gl.css';
 import 'flag-icons/css/flag-icons.min.css';
 
 import '../css/mx_variables.css';
@@ -20,4 +20,4 @@ window.mx = mx;
 /**
 * Mapbox gl preload workers as soon as possible
 */
-mx.mapboxgl.prewarm();
+mx.maplibregl.prewarm();

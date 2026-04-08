@@ -1,6 +1,6 @@
 import * as helpers from "./mx_helpers.js";
 import localforage from "localforage";
-import mapboxgl from "mapbox-gl";
+import maplibregl from "maplibre-gl";
 import { settings } from "./settings/index.js";
 import { ListenerStore } from "./listener_store";
 import { EventSimple } from "./event_simple";
@@ -10,6 +10,7 @@ import { NotifCenterMapx } from "./notif_center/nc_instance.js";
 import { HighlighterMapx } from "./features_highlight/highlighter_instance";
 import { Magnifier } from "./magnifier/index.js";
 import { theme } from "./init_theme";
+import { mapxStyle } from "./init_mapx_style";
 import { ProjectManager } from "./project/index.js";
 import { ButtonPanelManager } from "./button_panel/manager.js";
 import { ControlsPanel } from "./panel_controls/index.js";
@@ -53,7 +54,7 @@ const info = {};
 export {
   panels,
   controls,
-  mapboxgl,
+  maplibregl,
   project,
   localforage,
   selectize,
@@ -62,6 +63,7 @@ export {
   events,
   hinthack,
   theme,
+  mapxStyle,
   draw,
   ws,
   nc,

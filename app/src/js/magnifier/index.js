@@ -1,6 +1,6 @@
 import { el } from "./../el/src/index.js";
 import { EventSimple } from "./../event_simple";
-import mapboxgl from "mapbox-gl";
+import maplibregl from "maplibre-gl";
 import Draggabilly from "draggabilly";
 import { bindAll } from "../bind_class_methods/index.js";
 import "./style.less";
@@ -58,7 +58,7 @@ export class Magnifier extends EventSimple {
       pitch: m._map.getPitch(),
       center: m._map.getCenter(),
     };
-    m._map_magnifier = new mapboxgl.Map(config);
+    m._map_magnifier = new maplibregl.Map(config);
   }
   initSync() {
     const m = this;

@@ -17,10 +17,10 @@ npm run test
 
 - [x] **1.1** ~~Add `maplibre-gl` to `app/package.json`~~ — already present (`^5.22.0`)
 - [x] **1.2** ~~Add `maplibre-contour` (`mlcontour`) to `app/package.json`~~ — already present (`^0.1.0`)
-- [ ] **1.3** Add `@unepgrid-mapx/theme-core` as a local workspace dep:
+- [x] **1.3** Add `@unepgrid-mapx/theme-core` as a local workspace dep:
   `"@unepgrid-mapx/theme-core": "file:../submodules/mapx-style/packages/theme-core"`
-- [ ] **1.4** Run `npm install` in `app/`, verify no peer-dep conflicts
-- [ ] **1.5** Replace `mapbox-gl/dist/mapbox-gl.css` import in `app/src/js/init_mx.js:3`
+- [x] **1.4** Run `npm install` in `app/`, verify no peer-dep conflicts
+- [x] **1.5** Replace `mapbox-gl/dist/mapbox-gl.css` import in `app/src/js/init_mx.js:3`
   with `maplibre-gl/dist/maplibre-gl.css` (do this alongside step 2.1 so both libs don't
   inject duplicate CSS during the parallel-testing window)
 
@@ -30,26 +30,29 @@ npm run test
 
 Five files import `mapbox-gl` directly. Replace one at a time; build+smoke-test after each.
 
-- [ ] **2.1** `app/src/js/mx.js:3` — replace `import mapboxgl from "mapbox-gl"` with `maplibre-gl`;
-  update the global export (`mx.mapboxgl`) — rename to `mx.maplibregl` or keep alias for compat
-- [ ] **2.2** `app/src/js/listener_store/index.js:2` — replace `{ Map } from "mapbox-gl"` with `maplibre-gl`
-- [ ] **2.3** `app/src/js/raster_mini_map/index.js:1` — replace import
-- [ ] **2.4** `app/src/js/map_composer/components/item.js:1` — replace import
-- [ ] **2.5** `app/src/js/magnifier/index.js:3` — replace import
-- [ ] **2.6** Grep-check remaining `mapboxgl` variable usages across all JS files listed below and
+- [x] **2.1** `app/src/js/mx.js:3` — replace `import mapboxgl from "mapbox-gl"` with `maplibre-gl`;
+  update the global export (`mx.mapboxgl`) — renamed to `mx.maplibregl`
+- [x] **2.2** `app/src/js/listener_store/index.js:2` — replace `{ Map } from "mapbox-gl"` with `maplibre-gl`
+- [x] **2.3** `app/src/js/raster_mini_map/index.js:1` — replace import
+- [x] **2.4** `app/src/js/map_composer/components/item.js:1` — replace import
+- [x] **2.5** `app/src/js/magnifier/index.js:3` — replace import
+- [x] **2.6** Grep-check remaining `mapboxgl` variable usages across all JS files listed below and
   update any that still receive the mapbox-gl object:
-  - `map_helpers/index.js`, `map_helpers/utils.js`
-  - `north_arrow/index.js`, `map_controls/index.js`
-  - `language/index.js`, `geocoder/index.js`, `geocoder/geocoder.test.js`
-  - `story_map/index.js`, `story_map/settings.js`
-  - `map_info_box/index.js`, `init_mx.js`
-  - `mx_helper_map_dragdrop.js`
-  - `features_highlight/features_highlight.js` — update error message string "mapbox-gl map is required"
+  - `map_helpers/index.js` ✓ (import + all LngLatBounds/LngLat/Map usages renamed)
+  - `map_helpers/utils.js` ✓ (only JSDoc comments — updated in Phase 11)
+  - `north_arrow/index.js`, `map_controls/index.js` ✓ (`.mapboxgl-ctrl` are CSS classes — Phase 6)
+  - `language/index.js` ✓, `geocoder/index.js` ✓, `geocoder/geocoder.test.js` ✓ (mock updated)
+  - `story_map/index.js`, `story_map/settings.js` ✓ (`.mapboxgl-ctrl-*` CSS class names — Phase 6)
+  - `map_info_box/index.js` ✓ (JSDoc only — Phase 11), `init_mx.js` ✓
+  - `mx_helper_map_dragdrop.js` ✓
+  - `features_highlight/features_highlight.js` ✓ — error string updated
   - `draw/helper.js` — `moduleLoad("mapbox-gl-draw")` and `.mapbox-gl-draw_ctrl-draw-btn` are
     draw-library-owned identifiers; **do not rename these**
   - Low-priority comment/JSDoc-only references (no runtime impact, update for accuracy in Phase 11):
     `commonloc/index.js`, `mirror_util/index.js`, `style_vt/mbstyle_to_sld.js`,
     `is_test/index.js`, `map_composer/map_composer_modal.js`
+  - Note: added `URL.createObjectURL` stub to `vitest.setup.js` — maplibre-gl v5 calls it at
+    module init to register its web worker; jsdom does not implement it
 
 ---
 
@@ -58,10 +61,10 @@ Five files import `mapbox-gl` directly. Replace one at a time; build+smoke-test 
 RTL is now bootstrapped inside `MapxStyle` constructor in the submodule (lazy CDN load via
 `maplibregl.setRTLTextPlugin()`). Avoid double-registration.
 
-- [ ] **3.1** In `app/src/js/language/index.js` — remove `mapboxRTLload()` function (`language/index.js:641`)
+- [x] **3.1** In `app/src/js/language/index.js` — remove `mapboxRTLload()` function (`language/index.js:641`)
   and its call site (`language/index.js:596`). The CDN URL at line 650 is replaced by the one
   inside `MapxStyle`; no separate package to remove from `app/package.json`.
-- [ ] **3.2** Wire language changes through `mapxStyle.setLanguage(lang)` so that `MapxStyle`
+- [x] **3.2** Wire language changes through `mapxStyle.setLanguage(lang)` so that `MapxStyle`
   controls both the map style language labels and RTL activation (see Phase 4.4).
 - [ ] **3.3** Verify Arabic/Hebrew rendering still works end-to-end after MapxStyle is wired (Phase 4)
 
@@ -71,12 +74,12 @@ RTL is now bootstrapped inside `MapxStyle` constructor in the submodule (lazy CD
 
 Replace the ad-hoc `init_theme.js` / `mapx_style_resolver.js` apply path with `MapxStyle`.
 
-- [ ] **4.1** Create `app/src/js/init_mapx_style.js`:
+- [x] **4.1** Create `app/src/js/init_mapx_style.js`:
   - Import `maplibregl` from `maplibre-gl`
   - Import `mlcontour` from `maplibre-contour`
   - Import `{ MapxStyle }` from `@unepgrid-mapx/theme-core` (**named export, not default**)
   - Instantiate: `export const mapxStyle = new MapxStyle({ maplibregl, mlcontour })`
-- [ ] **4.2** In the map construction site (find where `new mapboxgl.Map(...)` is called),
+- [x] **4.2** In the map construction site (find where `new mapboxgl.Map(...)` is called),
   wire both `style` and `transformRequest` at construction time, then call `attachMap`:
   ```js
   const map = new maplibregl.Map({
@@ -88,13 +91,18 @@ Replace the ad-hoc `init_theme.js` / `mapx_style_resolver.js` apply path with `M
   ```
   `transformRequest` **must** be passed at construction — not after — so HCP S3 auth is
   injected from the very first tile request.
-- [ ] **4.3** Replace `theme.set(idTheme)` call sites with `mapxStyle.setTheme(idTheme)`,
-  keeping the same event/callback contract as the old Theme class where needed
-- [ ] **4.4** Replace `theme.setLanguage(lang)` call sites with `mapxStyle.setLanguage(lang)`
-  (language/index.js is the primary consumer)
-- [ ] **4.5** Validate that `css_resolver` CSS custom properties (`--mx_ui_*`, `--mx_map_*`) are
+- [x] **4.3** Replace `theme.set(idTheme)` call sites with `mapxStyle.setTheme(idTheme)`,
+  keeping the same event/callback contract as the old Theme class where needed.
+  `theme.setColors()` now dynamically imports and calls `mapxStyle.setTheme(t._theme)` so
+  any theme change (UI editor, project theme, query param) propagates to the map.
+- [x] **4.4** Replace `theme.setLanguage(lang)` call sites with `mapxStyle.setLanguage(lang)`
+  (language/index.js is the primary consumer) — `updateLanguageMap()` now delegates to
+  `mapxStyle.setLanguage(lang)`. `mapxStyle` exported from `mx.js`.
+- [x] **4.5** Validate that `css_resolver` CSS custom properties (`--mx_ui_*`, `--mx_map_*`) are
   still emitted — MapxStyle uses the same resolver; confirm no property names changed
-- [ ] **4.6** Delete `app/src/js/theme/mapx_style_resolver.js` (logic now lives in submodule)
+- [x] **4.6** Delete `app/src/js/theme/mapx_style_resolver.js` (logic now lives in submodule).
+  `theme/index.js` no longer imports resolvers; `validateColors()` uses chroma-only check.
+  Note: `vitest.config.js` gained `resolve.dedupe` for symlinked theme-core deps.
 
 ---
 

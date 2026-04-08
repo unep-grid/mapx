@@ -1,6 +1,5 @@
 import {
   isArray,
-  isMap,
   isElement,
   isStringRange,
   isNotEmpty,
@@ -8,15 +7,11 @@ import {
   isEmpty,
 } from "./../is_test";
 import { path, parseTemplate, objectToArray } from "./../mx_helper_misc.js";
-import {
-  getViews,
-  getMap,
-  getLayerNamesByPrefix,
-} from "./../map_helpers/index.js";
+import { getViews } from "./../map_helpers/index.js";
 import { getArrayDistinct } from "../array_stat";
 import { settings } from "./../settings";
 import { LegendVt } from "../legend_vt";
-import { events, mapboxgl } from "../mx.js";
+import { events, maplibregl, mapxStyle } from "../mx.js";
 
 /**
  * Add synonyms
@@ -554,68 +549,11 @@ export async function updateLanguageViewsList(o) {
  * @param {string} [o.language='en'] Two letter language code
  */
 export async function updateLanguageMap(o) {
-  o = Object.assign(
-    {},
-    {
-      language: getLanguageCurrent(),
-    },
-    o,
-  );
-
-  /**
-   * Map do not yet support all MapX languages. Subset here:
-   */
+  o = Object.assign({}, { language: getLanguageCurrent() }, o);
   const mapLang = ["en", "es", "fr", "de", "ru", "zh", "pt", "ar"];
-  const rtlLang = ["ar"];
   const defaultLang = mapLang[0];
   const lang = mapLang.includes(o.language) ? o.language : defaultLang;
-  const layers = [
-    "road-label",
-    "water-label-line",
-    "water-label-point",
-    "waterway-label",
-    "place-label-city",
-    "place-label-capital",
-    ...[0, 1, 2, 3, 4, 5, 99].map((i) => {
-      return `country_un_0_label_${i}`;
-    }),
-    ...[1].map((i) => {
-      return `country_un_1_label_${i}`;
-    }),
-  ];
-
-  const map = getMap(o.id);
-  const lang2 = lang === "zh" ? "zh-Hans" : defaultLang;
-
-  if (!isMap(map)) {
-    console.error("updateLanguageMap require a Map");
-    return;
-  }
-
-  if (rtlLang.includes(lang)) {
-    await mapboxRTLload();
-  }
-
-  /**
-   * Set language in layers
-   */
-  for (const layer of layers) {
-    const layerExists =
-      getLayerNamesByPrefix({
-        id: o.id,
-        prefix: layer,
-      }).length > 0;
-
-    if (layerExists) {
-      map.setLayoutProperty(layer, "text-field", [
-        "coalesce",
-        ["get", `name_${lang}`],
-        ["get", `name_${lang2}`],
-        ["get", `name_${defaultLang}`],
-        ["get", "name"],
-      ]);
-    }
-  }
+  mapxStyle.setLanguage(lang);
   return true;
 }
 
@@ -634,32 +572,3 @@ export async function getDictItemId(txt, language) {
   }
 }
 
-/**
- * Load LTR plugin for mapbox gl
- * @return {Promise<boolean>} success
- */
-let rtlLoaded = false;
-async function mapboxRTLload() {
-  if (rtlLoaded) {
-    return true;
-  }
-
-  return new Promise((resolve, reject) => {
-    try {
-      mapboxgl.setRTLTextPlugin(
-        "https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js",
-        (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            rtlLoaded = true;
-            resolve(true);
-          }
-        },
-        false,
-      );
-    } catch (e) {
-      reject(e);
-    }
-  });
-}

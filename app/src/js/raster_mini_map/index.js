@@ -1,4 +1,4 @@
-import mapboxgl from "mapbox-gl";
+import maplibregl from "maplibre-gl";
 //import style from '!postcss-loader!less-loader?{"mimetype":"text/css"}!./style.less';
 import style from "./style.less";
 import { isFunction } from "../is_test";
@@ -35,7 +35,7 @@ class RasterMiniMap {
 
   hasSyncMap() {
     const mm = this;
-    return mm.opt.mapSync instanceof mapboxgl.Map;
+    return mm.opt.mapSync instanceof maplibregl.Map;
   }
 
   isSync() {
@@ -83,7 +83,7 @@ class RasterMiniMap {
   init() {
     const mm = this;
     try {
-      mm._hasSyncMap = mm.opt.mapSync instanceof mapboxgl.Map;
+      mm._hasSyncMap = mm.opt.mapSync instanceof maplibregl.Map;
 
       /**
        * Set style
@@ -116,9 +116,9 @@ class RasterMiniMap {
       mm.elMap = document.createElement("div");
       mm.el.appendChild(mm.elMap);
 
-      mapboxgl.accessToken = mm.opt.token;
+      maplibregl.accessToken = mm.opt.token;
 
-      mm.map = new mapboxgl.Map({
+      mm.map = new maplibregl.Map({
         preserveDrawingBuffer: true,
         fadeDuration: 0,
         container: mm.elMap,

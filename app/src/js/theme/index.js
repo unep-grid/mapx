@@ -3,7 +3,6 @@ import { EventSimple } from "./../event_simple";
 import { el } from "./../el/src/index.js";
 import { elSelect, tt } from "./../el_mapx";
 import chroma from "chroma-js";
-import { layer_resolver, css_resolver } from "./mapx_style_resolver.js";
 import { bindAll } from "../bind_class_methods";
 import { isJson, isEmpty } from "../is_test";
 import { waitFrameAsync } from "../animation_frame/index.js";
@@ -1009,10 +1008,7 @@ class Theme extends EventSimple {
         colors instanceof Object &&
         Object.keys(colors).reduce((a, cid) => {
           return a && chroma.valid(colors[cid].color || colors[cid]);
-        }, true) &&
-        layer_resolver(colors) &&
-        (await css_resolver(colors)) &&
-        true;
+        }, true);
       t.log(`Validated in ${performance.now() - start} [ms]`);
       return valid;
     } catch (e) {
@@ -1059,8 +1055,8 @@ class Theme extends EventSimple {
       return;
     }
     t._theme.colors = new_colors;
-    await t.updateCss();
-    await t.updateMap();
+    const { mapxStyle } = await import("../init_mapx_style.js");
+    mapxStyle.setTheme(t._theme);
     t.fire("set_colors", new_colors);
   }
 
