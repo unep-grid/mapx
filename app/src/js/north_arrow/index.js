@@ -28,7 +28,7 @@ export class MapNorthArrow {
     const elNorthCtrl = el(
       "div",
       {
-        class: "mapboxgl-ctrl",
+        class: "maplibregl-ctrl",
       },
       elWrapper
     );

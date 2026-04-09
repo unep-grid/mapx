@@ -22,7 +22,7 @@ class MapControlLiveCoord {
     mlc.elContainer = el(
       "div",
       {
-        class: ["mapboxgl-ctrl", "mapboxgl-ctrl-attrib"],
+        class: ["maplibregl-ctrl", "maplibregl-ctrl-attrib"],
       },
       coord,
     );
@@ -49,7 +49,7 @@ class MapControlAttribution {
     mla.elContainer = el(
       "div",
       {
-        class: ["mapboxgl-ctrl", "mapboxgl-ctrl-attrib"],
+        class: ["maplibregl-ctrl", "maplibregl-ctrl-attrib"],
       },
       [
         el(
@@ -119,7 +119,7 @@ class MapxLogo {
     ml.elContainer = el(
       "div",
       {
-        class: "mapboxgl-ctrl",
+        class: "maplibregl-ctrl",
         style: {
           display: "inline-block",
           float: "none",
@@ -161,7 +161,7 @@ class MapControlScale {
     mcs.elContainer = el(
       "div",
       {
-        class: ["mapboxgl-ctrl", "mapboxgl-ctrl-attrib"],
+        class: ["maplibregl-ctrl", "maplibregl-ctrl-attrib"],
       },
       mcs.elScale,
     );

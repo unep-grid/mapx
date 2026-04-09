@@ -203,9 +203,9 @@ function initMouseMoveListener() {
   const elBody = document.body;
   const elCtrls = elBody.querySelectorAll(`
       .mx-story-step-bullets,
-      .mapboxgl-ctrl-bottom-left,
-      .mapboxgl-ctrl-bottom-right,
-      .mapboxgl-ctrl-top-right,
+      .maplibregl-ctrl-bottom-left,
+      .maplibregl-ctrl-bottom-right,
+      .maplibregl-ctrl-top-right,
       .button-panel--main
       `);
   //.button-panel--main : hidden or displayed by user choice

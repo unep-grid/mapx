@@ -21,7 +21,7 @@ const settings = {
   class_slide_front: 'mx-story-slide-front',
   class_container: 'mx-story-layout',
   class_wrapper: 'mx-story-screen-720p',
-  class_controls: 'mapboxgl-control-container',
+  class_controls: 'maplibregl-control-container',
   colors: {
     bg: '#FFF',
     fg: '#000',

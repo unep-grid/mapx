@@ -131,16 +131,18 @@ The Theme class owns two distinct concerns: **CRUD UI** and **apply-to-map**. On
 
 MapLibre uses `.maplibregl-*` instead of `.mapboxgl-*`.
 
-- [ ] **6.1** `app/src/css/mx_mapbox.css` — bulk-replace `.mapboxgl-` selectors with `.maplibregl-`
-  (verify each rule still applies to the correct DOM element after swap)
-- [ ] **6.2** `app/src/css/mx_base.css` — same
-- [ ] **6.3** `app/src/css/mx_modifiers.css` — same
-- [ ] **6.4** Grep JS files for `querySelector('.mapboxgl-` / `getElementsByClassName` usages
-  and update them (`map_controls/index.js`, `map_info_box/index.js` are candidates)
-- [ ] **6.5** Check `@mapbox/mapbox-gl-draw` CSS for selectors scoped under `.mapboxgl-map`
-  (cursor states etc.) — update to `.maplibregl-map` if present.
-  **Note:** The draw library's own class namespace (`.mapbox-gl-draw_ctrl-*`) is library-owned
-  and must **not** be renamed — only `.mapboxgl-*` runtime-generated classes need changing.
+- [x] **6.1** `app/src/css/mx_mapbox.css` — bulk-replaced `.mapboxgl-` → `.maplibregl-`
+- [x] **6.2** `app/src/css/mx_base.css` — same
+- [x] **6.3** `app/src/css/mx_modifiers.css` — same
+- [x] **6.4** JS class name strings updated:
+  - `map_controls/index.js` — `mapboxgl-ctrl` / `mapboxgl-ctrl-attrib` → `maplibregl-*`
+  - `north_arrow/index.js` — `mapboxgl-ctrl` → `maplibregl-ctrl`
+  - `story_map/index.js` — querySelector selectors updated
+  - `story_map/settings.js` — `mapboxgl-control-container` → `maplibregl-control-container`
+- [x] **6.5** `draw/style.less` cursor states (`.mapboxgl-map` / `.mapboxgl-canvas-container`)
+  updated to `.maplibregl-map` / `.maplibregl-canvas-container`.
+  Also updated: `raster_mini_map/style.less`, `map_composer/style/map_composer.less`.
+  Draw library's own `.mapbox-gl-draw_ctrl-*` namespace left untouched.
 
 ---
 
