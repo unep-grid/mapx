@@ -11,7 +11,6 @@ import { isNotEmpty } from "../is_test";
 import { fontFamilies, fonts, loadFontFace } from "./fonts.js";
 import { Button } from "./../panel_controls/button.js";
 import { sounds } from "./sound/index.js";
-import { MapScaler } from "../map_scaler";
 import "./style.less";
 import { jsonDiff } from "../mx_helper_utils_json";
 import { ThemeService } from "./services";
@@ -1068,75 +1067,6 @@ class Theme extends EventSimple {
     }
   }
 
-  async updateCss() {
-    const t = this;
-    global.elStyle.textContent = await css_resolver(t.colors());
-    return true;
-  }
-
-  async linkMap(map) {
-    const t = this;
-    t._map = map;
-    t._map_scaler = new MapScaler(map);
-    await t.updateMap();
-  }
-
-  async updateMap() {
-    const t = this;
-    const map = t._map;
-    if (!map) {
-      return;
-    }
-
-    if (t._update_map_when_calm) {
-      // Map is busy, command postponed
-      return;
-    }
-
-    if (!map.isStyleLoaded()) {
-      t._update_map_when_calm = true;
-      await map.once("idle");
-    }
-    t._update_map_when_calm = false;
-
-    /**
-     * Get latest colors and state
-     */
-    const isDark = t.isDarkMode();
-    const colors = t.colors();
-    const layers = layer_resolver(colors);
-
-    for (const grp of layers) {
-      for (const id of grp.id) {
-        const paint = grp.paint;
-        const layer = map.getLayer(id);
-        const layout = grp.layout;
-
-        if (!layer) {
-          return console.warn(`Layer ${id} not found`);
-        }
-
-        if (paint) {
-          for (const p in paint) {
-            map.setPaintProperty(id, p, paint[p]);
-          }
-        }
-
-        if (layout) {
-          for (const l in layout) {
-            map.setLayoutProperty(id, l, layout[l]);
-          }
-        }
-      }
-    }
-
-    if (isDark) {
-      map.setFog(t.opt.fog.dark);
-    } else {
-      map.setFog(t.opt.fog.light);
-    }
-    return true;
-  }
 
   async updateFromInput() {
     try {

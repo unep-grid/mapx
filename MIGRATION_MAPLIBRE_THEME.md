@@ -110,18 +110,20 @@ Replace the ad-hoc `init_theme.js` / `mapx_style_resolver.js` apply path with `M
 
 The Theme class owns two distinct concerns: **CRUD UI** and **apply-to-map**. Only CRUD survives.
 
-- [ ] **5.1** Audit all `theme.*` method calls across the codebase; classify each as
-  CRUD (keep in ThemeService/ThemeModal) or apply-to-map (replace with MapxStyle)
-- [ ] **5.2** Remove `theme.upsertSession()` / `upsertLocalStorage()` / `upsertDatabase()`
-  flow from the apply path — MapxStyle owns the active state now
-- [ ] **5.3** Keep `ThemeService` (websocket CRUD) and `ThemeModal` (UI) intact —
-  they talk to the API, not to the map
-- [ ] **5.4** Reduce `Theme` class to a thin coordinator:
-  fetch theme from storage/API → hand colors to `mapxStyle.setTheme()`
-- [ ] **5.5** Remove `app/src/js/theme/fonts.js` if MapxStyle fully covers font loading;
-  otherwise keep and wire it to `mapxStyle` lifecycle events
-- [ ] **5.6** Update `init_theme.js` to use the new slim Theme + mapxStyle,
-  or replace it entirely with `init_mapx_style.js` (see 4.1)
+- [x] **5.1** Audit all `theme.*` method calls across the codebase; classify each as
+  CRUD (keep in ThemeService/ThemeModal) or apply-to-map (replace with MapxStyle).
+  Result: only `linkMap`/`updateMap`/`updateCss` were apply-to-map; all removed.
+- [x] **5.2** `upsertSession/upsertLocalStorage/upsertDatabase` already delegate to
+  `set()` → `setColors()` → `mapxStyle.setTheme()` — apply path fully covered, no change needed.
+- [x] **5.3** `ThemeService` and `ThemeModal` intact.
+- [x] **5.4** Removed `linkMap`, `updateMap`, `updateCss` (dead code — only referenced
+  undefined `css_resolver`/`layer_resolver`; never called externally). Migrated `MapScaler`
+  to submodule (`packages/theme-core/src/map_scaler.js`), exported from
+  `@unepgrid-mapx/theme-core`. Added `scale(v,types)` / `scaleText(v)` / `scaleIcon(v)` to
+  `MapxStyle`. `app/src/js/map_scaler/index.js` now re-exports from the submodule.
+  `map_composer/components/item.js` unchanged (imports via re-export path transparently).
+- [x] **5.5** `fonts.js` kept — still consumed by theme UI font selector (Phase 5 concern only).
+- [x] **5.6** `init_theme.js` already minimal and correct — no changes needed.
 
 ---
 
