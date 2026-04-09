@@ -1090,15 +1090,6 @@ export async function initMapx(o) {
    */
   await nc.init();
 
-  /*
-   * test if mapbox gl is supported
-   */
-  if (!maplibregl.supported()) {
-    alert(
-      "This website will not work with your browser. Please upgrade it or use a compatible one.",
-    );
-    return;
-  }
 
   /*
    * Update map pos with values from query
@@ -1156,17 +1147,15 @@ export async function initMapx(o) {
     container: o.id, // container id
     style: mapxStyle.getStyle(),
     transformRequest: mapxStyle.transformRequest,
-    maxZoom: settings.map.maxZoom,
-    minZoom: settings.map.minZoom,
     bounds: mp.bounds || null,
     maxBounds: mp.maxBounds || null,
     preserveDrawingBuffer: false,
     attributionControl: false,
     crossSourceCollisions: true,
-    projection: mp.globe ? "globe" : null,
+    projection: mp.globe ? { type: "globe" } : { type: "mercator" },
     zoom: mp.z || mp.zoom || 1,
-    minZoom: mp.zmin || mp.zoomMax || null,
-    maxZoom: mp.zmax || mp.zoomMin || null,
+    minZoom: mp.zmin || mp.zoomMin || settings.map.minZoom,
+    maxZoom: mp.zmax || mp.zoomMax || settings.map.maxZoom,
     bearing: mp.b || mp.bearing || 0,
     pitch: mp.p || mp.pitch || 0,
     center: mp.center || [mp.lng || 0, mp.lat || 0],
@@ -4979,54 +4968,45 @@ export function boundsAngleRelation(bounds1, bounds2) {
 export async function setMapProjection(opt) {
   try {
     const map = getMap(opt.id);
+    // MapLibre getProjection() returns { type: "mercator" | "globe" | ... }
     const current = map.getProjection();
+    let nextName = current?.type || "mercator";
 
-    // update proj name using "globe" option value
     if (isNotEmpty(opt.globe)) {
       switch (opt.globe) {
         case "enable":
-          opt.name = "globe";
+          nextName = "globe";
           break;
         case "disable":
-          opt.name = "mercator";
+          nextName = "mercator";
           break;
         default:
           // toggle
-          if (current.name === "globe") {
-            opt.name = "mercator";
-          } else {
-            opt.name = "globe";
-          }
+          nextName = current?.type === "globe" ? "mercator" : "globe";
       }
     }
 
-    const def = {
-      name: current.name,
-      center: current.center || [0, 0],
-      parallels: current.parallels || [0, 0],
+    const projName = opt.name || nextName;
+
+    // Keep app-internal state under `name` key (used by settings.projection.name elsewhere)
+    settings.projection = {
+      ...settings.projection,
+      name: projName,
     };
 
-    const proj = {
-      name: opt.name,
-      center: opt.center || [0, 0],
-      parallels: opt.parallels || [0, 0],
-    };
-
-    settings.projection = Object.assign(settings.projection, def, proj);
-
-    map.setProjection(settings.projection.name, {
-      center: settings.projection.center,
-      parallels: settings.projection.parallels,
-    });
+    // MapLibre setProjection() expects { type: ... }
+    map.setProjection({ type: projName });
 
     if (!opt.skipEvent) {
       await events.fire("set_map_projection", settings.projection);
     }
+
+    return settings.projection;
   } catch (e) {
     console.error(e);
   }
-  return settings.projection;
 }
+
 
 /**
  * Set theme ( from shiny )
