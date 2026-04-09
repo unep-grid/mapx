@@ -10,8 +10,10 @@ import { spatialDataToView } from "./../mx_helper_map_dragdrop.js";
 import { viewsListAddSingle } from "./../views_list_manager";
 import { EventSimple } from "../event_simple";
 import { controls } from "./../mx.js";
+import { clone } from "./../mx_helper_misc.js";
 
 import "./style.less";
+
 
 const def = {};
 
@@ -94,13 +96,27 @@ class MapxDraw extends EventSimple {
       return;
     }
     if (!md._draw) {
-      const moduleDraw = await import("@mapbox/mapbox-gl-draw");
-      const moduleDrawCircle = await import("mapbox-gl-draw-circle");
+      const [moduleDraw, moduleDrawCircle, { default: drawTheme }] =
+        await Promise.all([
+          import("@mapbox/mapbox-gl-draw"),
+          import("mapbox-gl-draw-circle"),
+          import("@mapbox/mapbox-gl-draw/src/lib/theme.js"),
+        ]);
       const MapboxDraw = moduleDraw.default;
+
+      // MapLibre GL v3+ requires bare array values in paint expressions to be
+      // wrapped in ["literal", [...]]. Patch line-dasharray entries accordingly.
+      const drawStyles = clone(drawTheme).map((layer) => {
+        if (Array.isArray(layer.paint?.["line-dasharray"])) {
+          layer.paint["line-dasharray"] = ["literal", layer.paint["line-dasharray"]];
+        }
+        return layer;
+      });
 
       md._draw = new MapboxDraw({
         displayControlsDefault: false,
         userProperties: true,
+        styles: drawStyles,
         modes: {
           ...MapboxDraw.modes,
           /**

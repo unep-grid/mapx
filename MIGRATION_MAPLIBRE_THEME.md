@@ -155,16 +155,15 @@ which MapLibre rejects. `mapbox-gl-draw-circle` extends MapboxDraw modes and is 
 
 **No library replacement needed.** Fix by passing corrected `styles` to the constructor.
 
-- [ ] **7.1** In `app/src/js/draw/draw.js`, add a `styles` array to the `MapboxDraw`
-  constructor call. Start from the official default styles and wrap every `line-dasharray`
-  value in `["literal", [...]]`. Affected layers in the defaults:
-  - `gl-draw-line-inactive` — `'line-dasharray': ["literal", [0.2, 2]]`
-  - `gl-draw-line-active` — `'line-dasharray': ["literal", [0.2, 2]]`
-  - `gl-draw-polygon-stroke-static` — `'line-dasharray': ["literal", [0.2, 2]]`
+- [x] **7.1** `app/src/js/draw/draw.js` — statically imports `@mapbox/mapbox-gl-draw/src/lib/theme.js`,
+  deep-clones it into `drawStyles`, and wraps any bare `line-dasharray` array in
+  `["literal", [...]]` (affects `gl-draw-polygon-stroke-active` and `gl-draw-line-active`).
+  `styles: drawStyles` passed to the `MapboxDraw` constructor.
+  Note: only 2 layers had bare dasharray in the shipped theme (not 3 as originally estimated).
 - [ ] **7.2** Smoke-test all draw modes: point, line, polygon, circle — verify no console
   expression errors and that dashed lines render correctly
-- [ ] **7.3** If any other expression errors surface (e.g. `filter` arrays), apply the same
-  `["literal", [...]]` fix to those properties
+- [x] **7.3** No other expression errors found — `filter` arrays use standard MapLibre
+  expression operators (`all`, `==`, `!=`) which do not need `literal` wrapping.
 
 ---
 
