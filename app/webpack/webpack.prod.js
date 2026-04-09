@@ -23,6 +23,13 @@ const runtimeCacheOptions6months = {
     maxEntries: 200,
   },
 };
+const runtimeCacheOptions1year = {
+  cacheName: "data-cache-1year",
+  expiration: {
+    maxAgeSeconds: 365 * 24 * 60 * 60,
+    maxEntries: 500,
+  },
+};
 
 module.exports = merge(common, {
   cache: false,
@@ -65,14 +72,21 @@ module.exports = merge(common, {
       maximumFileSizeToCacheInBytes: 50 * 1e6, //50MB
       runtimeCaching: [
         {
-          urlPattern: new RegExp("^https://api.mapbox.com/", "i"),
+          // Glyphs (font PBFs) — static, versioned path, safe to cache long-term
+          // PMTiles (.pmtiles) use HTTP Range requests and have their own internal
+          // fetch cache; exclude them from SW caching to avoid per-range entry bloat.
+          urlPattern: new RegExp(
+            "^https://mapx\\.unepgrid\\.s3\\.unige\\.ch/mapx/style/",
+            "i",
+          ),
           handler: "CacheFirst",
-          options: runtimeCacheOptions6months,
+          options: runtimeCacheOptions1year,
         },
         {
-          urlPattern: new RegExp("^https://tiles.mapbox.com/", "i"),
+          // Terrain tiles — static WebP tiles, safe to cache long-term
+          urlPattern: new RegExp("^https://tiles\\.mapterhorn\\.com/", "i"),
           handler: "CacheFirst",
-          options: runtimeCacheOptions6months,
+          options: runtimeCacheOptions1year,
         },
         {
           urlPattern: new RegExp("^https://.*api.here.com/maptile", "i"),

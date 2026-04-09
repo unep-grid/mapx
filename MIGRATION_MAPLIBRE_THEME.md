@@ -169,11 +169,16 @@ which MapLibre rejects. `mapbox-gl-draw-circle` extends MapboxDraw modes and is 
 
 ## Phase 8 — Service Worker / Webpack
 
-- [ ] **8.1** In `app/webpack/webpack.prod.js` — remove Workbox runtime cache rules for
+- [x] **8.1** In `app/webpack/webpack.prod.js` — removed Workbox runtime cache rules for
   `https://api.mapbox.com/` and `https://tiles.mapbox.com/`
-- [ ] **8.2** Add Workbox rules for MapLibre CDN or PMTiles S3 endpoints if offline caching
-  is still required
-- [ ] **8.3** Check `CopyWebpackPlugin` entries — nothing should be copying mapbox-gl assets
+- [x] **8.2** Added Workbox rules (CacheFirst, 1 year) for:
+  - `mapx.unepgrid.s3.unige.ch/mapx/style/` (glyphs/PBFs only)
+  - `tiles.mapterhorn.com/` (terrain WebP tiles)
+  - PMTiles (`.pmtiles`) excluded — they use HTTP Range requests and have their own
+    internal fetch cache; SW CacheFirst would create one entry per range slice.
+- [x] **8.3** Mapterhorn 404 silencing already handled in submodule:
+  `mapx_style.js:89` — `if (String(e?.error?.message ?? "").includes("mapterhorn.com")) return;`
+- [x] **8.4** `CopyWebpackPlugin` only copies `sw_listen_skip_waiting_install.js` — no mapbox-gl assets
 
 ---
 
