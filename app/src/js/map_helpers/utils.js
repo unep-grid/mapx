@@ -29,7 +29,7 @@ const PROJECTION_WEBMERCATOR =
 
 /**
  * Creates a pixel bounding box from a map event point.
- * Output format is compatible with mapboxgl.Map#queryRenderedFeatures.
+ * Output format is compatible with maplibregl.Map#queryRenderedFeatures.
  *
  * @param {{ point: PointLike }} event - Mapbox map event containing a `point`.
  * @param {number} [buffer=DEFAULT_BUFFER_PIXELS] - Pixel buffer around the event point.
@@ -197,7 +197,7 @@ function formatBboxString(coordinates, targetSrid, useLatLngOrder) {
 
 /**
  * Normalize longitude to ensure the shortest map transition path.
- * Prevents mapbox-gl from animating across the entire globe
+ * Prevents maplibre-gl from animating across the entire globe
  * when transitioning between longitudes like -179 to 179.
  *
  * @param {object} dest - Destination coordinates object (e.g., { lng: 179 } or { w: 179 }).

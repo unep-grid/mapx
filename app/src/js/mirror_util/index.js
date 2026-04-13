@@ -28,7 +28,7 @@ export function mirrorUrlCreate(url, contentType = "") {
   /**
    * Replace % utf8 escaped brackets by the actual character.
    * -> if not, {bbox-epsg-3857}, {z}, {x} template
-   *    do not work when used as source for mapbox-gl
+   *    do not work when used as source for maplibre-gl
    * Brackets are not considered as reservered characters in
    * https://datatracker.ietf.org/doc/html/rfc3986
    * -> it should be fine and I don't know why there are

@@ -7,7 +7,7 @@ function handler() {
      * On Close callback
      * @param {Object} cc Custom Code View
      * @param {Object} cc.view Map-x view object
-     * @param {Object} cc.map mapbox-gl map instance
+     * @param {Object} cc.map maplibre-gl map instance
      * @param {String} cc.idView Id of the view
      * @param {String} cc.idSource Id of the source ( Suggested ID )
      * @param {Element} cc.elLegend Element containing the legend. Prefer cc.setLegend(...);

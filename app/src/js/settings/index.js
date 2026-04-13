@@ -1,4 +1,3 @@
-import { default as style } from "./../../data/style/style_mapx.json";
 import { default as routes } from "./routes_express.json";
 import { default as links } from "./links.json";
 import { default as emails } from "./emails.json";
@@ -11,7 +10,6 @@ import { default as services } from "./services.json";
 import { version } from "./../../../package.json";
 
 settings.api.routes = routes;
-settings.style = style;
 settings.version = version;
 settings.links = links;
 settings.wms = wms;

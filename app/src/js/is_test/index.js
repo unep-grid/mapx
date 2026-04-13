@@ -547,8 +547,8 @@ export function isMap(map) {
 /**
  * Checks if a LngLat coordinate is inside the given LngLatBounds object.
  *
- * @param {mapboxgl.LngLat} lngLat - The LngLat coordinate to check.
- * @param {mapboxgl.LngLatBounds} bounds - The LngLatBounds object to check against.
+ * @param {maplibregl.LngLat} lngLat - The LngLat coordinate to check.
+ * @param {maplibregl.LngLatBounds} bounds - The LngLatBounds object to check against.
  * @returns {boolean} - Returns true if the LngLat coordinate is inside the LngLatBounds, otherwise false.
  */
 export function isLngLatInsideBounds(lngLat, bounds) {
@@ -563,8 +563,8 @@ export function isLngLatInsideBounds(lngLat, bounds) {
 /**
  * Checks if a LngLatBounds object is inside another LngLatBounds
  *
- * @param {mapboxgl.LngLatBounds} bounds_test - The LngLatBounds object to check.
- * @param {mapboxgl.LngLatBounds} bounds - The LngLatBounds object to compare t.
+ * @param {maplibregl.LngLatBounds} bounds_test - The LngLatBounds object to check.
+ * @param {maplibregl.LngLatBounds} bounds - The LngLatBounds object to compare t.
  * @returns {boolean} - Returns true if the LngLatBounds object is inside the current bounds of getMaxBounds, otherwise false.
  */
 export function isBoundsInsideBounds(bounds_test, bounds) {

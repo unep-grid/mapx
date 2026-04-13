@@ -7,7 +7,7 @@ import { CommonLoc } from "./common_loc.js";
  * @param {String} options.code Code: iso3 or m49. E.g. 'COD','m49_004'
  * @param {String} options.name Name: Country or region mame. e.g. Africa, Bangladesh
  * @param {Boolean} options.inverse Inverse selection, e.g. for feature that cross
- * @param {Object} options.param Animation options, see https://docs.mapbox.com/mapbox-gl-js/api/properties/#animationoptions
+ * @param {Object} options.param Animation options, see https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/AnimationOptions/
  * @return {Promise<Array>} Array of geographic bounds [west, south, east, north]
  */
 export async function commonLocFitBbox(options) {

@@ -17,7 +17,7 @@ export class MapInfoBox {
 
   /**
    * Init
-   * @param {mapboxgl.Map} map
+   * @param {maplibregl.Map} map
    */
   init(map) {
     const mib = this;
@@ -30,7 +30,7 @@ export class MapInfoBox {
 
   /**
    * Move listener
-   * @param {mapboxgl.Evented} e
+   * @param {maplibregl.Evented} e
    */
   async onmousemove(e) {
     try {
@@ -100,7 +100,7 @@ export class MapInfoBox {
 
   /**
    * Update position
-   * @param {mapboxgl.PointLike} Point
+   * @param {maplibregl.PointLike} Point
    */
   setPos(point) {
     const mib = this;

@@ -998,7 +998,7 @@ export function hasViewsActivated() {
 }
 
 /**
- * Initial mgl and mapboxgl
+ * Initial mgl and maplibregl
  * @param {Object} o options
  * @param {String} o.id Id of the map. Default to settings.map.id
  * @param {Array} o.idViews Initial id views list
@@ -1089,7 +1089,6 @@ export async function initMapx(o) {
    * Init notification control
    */
   await nc.init();
-
 
   /*
    * Update map pos with values from query
@@ -2276,15 +2275,18 @@ export function getSpriteImage(id, opt) {
   updateIfEmpty(opt, { color: null });
 
   const map = getMap();
-  const sprite = map.style.imageManager.images[id];
+  const sprite =
+    map.style.imageManager.images[id] ||
+    map.style.imageManager.images["patterns:" + id];
+
   if (!sprite) {
     console.warn(`Unknown sprite ${id}`);
   }
   const out = {
-    widthDpr: sprite.data.width,
-    heightDpr: sprite.data.height,
-    width: sprite.data.width / sprite.pixelRatio,
-    height: sprite.data.height / sprite.pixelRatio,
+    widthDpr: sprite.spriteData.width,
+    heightDpr: sprite.spriteData.height,
+    width: sprite.spriteData.width / sprite.pixelRatio,
+    height: sprite.spriteData.height / sprite.pixelRatio,
   };
 
   out.url = (color) => {
@@ -2296,7 +2298,7 @@ export function getSpriteImage(id, opt) {
     canvas.style.height = `${out.height}px`;
     canvas.style.width = `${out.width}px`;
     const imData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    imData.data.set(sprite.data.data);
+    imData.data.set(sprite.spriteData.data);
     if (color) {
       let i, j, u;
       const rgba = chroma(color).rgba();
@@ -4656,7 +4658,10 @@ export async function getViewsBounds(views) {
     return a;
   }, init);
 
-  return new maplibregl.LngLatBounds([ext.lng1, ext.lat1], [ext.lng2, ext.lat2]);
+  return new maplibregl.LngLatBounds(
+    [ext.lng1, ext.lat1],
+    [ext.lng2, ext.lat2],
+  );
 }
 
 /**
@@ -5006,7 +5011,6 @@ export async function setMapProjection(opt) {
     console.error(e);
   }
 }
-
 
 /**
  * Set theme ( from shiny )

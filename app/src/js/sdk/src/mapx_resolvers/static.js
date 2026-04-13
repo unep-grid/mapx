@@ -1102,7 +1102,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
 
   /**
    * Map flyTo position with flying animation
-   * @param {Object} opt Options see https://docs.mapbox.com/mapbox-gl-js/api/map/#map#flyto
+   * @param {Object} opt Options see https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/#flyto
    * @example mapx.ask('map_fly_to',{center:[46,23], zoom:5});
    * @return {Promise<Object>} When moveend, the options
    */
@@ -1120,7 +1120,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
 
   /**
    * Map jumpTo position, without animation
-   * @param {Object} opt Options see https://docs.mapbox.com/mapbox-gl-js/api/map/#map#jumpto
+   * @param {Object} opt Options see https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/#jumpto
    * @example mapx.ask('set_map_jump_to',{lat:46,lng:23, zoom:5});
    * @return {Promise<Object>} When moveend, the options
    */
@@ -1206,9 +1206,9 @@ export class MapxResolversStatic extends MapxResolversPanels {
   }
 
   /**
-   * Generic map (mapbox-gl-js) methods
+   * Generic map (maplibre-gl) methods
    * This gives you low level access to the `map` methods. Most methods work, but not all.
-   * see https://docs.mapbox.com/mapbox-gl-js/api/map for all references
+   * see https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/ for all references
    * @example
    * mapx.ask('map',{
    *    method: 'setPaintProperty',
@@ -1304,7 +1304,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * @param {Object} o options
    * @param {(String|string[])} o.code Code: ISO 3166-1 alpha-3 (iso3) or UN M49 region code. E.g. 'COD','m49_004'
    * @param {(String|string[])} o.name Name (alternative to code, less recommanded): Country or region mame. e.g. Africa, Bangladesh
-   * @param {Object} o.param Animation options, see https://docs.mapbox.com/mapbox-gl-js/api/properties/#animationoptions
+   * @param {Object} o.param Animation options, see https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/AnimationOptions/
    * @return {Promise<Array>} Array of geographic bounds [west, south, east, north]
    */
   common_loc_fit_bbox(opt) {
@@ -1332,11 +1332,11 @@ export class MapxResolversStatic extends MapxResolversPanels {
    *    if (typeof opt.altitude !== "undefined") {
    *      let lngLat;
    *      if (opt.y && opt.x) {
-   *        lngLat = new mx.mapboxgl.MercatorCoordinate(opt.x, opt.y, 0);
+   *        lngLat = new mx.maplibregl.MercatorCoordinate(opt.x, opt.y, 0);
    *      } else {
    *        lngLat = cam.position.toLngLat();
    *      }
-   *      opt.z = mx.mapboxgl.MercatorCoordinate.fromLngLat(lngLat, opt.altitude).z;
+   *      opt.z = mx.maplibregl.MercatorCoordinate.fromLngLat(lngLat, opt.altitude).z;
    *      delete opt.altitude;
    *    }
    *    Object.assign(cam.position, opt);
