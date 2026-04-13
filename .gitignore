@@ -11,6 +11,9 @@ _postgres
 .claude
 claude
 sample_shader_layer
+TODO
+
+^MIGRATION_MAPLIBRE_THEME.md
 
 # Env variable
 *.env

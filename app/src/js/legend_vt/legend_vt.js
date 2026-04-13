@@ -8,7 +8,7 @@ import {
 } from "./../is_test/index.js";
 import { checkLanguage, getLabelFromObjectPath } from "./../language/index.js";
 import { updateIfEmpty, makeId, firstOf } from "./../mx_helper_misc.js";
-import { getSpriteImage } from "./../map_helpers/index.js";
+import { mapxStyle } from "./../mx.js";
 import { el } from "./../el/src/index.js";
 import { getArrayDistinct } from "../array_stat/index.js";
 
@@ -342,8 +342,14 @@ export class LegendVt {
       const hasSprite = isNotEmpty(rule.sprite) && rule.sprite !== "none";
       const hasBorder = rule.add_border && isNotEmpty(rule.color_border);
       const color = chroma(rule.color).alpha(rule.opacity).css();
-      const spriteImage = hasSprite
-        ? getSpriteImage(rule.sprite, { color: lvt._is_point ? color : null })
+      // For SDF point icons: pass RGBA 0-255 so the canvas is recolored.
+      // For raster patterns (polygon): pass null to render the raw image.
+      const spriteRgba =
+        hasSprite && lvt._is_point
+          ? [...chroma(rule.color).rgb(), Math.round(rule.opacity * 255)]
+          : null;
+      const spriteDataUrl = hasSprite
+        ? mapxStyle.getImageDataUrl(rule.sprite, spriteRgba)
         : null;
 
       //colStyle.opacity = rule.opacity;
@@ -365,7 +371,7 @@ export class LegendVt {
           colStyle.width = `${rule.size}px`;
           colStyle.backgroundColor = color;
         } else {
-          colStyle.backgroundImage = `url(${spriteImage.url(color)})`;
+          colStyle.backgroundImage = `url(${spriteDataUrl})`;
           colStyle.backgroundSize = `${rule.size}px ${rule.size}px`;
           colStyle.backgroundRepeat = "no-repeat";
           colStyle.height = `${rule.size}px`;
@@ -378,7 +384,7 @@ export class LegendVt {
           ? el("div", {
               class: "mx-legend-vt-rule-background",
               style: {
-                backgroundImage: `url(${spriteImage.url()})`,
+                backgroundImage: `url(${spriteDataUrl})`,
               },
             })
           : el("div");

@@ -1,7 +1,7 @@
 import { settings } from "./../settings/index.js";
 import { updateIfEmpty } from "./../mx_helper_misc.js";
 import { isArray, isEmpty, isNotEmpty } from "./../is_test/index.js";
-import { getSpriteImage } from "./../map_helpers/index.js";
+import { mapxStyle } from "./../mx.js";
 import chroma from "chroma-js";
 
 /**
@@ -64,7 +64,7 @@ const def = {
  * @param {Nmber} opt.outlineOpacity Polygon outline opacity
  * @return {Object} Layer
  */
-export function makeSimpleLayer(opt) {
+export async function makeSimpleLayer(opt) {
   updateIfEmpty(opt, def);
 
   const validId = opt.id || (opt.useLabelAsId && opt.label);
@@ -99,8 +99,9 @@ export function makeSimpleLayer(opt) {
     opt.sprite = null;
   }
   if (isNotEmpty(opt.sprite)) {
-    const spriteImage = getSpriteImage(opt.sprite);
-    opt.size = opt.size / spriteImage.width;
+    const dims = await mapxStyle.getIconDimensions(opt.sprite);
+    opt.size = opt.size / (dims ? dims.w : 64);
+    opt.sprite = mapxStyle.resolveSpriteName(opt.sprite);
   }
 
   /**

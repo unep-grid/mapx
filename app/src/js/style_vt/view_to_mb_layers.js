@@ -251,7 +251,7 @@ export async function getViewMapboxLayers(v, opt) {
    */
   if (useStyleDefault) {
     const label = "Default";
-    const layerDefault = _build_layer({
+    const layerDefault = await _build_layer({
       geomType: geomType,
       label: label,
     });
@@ -289,7 +289,7 @@ export async function getViewMapboxLayers(v, opt) {
       /**
        * Symbol only
        */
-      const layerSprite = _build_layer({
+      const layerSprite = await _build_layer({
         priority: 0,
         geomType: "symbol",
         color: ruleAll.color,
@@ -304,7 +304,7 @@ export async function getViewMapboxLayers(v, opt) {
       /**
        * Base layer and pattern
        */
-      const layerAll = _build_layer({
+      const layerAll = await _build_layer({
         geomType: geomType,
         type: isNumeric ? "number" : "string",
         priority: 1,
@@ -324,7 +324,7 @@ export async function getViewMapboxLayers(v, opt) {
       layers.push(layerAll);
 
       if (hasPattern) {
-        const layerPattern = _build_layer({
+        const layerPattern = await _build_layer({
           priority: 0,
           geomType: "pattern",
           color: ruleAll.color,
@@ -424,7 +424,7 @@ export async function getViewMapboxLayers(v, opt) {
         /**
          * Normal layer and pattern
          */
-        const layerMain = _build_layer({
+        const layerMain = await _build_layer({
           position: position,
           priority: 1,
           geomType: geomType,
@@ -445,7 +445,7 @@ export async function getViewMapboxLayers(v, opt) {
         rule.add_border = isPolygon ? layerMain?.metadata?.useOutline : null;
 
         if (hasPattern) {
-          const layerPattern = _build_layer({
+          const layerPattern = await _build_layer({
             position: position,
             priority: 0,
             geomType: "pattern",
@@ -461,7 +461,7 @@ export async function getViewMapboxLayers(v, opt) {
         /**
          * Layer for symbols
          */
-        const layerSprite = _build_layer({
+        const layerSprite = await _build_layer({
           position: position,
           geomType: "symbol",
           color: rule.color,
@@ -493,7 +493,7 @@ export async function getViewMapboxLayers(v, opt) {
     const position = -1;
     const filter = filterIncludeNull;
 
-    const layerNull = _build_layer({
+    const layerNull = await _build_layer({
       priority: 1,
       position: position,
       geomType: isPoint && hasSprite ? "symbol" : geomType,
@@ -504,7 +504,6 @@ export async function getViewMapboxLayers(v, opt) {
       filter: filter,
       rule: ruleNulls,
     });
-
 
     ruleNulls.filter = filter;
     ruleNulls.color_border = isPolygon
@@ -521,7 +520,7 @@ export async function getViewMapboxLayers(v, opt) {
      */
 
     if (hasPattern) {
-      const layerPattern = _build_layer({
+      const layerPattern = await _build_layer({
         position: position,
         priority: 0,
         geomType: "pattern",
@@ -554,7 +553,7 @@ export async function getViewMapboxLayers(v, opt) {
   /**
    * Local helpers
    */
-  function _build_layer(opt) {
+  async function _build_layer(opt) {
     const config = Object.assign(
       {},
       {
