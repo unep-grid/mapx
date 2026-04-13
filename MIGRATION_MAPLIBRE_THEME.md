@@ -187,11 +187,12 @@ which MapLibre rejects. `mapbox-gl-draw-circle` extends MapboxDraw modes and is 
 The API schema (`api/modules/themes/schemas/combined.js`) must stay in sync with
 the color property set used by `@unepgrid-mapx/theme-core`.
 
-- [ ] **9.1** Diff the 90+ color properties in `combined.js` against the theme schema
-  inside `submodules/mapx-style/packages/theme-core/src/themes/`
-- [ ] **9.2** Add/remove/rename any mismatched properties in `combined.js`
-- [ ] **9.3** Run `api/modules/themes/validate.js` unit tests against the updated schema
-- [ ] **9.4** Migrate existing stored themes in DB if property names changed (write a migration script)
+- [x] **9.1** Diffed `combined.js` (55 color properties) against `classic_light.json` —
+  exact match, no mismatches found
+- [x] **9.2** No changes needed — schemas already in sync
+- [x] **9.3** `validate.js` is a runtime validator module with no standalone unit tests;
+  validation runs at API save/load time
+- [x] **9.4** No property names changed — no DB migration needed
 
 ---
 
@@ -199,10 +200,14 @@ the color property set used by `@unepgrid-mapx/theme-core`.
 
 The MapX SDK (`app/src/js/sdk/`) exposes map-related API surface to external consumers.
 
-- [ ] **10.1** Audit `sdk/src/mapx_resolvers/static.js` for `mapboxgl` references
-- [ ] **10.2** Update SDK exports/types to reflect maplibre-gl
-- [ ] **10.3** Rebuild SDK: `npm run build:sdk`
-- [ ] **10.4** Update SDK test utils in `sdk/tests/utils/` (built dist files reference mapboxgl)
+- [x] **10.1** Audited `sdk/src/mapx_resolvers/static.js` — 7 JSDoc-only references updated:
+  mapbox docs URLs → maplibre.org equivalents; `mx.mapboxgl.MercatorCoordinate` →
+  `mx.maplibregl.MercatorCoordinate` (in commented-out block)
+- [x] **10.2** No type exports use `mapboxgl` — SDK has no TypeScript types
+- [x] **10.3** Rebuilt SDK: `npm run build:sdk` — dist files clean
+- [x] **10.4** Fixed `is_test/index.js` JSDoc (`mapboxgl.LngLat/LngLatBounds` →
+  `maplibregl.*`); rebuilt test utils — all dist files clean except one stale orphan
+  sourcemap `mxsdk-test-utils.modern.mjs.map` (old microbundle artifact, no longer generated)
 
 ---
 
@@ -210,18 +215,20 @@ The MapX SDK (`app/src/js/sdk/`) exposes map-related API surface to external con
 
 Only do this after all phases above are green and tested.
 
-- [ ] **11.1** Remove `mapbox-gl` from `app/package.json` dependencies
-- [ ] **11.2** Remove `@types/mapbox-gl` from `app/package.json`
-- [ ] **11.3** Remove `app/src/js/theme/mapx_style_resolver.js` if not already done (Phase 4.6)
-- [ ] **11.4** Remove or archive `app/src/js/theme/` if Theme class is fully replaced
-- [ ] **11.5** Remove mapbox-gl CSS import site
-- [ ] **11.6** Confirm no `mapbox-gl` or `mapboxgl` string remains in tracked source files:
-  ```
-  grep -r "mapbox-gl\|mapboxgl" app/src --include="*.js" --include="*.less" --include="*.css"
-  ```
-  Expected false-positives to ignore: `@mapbox/mapbox-gl-draw` and `mapbox-gl-draw-circle`
-  package name strings in `draw/draw.js` and `draw/helper.js` — these are correct library names
-  that do not change.
+- [x] **11.1** Removed `mapbox-gl` from `app/package.json`; `npm install` confirmed uninstalled
+- [x] **11.2** Removed `@types/mapbox-gl` from `app/package.json`
+- [x] **11.3** Already done in Phase 4.6
+- [x] **11.4** Theme class kept — owns CRUD UI (ThemeService, ThemeModal); apply-to-map
+  fully replaced by MapxStyle in Phase 5
+- [x] **11.5** Already done in Phase 1.5
+- [x] **11.6** Final grep clean. Remaining intentional references:
+  - `_archives/` — not in build
+  - `draw/draw.js`, `draw/helper.js` — `@mapbox/mapbox-gl-draw` / `mapbox-gl-draw-circle`
+    library names; must not change
+  - Bug report URLs in `map_composer_modal.js`, `mx_helper_map_dragdrop.js` — historical
+  - `style_vt/mbstyle_to_sld.js` — describes the "mapbox style" format name
+  - `geocoder/geocoder.test.js:4` — `// Mock mapboxgl` comment
+  All 110 tests pass.
 
 ---
 
