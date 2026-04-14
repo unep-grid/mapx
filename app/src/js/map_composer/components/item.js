@@ -141,11 +141,14 @@ class Item extends Box {
 
     const mapOptions = Object.assign(
       {
-        preserveDrawingBuffer: true,
         container: elOut,
         fadeDuration: 0,
         trackResize: false, // handled in mapcomposer
         renderWorldCopies: true,
+        canvasContextAttributes: {
+          preserveDrawingBuffer: true,
+          failIfMajorPerformanceCaveat: false,
+        },
       },
       item._config.options,
     );

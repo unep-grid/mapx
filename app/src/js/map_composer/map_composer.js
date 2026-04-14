@@ -313,21 +313,10 @@ export class MapComposer {
   async setScaleMap(scale = 1) {
     const mc = this;
     scale = Number(scale);
-    Object.defineProperty(window, "devicePixelRatio", {
-      get: function () {
-        return scale;
-      },
-    });
     for (const item of mc.page.items) {
       if (item.type === "map") {
-        const map = item.map;
-        map._resizeCanvas(item.width, item.height);
-        map.transform.resize(map._containerWidth, map._containerHeight);
-        map.painter.resize(
-          Math.ceil(map._containerWidth),
-          Math.ceil(map._containerHeight),
-        );
-        item.map.setBearing(item.map.getBearing());
+        item.map.setPixelRatio(scale);
+        item.map.resize();
       }
     }
     await waitTimeoutAsync(100);
@@ -335,7 +324,13 @@ export class MapComposer {
 
   async setScaleMapReset() {
     const mc = this;
-    await mc.setScaleMap(mc.state.dpr);
+    for (const item of mc.page.items) {
+      if (item.type === "map") {
+        item.map.setPixelRatio(null);
+        item.map.resize();
+      }
+    }
+    await waitTimeoutAsync(100);
   }
 
   setLegendColumnCount(n) {
