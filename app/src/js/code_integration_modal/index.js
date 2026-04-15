@@ -4,6 +4,7 @@ import { moduleLoad } from "./../modules_loader_async/index.js";
 import * as template_maplibre_simple from "./templates/maplibre_gl_app.html";
 import { getDictItem } from "../language/index.js";
 import { getViewMapboxStyle, getViewSldStyle } from "./../style_vt";
+import { CODE_INTEGRATION_VERSIONS } from "./dependency_versions.js";
 
 import { parseTemplate } from "./../mx_helper_misc";
 import { FlashItem } from "../icon_flash/index.js";
@@ -245,9 +246,10 @@ export class ModalCodeIntegration {
           sources: JSON.stringify(style.sources, 0, 2),
           layers: JSON.stringify(style.layers, 0, 2),
           theme: JSON.stringify(mci._config.theme, 0, 2),
-          maplibre_version: "5.2.0",
-          maplibre_contour_version: "0.1.0",
-          mapx_style_version: "0.3.0",
+          maplibre_version: CODE_INTEGRATION_VERSIONS.maplibre,
+          maplibre_contour_version:
+            CODE_INTEGRATION_VERSIONS.maplibreContour,
+          mapx_style_version: CODE_INTEGRATION_VERSIONS.mapxStyle,
           bounds: JSON.stringify(bounds || [-180, 90, 180, -90]),
         });
         out.language = "html";
