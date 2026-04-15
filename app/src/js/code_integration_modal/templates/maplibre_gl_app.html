@@ -1,18 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
     <title>{{title}}</title>
     <meta
       name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
+      content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 
-    <script src="https://unpkg.com/maplibre-gl@{{version}}/dist/maplibre-gl.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@{{maplibre_version}}/dist/maplibre-gl.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/maplibre-contour@{{maplibre_contour_version}}/dist/index.min.js"></script>
     <link
-      href="https://unpkg.com/maplibre-gl@{{version}}/dist/maplibre-gl.css"
-      rel="stylesheet"
-    />
+      href="https://cdn.jsdelivr.net/npm/maplibre-gl@{{maplibre_version}}/dist/maplibre-gl.css"
+      rel="stylesheet" />
+
+    <!-- MapxStyle: HCP S3 auth, PMTiles protocol, basemap style -->
+    <script src="https://cdn.jsdelivr.net/gh/unep-grid/mapx-style@v{{mapx_style_version}}/packages/theme-core/dist/mapx-style.umd.js"></script>
 
     <style>
       body {
@@ -31,17 +33,39 @@
     <div id="map"></div>
 
     <script>
-      const map = new maplibregl.Map({
-        container: "map",
-        zoom: 2,
-        center: [0, 0],
-        pitch: 0,
-        bearing: 0,
-        style: {{style}}
-      });
+            const { MapxStyle } = window.MapxStyle;
+            const theme = {{theme}};
+            const mxStyle = new MapxStyle({ maplibregl, mlcontour, theme });
+            if (!mxStyle.getTheme()) {
+              mxStyle.setTheme(theme);
+            }
 
-      map.fitBounds({{bounds}});
+            const sources = {{sources}};
+            const layers = {{layers}};
 
+            const map = new maplibregl.Map({
+              container: "map",
+              style: mxStyle.getStyle(),
+              transformRequest: mxStyle.transformRequest,
+              zoom: 2,
+              center: [0, 0],
+              pitch: 0,
+              bearing: 0,
+            });
+
+            map.on("load", () => {
+            
+             map.getLayer('country-code').setLayoutProperty("visibility","none")
+              mxStyle.attachMap(map);
+              for (const [id, source] of Object.entries(sources)) {
+                map.addSource(id, source);
+              }
+              for (const layer of layers) {
+                map.addLayer(layer);
+              }
+              map.fitBounds({{bounds}});
+
+            });
     </script>
   </body>
 </html>

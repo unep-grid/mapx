@@ -12,6 +12,7 @@ import {
   getView,
   getStyleBaseMap,
 } from "../map_helpers/index.js";
+import { theme } from "../init_theme.js";
 import { isViewVtWithStyleCustom } from "../is_test/index.js";
 import { downloadHTML, downloadJSON } from "../download/index.js";
 
@@ -20,7 +21,7 @@ export class ModalCodeIntegration {
     const mci = this;
     mci._config = Object.assign(
       {},
-      { idView: idView, darkMode: false },
+      { idView: idView, darkMode: false, theme: theme.get() },
       config,
     );
     mci.updateCode = mci.updateCode.bind(mci);
@@ -241,11 +242,14 @@ export class ModalCodeIntegration {
         const bounds = await getViewsBounds(mci._config.idView);
         out.str = parseTemplate(template_maplibre_simple, {
           title: style.name,
-          style: JSON.stringify(style, 0, 2),
-          version: "5.2.0",
+          sources: JSON.stringify(style.sources, 0, 2),
+          layers: JSON.stringify(style.layers, 0, 2),
+          theme: JSON.stringify(mci._config.theme, 0, 2),
+          maplibre_version: "5.2.0",
+          maplibre_contour_version: "0.1.0",
+          mapx_style_version: "0.2.2",
           bounds: JSON.stringify(bounds || [-180, 90, 180, -90]),
         });
-        out.str = out.str;
         out.language = "html";
         break;
       case "template_mapbox_layers":
