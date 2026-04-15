@@ -247,7 +247,7 @@ export class ModalCodeIntegration {
           theme: JSON.stringify(mci._config.theme, 0, 2),
           maplibre_version: "5.2.0",
           maplibre_contour_version: "0.1.0",
-          mapx_style_version: "0.2.2",
+          mapx_style_version: "0.3.0",
           bounds: JSON.stringify(bounds || [-180, 90, 180, -90]),
         });
         out.language = "html";
