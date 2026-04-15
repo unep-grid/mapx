@@ -2258,7 +2258,6 @@ export function viewLiAction(o) {
   }
 }
 
-
 /**
  * Get views order from list
  *  - app : ui list / user order
@@ -4568,7 +4567,7 @@ async function updateViewExtentMeta(view, extent) {
  * @param {Array} views Array of views
  * @return {Object} MapBox gl bounds object
  */
-export async function getViewsBounds(views) {
+export async function getViewsBounds(views, asArray = false) {
   views = views.constructor === Array ? views : [views];
 
   const init = {
@@ -4590,10 +4589,17 @@ export async function getViewsBounds(views) {
     return a;
   }, init);
 
-  return new maplibregl.LngLatBounds(
-    [ext.lng1, ext.lat1],
-    [ext.lng2, ext.lat2],
-  );
+  if (asArray) {
+    return [
+      [ext.lng1, ext.lat1],
+      [ext.lng2, ext.lat2],
+    ];
+  } else {
+    return new maplibregl.LngLatBounds(
+      [ext.lng1, ext.lat1],
+      [ext.lng2, ext.lat2],
+    );
+  }
 }
 
 /**

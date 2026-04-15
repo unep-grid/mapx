@@ -54,8 +54,6 @@
             });
 
             map.on("load", () => {
-            
-             map.getLayer('country-code').setLayoutProperty("visibility","none")
               mxStyle.attachMap(map);
               for (const [id, source] of Object.entries(sources)) {
                 map.addSource(id, source);

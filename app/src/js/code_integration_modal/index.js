@@ -22,9 +22,14 @@ export class ModalCodeIntegration {
     const mci = this;
     mci._config = Object.assign(
       {},
-      { idView: idView, darkMode: false, theme: theme.get() },
+      {
+        idView: idView,
+        darkMode: false,
+        theme: theme.getForIntegration(),
+      },
       config,
     );
+    mci._config.theme = theme.getForIntegration(mci._config.theme);
     mci.updateCode = mci.updateCode.bind(mci);
     mci.updateLayout = mci.updateLayout.bind(mci);
     mci.destroy = mci.destroy.bind(mci);
@@ -240,15 +245,14 @@ export class ModalCodeIntegration {
 
     switch (id) {
       case "template_maplibre_simple_app":
-        const bounds = await getViewsBounds(mci._config.idView);
+        const bounds = await getViewsBounds(mci._config.idView, true);
         out.str = parseTemplate(template_maplibre_simple, {
           title: style.name,
           sources: JSON.stringify(style.sources, 0, 2),
           layers: JSON.stringify(style.layers, 0, 2),
           theme: JSON.stringify(mci._config.theme, 0, 2),
           maplibre_version: CODE_INTEGRATION_VERSIONS.maplibre,
-          maplibre_contour_version:
-            CODE_INTEGRATION_VERSIONS.maplibreContour,
+          maplibre_contour_version: CODE_INTEGRATION_VERSIONS.maplibreContour,
           mapx_style_version: CODE_INTEGRATION_VERSIONS.mapxStyle,
           bounds: JSON.stringify(bounds || [-180, 90, 180, -90]),
         });

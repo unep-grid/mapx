@@ -16,6 +16,7 @@ import { jsonDiff } from "../mx_helper_utils_json";
 import { ThemeService } from "./services";
 import { ThemeModal } from "./theme_modal"; // Import the new modal class
 import {
+  clone,
   itemFlashCancel,
   itemFlashSave,
   itemFlashWarning,
@@ -550,6 +551,26 @@ class Theme extends EventSimple {
       id = t.id();
     }
     return t.list().find((t) => t.id === id);
+  }
+
+  getForIntegration(themeData) {
+    const t = this;
+    const baseTheme =
+      typeof themeData === "string"
+        ? t.get(themeData)
+        : themeData?.id
+          ? themeData
+          : t.get();
+
+    if (!baseTheme) {
+      return baseTheme;
+    }
+    const themeClone = clone(baseTheme);
+    if (themeClone?.colors?.mx_map_mask) {
+      themeClone.colors.mx_map_mask.visibility = "none";
+    }
+
+    return themeClone;
   }
 
   /**
