@@ -21,12 +21,15 @@ import {
 import { TextFilter } from "../text_filter_simple";
 import chroma from "chroma-js";
 import { onNextFrame, waitFrameAsync } from "../animation_frame/index.js";
-import { fontFamilies, fonts } from "./fonts.js";
 import { jedInit } from "../json_editor"; // Import jedInit
 import { settings } from "../mx.js";
 import { SelectAuto } from "../select_auto";
 import { getDictItem } from "../language/index.js";
 import "../color_swatches/color-swatches.js";
+import { listFontFamilies, listFonts } from "@unep-grid/mapx-style";
+
+const fontFamilies = listFontFamilies();
+const fonts = listFonts();
 
 export class ThemeModal extends EventSimple {
   constructor(opt) {

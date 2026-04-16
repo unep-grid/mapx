@@ -1,1 +1,1 @@
-export { MapScaler } from "@unepgrid-mapx/theme-core";
+export { MapScaler } from "@unep-grid/mapx-style";

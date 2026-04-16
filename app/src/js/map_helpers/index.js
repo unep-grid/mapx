@@ -6,7 +6,6 @@ import {
   data as mx_storage,
   listeners,
   theme,
-  mapxStyle,
   draw,
   maplibregl,
   maps,
@@ -44,7 +43,6 @@ import { initLog } from "./../logger/instance.js";
 import { dashboard } from "./../dashboards/index.js";
 import { share_modal } from "../share_modal/index.js";
 import {
-  updateIfEmpty,
   round,
   setBusy,
   clone,
@@ -1142,8 +1140,8 @@ export async function initMapx(o) {
   /* map options */
   const mapOptions = {
     container: o.id, // container id
-    style: mapxStyle.getStyle(),
-    transformRequest: mapxStyle.transformRequest,
+    style: theme.getStyle(),
+    transformRequest: theme.transformRequest,
     bounds: mp.bounds || null,
     maxBounds: mp.maxBounds || null,
     preserveDrawingBuffer: false,
@@ -1180,7 +1178,7 @@ export async function initMapx(o) {
    * Attach MapxStyle to the map (registers pitchend/error handlers,
    * applies the current theme to basemap layers, and loads the mask).
    */
-  mapxStyle.attachMap(map);
+  theme.attachMap(map);
 
   /**
    * Update theme, if required by init opt
@@ -1188,16 +1186,16 @@ export async function initMapx(o) {
    *   in init_theme.js
    * - Use the project theme if it's valid
    * - Use theme default if none exists.
-   * theme.set() fires events, saves URL, updates buttons, and via
-   * setColors() also calls mapxStyle.setTheme() to apply to the map.
+   * theme.set() fires events, saves URL, updates buttons, and syncs the
+   * theme-owned runtime to apply the current style to the map.
    */
   const idThemeQuery = getQueryParameter("theme")[0];
   if (isEmpty(idThemeQuery)) {
     const idTheme = o.idTheme;
     await theme.set(idTheme, { save_url: true });
   } else {
-    // Query param theme was already applied via theme.init(); sync mapxStyle.
-    mapxStyle.setTheme(theme.id());
+    // Query param theme was already applied via theme.init(); sync the theme-owned runtime.
+    theme.syncRuntimeTheme();
   }
 
   if (!settings.mode.static) {
@@ -4695,6 +4693,7 @@ export async function setMapPos(opt) {
   try {
     const map = getMap(opt.id);
     const p = opt.param;
+    const hasThemeQuery = isNotEmpty(getQueryParameter("theme")[0]);
     if (p.useMaxBounds) {
       p.jump = true;
     }
@@ -4755,7 +4754,7 @@ export async function setMapPos(opt) {
       map.scrollZoom.enable();
     }
 
-    if (p.theme) {
+    if (p.theme && !hasThemeQuery) {
       await theme.set(p.theme, { force: true });
     }
 

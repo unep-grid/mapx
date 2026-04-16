@@ -11,7 +11,7 @@ import { getViews } from "./../map_helpers/index.js";
 import { getArrayDistinct } from "../array_stat";
 import { settings } from "./../settings";
 import { LegendVt } from "../legend_vt";
-import { events, maplibregl, mapxStyle } from "../mx.js";
+import { events, theme } from "../mx.js";
 
 /**
  * Add synonyms
@@ -41,7 +41,7 @@ export function setLanguageCurrent(lang) {
  * @return {String} language code
  */
 export function getLanguageCurrent() {
-  const language = settings.language || getLanguagesAll()[0];
+  const language = settings?.language || getLanguagesAll()[0];
   return language;
 }
 
@@ -545,15 +545,11 @@ export async function updateLanguageViewsList(o) {
 /**
  * Set or Update language of a layer, based on text-field attribute.
  * @param {object} o Options
- * @param {string} o.mapId Map id
  * @param {string} [o.language='en'] Two letter language code
  */
-export async function updateLanguageMap(o) {
-  o = Object.assign({}, { language: getLanguageCurrent() }, o);
-  const mapLang = ["en", "es", "fr", "de", "ru", "zh", "pt", "ar"];
-  const defaultLang = mapLang[0];
-  const lang = mapLang.includes(o.language) ? o.language : defaultLang;
-  mapxStyle.setLanguage(lang);
+export async function updateLanguageMap(opt) {
+  const language = getLanguageCurrent();
+  theme.setLanguage(opt?.language || language);
   return true;
 }
 
@@ -571,4 +567,3 @@ export async function getDictItemId(txt, language) {
     return res.id;
   }
 }
-

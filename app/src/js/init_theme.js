@@ -14,5 +14,3 @@ export const theme = new Theme({
   id: idTheme,
   colors: colors,
 });
-
-

@@ -69,7 +69,7 @@ module.exports = {
   ],
   resolve: {
     alias: {
-      "@unepgrid-mapx/theme-core": path.resolve(
+      "@unep-grid/mapx-style": path.resolve(
         __dirname,
         "../../submodules/mapx-style/packages/theme-core/src/index.js",
       ),

@@ -6,9 +6,8 @@ import chroma from "chroma-js";
 import { bindAll } from "../bind_class_methods";
 import { isJson, isEmpty } from "../is_test";
 import { waitFrameAsync } from "../animation_frame/index.js";
-import { themes_custom, themes_orig, themes } from "./themes/index.js";
+import { themes_custom, themes } from "./themes/index.js";
 import { isNotEmpty } from "../is_test";
-import { fontFamilies, fonts, loadFontFace } from "./fonts.js";
 import { Button } from "./../panel_controls/button.js";
 import { sounds } from "./sound/index.js";
 import "./style.less";
@@ -16,7 +15,6 @@ import { jsonDiff } from "../mx_helper_utils_json";
 import { ThemeService } from "./services";
 import { ThemeModal } from "./theme_modal"; // Import the new modal class
 import {
-  clone,
   itemFlashCancel,
   itemFlashSave,
   itemFlashWarning,
@@ -24,12 +22,31 @@ import {
 import { modalConfirm } from "../mx_helper_modal";
 import { settings } from "../settings";
 import { getLanguageCurrent } from "../language";
+import {
+  getBuiltInTheme,
+  getForIntegration as getThemeForIntegration,
+  listFontFamilies,
+  listFonts,
+  listBuiltInThemes,
+  loadFontFamily,
+  loadThemeFonts,
+  validateThemeColors,
+  MapxStyle,
+} from "@unep-grid/mapx-style";
+
+import maplibregl from "maplibre-gl";
+import mlcontour from "maplibre-contour";
+
+const mapxStyle = new MapxStyle({ maplibregl, mlcontour });
 
 const def = {
   tree: true,
   water: true,
   dark: false,
 };
+
+const fontFamilies = listFontFamilies();
+const fonts = listFonts();
 
 /**
  * Set globals
@@ -40,6 +57,7 @@ class Theme extends EventSimple {
     const t = this;
     bindAll(t);
     t._opt = Object.assign({}, global, opt);
+    t._mapxStyle = mapxStyle;
 
     t._btns = {
       dark: null,
@@ -52,6 +70,14 @@ class Theme extends EventSimple {
 
   get opt() {
     return this._opt || {};
+  }
+
+  get mapxStyle() {
+    return this._mapxStyle;
+  }
+
+  get transformRequest() {
+    return this._mapxStyle?.transformRequest;
   }
 
   log(x) {
@@ -313,7 +339,7 @@ class Theme extends EventSimple {
   resetThemesOrig() {
     const t = this;
     themes.length = 0;
-    themes.push(...t.clone(themes_orig));
+    themes.push(...listBuiltInThemes());
     for (const theme of themes) {
       t._setStorageProperty(theme, "base");
     }
@@ -322,10 +348,6 @@ class Theme extends EventSimple {
     const t = this;
     t.resetThemesOrig();
     t.set(t.id());
-  }
-
-  clone(obj) {
-    return JSON.parse(JSON.stringify(obj));
   }
 
   /**
@@ -472,6 +494,13 @@ class Theme extends EventSimple {
       return;
     }
     t._btns[type] = btn;
+
+    const currentThemeId = t.theme()?.id;
+    if (currentThemeId) {
+      const state = t.inverseResolver(currentThemeId);
+      btn.activate(!!state[type]);
+    }
+
     btn.setAction(async () => {
       btn.toggle();
       await t.updateThemeByButton();
@@ -565,12 +594,7 @@ class Theme extends EventSimple {
     if (!baseTheme) {
       return baseTheme;
     }
-    const themeClone = clone(baseTheme);
-    if (themeClone?.colors?.mx_map_mask) {
-      themeClone.colors.mx_map_mask.visibility = "none";
-    }
-
-    return themeClone;
+    return getThemeForIntegration(baseTheme);
   }
 
   /**
@@ -1024,11 +1048,7 @@ class Theme extends EventSimple {
     const t = this;
     const start = performance.now();
     try {
-      const valid =
-        colors instanceof Object &&
-        Object.keys(colors).reduce((a, cid) => {
-          return a && chroma.valid(colors[cid].color || colors[cid]);
-        }, true);
+      const valid = validateThemeColors(colors);
       t.log(`Validated in ${performance.now() - start} [ms]`);
       return valid;
     } catch (e) {
@@ -1075,9 +1095,60 @@ class Theme extends EventSimple {
       return;
     }
     t._theme.colors = new_colors;
-    const { mapxStyle } = await import("../init_mapx_style.js");
-    mapxStyle.setTheme(t._theme);
+    await loadThemeFonts(t._theme);
+    t._applyThemeToRuntime(t._theme);
     t.fire("set_colors", new_colors);
+  }
+
+  _applyThemeToRuntime(theme) {
+    if (!this._mapxStyle || !theme) {
+      return false;
+    }
+    return this._mapxStyle.setTheme(theme);
+  }
+
+  syncRuntimeTheme(theme = this._theme) {
+    return this._applyThemeToRuntime(theme);
+  }
+
+  getStyle() {
+    return this._mapxStyle?.getStyle();
+  }
+
+  attachMap(map) {
+    return this._mapxStyle?.attachMap(map);
+  }
+
+  enableTerrain() {
+    return this._mapxStyle?.enableTerrain();
+  }
+
+  disableTerrain() {
+    return this._mapxStyle?.disableTerrain();
+  }
+
+  enableSatellite() {
+    return this._mapxStyle?.enableSatellite();
+  }
+
+  disableSatellite() {
+    return this._mapxStyle?.disableSatellite();
+  }
+
+  toggleSatellite() {
+    return this._mapxStyle?.toggleSatellite();
+  }
+
+  getImageDataUrl(id, rgba) {
+    return this._mapxStyle?.getImageDataUrl(id, rgba) || null;
+  }
+
+  getIconDimensions(id) {
+    return this._mapxStyle?.getIconDimensions(id) || null;
+  }
+
+  resolveSpriteName(id) {
+    return this._mapxStyle?.resolveSpriteName(id) || id;
   }
 
   getColorThemeItem(id) {
@@ -1087,7 +1158,6 @@ class Theme extends EventSimple {
       return item.color;
     }
   }
-
 
   async updateFromInput() {
     try {
@@ -1261,7 +1331,7 @@ class Theme extends EventSimple {
    * -> could be used in cc, widget
    */
   loadFontFace(name) {
-    loadFontFace(name);
+    return loadFontFamily(name);
   }
 
   /**
@@ -1322,7 +1392,10 @@ class Theme extends EventSimple {
 
   getDefault() {
     const t = this;
-    return themes.find((theme) => theme.id === t.opt.id_default);
+    return (
+      themes.find((theme) => theme.id === t.opt.id_default) ||
+      getBuiltInTheme(t.opt.id_default)
+    );
   }
 
   filterTheme(theme, opt) {
@@ -1340,6 +1413,9 @@ class Theme extends EventSimple {
     }
     const { tree, dark, water } = theme;
     return { tree, dark, water };
+  }
+  setLanguage(lang) {
+    return this._mapxStyle?.setLanguage(lang);
   }
 }
 

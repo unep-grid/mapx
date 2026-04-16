@@ -10,7 +10,6 @@ import { NotifCenterMapx } from "./notif_center/nc_instance.js";
 import { HighlighterMapx } from "./features_highlight/highlighter_instance";
 import { Magnifier } from "./magnifier/index.js";
 import { theme } from "./init_theme";
-import { mapxStyle } from "./init_mapx_style";
 import { ProjectManager } from "./project/index.js";
 import { ButtonPanelManager } from "./button_panel/manager.js";
 import { ControlsPanel } from "./panel_controls/index.js";
@@ -63,7 +62,6 @@ export {
   events,
   hinthack,
   theme,
-  mapxStyle,
   draw,
   ws,
   nc,

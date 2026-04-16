@@ -8,7 +8,7 @@ import {
 } from "./../is_test/index.js";
 import { checkLanguage, getLabelFromObjectPath } from "./../language/index.js";
 import { updateIfEmpty, makeId, firstOf } from "./../mx_helper_misc.js";
-import { mapxStyle } from "./../mx.js";
+import { theme } from "./../mx.js";
 import { el } from "./../el/src/index.js";
 import { getArrayDistinct } from "../array_stat/index.js";
 
@@ -349,7 +349,7 @@ export class LegendVt {
           ? [...chroma(rule.color).rgb(), Math.round(rule.opacity * 255)]
           : null;
       const spriteDataUrl = hasSprite
-        ? mapxStyle.getImageDataUrl(rule.sprite, spriteRgba)
+        ? theme.getImageDataUrl(rule.sprite, spriteRgba)
         : null;
 
       //colStyle.opacity = rule.opacity;

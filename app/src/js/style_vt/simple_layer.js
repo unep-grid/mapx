@@ -1,7 +1,7 @@
 import { settings } from "./../settings/index.js";
 import { updateIfEmpty } from "./../mx_helper_misc.js";
 import { isArray, isEmpty, isNotEmpty } from "./../is_test/index.js";
-import { mapxStyle } from "./../mx.js";
+import { theme } from "./../mx.js";
 import chroma from "chroma-js";
 
 /**
@@ -99,9 +99,9 @@ export async function makeSimpleLayer(opt) {
     opt.sprite = null;
   }
   if (isNotEmpty(opt.sprite)) {
-    const dims = await mapxStyle.getIconDimensions(opt.sprite);
+    const dims = await theme.getIconDimensions(opt.sprite);
     opt.size = opt.size / (dims ? dims.w : 64);
-    opt.sprite = mapxStyle.resolveSpriteName(opt.sprite);
+    opt.sprite = theme.resolveSpriteName(opt.sprite);
   }
 
   /**

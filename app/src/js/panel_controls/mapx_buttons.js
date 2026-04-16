@@ -12,7 +12,7 @@ import {
   storyClose,
 } from "./../story_map/index.js";
 import { settings } from "./../settings";
-import { theme, draw, mapxStyle } from "./../mx.js";
+import { theme, draw } from "./../mx.js";
 import { IssueReporterClient } from "../issue_reporter/index.js";
 import { modalIframe } from "../modal_iframe/index.js";
 import { GeocoderModal } from "../geocoder/modal.js";
@@ -130,9 +130,9 @@ export function generateButtons() {
         btn.elButton.classList[classop]("active");
         const enabled = btn.elButton.classList.contains("active");
         if (enabled) {
-          mapxStyle.enableTerrain();
+          theme.enableTerrain();
         } else {
-          mapxStyle.disableTerrain();
+          theme.disableTerrain();
         }
         return enabled;
       },
@@ -144,13 +144,13 @@ export function generateButtons() {
         const btn = this;
         cmd = typeof cmd === "string" ? cmd : "toggle";
         if (cmd === "hide") {
-          mapxStyle.disableSatellite();
+          theme.disableSatellite();
           btn.elButton.classList.remove("active");
         } else if (cmd === "show") {
-          mapxStyle.enableSatellite();
+          theme.enableSatellite();
           btn.elButton.classList.add("active");
         } else {
-          mapxStyle.toggleSatellite();
+          theme.toggleSatellite();
           btn.elButton.classList.toggle("active");
         }
       },
