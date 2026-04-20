@@ -34,15 +34,22 @@ The app must expose one theme authority. The rest of the app should talk to `the
 - app runtime font metadata/loading now comes from `@unep-grid/mapx-style`
 - `app/src/js/theme/fonts.js` has been removed
 - legacy app-owned font sync/docs/assets under `app/src/fonts` have been removed
-- package-owned font asset resolution now has an explicit `local` / `s3` contract
+- web fonts are bundled from `@unep-grid/mapx-style` and served by the app build, not S3
 - theme-related runtime actions in app modules now go through `theme.*`
+- startup precedence is enforced across both JS and legacy Shiny paths:
+  - URL `theme=` overrides project/default theme
+  - late `mglSetTheme(...)` messages no longer override a different query theme
+- focused regression tests now cover:
+  - explicit startup theme id precedence
+  - button registration staying aligned with the active theme
+- duplicate built-in theme JSON copies have been removed from `app/src/js/theme/themes`
 
 ### Still pending
 
-- move from local package font paths to S3-backed published font URLs
-- add focused contract tests for startup precedence and theme/button synchronization
-- remove duplicate built-in theme JSON files from the app once tooling dependencies are handled
-- harden the package publish contract for font assets and generated artifacts
+- add a focused regression around the Shiny `mglSetTheme(...)` override path
+- audit and trim remaining legacy theme docs/scripts that still assume app-owned built-ins
+- harden the packaged font/build contract and document the emitted asset expectations
+- reduce remaining global mutable registry state inside `app/src/js/theme/index.js`
 
 ## Problem Statement
 
@@ -53,10 +60,8 @@ The current split is still messy and fragile:
 - `init_theme.js` only constructs the app `Theme`, while `init_mapx_style.js` constructs a separate style runtime with overlapping responsibility
 - theme ownership is split between app orchestration and package runtime, which makes startup precedence and synchronization hard to reason about
 - fonts are still split:
-  - app theme UI uses `app/src/js/theme/fonts.js`
-  - font CSS lives in `app/src/fonts/css`
-  - fonts are fetched from `fonts.gstatic.com`
-  - but glyphs and sprites are already package-owned and S3-backed
+  - webfonts are now package-owned and bundled correctly
+  - but the remaining docs/build assumptions are not fully aligned yet
 
 This is not maintainable. Theme application, theme state, and style runtime are coupled, but the code treats them as parallel systems.
 
