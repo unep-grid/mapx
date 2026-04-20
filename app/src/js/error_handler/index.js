@@ -1,5 +1,6 @@
 import { isJson, isString } from "./../is_test/index.js";
 import { errorToWarn } from "./errToWarn.js";
+import { errorToIgnore } from "./errToIgnore.js";
 /**
  * Generic handler
  * @param {String|Object} err Error message or object
@@ -12,6 +13,9 @@ export function errorHandler(err) {
     errObject.message = `${errObject.message} (source:${src} )`;
   }
 
+  if (errObject._to_ignore) {
+    return;
+  }
   if (errObject._to_warn) {
     console.warn(errObject.message);
   } else {
@@ -59,5 +63,10 @@ export function errorFormater(e) {
     }
   }
 
+  for (const r of errorToIgnore) {
+    if (r.test(e.message)) {
+      e._to_ignore = true;
+    }
+  }
   return Object.assign(new Error(), e);
 }
