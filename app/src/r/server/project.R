@@ -154,9 +154,6 @@ observe({
 })
 
 
-
-
-
 #
 # In case project change log project change AND IP
 # IP can take a while to be updated
@@ -379,6 +376,9 @@ observe({
     language <- reactData$language
     hasNoClip <- isEmpty(countryClip) || "WLD" %in% countryClip
     posChange <- !identical(reactData$mapPos, mapPos)
+    themeQuery <- query$theme
+    hasThemeQuery <- isNotEmpty(themeQuery)
+    hasTheme <- isNotEmpty(theme)
 
     if (isEmpty(mapPos)) {
       mapPos <- list()
@@ -398,10 +398,11 @@ observe({
     )
 
     #
-    # Updaet theme
+    # Update theme
+    # -theme query has priority : project theme only applied if empty
     #
-    if (isNotEmpty(theme)) {
-      mglSetTheme(theme)
+    if (hasTheme || hasThemeQuery) {
+      mglSetTheme(ifelse(hasThemeQuery, themeQuery, theme))
     }
 
     #

@@ -144,6 +144,7 @@ import { ViewsUpdateHelper } from "../views_list_update/index.js";
 import { getViewSourceMetadata } from "../metadata/utils.js";
 import { eventToPointBbox } from "./utils.js";
 import { showProjectInfo } from "../project/info.js";
+import { shouldIgnoreIncomingThemeUpdate } from "../theme/precedence.js";
 export * from "./view_filters.js";
 
 /**
@@ -1175,7 +1176,7 @@ export async function initMapx(o) {
   await map.once("load");
 
   /**
-   * Attach MapxStyle to the map (registers pitchend/error handlers,
+   * Attach Theme/MapxStyle to the map (registers pitchend/error handlers,
    * applies the current theme to basemap layers, and loads the mask).
    */
   theme.attachMap(map);
@@ -4955,6 +4956,17 @@ export async function setMapProjection(opt) {
  * @param {String} opt.id Theme id
  */
 export async function setTheme(opt) {
+  const idThemeQuery = getQueryParameter("theme")[0];
+
+  if (
+    shouldIgnoreIncomingThemeUpdate({
+      queryThemeId: idThemeQuery,
+      incomingThemeId: opt.theme,
+    })
+  ) {
+    return;
+  }
+
   await theme.set(opt.theme, { save_url: true });
 }
 
