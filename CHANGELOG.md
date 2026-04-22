@@ -1,3 +1,8 @@
+  - [1.13.20-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.1) 
+
+    - fix: missing await in search index synonym update
+
+
   - [1.13.20-alpha.0](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.0) 
 
     - fix(routines): send an email to global admin in case of failure
