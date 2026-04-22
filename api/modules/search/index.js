@@ -76,7 +76,7 @@ async function updateIndexForLanguage(language, documents, cid) {
     searchableAttributes: cid.searchableAttributes,
   });
 
-  const locsyn = generateLocaleSynonyms(language);
+  const locsyn = await generateLocaleSynonyms(language);
   await indexView.updateSynonyms(locsyn);
 
   /**
