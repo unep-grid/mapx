@@ -36,8 +36,7 @@ import {
 
 import maplibregl from "maplibre-gl";
 import mlcontour from "maplibre-contour";
-
-const mapxStyle = new MapxStyle({ maplibregl, mlcontour });
+import { getApiUrl } from "../api_routes/index.js";
 
 const def = {
   tree: true,
@@ -57,7 +56,7 @@ class Theme extends EventSimple {
     const t = this;
     bindAll(t);
     t._opt = Object.assign({}, global, opt);
-    t._mapxStyle = mapxStyle;
+    t._mapxStyle = null;
 
     t._btns = {
       dark: null,
@@ -95,6 +94,15 @@ class Theme extends EventSimple {
     if (!global.elStyle) {
       global.elStyle = el("style");
       document.head.appendChild(global.elStyle);
+    }
+
+    if (!t._mapxStyle) {
+      const s3BaseUrl = getApiUrl("/s3");
+      t._mapxStyle = new MapxStyle({
+        maplibregl,
+        mlcontour,
+        baseUrl: s3BaseUrl,
+      });
     }
 
     t._s = new ThemeService();

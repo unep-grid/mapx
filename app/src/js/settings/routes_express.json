@@ -20,5 +20,6 @@
   "uploadImage": "/upload/image/",
   "uploadVector": "/upload/vector/",
   "postEmail": "/send/mail",
-  "collectLogs": "/collect/logs/"
+  "collectLogs": "/collect/logs/",
+  "s3": "/s3"
 }

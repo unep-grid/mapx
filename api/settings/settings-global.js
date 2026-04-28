@@ -62,6 +62,10 @@ const settings_global = {
     rateLimit: 2000,
     rateWindowMinutes: 15,
   },
+  s3_proxy: {
+    baseUrl: "",
+    allowedPrefixes: [],
+  },
   redis: {
     user: "redis",
     port: 6379,

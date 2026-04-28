@@ -45,6 +45,10 @@ const settings = Object.assign({}, settings_global, {
     rateLimit: env.MAPX_MIRROR_RATE_LIMIT,
     rateWindowMinutes: env.MAPX_MIRROR_RATE_WINDOW_MINUTES,
   },
+  s3_proxy: {
+    baseUrl: env.MAPX_S3_PROXY_BASE_URL,
+    allowedPrefixes: env.MAPX_S3_PROXY_ALLOWED_PREFIXES,
+  },
   redis: {
     user: env.REDIS_USER,
     port: env.REDIS_PORT,

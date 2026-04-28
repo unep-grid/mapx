@@ -5,6 +5,7 @@ import { Server as SocketServer } from "socket.io";
 import query from "#mapx/query";
 import * as project from "#mapx/project";
 import mirror from "#mapx/mirror";
+import s3Proxy from "#mapx/s3_proxy";
 import { mwSendMail } from "#mapx/mail";
 import * as ip from "#mapx/ip";
 import tile from "#mapx/tile";
@@ -172,7 +173,10 @@ app.get("/get/views/list/global/public/", view.mwGetListPublic);
 app.get("/get/tile/:x/:y/:z.:ext", tile.mwGet);
 app.get("/get/query/", query.mwGet);
 app.get("/get/sql/", query.mwGet);
+app.head("/get/mirror/", mirror.mwHead);
 app.get("/get/mirror/", mirror.mwGet);
+app.head("/s3/*", s3Proxy.mwHead);
+app.get("/s3/*", s3Proxy.mwGet);
 
 app.get("/get/config/update", mwGetConfigUpdate);
 app.get("/get/config/geoserver", mwGetConfigGeoServer);
