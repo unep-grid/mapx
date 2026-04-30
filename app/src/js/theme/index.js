@@ -1147,12 +1147,20 @@ class Theme extends EventSimple {
     return this._mapxStyle?.toggleSatellite();
   }
 
-  getImageDataUrl(id, rgba) {
-    return this._mapxStyle?.getImageDataUrl(id, rgba) || null;
+  getImageDataUrl(id) {
+    return this._mapxStyle?.getImageDataUrl(id) || null;
+  }
+
+  getSvgDataUrl(id, color) {
+    return this._mapxStyle?.getSvgDataUrl(id, color) ?? null;
   }
 
   getIconDimensions(id) {
     return this._mapxStyle?.getIconDimensions(id) || null;
+  }
+
+  getIconMetrics(id) {
+    return this._mapxStyle?.getIconMetrics(id) || null;
   }
 
   resolveSpriteName(id) {

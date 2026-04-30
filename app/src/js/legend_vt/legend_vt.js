@@ -46,6 +46,7 @@ export class LegendVt {
     lvt._is_line = view?.data?.geometry?.type === "line";
     lvt._is_numeric = view?.data?.attribute?.type !== "string";
     lvt._el_legend = lvt.build();
+    lvt._updateSpriteBackgrounds();
   }
 
   /**
@@ -70,6 +71,54 @@ export class LegendVt {
     lvt._rules =
       rules || lvt._view?._style_rules || lvt._view?.data?.style?.rules || [];
     return lvt._rules;
+  }
+
+  /**
+   * Fills in sprite backgrounds after build().
+   * - polygon+sprite: raw tile PNG from map image store (getImageDataUrl)
+   * - point+sprite:   colored SVG data URI (getSvgDataUrl)
+   */
+  async _updateSpriteBackgrounds() {
+    const lvt = this;
+    for (const div of lvt._el_container.querySelectorAll("[data-sprite-id]")) {
+      const url = theme.getImageDataUrl(div.dataset.spriteId);
+      if (url) div.style.backgroundImage = `url("${url}")`;
+    }
+    for (const div of lvt._el_container.querySelectorAll("[data-sdf-id]")) {
+      const [url, metrics] = await Promise.all([
+        theme.getSvgDataUrl(
+          div.dataset.sdfId,
+          div.dataset.sdfColor,
+        ),
+        theme.getIconMetrics?.(div.dataset.sdfId),
+      ]);
+      lvt._setSdfIconSize(
+        div,
+        Number(div.dataset.sdfSize),
+        metrics,
+      );
+      if (url) div.style.backgroundImage = `url("${url}")`;
+    }
+  }
+
+  /**
+   * Match legend SDF SVG size to the visible map symbol.
+   * MapLibre scales the padded sprite tile; the legend renders the unpadded SVG.
+   *
+   * @param {HTMLElement} elIcon - Legend icon element.
+   * @param {number} size - Rule size in map style units.
+   * @param {object|null} metrics - Sprite tile and visible SVG dimensions.
+   * @returns {void}
+   */
+  _setSdfIconSize(elIcon, size, metrics) {
+    if (!Number.isFinite(size) || !metrics?.w || !metrics?.h) {
+      return;
+    }
+    const width = size * ((metrics.contentW || metrics.w) / metrics.w);
+    const height = size * ((metrics.contentH || metrics.h) / metrics.h);
+    elIcon.style.width = `${width}px`;
+    elIcon.style.height = `${height}px`;
+    elIcon.style.backgroundSize = `${width}px ${height}px`;
   }
 
   /**
@@ -342,15 +391,7 @@ export class LegendVt {
       const hasSprite = isNotEmpty(rule.sprite) && rule.sprite !== "none";
       const hasBorder = rule.add_border && isNotEmpty(rule.color_border);
       const color = chroma(rule.color).alpha(rule.opacity).css();
-      // For SDF point icons: pass RGBA 0-255 so the canvas is recolored.
-      // For raster patterns (polygon): pass null to render the raw image.
-      const spriteRgba =
-        hasSprite && lvt._is_point
-          ? [...chroma(rule.color).rgb(), Math.round(rule.opacity * 255)]
-          : null;
-      const spriteDataUrl = hasSprite
-        ? theme.getImageDataUrl(rule.sprite, spriteRgba)
-        : null;
+      // Sprite backgrounds are applied async in _updateSpriteBackgrounds().
 
       //colStyle.opacity = rule.opacity;
 
@@ -370,12 +411,13 @@ export class LegendVt {
           colStyle.height = `${rule.size}px`;
           colStyle.width = `${rule.size}px`;
           colStyle.backgroundColor = color;
+          colStyle.margin = `10px`;
         } else {
-          colStyle.backgroundImage = `url(${spriteDataUrl})`;
           colStyle.backgroundSize = `${rule.size}px ${rule.size}px`;
           colStyle.backgroundRepeat = "no-repeat";
           colStyle.height = `${rule.size}px`;
           colStyle.width = `${rule.size}px`;
+          // backgroundImage set async by _updateSpriteBackgrounds
         }
       }
 
@@ -383,9 +425,7 @@ export class LegendVt {
         lvt._is_polygon && hasSprite
           ? el("div", {
               class: "mx-legend-vt-rule-background",
-              style: {
-                backgroundImage: `url(${spriteDataUrl})`,
-              },
+              dataset: { spriteId: rule.sprite },
             })
           : el("div");
 
@@ -419,6 +459,15 @@ export class LegendVt {
                 el("div", {
                   class: "mx-legend-vt-rule-color",
                   style: colStyle,
+                  ...(lvt._is_point && hasSprite
+                    ? {
+                        dataset: {
+                          sdfId: rule.sprite,
+                          sdfColor: color,
+                          sdfSize: rule.size,
+                        },
+                      }
+                    : {}),
                 }),
               ],
             ),
@@ -467,7 +516,7 @@ export class LegendVt {
         el(
           "span",
           {
-            class: ["mx-legend-title","text-muted"],
+            class: ["mx-legend-title", "text-muted"],
           },
           titleLegend,
         ),
@@ -510,9 +559,7 @@ export class LegendVt {
       obj: view,
       path: "data.style.titleLegend",
     });
-    const elLegendTitle = lvt._el_container.querySelector(
-      ".mx-legend-title",
-    );
+    const elLegendTitle = lvt._el_container.querySelector(".mx-legend-title");
     if (isElement(elLegendTitle)) {
       elLegendTitle.innerText = titleLegend;
     }
