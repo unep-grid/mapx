@@ -63,14 +63,6 @@ class MapControlAttribution {
         el(
           "a",
           {
-            target: "_blank",
-            href: "https://mapbox.com/",
-          },
-          " © Mapbox",
-        ),
-        el(
-          "a",
-          {
             href: "#",
             on: [
               "click",

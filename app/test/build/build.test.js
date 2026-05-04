@@ -81,7 +81,6 @@ describe('Build verification', () => {
     it('should have correct service worker setup', () => {
       expect(fileContains('service-worker.js', 'workbox')).toBe(true);
       expect(fileContains('service-worker.js', 'registerRoute')).toBe(true);
-      expect(fileContains('service-worker.js', 'api.mapbox.com')).toBe(true);
     });
   });
 

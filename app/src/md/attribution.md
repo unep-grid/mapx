@@ -19,13 +19,6 @@ This product includes boundary data based on the current official boundaries rec
 - **Terms of Use**: [MapX ToU - UN Geospatial Data](https://docs.mapx.org/docs/legal-notices/terms-of-use.html#united-nations-geospatial-data)
 - **Attribution**: © United Nations
 
-### Mapbox
-
-This product includes data and imagery provided by Mapbox.
-
-- **Attribution**: © Mapbox
-- **Terms of Service**: [Mapbox ToS](https://www.mapbox.com/legal/tos)
-
 ### OpenStreetMap
 
 This product includes data and imagery provided by OpenStreetMap.

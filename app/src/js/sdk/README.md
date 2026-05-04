@@ -1672,7 +1672,7 @@ Map flyTo position with flying animation
 
 | Param | Type | Description |
 | --- | --- | --- |
-| opt | <code>Object</code> | Options see https://docs.mapbox.com/mapbox-gl-js/api/map/#map#flyto |
+| opt | <code>Object</code> | Options see https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/#flyto |
 
 **Example**  
 ```js
@@ -1688,7 +1688,7 @@ Map jumpTo position, without animation
 
 | Param | Type | Description |
 | --- | --- | --- |
-| opt | <code>Object</code> | Options see https://docs.mapbox.com/mapbox-gl-js/api/map/#map#jumpto |
+| opt | <code>Object</code> | Options see https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/#jumpto |
 
 **Example**  
 ```js
@@ -1750,9 +1750,9 @@ Set current max bounds / world
 <a name="MapxResolversStatic+map"></a>
 
 #### mapxResolversApp.map(opt) ⇒ <code>Promise.&lt;(Any\|Boolean)&gt;</code>
-Generic map (mapbox-gl-js) methods
+Generic map (maplibre-gl) methods
 This gives you low level access to the `map` methods. Most methods work, but not all.
-see https://docs.mapbox.com/mapbox-gl-js/api/map for all references
+see https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/ for all references
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
 **Returns**: <code>Promise.&lt;(Any\|Boolean)&gt;</code> - If returned value can be parsed, the value. If not, true;  
@@ -1838,7 +1838,7 @@ Set map bounding box based on code (ISO 3166-1 alpha-3 (ex. AFG, COD) and UN M49
 | o | <code>Object</code> | options |
 | o.code | <code>String</code> \| <code>Array.&lt;string&gt;</code> | Code: ISO 3166-1 alpha-3 (iso3) or UN M49 region code. E.g. 'COD','m49_004' |
 | o.name | <code>String</code> \| <code>Array.&lt;string&gt;</code> | Name (alternative to code, less recommanded): Country or region mame. e.g. Africa, Bangladesh |
-| o.param | <code>Object</code> | Animation options, see https://docs.mapbox.com/mapbox-gl-js/api/properties/#animationoptions |
+| o.param | <code>Object</code> | Animation options, see https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/AnimationOptions/ |
 
 <a name="MapxResolversPanels"></a>
 
@@ -2990,7 +2990,7 @@ Map flyTo position with flying animation
 
 | Param | Type | Description |
 | --- | --- | --- |
-| opt | <code>Object</code> | Options see https://docs.mapbox.com/mapbox-gl-js/api/map/#map#flyto |
+| opt | <code>Object</code> | Options see https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/#flyto |
 
 **Example**  
 ```js
@@ -3006,7 +3006,7 @@ Map jumpTo position, without animation
 
 | Param | Type | Description |
 | --- | --- | --- |
-| opt | <code>Object</code> | Options see https://docs.mapbox.com/mapbox-gl-js/api/map/#map#jumpto |
+| opt | <code>Object</code> | Options see https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/#jumpto |
 
 **Example**  
 ```js
@@ -3068,9 +3068,9 @@ Set current max bounds / world
 <a name="MapxResolversStatic+map"></a>
 
 #### mapxResolversStatic.map(opt) ⇒ <code>Promise.&lt;(Any\|Boolean)&gt;</code>
-Generic map (mapbox-gl-js) methods
+Generic map (maplibre-gl) methods
 This gives you low level access to the `map` methods. Most methods work, but not all.
-see https://docs.mapbox.com/mapbox-gl-js/api/map for all references
+see https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/ for all references
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>Promise.&lt;(Any\|Boolean)&gt;</code> - If returned value can be parsed, the value. If not, true;  
@@ -3156,7 +3156,7 @@ Set map bounding box based on code (ISO 3166-1 alpha-3 (ex. AFG, COD) and UN M49
 | o | <code>Object</code> | options |
 | o.code | <code>String</code> \| <code>Array.&lt;string&gt;</code> | Code: ISO 3166-1 alpha-3 (iso3) or UN M49 region code. E.g. 'COD','m49_004' |
 | o.name | <code>String</code> \| <code>Array.&lt;string&gt;</code> | Name (alternative to code, less recommanded): Country or region mame. e.g. Africa, Bangladesh |
-| o.param | <code>Object</code> | Animation options, see https://docs.mapbox.com/mapbox-gl-js/api/properties/#animationoptions |
+| o.param | <code>Object</code> | Animation options, see https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/AnimationOptions/ |
 
 <a name="MapxResolversPanels+panels_batch"></a>
 
