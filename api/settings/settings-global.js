@@ -59,12 +59,12 @@ const settings_global = {
     doc_base: "https://docs.mapx.org",
   },
   mirror: {
-    rateLimit: 100_000,
+    rateLimit: 2000,
     rateWindowMinutes: 15,
   },
   s3_proxy: {
     baseUrl: "",
-    allowedPrefixes: [],
+    allowedPrefixes: ["style", "layers", "masks", "maps"],
   },
   redis: {
     user: "redis",

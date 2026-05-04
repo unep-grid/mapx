@@ -47,7 +47,6 @@ const settings = Object.assign({}, settings_global, {
   },
   s3_proxy: {
     baseUrl: env.MAPX_S3_PROXY_BASE_URL,
-    allowedPrefixes: env.MAPX_S3_PROXY_ALLOWED_PREFIXES,
   },
   redis: {
     user: env.REDIS_USER,
