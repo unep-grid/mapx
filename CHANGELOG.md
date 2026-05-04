@@ -1,3 +1,45 @@
+  - [1.13.20-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.2) 
+
+    - fix: missing await in search index synonym update
+    - chore: revert release it tag control, re-add that if needed later
+    - chore: bumb version + check for remote version before  release
+    - chore: remove ref to mapbox.com
+    - chore: update mapx-style submodule
+    - fix: set keep alive true for s3 proxy + parse allowed prefix first
+    - fix: rate limites for mirror/s3
+    - fix: icon/pattern size in legend
+    - chore: updated submodule mapx-style
+    - feat:  s3 proxy (mainly for mapx-style)  and api mirror refactor
+    - chore: update ref submodule
+    - chore: clean files moved to MapxStyle
+    - feat: error handler cb, e.g. handling 404
+    - docs: theme refactor plan update
+    - fix: themes file left over + theme selection precedence issue
+    - refactor: moved font management to theme-core
+    - fix: theme bound in code integration; versions;
+    - fix: versions in code integration html example
+    - chore: versions
+    - fix: code sharing html demo
+    - fix: map composer export
+    - chore: clean unused import
+    - chore: update geoserver image
+    - chore: gitignore update
+    - docs: migration plan update
+    - refactor: pattern/icon management
+    - refactor: mapx style module adaptation
+    - refactor: webpack caching for s3 / mapterhorn
+    - refactor: adapt draw.js style, use modern expression for dash array line
+    - refactor: mapbox css -> maplibre
+    - refactor: continue slim down legacy thee class + introduced mapscaler from mapx-theme
+    - fix: zoom limitation issue
+    - chore: phase 1 to 4 of the migration plan
+    - docs: initial migration plan
+    - chore: add mapx-style as submodule
+    - chore: update gitignore, add sample_sahder_layer
+    - refactor(svg-icons): remove font icons generation, use svg directly
+    - chore(gitignore): prepare for style migration
+
+
   - [1.13.20-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.1) 
 
     - fix: missing await in search index synonym update
