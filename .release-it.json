@@ -14,6 +14,7 @@
       "npm run doc:sdk"
     ],
     "before:bump": [
+      "git fetch --tags -q && git tag -l \"${version}\" | grep -q \"^${version}$\" && { echo \"ERROR: tag ${version} already exists (possibly released on another branch). Update version.txt to the last released version first.\"; exit 1; } || true",
       "./release_scripts/update_versions.sh ${version}"
     ],
     "after:bump": [
