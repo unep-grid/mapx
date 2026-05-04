@@ -1,3 +1,9 @@
+  - [1.13.20-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.3) 
+
+    - ci: missing recursive submodule
+    - chore: clean md files
+
+
   - [1.13.20-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.2) 
 
     - fix: missing await in search index synonym update
