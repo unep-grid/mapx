@@ -59,7 +59,7 @@ const settings_global = {
     doc_base: "https://docs.mapx.org",
   },
   mirror: {
-    rateLimit: 2000,
+    rateLimit: 100_000,
     rateWindowMinutes: 15,
   },
   s3_proxy: {
