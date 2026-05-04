@@ -1,3 +1,9 @@
+  - [1.13.20-alpha.4](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.4) 
+
+    - ci: npm install submodule too
+    - chore: cleared config not usefull
+
+
   - [1.13.20-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.3) 
 
     - ci: missing recursive submodule
