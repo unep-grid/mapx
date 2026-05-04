@@ -12,6 +12,8 @@ import {
 
 const S3_PUBLIC_AUTHORIZATION = "AWS all_users:";
 
+const _allowedPrefixes = parseAllowedPrefixes(settings.s3_proxy.allowedPrefixes);
+
 const mwLimiter = rateLimit({
   windowMs: settings.mirror.rateWindowMinutes * 60 * 1000,
   max: settings.mirror.rateLimit,
@@ -26,11 +28,7 @@ export default { mwGet, mwHead };
 async function mwS3Proxy(req, res) {
   try {
     const path = sanitizeProxyPath(req.params[0]);
-    const allowedPrefixes = parseAllowedPrefixes(
-      settings.s3_proxy.allowedPrefixes,
-    );
-
-    assertAllowedPath(path, allowedPrefixes);
+    assertAllowedPath(path, _allowedPrefixes);
 
     await proxyRequest(req, res, {
       url: resolveProxyUrl(settings.s3_proxy.baseUrl, path, req.query),

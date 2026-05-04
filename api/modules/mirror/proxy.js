@@ -1,5 +1,14 @@
 import fetch from "node-fetch";
+import http from "node:http";
+import https from "node:https";
 import { pipeline } from "node:stream/promises";
+
+const _httpAgent = new http.Agent({ keepAlive: true, maxSockets: 256 });
+const _httpsAgent = new https.Agent({ keepAlive: true, maxSockets: 256 });
+
+function getAgent(url) {
+  return url.startsWith("https:") ? _httpsAgent : _httpAgent;
+}
 
 const REQUEST_HEADERS_TO_FORWARD = [
   "accept",
@@ -163,6 +172,7 @@ export async function proxyRequest(req, res, options) {
     method,
     headers: buildUpstreamHeaders(req, requestHeaders),
     compress: false,
+    agent: getAgent(url),
   });
 
   res.status(response.status);
