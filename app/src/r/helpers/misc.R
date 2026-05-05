@@ -91,8 +91,6 @@ mxIsValidSourceEdit <- function(idSource) {
 }
 
 
-
-
 #' Load external ui file value in shiny app
 #'
 #' Shortcut to load external shiny ui file
@@ -129,7 +127,6 @@ mxMd5 <- function(f) {
 mxJsonToListSource <- function(path) {
   paste(deparse(mxJsonToList(path), control = NULL), collapse = "\n")
 }
-
 
 
 #' Simple counter
@@ -261,8 +258,6 @@ mxSchemaMultiLingualInput <- function(
     properties = prop
   )
 }
-
-
 
 
 #' Create attribute description object based on multilingual input
@@ -400,7 +395,6 @@ mxSetResourcePath <- function(resources) {
 }
 
 
-
 #' Get country codes list, using selected language for names
 #' @param language {Character} Two letter code for language
 #' @return list {List} Named list of countries
@@ -414,7 +408,6 @@ mxGetCountryList <- function(language = "en", includeWorld = TRUE) {
   }
   return(out)
 }
-
 
 
 #' Replace escaped new line by new line
@@ -432,7 +425,8 @@ mxUnescapeNewLine <- function(txt) {
 #' @param dict {List} Dictionnary
 #' @param language {Character} Language (two letters code)
 #' @return Dictionary item
-mxDictTranslateSimple <- function(id,
+mxDictTranslateSimple <- function(
+  id,
   language = .get(config, c("languages", "codes")),
   dict = .get(config, "dict")
 ) {
@@ -617,7 +611,6 @@ mxDictTranslate <- function(
 d <- mxDictTranslate
 
 
-
 #' Create source named list from layer table with improved display
 #'
 #' @param layerTable A data frame with columns: "id", "title", "date_modified", "global"
@@ -636,7 +629,7 @@ mxGetSourceNamedList <- function(layerTable) {
   # Generate parts of the name
   global_icon <- ifelse(layerTable$global, "[g]", "")
   formatted_date <- format(layerTable$date_modified, "%Y-%m-%d")
-  dims <- sprintf("[%d x %d]",layerTable$nrow, layerTable$ncol)
+  dims <- sprintf("[%d x %d]", layerTable$nrow, layerTable$ncol)
 
   # Construct name string
   display_names <- sprintf(
@@ -680,8 +673,6 @@ mxGetTitleFromSourceID <- function(id, language = "en") {
 
   return(out)
 }
-
-
 
 
 #' Translate geom type name
@@ -805,7 +796,6 @@ mxTimeDiff <- function(titleOrTimer = "test") {
 }
 
 
-
 #' Test for internet connection.
 #' The idea is to reach google with a ping and determine if there is a full packet response without loss
 #'
@@ -822,7 +812,6 @@ mxCanReach <- function(server = "google.com", port = 80) {
 }
 
 
-
 #' Display a header message in console
 #' @param {character} text Text to display
 #' @export
@@ -836,15 +825,15 @@ mxConsoleText <- function(text = "") {
 }
 
 
-
-
 #' Extract stack trace from cond, format it as a data.frame
 #'
 #' @note  See https://github.com/rstudio/shiny/issues/2096
 #' @param cond Cond object
-mxGetStackTrace <- function(cond,
+mxGetStackTrace <- function(
+  cond,
   full = getOption("shiny.fullstacktrace", FALSE),
-  offset = getOption("shiny.stacktraceoffset", TRUE)) {
+  offset = getOption("shiny.stacktraceoffset", TRUE)
+) {
   tryCatch(
     {
       should_drop <- !full
@@ -1124,7 +1113,8 @@ mxCatch <- function(
   debug = TRUE,
   onError = function() {},
   onWarning = function() {},
-  onMessage = function() {}) {
+  onMessage = function() {}
+) {
   tryCatch(
     {
       captureStackTraces(eval(expression))
@@ -1157,7 +1147,6 @@ mxCatch <- function(
     }
   )
 }
-
 
 
 #' Random string generator
@@ -1231,7 +1220,6 @@ subPunct <- function(str, sep = "_", rmTrailingSep = T, rmLeadingSep = T, rmDupl
 }
 
 
-
 #' Set a checkbox button with custom icon.
 #'
 #' Create a checkbox input with a select icon.
@@ -1266,7 +1254,6 @@ mxEncode <- function(text) {
 mxDecode <- function(base64text) {
   rawToChar(jsonlite::base64_dec(base64text))
 }
-
 
 
 #' Parse key value pair from text
@@ -1414,7 +1401,6 @@ mxTextValidation <- function(textToTest, existingTexts, idTextValidation, minCha
 }
 
 
-
 #' Extract value from a list given a path
 #' @param listInput Input named list
 #' @param path Path inside the list
@@ -1526,7 +1512,6 @@ mxReadText <- function(fileName, clean = FALSE) {
 }
 
 
-
 mxButton <- function(inputId, labelId = NULL, class = NULL) {
   class <- paste0(class, collapse = " ")
   tags$button(
@@ -1550,40 +1535,73 @@ mxLabel <- function(id, language, icon) {
   )
 }
 
-
-#' User name input
+#' User name / one-time code input
 #'
-#' Create a username input
+#' Create a generic login input with autocomplete hints that reduce unwanted
+#' password-manager behavior, especially on the one-time code field.
 #'
 #' @param inputId Input id
-#' @param label Label to display
+#' @param placeholder Placeholder text
+#' @param tabindex Tab index
+#' @param autofocus Whether to autofocus the field
+#' @param class Additional CSS classes
+#' @param type Either "email" for the email field, or "otp" for the one-time
+#'   code field.
 #' @export
 mxInputUser <- function(
   inputId,
   placeholder = "Text...",
   tabindex = 0,
   autofocus = FALSE,
-  class = "form-control"
+  class = "form-control",
+  type = c("email", "otp")
 ) {
-  elInput <- tags$input(
+  type <- match.arg(type)
+
+  commonAttrs <- list(
     id = inputId,
     placeholder = placeholder,
     class = paste("mx-login-input", class),
     value = "",
-    autocomplete = "off",
     autocorrect = "off",
     autocapitalize = "off",
     spellcheck = "false",
     tabindex = tabindex,
+
+    # Vendor-specific password-manager opt-outs.
+    # These are best-effort only; extensions may still ignore them.
+    `data-1p-ignore` = "true", # 1Password
+    `data-lpignore` = "true", # LastPass
+    `data-bwignore` = "true", # Bitwarden
+    `data-form-type` = "other" # Dashlane / heuristic-based managers
   )
+
+  if (type == "email") {
+    typeAttrs <- list(
+      type = "email",
+      inputmode = "email",
+      name = "user-identifier",
+      autocomplete = "username"
+    )
+  } else {
+    typeAttrs <- list(
+      type = "text",
+      inputmode = "numeric",
+      name = "one-time-code",
+      autocomplete = "one-time-code",
+      pattern = "[A-Z0-9\\-]+",
+      style = "-webkit-text-security: disc; text-security: disc;"
+    )
+  }
+
+  elInput <- do.call(tags$input, c(commonAttrs, typeAttrs))
+
   if (isTRUE(autofocus)) {
     elInput <- tagAppendAttributes(elInput, autofocus = "autofocus")
   }
+
   elInput
 }
-
-
-
 
 
 #' Create a bootstrap accordion
@@ -1737,11 +1755,6 @@ mxSelect <- function(
 }
 
 
-
-
-
-
-
 #' Create button to change ui color
 #' @param {string} id Id of the generated button
 #' @export
@@ -1827,7 +1840,8 @@ mxFoldOrig <- function(
   classContainer = "fold-container form-group shiny-input-container",
   classContent = "fold-content",
   classLabel = "fold-label",
-  classScroll = "mx-scroll-styled") {
+  classScroll = "mx-scroll-styled"
+) {
   if (isEmpty(id)) id <- randomString()
 
   foldType <- ifelse(type == "caret", "fold-caret", "fold-check")
@@ -1860,7 +1874,8 @@ mxFold <- function(
   labelText = NULL,
   labelUi = NULL,
   type = "caret",
-  open = FALSE) {
+  open = FALSE
+) {
   elDetails <- tags$details()
 
   if (isEmpty(labelUi)) {
@@ -1963,8 +1978,6 @@ listToHtmlSimple <- function(listInput, lang = "en", dict = config$dict, useFold
 
   makeUL(listInput)
 }
-
-
 
 
 #' Checkbox with custom ui
@@ -2135,7 +2148,6 @@ mxGetAppUrlParam <- function(params, static = FALSE) {
 }
 
 
-
 #' Get project url
 #'
 #' @param project {Character} id of the project
@@ -2146,7 +2158,6 @@ mxGetProjectUrl <- function(project) {
 mxGetProjectLink <- function(project, title) {
   tagList(tags$a(href = mxGetProjectUrl(project), title))
 }
-
 
 
 #' Create encrypted link for an action
@@ -2178,7 +2189,8 @@ mxUpdateDefViewVt <- function(
   view,
   sourceData = NULL,
   sourceDataMask = NULL,
-  additionalAttributes = NULL) {
+  additionalAttributes = NULL
+) {
   #
   # update meta data
   #

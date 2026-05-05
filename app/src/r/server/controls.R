@@ -20,7 +20,6 @@ observeEvent(input$btn_control, {
 })
 
 
-
 observeEvent(reactChain$showLogin, {
   btn <- list()
   userInfo <- ""
@@ -75,16 +74,20 @@ observeEvent(reactChain$showLogin, {
     txtSubTitle <- d("login_subtitle", language)
     titleModalLogin <- d("user_authentication", language)
 
-    uiOut <- div(
+    uiOut <- tags$form(
+      id = "loginForm",
+      autocomplete = "off",
+      onsubmit = "return false;",
       div(
         id = "divEmailInput",
         class = "input-group mx-login-group",
         mxInputUser(
           inputId = "loginUserEmail",
-          placeholder = d("login_email", language, web = F),
+          placeholder = d("login_email", language, web = FALSE),
           class = "mx-login-input-black form-control",
           tabindex = 10,
-          autofocus = TRUE
+          autofocus = TRUE,
+          type = "email"
         ),
         tags$span(
           class = "input-group-btn",
@@ -100,9 +103,10 @@ observeEvent(reactChain$showLogin, {
       mxInputUser(
         inputId = "loginKey",
         placeholder = d("login_insert_pwd", language, web = FALSE),
-        class = "form-control mx-login-input mx-login-input-black  mx-hide",
+        class = "form-control mx-login-input mx-login-input-black mx-hide",
         tabindex = 12,
-        autofocus = FALSE
+        autofocus = FALSE,
+        type = "otp"
       ),
       div(
         class = "mx-login-info",
@@ -170,7 +174,6 @@ observeEvent(reactChain$showLogin, {
     )
   )
 })
-
 
 
 observeEvent(reactChain$showLanguages, {
