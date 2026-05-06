@@ -1,3 +1,9 @@
+  - [1.13.20-alpha.6](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.6) 
+
+    - fix: sld conversion, geostyler failed to parse multi sprite used in maplibre
+    - fix: wms/wmts time extension incl. legend + layer sort bug
+
+
   - [1.13.20-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.5) 
 
     - fix: theme editor color save
