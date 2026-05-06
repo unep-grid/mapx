@@ -406,7 +406,7 @@ export class BaseTimeMapLegend {
 
     for (let i = 0; i < nSlot; i++) {
       const slot = slots[i];
-      const isMatch = this.slotIncludes(slot, time);
+      const isMatch = this.slotContains(slot, time);
       if (isMatch) {
         switch (type) {
           case "time":
@@ -441,12 +441,18 @@ export class BaseTimeMapLegend {
   getTimeInput() {
     const dates = this._fp?.selectedDates;
     const start = dates[0];
-    // utc compensation
-    const delta = start.getTimezoneOffset() * 60 * 1000;
-    const time = start.getTime();
-    const utc = new Date(time - delta);
-    const dateTimeUtc = DateTime.fromJSDate(utc).toUTC();
-    return dateTimeUtc;
+    return this.getDateInputAsUtc(start);
+  }
+
+  getDateInputAsUtc(date) {
+    if (!(date instanceof Date)) {
+      return DateTime.invalid("Invalid date input");
+    }
+    return DateTime.utc(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      date.getDate(),
+    );
   }
 
   getTimeISOstring() {
@@ -471,10 +477,7 @@ export class BaseTimeMapLegend {
 
   getTimeSlot(time) {
     const slot = this.getSlotFromTime(time);
-    const { start, step } = slot;
-
-    const nStep = Math.ceil(time.diff(start) / step);
-    const snapTime = start.plus(nStep * step);
+    const snapTime = this.getTimeStepOnOrAfter(slot, time);
     const valid = this.validate(snapTime);
 
     if (valid) {
@@ -491,24 +494,26 @@ export class BaseTimeMapLegend {
     const slotc = this.getCurrentSlot();
     const currentTime = this.getTime();
     const increment = this.getIncrementDuration();
-    const { interval, start, step } = slotc;
+    const { interval } = slotc;
     const duration = Duration.fromISO(increment);
     const futureTime = currentTime[backward ? "minus" : "plus"](duration);
-
-    // Get plain number of step from start to future
-    const nStepFuture = Math.ceil(futureTime.diff(start) / step);
-    const moved = start.plus(nStepFuture * step);
+    const moved = backward
+      ? this.getTimeStepOnOrBefore(slotc, futureTime)
+      : this.getTimeStepOnOrAfter(slotc, futureTime);
 
     // _m__|-----|___
-    const usePrevious = interval.isAfter(moved);
+    const usePrevious = backward
+      ? !moved || interval.isAfter(moved)
+      : !!moved && interval.isAfter(moved);
     // ___|-----|__m_
-    const useNext = interval.isBefore(moved);
+    const useNext = backward
+      ? !!moved && interval.isBefore(moved)
+      : !moved || interval.isBefore(moved);
 
     if (usePrevious) {
       const slotp = this.getPreviousSlot();
-      const { end } = slotp;
       return {
-        time: end,
+        time: this.getLastTimeStep(slotp),
         slot: slotp,
       };
     }
@@ -555,10 +560,16 @@ export class BaseTimeMapLegend {
   }
 
   validate(time) {
+    if (!time) {
+      return false;
+    }
     const slots = this.getLayerInfo("time_slots");
     const isDateTime = time instanceof DateTime;
     if (!isDateTime) {
       time = DateTime.fromISO(time);
+    }
+    if (!time.isValid) {
+      return false;
     }
     for (const slot of slots) {
       if (this.slotIncludes(slot, time)) {
@@ -569,9 +580,90 @@ export class BaseTimeMapLegend {
   }
 
   slotIncludes(slot, time) {
+    const t = time.toUTC();
+    if (!this.slotContains(slot, t)) {
+      return false;
+    }
+    const stepTime = this.getTimeStepOnOrAfter(slot, t);
+    return !!stepTime && stepTime.equals(t);
+  }
+
+  slotContains(slot, time) {
     const { start, end, interval } = slot;
     const t = time.toUTC();
     return interval.contains(t) || t.equals(start) || t.equals(end);
+  }
+
+  getFirstTimeStep(slot) {
+    return slot.start;
+  }
+
+  getLastTimeStep(slot) {
+    return this.getTimeStepOnOrBefore(slot, slot.end);
+  }
+
+  getTimeStepOnOrAfter(slot, time) {
+    return this.getTimeStepBoundary(slot, time, false);
+  }
+
+  getTimeStepOnOrBefore(slot, time) {
+    return this.getTimeStepBoundary(slot, time, true);
+  }
+
+  getTimeStepBoundary(slot, time, backward = false) {
+    const t = time.toUTC();
+    const { start, end, step } = slot;
+
+    if (!step?.isValid || !this.durationCanAdvance(step)) {
+      return null;
+    }
+    if (t <= start) {
+      return backward && !t.equals(start) ? null : start;
+    }
+    if (t > end) {
+      return backward ? this.getLastTimeStep(slot) : null;
+    }
+
+    let high = 1;
+    let highTime = this.getTimeStepAt(slot, high);
+
+    while (highTime < t && highTime <= end) {
+      high *= 2;
+      highTime = this.getTimeStepAt(slot, high);
+    }
+
+    let low = 0;
+    while (low < high) {
+      const mid = Math.floor((low + high) / 2);
+      const midTime = this.getTimeStepAt(slot, mid);
+      if (midTime < t) {
+        low = mid + 1;
+      } else {
+        high = mid;
+      }
+    }
+
+    const candidate = this.getTimeStepAt(slot, low);
+    if (candidate.equals(t)) {
+      return candidate;
+    }
+    if (backward) {
+      return low > 0 ? this.getTimeStepAt(slot, low - 1) : null;
+    }
+    return candidate <= end ? candidate : null;
+  }
+
+  getTimeStepAt(slot, n) {
+    const units = slot.step.toObject();
+    const multipliedUnits = {};
+    for (const unit in units) {
+      multipliedUnits[unit] = units[unit] * n;
+    }
+    return slot.start.plus(Duration.fromObject(multipliedUnits));
+  }
+
+  durationCanAdvance(duration) {
+    return Object.values(duration.toObject()).some((value) => value > 0);
   }
 
   // Abstract method - must be implemented by subclasses
@@ -667,7 +759,7 @@ export class BaseTimeMapLegend {
       defaultDate: defaultDate,
       disable: [
         (date) => {
-          const dTime = DateTime.fromJSDate(date).toUTC();
+          const dTime = this.getDateInputAsUtc(date);
           return !this.validate(dTime);
         },
       ],

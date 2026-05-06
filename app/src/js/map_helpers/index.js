@@ -145,7 +145,9 @@ import { getViewSourceMetadata } from "../metadata/utils.js";
 import { eventToPointBbox } from "./utils.js";
 import { showProjectInfo } from "../project/info.js";
 import { shouldIgnoreIncomingThemeUpdate } from "../theme/precedence.js";
+import { sortLayers } from "./sort_layers.js";
 export * from "./view_filters.js";
+export { sortLayers } from "./sort_layers.js";
 
 /**
  * Storage
@@ -2372,37 +2374,6 @@ export function viewsLayersOrderUpdate(o) {
 }
 
 /**
- * Sort layer helper
- *
- * Set layers order, while keeping priority in order:
- *
- * true     false
- * ----     -----
- * 0,1      1,1
- * 0,0      1,0
- * 1,1      0,1
- * 1,0      0,0
- *
- * Last layer will be on top
- *
- * @param {Array} layers Layers list, with metadata attribute
- * @param {Boolean} reverse Reverse pos, keep priority
- */
-export function sortLayers(layers, reverse) {
-  layers.sort((a, b) => {
-    const ap = a.metadata.position;
-    const ar = a.metadata.priority;
-    const bp = b.metadata.position;
-    const br = b.metadata.priority;
-    const d1 = reverse ? bp - ap : ap - bp;
-    if (d1 !== 0) {
-      return d1;
-    }
-    return ar - br;
-  });
-}
-
-/**
  * Update view in params
  */
 export function updateViewParams(o) {
@@ -3503,7 +3474,7 @@ async function viewRenderCc(o) {
         return;
       }
       if (!opt.isInit()) {
-        console.warn("CC view : requested remove, but not yet initialized");
+        console.warn("CC view : requested remove, but not yet initialized. Save at least one cahnge");
       }
       await opt.onClose(opt);
       clear();
@@ -3566,6 +3537,7 @@ async function viewRenderCc(o) {
   }
 
   function setLegend(legend) {
+
     if (isHTML(legend) || isString(legend)) {
       legend = el("div", legend);
     }

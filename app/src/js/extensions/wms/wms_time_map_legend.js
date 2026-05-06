@@ -52,7 +52,7 @@ export class WMSTimeMapLegend extends BaseTimeMapLegend {
     };
 
     // Add elevation if provided
-    if(isNotEmpty(selectedElevation)){
+    if (isNotEmpty(selectedElevation)) {
       paramObject.ELEVATION = selectedElevation;
     }
 
@@ -105,7 +105,7 @@ export class WMSTimeMapLegend extends BaseTimeMapLegend {
     const styles = styleElements.map((styleEl) => {
       const name = styleEl.querySelector("Name")?.textContent || "";
       const legendEl = styleEl.querySelector("LegendURL OnlineResource");
-      const url_legend = legendEl?.getAttribute("xlink:href") || null;
+      const url_legend = this.getOnlineResourceUrl(legendEl);
 
       return {
         name,
@@ -169,6 +169,18 @@ export class WMSTimeMapLegend extends BaseTimeMapLegend {
     }
 
     return out;
+  }
+
+  getOnlineResourceUrl(node) {
+    if (!node) {
+      return null;
+    }
+    return (
+      node.getAttributeNS("http://www.w3.org/1999/xlink", "href") ||
+      node.getAttribute("xlink:href") ||
+      node.getAttribute("href") ||
+      null
+    );
   }
 
   parseWmsTimeSlots(timeString) {
