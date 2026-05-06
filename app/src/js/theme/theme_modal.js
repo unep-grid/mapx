@@ -31,6 +31,17 @@ import { listFontFamilies, listFonts } from "@unep-grid/mapx-style";
 const fontFamilies = listFontFamilies();
 const fonts = listFonts();
 
+function toLegacyRgbString(hex, alpha) {
+  const [r, g, b, a] = chroma(hex).alpha(alpha).rgba();
+  const alphaRounded = Math.round(a * 100) / 100;
+
+  if (alphaRounded >= 1) {
+    return `rgb(${r},${g},${b})`;
+  }
+
+  return `rgba(${r},${g},${b},${Number(alphaRounded.toFixed(2))})`;
+}
+
 export class ThemeModal extends EventSimple {
   constructor(opt) {
     super();
@@ -797,7 +808,7 @@ export class ThemeModal extends EventSimple {
         const font = out[cid].font;
         out[cid] = {
           visibility: out[cid].visibility === true ? "visible" : "none",
-          color: chroma(hex).alpha(alpha).css(),
+          color: toLegacyRgbString(hex, alpha),
         };
         if (font) {
           out[cid].font = font;
