@@ -1,3 +1,10 @@
+  - [1.13.20-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.5) 
+
+    - fix: theme editor color save
+    - fix: better OTP support + legacy code format
+    - chore: update submodule
+
+
   - [1.13.20-alpha.4](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.4) 
 
     - ci: npm install submodule too
