@@ -440,6 +440,7 @@ async function jedHooksApply(value, hooks) {
           value._style_mapbox = await getViewMapboxStyle(view);
           /* if custom style, null */
           value._style_sld = await getViewSldStyle(view);
+          break;
 
         default:
           null;

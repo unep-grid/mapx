@@ -4,6 +4,7 @@ import {
   getViewTitle,
   getStyleBaseMap,
 } from "../map_helpers/index.js";
+import { path } from "./../mx_helper_misc.js";
 import { getViewMapboxLayers } from "./view_to_mb_layers";
 import { mapboxToSld } from "./mbstyle_to_sld";
 import { isViewVtWithStyleCustom, isString } from "./../is_test/index.js";
@@ -28,6 +29,7 @@ export async function getViewSldStyle(idView) {
 
   const styleSld = await mapboxToSld(styleMapboxForSld, {
     fixFilters: true,
+    geomType: path(view, "data.geometry.type", "point"),
   });
 
   return styleSld;

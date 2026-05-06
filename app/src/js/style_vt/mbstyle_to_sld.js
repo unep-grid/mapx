@@ -1,5 +1,4 @@
 import { isUrl, isArray, isEmpty, isNotEmpty } from "./../is_test/index.js";
-import { parseTemplate } from "./../mx_helper_misc.js";
 import { settings } from "./../settings/index.js";
 import { getVersion } from "./../mx_helper_app_utils.js";
 /**
@@ -21,16 +20,20 @@ export async function mapboxToSld(style, opt) {
         fixImageCdn: true,
         fixIconSize: true,
         ignoreConversionErrors: true,
+        geomType: "point",
       },
       opt,
     );
 
     const fixNumeric = !!style?.metadata?.type_all_numeric;
+    const styleSld = getMapboxStyleForSld(style, {
+      geomType: opt.geomType,
+    });
     const mapbox = new MapboxStyleParser();
     const sld = new SldStyleParser();
 
     mapbox.ignoreConversionErrors = opt.ignoreConversionErrors;
-    const gstyle = await mapbox.readStyle(style, {});
+    const gstyle = await mapbox.readStyle(styleSld, {});
 
     if (isArray(gstyle?.errors) && isNotEmpty(gstyle.errors)) {
       const errors = gstyle.errors.join(",");
@@ -62,6 +65,55 @@ export async function mapboxToSld(style, opt) {
     console.warn(e);
   }
   return "";
+}
+
+/**
+ * Convert MapLibre style additions to a Mapbox/GeoStyler compatible style.
+ * GeoStyler's Mapbox parser only accepts a single sprite URL string.
+ * @param {Object} style Mapbox/MapLibre style
+ * @param {Object} opt Options
+ * @param {String} opt.geomType View geometry type
+ * @return {Object} Cloned style compatible with GeoStyler
+ */
+export function getMapboxStyleForSld(style, opt) {
+  const styleSld = cloneStyle(style);
+  const sprite = getSpriteUrlForSld(styleSld?.sprite, opt);
+
+  if (sprite) {
+    styleSld.sprite = sprite;
+  } else {
+    delete styleSld.sprite;
+  }
+
+  return styleSld;
+}
+
+/**
+ * Select a single sprite URL for GeoStyler from MapLibre's multi-sprite array.
+ * @param {String|Array} sprite Style sprite value
+ * @param {Object} opt Options
+ * @param {String} opt.geomType View geometry type
+ * @return {String|undefined} Sprite URL
+ */
+export function getSpriteUrlForSld(sprite, opt) {
+  if (typeof sprite === "string") {
+    return sprite;
+  }
+  if (!isArray(sprite)) {
+    return;
+  }
+
+  const geomType = opt?.geomType;
+  const idPreferred = geomType === "polygon" ? "patterns" : "default";
+  const preferred = sprite.find((s) => s?.id === idPreferred);
+  const fallbackDefault = sprite.find((s) => s?.id === "default");
+  const fallbackAny = sprite.find((s) => typeof s?.url === "string");
+
+  for (const item of [preferred, fallbackDefault, fallbackAny]) {
+    if (typeof item?.url === "string") {
+      return item.url;
+    }
+  }
 }
 
 /**
@@ -149,13 +201,13 @@ function geostylerFixIconSize(gstyle) {
  * @param {Object} params Search parameters e.g. {fill:'#FF0000'};
  * @return {String} url
  */
-function spriteToCdnLink(str, params) {
-  if (!str) {
+export function spriteToCdnLink(str, params) {
+  if (!str || typeof str !== "string") {
     return;
   }
   const url = new URL(location.origin + str);
   const version = getVersion();
-  const name = url.searchParams.get("name");
+  const name = stripSpriteNamespace(url.searchParams.get("name"));
 
   if (!name) {
     return;
@@ -165,13 +217,38 @@ function spriteToCdnLink(str, params) {
   const cdnTemplate = settings.cdn.template;
   const cdnPath = settings.cdn.path_svg;
   const path = `${cdnPath}/${image}`;
-  const urlImage = new URL(parseTemplate(cdnTemplate, { version, path }));
+  const urlImage = new URL(parseTemplateSimple(cdnTemplate, { version, path }));
   if (params) {
     for (const p in params) {
       urlImage.searchParams.set(p, params[p]);
     }
   }
   return urlImage;
+}
+
+/**
+ * Remove MapLibre sprite namespace prefix, e.g. patterns:t_b_lines_01.
+ * @param {String} name Sprite name
+ * @return {String} Bare sprite name
+ */
+export function stripSpriteNamespace(name) {
+  if (!name || typeof name !== "string") {
+    return name;
+  }
+  return name.split(":").pop();
+}
+
+function cloneStyle(style) {
+  if (!style) {
+    return {};
+  }
+  return JSON.parse(JSON.stringify(style));
+}
+
+function parseTemplateSimple(template, data) {
+  return template.replace(/{{([^{}]+)}}/g, (_, key) => {
+    return isEmpty(data[key]) ? "" : data[key];
+  });
 }
 
 /*async function svgPathFill(url,color){*/
