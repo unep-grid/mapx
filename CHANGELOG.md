@@ -1,3 +1,9 @@
+  - [1.13.20-alpha.7](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.7) 
+
+    - feat(symbolpicker): added + configured symbol picker in the vector view style configurator
+    - feat(svg): replace the CDN fetching for svg by our s3 endpoint in geoserver style/conversion update
+
+
   - [1.13.20-alpha.6](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.6) 
 
     - fix: sld conversion, geostyler failed to parse multi sprite used in maplibre
