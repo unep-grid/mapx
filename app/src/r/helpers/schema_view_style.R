@@ -87,21 +87,12 @@ mxSchemaViewStyle <- function(
   #
   # sprite settings
   #
-  jsonSpritePath <- file.path("src/sprites/dist/sprites/sprite.json")
-
-  # stop if the path is not found
-  if (!file.exists(jsonSpritePath)) stop("sprites path is not found")
-
-  # fetch sprite name
-  sprites <- sort(names(jsonlite::fromJSON(jsonSpritePath)))
-  #
-  # Points : maki-
-  # Polygon : t_ & geol_
-  #
-  spritesPrefix <- .get(config, c("sprites_prefix"))
-  sprites <- sprites[grepl(spritesPrefix[[geomType]], sprites)]
-
-
+  spriteGroups <- switch(geomType,
+    point = c("maki", "geology"),
+    polygon = c("pattern", "geology"),
+    line = c("maki", "pattern", "geology"),
+    c("maki", "pattern", "geology")
+  )
 
   #
   # style property
@@ -205,7 +196,13 @@ mxSchemaViewStyle <- function(
     sprite = list(
       title = tt("schema_style_sprite"),
       type = "string",
-      enum = c("none", sprites)
+      format = "mapx-sprite-picker",
+      default = "none",
+      mx_options = list(
+        renderer = "mapx-sprite-picker",
+        geometry = geomType,
+        groups = spriteGroups
+      )
     )
   )
 

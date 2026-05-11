@@ -153,6 +153,7 @@ vi.mock("@unep-grid/mapx-style", async () => {
       this.toggleSatellite = vi.fn();
       this.getImageDataUrl = vi.fn(() => null);
       this.getIconDimensions = vi.fn(async () => null);
+      this.getSprites = vi.fn(async () => []);
       this.resolveSpriteName = vi.fn((id) => id);
     }
   }
@@ -231,7 +232,9 @@ describe("Theme regressions", () => {
 
     expect(theme.preloadThemes).toHaveBeenCalledOnce();
     expect(theme.id()).toBe("classic_dark");
-    expect(new URL(location.href).searchParams.get("theme")).toBe("classic_dark");
+    expect(new URL(location.href).searchParams.get("theme")).toBe(
+      "classic_dark",
+    );
   });
 
   it("keeps button state aligned so the first click resolves from the active theme", async () => {
@@ -264,5 +267,18 @@ describe("Theme regressions", () => {
 
     expect(theme.id()).toBe(expectedTheme.id);
     expect(treeButton.active).toBe(!initialState.tree);
+  });
+
+  it("delegates sprite catalog loading to MapxStyle", async () => {
+    const { Theme, settings } = await loadThemeModule();
+    settings.mode = { app: false };
+
+    const theme = new Theme({ id: "classic_dark" });
+    await theme.init();
+
+    await expect(theme.getSprites({ groups: ["maki"] })).resolves.toEqual([]);
+    expect(theme.mapxStyle.getSprites).toHaveBeenCalledWith({
+      groups: ["maki"],
+    });
   });
 });

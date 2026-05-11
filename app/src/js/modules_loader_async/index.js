@@ -157,6 +157,7 @@ async function loadJsonEditor() {
     import("./../json_editor/editors/select_group.js"),
     import("./../json_editor/editors/select_keywords.js"),
     import("./../json_editor/editors/svg_input.js"),
+    import("./../json_editor/editors/mapx_sprite_picker.js"),
   ]);
   return { JSONEditor };
 }

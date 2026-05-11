@@ -1163,6 +1163,10 @@ class Theme extends EventSimple {
     return this._mapxStyle?.getIconMetrics(id) || null;
   }
 
+  getSprites(opt) {
+    return this._mapxStyle?.getSprites(opt) || [];
+  }
+
   resolveSpriteName(id) {
     return this._mapxStyle?.resolveSpriteName(id) || id;
   }

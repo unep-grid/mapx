@@ -82,7 +82,14 @@ module.exports = {
         use: [
           "style-loader",
           "css-loader",
-          "postcss-loader",
+          {
+            loader: "postcss-loader",
+            options: {
+              config: {
+                path: path.resolve(__dirname, "../postcss.config.js"),
+              },
+            },
+          },
           "less-loader",
         ],
       },
@@ -91,7 +98,14 @@ module.exports = {
         use: [
           "style-loader",
           "css-loader",
-          "postcss-loader",
+          {
+            loader: "postcss-loader",
+            options: {
+              config: {
+                path: path.resolve(__dirname, "../postcss.config.js"),
+              },
+            },
+          },
         ],
       },
       {
