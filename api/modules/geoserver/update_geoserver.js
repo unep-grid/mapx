@@ -51,7 +51,16 @@ async function ioUpdateGeoserver(socket, options) {
     });
     return;
   }
-  await rebuildHandler(socket, options);
+  try {
+    await rebuildHandler(socket, options);
+  } catch (e) {
+    /**
+     * rebuildHandler already notifies and resets the running state.
+     * Socket event handlers are not awaited by socket.io; swallowing here
+     * prevents an unhandled rejection from terminating the API process.
+     */
+    console.error("Geoserver rebuild failed", e);
+  }
 }
 
 /**
@@ -146,7 +155,7 @@ async function rebuild(socket, options) {
   const idGroup = randomString("update_geoserver");
   const idProgress = randomString("progress");
 
-  const clientStyle = !!options.overwriteStyle && !!socket?.connected;
+  const clientStyle = !!options.overwriteStyle;
 
   const out = {
     ok: false,
@@ -167,6 +176,20 @@ async function rebuild(socket, options) {
   const ids_db = await getProjectsIdAll();
   const ids_ns = await getNamespaceIdAll();
   const ids_ns_keep = ["it.geosolutions"]; // ws that can't be deleted...
+  let layers = await getViewsGeoserver();
+
+  if (clientStyle) {
+    const refresh = await refreshDbViewAltStyles(
+      socket,
+      layers,
+      idGroup,
+      idProgress
+    );
+    out.n_styles_refreshed = refresh.refreshed;
+    out.n_styles_skipped = refresh.skipped;
+    out.n_styles_failed = refresh.failed;
+    layers = await getViewsGeoserver();
+  }
 
   await socket.notifyProgress({
     idGroup: idGroup,
@@ -226,11 +249,8 @@ async function rebuild(socket, options) {
     value: 80,
   });
   const prom_layers = [];
-  const layers = await getViewsGeoserver();
   for (const layer of layers) {
-    prom_layers.push(
-      createLayer(socket, layer, clientStyle, idGroup, idProgress)
-    );
+    prom_layers.push(createLayer(socket, layer, idGroup, idProgress));
   }
   const resLayers = await Promise.all(prom_layers);
 
@@ -280,7 +300,7 @@ function isBboxGeoserver(item) {
 /**
  * Helpers
  */
-async function createLayer(socket, layer, clientStyle, idGroup, idProgress) {
+async function createLayer(socket, layer, idGroup, idProgress) {
   const ws = layer.id_project;
   const ds = `PG_${ws}`;
   const idStyle = layer.id;
@@ -308,18 +328,7 @@ async function createLayer(socket, layer, clientStyle, idGroup, idProgress) {
     layer.bbox_source
   );
 
-  const hasCustomStyle = !!layer.style_custom;
-  const requestStyle = clientStyle && !hasCustomStyle;
-
-  if (requestStyle) {
-    const result = await ioUpdateDbViewAltStyle(socket, { idView: layer.id });
-    if (result.valid) {
-      layer.style_mapbox = result.mapbox;
-      layer.style_sld = result.sld;
-    }
-  }
-
-  if (hasCustomStyle) {
+  if (layer.style_custom) {
     /**
      * Case style_sld has been previously defined:
      * if there is a custom style, we dont want that.
@@ -342,6 +351,81 @@ async function createLayer(socket, layer, clientStyle, idGroup, idProgress) {
   });
 
   return true;
+}
+
+async function refreshDbViewAltStyles(socket, layers, idGroup, idProgress) {
+  if (!socket?.connected || !socket?.mx_emit_ws_response) {
+    throw new Error(
+      "Client-side style regeneration requires a connected MapX client"
+    );
+  }
+
+  const summary = {
+    refreshed: 0,
+    skipped: 0,
+    failed: 0,
+  };
+  const layersToRefresh = layers.filter((layer) => !layer.style_custom);
+
+  await socket.notifyProgress({
+    idGroup: idGroup,
+    idMerge: idProgress,
+    type: "progress",
+    message: `Regenerating SLD styles...`,
+    value: 5,
+  });
+
+  const results = await Promise.all(
+    layersToRefresh.map(async (layer) => {
+      try {
+        const result = await ioUpdateDbViewAltStyle(socket, {
+          idView: layer.id,
+        });
+        if (!result?.valid) {
+          throw new Error(result?.error || "Invalid generated style");
+        }
+        summary.refreshed++;
+        return {
+          id: layer.id,
+          valid: true,
+        };
+      } catch (e) {
+        summary.failed++;
+        await socket.notifyInfoWarning({
+          idGroup: idGroup,
+          message: `SLD style regeneration failed for ${layer.id}: ${
+            e.message || e
+          }`,
+        });
+        return {
+          id: layer.id,
+          valid: false,
+          error: e,
+        };
+      }
+    })
+  );
+
+  summary.skipped = layers.length - layersToRefresh.length;
+
+  await socket.notifyProgress({
+    idGroup: idGroup,
+    idMerge: idProgress,
+    type: "progress",
+    message: `SLD styles regenerated: ${summary.refreshed} refreshed, ${summary.skipped} skipped, ${summary.failed} failed`,
+    value: 8,
+  });
+
+  const failed = results.filter((result) => !result.valid);
+  if (failed.length) {
+    throw new Error(
+      `SLD style regeneration failed for ${failed.length} view(s): ${failed
+        .map((result) => result.id)
+        .join(", ")}`
+    );
+  }
+
+  return summary;
 }
 
 async function addWorkspace(socket, id, ns_uri, idGroup, idProgress) {

@@ -1,10 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("./../mx_helper_app_utils.js", () => ({
-  getVersion: () => "test",
+vi.mock("./../api_routes/index.js", () => ({
+  getApiUrl: () => "https://api.example.test/s3",
 }));
 
 import {
+  fixSldExternalGraphicFormat,
   getMapboxStyleForSld,
   getSpriteUrlForSld,
   spriteToCdnLink,
@@ -83,15 +84,13 @@ describe("mbstyle_to_sld", () => {
   });
 
   describe("spriteToCdnLink", () => {
-    it("strips MapLibre sprite namespaces before building CDN SVG URLs", () => {
+    it("strips MapLibre sprite namespaces before building S3 SVG URLs", () => {
       const url = spriteToCdnLink("/sprites/?name=patterns:t_b_lines_01", {
         fill: "#AABBCC",
       });
 
       expect(url).toBeInstanceOf(URL);
-      expect(url.href).toContain(
-        "/app/src/sprites/dist/svg/t_b_lines_01.svg",
-      );
+      expect(url.href).toContain("/s3/style/v1/svg/t_b_lines_01.svg");
       expect(url.searchParams.get("fill")).toBe("#AABBCC");
     });
 
@@ -100,6 +99,24 @@ describe("mbstyle_to_sld", () => {
         "t_b_lines_01",
       );
       expect(stripSpriteNamespace("maki-airport-11")).toBe("maki-airport-11");
+    });
+  });
+
+  describe("fixSldExternalGraphicFormat", () => {
+    it("sets SVG format for external graphic URLs with query strings", () => {
+      const sld = `<?xml version="1.0" encoding="UTF-8"?>
+<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld">
+  <sld:ExternalGraphic>
+    <sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://apidev.mapx.localhost:8880/s3/style/v1/svg/maki-marker-11.svg?fill=%2374c476"/>
+    <sld:Format/>
+  </sld:ExternalGraphic>
+</sld:StyledLayerDescriptor>`;
+
+      const out = fixSldExternalGraphicFormat(sld);
+      const dom = new DOMParser().parseFromString(out, "application/xml");
+      const format = dom.querySelector("Format, sld\\:Format");
+
+      expect(format.textContent).toBe("image/svg+xml");
     });
   });
 });

@@ -1,6 +1,6 @@
+import { resolveSvgUrl } from "@unep-grid/mapx-style";
+import { getApiUrl } from "./../api_routes/index.js";
 import { isUrl, isArray, isEmpty, isNotEmpty } from "./../is_test/index.js";
-import { settings } from "./../settings/index.js";
-import { getVersion } from "./../mx_helper_app_utils.js";
 /**
  * Extract SLD from Mapbox layers
  * .. and fix common issues
@@ -60,7 +60,7 @@ export async function mapboxToSld(style, opt) {
 
     const out = await sld.writeStyle(gstyle.output);
 
-    return out.output;
+    return fixSldExternalGraphicFormat(out.output);
   } catch (e) {
     console.warn(e);
   }
@@ -148,7 +148,7 @@ function geostylerFixDuplicate(gstyle) {
 }
 
 /**
- * Replace sprite url by actual svg file url, using a cdn
+ * Replace sprite url by actual versioned SVG file url, using the S3 proxy.
  * @param {Object} GeoStyler style
  */
 function geostylerFixImageCdn(gstyle) {
@@ -159,7 +159,6 @@ function geostylerFixImageCdn(gstyle) {
         case "Icon":
           const img = spriteToCdnLink(symbolizer?.image, {
             fill: symbolizer.color,
-            dummyExt: ".svg", // converter expects .svg at the end...
           });
           if (isUrl(img)) {
             symbolizer.image = img.toString();
@@ -196,7 +195,7 @@ function geostylerFixIconSize(gstyle) {
 }
 
 /**
- * Convert a sprint string to CDN link
+ * Convert a sprite string to an S3 proxy SVG link.
  * @param {String} sprite link, e.g. '/sprites/?name=geol_hatch_02'
  * @param {Object} params Search parameters e.g. {fill:'#FF0000'};
  * @return {String} url
@@ -205,25 +204,20 @@ export function spriteToCdnLink(str, params) {
   if (!str || typeof str !== "string") {
     return;
   }
-  const url = new URL(location.origin + str);
-  const version = getVersion();
+  const origin = globalThis.location?.origin || "http://localhost";
+  const url = new URL(str, origin);
   const name = stripSpriteNamespace(url.searchParams.get("name"));
 
   if (!name) {
     return;
   }
 
-  const image = `${name}.svg`;
-  const cdnTemplate = settings.cdn.template;
-  const cdnPath = settings.cdn.path_svg;
-  const path = `${cdnPath}/${image}`;
-  const urlImage = new URL(parseTemplateSimple(cdnTemplate, { version, path }));
-  if (params) {
-    for (const p in params) {
-      urlImage.searchParams.set(p, params[p]);
-    }
-  }
-  return urlImage;
+  return new URL(
+    resolveSvgUrl(name, {
+      baseUrl: getApiUrl("/s3"),
+      params,
+    }),
+  );
 }
 
 /**
@@ -238,17 +232,61 @@ export function stripSpriteNamespace(name) {
   return name.split(":").pop();
 }
 
+/**
+ * Fix GeoStyler SVG format detection when SVG URLs include query strings.
+ * @param {String} sldString SLD XML string
+ * @return {String} Fixed SLD XML string
+ */
+export function fixSldExternalGraphicFormat(sldString) {
+  if (!sldString || typeof sldString !== "string") {
+    return sldString;
+  }
+  const dom = new DOMParser().parseFromString(sldString, "application/xml");
+  const parserError = dom.querySelector("parsererror");
+
+  if (parserError) {
+    return sldString;
+  }
+
+  const graphics = dom.querySelectorAll("ExternalGraphic, sld\\:ExternalGraphic");
+
+  for (const graphic of graphics) {
+    const resource = graphic.querySelector("OnlineResource, sld\\:OnlineResource");
+    const href =
+      resource?.getAttribute("xlink:href") || resource?.getAttribute("href");
+
+    if (!isSvgHref(href)) {
+      continue;
+    }
+
+    let format = graphic.querySelector("Format, sld\\:Format");
+    if (!format) {
+      format = dom.createElementNS(graphic.namespaceURI, "Format");
+      graphic.appendChild(format);
+    }
+    format.textContent = "image/svg+xml";
+  }
+
+  return new XMLSerializer().serializeToString(dom);
+}
+
+function isSvgHref(href) {
+  if (!href || typeof href !== "string") {
+    return false;
+  }
+  try {
+    const url = new URL(href, globalThis.location?.origin || "http://localhost");
+    return url.pathname.endsWith(".svg");
+  } catch (e) {
+    return href.split("?")[0].endsWith(".svg");
+  }
+}
+
 function cloneStyle(style) {
   if (!style) {
     return {};
   }
   return JSON.parse(JSON.stringify(style));
-}
-
-function parseTemplateSimple(template, data) {
-  return template.replace(/{{([^{}]+)}}/g, (_, key) => {
-    return isEmpty(data[key]) ? "" : data[key];
-  });
 }
 
 /*async function svgPathFill(url,color){*/

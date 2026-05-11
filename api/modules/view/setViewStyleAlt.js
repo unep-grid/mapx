@@ -48,12 +48,27 @@ export async function ioUpdateDbViewAltStyle(socket, options, client) {
     return { valid: false };
   }
 
-  const { result } = await socket.mx_emit_ws_response(
+  const response = await socket.mx_emit_ws_response(
     "/server/view/style/get",
     {
       idView: idView,
     }
   );
+  const { result, error } = response || {};
+
+  if (error) {
+    return {
+      valid: false,
+      error,
+    };
+  }
+
+  if (!result) {
+    return {
+      valid: false,
+      error: "Missing style generation result",
+    };
+  }
 
   result.valid = isNotEmpty(result?.mapbox) && isNotEmpty(result?.sld);
 

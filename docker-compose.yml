@@ -170,6 +170,9 @@ services:
     networks:
       - backend
       - frontend
+    extra_hosts:
+      - "api.mapx.localhost:host-gateway"
+      - "apidev.mapx.localhost:host-gateway"
     volumes:
       - ./_shared/geoserver:/geoserver/db
     labels:
