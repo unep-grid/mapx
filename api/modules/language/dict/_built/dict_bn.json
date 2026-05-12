@@ -7295,6 +7295,16 @@
     "bn": "অন্যান্য"
   },
   {
+    "id": "meta_view_stat_n_add_by_month",
+    "en": "Monthly activations",
+    "bn": "মাসিক সক্রিয়করণ"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_month",
+    "en": "Monthly activations by country",
+    "bn": "দেশ অনুযায়ী মাসিক অ্যাক্টিভেশন"
+  },
+  {
     "id": "meta_source_title",
     "en": "Title",
     "bn": "শিরোনাম "

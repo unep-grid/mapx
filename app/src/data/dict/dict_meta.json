@@ -312,6 +312,32 @@
     "de": ""
   },
   {
+    "id": "meta_view_stat_n_add_by_month",
+    "en": "Monthly activations",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_month",
+    "en": "Monthly activations by country",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "meta_source_title",
     "en": "Title",
     "fr": "Titre",

@@ -18967,6 +18967,32 @@
     "de": "Andere"
   },
   {
+    "id": "meta_view_stat_n_add_by_month",
+    "en": "Monthly activations",
+    "fr": "Activations mensuelles",
+    "es": "Activaciones mensuales",
+    "ru": "Ежемесячные активации",
+    "zh": "每月激活量",
+    "ar": "التفعيلات الشهرية",
+    "fa": "فعال‌سازی‌های ماهانه",
+    "ps": "میاشتني فعالیتونه",
+    "bn": "মাসিক সক্রিয়করণ",
+    "de": "Monatliche Aktivierungen"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_month",
+    "en": "Monthly activations by country",
+    "fr": "Activations mensuelles par pays",
+    "es": "Activaciones mensuales por país",
+    "ru": "Ежемесячные мероприятия по странам",
+    "zh": "按国家/地区划分的月度激活量",
+    "ar": "عمليات التفعيل الشهرية حسب البلد",
+    "fa": "فعال‌سازی‌های ماهانه بر اساس کشور",
+    "ps": "د هیواد له مخې میاشتني فعالیتونه",
+    "bn": "দেশ অনুযায়ী মাসিক অ্যাক্টিভেশন",
+    "de": "Monatliche Aktivierungen nach Land"
+  },
+  {
     "id": "meta_source_title",
     "en": "Title",
     "fr": "Titre",

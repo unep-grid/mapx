@@ -7295,6 +7295,16 @@
     "de": "Andere"
   },
   {
+    "id": "meta_view_stat_n_add_by_month",
+    "en": "Monthly activations",
+    "de": "Monatliche Aktivierungen"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_month",
+    "en": "Monthly activations by country",
+    "de": "Monatliche Aktivierungen nach Land"
+  },
+  {
     "id": "meta_source_title",
     "en": "Title",
     "de": "Titel "
