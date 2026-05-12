@@ -1,3 +1,10 @@
+  - [1.13.20-alpha.8](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.8) 
+
+    - feat(#1111): initial implementation; Better view stats, wider range, map view
+    - chore: update translations
+    - chore: update mapxstyle submodule
+
+
   - [1.13.20-alpha.7](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.7) 
 
     - feat(symbolpicker): added + configured symbol picker in the vector view style configurator
