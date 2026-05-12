@@ -15,12 +15,13 @@ import { settings, theme, ws } from "../mx";
 import { MenuBuilder } from "../metadata/menu";
 import {
   aggregateCountryMonthRange,
-  buildCountryPoints,
+  buildClassPieces,
+  buildCountryMapData,
   buildMonthKeys,
   fillMonthlyCounts,
   formatMonthLabel,
   limitCountryRows,
-  symbolSizeByCount,
+  sumMonthlyRange,
 } from "./helpers";
 
 const defOpt = {
@@ -298,7 +299,6 @@ export class ViewStats {
     const panel = this.panels.get("monthly");
     const monthKeys = buildMonthKeys();
     const rows = fillMonthlyCounts(this.stats?.stat_n_add_by_month, monthKeys);
-    const title = await getDictItem("meta_view_stat_n_add_by_month");
     const elChart = this.chartPanel(panel, "mx-view-stats--chart");
     const echarts = await moduleLoad("echarts");
     const chart = this.initChart(echarts, elChart);
@@ -340,18 +340,6 @@ export class ViewStats {
             color: this.color("mx_ui_link"),
           },
         },
-        {
-          name: txtReads,
-          type: "line",
-          data: rows.map((row) => row.count),
-          symbolSize: 6,
-          lineStyle: {
-            color: this.color("mx_ui_link"),
-          },
-          itemStyle: {
-            color: this.color("mx_ui_link"),
-          },
-        },
       ],
       toolbox: this.toolbox(),
     });
@@ -361,33 +349,46 @@ export class ViewStats {
     const panel = this.panels.get("map");
     const monthKeys = buildMonthKeys();
     const rows = this.stats?.stat_n_add_by_country_month || [];
+    const monthlyRows = this.stats?.stat_n_add_by_month || [];
     const aggregated = aggregateCountryMonthRange(rows, monthKeys);
+    const totalActivations = sumMonthlyRange(monthlyRows, monthKeys);
     const title = await getDictItem("meta_view_stat_n_add_by_country_month");
 
-    if (aggregated.max <= 0) {
+    if (totalActivations <= 0) {
       panel.appendChild(this.emptyPanel(title, await getDictItem("empty")));
       return;
     }
 
     const elSlider = await this.buildMapRangeSlider(panel, monthKeys);
     const elChart = this.chartPanel(panel, "mx-view-stats--chart-map");
-    const [echarts, topojson, d3Geo] = await Promise.all([
+    const [echarts, topojson] = await Promise.all([
       moduleLoad("echarts"),
       moduleLoad("topojson"),
-      moduleLoad("d3-geo"),
     ]);
-    const geojson = this.registerMap(echarts, topojson);
-    const centroids = this.countryCentroids(geojson, d3Geo);
+    this.registerMap(echarts, topojson);
     const chart = this.initChart(echarts, elChart);
     const countryNames = await this.countryNameMap(
       this.stats?.stat_n_add_by_country_month || [],
     );
     const txtReads = await getDictItem("meta_view_stat_activations");
+    const pieces = buildClassPieces(aggregated.max, 5);
+    const colors = this.choroplethColors(pieces.length);
+    const visualPieces = pieces.map((piece, index) => ({
+      ...piece,
+      color: colors[index],
+      label:
+        piece.min === piece.max
+          ? String(piece.min)
+          : `${piece.min} - ${piece.max}`,
+    }));
 
     const updateMap = (range) => {
       const dataRange = aggregateCountryMonthRange(rows, monthKeys, range);
-      const points = buildCountryPoints(dataRange, centroids);
+      const mapData = buildCountryMapData(dataRange);
       const labelRange = this.formatMonthRange(monthKeys, range);
+      const totalRange = sumMonthlyRange(monthlyRows, monthKeys, range);
+      const mappedRange = mapData.reduce((sum, row) => sum + row.count, 0);
+      const unknownRange = Math.max(0, totalRange - mappedRange);
 
       chart.setOption({
         title: {
@@ -401,45 +402,58 @@ export class ViewStats {
           },
         },
         backgroundColor: this.color("mx_ui_background"),
+        graphic:
+          unknownRange > 0
+            ? [
+                {
+                  type: "text",
+                  left: 12,
+                  bottom: 16,
+                  style: {
+                    text: `${unknownRange} activation(s) without location`,
+                    fill: this.color("mx_ui_text_faded"),
+                    fontSize: 11,
+                  },
+                },
+              ]
+            : [],
         tooltip: {
           trigger: "item",
           formatter: (params) => {
             const countryName = countryNames.get(params.name) || params.name;
-            const value = params.data?.count || params.value?.[2] || 0;
+            const value = params.data?.count || params.value || 0;
             return `${countryName}<br>${labelRange}<br>${value} ${txtReads}`;
           },
         },
-        geo: {
-          map: MAP_NAME,
-          roam: true,
-          silent: true,
-          itemStyle: {
-            areaColor: this.color("mx_ui_background_faded"),
-            borderColor: this.color("mx_ui_border"),
-            borderWidth: 0.6,
+        visualMap: {
+          type: "piecewise",
+          pieces: visualPieces,
+          left: 12,
+          top: 16,
+          textStyle: {
+            color: this.color("mx_ui_text"),
           },
-          emphasis: {
-            disabled: true,
-          },
+          itemGap: 4,
+          itemWidth: 16,
+          itemHeight: 10,
         },
         series: [
           {
             name: title,
-            type: "scatter",
-            coordinateSystem: "geo",
-            data: points,
-            symbolSize: (value) =>
-              symbolSizeByCount(value?.[2], dataRange.max),
+            type: "map",
+            map: MAP_NAME,
+            roam: true,
+            data: mapData,
             itemStyle: {
-              color: this.color("mx_ui_link"),
-              opacity: 0.72,
-              borderColor: this.color("mx_ui_background"),
-              borderWidth: 1,
+              areaColor: this.color("mx_ui_background_faded"),
+              borderColor: this.color("mx_ui_text_faded"),
+              borderWidth: 0.75,
             },
             emphasis: {
               itemStyle: {
-                color: this.color("mx_ui_input_accent"),
-                opacity: 0.9,
+                areaColor: this.color("mx_ui_input_accent"),
+                borderColor: this.color("mx_ui_text"),
+                borderWidth: 0.8,
               },
             },
           },
@@ -564,22 +578,6 @@ export class ViewStats {
     return geojson;
   }
 
-  countryCentroids(geojson, d3Geo) {
-    if (ViewStats._countryCentroids) {
-      return ViewStats._countryCentroids;
-    }
-
-    const centroids = new Map();
-    for (const feature of geojson.features || []) {
-      const country = feature.properties?.ISO_2_CODE;
-      if (country) {
-        centroids.set(country, d3Geo.geoCentroid(feature));
-      }
-    }
-    ViewStats._countryCentroids = centroids;
-    return centroids;
-  }
-
   formatMonthRange(monthKeys, range) {
     const locale = getLanguageCurrent();
     const start = Math.max(0, Math.min(range[0], range[1]));
@@ -609,6 +607,16 @@ export class ViewStats {
     return theme.getColorThemeItem(id) || theme.colors()?.[id]?.color || "";
   }
 
+  choroplethColors(n) {
+    const base = parseColor(this.color("mx_ui_link"));
+    const count = Math.max(1, n);
+
+    return Array.from({ length: count }, (_, index) => {
+      const opacity = 0.18 + (index / Math.max(1, count - 1)) * 0.72;
+      return `rgba(${base.r}, ${base.g}, ${base.b}, ${opacity.toFixed(2)})`;
+    });
+  }
+
   toolbox() {
     return {
       feature: {
@@ -618,6 +626,39 @@ export class ViewStats {
       },
     };
   }
+}
+
+function parseColor(value) {
+  const color = String(value || "").trim();
+  const rgb = color.match(
+    /^rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)(?:[,\s/]+[\d.]+)?\s*\)$/i,
+  );
+  if (rgb) {
+    return {
+      r: Number(rgb[1]),
+      g: Number(rgb[2]),
+      b: Number(rgb[3]),
+    };
+  }
+
+  const hex = color.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+  if (hex) {
+    const raw = hex[1];
+    const full =
+      raw.length === 3
+        ? raw
+            .split("")
+            .map((part) => `${part}${part}`)
+            .join("")
+        : raw;
+    return {
+      r: parseInt(full.slice(0, 2), 16),
+      g: parseInt(full.slice(2, 4), 16),
+      b: parseInt(full.slice(4, 6), 16),
+    };
+  }
+
+  return { r: 18, g: 176, b: 248 };
 }
 
 export async function getViewStats(

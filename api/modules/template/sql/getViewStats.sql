@@ -39,6 +39,8 @@ WITH
       mx_logs
     WHERE
       data #>> '{"id_view"}' = $1
+      -- view_add is used as activation: it records interest in the view object,
+      -- including story maps, while story steps keep logging their own views.
       AND id_log = 'view_add'
       AND date_modified > (CURRENT_DATE - $2::integer)
   ),

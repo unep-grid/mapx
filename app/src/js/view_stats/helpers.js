@@ -123,47 +123,49 @@ export function aggregateCountryMonthRange(
   };
 }
 
-export function buildCountryPoints(aggregated, centroids = new Map()) {
+export function sumMonthlyRange(
+  rows = [],
+  monthKeys = buildMonthKeys(),
+  range = [0, monthKeys.length - 1],
+) {
+  const start = Math.max(0, Math.min(range[0], range[1]));
+  const end = Math.min(monthKeys.length - 1, Math.max(range[0], range[1]));
+  const months = new Set(monthKeys.slice(start, end + 1));
+  let total = 0;
+
+  for (const row of fillMonthlyCounts(rows, monthKeys)) {
+    if (months.has(row.month)) {
+      total += normalizeCount(row.count);
+    }
+  }
+
+  return total;
+}
+
+export function buildCountryMapData(aggregated) {
   const countries = aggregated?.countries || [];
 
   return countries
-    .map((row) => {
-      const centroid = centroids.get(row.country);
-      if (!centroid) {
-        return null;
-      }
-      return {
-        name: row.country,
-        count: normalizeCount(row.count),
-        value: [centroid[0], centroid[1], normalizeCount(row.count)],
-      };
-    })
-    .filter(Boolean);
-}
-
-export function symbolSizeByCount(count, max, minSize = 4, maxSize = 42) {
-  const value = normalizeCount(count);
-  const upper = normalizeCount(max);
-
-  if (value <= 0 || upper <= 0) {
-    return 0;
-  }
-
-  return minSize + Math.sqrt(value / upper) * (maxSize - minSize);
+    .filter((row) => row.country && row.country !== "?")
+    .map((row) => ({
+      name: row.country,
+      count: normalizeCount(row.count),
+      value: normalizeCount(row.count),
+    }));
 }
 
 export function buildClassPieces(max, n = 5) {
   const upper = Math.max(0, normalizeCount(max));
 
   if (upper <= 0) {
-    return [{ min: 0, max: 0 }];
+    return [];
   }
 
   const step = Math.ceil(upper / n);
   const pieces = [];
 
   for (let i = 0; i < n; i++) {
-    const min = i * step + (i === 0 ? 0 : 1);
+    const min = i * step + 1;
     const pieceMax = Math.min((i + 1) * step, upper);
 
     if (min <= pieceMax) {

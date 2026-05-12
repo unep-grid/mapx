@@ -2,13 +2,13 @@ import { describe, expect, it } from "vitest";
 import {
   aggregateCountryMonthRange,
   buildClassPieces,
-  buildCountryPoints,
+  buildCountryMapData,
   buildMonthKeys,
   fillMonthlyCounts,
   formatMonthLabel,
   groupCountryMonthRows,
   limitCountryRows,
-  symbolSizeByCount,
+  sumMonthlyRange,
 } from "./helpers";
 
 describe("view stats helpers", () => {
@@ -100,12 +100,12 @@ describe("view stats helpers", () => {
 
   it("builds bounded class pieces", () => {
     expect(buildClassPieces(12, 5)).toEqual([
-      { min: 0, max: 3 },
+      { min: 1, max: 3 },
       { min: 4, max: 6 },
       { min: 7, max: 9 },
       { min: 10, max: 12 },
     ]);
-    expect(buildClassPieces(0, 5)).toEqual([{ min: 0, max: 0 }]);
+    expect(buildClassPieces(0, 5)).toEqual([]);
   });
 
   it("formats month labels", () => {
@@ -133,6 +133,20 @@ describe("view stats helpers", () => {
     });
   });
 
+  it("sums monthly counts over an inclusive month range", () => {
+    expect(
+      sumMonthlyRange(
+        [
+          { month: "2026-01-01", count: 2 },
+          { month: "2026-02-01", count: "3" },
+          { month: "2026-03-01", count: 20 },
+        ],
+        ["2026-01", "2026-02", "2026-03"],
+        [0, 1],
+      ),
+    ).toBe(5);
+  });
+
   it("excludes unknown countries from range aggregation", () => {
     const aggregated = aggregateCountryMonthRange(
       [
@@ -150,29 +164,26 @@ describe("view stats helpers", () => {
     });
   });
 
-  it("builds map points only when a centroid is available", () => {
+  it("builds choropleth map data and excludes unknown countries", () => {
     expect(
-      buildCountryPoints(
-        {
-          countries: [
-            { country: "CH", count: 5 },
-            { country: "FR", count: 3 },
-          ],
-        },
-        new Map([["CH", [8.2, 46.8]]]),
-      ),
+      buildCountryMapData({
+        countries: [
+          { country: "CH", count: 5 },
+          { country: "?", count: 4 },
+          { country: "FR", count: "3" },
+        ],
+      }),
     ).toEqual([
       {
         name: "CH",
         count: 5,
-        value: [8.2, 46.8, 5],
+        value: 5,
+      },
+      {
+        name: "FR",
+        count: 3,
+        value: 3,
       },
     ]);
-  });
-
-  it("scales proportional symbols with square-root sizing", () => {
-    expect(symbolSizeByCount(0, 100)).toBe(0);
-    expect(symbolSizeByCount(100, 100)).toBe(42);
-    expect(symbolSizeByCount(25, 100)).toBe(23);
   });
 });
