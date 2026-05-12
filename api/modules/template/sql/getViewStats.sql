@@ -42,6 +42,14 @@ WITH
       AND id_log = 'view_add'
       AND date_modified > (CURRENT_DATE - $2::integer)
   ),
+  v_months AS (
+    SELECT
+      generate_series(
+        date_trunc('month', CURRENT_DATE)::date - (($3::integer - 1) * interval '1 month'),
+        date_trunc('month', CURRENT_DATE)::date,
+        interval '1 month'
+      )::date AS month
+  ),
   v_stat_add_count_by_country AS (
     SELECT
       country_code as country,
@@ -49,11 +57,52 @@ WITH
     FROM
       v_log
     WHERE
-      date_modified > (CURRENT_DATE - 365::integer)
+      date_modified > (CURRENT_DATE - $2::integer)
     GROUP BY
       country_code
     ORDER BY
       count desc
+  ),
+  v_stat_add_count_by_month AS (
+    SELECT
+      m.month,
+      COUNT(l.pid)
+    FROM
+      v_months m
+      LEFT JOIN v_log l ON date_trunc('month', l.date_modified)::date = m.month
+    GROUP BY
+      m.month
+    ORDER BY
+      m.month
+  ),
+  v_stat_add_count_by_month_table AS (
+    SELECT
+      coalesce(json_agg(row_to_json(t)), '[]') tbl
+    FROM
+      v_stat_add_count_by_month t
+  ),
+  v_stat_add_count_by_country_month AS (
+    SELECT
+      date_trunc('month', date_modified)::date as month,
+      country_code as country,
+      COUNT(*)
+    FROM
+      v_log
+    WHERE
+      country_code IS NOT NULL
+      AND date_modified >= (SELECT min(month) FROM v_months)
+    GROUP BY
+      month,
+      country_code
+    ORDER BY
+      month,
+      count desc
+  ),
+  v_stat_add_count_by_country_month_table AS (
+    SELECT
+      coalesce(json_agg(row_to_json(t)), '[]') tbl
+    FROM
+      v_stat_add_count_by_country_month t
   ),
   v_stat_add_count_by_country_table AS (
     SELECT
@@ -101,6 +150,8 @@ WITH
       json_build_object(
         'id',
         to_json(vl.id),
+        'title',
+        (vl.data #> '{"title"}')::json,
         'stat_n_add',
         to_json(vs_add_by_users.count + vs_add_by_guests.count),
         'stat_n_add_by_guests',
@@ -110,7 +161,11 @@ WITH
         'stat_n_add_by_distinct_users',
         to_json(vs_add_by_distinct_users.count),
         'stat_n_add_by_country',
-        vs_add_by_country.tbl
+        vs_add_by_country.tbl,
+        'stat_n_add_by_month',
+        vs_add_by_month.tbl,
+        'stat_n_add_by_country_month',
+        vs_add_by_country_month.tbl
       ) AS stats
     FROM
       v_latest vl,
@@ -118,7 +173,9 @@ WITH
       v_stat_add_count_by_guests vs_add_by_guests,
       v_stat_add_count_by_users vs_add_by_users,
       v_stat_add_count_by_distinct_users vs_add_by_distinct_users,
-      v_stat_add_count_by_country_table vs_add_by_country
+      v_stat_add_count_by_country_table vs_add_by_country,
+      v_stat_add_count_by_month_table vs_add_by_month,
+      v_stat_add_count_by_country_month_table vs_add_by_country_month
   )
 SELECT
   *

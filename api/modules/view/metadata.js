@@ -88,9 +88,13 @@ export async function ioViewStatsGet(socket, config, cb) {
       throw new Error("Missing session");
     }
 
-    const { idView, stat_n_days } = config;
+    const { idView, stat_n_days, stat_n_months } = config;
 
-    const statsView = await getViewStats({ id: idView, stat_n_days });
+    const statsView = await getViewStats({
+      id: idView,
+      stat_n_days,
+      stat_n_months,
+    });
 
     return cb(statsView);
   } catch (e) {
@@ -128,6 +132,7 @@ export async function getViewMetadata(opt) {
  * @param {Object} opt options
  * @param {String} opt.id Id of the view
  * @param {Number} opt.stat_n_days  Number of days to computed stat frow now
+ * @param {Number} opt.stat_n_months  Number of months to computed monthly stats
  * @return {Promise<Object>} view metadata
  */
 export async function getViewStats(opt) {
@@ -135,9 +140,10 @@ export async function getViewStats(opt) {
   if (!isViewId(id)) {
     throw Error("No valid id");
   }
-  const nDays = Math.ceil(opt.stat_n_days || 30);
+  const nDays = Math.ceil(opt.stat_n_days || 365 * 5);
+  const nMonths = Math.max(1, Math.ceil(opt.stat_n_months || 60));
   const sql = templates.getViewStats;
-  const result = await pgRead.query(sql, [id, nDays]);
+  const result = await pgRead.query(sql, [id, nDays, nMonths]);
   if (result && result.rowCount > 0) {
     return result.rows[0].stats;
   } else {

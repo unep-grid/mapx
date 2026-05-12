@@ -7,5 +7,5 @@
     "ecmaVersion": 2020,
     "sourceType": "module"
   },
-  "ignorePatterns": ["**/dist/**", "**/*.min.js"]
+  "ignorePatterns": ["**/dist/**", "**/*.min.js", "**/_archives/**"]
 }
