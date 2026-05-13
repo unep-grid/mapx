@@ -58,8 +58,8 @@
               bearing: 0,
             });
 
-            map.on("load", () => {
-              mxStyle.attachMap(map);
+            (async () => {
+              await mxStyle.attachMap(map);
               for (const [id, source] of Object.entries(sources)) {
                 map.addSource(id, source);
               }
@@ -67,8 +67,7 @@
                 map.addLayer(layer);
               }
               map.fitBounds({{bounds}});
-
-            });
+            })();
     </script>
   </body>
 </html>

@@ -31,7 +31,11 @@ export function errorHandler(err) {
  * @return {Error}
  */
 export function errorFormater(e) {
+  const mapxStyleIgnore = e?._mapxStyleIgnore || e?.error?._mapxStyleIgnore;
   if (e instanceof Error || e instanceof ErrorEvent) {
+    if (mapxStyleIgnore) {
+      e._to_ignore = true;
+    }
     return e;
   }
   if (!e) {
@@ -67,6 +71,9 @@ export function errorFormater(e) {
     if (r.test(e.message)) {
       e._to_ignore = true;
     }
+  }
+  if (mapxStyleIgnore) {
+    e._to_ignore = true;
   }
   return Object.assign(new Error(), e);
 }

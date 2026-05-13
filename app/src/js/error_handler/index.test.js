@@ -51,4 +51,23 @@ describe("errorHandler", () => {
     );
     expect(consoleTrace).toHaveBeenCalled();
   });
+
+  it("suppresses errors marked by MapxStyle", () => {
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
+    const consoleTrace = vi
+      .spyOn(console, "trace")
+      .mockImplementation(() => undefined);
+
+    errorHandler({
+      error: {
+        message: "Bad response: 404 for https://tiles.mapterhorn.com/6/31/22.webp",
+        _mapxStyleIgnore: true,
+      },
+    });
+
+    expect(consoleError).not.toHaveBeenCalled();
+    expect(consoleTrace).not.toHaveBeenCalled();
+  });
 });

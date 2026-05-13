@@ -1174,15 +1174,10 @@ export async function initMapx(o) {
   maps[o.id].map = map;
 
   /**
-   * Wait for map to be loaded
-   */
-  await map.once("load");
-
-  /**
    * Attach Theme/MapxStyle to the map (registers pitchend/error handlers,
-   * applies the current theme to basemap layers, and loads the mask).
+   * waits for style load, applies the current theme to basemap layers, and loads the mask).
    */
-  theme.attachMap(map);
+  await theme.attachMap(map);
 
   /**
    * Update theme, if required by init opt
