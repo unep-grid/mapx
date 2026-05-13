@@ -13,7 +13,7 @@
       href="https://cdn.jsdelivr.net/npm/maplibre-gl@{{maplibre_version}}/dist/maplibre-gl.css"
       rel="stylesheet" />
 
-    <!-- MapxStyle: HCP S3 auth, PMTiles protocol, basemap style -->
+    <!-- MapxStyle: MapX style assets, PMTiles protocol, basemap style -->
     <script src="https://cdn.jsdelivr.net/gh/unep-grid/mapx-style@v{{mapx_style_version}}/packages/theme-core/dist/mapx-style.umd.js"></script>
 
     <style>
@@ -35,7 +35,13 @@
     <script>
             const { MapxStyle } = window.MapxStyle;
             const theme = {{theme}};
-            const mxStyle = new MapxStyle({ maplibregl, mlcontour, theme });
+            const s3BaseUrl = "{{s3BaseUrl}}";
+            const mxStyle = new MapxStyle({
+              maplibregl,
+              mlcontour,
+              theme,
+              baseUrl: s3BaseUrl,
+            });
             if (!mxStyle.getTheme()) {
               mxStyle.setTheme(theme);
             }
@@ -46,7 +52,6 @@
             const map = new maplibregl.Map({
               container: "map",
               style: mxStyle.getStyle(),
-              transformRequest: mxStyle.transformRequest,
               zoom: 2,
               center: [0, 0],
               pitch: 0,

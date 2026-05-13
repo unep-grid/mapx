@@ -16,6 +16,7 @@ import {
 import { theme } from "../init_theme.js";
 import { isViewVtWithStyleCustom } from "../is_test/index.js";
 import { downloadHTML, downloadJSON } from "../download/index.js";
+import { getApiUrl } from "../api_routes/index.js";
 
 export class ModalCodeIntegration {
   constructor(idView, config) {
@@ -254,6 +255,7 @@ export class ModalCodeIntegration {
           maplibre_version: CODE_INTEGRATION_VERSIONS.maplibre,
           maplibre_contour_version: CODE_INTEGRATION_VERSIONS.maplibreContour,
           mapx_style_version: CODE_INTEGRATION_VERSIONS.mapxStyle,
+          s3BaseUrl: getApiUrl("/s3"),
           bounds: JSON.stringify(bounds || [-180, 90, 180, -90]),
         });
         out.language = "html";
