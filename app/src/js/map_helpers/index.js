@@ -105,7 +105,6 @@ import {
   isViewId,
   isViewRt,
   isViewVt,
-  isHTML,
   isElement,
   isString,
   isFunction,
@@ -146,6 +145,7 @@ import { eventToPointBbox } from "./utils.js";
 import { showProjectInfo } from "../project/info.js";
 import { shouldIgnoreIncomingThemeUpdate } from "../theme/precedence.js";
 import { sortLayers } from "./sort_layers.js";
+import { CustomCodeView } from "./view_custom_code.js";
 export * from "./view_filters.js";
 export { sortLayers } from "./sort_layers.js";
 
@@ -1158,6 +1158,7 @@ export async function initMapx(o) {
     pitch: mp.p || mp.pitch || 0,
     center: mp.center || [mp.lng || 0, mp.lat || 0],
     localIdeographFontFamily: "'Noto Sans', 'Noto Sans SC', sans-serif",
+    aroundCenter: false,
   };
   /*
    * Create map object
@@ -3372,7 +3373,6 @@ export async function getViewLegendImage(opt) {
  */
 async function viewRenderCc(o) {
   const view = o.view;
-  const map = o.map;
   const methods = path(view, "data.methods");
 
   if (isEmpty(methods)) {
@@ -3380,180 +3380,25 @@ async function viewRenderCc(o) {
     return false;
   }
 
-  const idView = view.id;
-  const idSource = idView + "-SRC";
-  const idListener = "listener_cc_" + view.id;
-
   if (view._onRemoveCustomView) {
     await view._onRemoveCustomView();
   }
-  let cc;
 
-  const elLegend = elLegendBuild(view, {
-    type: "cc",
+  const customCodeView = new CustomCodeView({
+    view: view,
+    map: o.map,
+    before: o.before,
     elLegendContainer: o.elLegendContainer,
     addTitle: o.addTitle,
-    removeOld: true,
+    buildLegend: elLegendBuild,
+    highlighter: highlighter,
+    listeners: listeners,
+    layerBefore: settings.layerBefore,
   });
 
-  try {
-    /**
-     * Remove comments
-     */
-    let strToEval = methods.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, "");
+  view._onRemoveCustomView = () => customCodeView.close();
 
-    /**
-     * Test if script start with function
-     */
-    const hasFunction = /function handler/.test(strToEval);
-
-    if (hasFunction) {
-      strToEval = strToEval.substring(
-        strToEval.indexOf("{") + 1,
-        strToEval.lastIndexOf("}"),
-      );
-    }
-
-    cc = new Function(strToEval)();
-  } catch (e) {
-    throw new Error("Failed to parse cc view", e.message);
-  }
-
-  if (
-    !cc ||
-    !(cc.onInit instanceof Function) ||
-    !(cc.onClose instanceof Function)
-  ) {
-    return console.warn("Invalid custom code  view");
-  }
-
-  /**
-   * Config
-   */
-  const opt = {
-    _init: false,
-    _closed: false,
-    map: map,
-    view: view,
-    idView: idView,
-    idSource: idSource,
-    idLegend: elLegend.id,
-    elLegend: elLegend,
-    clear: clear,
-    addSource: addSource,
-    setLegend: setLegend,
-    addLayer: addLayer,
-    isClosed: isClosed,
-    isInit: isInit,
-  };
-
-  opt.onInit = cc.onInit.bind(opt);
-  opt.onClose = cc.onClose.bind(opt);
-
-  /**
-   * Preventive  clearing
-   */
-  clear();
-
-  /**
-   * Avoid event to propagate
-   */
-  listeners.addListener({
-    group: idListener,
-    target: elLegend,
-    type: ["click", "mousedown", "change", "input"],
-    callback: catchEvent,
-  });
-
-  /**
-   * "destroy" usable by MapX
-   */
-  view._onRemoveCustomView = async function () {
-    try {
-      if (opt.isClosed()) {
-        return;
-      }
-      if (!opt.isInit()) {
-        console.warn("CC view : requested remove, but not yet initialized. Save at least one cahnge");
-      }
-      await opt.onClose(opt);
-      clear();
-    } catch (e) {
-      console.error(e);
-    } finally {
-      delete view._onRemoveCustomView; // remove itself
-      opt._closed = true;
-    }
-  };
-
-  /**
-   * Init custom map
-   * clear, in case it's not done in custom script and previous version still
-   * there.
-   */
-  await opt.onInit(opt);
-  opt._init = true;
-  return true;
-  /**
-   * Helpers
-   */
-  function catchEvent(e) {
-    e.stopPropagation();
-  }
-
-  function clear() {
-    listeners.removeListenerByGroup(idListener);
-    removeHighlight();
-    removeLayers();
-    removeSource();
-  }
-
-  function removeHighlight() {
-    highlighter.resetLayer(opt.idView);
-  }
-
-  function removeSource() {
-    if (opt.map.getSource(opt.idSource)) {
-      opt.map.removeSource(opt.idSource);
-    }
-  }
-
-  function removeLayers() {
-    removeLayersByPrefix({
-      prefix: opt.idView,
-      id: settings.map.id,
-    });
-  }
-
-  function addSource(source) {
-    removeLayers();
-    removeSource();
-    map.addSource(opt.idSource, source);
-  }
-
-  function addLayer(layer) {
-    removeLayers();
-    map.addLayer(layer, settings.layerBefore);
-  }
-
-  function setLegend(legend) {
-
-    if (isHTML(legend) || isString(legend)) {
-      legend = el("div", legend);
-    }
-    while (opt.elLegend.firstElementChild) {
-      opt.elLegend.firstElementChild.remove();
-    }
-    opt.elLegend.appendChild(legend);
-    return legend;
-  }
-
-  function isClosed() {
-    return !!opt._closed;
-  }
-  function isInit() {
-    return !!opt._init;
-  }
+  return customCodeView.init();
 }
 
 /**
