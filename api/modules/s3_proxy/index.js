@@ -1,6 +1,5 @@
 import { sendError } from "#mapx/helpers";
 import { settings } from "#root/settings";
-import rateLimit from "express-rate-limit";
 import {
   assertAllowedPath,
   parseAllowedPrefixes,
@@ -14,13 +13,8 @@ const S3_PUBLIC_AUTHORIZATION = "AWS all_users:";
 
 const _allowedPrefixes = parseAllowedPrefixes(settings.s3_proxy.allowedPrefixes);
 
-const mwLimiter = rateLimit({
-  windowMs: settings.mirror.rateWindowMinutes * 60 * 1000,
-  max: settings.mirror.rateLimit,
-});
-
-const mwGet = [mwLimiter, mwS3Proxy];
-const mwHead = [mwLimiter, mwS3Proxy];
+const mwGet = [mwS3Proxy];
+const mwHead = [mwS3Proxy];
 
 export { mwGet, mwHead };
 export default { mwGet, mwHead };
