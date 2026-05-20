@@ -16,6 +16,11 @@ import { modal } from "../mx_helper_modal.js";
 import { RadioGroup } from "../radio_group/index.js";
 import chroma from "chroma-js";
 import { createState } from "../state/index.js";
+import {
+  DEFAULT_PALETTE,
+  getPaletteColors,
+  resolvePaletteName,
+} from "./palette.js";
 import "./style.less";
 
 const stateDefault = {
@@ -26,7 +31,7 @@ const stateDefault = {
   title: null,
   reversePalette: false,
   mergeLabelByRow: false,
-  palette: "purd",
+  palette: DEFAULT_PALETTE,
   type: null,
   geomType: "point",
   mode: "colors", // sizes
@@ -67,7 +72,9 @@ export class AutoStyle {
     /**
      * set default
      */
-    as._state = createState(Object.assign({}, stateDefault, config));
+    const initialState = Object.assign({}, stateDefault, config);
+    initialState.palette = resolvePaletteName(initialState.palette);
+    as._state = createState(initialState);
     const state = as._state;
     state.title = getViewTitle(state.idView) || state.idView;
 
@@ -110,7 +117,8 @@ export class AutoStyle {
     const opacity = state.opacity;
     const table = aStat.table;
     const mode = state.mode;
-    const palette = chroma.brewer[state.palette].map((c) => c); // clone
+    state.palette = resolvePaletteName(state.palette);
+    const palette = getPaletteColors(state.palette);
     if (state.reversePalette === true) {
       palette.reverse();
     }
