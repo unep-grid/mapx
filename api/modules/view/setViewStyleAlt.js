@@ -1,4 +1,4 @@
-import { isViewId, isNotEmpty } from "@fxi/mx_valid";
+import { isViewId, isNotEmpty, isString } from "@fxi/mx_valid";
 import { pgWrite } from "#mapx/db";
 import { templates } from "#mapx/template";
 import { getViewsIdBySource } from "#mapx/view";
@@ -70,7 +70,7 @@ export async function ioUpdateDbViewAltStyle(socket, options, client) {
     };
   }
 
-  result.valid = isNotEmpty(result?.mapbox) && isNotEmpty(result?.sld);
+  result.valid = isString(result?.sld) && isNotEmpty(result.sld);
 
   if (result.valid) {
     await setViewStyleAlt(idView, result, pgClient);
