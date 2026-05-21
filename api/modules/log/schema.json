@@ -39,6 +39,7 @@
         "session_start",
         "view_remove",
         "view_add",
+        "story_read",
         "view_panel_click",
         "project_change",
         "language_change"

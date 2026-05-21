@@ -587,6 +587,32 @@ export function getStoryViewsId(onlyCurrentStep) {
   return views;
 }
 
+function emitStoryRead(stepNum, nSteps) {
+  const state = getState();
+  const shouldSkip =
+    state.storyReadLogged ||
+    state.edit === true ||
+    state.preview === true ||
+    !isViewId(state.idView);
+
+  if (shouldSkip) {
+    return;
+  }
+
+  const hasSingleStep = nSteps === 1;
+  const hasReachedSecondStep = nSteps > 1 && stepNum >= 1;
+  const hasReadStory = hasSingleStep || hasReachedSecondStep;
+
+  if (!hasReadStory) {
+    return;
+  }
+
+  state.storyReadLogged = true;
+  events.fire("story_read", {
+    idView: state.idView,
+  });
+}
+
 /**
  * Get view id
  * -> Story schema used to work with different format for storing views
@@ -1625,6 +1651,8 @@ export async function storyPlayStep(stepNum) {
     state.currentStep = stepNum;
     state.stepActive = stepNum;
     state.step = step;
+
+    emitStoryRead(stepNum, steps.length);
 
     await updateBullets();
 

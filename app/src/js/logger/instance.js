@@ -39,6 +39,24 @@ export function initLog() {
   });
 
   /**
+   * On story read
+   */
+  events.on({
+    type: "story_read",
+    idGroup: "mx_log",
+    callback: (d) => {
+      if (isViewId(d.idView)) {
+        logger.add({
+          id_log: "story_read",
+          data: {
+            id_view: d.idView,
+          },
+        });
+      }
+    },
+  });
+
+  /**
    * On view removed
    */
   events.on({
