@@ -31,6 +31,15 @@ mglSetHighlightedCountries <- function(id, countries, idLayer = "country-code", 
   )
 }
 
+#' Set boundary type
+#' @param type {Character} Boundary type: un, wmo, osm, or none
+#' @export
+mglSetBoundaryType <- function(type = "un", session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mglSetBoundaryType", list(
+    type = type
+  ))
+}
+
 
 
 #' Update all view badges, and linked metadata if needed

@@ -371,6 +371,7 @@ observe({
     countryClip <- projectData$countries
     mapPos <- projectData$map_position
     mapProj <- projectData$map_projection
+    boundaryType <- .get(projectData, "map_boundary_type", "un")
     theme <- projectData$theme
     hasMaxBounds <- isTRUE(mapPos$useMaxBounds)
     language <- reactData$language
@@ -404,6 +405,8 @@ observe({
     if (hasTheme || hasThemeQuery) {
       mglSetTheme(ifelse(hasThemeQuery, themeQuery, theme))
     }
+
+    mglSetBoundaryType(boundaryType)
 
     #
     # Update map pos config

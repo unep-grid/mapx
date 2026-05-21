@@ -204,6 +204,7 @@ observeEvent(input$btnSaveProjectConfig, {
     mapPosition <- .get(data, c("map_settings", "map_position"))
     projectionName <- .get(data, c("map_settings", "projection", "name"), "mercator")
     projectionDisableGlobe <- .get(data, c("map_settings", "projection", "disableGlobe"), FALSE)
+    boundaryType <- .get(data, c("map_settings", "boundary_type"), "un")
 
     # Access settings section
     isPublic <- .get(data, c("access_settings", "public"), FALSE)
@@ -249,6 +250,7 @@ observeEvent(input$btnSaveProjectConfig, {
       map_position = mapPosition,
       logo = logo,
       map_projection = projection,
+      map_boundary_type = boundaryType,
       countries = countries,
       theme = theme,
       creator = NULL, # Keep existing data structure

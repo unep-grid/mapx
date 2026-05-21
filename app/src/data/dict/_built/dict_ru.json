@@ -8130,6 +8130,31 @@
     "ru": "Тип проекции карты по умолчанию"
   },
   {
+    "id": "project_map_boundary_type",
+    "en": "Default boundary type",
+    "ru": "Тип границы по умолчанию"
+  },
+  {
+    "id": "project_map_boundary_type_un",
+    "en": "UN official",
+    "ru": "Представитель ООН"
+  },
+  {
+    "id": "project_map_boundary_type_wmo",
+    "en": "WMO official",
+    "ru": "Официальный представитель ВМО"
+  },
+  {
+    "id": "project_map_boundary_type_osm",
+    "en": "OSM",
+    "ru": "ОСМ"
+  },
+  {
+    "id": "project_map_boundary_type_none",
+    "en": "None",
+    "ru": "Никто"
+  },
+  {
     "id": "project_map_projection_mercator",
     "en": "Web mercator",
     "ru": "Веб-Меркатор"

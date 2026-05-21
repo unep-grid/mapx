@@ -1147,6 +1147,14 @@ class Theme extends EventSimple {
     return this._mapxStyle?.toggleSatellite();
   }
 
+  setBoundaryType(type) {
+    return this._mapxStyle?.setBoundaryType(type);
+  }
+
+  getBoundaryType() {
+    return this._mapxStyle?.getBoundaryType();
+  }
+
   getImageDataUrl(id) {
     return this._mapxStyle?.getImageDataUrl(id) || null;
   }

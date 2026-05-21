@@ -6504,6 +6504,26 @@
     "en": "Default map projection type"
   },
   {
+    "id": "project_map_boundary_type",
+    "en": "Default boundary type"
+  },
+  {
+    "id": "project_map_boundary_type_un",
+    "en": "UN official"
+  },
+  {
+    "id": "project_map_boundary_type_wmo",
+    "en": "WMO official"
+  },
+  {
+    "id": "project_map_boundary_type_osm",
+    "en": "OSM"
+  },
+  {
+    "id": "project_map_boundary_type_none",
+    "en": "None"
+  },
+  {
     "id": "project_map_projection_mercator",
     "en": "Web mercator"
   },

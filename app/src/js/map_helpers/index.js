@@ -4763,6 +4763,20 @@ export async function setMapProjection(opt) {
 }
 
 /**
+ * Set map boundary type.
+ * @param {Object} opt options
+ * @param {"un"|"wmo"|"osm"|"none"} opt.type Boundary type
+ */
+export function setBoundaryType(opt) {
+  const validTypes = ["un", "wmo", "osm", "none"];
+  const type = validTypes.includes(opt.type) ? opt.type : "un";
+
+  theme.setBoundaryType(type);
+
+  return type;
+}
+
+/**
  * Set theme ( from shiny )
  * @param {Object} opt options
  * @param {String} opt.id Theme id

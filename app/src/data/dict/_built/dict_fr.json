@@ -8130,6 +8130,31 @@
     "fr": "Type de projection de carte par défaut"
   },
   {
+    "id": "project_map_boundary_type",
+    "en": "Default boundary type",
+    "fr": "Type de frontières par défaut"
+  },
+  {
+    "id": "project_map_boundary_type_un",
+    "en": "UN official",
+    "fr": "ONU officiel"
+  },
+  {
+    "id": "project_map_boundary_type_wmo",
+    "en": "WMO official",
+    "fr": "OMM officiel"
+  },
+  {
+    "id": "project_map_boundary_type_osm",
+    "en": "OSM",
+    "fr": "OSM"
+  },
+  {
+    "id": "project_map_boundary_type_none",
+    "en": "None",
+    "fr": "Aucun"
+  },
+  {
     "id": "project_map_projection_mercator",
     "en": "Web mercator",
     "fr": "Mercator Web"

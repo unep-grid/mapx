@@ -5,6 +5,7 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
   languages <- .get(config, c("languages", "codes"))
   v <- .get(config, c("validation", "input", "nchar"))
   projection <- .get(projectData, "map_projection", list())
+  boundaryType <- .get(projectData, "map_boundary_type", "un")
 
   # Helper function for translations
   tt <- function(id) {
@@ -227,6 +228,20 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
                 default = .get(projection, "disableGlobe", FALSE)
               )
             )
+          ),
+          boundary_type = list(
+            type = "string",
+            title = tt("project_map_boundary_type"),
+            enum = c("un", "wmo", "osm", "none"),
+            options = list(
+              enum_titles = c(
+                tt("project_map_boundary_type_un"),
+                tt("project_map_boundary_type_wmo"),
+                tt("project_map_boundary_type_osm"),
+                tt("project_map_boundary_type_none")
+              )
+            ),
+            default = boundaryType
           )
         )
       ),
@@ -275,7 +290,8 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
       projection = list(
         name = .get(projection, "name", "mercator"),
         disableGlobe = .get(projection, "disableGlobe", FALSE)
-      )
+      ),
+      boundary_type = boundaryType
     ),
     access_settings = list(
       public = projectData$public,

@@ -8130,6 +8130,31 @@
     "ar": "نوع إسقاط الخريطة الافتراضي"
   },
   {
+    "id": "project_map_boundary_type",
+    "en": "Default boundary type",
+    "ar": "نوع الحدود الافتراضي"
+  },
+  {
+    "id": "project_map_boundary_type_un",
+    "en": "UN official",
+    "ar": "مسؤول في الأمم المتحدة"
+  },
+  {
+    "id": "project_map_boundary_type_wmo",
+    "en": "WMO official",
+    "ar": "مسؤول في المنظمة العالمية للأرصاد الجوية"
+  },
+  {
+    "id": "project_map_boundary_type_osm",
+    "en": "OSM",
+    "ar": "OSM"
+  },
+  {
+    "id": "project_map_boundary_type_none",
+    "en": "None",
+    "ar": "لا أحد"
+  },
+  {
     "id": "project_map_projection_mercator",
     "en": "Web mercator",
     "ar": "ميركاتور الويب"

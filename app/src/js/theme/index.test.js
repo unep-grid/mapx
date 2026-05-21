@@ -151,6 +151,8 @@ vi.mock("@unep-grid/mapx-style", async () => {
       this.enableSatellite = vi.fn();
       this.disableSatellite = vi.fn();
       this.toggleSatellite = vi.fn();
+      this.setBoundaryType = vi.fn();
+      this.getBoundaryType = vi.fn(() => "un");
       this.getImageDataUrl = vi.fn(() => null);
       this.getIconDimensions = vi.fn(async () => null);
       this.getSprites = vi.fn(async () => []);
@@ -280,5 +282,18 @@ describe("Theme regressions", () => {
     expect(theme.mapxStyle.getSprites).toHaveBeenCalledWith({
       groups: ["maki"],
     });
+  });
+
+  it("delegates boundary type changes to MapxStyle", async () => {
+    const { Theme, settings } = await loadThemeModule();
+    settings.mode = { app: false };
+
+    const theme = new Theme({ id: "classic_dark" });
+    await theme.init();
+
+    theme.setBoundaryType("wmo");
+
+    expect(theme.mapxStyle.setBoundaryType).toHaveBeenCalledWith("wmo");
+    expect(theme.getBoundaryType()).toBe("un");
   });
 });

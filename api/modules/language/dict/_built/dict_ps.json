@@ -8130,6 +8130,31 @@
     "ps": "د نقشې د تصویر اصلي ډول"
   },
   {
+    "id": "project_map_boundary_type",
+    "en": "Default boundary type",
+    "ps": "د ډیفالټ پولې ډول"
+  },
+  {
+    "id": "project_map_boundary_type_un",
+    "en": "UN official",
+    "ps": "د ملګرو ملتونو چارواکی"
+  },
+  {
+    "id": "project_map_boundary_type_wmo",
+    "en": "WMO official",
+    "ps": "د WMO چارواکي"
+  },
+  {
+    "id": "project_map_boundary_type_osm",
+    "en": "OSM",
+    "ps": "او ایس ایم"
+  },
+  {
+    "id": "project_map_boundary_type_none",
+    "en": "None",
+    "ps": "هیڅ نه"
+  },
+  {
     "id": "project_map_projection_mercator",
     "en": "Web mercator",
     "ps": "ویب مرکاتور"

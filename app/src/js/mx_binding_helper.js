@@ -8,6 +8,7 @@ import {
   setHighlightedCountries,
   setMapPos,
   setMapProjection,
+  setBoundaryType,
   setTheme,
   shinyNotify,
   syncAll,
@@ -126,6 +127,7 @@ function mapxBindings() {
   bind("mglAddLayer", addLayer);
   bind("mglSetMapPos", setMapPos);
   bind("mglSetMapProjection", setMapProjection);
+  bind("mglSetBoundaryType", setBoundaryType);
   bind("mglSetTheme", setTheme);
   bind("mglSyncAllMaps", syncAll);
   bind("mglUpdateViewsList", updateViewsList);
