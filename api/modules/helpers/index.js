@@ -132,6 +132,14 @@ function sendJSON(res, data, opt) {
 function sendError(res, error, code = 500) {
   let errorMessage = isString(error) ? error : error.message;
 
+  if (res.headersSent) {
+    console.error("Could not send error response after headers were sent", error);
+    if (!res.writableEnded) {
+      res.end();
+    }
+    return;
+  }
+
   const out = {
     message: errorMessage,
     type: "error",

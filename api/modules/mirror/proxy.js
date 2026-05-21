@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 import http from "node:http";
 import https from "node:https";
 import { pipeline } from "node:stream/promises";
+import { sendError } from "#mapx/helpers";
 
 const _httpAgent = new http.Agent({ keepAlive: true, maxSockets: 256 });
 const _httpsAgent = new https.Agent({ keepAlive: true, maxSockets: 256 });
@@ -50,6 +51,27 @@ export function toHttpError(error, defaultStatusCode = 500) {
   }
 
   return new HttpError(error?.message || "Proxy request failed", defaultStatusCode);
+}
+
+export function handleProxyError(res, error, options = {}) {
+  const { context = "Proxy", defaultStatusCode = 502 } = options;
+
+  if (res.headersSent) {
+    if (!isExpectedStreamClose(error)) {
+      console.error(`${context} error after response started`, error);
+    }
+    if (!res.writableEnded) {
+      res.end();
+    }
+    return;
+  }
+
+  const httpError = toHttpError(error, defaultStatusCode);
+  return sendError(res, httpError, httpError.statusCode);
+}
+
+function isExpectedStreamClose(error) {
+  return error?.code === "ERR_STREAM_PREMATURE_CLOSE";
 }
 
 export function normalizeExternalUrl(value) {

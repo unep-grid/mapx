@@ -1,8 +1,7 @@
-import { sendError } from "#mapx/helpers";
 import { settings } from "#root/settings";
 import { isNotEmpty } from "@fxi/mx_valid";
 import rateLimit from "express-rate-limit";
-import { normalizeExternalUrl, proxyRequest, toHttpError } from "./proxy.js";
+import { handleProxyError, normalizeExternalUrl, proxyRequest } from "./proxy.js";
 
 const mwLimiter = rateLimit({
   windowMs: settings.mirror.rateWindowMinutes * 60 * 1000,
@@ -31,7 +30,6 @@ async function mwMirror(req, res) {
       responseHeaders,
     });
   } catch (e) {
-    const error = toHttpError(e, 502);
-    return sendError(res, error, error.statusCode);
+    return handleProxyError(res, e, { context: "Mirror proxy" });
   }
 }
