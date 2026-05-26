@@ -1,3 +1,23 @@
+  - [1.13.20-alpha.9](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.9) 
+
+    - feat: implement satellite view overides in mapxstyle and connect to mapx, using maptiler source
+    - fix: mirror/s3 proxy, premature close/header sent crash
+    - feat: log storymap read
+    - chore: update style submodule
+    - feat: finalisation of map country boundaries settings by project, server part
+    - chore: update style submodule
+    - fix(empty_sld): should fix mapx-internal-tracker/issues/33 accept empty.sld
+    - fix: color palette default internal tracker #34
+    - chore: update submodule
+    - chore: update submodule
+    - chore: update style submodule
+    - fix: removed rate limiter in s3 proxy, not ideal for quick and frequent pmtiles range request
+    - fix(dem): implement change done in mapxstyle for handing 404 due to DEM
+    - fix(code_integration): missing s3 base url
+    - refactor(cc): improve custom code handling,dedicated  module + tests + template
+    - feat(#1111): map as choropleth + fix monthly view
+
+
   - [1.13.20-alpha.8](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.8) 
 
     - feat(#1111): initial implementation; Better view stats, wider range, map view
