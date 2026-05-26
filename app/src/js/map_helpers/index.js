@@ -55,7 +55,6 @@ import {
   getClickHandlers,
   setClickHandler,
   cssTransformFun,
-  debounce,
   isShinyReady,
   quickHash,
 } from "./../mx_helper_misc.js";
@@ -735,16 +734,16 @@ export function initListenerGlobal() {
   });
   map.on("move", updateSharingTool);
   map.on("styledata", updateSharingTool);
-  map.on("pitch", debounce(update3d));
+  map.on("pitchend", update3d);
 
   function update3d() {
-    const enable = map.getPitch() > 0;
+    const enable = theme.isTerrainEnabled();
     const enabled = btn3d.isActive();
     if (enable && !enabled) {
-      btn3d.action("enable");
+      btn3d.enable();
     }
     if (!enable && enabled) {
-      btn3d.action("disable");
+      btn3d.disable();
     }
   }
 

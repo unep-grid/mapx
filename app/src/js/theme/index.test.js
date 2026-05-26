@@ -151,6 +151,7 @@ vi.mock("@unep-grid/mapx-style", async () => {
       this.getStyle = vi.fn(() => ({ version: 8, layers: [], sources: {} }));
       this.enableTerrain = vi.fn();
       this.disableTerrain = vi.fn();
+      this.isTerrainEnabled = vi.fn(() => false);
       this.enableSatellite = vi.fn();
       this.disableSatellite = vi.fn();
       this.toggleSatellite = vi.fn();
@@ -298,6 +299,19 @@ describe("Theme regressions", () => {
 
     expect(theme.mapxStyle.setBoundaryType).toHaveBeenCalledWith("wmo");
     expect(theme.getBoundaryType()).toBe("un");
+  });
+
+  it("delegates terrain enabled state to MapxStyle", async () => {
+    const { Theme, settings } = await loadThemeModule();
+    settings.mode = { app: false };
+
+    const theme = new Theme({ id: "classic_dark" });
+    await theme.init();
+
+    expect(theme.isTerrainEnabled()).toBe(false);
+
+    theme.mapxStyle.isTerrainEnabled.mockReturnValue(true);
+    expect(theme.isTerrainEnabled()).toBe(true);
   });
 
   it("passes a MapTiler satellite source override when a token exists", async () => {

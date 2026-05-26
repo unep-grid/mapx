@@ -1167,6 +1167,10 @@ class Theme extends EventSimple {
     return this._mapxStyle?.disableTerrain();
   }
 
+  isTerrainEnabled() {
+    return !!this._mapxStyle?.isTerrainEnabled();
+  }
+
   enableSatellite() {
     return this._mapxStyle?.enableSatellite();
   }

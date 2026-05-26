@@ -115,23 +115,27 @@ export function generateButtons() {
       classesIcon: ["mx-mountain","mx-icon"],
       action: function (cmd) {
         const btn = this;
-        let classop = "toggle";
+        const action = typeof cmd === "string" ? cmd : "toggle";
+        let enabled;
 
-        switch (cmd) {
+        switch (action) {
           case "hide":
-            classop = "remove";
+          case "disable":
+            enabled = false;
             break;
           case "show":
-            classop = "add";
+          case "enable":
+            enabled = true;
             break;
           default:
-            classop = "toggle";
+            enabled = !btn.isActive();
         }
-        btn.elButton.classList[classop]("active");
-        const enabled = btn.elButton.classList.contains("active");
+
         if (enabled) {
+          btn.enable();
           theme.enableTerrain();
         } else {
+          btn.disable();
           theme.disableTerrain();
         }
         return enabled;
