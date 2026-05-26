@@ -135,7 +135,7 @@
     "luxon": "^3.4.4",
     "mapbox-gl-draw-circle": "^1.1.2",
     "maplibre-contour": "^0.1.0",
-    "maplibre-gl": "^5.22.0",
+    "maplibre-gl": "^5.24.0",
     "martinez-polygon-clipping": "^0.5.0",
     "monaco-editor": "^0.33.0",
     "monaco-editor-webpack-plugin": "^7.0.1",
