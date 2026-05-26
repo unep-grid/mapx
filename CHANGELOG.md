@@ -1,3 +1,8 @@
+  - [1.13.20-alpha.11](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.11) 
+
+    - fix: improved terrain state handling
+
+
   - [1.13.20-alpha.10](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.10) 
 
     - chore: update submodule
