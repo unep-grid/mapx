@@ -1,3 +1,9 @@
+  - [1.13.20-alpha.10](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.10) 
+
+    - chore: update submodule
+    - chore: update maplibre to 5.24, could impact performances
+
+
   - [1.13.20-alpha.9](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.9) 
 
     - feat: implement satellite view overides in mapxstyle and connect to mapx, using maptiler source
