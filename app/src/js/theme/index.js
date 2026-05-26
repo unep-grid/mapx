@@ -38,6 +38,31 @@ import maplibregl from "maplibre-gl";
 import mlcontour from "maplibre-contour";
 import { getApiUrl } from "../api_routes/index.js";
 
+const MAPTILER_SATELLITE_ATTRIBUTION =
+  "<a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a>";
+
+function getSatelliteSourceOverrides() {
+  const token = settings?.services?.maptiler?.token;
+
+  if (typeof token !== "string" || token.trim() === "") {
+    return null;
+  }
+
+  return {
+    satellite: {
+      type: "raster",
+      tiles: [
+        `https://api.maptiler.com/tiles/satellite-v2/{z}/{x}/{y}.jpg?key=${encodeURIComponent(
+          token.trim(),
+        )}`,
+      ],
+      tileSize: 256,
+      maxzoom: 19,
+      attribution: MAPTILER_SATELLITE_ATTRIBUTION,
+    },
+  };
+}
+
 const def = {
   tree: true,
   water: true,
@@ -98,11 +123,18 @@ class Theme extends EventSimple {
 
     if (!t._mapxStyle) {
       const s3BaseUrl = getApiUrl("/s3");
-      t._mapxStyle = new MapxStyle({
+      const sourceOverrides = getSatelliteSourceOverrides();
+      const mapxStyleOptions = {
         maplibregl,
         mlcontour,
         baseUrl: s3BaseUrl,
-      });
+      };
+
+      if (sourceOverrides) {
+        mapxStyleOptions.sourceOverrides = sourceOverrides;
+      }
+
+      t._mapxStyle = new MapxStyle(mapxStyleOptions);
     }
 
     t._s = new ThemeService();

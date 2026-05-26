@@ -140,7 +140,10 @@ vi.mock("@unep-grid/mapx-style", async () => {
   const actual = await vi.importActual("@unep-grid/mapx-style");
 
   class FakeMapxStyle {
-    constructor() {
+    static constructorOptions = [];
+
+    constructor(options = {}) {
+      FakeMapxStyle.constructorOptions.push(options);
       this.transformRequest = vi.fn();
       this.setTheme = vi.fn(() => true);
       this.setLanguage = vi.fn();
@@ -295,5 +298,43 @@ describe("Theme regressions", () => {
 
     expect(theme.mapxStyle.setBoundaryType).toHaveBeenCalledWith("wmo");
     expect(theme.getBoundaryType()).toBe("un");
+  });
+
+  it("passes a MapTiler satellite source override when a token exists", async () => {
+    const { Theme, settings } = await loadThemeModule();
+    const { MapxStyle } = await import("@unep-grid/mapx-style");
+    MapxStyle.constructorOptions.length = 0;
+    settings.mode = { app: false };
+    settings.services = { maptiler: { token: "abc 123" } };
+
+    const theme = new Theme({ id: "classic_dark" });
+    await theme.init();
+
+    const options = MapxStyle.constructorOptions.at(-1);
+    expect(options.sourceOverrides.satellite).toMatchObject({
+      type: "raster",
+      tileSize: 256,
+      maxzoom: 19,
+    });
+    expect(options.sourceOverrides.satellite.tiles[0]).toBe(
+      "https://api.maptiler.com/tiles/satellite-v2/{z}/{x}/{y}.jpg?key=abc%20123",
+    );
+    expect(options.sourceOverrides.satellite.attribution).toContain(
+      "maptiler.com/copyright",
+    );
+  });
+
+  it("keeps the default satellite source when no MapTiler token exists", async () => {
+    const { Theme, settings } = await loadThemeModule();
+    const { MapxStyle } = await import("@unep-grid/mapx-style");
+    MapxStyle.constructorOptions.length = 0;
+    settings.mode = { app: false };
+    settings.services = { maptiler: { token: null } };
+
+    const theme = new Theme({ id: "classic_dark" });
+    await theme.init();
+
+    const options = MapxStyle.constructorOptions.at(-1);
+    expect(options.sourceOverrides).toBeUndefined();
   });
 });
