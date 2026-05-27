@@ -1,3 +1,12 @@
+  - [1.13.20-alpha.12](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.12) 
+
+    - chore: update submodule
+    - refactor: moved back the map scaler to mapx client to keep size state coherent
+    - feat: connect intl border to themes for various boundary types and better tooltip in theme manager
+    - chore: update submodule
+    - chore: update submodule
+
+
   - [1.13.20-alpha.11](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.11) 
 
     - fix: improved terrain state handling
