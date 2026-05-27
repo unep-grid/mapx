@@ -171,6 +171,7 @@ class Item extends Box {
       item.map.resize();
     });
     item.removers.push(() => {
+      item.scaler.destroy?.();
       item.map.remove();
     });
     return elOut;
