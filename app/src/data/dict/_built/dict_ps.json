@@ -9710,6 +9710,11 @@
     "ps": "نقشه: نړیوال حد "
   },
   {
+    "id": "mx_map_boundary_un_1_tooltip",
+    "en": "Styles UN international boundaries, OSM country boundaries, and WMO generalized boundaries.",
+    "ps": "د ملګرو ملتونو نړیوالو پولو، د OSM هېوادنیو پولو او د WMO عمومي شوو پولو بڼه ټاکي."
+  },
+  {
     "id": "mx_map_boundary_un_2",
     "en": "Map: Special boundary line",
     "ps": "نقشه: د ځانګړي حد کرښه "
@@ -9738,6 +9743,11 @@
     "id": "mx_map_boundary_un_6",
     "en": "Map: Subnational boundaries",
     "ps": "نقشه: سیمه ییز سرحدونه"
+  },
+  {
+    "id": "mx_map_boundary_un_6_tooltip",
+    "en": "Styles UN subnational boundaries when the UN boundary dataset is active.",
+    "ps": "کله چې د ملګرو ملتونو د پولو ډیټاسېټ فعال وي، د ملګرو ملتونو د فرعي ملي پولو بڼه ټاکي."
   },
   {
     "id": "mx_map_text_place",

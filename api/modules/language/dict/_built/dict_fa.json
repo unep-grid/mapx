@@ -9710,6 +9710,11 @@
     "fa": "نقشه: مرز بین المللی "
   },
   {
+    "id": "mx_map_boundary_un_1_tooltip",
+    "en": "Styles UN international boundaries, OSM country boundaries, and WMO generalized boundaries.",
+    "fa": "سبک مرزهای بین‌المللی سازمان ملل، مرزهای کشوری OSM و مرزهای تعمیم‌یافته WMO را تعیین می‌کند."
+  },
+  {
     "id": "mx_map_boundary_un_2",
     "en": "Map: Special boundary line",
     "fa": "نقشه: خط مرزی ویژه "
@@ -9738,6 +9743,11 @@
     "id": "mx_map_boundary_un_6",
     "en": "Map: Subnational boundaries",
     "fa": "نقشه: مرزهای فرعی"
+  },
+  {
+    "id": "mx_map_boundary_un_6_tooltip",
+    "en": "Styles UN subnational boundaries when the UN boundary dataset is active.",
+    "fa": "وقتی مجموعه‌داده مرزهای سازمان ملل فعال است، سبک مرزهای زیرملی سازمان ملل را تعیین می‌کند."
   },
   {
     "id": "mx_map_text_place",

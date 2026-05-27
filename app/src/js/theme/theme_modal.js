@@ -621,13 +621,15 @@ export class ThemeModal extends EventSimple {
     const visible = conf.visibility === "visible";
     const isTextMap = tm._theme._opt.fonts_enabled.map.includes(cid);
     const isTextCss = tm._theme._opt.fonts_enabled.css.includes(cid);
+    const tooltipKey = cid.match(/^mx_map_boundary_un_(1|6)$/)
+      ? `${cid}_tooltip`
+      : cid;
 
     const elLabel = el(
       "label",
       {
         class: ["mx-theme--color-label", "hint--right"],
-        dataset: { lang_key: cid },
-        "aria-label": cid,
+        dataset: { lang_key: tooltipKey, lang_type: "tooltip" },
       },
       tt(cid),
     );

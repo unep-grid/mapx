@@ -9710,6 +9710,11 @@
     "ru": "Карта: международная граница "
   },
   {
+    "id": "mx_map_boundary_un_1_tooltip",
+    "en": "Styles UN international boundaries, OSM country boundaries, and WMO generalized boundaries.",
+    "ru": "Задает стиль международных границ ООН, государственных границ OSM и обобщенных границ ВМО."
+  },
+  {
     "id": "mx_map_boundary_un_2",
     "en": "Map: Special boundary line",
     "ru": "Карта: Специальная пограничная линия "
@@ -9738,6 +9743,11 @@
     "id": "mx_map_boundary_un_6",
     "en": "Map: Subnational boundaries",
     "ru": "Карта: субнациональные границы"
+  },
+  {
+    "id": "mx_map_boundary_un_6_tooltip",
+    "en": "Styles UN subnational boundaries when the UN boundary dataset is active.",
+    "ru": "Задает стиль субнациональных границ ООН, когда активен набор границ ООН."
   },
   {
     "id": "mx_map_text_place",

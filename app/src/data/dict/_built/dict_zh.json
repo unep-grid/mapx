@@ -9710,6 +9710,11 @@
     "zh": "地图：国际边界"
   },
   {
+    "id": "mx_map_boundary_un_1_tooltip",
+    "en": "Styles UN international boundaries, OSM country boundaries, and WMO generalized boundaries.",
+    "zh": "设置联合国国际边界、OSM 国家边界和 WMO 概化边界的样式。"
+  },
+  {
     "id": "mx_map_boundary_un_2",
     "en": "Map: Special boundary line",
     "zh": "地图：特殊边界线"
@@ -9738,6 +9743,11 @@
     "id": "mx_map_boundary_un_6",
     "en": "Map: Subnational boundaries",
     "zh": "地图：国家以下边界"
+  },
+  {
+    "id": "mx_map_boundary_un_6_tooltip",
+    "en": "Styles UN subnational boundaries when the UN boundary dataset is active.",
+    "zh": "当联合国边界数据集处于活动状态时，设置联合国次国家级边界的样式。"
   },
   {
     "id": "mx_map_text_place",

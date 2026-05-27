@@ -496,6 +496,19 @@
     "de": ""
   },
   {
+    "id": "mx_map_boundary_un_1_tooltip",
+    "en": "Styles UN international boundaries, OSM country boundaries, and WMO generalized boundaries.",
+    "fr": "Définit le style des frontières internationales de l'ONU, des frontières nationales OSM et des frontières généralisées de l'OMM.",
+    "es": "Define el estilo de las fronteras internacionales de la ONU, las fronteras nacionales de OSM y las fronteras generalizadas de la OMM.",
+    "ru": "Задает стиль международных границ ООН, государственных границ OSM и обобщенных границ ВМО.",
+    "zh": "设置联合国国际边界、OSM 国家边界和 WMO 概化边界的样式。",
+    "ar": "يضبط نمط الحدود الدولية للأمم المتحدة وحدود الدول في OSM والحدود المعممة للمنظمة العالمية للأرصاد الجوية.",
+    "fa": "سبک مرزهای بین‌المللی سازمان ملل، مرزهای کشوری OSM و مرزهای تعمیم‌یافته WMO را تعیین می‌کند.",
+    "ps": "د ملګرو ملتونو نړیوالو پولو، د OSM هېوادنیو پولو او د WMO عمومي شوو پولو بڼه ټاکي.",
+    "bn": "জাতিসংঘের আন্তর্জাতিক সীমানা, OSM দেশের সীমানা এবং WMO সাধারণীকৃত সীমানার শৈলী নির্ধারণ করে।",
+    "de": "Legt den Stil der internationalen UN-Grenzen, der OSM-Ländergrenzen und der generalisierten WMO-Grenzen fest."
+  },
+  {
     "id": "mx_map_boundary_un_2",
     "en": "Map: Special boundary line",
     "fr": "Carte : Frontière ligne spéciale",
@@ -572,6 +585,19 @@
     "ps": "",
     "bn": "",
     "de": ""
+  },
+  {
+    "id": "mx_map_boundary_un_6_tooltip",
+    "en": "Styles UN subnational boundaries when the UN boundary dataset is active.",
+    "fr": "Définit le style des frontières sous-nationales de l'ONU lorsque le jeu de frontières ONU est actif.",
+    "es": "Define el estilo de las fronteras subnacionales de la ONU cuando el conjunto de fronteras de la ONU está activo.",
+    "ru": "Задает стиль субнациональных границ ООН, когда активен набор границ ООН.",
+    "zh": "当联合国边界数据集处于活动状态时，设置联合国次国家级边界的样式。",
+    "ar": "يضبط نمط الحدود دون الوطنية للأمم المتحدة عندما تكون مجموعة بيانات حدود الأمم المتحدة نشطة.",
+    "fa": "وقتی مجموعه‌داده مرزهای سازمان ملل فعال است، سبک مرزهای زیرملی سازمان ملل را تعیین می‌کند.",
+    "ps": "کله چې د ملګرو ملتونو د پولو ډیټاسېټ فعال وي، د ملګرو ملتونو د فرعي ملي پولو بڼه ټاکي.",
+    "bn": "জাতিসংঘ সীমানা ডেটাসেট সক্রিয় থাকলে জাতিসংঘের উপ-জাতীয় সীমানার শৈলী নির্ধারণ করে।",
+    "de": "Legt den Stil der subnationalen UN-Grenzen fest, wenn der UN-Grenzdatensatz aktiv ist."
   },
   {
     "id": "mx_map_text_place",

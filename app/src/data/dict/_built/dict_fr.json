@@ -9710,6 +9710,11 @@
     "fr": "Carte : Frontières internationales"
   },
   {
+    "id": "mx_map_boundary_un_1_tooltip",
+    "en": "Styles UN international boundaries, OSM country boundaries, and WMO generalized boundaries.",
+    "fr": "Définit le style des frontières internationales de l'ONU, des frontières nationales OSM et des frontières généralisées de l'OMM."
+  },
+  {
     "id": "mx_map_boundary_un_2",
     "en": "Map: Special boundary line",
     "fr": "Carte : Frontière ligne spéciale"
@@ -9738,6 +9743,11 @@
     "id": "mx_map_boundary_un_6",
     "en": "Map: Subnational boundaries",
     "fr": "Carte : Frontières sous-nationales"
+  },
+  {
+    "id": "mx_map_boundary_un_6_tooltip",
+    "en": "Styles UN subnational boundaries when the UN boundary dataset is active.",
+    "fr": "Définit le style des frontières sous-nationales de l'ONU lorsque le jeu de frontières ONU est actif."
   },
   {
     "id": "mx_map_text_place",

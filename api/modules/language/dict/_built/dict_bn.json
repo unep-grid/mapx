@@ -9710,6 +9710,11 @@
     "bn": "মানচিত্র: আন্তর্জাতিক সীমানা "
   },
   {
+    "id": "mx_map_boundary_un_1_tooltip",
+    "en": "Styles UN international boundaries, OSM country boundaries, and WMO generalized boundaries.",
+    "bn": "জাতিসংঘের আন্তর্জাতিক সীমানা, OSM দেশের সীমানা এবং WMO সাধারণীকৃত সীমানার শৈলী নির্ধারণ করে।"
+  },
+  {
     "id": "mx_map_boundary_un_2",
     "en": "Map: Special boundary line",
     "bn": "মানচিত্র: বিশেষ সীমানা রেখা "
@@ -9738,6 +9743,11 @@
     "id": "mx_map_boundary_un_6",
     "en": "Map: Subnational boundaries",
     "bn": "মানচিত্র: আঞ্চলিক সীমানা"
+  },
+  {
+    "id": "mx_map_boundary_un_6_tooltip",
+    "en": "Styles UN subnational boundaries when the UN boundary dataset is active.",
+    "bn": "জাতিসংঘ সীমানা ডেটাসেট সক্রিয় থাকলে জাতিসংঘের উপ-জাতীয় সীমানার শৈলী নির্ধারণ করে।"
   },
   {
     "id": "mx_map_text_place",
