@@ -3711,8 +3711,8 @@
   },
   {
     "id": "btn_3d_terrain",
-    "en": "Add 3D terrain",
-    "es": "Añade relieve en 3D"
+    "en": "Enable topography",
+    "es": "Activar topografía"
   },
   {
     "id": "btn_globe",

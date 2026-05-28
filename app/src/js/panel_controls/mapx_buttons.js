@@ -133,10 +133,10 @@ export function generateButtons() {
 
         if (enabled) {
           btn.enable();
-          theme.enableTerrain();
+          theme.enableTopography();
         } else {
           btn.disable();
-          theme.disableTerrain();
+          theme.disableTopography();
         }
         return enabled;
       },

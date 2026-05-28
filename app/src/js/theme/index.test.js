@@ -152,6 +152,10 @@ vi.mock("@unep-grid/mapx-style", async () => {
       this.enableTerrain = vi.fn();
       this.disableTerrain = vi.fn();
       this.isTerrainEnabled = vi.fn(() => false);
+      this.enableTopography = vi.fn();
+      this.disableTopography = vi.fn();
+      this.toggleTopography = vi.fn();
+      this.isTopographyEnabled = vi.fn(() => false);
       this.enableSatellite = vi.fn();
       this.disableSatellite = vi.fn();
       this.toggleSatellite = vi.fn();

@@ -737,7 +737,7 @@ export function initListenerGlobal() {
   map.on("pitchend", update3d);
 
   function update3d() {
-    const enable = theme.isTerrainEnabled();
+    const enable = theme.isTopographyEnabled?.() ?? theme.isTerrainEnabled();
     const enabled = btn3d.isActive();
     if (enable && !enabled) {
       btn3d.enable();

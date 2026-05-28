@@ -3711,8 +3711,8 @@
   },
   {
     "id": "btn_3d_terrain",
-    "en": "Add 3D terrain",
-    "ar": "أضف تضاريس ثلاثية الأبعاد"
+    "en": "Enable topography",
+    "ar": "تفعيل خاصية التضاريس"
   },
   {
     "id": "btn_globe",

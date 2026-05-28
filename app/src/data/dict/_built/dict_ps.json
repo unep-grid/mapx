@@ -3711,8 +3711,8 @@
   },
   {
     "id": "btn_3d_terrain",
-    "en": "Add 3D terrain",
-    "ps": "د 3D خاوره اضافه کړئ"
+    "en": "Enable topography",
+    "ps": "د ځمکې ښودنه فعاله کړئ"
   },
   {
     "id": "btn_globe",

@@ -3711,8 +3711,8 @@
   },
   {
     "id": "btn_3d_terrain",
-    "en": "Add 3D terrain",
-    "zh": "添加3D浮雕"
+    "en": "Enable topography",
+    "zh": "启用地形模式"
   },
   {
     "id": "btn_globe",

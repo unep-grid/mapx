@@ -3711,8 +3711,8 @@
   },
   {
     "id": "btn_3d_terrain",
-    "en": "Add 3D terrain",
-    "fa": "زمین سه بعدی را اضافه کنید"
+    "en": "Enable topography",
+    "fa": "فعال کردن توپوگرافی"
   },
   {
     "id": "btn_globe",

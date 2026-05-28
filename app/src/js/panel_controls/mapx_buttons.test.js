@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const themeMock = vi.hoisted(() => ({
-  enableTerrain: vi.fn(),
-  disableTerrain: vi.fn(),
+  enableTopography: vi.fn(),
+  disableTopography: vi.fn(),
   registerButton: vi.fn(),
 }));
 
@@ -58,11 +58,11 @@ describe("btn_3d_terrain", () => {
 
     expect(button.action()).toBe(true);
     expect(button.elButton.classList.contains("active")).toBe(true);
-    expect(themeMock.enableTerrain).toHaveBeenCalledTimes(1);
+    expect(themeMock.enableTopography).toHaveBeenCalledTimes(1);
 
     expect(button.action()).toBe(false);
     expect(button.elButton.classList.contains("active")).toBe(false);
-    expect(themeMock.disableTerrain).toHaveBeenCalledTimes(1);
+    expect(themeMock.disableTopography).toHaveBeenCalledTimes(1);
   });
 
   it("treats enable and disable as idempotent commands", () => {
@@ -71,13 +71,13 @@ describe("btn_3d_terrain", () => {
     expect(button.action("enable")).toBe(true);
     expect(button.action("enable")).toBe(true);
     expect(button.elButton.classList.contains("active")).toBe(true);
-    expect(themeMock.enableTerrain).toHaveBeenCalledTimes(2);
-    expect(themeMock.disableTerrain).not.toHaveBeenCalled();
+    expect(themeMock.enableTopography).toHaveBeenCalledTimes(2);
+    expect(themeMock.disableTopography).not.toHaveBeenCalled();
 
     expect(button.action("disable")).toBe(false);
     expect(button.action("disable")).toBe(false);
     expect(button.elButton.classList.contains("active")).toBe(false);
-    expect(themeMock.disableTerrain).toHaveBeenCalledTimes(2);
+    expect(themeMock.disableTopography).toHaveBeenCalledTimes(2);
   });
 
   it("keeps show and hide aliases for story map callers", () => {

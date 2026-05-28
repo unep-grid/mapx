@@ -3711,8 +3711,8 @@
   },
   {
     "id": "btn_3d_terrain",
-    "en": "Add 3D terrain",
-    "de": "Fügen Sie 3D-Gelände hinzu"
+    "en": "Enable topography",
+    "de": "Topografie aktivieren"
   },
   {
     "id": "btn_globe",

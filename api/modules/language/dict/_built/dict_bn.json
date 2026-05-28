@@ -3711,8 +3711,8 @@
   },
   {
     "id": "btn_3d_terrain",
-    "en": "Add 3D terrain",
-    "bn": "3D ভূখণ্ড যোগ করুন"
+    "en": "Enable topography",
+    "bn": "ভূসংস্থান সক্ষম করুন"
   },
   {
     "id": "btn_globe",

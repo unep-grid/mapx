@@ -1171,6 +1171,22 @@ class Theme extends EventSimple {
     return !!this._mapxStyle?.isTerrainEnabled();
   }
 
+  enableTopography() {
+    return this._mapxStyle?.enableTopography();
+  }
+
+  disableTopography() {
+    return this._mapxStyle?.disableTopography();
+  }
+
+  toggleTopography() {
+    return this._mapxStyle?.toggleTopography();
+  }
+
+  isTopographyEnabled() {
+    return !!this._mapxStyle?.isTopographyEnabled();
+  }
+
   enableSatellite() {
     return this._mapxStyle?.enableSatellite();
   }

@@ -3711,8 +3711,8 @@
   },
   {
     "id": "btn_3d_terrain",
-    "en": "Add 3D terrain",
-    "ru": "Добавьте 3D-территорию"
+    "en": "Enable topography",
+    "ru": "Включить топографию"
   },
   {
     "id": "btn_globe",
