@@ -1,3 +1,8 @@
+  - [1.13.20-beta.0](https://github.com/unep-grid/mapx/tree/1.13.20-beta.0) 
+
+    - chore: link topographic mode, should solve performance issue generating contour on demand
+
+
   - [1.13.20-alpha.12](https://github.com/unep-grid/mapx/tree/1.13.20-alpha.12) 
 
     - chore: update submodule
