@@ -37,6 +37,13 @@ jobs:
           node-version: '22'
           cache: 'npm'
 
+      # Build zartigl submodule before app webpack resolves its dist aliases
+      - name: Build zartigl
+        run: |
+          cd submodules/zartigl
+          npm install
+          npm run build:lib
+
       # Initialize and build all components
       - name: Run CI process
         run: npm run ci
