@@ -2,7 +2,7 @@ import { Zartigl } from "@fxi/zartigl";
 import { catalog, getCatalogLayer, formatVertical } from "@fxi/zartigl/catalog";
 import flatpickr from "flatpickr";
 import { el } from "../../el_mapx";
-import { maplibregl } from "../../mx";
+import { maplibregl, settings as mxSettings } from "../../mx";
 import { moduleLoad } from "../../modules_loader_async";
 import { setClickHandler, debounce } from "../../mx_helper_misc";
 import { ArcoChart } from "./chart.js";
@@ -24,6 +24,8 @@ const defaultOptions = {
   maxPoints: 200,
   maxDepths: 50,
   settings: null,
+  time: null,
+  depth: null,
 };
 
 /**
@@ -66,12 +68,23 @@ export class ArcoMapLegend {
       throw new Error(`ARCO catalog layer '${this._opt.layer}' not found`);
     }
 
+    const idView = this._opt.idView || "arco";
+    const idLayer = toMapxLayerId(idView);
+    this._id_layer = idLayer;
     this._z = new Zartigl({
-      id: this._opt.idView || "arco",
+      id: idLayer,
       map: this._opt.map,
       catalog: catalog,
       backend: this._opt.backend,
       settings: this._opt.settings || undefined,
+      before: mxSettings.layerBefore,
+      metadata: {
+        idView,
+        idLayer,
+        type: "arco",
+        catalogLayer: this._opt.layer,
+        label: this._layer_def.label,
+      },
     });
     this._z.on("loading", this._on_loading);
     this._z.on("loaded", this._on_loaded);
@@ -82,10 +95,16 @@ export class ArcoMapLegend {
     this._time_meta = this._z.getTimeMeta();
     this._depth_meta = this._z.getDepthMeta();
     this._depths = [...this._depth_meta.values].sort((a, b) => a - b);
-    this._time = this._time_meta.current ?? this._time_meta.max;
+    this._time = this._resolveInitialTime(
+      this._opt.time ?? this._time_meta.current ?? this._time_meta.max,
+    );
+    this._depth = this._resolveInitialDepth(
+      this._opt.depth ?? this._depth_meta.current ?? this._depths[0] ?? 0,
+    );
 
     this.build();
     this.renderLegend();
+    this.setDepth(this._depth);
     this.setTime(this._time);
     window._arco = this;
   }
@@ -147,6 +166,14 @@ export class ArcoMapLegend {
     return this._time;
   }
 
+  _resolveInitialTime(time) {
+    const value = timeToMs(time);
+    if (Number.isFinite(value)) {
+      return value;
+    }
+    return this._time_meta.current ?? this._time_meta.max ?? this._time_meta.min;
+  }
+
   _timeStep() {
     const { step, values } = this._time_meta;
     if (step > 0) {
@@ -169,14 +196,36 @@ export class ArcoMapLegend {
     return this._depth ?? this._depths[0] ?? 0;
   }
 
+  _resolveInitialDepth(depth) {
+    if (!this._depths.length) {
+      return depth;
+    }
+    return this._depths[nearestIndex(this._depths, depth)];
+  }
+
   setDepthIndex(index) {
     const depth = this._depths[Math.round(index)];
     if (depth === undefined) {
       return;
     }
-    this._depth = depth;
-    this._z.setDepth(depth);
-    this._updateDepthReadout(depth);
+    this.setDepth(depth, { fromSlider: true });
+  }
+
+  setDepth(depth, opt = {}) {
+    if (!this._depths.length) {
+      return;
+    }
+    const index = nearestIndex(this._depths, depth);
+    const nearest = this._depths[index];
+    if (nearest === undefined) {
+      return;
+    }
+    this._depth = nearest;
+    this._z.setDepth(nearest);
+    if (!opt.fromSlider) {
+      this.elDepthSlider?.noUiSlider?.set(index);
+    }
+    this._updateDepthReadout(nearest);
     if (this._point) {
       this._update_chart_debounced();
     }
@@ -392,10 +441,24 @@ export class ArcoMapLegend {
    * Settings
    */
   updateSettings(settings) {
+    this._syncSettings(settings);
     this._z.updateSettings(settings);
     const legendChanged = "palette" in settings || "logScale" in settings;
     if (legendChanged) {
       this.renderLegend();
+    }
+  }
+
+  _syncSettings(settings) {
+    if (!this._settings) {
+      return;
+    }
+    for (const [key, value] of Object.entries(settings)) {
+      if (key === "speedFactor" || key === "fadeOpacity") {
+        this._settings[key] = asZoomWeightedPair(value, this._settings[key]);
+      } else {
+        this._settings[key] = value;
+      }
     }
   }
 
@@ -748,17 +811,25 @@ export class ArcoMapLegend {
     const defaults = this._layer_def.defaults || {};
     const raster = defaults.raster || {};
     const particles = defaults.particles || {};
+    const settings = this._opt.settings || {};
     const isVector = this.isVector();
 
     this._settings = {
-      opacity: raster.opacity ?? 1,
-      vibrance: raster.vibrance ?? 0,
-      logScale: raster.logScale ?? false,
-      particleDensity: particles.density ?? 0.01,
-      speedFactor: asZoomWeightedPair(particles.speedFactor, [0.25, 0.6]),
-      fadeOpacity: asZoomWeightedPair(particles.fadeOpacity, [0.96, 0.99]),
-      dropRate: particles.dropRate ?? 0.003,
-      dropRateBump: particles.dropRateBump ?? 0,
+      palette: settings.palette ?? defaults.palette,
+      opacity: settings.opacity ?? raster.opacity ?? 1,
+      vibrance: settings.vibrance ?? raster.vibrance ?? 0,
+      logScale: settings.logScale ?? raster.logScale ?? false,
+      particleDensity: settings.particleDensity ?? particles.density ?? 0.01,
+      speedFactor: asZoomWeightedPair(
+        settings.speedFactor ?? particles.speedFactor,
+        [0.25, 0.6],
+      ),
+      fadeOpacity: asZoomWeightedPair(
+        settings.fadeOpacity ?? particles.fadeOpacity,
+        [0.96, 0.99],
+      ),
+      dropRate: settings.dropRate ?? particles.dropRate ?? 0.003,
+      dropRateBump: settings.dropRateBump ?? particles.dropRateBump ?? 0,
     };
 
     const rows = [
@@ -883,14 +954,16 @@ export class ArcoMapLegend {
 
   _buildPaletteRow(defaults) {
     const palettes = this._z.getPalettes();
-    const paletteDefault = defaults.palette || palettes[0]?.id;
+    const paletteDefault = this._settings.palette || defaults.palette || palettes[0]?.id;
     const elPalette = el(
       "select",
       {
         class: "form-control",
         on: {
-          change: (event) =>
-            this.updateSettings({ palette: event.target.value }),
+          change: (event) => {
+            this._settings.palette = event.target.value;
+            this.updateSettings({ palette: event.target.value });
+          },
         },
       },
       palettes.map((palette) =>
@@ -999,6 +1072,19 @@ function pickerDateToMs(date) {
   );
 }
 
+function timeToMs(time) {
+  if (time instanceof Date) {
+    return time.getTime();
+  }
+  if (typeof time === "number") {
+    return time;
+  }
+  if (typeof time === "string") {
+    return new Date(time).getTime();
+  }
+  return NaN;
+}
+
 /**
  * ZoomWeighted : scalar or [high zoom, low zoom] pair
  */
@@ -1012,6 +1098,19 @@ function asZoomWeightedPair(value, fallback) {
   return [...fallback];
 }
 
+function nearestIndex(values, target) {
+  let index = 0;
+  let distance = Infinity;
+  for (let i = 0; i < values.length; i++) {
+    const next = Math.abs(values[i] - target);
+    if (next < distance) {
+      index = i;
+      distance = next;
+    }
+  }
+  return index;
+}
+
 function countDecimals(step) {
   const text = String(step);
   const pos = text.indexOf(".");
@@ -1020,4 +1119,9 @@ function countDecimals(step) {
 
 function formatYear(ms) {
   return new Date(ms).toISOString().slice(0, 4);
+}
+
+function toMapxLayerId(id) {
+  const value = String(id || "arco");
+  return value.startsWith("MX-") ? value : `MX-${value}`;
 }
