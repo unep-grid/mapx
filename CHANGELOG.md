@@ -1,3 +1,8 @@
+  - [1.13.20-beta.3](https://github.com/unep-grid/mapx/tree/1.13.20-beta.3) 
+
+    - fix: ci build zartigl
+
+
   - [1.13.20-beta.2](https://github.com/unep-grid/mapx/tree/1.13.20-beta.2) 
 
     - feat: arco extension + example
