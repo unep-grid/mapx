@@ -1,3 +1,9 @@
+  - [1.13.20-beta.2](https://github.com/unep-grid/mapx/tree/1.13.20-beta.2) 
+
+    - feat: arco extension + example
+    - chore: remove old plan
+
+
   - [1.13.20-beta.1](https://github.com/unep-grid/mapx/tree/1.13.20-beta.1) 
 
     - chore: update submodule
