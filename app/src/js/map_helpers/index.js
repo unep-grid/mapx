@@ -135,6 +135,7 @@ import { FlashItem } from "../icon_flash/index.js";
 import { elViewListOption } from "./view_list_options.js";
 import { viewFiltersInit } from "./view_filters.js";
 import { elViewListFilters } from "./view_list_filters.js";
+import { getRuntimeLayersByPrefix } from "./runtime_layers.js";
 import { ButtonPanelLegend } from "../panel_legend/index.js";
 import { createViewControls } from "../views_builder/view_controls.js";
 import { ButtonFilter } from "../button_filter/index.js";
@@ -2318,7 +2319,8 @@ export function viewsLayersOrderUpdate(o) {
   /**
    * Get displayed layer
    */
-  const layersDiplayed = getLayerByPrefix({
+  const layersDiplayed = getRuntimeLayersByPrefix({
+    map,
     prefix: /^MX-/,
   });
 
