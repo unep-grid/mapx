@@ -92,6 +92,7 @@
     "worker-loader": "^2.0.0"
   },
   "dependencies": {
+    "@fxi/zartigl": "file:../submodules/zartigl",
     "@json-editor/json-editor": "^2.12.0",
     "@mapbox/mapbox-gl-draw": "^1.3.0",
     "@tmcw/togeojson": "^4.5.0",

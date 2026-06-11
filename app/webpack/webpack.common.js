@@ -73,6 +73,16 @@ module.exports = {
         __dirname,
         "../../submodules/mapx-style/packages/theme-core/src/index.js",
       ),
+      // webpack 4 ignores the package "exports" field : alias the
+      // subpath first, then the package root (exact match with $)
+      "@fxi/zartigl/catalog$": path.resolve(
+        __dirname,
+        "../../submodules/zartigl/dist/catalog.js",
+      ),
+      "@fxi/zartigl$": path.resolve(
+        __dirname,
+        "../../submodules/zartigl/dist/zartigl.js",
+      ),
     },
   },
   module: {

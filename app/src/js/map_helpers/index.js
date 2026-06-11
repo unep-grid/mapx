@@ -1722,10 +1722,11 @@ export async function handleClickEvent(event, idMap) {
   const hasDashboard = clickModes.includes("dashboard");
   const hasDraw = clickModes.includes("draw");
   const hasSdk = clickModes.includes("sdk");
+  const hasArco = clickModes.includes("arco");
 
-  const addWidget = !(hasDashboard || hasSdk || hasDraw);
+  const addWidget = !(hasDashboard || hasSdk || hasDraw || hasArco);
 
-  const addHighlight = !(hasDraw || hasDashboard);
+  const addHighlight = !(hasDraw || hasDashboard || hasArco);
 
   if (!hasLayer && type !== "click") {
     return;

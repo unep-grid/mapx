@@ -10,6 +10,8 @@ The extensions follow an inheritance-based architecture that maximizes code reus
 BaseTimeMapLegend (shared/)
 ├── TimeMapLegend (cmems/) - CMEMS/WMTS implementation
 └── WMSTimeMapLegend (wms/) - Generic WMS implementation
+
+ArcoMapLegend (arco/) - Independent, zartigl/Zarr implementation
 ```
 
 ### Directory Structure
@@ -19,6 +21,11 @@ extensions/
 ├── index.js                           # Main exports
 ├── shared/                           # Shared base classes
 │   └── base_time_map_legend.js      # Base class with common logic
+├── arco/                            # ARCO/Zarr extension (zartigl)
+│   ├── arco_map_legend.js           # ARCO implementation
+│   ├── chart.js                     # Time/depth series chart
+│   ├── example.js                   # Usage examples
+│   └── style.less                   # ARCO-specific styling
 ├── cmems/                           # CMEMS/WMTS extension
 │   ├── ocean_map_legend.js          # CMEMS implementation
 │   ├── example.js                   # Usage examples
@@ -28,6 +35,38 @@ extensions/
     ├── example.js                   # Usage examples
     └── style.less                   # WMS-specific styling
 ```
+
+## ARCO Extension (zartigl)
+
+`ArcoMapLegend` does **not** extend `BaseTimeMapLegend` : it renders Zarr
+ocean data client-side through the [`@fxi/zartigl`](../../../../submodules/zartigl)
+MapLibre plugin (GPU particle advection for vector fields, palette rasters
+for scalars), so capabilities parsing, tile URL construction and raster
+cross-fade do not apply. It follows the same conventions (options object,
+`init()`/`destroy()`, `example.js` widget handler).
+
+Features : time slider + playback (play/stop/step/loop), vertical depth
+slider snapped to dataset levels, time-series / depth-profile chart at a
+point picked on the map (uses the `arco` click mode to suppress the
+default MapX popup), gradient legend, settings panel (palette, opacity,
+particle density, log scale).
+
+```javascript
+const { ArcoMapLegend } = await moduleLoad("extension", "arco_time_map_legend");
+
+const arco = new ArcoMapLegend({
+  idView: widget.opt.view.id,
+  map: widget.opt.map,
+  layer: "ocean-current-velocity", // catalog id, see @fxi/zartigl/catalog
+  elLegend: elLegend,
+  elInputs: widget.elContent,
+});
+await arco.init();
+```
+
+Build note : `submodules/zartigl/dist/` is gitignored. After a fresh clone
+or zartigl changes, run `cd submodules/zartigl && npm install && npm run build:lib`
+before building the app (webpack aliases point at the prebuilt dist).
 
 ## Features
 
