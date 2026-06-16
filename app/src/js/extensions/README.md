@@ -140,7 +140,7 @@ await tml.init();
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `idView` | string | null | MapX view identifier |
-| `map` | object | null | Mapbox GL JS map instance |
+| `map` | object | null | MapLibre GL JS map instance |
 | `baseURL` | string | null | Service base URL |
 | `elInputs` | HTMLElement | null | Container for UI controls |
 | `elLegend` | HTMLElement | null | Container for legend |
@@ -242,7 +242,7 @@ The extensions include comprehensive error handling:
 ## Browser Compatibility
 
 - Modern browsers with ES6+ support
-- Mapbox GL JS compatibility
+- MapLibre GL JS compatibility
 - Luxon for date/time handling
 - Flatpickr for date picker UI
 

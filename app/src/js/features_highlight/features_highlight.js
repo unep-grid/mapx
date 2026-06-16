@@ -2,7 +2,7 @@ import { bindAll } from "../bind_class_methods";
 import { clone, patchObject } from "../mx_helper_misc";
 import { isEmpty, isMap, isNotEmpty } from "./../is_test/index";
 const def = {
-  map: null, // Mapbox gl instance
+  map: null, // MapLibre GL instance
   transition_duration: 180,
   transition_delay: 0,
   highlight_shadow_blur: 2,
@@ -86,7 +86,7 @@ class Highlighter {
    * @param {Object} state - State options for what to highlight.
    * @param {Array.<Object>} state.filters - Array of filter objects to be applied.
    * @param {String} state.filters[].id - Identifier of the view to which the filter applies.
-   * @param {Array} state.filters[].filter - MapboxGL expression
+   * @param {Array} state.filters[].filter - MapLibre GL expression
    * @returns {number} Number of matched feature
    * @example
    * hl.setState({

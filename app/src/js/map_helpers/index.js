@@ -177,7 +177,7 @@ export function getMapSources() {
  * Export style basemap
  * @param {Object} opt Options
  * @param {String} opt.sourcePrefixToKeep Prefix of source layers id to keep;
- * @returns {Object} Mapbox style with MapX basemap
+ * @returns {Object} MapLibre style-spec object with MapX basemap
  */
 export function getStyleBaseMap(opt) {
   const map = getMap();
@@ -1021,7 +1021,7 @@ export async function initMapx(o) {
   const mp = o.mapPosition || {};
 
   /**
-   * Set mapbox gl token
+   * Set access token for legacy tokenized services, if configured.
    */
   maplibregl.accessToken = settings.services.mapbox.token;
 
@@ -2055,7 +2055,7 @@ function removeOldSourceIfExists(view, map, idSource) {
     return false;
   }
   /*
-   * Bug in mapbox gl with updatingTerrain ( #12747 )
+   * GL JS bug with updatingTerrain ( #12747 )
    * -> "Cannot read properties of undefined (reading 'get')"
    * -> fails when removing layer and right after, their source.
    * -> Waiting a bit seems to solve the issue;

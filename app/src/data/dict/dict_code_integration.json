@@ -53,7 +53,7 @@
   },
   {
     "id": "code_integration_template_mapbox_style",
-    "en": "Mapbox style (full)",
+    "en": "MapLibre style (full)",
     "fr": "",
     "es": "",
     "ru": "",
@@ -66,7 +66,7 @@
   },
   {
     "id": "code_integration_template_mapbox_style_basemap",
-    "en": "Mapbox style (base map only, usable in Studio)",
+    "en": "MapLibre base style",
     "fr": "",
     "es": "",
     "ru": "",
@@ -79,7 +79,7 @@
   },
   {
     "id": "code_integration_template_mapbox_layers",
-    "en": "Mapbox style (layers only)",
+    "en": "MapLibre style (layers only)",
     "fr": "",
     "es": "",
     "ru": "",
@@ -92,7 +92,7 @@
   },
   {
     "id": "code_integration_template_maplibre_simple_app",
-    "en": "Simple html/js app, using maplibre",
+    "en": "Simple HTML/JS app using MapLibre",
     "fr": "",
     "es": "",
     "ru": "",

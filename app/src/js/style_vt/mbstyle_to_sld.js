@@ -2,9 +2,9 @@ import { resolveSvgUrl } from "@unep-grid/mapx-style";
 import { getApiUrl } from "./../api_routes/index.js";
 import { isUrl, isArray, isEmpty, isNotEmpty } from "./../is_test/index.js";
 /**
- * Extract SLD from Mapbox layers
+ * Extract SLD from MapLibre/Mapbox style-spec layers
  * .. and fix common issues
- * @param {Object} style Mapbox style
+ * @param {Object} style MapLibre/Mapbox style-spec object
  * @return {Promise<Array>} Array of layers
  */
 export async function mapboxToSld(style, opt) {
@@ -70,7 +70,7 @@ export async function mapboxToSld(style, opt) {
 /**
  * Convert MapLibre style additions to a Mapbox/GeoStyler compatible style.
  * GeoStyler's Mapbox parser only accepts a single sprite URL string.
- * @param {Object} style Mapbox/MapLibre style
+ * @param {Object} style MapLibre/Mapbox style-spec object
  * @param {Object} opt Options
  * @param {String} opt.geomType View geometry type
  * @return {Object} Cloned style compatible with GeoStyler
@@ -307,10 +307,10 @@ function cloneStyle(style) {
  * Fix / update geostyler output
  * This is a minimalist approach : no recursion or deep changes.
  *
- * 1) Mapbox VT requires "" for numeric null testing. Type issue: SLD,
+ * 1) Vector tile styles require "" for numeric null testing. Type issue: SLD,
  * then postgres will produce wrong requests.
  *
- * 2) Recent mapbox-gl use newer "expression" for filter and data driven
+ * 2) Recent GL style-spec expressions use newer "expression" filter and data driven
  * style, but geostyler parser only handle old system. Conversion is needed.
  *
  * Example

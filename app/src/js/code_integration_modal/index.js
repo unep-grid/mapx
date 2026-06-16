@@ -3,7 +3,7 @@ import { el, elSelect, elButtonFa } from "./../el_mapx/index.js";
 import { moduleLoad } from "./../modules_loader_async/index.js";
 import * as template_maplibre_simple from "./templates/maplibre_gl_app.html";
 import { getDictItem } from "../language/index.js";
-import { getViewMapboxStyle, getViewSldStyle } from "./../style_vt";
+import { getViewMapLibreStyle, getViewSldStyle } from "./../style_vt";
 import { CODE_INTEGRATION_VERSIONS } from "./dependency_versions.js";
 
 import { parseTemplate } from "./../mx_helper_misc";
@@ -242,7 +242,7 @@ export class ModalCodeIntegration {
       language: "html",
     };
 
-    const style = await getViewMapboxStyle(mci._config.idView);
+    const style = await getViewMapLibreStyle(mci._config.idView);
 
     switch (id) {
       case "template_maplibre_simple_app":

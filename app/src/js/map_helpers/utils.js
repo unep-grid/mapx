@@ -14,12 +14,12 @@ const PROJECTION_WGS84 = "+proj=longlat +datum=WGS84 +no_defs +type=crs";
 const PROJECTION_WEBMERCATOR =
   "+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs +type=crs";
 
-// --- Type Aliases (Based on Mapbox GL JS) ---
+// --- Type Aliases (Based on MapLibre GL JS) ---
 
-/** Mapbox GL JS Point representation: [number, number] or {x: number, y: number} */
+/** MapLibre GL JS Point representation: [number, number] or {x: number, y: number} */
 /** @typedef {[number, number] | {x: number, y: number}} PointLike */
 
-/** Mapbox GL JS LngLat representation: {lng: number, lat: number} */
+/** MapLibre GL JS LngLat representation: {lng: number, lat: number} */
 /** @typedef {{lng: number, lat: number}} LngLat */
 
 /** Pixel Bounding Box format: [[minX, minY], [maxX, maxY]] */
@@ -31,7 +31,7 @@ const PROJECTION_WEBMERCATOR =
  * Creates a pixel bounding box from a map event point.
  * Output format is compatible with maplibregl.Map#queryRenderedFeatures.
  *
- * @param {{ point: PointLike }} event - Mapbox map event containing a `point`.
+ * @param {{ point: PointLike }} event - MapLibre map event containing a `point`.
  * @param {number} [buffer=DEFAULT_BUFFER_PIXELS] - Pixel buffer around the event point.
  * @returns {PixelBbox} Pixel bounding box [[minX, minY], [maxX, maxY]].
  * @throws {Error} If event or event.point is invalid.

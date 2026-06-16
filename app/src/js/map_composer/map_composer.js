@@ -50,7 +50,7 @@ export class MapComposer {
        * NOTE; Render map composer in shadow dom : sounds good, doesnt work
        * HTMLtoCanvas does not work well and
        * we need to import style for building legends, fontawesome for
-       * buttons, bootstrap and mapbox gl css.
+       * buttons, bootstrap and MapLibre GL CSS.
        */
       elContainer.attachShadow({ mode: "open" });
       const elRoot = elContainer.shadowRoot;

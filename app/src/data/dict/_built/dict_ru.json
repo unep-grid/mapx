@@ -131,23 +131,23 @@
   },
   {
     "id": "code_integration_template_mapbox_style",
-    "en": "Mapbox style (full)",
-    "ru": "Стиль Mapbox (полный)"
+    "en": "MapLibre style (full)",
+    "ru": "В стиле MapLibre (полная версия)"
   },
   {
     "id": "code_integration_template_mapbox_style_basemap",
-    "en": "Mapbox style (base map only, usable in Studio)",
-    "ru": "Стиль Mapbox (только базовая карта, которую можно использовать в Studio)"
+    "en": "MapLibre base style",
+    "ru": "базовый стиль MapLibre"
   },
   {
     "id": "code_integration_template_mapbox_layers",
-    "en": "Mapbox style (layers only)",
-    "ru": "Стиль Mapbox (только слои)"
+    "en": "MapLibre style (layers only)",
+    "ru": "Стиль MapLibre (только слои)"
   },
   {
     "id": "code_integration_template_maplibre_simple_app",
-    "en": "Simple html/js app, using maplibre",
-    "ru": "Простое приложение html/js, использующее maplibre"
+    "en": "Simple HTML/JS app using MapLibre",
+    "ru": "Простое HTML/JS-приложение, использующее MapLibre."
   },
   {
     "id": "ABW",

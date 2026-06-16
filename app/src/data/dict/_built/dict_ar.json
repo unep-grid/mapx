@@ -131,23 +131,23 @@
   },
   {
     "id": "code_integration_template_mapbox_style",
-    "en": "Mapbox style (full)",
-    "ar": "نمط Mapbox (ممتلئ)"
+    "en": "MapLibre style (full)",
+    "ar": "نمط MapLibre (كامل)"
   },
   {
     "id": "code_integration_template_mapbox_style_basemap",
-    "en": "Mapbox style (base map only, usable in Studio)",
-    "ar": "نمط Mapbox (الخريطة الأساسية فقط ، يمكن استخدامها في الاستوديو)"
+    "en": "MapLibre base style",
+    "ar": "نمط قاعدة MapLibre"
   },
   {
     "id": "code_integration_template_mapbox_layers",
-    "en": "Mapbox style (layers only)",
-    "ar": "نمط Mapbox (الطبقات فقط)"
+    "en": "MapLibre style (layers only)",
+    "ar": "نمط MapLibre (الطبقات فقط)"
   },
   {
     "id": "code_integration_template_maplibre_simple_app",
-    "en": "Simple html/js app, using maplibre",
-    "ar": "تطبيق html / js بسيط باستخدام maplibre"
+    "en": "Simple HTML/JS app using MapLibre",
+    "ar": "تطبيق HTML/JS بسيط باستخدام MapLibre"
   },
   {
     "id": "ABW",

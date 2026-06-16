@@ -99,7 +99,7 @@ class ResolversBase {
   }
 
   /**
-   * Promisify mapbox method
+   * Promisify MapLibre map method
    * @param {String} type of event to listen to resolve the promise
    * @param {Function} cb Function to wrap
    * @param {Object} opt Object, e.g. for references

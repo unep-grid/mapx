@@ -348,7 +348,7 @@ MapX resolvers available in app only
     * [.set_highlighter(opt)](#MapxResolversStatic+set_highlighter) ⇒ <code>number</code>
     * [.update_highlighter()](#MapxResolversStatic+update_highlighter) ⇒ <code>number</code>
     * [.reset_highlighter()](#MapxResolversStatic+reset_highlighter) ⇒ <code>number</code>
-    * [.set_country_highlight(countries)](#MapxResolversStatic+set_country_highlight) ⇒ <code>MapboxFilterExpression</code>
+    * [.set_country_highlight(countries)](#MapxResolversStatic+set_country_highlight) ⇒ <code>MapLibreFilterExpression</code>
     * [.view_geojson_create(opt)](#MapxResolversStatic+view_geojson_create) ⇒ <code>Object</code>
     * [.view_geojson_set_style(opt)](#MapxResolversStatic+view_geojson_set_style) ⇒ <code>Boolean</code>
     * [.view_geojson_delete(opt)](#MapxResolversStatic+view_geojson_delete) ⇒ <code>Boolean</code>
@@ -1532,7 +1532,7 @@ Set the highlighter with the provided options.
 | config.point | <code>PointLike</code> \| <code>Array.&lt;PointLike&gt;</code> | Location to query |
 | opt.filters | <code>Array.&lt;Object&gt;</code> | Array of filter objects to be applied. |
 | opt.filters[].id | <code>String</code> | Identifier of the view to which the filter applies. |
-| opt.filters[].filter | <code>Array</code> | MapboxGl filter expression |
+| opt.filters[].filter | <code>Array</code> | MapLibre GL filter expression |
 
 **Example**  
 ```js
@@ -1577,11 +1577,11 @@ Clear all highlighted features and reset config
 **Returns**: <code>number</code> - Feature count  
 <a name="MapxResolversStatic+set_country_highlight"></a>
 
-#### mapxResolversApp.set\_country\_highlight(countries) ⇒ <code>MapboxFilterExpression</code>
+#### mapxResolversApp.set\_country\_highlight(countries) ⇒ <code>MapLibreFilterExpression</code>
 Highlights the specified countries on the map by graying out all others.
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
-**Returns**: <code>MapboxFilterExpression</code> - Filter to highlight specified countries  
+**Returns**: <code>MapLibreFilterExpression</code> - Filter to highlight specified countries  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1622,8 +1622,8 @@ Set geojson view layers style : layout and paint
 | --- | --- | --- |
 | opt | <code>Object</code> | Options |
 | opt.idView | <code>String</code> | Id of the geojson view |
-| opt.layout | <code>Object</code> | Mapbox-gl layout object e.g. {'visibility','none'}; |
-| opt.paint | <code>Object</code> | Mapbox-gl paint object. e.g. {'fill-color':'red'}; |
+| opt.layout | <code>Object</code> | MapLibre GL layout object e.g. {'visibility','none'}; |
+| opt.paint | <code>Object</code> | MapLibre GL paint object. e.g. {'fill-color':'red'}; |
 
 <a name="MapxResolversStatic+view_geojson_delete"></a>
 
@@ -2066,7 +2066,7 @@ MapX resolvers available in static and app
     * [.set_highlighter(opt)](#MapxResolversStatic+set_highlighter) ⇒ <code>number</code>
     * [.update_highlighter()](#MapxResolversStatic+update_highlighter) ⇒ <code>number</code>
     * [.reset_highlighter()](#MapxResolversStatic+reset_highlighter) ⇒ <code>number</code>
-    * [.set_country_highlight(countries)](#MapxResolversStatic+set_country_highlight) ⇒ <code>MapboxFilterExpression</code>
+    * [.set_country_highlight(countries)](#MapxResolversStatic+set_country_highlight) ⇒ <code>MapLibreFilterExpression</code>
     * [.view_geojson_create(opt)](#MapxResolversStatic+view_geojson_create) ⇒ <code>Object</code>
     * [.view_geojson_set_style(opt)](#MapxResolversStatic+view_geojson_set_style) ⇒ <code>Boolean</code>
     * [.view_geojson_delete(opt)](#MapxResolversStatic+view_geojson_delete) ⇒ <code>Boolean</code>
@@ -2850,7 +2850,7 @@ Set the highlighter with the provided options.
 | config.point | <code>PointLike</code> \| <code>Array.&lt;PointLike&gt;</code> | Location to query |
 | opt.filters | <code>Array.&lt;Object&gt;</code> | Array of filter objects to be applied. |
 | opt.filters[].id | <code>String</code> | Identifier of the view to which the filter applies. |
-| opt.filters[].filter | <code>Array</code> | MapboxGl filter expression |
+| opt.filters[].filter | <code>Array</code> | MapLibre GL filter expression |
 
 **Example**  
 ```js
@@ -2895,11 +2895,11 @@ Clear all highlighted features and reset config
 **Returns**: <code>number</code> - Feature count  
 <a name="MapxResolversStatic+set_country_highlight"></a>
 
-#### mapxResolversStatic.set\_country\_highlight(countries) ⇒ <code>MapboxFilterExpression</code>
+#### mapxResolversStatic.set\_country\_highlight(countries) ⇒ <code>MapLibreFilterExpression</code>
 Highlights the specified countries on the map by graying out all others.
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: <code>MapboxFilterExpression</code> - Filter to highlight specified countries  
+**Returns**: <code>MapLibreFilterExpression</code> - Filter to highlight specified countries  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -2940,8 +2940,8 @@ Set geojson view layers style : layout and paint
 | --- | --- | --- |
 | opt | <code>Object</code> | Options |
 | opt.idView | <code>String</code> | Id of the geojson view |
-| opt.layout | <code>Object</code> | Mapbox-gl layout object e.g. {'visibility','none'}; |
-| opt.paint | <code>Object</code> | Mapbox-gl paint object. e.g. {'fill-color':'red'}; |
+| opt.layout | <code>Object</code> | MapLibre GL layout object e.g. {'visibility','none'}; |
+| opt.paint | <code>Object</code> | MapLibre GL paint object. e.g. {'fill-color':'red'}; |
 
 <a name="MapxResolversStatic+view_geojson_delete"></a>
 

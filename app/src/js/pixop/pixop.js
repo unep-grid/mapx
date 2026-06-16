@@ -102,7 +102,7 @@ export class PixOp {
   getDefault(type) {
     const def = {
       /**
-       * Store mapbox gl sources
+       * Store MapLibre GL sources
        */
       sources: {
         canvas: {},
@@ -452,7 +452,7 @@ export class PixOp {
   }
 
   /*
-   * Get mapbox gl bounds
+   * Get MapLibre GL bounds
    */
   getMapBounds() {
     const px = this;

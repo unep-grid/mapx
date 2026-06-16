@@ -7,7 +7,7 @@ import {getArrayDistinct} from './array_stat';
 import * as color from './color_utils/';
 const debug = false;
 
-// geojson type to mapbox gl type
+// GeoJSON type to MapLibre GL style type
 var typeSwitcher = {
   Point: 'circle',
   MultiPoint: 'circle',

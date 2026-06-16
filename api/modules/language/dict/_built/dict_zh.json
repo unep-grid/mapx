@@ -131,23 +131,23 @@
   },
   {
     "id": "code_integration_template_mapbox_style",
-    "en": "Mapbox style (full)",
-    "zh": "Mapbox 样式（完整）"
+    "en": "MapLibre style (full)",
+    "zh": "MapLibre 风格（完整版）"
   },
   {
     "id": "code_integration_template_mapbox_style_basemap",
-    "en": "Mapbox style (base map only, usable in Studio)",
-    "zh": "Mapbox 样式（仅底图，可在 Studio 中使用）"
+    "en": "MapLibre base style",
+    "zh": "MapLibre 基础样式"
   },
   {
     "id": "code_integration_template_mapbox_layers",
-    "en": "Mapbox style (layers only)",
-    "zh": "Mapbox 样式（仅限图层）"
+    "en": "MapLibre style (layers only)",
+    "zh": "MapLibre 风格（仅限图层）"
   },
   {
     "id": "code_integration_template_maplibre_simple_app",
-    "en": "Simple html/js app, using maplibre",
-    "zh": "简单的 html/js 应用，使用 maplibre"
+    "en": "Simple HTML/JS app using MapLibre",
+    "zh": "使用 MapLibre 的简单 HTML/JS 应用程序"
   },
   {
     "id": "ABW",

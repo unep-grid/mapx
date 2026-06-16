@@ -932,7 +932,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * @param {(PointLike | Array<PointLike>)?} config.point Location to query
    * @param {Array.<Object>} opt.filters - Array of filter objects to be applied.
    * @param {String} opt.filters[].id - Identifier of the view to which the filter applies.
-   * @param {Array} opt.filters[].filter - MapboxGl filter expression 
+   * @param {Array} opt.filters[].filter - MapLibre GL filter expression
    * @returns {number} Feature count
    * @example
    * 
@@ -986,7 +986,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * Highlights the specified countries on the map by graying out all others.
    *
    * @param {Array<string>} countries - ISO 3166-1 alpha-3 country codes to highlight
-   * @returns {MapboxFilterExpression} Filter to highlight specified countries
+   * @returns {MapLibreFilterExpression} Filter to highlight specified countries
    */
   set_country_highlight(countries = []) {
     return setHighlightedCountries({ countries });
@@ -1036,8 +1036,8 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * Set geojson view layers style : layout and paint
    * @param {Object} opt Options
    * @param {String} opt.idView Id of the geojson view
-   * @param {Object} opt.layout Mapbox-gl layout object e.g. {'visibility','none'};
-   * @param {Object} opt.paint Mapbox-gl paint object. e.g. {'fill-color':'red'};
+   * @param {Object} opt.layout MapLibre GL layout object e.g. {'visibility','none'};
+   * @param {Object} opt.paint MapLibre GL paint object. e.g. {'fill-color':'red'};
    * @return {Boolean} done
    */
   view_geojson_set_style(opt) {

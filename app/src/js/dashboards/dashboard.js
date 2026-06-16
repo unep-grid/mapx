@@ -141,7 +141,7 @@ class Dashboard extends EventSimple {
    * @param {Object} conf - Dashboard configuration for the widgets.
    * @param {Array} conf.widgets - Widgets data.
    * @param {Array} conf.modules - Names of the modules e.g. ["d3"].
-   * @param {Object} conf.map - Mapbox gl map instance.
+   * @param {Object} conf.map - MapLibre GL map instance.
    * @param {Object} conf.view - View instance.
    * @returns {Promise<Array>} Returns a promise that resolves to an array of widgets.
    */

@@ -69,7 +69,7 @@ export function mirrorUrlGet(url) {
 }
 
 /**
- * Fetch url, using mirror. Takes cares of mapbox bbox brackets
+ * Fetch URL using the mirror. Handles GL bbox template brackets.
  * @param {String} url Url to fetch
  * @param {Any} opt Fetch method options
  * @return {Promise} Fetch promise

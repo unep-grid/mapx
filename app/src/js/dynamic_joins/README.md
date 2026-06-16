@@ -176,7 +176,7 @@ await dynamicJoin.init({
 - `palette: string` - Chroma.js color palette name or array of colors
 - `classes: number` - Number of classification classes (default: 5)
 - `colorNa: string` - Color for missing/null values (default: '#ccc')
-- `paint: PaintConfig` - Mapbox GL paint properties per layer type
+- `paint: PaintConfig` - MapLibre GL paint properties per layer type
 
 ### Data Source
 

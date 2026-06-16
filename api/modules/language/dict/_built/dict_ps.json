@@ -131,23 +131,23 @@
   },
   {
     "id": "code_integration_template_mapbox_style",
-    "en": "Mapbox style (full)",
-    "ps": "د نقشه بکس سټایل (بشپړ)"
+    "en": "MapLibre style (full)",
+    "ps": "د MapLibre سټایل (بشپړ)"
   },
   {
     "id": "code_integration_template_mapbox_style_basemap",
-    "en": "Mapbox style (base map only, usable in Studio)",
-    "ps": "د نقشه بکس سټایل (یوازې اساسی نقشه، په سټوډیو کې د کارولو وړ)"
+    "en": "MapLibre base style",
+    "ps": "د MapLibre اساس سټایل"
   },
   {
     "id": "code_integration_template_mapbox_layers",
-    "en": "Mapbox style (layers only)",
-    "ps": "د نقشه بکس سټایل (یوازې پرتونه)"
+    "en": "MapLibre style (layers only)",
+    "ps": "د MapLibre سټایل (یوازې پرتونه)"
   },
   {
     "id": "code_integration_template_maplibre_simple_app",
-    "en": "Simple html/js app, using maplibre",
-    "ps": "ساده html/js ایپ، د میپلیبر په کارولو سره"
+    "en": "Simple HTML/JS app using MapLibre",
+    "ps": "د MapLibre په کارولو سره ساده HTML/JS اپلیکیشن"
   },
   {
     "id": "ABW",

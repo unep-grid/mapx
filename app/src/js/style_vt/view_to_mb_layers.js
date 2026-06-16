@@ -29,13 +29,13 @@ const def = {
 };
 
 /**
- * Create mapbox layers from mapx's style
+ * Create MapLibre style-spec layers from MapX's style.
  * @param {Object|String} v View or view's id
  * @param {Object} opt Options
  * @param {Boolean} opt.useLabelAsId Set id based on rule's label (e.g. for sld)
  * @param {Boolean} opt.simplifyExpression Simplify expressions (e.g. for SLD)
  * @param {Boolean} opt.mapxOrder Order to add layers sequentially - instead of appending all at once
- * @return {Promise<Array>} Array of mapbox layers
+ * @return {Promise<Array>} Array of MapLibre style-spec layers
  */
 export async function getViewMapboxLayers(v, opt) {
   const {
@@ -598,4 +598,8 @@ export async function getViewMapboxLayers(v, opt) {
 
     return makeSimpleLayer(config);
   }
+}
+
+export async function getViewMapLibreLayers(v, opt) {
+  return getViewMapboxLayers(v, opt);
 }

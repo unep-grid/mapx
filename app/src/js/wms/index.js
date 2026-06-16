@@ -132,9 +132,9 @@ function isWmsLayer(layer) {
 }
 
 /**
- * Query wms layer using mapbox point, layer list and service URL
+ * Query WMS layer using a MapLibre point, layer list and service URL
  * @param {Object} opt Options
- * @param {Object} opt.map Mapbox gl map. Empty, use default
+ * @param {Object} opt.map MapLibre GL map. Empty, use default
  * @param {Boolean} opt.asObject Return an object of array `{a:[2,1]}` instead of an array of object `[{a:2},{a:1}]`.
  * @param {Object} opt.bbox point bbox
  * @param {Array} opt.layers layer list

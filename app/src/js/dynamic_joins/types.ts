@@ -168,7 +168,7 @@ export interface SeriesDataPoint {
 // Function types
 export type AggregatorFunction = (vals: any[]) => any;
 
-// Map type - using any for now to avoid complex Mapbox GL JS typing
+// Map type - using any for now to avoid complex MapLibre GL JS typing
 export type MapInstance = any;
 
 export interface LegendClass {

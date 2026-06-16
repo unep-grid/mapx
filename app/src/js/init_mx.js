@@ -18,6 +18,6 @@ import '../css/mx_icons.less';
 import * as mx from './mx.js';
 window.mx = mx;
 /**
-* Mapbox gl preload workers as soon as possible
+* MapLibre GL preload workers as soon as possible
 */
 mx.maplibregl.prewarm();

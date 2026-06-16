@@ -131,23 +131,23 @@
   },
   {
     "id": "code_integration_template_mapbox_style",
-    "en": "Mapbox style (full)",
-    "de": "Mapbox-Stil (vollständig)"
+    "en": "MapLibre style (full)",
+    "de": "MapLibre-Stil (vollständig)"
   },
   {
     "id": "code_integration_template_mapbox_style_basemap",
-    "en": "Mapbox style (base map only, usable in Studio)",
-    "de": "Mapbox-Stil (nur Basiskarte, verwendbar in Studio)"
+    "en": "MapLibre base style",
+    "de": "MapLibre-Basisstil"
   },
   {
     "id": "code_integration_template_mapbox_layers",
-    "en": "Mapbox style (layers only)",
-    "de": "Mapbox-Stil (nur Ebenen)"
+    "en": "MapLibre style (layers only)",
+    "de": "MapLibre-Stil (nur Ebenen)"
   },
   {
     "id": "code_integration_template_maplibre_simple_app",
-    "en": "Simple html/js app, using maplibre",
-    "de": "Einfache HTML/JS-App mit Maplibre"
+    "en": "Simple HTML/JS app using MapLibre",
+    "de": "Einfache HTML/JS-App mit MapLibre"
   },
   {
     "id": "ABW",

@@ -5,7 +5,7 @@ import {
   getStyleBaseMap,
 } from "../map_helpers/index.js";
 import { path } from "./../mx_helper_misc.js";
-import { getViewMapboxLayers } from "./view_to_mb_layers";
+import { getViewMapLibreLayers } from "./view_to_mb_layers";
 import { mapboxToSld } from "./mbstyle_to_sld";
 import { isViewVtWithStyleCustom, isString } from "./../is_test/index.js";
 
@@ -20,14 +20,14 @@ export async function getViewSldStyle(idView) {
   if (isViewVtWithStyleCustom(view)) {
     return null;
   }
-  const styleMapboxForSld = await getViewMapboxStyle(view, {
+  const styleForSld = await getViewMapLibreStyle(view, {
     useLabelAsId: true,
     addMetadata: true,
     simplifyExpression: true,
     mapxOrder: false,
   });
 
-  const styleSld = await mapboxToSld(styleMapboxForSld, {
+  const styleSld = await mapboxToSld(styleForSld, {
     fixFilters: true,
     geomType: path(view, "data.geometry.type", "point"),
   });
@@ -36,7 +36,7 @@ export async function getViewSldStyle(idView) {
 }
 
 /**
- * Create mapbox style from view's layers
+ * Create a MapLibre style-spec object from view layers.
  * @param {String|object} idView Id of the view or view
  * @param {Object} opt Options
  * @param {Boolean} opt.useLabelAsId Set id based on rule's label (e.g. for sld)
@@ -59,7 +59,7 @@ export async function getViewMapboxStyle(idView, opt) {
   const simplifyColors = simplifyExpression;
 
   const view = getView(idView);
-  const base = await getViewMapboxLayers(view, {
+  const base = await getViewMapLibreLayers(view, {
     useLabelAsId,
     addMetadata,
     simplifyExpression,
@@ -115,7 +115,7 @@ export async function getViewMapboxStyle(idView, opt) {
   }
 
   /**
-   * If used directly in mapbox style,
+   * If used directly as a standalone GL style,
    * all layers should be reversed. If used in mapx,
    * they will be added sequentially, at a given point, but
    * not directly. reverse option in sortLayers is not usefull
@@ -145,4 +145,8 @@ export async function getViewMapboxStyle(idView, opt) {
   }
 
   return style;
+}
+
+export async function getViewMapLibreStyle(idView, opt) {
+  return getViewMapboxStyle(idView, opt);
 }
