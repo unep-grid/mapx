@@ -1,3 +1,8 @@
+  - [1.13.20-beta.5](https://github.com/unep-grid/mapx/tree/1.13.20-beta.5) 
+
+    - refactor: change more mapbox references in comments/lables/types
+
+
   - [1.13.20-beta.4](https://github.com/unep-grid/mapx/tree/1.13.20-beta.4) 
 
     - fix(arco): layer order of custom layers requires runtime layers id
