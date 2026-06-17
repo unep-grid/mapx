@@ -1,3 +1,10 @@
+  - [1.13.20-beta.6](https://github.com/unep-grid/mapx/tree/1.13.20-beta.6) 
+
+    - fix: maplibre code integration code template mapx style url
+    - chore: update submodule
+    - fix: attributions line
+
+
   - [1.13.20-beta.5](https://github.com/unep-grid/mapx/tree/1.13.20-beta.5) 
 
     - refactor: change more mapbox references in comments/lables/types
