@@ -2,8 +2,21 @@ import { el } from "./../el/src/index.js";
 import { formatZeros, path } from "./../mx_helpers.js";
 import mapxlogo from "./../../svg/map-x-logo-full.svg";
 import { isElement } from "../is_test/index.js";
-import { modalIframe } from "../modal_iframe/index.js";
+import { AttributionManager } from "../attribution_manager";
 import { bindAll } from "../bind_class_methods/index.js";
+
+const BASE_ATTRIBUTION_SOURCE_IDS = new Set([
+  "mapx",
+  "protomaps_basemap",
+  "mapx_borders",
+  "mapx_bathymetry",
+  "terrain",
+  "terrain_hillshade",
+  "contours",
+  "mapx_wmo_borders",
+  "satellite",
+]);
+
 /**
  * Control for live coordinate
  */
@@ -42,49 +55,175 @@ class MapControlLiveCoord {
  */
 
 class MapControlAttribution {
-  constructor() {}
+  constructor() {
+    this.render = this.render.bind(this);
+    this.toggleExpanded = this.toggleExpanded.bind(this);
+    this.expanded = false;
+  }
   onAdd(map) {
     const mla = this;
     mla.map = map;
+    mla.attributionManager = new AttributionManager(map);
     mla.elContainer = el(
       "div",
       {
-        class: ["maplibregl-ctrl", "maplibregl-ctrl-attrib"],
+        class: [
+          "maplibregl-ctrl",
+          "maplibregl-ctrl-attrib",
+          "mx-attribution-live",
+        ],
       },
-      [
-        el(
-          "a",
-          {
-            target: "_blank",
-            href: "https://www.openstreetmap.org/copyright",
-          },
-          " © OpenStreetMap",
-        ),
-        el(
-          "a",
-          {
-            href: "#",
-            on: [
-              "click",
-              async () => {
-                return modalIframe({
-                  doc_id: "doc_legal_notice",
-                });
-              },
-            ],
-          },
-          " © MapX",
-        ),
-      ],
+      [],
     );
+    mla.render();
+    map.on?.("styledata", mla.render);
+    map.on?.("idle", mla.render);
     return mla.elContainer;
+  }
+  render() {
+    const mla = this;
+    const rows = mla.attributionManager?.rows() || [];
+    const baseRows = rows.filter(isBaseAttributionRow);
+    const additionalRows = rows.filter((row) => !isBaseAttributionRow(row));
+    const hasAdditionalRows = additionalRows.length > 0;
+    if (!hasAdditionalRows) {
+      mla.expanded = false;
+    }
+    const key = [
+      mla.expanded ? "expanded" : "collapsed",
+      ...rows.map((row) =>
+        [
+          row.kind,
+          row.id,
+          row.source,
+          row.attribution_text,
+          row.attribution_html,
+        ].join("\u001f"),
+      ),
+    ].join("\u001e");
+    if (key === mla.attributionKey) {
+      return;
+    }
+
+    mla.attributionKey = key;
+    mla.elContainer.innerHTML = "";
+    mla.elContainer.appendChild(
+      renderAttributionLine({
+        rows: baseRows,
+        hasToggle: hasAdditionalRows,
+        expanded: mla.expanded,
+        onToggle: mla.toggleExpanded,
+      }),
+    );
+    if (mla.expanded && hasAdditionalRows) {
+      mla.elContainer.appendChild(renderAttributionPanel(rows));
+    }
+  }
+  toggleExpanded(e) {
+    e?.preventDefault?.();
+    this.expanded = !this.expanded;
+    this.render();
   }
   onRemove() {
     const mlc = this;
+    mlc.map?.off?.("styledata", mlc.render);
+    mlc.map?.off?.("idle", mlc.render);
     mlc.map = undefined;
+    mlc.attributionManager = undefined;
     if (isElement(mlc.elContainer)) {
       mlc.elContainer.remove();
     }
+  }
+}
+
+function isBaseAttributionRow(row) {
+  return (
+    BASE_ATTRIBUTION_SOURCE_IDS.has(row.id) ||
+    BASE_ATTRIBUTION_SOURCE_IDS.has(row.source)
+  );
+}
+
+function renderAttributionLine(opt) {
+  const line = el("div", { class: ["mx-attribution-line"] }, []);
+  appendAttributionRows(line, opt.rows);
+  if (opt.hasToggle) {
+    line.appendChild(
+      el(
+        "button",
+        {
+          type: "button",
+          class: [
+            "mx-attribution-toggle",
+            "fa",
+            opt.expanded ? "fa-minus" : "fa-plus",
+          ],
+          title: opt.expanded ? "Collapse attributions" : "Expand attributions",
+          "aria-expanded": opt.expanded ? "true" : "false",
+          on: ["click", opt.onToggle],
+        },
+        "",
+      ),
+    );
+  }
+  return line;
+}
+
+function renderAttributionPanel(rows) {
+  return el(
+    "div",
+    { class: ["mx-attribution-panel"] },
+    rows.map((row) =>
+      el("div", { class: ["mx-attribution-panel-row"] }, renderAttributionRow(row)),
+    ),
+  );
+}
+
+function appendAttributionRows(root, rows) {
+  for (const [index, row] of rows.entries()) {
+    if (index > 0) {
+      root.appendChild(
+        el("span", { class: ["mx-attribution-separator"] }, " | "),
+      );
+    }
+    root.appendChild(renderAttributionRow(row));
+  }
+}
+
+function renderAttributionRow(row) {
+  const text = row.attribution_text || row.attribution_html || row.id;
+  if (row.id === "mapx") {
+    return el(
+      "a",
+      {
+        class: ["mx-attribution-item"],
+        href: path(
+          globalThis.mx,
+          "settings.links.mainProjectPage",
+          "https://mapx.org",
+        ),
+        target: "_blank",
+        rel: "noreferrer",
+      },
+      text,
+    );
+  }
+
+  const item = el(
+    "span",
+    { class: ["mx-attribution-item"] },
+    row.attribution_html || text,
+  );
+  setExternalLinkAttributes(item);
+  return item;
+}
+
+function setExternalLinkAttributes(root) {
+  for (const link of root.querySelectorAll?.("a") || []) {
+    if (!link.getAttribute("href")) {
+      continue;
+    }
+    link.setAttribute("target", "_blank");
+    link.setAttribute("rel", "noreferrer");
   }
 }
 /**

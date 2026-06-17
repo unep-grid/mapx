@@ -94,6 +94,17 @@ class Page extends Box {
         zip.file(file.name, file.content);
       }
 
+      const mapItem = page.items.find(
+        (item) => item.type === "map" && item.map?.getStyle instanceof Function,
+      );
+      const attributions = mc.state.attributions;
+      if (attributions?.getFiles instanceof Function) {
+        const files = await attributions.getFiles({ map: mapItem?.map });
+        for (const file of files) {
+          zip.file(file.name, file.content);
+        }
+      }
+
       const elPrint = page.el;
       const scale = mc.getScaleOut();
 

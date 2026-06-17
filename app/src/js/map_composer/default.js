@@ -35,6 +35,7 @@ const state = {
   canvas_max_area_theory: 16384 * 16384,
   canvas_max_area: 5000 * 5000,
   files: [],
+  attributions: null,
   items: [
     {
       type: "map",

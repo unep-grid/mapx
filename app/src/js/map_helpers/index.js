@@ -26,7 +26,7 @@ import { Search } from "./../search";
 import { downloadJSON } from "../download/index.js";
 import { ViewBase } from "../views_builder/view_base.js";
 import { ChaosTest } from "./chaos_test.js";
-import { MapxLogo, MapControlAttribution } from "./../map_controls";
+import { MapControlAttribution } from "./../map_controls";
 import { NotifCenter } from "./../notif_center/";
 import { cleanDiacritic } from "./../string_util/";
 import { mirrorUrlCreate } from "./../mirror_util";
@@ -1359,7 +1359,6 @@ export async function initMapx(o) {
   map.addControl(new MapControlAttribution(), "bottom-right");
   //map.addControl(new MapControlLiveCoord(), "bottom-right");
   //map.addControl(new MapControlScale(), "bottom-right");
-  map.addControl(new MapxLogo(), "bottom-left");
 
   /**
    * Init global listeners

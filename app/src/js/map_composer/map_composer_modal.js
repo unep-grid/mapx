@@ -9,7 +9,7 @@ import {
   getViewTitle,
   getView,
 } from "./../map_helpers/index.js";
-import { getViewMetaToHtml } from "../metadata/utils";
+import { AttributionManager } from "../attribution_manager";
 import { objectToArray, getContentSize } from "./../mx_helper_misc.js";
 import { modalIframe } from "../modal_iframe";
 
@@ -37,6 +37,7 @@ export class MapComposerModal {
       predefined_dim: "A5",
       items: [],
       files: [],
+      attributions: null,
     };
     const style = map.getStyle();
     if (style.terrain) {
@@ -120,26 +121,10 @@ export class MapComposerModal {
         height: dimTitle.height + 30,
       });
 
-      /**
-       * Provide metadata as files
-       */
-      const meta = await getViewMetaToHtml(id);
-
-      config.files.push({
-        type: "file",
-        content: new Blob([meta], { type: "text/html" }),
-        name: `view_metadata_${id}.html`,
-      });
     }
 
-    /**
-     * Add disclaimer and atribution
-     */
-    const { default: attribution } = await import("./../../md/attribution.md");
-    config.files.push({
-      type: "file",
-      content: new Blob([attribution], { type: "text/markdown" }),
-      name: "attribution.md",
+    config.attributions = new AttributionManager(map, {
+      idViews: vVisible,
     });
 
     /**
