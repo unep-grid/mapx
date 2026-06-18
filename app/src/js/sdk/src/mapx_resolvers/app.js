@@ -15,6 +15,7 @@ import { settings } from "./../../../settings";
 import { wsGetSourcesList } from "./../../../source";
 import { ChaosTest } from "../../../map_helpers/chaos_test.js";
 import { editTable } from "../../../source/edit/instance.js";
+import { events } from "../../../mx.js";
 
 /**
  * MapX resolvers available in app only
@@ -445,7 +446,7 @@ export class MapxResolversApp extends MapxResolversStatic {
      * Sort group -> trigger viewsLayersOrderUpdate -> fire 'layers_ordered'
      */
     const prom = new Promise((resolve) => {
-      mx.events.on({
+      events.on({
         type: "layers_ordered",
         idGroup: "sdk_resolver",
         callback: resolve,

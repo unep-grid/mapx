@@ -1,7 +1,7 @@
 import { jed } from "../json_editor";
 import { getLanguageCurrent } from "../language";
 import { getApiUrl } from "./../api_routes";
-import { sendData, path } from "./../mx_helper_misc.js";
+import { sendData } from "./../mx_helper_misc.js";
 import { modal } from "./../mx_helper_modal.js";
 import { settings } from "./../settings";
 import { updateEditorLanguage } from "./editor_language.js";
@@ -271,9 +271,9 @@ function contentToolsImageUploader(dialog) {
       form.append("image", blob);
       form.append("width", width);
       form.append("height", height);
-      form.append("token", path(mx, "settings.user.token"));
-      form.append("idUser", path(mx, "settings.user.id"));
-      form.append("project", path(mx, "settings.project.id"));
+      form.append("token", settings.user.token);
+      form.append("idUser", settings.user.id);
+      form.append("project", settings.project.id);
 
       sendData({
         url: getApiUrl("uploadImage"),

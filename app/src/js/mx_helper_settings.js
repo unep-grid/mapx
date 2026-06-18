@@ -1,5 +1,6 @@
 import { diff, clone } from "jsondiffpatch";
 import { settings } from "./settings";
+import { events } from "./mx.js";
 //import { mergeDeep } from "./mx_helper_misc.js";
 
 /**
@@ -19,7 +20,7 @@ export function updateSettings(newSettings) {
 
   const delta = diff(oldSettings, settings);
 
-  mx.events.fire({
+  events.fire({
     type: "settings_change",
     data: {
       delta: delta,
@@ -30,7 +31,7 @@ export function updateSettings(newSettings) {
 
   const userChange = diff(oldSettings.user, settings.user);
   if (userChange) {
-    mx.events.fire({
+    events.fire({
       type: "settings_user_change",
       data: {
         delta: userChange,
@@ -42,7 +43,7 @@ export function updateSettings(newSettings) {
   const projectChange = diff(oldSettings.project, settings.project);
 
   if (projectChange) {
-    mx.events.fire({
+    events.fire({
       type: "settings_project_change",
       data: {
         delta: projectChange,

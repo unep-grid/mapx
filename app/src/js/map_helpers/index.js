@@ -27,6 +27,7 @@ import { downloadJSON } from "../download/index.js";
 import { ViewBase } from "../views_builder/view_base.js";
 import { ChaosTest } from "./chaos_test.js";
 import { MapControlAttribution } from "./../map_controls";
+import { AttributionControl } from "maplibre-gl";
 import { NotifCenter } from "./../notif_center/";
 import { cleanDiacritic } from "./../string_util/";
 import { mirrorUrlCreate } from "./../mirror_util";
@@ -532,7 +533,7 @@ export async function setProject(idProject, opt, origin) {
   }
 
   opt = Object.assign({}, { askConfirmIfModal: true, askConfirm: false }, opt);
-  const idCurrentProject = path(mx, "settings.project.id");
+  const idCurrentProject = settings.project.id;
   const isGuest = settings.user.guest;
 
   if (idProject === idCurrentProject) {
@@ -925,8 +926,8 @@ async function updateUiSettings() {
      * User / login labels
      */
     const elBtnLogin = document.getElementById("btnShowLoginLabel");
-    const sUser = path(mx, "settings.user", {});
-    const sRole = path(mx, "settings.user.roles", {});
+    const sUser = path(settings, "user", {});
+    const sRole = path(settings, "user.roles", {});
 
     if (sUser.guest) {
       elBtnLogin.innerText = await getDictItem("login_label");
@@ -951,7 +952,7 @@ async function updateUiSettings() {
     const elBtnProjectPrivate = document.getElementById(
       "btnShowProjectPrivate",
     );
-    const title = path(mx, "settings.project.title");
+    const title = path(settings, "project.title");
 
     const label = title[lang] || title[langDef] || settings.project.id;
 
@@ -1164,6 +1165,7 @@ export async function initMapx(o) {
    * Create map object
    */
   const map = new maplibregl.Map(mapOptions);
+
   const elCanvas = map.getCanvas();
   elCanvas.setAttribute("tabindex", "-1");
 
@@ -1357,6 +1359,7 @@ export async function initMapx(o) {
    * Add controls
    */
   map.addControl(new MapControlAttribution(), "bottom-right");
+  //map.addControl(new AttributionControl({ compact: true }));
   //map.addControl(new MapControlLiveCoord(), "bottom-right");
   //map.addControl(new MapControlScale(), "bottom-right");
 
@@ -1653,14 +1656,12 @@ export async function initMapxApp(opt) {
       type: "dragover",
       callback: handleMapDragOver,
       group: "map_drag_over",
-      bind: mx,
     });
     listeners.addListener({
       target: elMap,
       type: "drop",
       callback: handleMapDrop,
       group: "map_drag_over",
-      bind: mx,
     });
   }
 
@@ -1952,7 +1953,7 @@ export async function addSourceFromView({ view, noLocationCheck, map }) {
 
   const idSource = `${view.id}-SRC`;
 
-  const currentProjectId = path(mx, "settings.project.id");
+  const currentProjectId = settings.project.id;
   const viewProjectId = path(view, "project");
   const projectsView = path(view, "data.projects", []);
   const useMirror = path(view, "data.source.useMirror");

@@ -33,7 +33,7 @@ import {
   viewRemove,
 } from "./../map_helpers/index.js";
 
-import { ws, data } from "./../mx.js";
+import { ws, data, theme } from "./../mx.js";
 import { settings } from "./../settings";
 import { viewsListAddSingle } from "../views_list_manager";
 import { LegendVt } from "../legend_vt/legend_vt.js";
@@ -128,7 +128,7 @@ export function btn_opt_share() {
  */
 export async function btn_opt_code_integration(dataset) {
   const idView = dataset.view_action_target;
-  const darkMode = mx.theme.isDarkMode();
+  const darkMode = theme.isDarkMode();
   const mci = new ModalCodeIntegration(idView, { darkMode: darkMode });
   await mci.init();
 }

@@ -3,6 +3,7 @@ import { cleanDiacritic } from "./../string_util/";
 import { requestProjectMembership, setProject } from "../map_helpers/index.js";
 import { getDictItem } from "../language";
 import { settings } from "../settings";
+import { listeners } from "../mx.js";
 
 const refs = {
   instance: null,
@@ -65,7 +66,7 @@ export class UserProjectsListRenderer {
   }
 
   detach() {
-    mx.listeners.removeListenerByGroup("project_list");
+    listeners.removeListenerByGroup("project_list");
   }
 
   destroy() {
@@ -75,7 +76,7 @@ export class UserProjectsListRenderer {
 
   listen() {
     this.detach();
-    mx.listeners.addListener({
+    listeners.addListener({
       target: this.elSearchInput,
       bind: this,
       type: "keyup",
@@ -84,7 +85,7 @@ export class UserProjectsListRenderer {
       debounce: true,
       debounceTime: 100,
     });
-    mx.listeners.addListener({
+    listeners.addListener({
       target: this.elProjects,
       bind: this,
       type: ["click", "keydown"],

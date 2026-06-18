@@ -4,6 +4,7 @@ import mapxlogo from "./../../svg/map-x-logo-full.svg";
 import { isElement } from "../is_test/index.js";
 import { AttributionManager } from "../attribution_manager";
 import { bindAll } from "../bind_class_methods/index.js";
+import { settings } from "../settings";
 
 const BASE_ATTRIBUTION_SOURCE_IDS = new Set([
   "mapx",
@@ -173,7 +174,11 @@ function renderAttributionPanel(rows) {
     "div",
     { class: ["mx-attribution-panel"] },
     rows.map((row) =>
-      el("div", { class: ["mx-attribution-panel-row"] }, renderAttributionRow(row)),
+      el(
+        "div",
+        { class: ["mx-attribution-panel-row"] },
+        renderAttributionRow(row),
+      ),
     ),
   );
 }
@@ -191,16 +196,13 @@ function appendAttributionRows(root, rows) {
 
 function renderAttributionRow(row) {
   const text = row.attribution_text || row.attribution_html || row.id;
+  const mainProjectPage = settings.links.mainProjectPage;
   if (row.id === "mapx") {
     return el(
       "a",
       {
         class: ["mx-attribution-item"],
-        href: path(
-          globalThis.mx,
-          "settings.links.mainProjectPage",
-          "https://mapx.org",
-        ),
+        href: mainProjectPage,
         target: "_blank",
         rel: "noreferrer",
       },
@@ -236,7 +238,7 @@ class MapxLogo {
     const elLogo = el(
       "a",
       {
-        href: path(mx, "settings.links.mainProjectPage"),
+        href: path(settings, "links.mainProjectPage"),
         class: "mx-logo",
         target: "_blank",
         rel: "noreferrer",

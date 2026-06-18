@@ -1,5 +1,6 @@
 import { isIconFont, isCanvas, isEmpty } from "./../is_test_mapx";
 import { FlashCircle } from "./../icon_flash";
+import { events } from "./../mx.js";
 import * as actions from "./actions.js";
 
 export function handleViewClick(event) {
@@ -48,7 +49,7 @@ export function handleViewClick(event) {
     });
 
     if (dataset.view_action_key) {
-      mx.events.fire({
+      events.fire({
         type: "view_panel_click",
         data: {
           idView: dataset.view_action_target,

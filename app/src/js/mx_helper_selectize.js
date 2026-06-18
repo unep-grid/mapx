@@ -2,7 +2,7 @@ import { isArray } from "./is_test";
 import { isFunction } from "./is_test";
 import { isElement, isEmpty } from "./is_test";
 import { moduleLoad } from "./modules_loader_async";
-import { selectize } from "./mx";
+import { helpers, selectize } from "./mx";
 
 export function updateSelectizeItems(_) {
   console.warn("updateSelectizeItems is deprecated");
@@ -35,7 +35,7 @@ export async function initSelectizeAll(opt) {
         Object.assign(localOptions, {}, JSON.parse(data));
         if (localOptions.renderFun) {
           localOptions.render = {
-            option: mx.helpers[localOptions.renderFun],
+            option: helpers[localOptions.renderFun],
           };
         }
       }
