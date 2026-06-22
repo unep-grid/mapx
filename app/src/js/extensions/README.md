@@ -48,8 +48,8 @@ cross-fade do not apply. It follows the same conventions (options object,
 Features : time slider + playback (play/stop/step/loop), vertical depth
 slider snapped to dataset levels, time-series / depth-profile chart at a
 point picked on the map (uses the `arco` click mode to suppress the
-default MapX popup), gradient legend, settings panel (palette, opacity,
-particle density, log scale).
+default MapX popup), gradient legend, settings panel (palette previews,
+opacity, particle density, speed, fade, vector render mode, log scale).
 
 ```javascript
 const { ArcoMapLegend } = await moduleLoad("extension", "arco_time_map_legend");

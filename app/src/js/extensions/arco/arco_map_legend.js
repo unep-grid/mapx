@@ -6,6 +6,7 @@ import { maplibregl, settings as mxSettings } from "../../mx";
 import { moduleLoad } from "../../modules_loader_async";
 import { setClickHandler, debounce } from "../../mx_helper_misc";
 import { ArcoChart } from "./chart.js";
+import { createPaletteDropdown } from "./palette_dropdown.js";
 import "../../search/style_flatpickr.less";
 import "../shared/style.less";
 import "./style.less";
@@ -121,6 +122,7 @@ export class ArcoMapLegend {
     this._z?.off("error", this._on_error);
     this._z?.destroy();
     this._chart?.destroy();
+    this._paletteDropdown?.destroy();
     this._marker?.remove();
     this._marker = null;
     this._fp?.destroy();
@@ -454,11 +456,7 @@ export class ArcoMapLegend {
       return;
     }
     for (const [key, value] of Object.entries(settings)) {
-      if (key === "speedFactor" || key === "fadeOpacity") {
-        this._settings[key] = asZoomWeightedPair(value, this._settings[key]);
-      } else {
-        this._settings[key] = value;
-      }
+      this._settings[key] = value;
     }
   }
 
@@ -820,16 +818,9 @@ export class ArcoMapLegend {
       vibrance: settings.vibrance ?? raster.vibrance ?? 0,
       logScale: settings.logScale ?? raster.logScale ?? false,
       particleDensity: settings.particleDensity ?? particles.density ?? 0.01,
-      speedFactor: asZoomWeightedPair(
-        settings.speedFactor ?? particles.speedFactor,
-        [0.25, 0.6],
-      ),
-      fadeOpacity: asZoomWeightedPair(
-        settings.fadeOpacity ?? particles.fadeOpacity,
-        [0.96, 0.99],
-      ),
-      dropRate: settings.dropRate ?? particles.dropRate ?? 0.003,
-      dropRateBump: settings.dropRateBump ?? particles.dropRateBump ?? 0,
+      speed: settings.speed ?? particles.speed ?? 1,
+      fade: settings.fade ?? particles.fade ?? 0.7,
+      renderMode: settings.renderMode ?? defaults.renderMode ?? "particles",
     };
 
     const rows = [
@@ -880,70 +871,36 @@ export class ArcoMapLegend {
           },
         }),
         this._buildRangeRow({
-          label: "Speed local",
-          min: 0.01,
-          max: 2,
-          step: 0.01,
-          get: () => this._settings.speedFactor[0],
+          label: "Speed",
+          min: 0.1,
+          max: 8,
+          step: 0.1,
+          get: () => this._settings.speed,
           set: (value) => {
-            this._settings.speedFactor[0] = value;
-            this.updateSettings({ speedFactor: [...this._settings.speedFactor] });
+            this._settings.speed = value;
+            this.updateSettings({ speed: value });
           },
         }),
         this._buildRangeRow({
-          label: "Speed global",
-          min: 0.01,
-          max: 2,
-          step: 0.01,
-          get: () => this._settings.speedFactor[1],
-          set: (value) => {
-            this._settings.speedFactor[1] = value;
-            this.updateSettings({ speedFactor: [...this._settings.speedFactor] });
-          },
-        }),
-        this._buildRangeRow({
-          label: "Fade local",
-          min: 0.9,
-          max: 1,
-          step: 0.0001,
-          get: () => this._settings.fadeOpacity[0],
-          set: (value) => {
-            this._settings.fadeOpacity[0] = value;
-            this.updateSettings({ fadeOpacity: [...this._settings.fadeOpacity] });
-          },
-        }),
-        this._buildRangeRow({
-          label: "Fade global",
-          min: 0.9,
-          max: 1,
-          step: 0.0001,
-          get: () => this._settings.fadeOpacity[1],
-          set: (value) => {
-            this._settings.fadeOpacity[1] = value;
-            this.updateSettings({ fadeOpacity: [...this._settings.fadeOpacity] });
-          },
-        }),
-        this._buildRangeRow({
-          label: "Drop rate",
+          label: "Fade",
           min: 0,
-          max: 0.1,
-          step: 0.001,
-          get: () => this._settings.dropRate,
+          max: 1,
+          step: 0.01,
+          get: () => this._settings.fade,
           set: (value) => {
-            this._settings.dropRate = value;
-            this.updateSettings({ dropRate: value });
+            this._settings.fade = value;
+            this.updateSettings({ fade: value });
           },
         }),
-        this._buildRangeRow({
-          label: "Drop bump",
-          min: 0,
-          max: 0.1,
-          step: 0.001,
-          get: () => this._settings.dropRateBump,
-          set: (value) => {
-            this._settings.dropRateBump = value;
-            this.updateSettings({ dropRateBump: value });
-          },
+        this._buildSelectRow({
+          label: "Render mode",
+          value: this._settings.renderMode,
+          options: [
+            ["particles", "Particles"],
+            ["raster", "Raster"],
+            ["raster+particles", "Raster + particles"],
+          ],
+          set: (value) => this.updateSettings({ renderMode: value }),
         }),
       );
     }
@@ -954,29 +911,18 @@ export class ArcoMapLegend {
 
   _buildPaletteRow(defaults) {
     const palettes = this._z.getPalettes();
-    const paletteDefault = this._settings.palette || defaults.palette || palettes[0]?.id;
-    const elPalette = el(
-      "select",
-      {
-        class: "form-control",
-        on: {
-          change: (event) => {
-            this._settings.palette = event.target.value;
-            this.updateSettings({ palette: event.target.value });
-          },
-        },
+    const paletteDefault =
+      this._settings.palette || defaults.palette || palettes[0]?.id;
+    this._paletteDropdown?.destroy();
+    const elPalette = createPaletteDropdown({
+      palettes,
+      value: paletteDefault,
+      onChange: (value) => {
+        this._settings.palette = value;
+        this.updateSettings({ palette: value });
       },
-      palettes.map((palette) =>
-        el(
-          "option",
-          {
-            value: palette.id,
-            selected: palette.id === paletteDefault ? true : null,
-          },
-          palette.label,
-        ),
-      ),
-    );
+    });
+    this._paletteDropdown = elPalette;
     return el("div", { class: "arco--settings_row" }, [
       el("label", "Palette"),
       elPalette,
@@ -1009,6 +955,30 @@ export class ArcoMapLegend {
       el("label", label),
       elInput,
       elValue,
+    ]);
+  }
+
+  _buildSelectRow({ label, value, options, set }) {
+    const elInput = el(
+      "select",
+      {
+        class: "form-control",
+        on: { change: (event) => set(event.target.value) },
+      },
+      options.map(([optionValue, optionLabel]) =>
+        el(
+          "option",
+          {
+            value: optionValue,
+            selected: optionValue === value ? true : null,
+          },
+          optionLabel,
+        ),
+      ),
+    );
+    return el("div", { class: "arco--settings_row" }, [
+      el("label", label),
+      elInput,
     ]);
   }
 
@@ -1083,19 +1053,6 @@ function timeToMs(time) {
     return new Date(time).getTime();
   }
   return NaN;
-}
-
-/**
- * ZoomWeighted : scalar or [high zoom, low zoom] pair
- */
-function asZoomWeightedPair(value, fallback) {
-  if (Array.isArray(value)) {
-    return [...value];
-  }
-  if (typeof value === "number") {
-    return [value, value];
-  }
-  return [...fallback];
 }
 
 function nearestIndex(values, target) {
