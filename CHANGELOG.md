@@ -1,3 +1,9 @@
+  - [1.13.20-beta.7](https://github.com/unep-grid/mapx/tree/1.13.20-beta.7) 
+
+    - chore: update submodules
+    - refactor: global mx access improvement
+
+
   - [1.13.20-beta.6](https://github.com/unep-grid/mapx/tree/1.13.20-beta.6) 
 
     - fix: maplibre code integration code template mapx style url
