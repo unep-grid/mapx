@@ -38,9 +38,10 @@ export class ArcoChart {
    * @param {String} opt.mode "time" | "depth"
    * @param {String} opt.unit value unit, e.g. "m s-1"
    * @param {String} opt.label series label
+   * @param {String} opt.verticalLabel vertical axis label
    */
   setSeries(opt) {
-    const { data, mode, unit, label } = opt;
+    const { data, mode, unit, label, verticalLabel } = opt;
     this._mode = mode;
     const accent = getAccentColor();
 
@@ -60,7 +61,7 @@ export class ArcoChart {
       },
       xAxis: {
         type: mode === "time" ? "time" : "value",
-        name: mode === "time" ? null : "depth",
+        name: mode === "time" ? null : (verticalLabel || "Depth"),
         nameLocation: "middle",
         nameGap: 22,
       },

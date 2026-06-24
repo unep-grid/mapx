@@ -7,6 +7,7 @@ import { moduleLoad } from "../../modules_loader_async";
 import { setClickHandler, debounce } from "../../mx_helper_misc";
 import { ArcoChart } from "./chart.js";
 import { createPaletteDropdown } from "./palette_dropdown.js";
+import { formatVerticalAxisLabel, orderVerticalValues } from "./vertical.js";
 import "../../search/style_flatpickr.less";
 import "../shared/style.less";
 import "./style.less";
@@ -95,7 +96,10 @@ export class ArcoMapLegend {
 
     this._time_meta = this._z.getTimeMeta();
     this._depth_meta = this._z.getDepthMeta();
-    this._depths = [...this._depth_meta.values].sort((a, b) => a - b);
+    this._depths = orderVerticalValues(
+      this._depth_meta.values,
+      this._depth_meta,
+    );
     this._time = this._resolveInitialTime(
       this._opt.time ?? this._time_meta.current ?? this._time_meta.max,
     );
@@ -391,6 +395,7 @@ export class ArcoMapLegend {
         mode: mode,
         unit: unit,
         label: this._layer_def.label,
+        verticalLabel: formatVerticalAxisLabel(this._depth_meta, this._depths),
       });
       if (mode === "time") {
         this._chart.setCursor(this._time);
@@ -709,6 +714,7 @@ export class ArcoMapLegend {
     const { label, units } = this._depth_meta;
     const depths = this._depths;
     const start = depths.indexOf(this.getDepth());
+    const axisLabel = formatVerticalAxisLabel(this._depth_meta, depths);
 
     this.elDepthReadout = el("span", { class: "arco--readout_value" });
     this.elDepthSlider = el("div", { class: "arco--depth_slider" });
@@ -740,7 +746,7 @@ export class ArcoMapLegend {
 
     return el("div", { class: "arco--depth_col" }, [
       el("div", { class: "arco--readout" }, [
-        el("label", label || "Depth"),
+        el("label", axisLabel),
         this.elDepthReadout,
       ]),
       this.elDepthSlider,
@@ -750,6 +756,10 @@ export class ArcoMapLegend {
 
   _buildChartCol() {
     const unit = this._layer_def.variables?.units || "";
+    const verticalLabel = formatVerticalAxisLabel(
+      this._depth_meta,
+      this._depths,
+    );
     this.elValue = el("span", { class: "arco--readout_value" }, "-");
     const elChart = el("div", { class: "arco--chart" });
     this._chart = new ArcoChart({
@@ -771,10 +781,10 @@ export class ArcoMapLegend {
       "button",
       {
         class: ["btn", "btn-default"],
-        title: "Depth profile at picked point",
+        title: `${verticalLabel} profile at picked point`,
         on: { click: () => this.setChartMode("depth") },
       },
-      "Depth",
+      verticalLabel,
     );
     this.elButtonPick = el(
       "button",
@@ -811,6 +821,7 @@ export class ArcoMapLegend {
     const particles = defaults.particles || {};
     const settings = this._opt.settings || {};
     const isVector = this.isVector();
+    const renderMode = settings.renderMode ?? defaults.renderMode ?? "particles";
 
     this._settings = {
       palette: settings.palette ?? defaults.palette,
@@ -820,7 +831,7 @@ export class ArcoMapLegend {
       particleDensity: settings.particleDensity ?? particles.density ?? 0.01,
       speed: settings.speed ?? particles.speed ?? 1,
       fade: settings.fade ?? particles.fade ?? 0.7,
-      renderMode: settings.renderMode ?? defaults.renderMode ?? "particles",
+      renderMode,
     };
 
     const rows = [
