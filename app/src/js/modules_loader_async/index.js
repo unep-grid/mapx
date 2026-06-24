@@ -31,6 +31,7 @@ const modules = {
   "tom-select": loadTomSelect,
   "monaco-editor": loadMonacoEditor,
   extension: loadExtension,
+  pmtiles: loadPMTiles,
 };
 
 export async function moduleLoad(name, id) {
@@ -52,6 +53,11 @@ export async function modulesLoad(arr) {
 /*
  * LOADERS - without attribution
  */
+
+async function loadPMTiles() {
+  const m = await import("pmtiles");
+  return m.default || m;
+}
 
 async function loadProj4() {
   const m = await import("proj4");

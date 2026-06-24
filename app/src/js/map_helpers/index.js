@@ -143,6 +143,10 @@ import { ButtonFilter } from "../button_filter/index.js";
 import { ViewsUpdateHelper } from "../views_list_update/index.js";
 import { getViewSourceMetadata } from "../metadata/utils.js";
 import { eventToPointBbox } from "./utils.js";
+import {
+  buildFeatureIdentityFilter,
+  setFeatureIdentityProperty,
+} from "./feature_identity.js";
 import { showProjectInfo } from "../project/info.js";
 import { shouldIgnoreIncomingThemeUpdate } from "../theme/precedence.js";
 import { sortLayers } from "./sort_layers.js";
@@ -1808,14 +1812,8 @@ async function layersAttributesToFilters(layersAttributes) {
   // Loop through each layer in the data
 
   for (const layer of layers) {
-    let filter;
     const data = (await layersAttributes[layer]) || [];
-    const gids = data.map((d) => d.gid);
-    if (isEmpty(gids)) {
-      filter = false;
-    } else {
-      filter = ["in", ["get", "gid"], ["literal", gids]];
-    }
+    const filter = buildFeatureIdentityFilter(data);
     result.push({ id: layer, filter: filter });
   }
 
@@ -4148,6 +4146,7 @@ export function getLayersPropertiesAtBbox(opt) {
     const out = modeObject ? {} : [];
 
     for (const f of features) {
+      setFeatureIdentityProperty(f.properties, f.id);
       /**
        * Fill null
        * -> tiles can't contain nulls

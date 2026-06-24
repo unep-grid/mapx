@@ -1,4 +1,5 @@
 import { bindAll } from "../bind_class_methods";
+import { buildFeatureIdentityFilter } from "../map_helpers/feature_identity.js";
 import { clone, patchObject } from "../mx_helper_misc";
 import { isEmpty, isMap, isNotEmpty } from "./../is_test/index";
 const def = {
@@ -23,17 +24,17 @@ class Highlighter {
   constructor(opt = {}) {
     const hl = this;
     /**
-     * Bind
-     */
-    bindAll(hl);
-
-    /**
      * local store
      */
     hl._layers = {};
     hl._state = hl._def_state();
     hl._destroyed = false;
     hl.opt = hl._def_opt();
+
+    /**
+     * Bind
+     */
+    bindAll(hl);
 
     /**
      * Set options
@@ -318,13 +319,12 @@ class Highlighter {
     const state = patchObject(def, hl._state);
     hl._feature_count = 0;
     const hl_layers = {};
+    const sourceMatches = {};
+
     for (const item of state.filters) {
       const { id, filter } = item;
 
       const layers = hl._get_layers_by_prefix(id);
-      const gids = [];
-
-      const filter_gids = ["in", ["get", "gid"], ["literal", gids]];
 
       for (const layer of layers) {
         const features = hl._map.queryRenderedFeatures(null, {
@@ -336,19 +336,25 @@ class Highlighter {
          * Add gids for each visited layer
          * but only create one highlight layer per source
          */
-        gids.push(...features.map((f) => f.properties?.gid));
-
-        if (!layers[layer.source]) {
-          hl_layers[layer.source] = hl._create_layers(layer, filter_gids);
+        if (!sourceMatches[layer.source]) {
+          sourceMatches[layer.source] = {
+            layer,
+            features: [],
+          };
         }
+        sourceMatches[layer.source].features.push(...features);
       }
+    }
+
+    for (const source in sourceMatches) {
+      const match = sourceMatches[source];
+      const filter = buildFeatureIdentityFilter(match.features);
+      hl_layers[source] = hl._create_layers(match.layer, filter);
     }
 
     hl._layers = hl_layers;
     const newSources = Object.keys(hl._layers);
-    const sourcesToRemove = oldSources.filter(
-      (s) => !newSources.includes(s)
-    );
+    const sourcesToRemove = oldSources.filter((s) => !newSources.includes(s));
     if (sourcesToRemove.length > 0) {
       hl._remove_highlight_layers(sourcesToRemove);
     }
