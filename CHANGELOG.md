@@ -1,3 +1,8 @@
+  - [1.13.20-beta.10](https://github.com/unep-grid/mapx/tree/1.13.20-beta.10) 
+
+    - fix: consolidate highlighter for external source without proper id like pmtiles
+
+
   - [1.13.20-beta.9](https://github.com/unep-grid/mapx/tree/1.13.20-beta.9) 
 
     - fix: vertial slider in arco extension
