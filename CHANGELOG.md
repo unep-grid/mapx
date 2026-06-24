@@ -1,3 +1,8 @@
+  - [1.13.20-beta.9](https://github.com/unep-grid/mapx/tree/1.13.20-beta.9) 
+
+    - fix: vertial slider in arco extension
+
+
   - [1.13.20-beta.8](https://github.com/unep-grid/mapx/tree/1.13.20-beta.8) 
 
     - feat: improve rendering mode in arco extension and palette preview
