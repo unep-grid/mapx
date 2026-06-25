@@ -1,3 +1,8 @@
+  - [1.13.20-beta.11](https://github.com/unep-grid/mapx/tree/1.13.20-beta.11) 
+
+    - chore: update style submodule
+
+
   - [1.13.20-beta.10](https://github.com/unep-grid/mapx/tree/1.13.20-beta.10) 
 
     - fix: consolidate highlighter for external source without proper id like pmtiles
