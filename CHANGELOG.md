@@ -1,3 +1,10 @@
+  - [1.13.20-beta.12](https://github.com/unep-grid/mapx/tree/1.13.20-beta.12) 
+
+    - feat: added simple map compare/swipe tool
+    - feat: mapCompare load async modudule
+    - chore: update mapx style(release)
+
+
   - [1.13.20-beta.11](https://github.com/unep-grid/mapx/tree/1.13.20-beta.11) 
 
     - chore: update style submodule
