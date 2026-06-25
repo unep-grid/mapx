@@ -30,6 +30,7 @@ const modules = {
   button_panel: loadButtonPanel,
   "tom-select": loadTomSelect,
   "monaco-editor": loadMonacoEditor,
+  map_compare: loadMapCompare,
   "maplibre-gl-compare": loadMaplibreGlCompare,
   extension: loadExtension,
   pmtiles: loadPMTiles,
@@ -66,6 +67,11 @@ async function loadMaplibreGlCompare() {
     import("@maplibre/maplibre-gl-compare/dist/maplibre-gl-compare.css"),
   ]);
   return m[0].default || m[0];
+}
+
+async function loadMapCompare() {
+  const m = await import("./../map_compare/index.js");
+  return m.MapCompare;
 }
 
 async function loadProj4() {
