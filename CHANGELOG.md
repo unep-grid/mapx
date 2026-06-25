@@ -1,3 +1,8 @@
+  - [1.13.20-beta.13](https://github.com/unep-grid/mapx/tree/1.13.20-beta.13) 
+
+    - chore: update submodule
+
+
   - [1.13.20-beta.12](https://github.com/unep-grid/mapx/tree/1.13.20-beta.12) 
 
     - feat: added simple map compare/swipe tool
