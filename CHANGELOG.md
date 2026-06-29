@@ -1,3 +1,7 @@
+  - [1.14.0](https://github.com/unep-grid/mapx/tree/1.14.0) 
+
+
+
   - [1.13.20-beta.13](https://github.com/unep-grid/mapx/tree/1.13.20-beta.13) 
 
     - chore: update submodule
