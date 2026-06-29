@@ -203,6 +203,8 @@ export function modal(o) {
   setTitle(o.title);
 
   elModal.close = close;
+  elModal.hide = hide; 
+  elModal.show = show; 
   elModal.setTitle = setTitle;
 
   /**
@@ -264,6 +266,7 @@ export function modal(o) {
    */
   const moveModal = new ElementMover(elModal);
 
+  console.log(elModal);
   /**
    * Return final element
    */
@@ -412,6 +415,7 @@ export function modal(o) {
     return elModal;
   }
 
+
   function setPinned() {
     const elsModal = document.querySelectorAll(".mx-modal-container");
     elsModal.forEach((elModalOther) => {
@@ -447,6 +451,13 @@ export function modal(o) {
     }
   }
 
+
+  function hide(){
+    elModal.style.display = 'none'; 
+  }
+  function show(){
+    elModal.style.display = null; 
+  }
   function close() {
     if (resizeObserver) {
       /**
