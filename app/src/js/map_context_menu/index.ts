@@ -9,11 +9,18 @@ import {
 } from "./helpers.ts";
 import type {
   AnyRecord,
-  MapContextMenuDependencies,
+  MapContextMenuMapApi,
   MapContextMenuEvent,
   MapContextMenuItem,
   MapContextMenuMap,
 } from "./types";
+import { downloadJSON } from "../download/index.js";
+import { el } from "../el_mapx";
+import { isEmpty, isView } from "../is_test/index.js";
+import { draw, panels, settings } from "../mx.js";
+import { copyToClipboard, makeId } from "../mx_helper_misc.js";
+import { modalDialog } from "../mx_helper_modal.js";
+import { QuickGeometryEditSession } from "../source/edit/quick_geometry.js";
 import "./style.less";
 
 let activeMenu: MapContextMenu | null = null;
@@ -22,21 +29,21 @@ let activeToken: string | null = null;
 export async function handleMapContextMenuEvent(
   event: MapContextMenuEvent,
   map: MapContextMenuMap,
-  deps: MapContextMenuDependencies,
+  api: MapContextMenuMapApi,
 ) {
   event.preventDefault?.();
   event.originalEvent?.preventDefault?.();
 
-  const token = deps.makeId();
+  const token = makeId();
   activeToken = token;
   destroyMapContextMenu();
 
-  const features = collectFeatureItems({ event, map, deps });
+  const features = collectFeatureItems({ event, map, api });
   if (activeToken !== token) {
     return;
   }
 
-  await Promise.all(features.map((item) => addEditState(item, deps)));
+  await Promise.all(features.map((item) => addEditState(item, api)));
   if (activeToken !== token) {
     return;
   }
@@ -45,7 +52,7 @@ export async function handleMapContextMenuEvent(
     event,
     map,
     features,
-    deps,
+    api,
   });
 }
 
@@ -56,18 +63,18 @@ function destroyMapContextMenu() {
 
 async function addEditState(
   item: MapContextMenuItem,
-  deps: MapContextMenuDependencies,
+  api: MapContextMenuMapApi,
 ) {
   item.canEdit = false;
-  if (!canAttemptEdit(item, deps)) {
+  if (!canAttemptEdit(item, settings)) {
     return item;
   }
   try {
-    const summary = await deps.getViewSourceSummary(item.view.id, {
+    const summary = await api.getViewSourceSummary(item.view.id, {
       stats: ["base", "roles"],
       useCache: false,
     });
-    item.canEdit = canEditFromSummary(item, summary, deps.settings);
+    item.canEdit = canEditFromSummary(item, summary, settings);
   } catch (e) {
     console.error(e);
   }
@@ -76,9 +83,9 @@ async function addEditState(
 
 async function startQuickEdit(
   item: MapContextMenuItem,
-  deps: MapContextMenuDependencies,
+  api: MapContextMenuMapApi,
 ) {
-  const session = new deps.QuickGeometryEditSession({
+  const session = new QuickGeometryEditSession({
     id_table: item.idSource,
   });
   let mainPanelWasVisible = false;
@@ -89,12 +96,12 @@ async function startQuickEdit(
       throw new Error("Feature not found");
     }
     mainPanelWasVisible =
-      deps.panels.idExists("main_panel") && deps.panels.isVisible("main_panel");
-    if (deps.panels.idExists("main_panel")) {
-      deps.panels.hide("main_panel");
+      panels.idExists("main_panel") && panels.isVisible("main_panel");
+    if (panels.idExists("main_panel")) {
+      panels.hide("main_panel");
     }
     const geometry = feature.geom || item.geometry || null;
-    const result = await deps.draw.startEditSession({
+    const result = await draw.startEditSession({
       type: getGeometryType(geometry),
       feature: {
         type: "Feature",
@@ -113,17 +120,17 @@ async function startQuickEdit(
       },
     });
     if (result?.status === "saved") {
-      await refreshTableViews(session, deps);
+      await refreshTableViews(session, api);
     }
   } catch (e: any) {
     console.error(e);
-    await deps.modalDialog({
+    await modalDialog({
       title: "Quick edit failed",
       content: e.message || "The feature could not be edited.",
     });
   } finally {
-    if (mainPanelWasVisible && deps.panels.idExists("main_panel")) {
-      deps.panels.show("main_panel");
+    if (mainPanelWasVisible && panels.idExists("main_panel")) {
+      panels.show("main_panel");
     }
     await session.destroy();
   }
@@ -131,28 +138,28 @@ async function startQuickEdit(
 
 async function refreshTableViews(
   session: AnyRecord,
-  deps: MapContextMenuDependencies,
+  api: MapContextMenuMapApi,
 ) {
   const tableViews = await session.getTableViews();
   if (!tableViews) {
     return false;
   }
   const views = tableViews
-    .map((row: AnyRecord) => deps.getView(row.id))
-    .filter((view: AnyRecord) => deps.isView(view));
-  if (deps.isEmpty(views)) {
+    .map((row: AnyRecord) => api.getView(row.id))
+    .filter((view: AnyRecord) => isView(view));
+  if (isEmpty(views)) {
     return false;
   }
-  return deps.viewsReplace(views);
+  return api.viewsReplace(views);
 }
 
 async function downloadFeature(
   item: MapContextMenuItem,
-  deps: MapContextMenuDependencies,
+  api: MapContextMenuMapApi,
 ) {
   let row = null;
   if (item.canEdit) {
-    const session = new deps.QuickGeometryEditSession({
+    const session = new QuickGeometryEditSession({
       id_table: item.idSource,
     });
     try {
@@ -165,9 +172,9 @@ async function downloadFeature(
     }
   }
 
-  await deps.downloadJSON(
+  await downloadJSON(
     buildFeatureGeoJSON(item, row),
-    buildFeatureFilename(item, deps),
+    buildFeatureFilename(item),
   );
 }
 
@@ -175,7 +182,7 @@ class MapContextMenu {
   event: MapContextMenuEvent;
   map: MapContextMenuMap;
   features: MapContextMenuItem[];
-  deps: MapContextMenuDependencies;
+  api: MapContextMenuMapApi;
   top: number;
   left: number;
   coordinates: string;
@@ -186,12 +193,12 @@ class MapContextMenu {
     event: MapContextMenuEvent;
     map: MapContextMenuMap;
     features: MapContextMenuItem[];
-    deps: MapContextMenuDependencies;
+    api: MapContextMenuMapApi;
   }) {
     this.event = opt.event;
     this.map = opt.map;
     this.features = opt.features || [];
-    this.deps = opt.deps;
+    this.api = opt.api;
     const rect = opt.map.getContainer().getBoundingClientRect();
     this.top =
       opt.event.originalEvent?.clientY || rect.top + (opt.event.point?.y || 0);
@@ -212,7 +219,7 @@ class MapContextMenu {
       this.buildCoordinatesGroup(),
       ...this.features.map((item) => this.buildFeatureGroup(item)),
     ];
-    return this.deps.el(
+    return el(
       "div",
       {
         class: "mx-map-context-menu",
@@ -226,13 +233,13 @@ class MapContextMenu {
   }
 
   buildCoordinatesGroup() {
-    return this.deps.el(
+    return el(
       "div",
       { class: "mx-map-context-menu__group" },
-      this.deps.el("div", { class: "mx-map-context-menu__header" }, "Coordinates"),
-      this.deps.el("div", { class: "mx-map-context-menu__coords" }, this.coordinates),
+      el("div", { class: "mx-map-context-menu__header" }, "Coordinates"),
+      el("div", { class: "mx-map-context-menu__coords" }, this.coordinates),
       this.button("Copy coordinates", () =>
-        this.deps.copyToClipboard(this.coordinates),
+        copyToClipboard(this.coordinates),
       ),
     );
   }
@@ -241,24 +248,24 @@ class MapContextMenu {
     const label = item.gid ? `${item.title} #${item.gid}` : item.title;
     const buttons = [
       this.button("Download feature as GeoJSON", () => {
-        return downloadFeature(item, this.deps);
+        return downloadFeature(item, this.api);
       }),
     ];
     if (item.canEdit) {
       buttons.unshift(
-        this.button("Edit geometry", () => startQuickEdit(item, this.deps)),
+        this.button("Edit geometry", () => startQuickEdit(item, this.api)),
       );
     }
-    return this.deps.el(
+    return el(
       "div",
       { class: "mx-map-context-menu__group" },
-      this.deps.el("div", { class: "mx-map-context-menu__header" }, label),
+      el("div", { class: "mx-map-context-menu__header" }, label),
       buttons,
     );
   }
 
   button(label: string, action: () => Promise<any>) {
-    return this.deps.el(
+    return el(
       "button",
       {
         class: "mx-map-context-menu__button",

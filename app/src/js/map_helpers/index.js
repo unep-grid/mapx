@@ -58,8 +58,6 @@ import {
   cssTransformFun,
   isShinyReady,
   quickHash,
-  copyToClipboard,
-  makeId,
 } from "./../mx_helper_misc.js";
 import {
   modal,
@@ -133,8 +131,6 @@ import {
   isViewGj,
   isTrue,
   isViewSm,
-  isNumeric,
-  makeSafeName,
 } from "./../is_test_mapx/index.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { elViewListOption } from "./view_list_options.js";
@@ -155,7 +151,6 @@ import { showProjectInfo } from "../project/info.js";
 import { shouldIgnoreIncomingThemeUpdate } from "../theme/precedence.js";
 import { sortLayers } from "./sort_layers.js";
 import { CustomCodeView } from "./view_custom_code.js";
-import { QuickGeometryEditSession } from "../source/edit/quick_geometry.js";
 import { handleMapContextMenuEvent } from "../map_context_menu/index.ts";
 export * from "./view_filters.js";
 export { sortLayers } from "./sort_layers.js";
@@ -1414,7 +1409,7 @@ export async function initMapListener(map) {
   });
 
   map.on("contextmenu", (e) => {
-    handleMapContextMenuEvent(e, map, getMapContextMenuDependencies());
+    handleMapContextMenuEvent(e, map, getMapContextMenuMapApi());
   });
 
   /**
@@ -1814,34 +1809,14 @@ export async function handleClickEvent(event, idMap) {
   await attributesToEvent(attributes_flat, event);
 }
 
-function getMapContextMenuDependencies() {
+function getMapContextMenuMapApi() {
   return {
-    clone,
-    copyToClipboard,
-    downloadJSON,
-    draw,
-    el,
-    eventToPointBbox,
     getFeaturesAtBbox,
     getLayerNamesByPrefix,
     getView,
     getViewSourceSummary,
     getViewTitle,
     getViewsOrder,
-    isEmpty,
-    isNotEmpty,
-    isNumeric,
-    isSourceId,
-    isView,
-    makeId,
-    makeSafeName,
-    modalDialog,
-    panels,
-    path,
-    QuickGeometryEditSession,
-    settings,
-    setFeatureIdentityProperty,
-    sortByOrder,
     viewsReplace,
   };
 }

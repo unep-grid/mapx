@@ -1286,14 +1286,14 @@ export function getXML(o) {
 
 /**
  * Create a random ASCII string of given length
- * @param {integer} n - The length of the string. If not set, a UUID will be returned.
+ * @param {number} n - The length of the string. If not set, a UUID will be returned.
  * @param {boolean} lowercase - Return a lowercase string
  * @returns {string} A random ASCII string or a UUID.
  */
-export function makeId(n, lowercase = false) {
+export function makeId(n = null, lowercase = false) {
   let out = "";
 
-  if (!n) {
+  if (isEmpty(n)) {
     out = crypto.randomUUID();
   } else {
     const array = new Uint8Array(n);

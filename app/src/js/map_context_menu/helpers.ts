@@ -1,11 +1,51 @@
 import type {
   AnyRecord,
-  MapContextMenuDependencies,
+  MapContextMenuMapApi,
   MapContextMenuEvent,
   MapContextMenuItem,
   MapContextMenuMap,
   SourceSummary,
 } from "./types";
+import { sortByOrder } from "../array_stat/index.js";
+import { setFeatureIdentityProperty } from "../map_helpers/feature_identity.js";
+import {
+  isNotEmpty,
+  isNumeric,
+  isSourceId,
+  isView,
+  makeSafeName,
+} from "../is_test/index.js";
+
+const DEFAULT_BUFFER_PIXELS = 5;
+
+function cloneValue<T>(value: T): T {
+  if (value === null || value === undefined) {
+    return value;
+  }
+  if (typeof structuredClone === "function") {
+    return structuredClone(value);
+  }
+  return JSON.parse(JSON.stringify(value));
+}
+
+function pathValue(obj: AnyRecord, path: string) {
+  return path.split(".").reduce((out, key) => out?.[key], obj);
+}
+
+function eventToPointBbox(
+  event: MapContextMenuEvent,
+  buffer = DEFAULT_BUFFER_PIXELS,
+) {
+  const x = event.point?.x;
+  const y = event.point?.y;
+  if (typeof x !== "number" || typeof y !== "number") {
+    throw new Error("Invalid event.point format. Coordinates must be numbers.");
+  }
+  return [
+    [x - buffer, y - buffer],
+    [x + buffer, y + buffer],
+  ];
+}
 
 export function formatCoordinates(lngLat: { lng: number; lat: number }) {
   const lng = Number(lngLat.lng).toFixed(6);
@@ -32,18 +72,15 @@ export function getRoleGroups(roles: AnyRecord = {}) {
 
 export function canAttemptEdit(
   item: MapContextMenuItem,
-  opt: Pick<
-    MapContextMenuDependencies,
-    "isNotEmpty" | "isNumeric" | "isSourceId" | "isView" | "settings"
-  >,
+  settings: AnyRecord,
 ) {
   return (
-    !opt.settings.mode.static &&
-    opt.isSourceId(item.idSource) &&
-    opt.isNumeric(item.gid) &&
-    opt.isView(item.view) &&
+    !settings?.mode?.static &&
+    isSourceId(item.idSource) &&
+    isNumeric(item.gid) &&
+    isView(item.view) &&
     item.view.type === "vt" &&
-    opt.isNotEmpty(opt.settings?.user?.id)
+    isNotEmpty(settings?.user?.id)
   );
 }
 
@@ -79,54 +116,38 @@ export function buildFeatureGeoJSON(
   };
 }
 
-export function buildFeatureFilename(
-  item: MapContextMenuItem,
-  opt: Pick<MapContextMenuDependencies, "isNotEmpty" | "makeSafeName">,
-) {
-  const title = opt.makeSafeName(item.title || item.idView) || item.idView;
-  const gid = opt.isNotEmpty(item.gid) ? item.gid : "feature";
+export function buildFeatureFilename(item: MapContextMenuItem) {
+  const title = makeSafeName(item.title || item.idView) || item.idView;
+  const gid = isNotEmpty(item.gid) ? item.gid : "feature";
   return `${title}_${gid}.geojson`;
 }
 
 export function collectFeatureItems(opt: {
   event: MapContextMenuEvent;
   map: MapContextMenuMap;
-  deps: Pick<
-    MapContextMenuDependencies,
-    | "clone"
-    | "eventToPointBbox"
-    | "getFeaturesAtBbox"
-    | "getLayerNamesByPrefix"
-    | "getView"
-    | "getViewTitle"
-    | "getViewsOrder"
-    | "isView"
-    | "path"
-    | "setFeatureIdentityProperty"
-    | "sortByOrder"
-  >;
+  api: MapContextMenuMapApi;
   maxItems?: number;
 }) {
-  const { event, map, deps } = opt;
+  const { event, map, api } = opt;
   const maxItems = opt.maxItems || 3;
-  const bbox = deps.eventToPointBbox(event);
-  const idViews = deps.sortByOrder(
-    deps.getLayerNamesByPrefix({
+  const bbox = eventToPointBbox(event);
+  const idViews = sortByOrder(
+    api.getLayerNamesByPrefix({
       base: true,
     }),
-    deps.getViewsOrder(),
+    api.getViewsOrder(),
   );
   const seen = new Set<string>();
   const items: MapContextMenuItem[] = [];
 
   for (const idView of idViews) {
-    const view = deps.getView(idView);
-    if (!deps.isView(view) || !["vt", "gj"].includes(view.type)) {
+    const view = api.getView(idView);
+    if (!isView(view) || !["vt", "gj"].includes(view.type)) {
       continue;
     }
-    const features = deps.getFeaturesAtBbox(map, bbox, idView);
+    const features = api.getFeaturesAtBbox(map, bbox, idView);
     for (const feature of features) {
-      deps.setFeatureIdentityProperty(feature.properties, feature.id);
+      setFeatureIdentityProperty(feature.properties, feature.id);
       const gid = feature.properties?.gid;
       const identity = `${idView}:${gid ?? feature.id ?? items.length}`;
       if (seen.has(identity)) {
@@ -137,10 +158,10 @@ export function collectFeatureItems(opt: {
         idView,
         view,
         gid,
-        idSource: deps.path(view, "data.source.layerInfo.name"),
-        title: deps.getViewTitle(view),
-        properties: deps.clone(feature.properties || {}),
-        geometry: deps.clone(feature.geometry || null),
+        idSource: pathValue(view, "data.source.layerInfo.name"),
+        title: api.getViewTitle(view),
+        properties: cloneValue(feature.properties || {}),
+        geometry: cloneValue(feature.geometry || null),
       });
       if (items.length >= maxItems) {
         return items;

@@ -8,14 +8,25 @@ import {
   formatCoordinates,
   getGeometryType,
 } from "./helpers";
-import type { MapContextMenuDependencies } from "./types";
+import type { MapContextMenuMapApi } from "./types";
+
+const idProject = "MX-AAA-BBB-CCC-DDD-EEE";
+const idViewA = "MX-AAAAA-BBBBB-CCCCC";
+const idViewB = "MX-DDDDD-EEEEE-FFFFF";
 
 const baseItem = {
-  idView: "MX-AAA-BBB-CCC",
+  idView: idViewA,
   view: {
-    id: "MX-AAA-BBB-CCC",
+    id: idViewA,
     type: "vt",
-    project: "project_a",
+    project: idProject,
+    data: {
+      source: {
+        layerInfo: {
+          name: "mx_vector_a_b_c_d_e",
+        },
+      },
+    },
   },
   gid: 12,
   idSource: "mx_vector_a_b_c_d_e",
@@ -30,18 +41,16 @@ const baseItem = {
   },
 };
 
-const deps = {
-  clone: (value: any) => JSON.parse(JSON.stringify(value)),
-  eventToPointBbox: () => [0, 0, 1, 1],
+const api = {
   getFeaturesAtBbox: (_map: any, _bbox: any, idView: string) => [
     { id: 1, properties: { gid: 1, label: `${idView}-1` }, geometry: null },
     { id: 2, properties: { gid: 2, label: `${idView}-2` }, geometry: null },
   ],
-  getLayerNamesByPrefix: () => ["view_b", "view_a"],
+  getLayerNamesByPrefix: () => [idViewB, idViewA],
   getView: (id: string) => ({
     id,
     type: "vt",
-    project: "project_a",
+    project: idProject,
     data: {
       source: {
         layerInfo: {
@@ -51,27 +60,10 @@ const deps = {
     },
   }),
   getViewTitle: (view: any) => `Title ${view.id}`,
-  getViewsOrder: () => ["view_a", "view_b"],
-  isView: (view: any) => !!view?.id,
-  path: (obj: any, key: string) =>
-    key.split(".").reduce((out, part) => out?.[part], obj),
-  setFeatureIdentityProperty: () => {},
-  sortByOrder: (items: string[], order: string[]) =>
-    [...items].sort((a, b) => order.indexOf(a) - order.indexOf(b)),
-} as Pick<
-  MapContextMenuDependencies,
-  | "clone"
-  | "eventToPointBbox"
-  | "getFeaturesAtBbox"
-  | "getLayerNamesByPrefix"
-  | "getView"
-  | "getViewTitle"
-  | "getViewsOrder"
-  | "isView"
-  | "path"
-  | "setFeatureIdentityProperty"
-  | "sortByOrder"
->;
+  getViewsOrder: () => [idViewA, idViewB],
+  getViewSourceSummary: async () => ({ type: "vector" }),
+  viewsReplace: async () => true,
+} as MapContextMenuMapApi;
 
 describe("map context menu helpers", () => {
   it("formats coordinates", () => {
@@ -94,50 +86,43 @@ describe("map context menu helpers", () => {
         lngLat: { lng: 7, lat: 46 },
       },
       map: {} as any,
-      deps,
+      api,
       maxItems: 3,
     });
     expect(items).toHaveLength(3);
     expect(items.map((item) => item.idView)).toEqual([
-      "view_a",
-      "view_a",
-      "view_b",
+      idViewA,
+      idViewA,
+      idViewB,
     ]);
   });
 
   it("gates edit attempts before remote role checks", () => {
-    const opt = {
-      isNotEmpty: (value: any) => value !== null && value !== undefined && value !== "",
-      isNumeric: (value: any) =>
-        value !== null && value !== "" && Number.isFinite(Number(value)),
-      isSourceId: (value: any) => typeof value === "string" && value.startsWith("mx_"),
-      isView: (value: any) => !!value?.id,
-      settings: {
-        mode: { static: false },
-        user: { id: "user_a" },
-      },
+    const settings = {
+      mode: { static: false },
+      user: { id: "user_a" },
     };
-    expect(canAttemptEdit(baseItem, opt)).toBe(true);
+    expect(canAttemptEdit(baseItem, settings)).toBe(true);
     expect(
       canAttemptEdit(
         {
           ...baseItem,
           gid: null,
         },
-        opt,
+        settings,
       ),
     ).toBe(false);
     expect(
       canAttemptEdit(baseItem, {
-        ...opt,
-        settings: { ...opt.settings, mode: { static: true } },
+        ...settings,
+        mode: { static: true },
       }),
     ).toBe(false);
   });
 
   it("resolves edit permission from source summary and user roles", () => {
     const settings = {
-      project: { id: "project_a" },
+      project: { id: idProject },
       user: {
         id: "user_a",
         roles: {
@@ -157,7 +142,10 @@ describe("map context menu helpers", () => {
     ).toBe(true);
     expect(
       canEditFromSummary(
-        { ...baseItem, view: { ...baseItem.view, project: "project_b" } },
+        {
+          ...baseItem,
+          view: { ...baseItem.view, project: "MX-FFF-GGG-HHH-III-JJJ" },
+        },
         {
           type: "vector",
           roles: { editor: "user_a", editors: [] },
@@ -178,11 +166,6 @@ describe("map context menu helpers", () => {
   });
 
   it("builds stable feature download filenames", () => {
-    expect(
-      buildFeatureFilename(baseItem, {
-        isNotEmpty: (value: any) => value !== null && value !== undefined && value !== "",
-        makeSafeName: (value: string) => value.toLowerCase().replaceAll(" ", "_"),
-      }),
-    ).toBe("layer_title_12.geojson");
+    expect(buildFeatureFilename(baseItem)).toBe("layer_title_12.geojson");
   });
 });

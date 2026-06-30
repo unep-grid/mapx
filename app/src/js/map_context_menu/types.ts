@@ -48,16 +48,10 @@ export interface SourceSummary {
   };
 }
 
-export interface MapContextMenuDependencies {
-  clone: <T>(value: T) => T;
-  copyToClipboard: (text: string) => Promise<void>;
-  downloadJSON: (data: AnyRecord, filename: string) => Promise<boolean>;
-  draw: AnyRecord;
-  el: (...args: any[]) => HTMLElement;
-  eventToPointBbox: (event: MapContextMenuEvent) => AnyRecord;
+export interface MapContextMenuMapApi {
   getFeaturesAtBbox: (
     map: MapContextMenuMap,
-    bbox: AnyRecord,
+    bbox: any,
     prefix?: string,
   ) => RenderedFeature[];
   getLayerNamesByPrefix: (opt: AnyRecord) => string[];
@@ -65,19 +59,5 @@ export interface MapContextMenuDependencies {
   getViewSourceSummary: (idView: string, opt: AnyRecord) => Promise<SourceSummary>;
   getViewTitle: (view: AnyRecord) => string;
   getViewsOrder: () => string[];
-  isEmpty: (value: any) => boolean;
-  isNotEmpty: (value: any) => boolean;
-  isNumeric: (value: any) => boolean;
-  isSourceId: (value: any) => boolean;
-  isView: (value: any) => boolean;
-  makeId: () => string;
-  makeSafeName: (value: string) => string;
-  modalDialog: (opt: AnyRecord) => Promise<any>;
-  panels: AnyRecord;
-  path: (obj: AnyRecord, path: string, fallback?: any) => any;
-  QuickGeometryEditSession: new (config: AnyRecord) => AnyRecord;
-  settings: AnyRecord;
-  setFeatureIdentityProperty: (properties: AnyRecord | undefined, id: any) => void;
-  sortByOrder: (items: string[], order: string[]) => string[];
   viewsReplace: (views: AnyRecord[]) => Promise<boolean>;
 }
