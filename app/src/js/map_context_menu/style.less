@@ -1,0 +1,59 @@
+.mx-map-context-menu {
+  position: absolute;
+  z-index: 30;
+  min-width: 220px;
+  max-width: 320px;
+  padding: 6px;
+  color: var(--mx_ui_text);
+  background: var(--mx_ui_background);
+  border: 1px solid var(--mx_ui_border);
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  font-size: 13px;
+}
+
+.mx-map-context-menu__group {
+  padding: 4px 0;
+}
+
+.mx-map-context-menu__group + .mx-map-context-menu__group {
+  border-top: 1px solid var(--mx_ui_border);
+}
+
+.mx-map-context-menu__header {
+  padding: 4px 8px 5px;
+  font-weight: 600;
+  color: var(--mx_ui_text_faded);
+}
+
+.mx-map-context-menu__coords {
+  padding: 4px 8px 6px;
+  font-family: monospace;
+  font-size: 12px;
+  user-select: text;
+}
+
+.mx-map-context-menu__button {
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  color: var(--mx_ui_text);
+  background: transparent;
+  border: 0;
+  border-radius: 3px;
+  text-align: left;
+  line-height: 1.25;
+  cursor: pointer;
+}
+
+.mx-map-context-menu__button:hover,
+.mx-map-context-menu__button:focus {
+  color: var(--mx_ui_text);
+  background: var(--mx_ui_shadow);
+  outline: none;
+}
+
+.mx-map-context-menu__button[disabled] {
+  cursor: default;
+  opacity: 0.55;
+}

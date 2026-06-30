@@ -414,14 +414,15 @@ class EditTableSession {
       return;
     }
 
-    const dim = await getTableDimension(et._id_table);
+    const lightweight = et._config.lightweight === true;
+    const dim = lightweight ? null : await getTableDimension(et._id_table);
 
-    if (dim.nrow > def.max_rows) {
+    if (!lightweight && dim.nrow > def.max_rows) {
       et.error(`Full table: too many rows. ${dim.nrow} > ${def.max_rows} `);
       return;
     }
 
-    if (dim.ncol > def.max_columns) {
+    if (!lightweight && dim.ncol > def.max_columns) {
       et.error(
         `Full table: too many columns. ${dim.ncol} > ${def.max_columns} `
       );
@@ -461,7 +462,7 @@ class EditTableSession {
       members: members,
     });
 
-    if (et._config.send_table) {
+    if (et._config.send_table && !lightweight) {
       /*
        * Initial table send
        */
@@ -566,6 +567,9 @@ class EditTableSession {
   async onGet(message, callback) {
     const et = this;
     try {
+      if (message.id_session && message.id_session !== et._id_session) {
+        return;
+      }
       switch (message.type) {
         case "columns_used": {
           const data = await getLayerUsedAttributes(et._id_table);
@@ -634,8 +638,15 @@ class EditTableSession {
         callback(false);
         return;
       }
+      if (message.id_session && message.id_session !== et._id_session) {
+        return;
+      }
       if (message.write_db) {
-        await et.write(message);
+        const written = await et.write(message);
+        if (!written) {
+          callback(false);
+          return;
+        }
       }
       if (message.update_state) {
         et.updateState(message);
@@ -645,6 +656,7 @@ class EditTableSession {
     } catch (e) {
       callback(false);
       et.error("Update error", e);
+      return;
     }
     callback(true);
   }
@@ -674,13 +686,14 @@ class EditTableSession {
     if (isEmpty(updates)) {
       return;
     }
-    const allowed = et.isAllowed(message);
+    const allowed = await et.isAllowed(message);
     if (!allowed) {
       et.error("Not allowed");
-      return;
+      return false;
     }
     await et.writePostgres(message);
     et.perfEnd("write");
+    return true;
   }
 
   async sendTable() {
