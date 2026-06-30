@@ -266,7 +266,6 @@ export function modal(o) {
    */
   const moveModal = new ElementMover(elModal);
 
-  console.log(elModal);
   /**
    * Return final element
    */
