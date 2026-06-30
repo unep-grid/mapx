@@ -13,7 +13,7 @@ import { getArrayDistinct } from "./../../array_stat";
 import { prefGet, prefSet } from "./../../user_pref";
 import { clone, makeId, buttonEnable } from "../../mx_helper_misc.js";
 import { RadialProgress } from "../../radial_progress";
-import { theme } from "../../mx.js";
+import { draw, panels, theme } from "../../mx.js";
 import { Popup } from "../../popup";
 import { viewLink, getView, viewsReplace } from "../../map_helpers/index.js";
 import { getSourceVtSummaryUI } from "../../mx_helper_source_summary";
@@ -53,7 +53,9 @@ const defaults = {
   ht_license: "non-commercial-and-evaluation",
   id_column_main: "gid",
   id_column_valid: "_mx_valid",
-  id_columns_reserved: ["gid", "_mx_valid", "geom"],
+  id_column_geom_action: "__mx_geom_action",
+  id_column_geom_status: "__mx_geom_status",
+  id_columns_reserved: ["gid", "_mx_valid", "geom", "__mx_geom_status"],
   id_columns_hidden: ["gid"],
   max_changes: 1e5, //max one column at max rows
   min_columns: 3,
@@ -148,6 +150,8 @@ export class EditTableSessionClient extends EditTableBase {
       et._id_table = et._config?.id_table;
       et._id_user = settings.user.id;
       et._has_geom = false;
+      et._geom_type = null;
+      et._geom_mode = false;
       et._validation_geom = {};
       et._table_ready = false;
       et._init_data = [];
@@ -339,13 +343,7 @@ export class EditTableSessionClient extends EditTableBase {
        */
       if (et._built) {
         et.lock();
-        const tableViews = await et.getTableViews();
-        if (tableViews) {
-          const views = tableViews
-            .map((row) => getView(row.id))
-            .filter((v) => isView(v));
-          await viewsReplace(views);
-        }
+        await et.refreshTableViews();
       }
 
       /**
@@ -447,6 +445,11 @@ export class EditTableSessionClient extends EditTableBase {
     /**
      *  Rows
      */
+    et._el_button_add_row = elButtonFa("btn_edit_add_row", {
+      icon: "plus",
+      action: et._l(et.dialogAddRow),
+    });
+
     et._el_button_remove_rows = elButtonFa("btn_edit_remove_rows", {
       icon: "trash",
       action: et._l(et.dialogRemoveRows),
@@ -476,6 +479,7 @@ export class EditTableSessionClient extends EditTableBase {
         et._el_button_remove_column,
         et._el_button_rename_column,
         et._el_button_duplicate_column,
+        et._el_button_add_row,
         et._el_button_remove_rows,
         et._el_button_geom_validate,
         et._el_button_geom_repair,
@@ -593,6 +597,10 @@ export class EditTableSessionClient extends EditTableBase {
     const columns = table.types;
     et._columns = [];
     et._add_columns(columns, table.columnsOrder);
+    if (table.hasGeom) {
+      et._columns.push(et._column_create_geom_action());
+    }
+    et.sortColumns(table.columnsOrder);
   }
 
   _add_columns(updates, order) {
@@ -621,7 +629,7 @@ export class EditTableSessionClient extends EditTableBase {
       et._columns.push(column);
     }
 
-    et._columns.sort((a, b) => a._pos - b._pos);
+    et.sortColumns(order);
   }
 
   async _add_column_strict(update) {
@@ -718,6 +726,38 @@ export class EditTableSessionClient extends EditTableBase {
     return et._columns.map((c) => c.data);
   }
 
+  sortColumns(order) {
+    const et = this;
+    let i = 0;
+    for (const column of et._columns) {
+      if (et.isColumnGeomAction(column.data)) {
+        column._pos = Number.MIN_SAFE_INTEGER;
+        continue;
+      }
+      if (et.isColumnHidden(column.data)) {
+        column._pos = Number.MIN_SAFE_INTEGER + 1 + i++;
+        continue;
+      }
+      if (column.data === et._config.id_column_valid) {
+        column._pos = Number.MAX_SAFE_INTEGER;
+        continue;
+      }
+      if (isArray(order) && order.includes(column.data)) {
+        column._pos = order.indexOf(column.data);
+      }
+    }
+    et._columns.sort((a, b) => a._pos - b._pos);
+  }
+
+  isColumnOrderFixed(name) {
+    const et = this;
+    return (
+      et.isColumnGeomAction(name) ||
+      et.isColumnHidden(name) ||
+      name === et._config.id_column_valid
+    );
+  }
+
   /**
    * Get an array of columns as option
    * @param {Array} checks in is_safe, is_not_used, is_not_reserved
@@ -768,6 +808,19 @@ export class EditTableSessionClient extends EditTableBase {
     return column;
   }
 
+  _column_create_geom_action() {
+    const et = this;
+    return {
+      data: et._config.id_column_geom_action,
+      type: "mx_string",
+      _pg_type: "text",
+      _pos: Number.MIN_SAFE_INTEGER,
+      readOnly: true,
+      _is_geom_action: true,
+      renderer: et.renderGeomActionCell,
+    };
+  }
+
   _column_set_readonly(column) {
     const et = this;
 
@@ -807,6 +860,7 @@ export class EditTableSessionClient extends EditTableBase {
     et.updateButtonRenameColumn();
     et.updateButtonOrderColumns();
     et.updateButtonStatColumn();
+    et.updateButtonAddRow();
   }
 
   /**
@@ -914,6 +968,11 @@ export class EditTableSessionClient extends EditTableBase {
     et._button_enable(et._el_button_stat, !et.unsaved);
   }
 
+  updateButtonAddRow() {
+    const et = this;
+    et._button_enable(et._el_button_add_row, !et.unsaved && !et._geom_mode);
+  }
+
   updateButtonRenameColumn() {
     const et = this;
     /* always true if no pending upadte, unless _button_enable use _disabled flag*/
@@ -998,12 +1057,92 @@ export class EditTableSessionClient extends EditTableBase {
   formatColumns(pos, element) {
     const et = this;
     if (pos >= 0) {
+      const column = et._columns[pos];
+      if (column?._is_geom_action) {
+        element.classList.add("edit-table--header");
+        element.classList.add("edit-table--header-geom");
+        element.replaceChildren(tt("btn_edit_geom_tool"));
+        getDictItem("btn_edit_geom_tool").then((label) => {
+          element.title = label;
+        });
+        return;
+      }
       const type = et.getColumnTypeByIndex(pos, "css");
       const type_pg = et.getColumnTypeByIndex(pos, "postgres");
       element.classList.add(`edit-table--header`);
       element.classList.add(`edit-table--header-${type}`);
       element.title = type_pg;
     }
+  }
+
+  renderGeomActionCell(instance, td, row) {
+    const et = this;
+    const physicalRow = instance.toPhysicalRow(row);
+    const rowData = instance.getSourceDataAtRow(physicalRow) || {};
+    const gid = rowData[et.column_index];
+    const status = rowData[et._config.id_column_geom_status] || "present";
+    const isMissing = status === "null" || status === "empty";
+    const buttons = [
+      et.renderGeomToolButton({
+        key: isMissing ? "btn_edit_geom_add" : "btn_edit_geom_edit",
+        icon: isMissing ? "fa-plus" : "fa-pencil",
+        className: isMissing ? "edit-table--geom-action-missing" : null,
+        action: () => et.dialogEditGeometry(gid),
+      }),
+    ];
+
+    if (!isMissing) {
+      buttons.push(
+        et.renderGeomToolButton({
+          key: "btn_edit_geom_zoom",
+          icon: "fa-binoculars",
+          action: () => et.dialogZoomFeature(gid),
+        }),
+      );
+    }
+
+    const content = el(
+      "div",
+      { class: "edit-table--geom-tools" },
+      buttons,
+    );
+
+    td.className = "htCenter htMiddle edit-table--geom-cell";
+    td.replaceChildren(content);
+    return td;
+  }
+
+  renderGeomToolButton(opt) {
+    const button = el(
+      "button",
+      {
+        class: [
+          "btn",
+          "btn-default",
+          "btn-xs",
+          "edit-table--geom-action",
+          opt.className,
+        ].filter(isNotEmpty),
+        type: "button",
+        dataset: {
+          lang_key: opt.key,
+          lang_type: "tooltip",
+        },
+        on: {
+          click: (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            opt.action().catch(console.error);
+          },
+        },
+      },
+      el("i", { class: ["fa", opt.icon] }),
+    );
+    getDictItem(opt.key).then((label) => {
+      button.title = label;
+      button.setAttribute("aria-label", label);
+    });
+    return button;
   }
 
   /**
@@ -1048,6 +1187,11 @@ export class EditTableSessionClient extends EditTableBase {
   isColumnHidden(name) {
     const et = this;
     return et._config.id_columns_hidden.includes(name);
+  }
+
+  isColumnGeomAction(name) {
+    const et = this;
+    return name === et._config.id_column_geom_action;
   }
 
   /**
@@ -1126,6 +1270,21 @@ export class EditTableSessionClient extends EditTableBase {
     const et = this;
     const tableViews = await et.emitGetCached("table_views");
     return tableViews;
+  }
+
+  async refreshTableViews() {
+    const et = this;
+    const tableViews = await et.getTableViews();
+    if (!tableViews) {
+      return false;
+    }
+    const views = tableViews
+      .map((row) => getView(row.id))
+      .filter((v) => isView(v));
+    if (isEmpty(views)) {
+      return false;
+    }
+    return viewsReplace(views);
   }
 
   /**
@@ -1429,6 +1588,7 @@ export class EditTableSessionClient extends EditTableBase {
      */
     if (table.hasGeom) {
       et._has_geom = true;
+      et._geom_type = table.geomType || "polygon";
       et._validation_geom = table.validation;
     }
 
@@ -1568,12 +1728,42 @@ export class EditTableSessionClient extends EditTableBase {
     await et.handlerUpdateRowsRemove(update, source);
   }
 
+  async dialogAddRow() {
+    const et = this;
+    if (et.locked || et._geom_mode) {
+      return;
+    }
+
+    const ok = await modalConfirm({
+      title: et._has_geom ? "New feature" : "New row",
+      content: et._has_geom
+        ? "Create an empty feature row. Attribute values and geometry can be edited afterward."
+        : "Create an empty row. Attribute values can be edited afterward.",
+      cancel: tt("btn_cancel"),
+      confirm: et._has_geom ? "Create feature" : "Create row",
+    });
+
+    if (!ok) {
+      return false;
+    }
+
+    const clientId = makeId();
+    return et.emitUpdatesDb([
+      {
+        type: "add_row",
+        id_table: et._id_table,
+        geom: null,
+        _client_id: clientId,
+      },
+    ]);
+  }
+
   async dialogColumnOrder() {
     const { default: Muuri } = await import("muuri");
     const et = this;
     const source = et._config.id_source_dialog;
-    const columns = et.getColumns();
-    const orderBefore = et.getColumnLabels();
+    const columns = et.getColumns().filter((c) => !et.isColumnOrderFixed(c.data));
+    const orderBefore = columns.map((c) => c.data);
     let grid;
 
     const elCols = el(
@@ -1653,15 +1843,7 @@ export class EditTableSessionClient extends EditTableBase {
     const et = this;
     try {
       const order = update.columns_order;
-      const columns = et.getColumns();
-
-      for (const column of columns) {
-        if (isArray(order) && order.includes(column.data)) {
-          column._pos = order.indexOf(column.data);
-        }
-      }
-
-      et._columns.sort((a, b) => a._pos - b._pos);
+      et.sortColumns(order);
       et.updateTableColumns();
 
       if (et.isFromDispatch(source)) {
@@ -1849,6 +2031,12 @@ export class EditTableSessionClient extends EditTableBase {
                 break;
               case "remove_rows":
                 await et.handlerUpdateRowsRemove(update, idDispatch);
+                break;
+              case "add_row":
+                await et.handlerUpdateRowAdd(update, idDispatch);
+                break;
+              case "update_geom":
+                await et.handlerUpdateGeom(update, idDispatch);
                 break;
 
               default:
@@ -2527,6 +2715,58 @@ export class EditTableSessionClient extends EditTableBase {
     }
   }
 
+  async handlerUpdateRowAdd(update, source) {
+    const et = this;
+    try {
+      const row = et.rowForTable(update.row);
+      if (isEmpty(row)) {
+        return false;
+      }
+      await et._add_row(row);
+      et.fire("row_added", {
+        row,
+        client_id: update._client_id,
+        source,
+      });
+      await et.refreshTableViews();
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  }
+
+  async handlerUpdateGeom(update) {
+    const et = this;
+    try {
+      const row = et.rowForTable(update.row);
+      const gid = update.gid || row?.gid;
+      if (isEmpty(gid)) {
+        return false;
+      }
+      const data = et._ht.getSourceData();
+      const idRow = data.findIndex((r) => r[et.column_index] === gid);
+      if (idRow === -1) {
+        if (row) {
+          await et._add_row(row);
+        }
+        await et.refreshTableViews();
+        return true;
+      }
+      const keyStatus = et._config.id_column_geom_status;
+      const geomStatus = update[keyStatus] || row?.[keyStatus] || "present";
+      const dataUpdated = data.map((r, i) => {
+        return i === idRow ? { ...r, [keyStatus]: geomStatus } : r;
+      });
+      await et.updateData(dataUpdated, et._config.id_source_geom);
+      await et.refreshTableViews();
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  }
+
   async _remove_rows(update) {
     const et = this;
     const data = et._ht.getSourceData();
@@ -2538,6 +2778,36 @@ export class EditTableSessionClient extends EditTableBase {
     await et.updateData(filteredData, "column_remove_handler");
 
     return true;
+  }
+
+  async _add_row(row) {
+    const et = this;
+    row = et.rowForTable(row);
+    const data = et._ht.getSourceData();
+    const gid = row[et.column_index];
+    const exists = data.some((r) => r[et.column_index] === gid);
+    if (exists) {
+      return false;
+    }
+    data.push(row);
+    await et.updateData(data, "row_add_handler");
+    et._ht.updateSettings({
+      maxRows: data.length,
+      copyPaste: {
+        rowsLimit: data.length,
+      },
+    });
+    et._ht.render();
+    return true;
+  }
+
+  rowForTable(row) {
+    if (isEmpty(row)) {
+      return row;
+    }
+    const out = clone(row);
+    delete out.geom;
+    return out;
   }
 
   /**
@@ -2886,6 +3156,10 @@ export class EditTableSessionClient extends EditTableBase {
       for (const change of changes) {
         /* change: [row, prop, oldValue, newValue] */
 
+        if (et.isColumnGeomAction(change[1])) {
+          continue;
+        }
+
         /* no change = continue
          */
         if (isEqualNoType(change[2], change[3])) {
@@ -2922,9 +3196,13 @@ export class EditTableSessionClient extends EditTableBase {
     if (isEmpty(updates)) {
       return;
     }
-    await et.emitUpdatesDb(updates);
+    const saved = await et.emitUpdatesDb(updates);
+    if (!saved) {
+      return false;
+    }
     et.clearUpdates();
     et.updateButtons();
+    return true;
   }
 
   /**
@@ -3281,7 +3559,7 @@ export class EditTableSessionClient extends EditTableBase {
    */
   async emitUpdatesDb(updates) {
     const et = this;
-    await et.emitUpdates(updates, { write_db: true });
+    return et.emitUpdates(updates, { write_db: true });
   }
 
   /**
@@ -3354,6 +3632,120 @@ export class EditTableSessionClient extends EditTableBase {
   /**
    * Geometry tools
    */
+  async getFeature(gid) {
+    const et = this;
+    const e = et._config.events;
+    return et.emitGet(
+      e.client_get,
+      {
+        type: "feature",
+        gid,
+      },
+      et._config.timeout_emit,
+    );
+  }
+
+  async dialogEditGeometry(gid) {
+    const et = this;
+    if (!et._has_geom || et._geom_mode || et.locked || isEmpty(gid)) {
+      return;
+    }
+    if (et.unsaved) {
+      await modalDialog({
+        title: "Pending changes",
+        content: "Save or discard pending attribute changes before editing geometry.",
+      });
+      return;
+    }
+
+    const feature = await et.getFeature(gid);
+    if (!feature) {
+      return;
+    }
+
+    await et.setGeometryMode(true);
+    try {
+      const result = await draw.startEditSession({
+        type: et._geom_type,
+        feature: {
+          type: "Feature",
+          properties: {
+            gid: feature.gid,
+          },
+          geometry: feature.geom || null,
+        },
+        minZoom: 12,
+        singleFeature: true,
+        onSave: async ({ geometry }) => {
+          try {
+            const saved = await et.emitUpdatesDb([
+              {
+                type: "update_geom",
+                id_table: et._id_table,
+                gid: feature.gid,
+                geom: geometry,
+              },
+            ]);
+            if (!saved) {
+              throw new Error("Geometry update was not accepted");
+            }
+          } catch (e) {
+            await modalDialog({
+              title: "Geometry save failed",
+              content: "The geometry could not be saved. The edit session is still active.",
+            });
+            throw e;
+          }
+        },
+      });
+      if (result?.status === "saved") {
+        await et.refreshTableViews();
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      await et.setGeometryMode(false);
+    }
+  }
+
+  async dialogZoomFeature(gid) {
+    const et = this;
+    if (!et._has_geom || isEmpty(gid)) {
+      return;
+    }
+    const feature = await et.getFeature(gid);
+    if (isEmpty(feature?.geom)) {
+      return;
+    }
+    draw.focusGeometry(feature.geom, {
+      minZoom: 12,
+    });
+  }
+
+  async setGeometryMode(enable) {
+    const et = this;
+    et._geom_mode = !!enable;
+    et._el_content.classList.toggle("edit-table--geom-mode", et._geom_mode);
+    et.setReadOnly(et._geom_mode);
+    if (et._geom_mode) {
+      et._modal?.hide?.();
+      et._main_panel_was_visible =
+        panels.idExists("main_panel") && panels.isVisible("main_panel");
+      if (panels.idExists("main_panel")) {
+        panels.hide("main_panel");
+      }
+      await et.lockTableConcurrent(true);
+    } else {
+      et._modal?.show?.();
+      if (et._main_panel_was_visible && panels.idExists("main_panel")) {
+        panels.show("main_panel");
+      }
+      et._main_panel_was_visible = false;
+      await et.lockTableConcurrent(!et._auto_save);
+    }
+    et.updateButtons();
+  }
+
   async dialogGeomValidate() {
     const et = this;
     if (et.locked) {
@@ -3450,7 +3842,7 @@ export class EditTableSessionClient extends EditTableBase {
     const et = this;
     return buttonEnable(
       elBtn,
-      et._disabled || et._in_progress ? false : enable,
+      et._disabled || et._in_progress || et._geom_mode ? false : enable,
     );
   }
 
@@ -3730,10 +4122,15 @@ export class EditTableSessionClient extends EditTableBase {
   beforeChange(changes, source) {
     const et = this;
 
+    const changesData = changes.filter(
+      (change) => !et.isColumnGeomAction(change[1]),
+    );
+
     const skip =
       et.isFromSanitize(source) ||
       et.isFromDispatch(source) ||
-      et.isFromGeom(source);
+      et.isFromGeom(source) ||
+      changesData.length === 0;
 
     if (skip) {
       return;
@@ -3744,7 +4141,7 @@ export class EditTableSessionClient extends EditTableBase {
      * handsontable 6.2.2 changes should be cloned before
      * sanitazing : the array "changes" is emptied by handsontable
      */
-    et.sanitize([...changes]);
+    et.sanitize([...changesData]);
 
     return false;
   }
@@ -3754,6 +4151,9 @@ export class EditTableSessionClient extends EditTableBase {
     const sampleSize = Math.min(100, data.length);
     const columns = this.getColumns();
     const colWidths = columns.map((c) => {
+      if (c._is_geom_action) {
+        return 72;
+      }
       if (this.isColumnHidden(c.data)) {
         return 0.1;
       }

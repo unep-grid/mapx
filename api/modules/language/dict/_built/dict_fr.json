@@ -1675,6 +1675,31 @@
     "fr": "Outils..."
   },
   {
+    "id": "btn_edit_add_row",
+    "en": "Add row",
+    "fr": "Ajouter une ligne"
+  },
+  {
+    "id": "btn_edit_geom_tool",
+    "en": "Geom tool",
+    "fr": "Outil géométrique"
+  },
+  {
+    "id": "btn_edit_geom_add",
+    "en": "Add geometry",
+    "fr": "Ajouter de la géométrie"
+  },
+  {
+    "id": "btn_edit_geom_edit",
+    "en": "Edit geometry",
+    "fr": "Modifier la géométrie"
+  },
+  {
+    "id": "btn_edit_geom_zoom",
+    "en": "Zoom to feature",
+    "fr": "Zoom sur la fonctionnalité"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "fr": "annuler"

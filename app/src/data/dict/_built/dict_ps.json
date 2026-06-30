@@ -1675,6 +1675,31 @@
     "ps": "وسایل..."
   },
   {
+    "id": "btn_edit_add_row",
+    "en": "Add row",
+    "ps": "قطار اضافه کړئ"
+  },
+  {
+    "id": "btn_edit_geom_tool",
+    "en": "Geom tool",
+    "ps": "د جیوم وسیله"
+  },
+  {
+    "id": "btn_edit_geom_add",
+    "en": "Add geometry",
+    "ps": "جیومیټری اضافه کړئ"
+  },
+  {
+    "id": "btn_edit_geom_edit",
+    "en": "Edit geometry",
+    "ps": "جیومیټری سم کړئ"
+  },
+  {
+    "id": "btn_edit_geom_zoom",
+    "en": "Zoom to feature",
+    "ps": "ځانګړتیا ته زوم کړئ"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "ps": "بیرته راګرځول"

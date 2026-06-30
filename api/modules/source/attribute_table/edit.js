@@ -40,6 +40,7 @@ import {
   isSafeName,
 } from "@fxi/mx_valid";
 import { pgWrite, redisSetJSON, redisGetJSON } from "#mapx/db";
+import { toPgColumn } from "#mapx/helpers";
 import {
   ioUpdateDbViewsAltStyleBySource,
   getViewsTableBySource,
@@ -67,6 +68,8 @@ const def = {
   max_columns: 1000, // should match client
   size_chunk: 1e3,
   col_geom: "geom",
+  col_gid: "gid",
+  col_geom_status: "__mx_geom_status",
 };
 
 export const events = {
@@ -96,6 +99,215 @@ export const events = {
   server_spread_views_update: "/server/spread/views/update",
   server_spread_join_editor_update: "/server/spread/join_editor/update",
 };
+
+function quoteId(id) {
+  return `"${id}"`;
+}
+
+function normalizeGeometry(geometry) {
+  if (isEmpty(geometry)) {
+    return null;
+  }
+  if (geometry?.type === "Feature") {
+    return geometry.geometry || null;
+  }
+  return geometry;
+}
+
+function toGeomTypeSimple(type) {
+  const t = `${type || ""}`.toLowerCase();
+  if (t.includes("point")) {
+    return "point";
+  }
+  if (t.includes("line")) {
+    return "line";
+  }
+  if (t.includes("polygon")) {
+    return "polygon";
+  }
+  return null;
+}
+
+async function getGeometryColumnInfo(idTable, client = pgWrite) {
+  const res = await client.query(
+    `
+    SELECT type, srid
+    FROM geometry_columns
+    WHERE f_table_schema = 'public'
+      AND f_table_name = $1
+      AND f_geometry_column = $2
+    LIMIT 1
+    `,
+    [idTable, def.col_geom]
+  );
+  const row = res.rows[0] || {};
+  return {
+    type: row.type || "GEOMETRY",
+    srid: row.srid || 4326,
+    simpleType: toGeomTypeSimple(row.type),
+  };
+}
+
+async function getGeometryTypeSimple(idTable, client = pgWrite) {
+  const columnInfo = await getGeometryColumnInfo(idTable, client);
+  if (columnInfo.simpleType) {
+    return columnInfo.simpleType;
+  }
+  const res = await client.query(
+    `
+    SELECT ST_GeometryType(${quoteId(def.col_geom)}) AS geom_type
+    FROM ${quoteId(idTable)}
+    WHERE ${quoteId(def.col_geom)} IS NOT NULL
+      AND NOT ST_IsEmpty(${quoteId(def.col_geom)})
+    LIMIT 1
+    `
+  );
+  return toGeomTypeSimple(res.rows[0]?.geom_type) || "polygon";
+}
+
+function getGeomSqlExpression(type) {
+  const t = `${type || ""}`.toUpperCase();
+  const base = `ST_SetSRID(ST_GeomFromGeoJSON($1), 4326)`;
+  if (t.startsWith("MULTI")) {
+    return `ST_Multi(${base})`;
+  }
+  return base;
+}
+
+function getGeomStatusSql() {
+  return `
+    CASE
+      WHEN ${quoteId(def.col_geom)} IS NULL THEN 'null'
+      WHEN ST_IsEmpty(${quoteId(def.col_geom)}) THEN 'empty'
+      ELSE 'present'
+    END AS ${quoteId(def.col_geom_status)}
+  `;
+}
+
+async function getFeatureByGid(idTable, gid, client = pgWrite) {
+  if (!isSourceId(idTable) || !isNumeric(gid)) {
+    throw new Error("Invalid feature request");
+  }
+  const columns = await getColumnsTypesSimple(idTable, null, [def.col_geom]);
+  const names = columns
+    .map((c) => c.column_name)
+    .filter((name) => name !== def.col_geom_status);
+  const selectColumns = toPgColumn(names);
+  const hasGeom = await columnExists(def.col_geom, idTable, client);
+  const geomSelect = hasGeom
+    ? `,
+      ${getGeomStatusSql()},
+      ST_AsGeoJSON(${quoteId(def.col_geom)})::json AS geom`
+    : "";
+  const res = await client.query(
+    `
+    SELECT ${selectColumns}${geomSelect}
+    FROM ${quoteId(idTable)}
+    WHERE ${quoteId(def.col_gid)} = $1
+    LIMIT 1
+    `,
+    [gid]
+  );
+  if (res.rowCount !== 1) {
+    throw new Error("Feature not found");
+  }
+  return res.rows[0];
+}
+
+async function addGeometryStatusToRows(idTable, rows, client = pgWrite) {
+  if (isEmpty(rows)) {
+    return rows;
+  }
+  const gids = rows.map((row) => row[def.col_gid]).filter(isNumeric);
+  if (isEmpty(gids)) {
+    return rows;
+  }
+  const res = await client.query(
+    `
+    SELECT ${quoteId(def.col_gid)}, ${getGeomStatusSql()}
+    FROM ${quoteId(idTable)}
+    WHERE ${quoteId(def.col_gid)} = ANY($1::int[])
+    `,
+    [gids]
+  );
+  const statusByGid = new Map(
+    res.rows.map((row) => [row[def.col_gid], row[def.col_geom_status]])
+  );
+  for (const row of rows) {
+    row[def.col_geom_status] = statusByGid.get(row[def.col_gid]) || "null";
+  }
+  return rows;
+}
+
+async function insertTableRow(idTable, geometry, client = pgWrite) {
+  if (!isSourceId(idTable)) {
+    throw new Error("Invalid table");
+  }
+  const hasGeom = await columnExists(def.col_geom, idTable, client);
+  const columnsSql = [];
+  const valuesSql = [];
+  const params = [];
+
+  const geom = normalizeGeometry(geometry);
+  if (hasGeom && !isEmpty(geom)) {
+    const columnInfo = await getGeometryColumnInfo(idTable, client);
+    columnsSql.push(quoteId(def.col_geom));
+    params.push(JSON.stringify(geom));
+    valuesSql.push(getGeomSqlExpression(columnInfo.type).replaceAll("$1", `$${params.length}`));
+  }
+
+  let res;
+  if (columnsSql.length === 0) {
+    res = await client.query(
+      `INSERT INTO ${quoteId(idTable)} DEFAULT VALUES RETURNING ${quoteId(def.col_gid)}`
+    );
+  } else {
+    res = await client.query(
+      `
+      INSERT INTO ${quoteId(idTable)} (${columnsSql.join(", ")})
+      VALUES (${valuesSql.join(", ")})
+      RETURNING ${quoteId(def.col_gid)}
+      `,
+      params
+    );
+  }
+
+  const gid = res.rows[0]?.[def.col_gid];
+  return getFeatureByGid(idTable, gid, client);
+}
+
+async function updateFeatureGeometry(idTable, gid, geometry, client = pgWrite) {
+  if (!isSourceId(idTable) || !isNumeric(gid)) {
+    throw new Error("Invalid geometry update");
+  }
+  const hasGeom = await columnExists(def.col_geom, idTable, client);
+  if (!hasGeom) {
+    throw new Error("Table has no geometry column");
+  }
+  const geom = normalizeGeometry(geometry);
+  if (isEmpty(geom)) {
+    await client.query(
+      `
+      UPDATE ${quoteId(idTable)}
+      SET ${quoteId(def.col_geom)} = NULL
+      WHERE ${quoteId(def.col_gid)} = $1
+      `,
+      [gid]
+    );
+  } else {
+    const columnInfo = await getGeometryColumnInfo(idTable, client);
+    const geomSql = getGeomSqlExpression(columnInfo.type);
+    await client.query(
+      `
+      UPDATE ${quoteId(idTable)}
+      SET ${quoteId(def.col_geom)} = ${geomSql}
+      WHERE ${quoteId(def.col_gid)} = $2
+      `,
+      [JSON.stringify(geom), gid]
+    );
+  }
+  return getFeatureByGid(idTable, gid, client);
+}
 
 class EditTableSession {
   constructor(socket, config) {
@@ -366,6 +578,10 @@ class EditTableSession {
           );
           return callback(data);
         }
+        case "feature": {
+          const data = await getFeatureByGid(et._id_table, message.gid);
+          return callback(data);
+        }
       }
     } catch (e) {
       et.error("Get handler failed. Check logs", e);
@@ -490,9 +706,15 @@ class EditTableSession {
       });
       const data = pgRes.rows;
       const nRow = pgRes.rowCount;
-      const attributes = pgRes.fields.map((f) => f.name);
+      if (hasGeom) {
+        await addGeometryStatusToRows(et._id_table, data);
+      }
+      const attributes = pgRes.fields
+        .map((f) => f.name)
+        .filter((name) => name !== def.col_geom_status);
       const types = await getColumnsTypesSimple(et._id_table, attributes, [
         "geom",
+        def.col_geom_status,
       ]);
       const title = await getLayerTitle(et._id_table);
       const locked = await et.getState("lock_table");
@@ -506,6 +728,7 @@ class EditTableSession {
       const table = {
         columnsOrder,
         hasGeom,
+        geomType: hasGeom ? await getGeometryTypeSimple(et._id_table) : null,
         validation,
         types,
         title,
@@ -852,6 +1075,47 @@ class EditTableSession {
               const { id_rows } = update;
               await deleteRowByGid(id_table, id_rows);
               await updateLayerExtentMeta(id_table);
+              tables_update.add(id_table);
+            }
+            break;
+          case "add_row":
+            {
+              const row = await insertTableRow(
+                id_table,
+                update.geom,
+                client
+              );
+              update.row = row;
+              update.gid = row.gid;
+              message._include_sender = true;
+              postScripts.set(`${id_table}_update_extent_add_row`, async () => {
+                try {
+                  await updateLayerExtentMeta(id_table);
+                } catch (e) {
+                  console.warn("Unable to update layer extent", e.message);
+                }
+              });
+              tables_update.add(id_table);
+            }
+            break;
+          case "update_geom":
+            {
+              const row = await updateFeatureGeometry(
+                id_table,
+                update.gid,
+                update.geom,
+                client
+              );
+              update.row = row;
+              update[def.col_geom_status] = row[def.col_geom_status];
+              message._include_sender = true;
+              postScripts.set(`${id_table}_update_extent_update_geom`, async () => {
+                try {
+                  await updateLayerExtentMeta(id_table);
+                } catch (e) {
+                  console.warn("Unable to update layer extent", e.message);
+                }
+              });
               tables_update.add(id_table);
             }
             break;

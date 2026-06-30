@@ -1675,6 +1675,31 @@
     "zh": "工具..."
   },
   {
+    "id": "btn_edit_add_row",
+    "en": "Add row",
+    "zh": "添加行"
+  },
+  {
+    "id": "btn_edit_geom_tool",
+    "en": "Geom tool",
+    "zh": "几何工具"
+  },
+  {
+    "id": "btn_edit_geom_add",
+    "en": "Add geometry",
+    "zh": "添加几何体"
+  },
+  {
+    "id": "btn_edit_geom_edit",
+    "en": "Edit geometry",
+    "zh": "编辑几何体"
+  },
+  {
+    "id": "btn_edit_geom_zoom",
+    "en": "Zoom to feature",
+    "zh": "放大显示"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "zh": "撤消"

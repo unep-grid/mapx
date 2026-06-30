@@ -44,6 +44,32 @@
           &.edit-table--header-array:after {
             border-bottom: 2px solid var(--mx_ui_type_array);
           }
+          &.edit-table--header-geom:after {
+            border-bottom: 2px solid var(--mx_ui_link);
+          }
+        }
+      }
+      .edit-table--geom-cell {
+        padding: 2px !important;
+        .edit-table--geom-tools {
+          align-items: center;
+          display: flex;
+          gap: 3px;
+          justify-content: center;
+        }
+        .edit-table--geom-action {
+          align-items: center;
+          display: inline-flex;
+          height: 24px;
+          justify-content: center;
+          padding: 0;
+          width: 26px;
+          &.edit-table--geom-action-missing {
+            color: var(--mx_ui_message_warning);
+          }
+          .fa {
+            margin: 0;
+          }
         }
       }
     }
@@ -105,6 +131,12 @@
     &:after {
       content: attr(data-count);
       color: var(--mx_ui_text_faded);
+    }
+  }
+
+  &.edit-table--geom-mode {
+    .edit-table--table-wrapper {
+      opacity: 0.65;
     }
   }
 }

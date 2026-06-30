@@ -1675,6 +1675,31 @@
     "bn": "টুল..."
   },
   {
+    "id": "btn_edit_add_row",
+    "en": "Add row",
+    "bn": "সারি যোগ করুন"
+  },
+  {
+    "id": "btn_edit_geom_tool",
+    "en": "Geom tool",
+    "bn": "জিওম টুল"
+  },
+  {
+    "id": "btn_edit_geom_add",
+    "en": "Add geometry",
+    "bn": "জ্যামিতি যোগ করুন"
+  },
+  {
+    "id": "btn_edit_geom_edit",
+    "en": "Edit geometry",
+    "bn": "জ্যামিতি সম্পাদনা করুন"
+  },
+  {
+    "id": "btn_edit_geom_zoom",
+    "en": "Zoom to feature",
+    "bn": "বৈশিষ্ট্যটিতে জুম করুন"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "bn": "পূর্বাবস্থায় ফেরান"

@@ -1675,6 +1675,31 @@
     "es": "Instrumentos..."
   },
   {
+    "id": "btn_edit_add_row",
+    "en": "Add row",
+    "es": "Agregar fila"
+  },
+  {
+    "id": "btn_edit_geom_tool",
+    "en": "Geom tool",
+    "es": "Herramienta Geom"
+  },
+  {
+    "id": "btn_edit_geom_add",
+    "en": "Add geometry",
+    "es": "Agregar geometría"
+  },
+  {
+    "id": "btn_edit_geom_edit",
+    "en": "Edit geometry",
+    "es": "Editar geometría"
+  },
+  {
+    "id": "btn_edit_geom_zoom",
+    "en": "Zoom to feature",
+    "es": "Zoom para destacar"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "es": "Deshacer"

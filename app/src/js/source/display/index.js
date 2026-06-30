@@ -336,6 +336,7 @@ async function showSourceTableAttributeModal(opt) {
       if (!addEdit) {
         return;
       }
+      destroy();
       await editTable({
         id_table: config.idSource,
         on_destroy: restart,

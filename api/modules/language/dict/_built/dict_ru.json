@@ -1675,6 +1675,31 @@
     "ru": "Инструменты..."
   },
   {
+    "id": "btn_edit_add_row",
+    "en": "Add row",
+    "ru": "Добавить строку"
+  },
+  {
+    "id": "btn_edit_geom_tool",
+    "en": "Geom tool",
+    "ru": "Инструмент Geom"
+  },
+  {
+    "id": "btn_edit_geom_add",
+    "en": "Add geometry",
+    "ru": "Добавить геометрию"
+  },
+  {
+    "id": "btn_edit_geom_edit",
+    "en": "Edit geometry",
+    "ru": "Редактировать геометрию"
+  },
+  {
+    "id": "btn_edit_geom_zoom",
+    "en": "Zoom to feature",
+    "ru": "Увеличьте масштаб, чтобы увидеть изображение."
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "ru": "Отменить"
