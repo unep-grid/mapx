@@ -89,8 +89,17 @@ async function startQuickEdit(
     id_table: item.idSource,
   });
   let mainPanelWasVisible = false;
+  let tableLockAcquired = false;
   try {
     await session.init();
+    if (await session.isTableLocked()) {
+      throw new Error("This table is already being edited.");
+    }
+    const lockAccepted = await session.setTableLock(true);
+    if (!lockAccepted) {
+      throw new Error("Table lock was not accepted.");
+    }
+    tableLockAcquired = true;
     const feature = await session.getFeature(item.gid);
     if (!feature) {
       throw new Error("Feature not found");
@@ -131,6 +140,13 @@ async function startQuickEdit(
   } finally {
     if (mainPanelWasVisible && panels.idExists("main_panel")) {
       panels.show("main_panel");
+    }
+    if (tableLockAcquired) {
+      try {
+        await session.setTableLock(false);
+      } catch (e) {
+        console.error(e);
+      }
     }
     await session.destroy();
   }

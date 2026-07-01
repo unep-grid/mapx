@@ -571,6 +571,10 @@ class EditTableSession {
         return;
       }
       switch (message.type) {
+        case "lock_table": {
+          const locked = await et.getState("lock_table");
+          return callback(!!locked);
+        }
         case "columns_used": {
           const data = await getLayerUsedAttributes(et._id_table);
           return callback(data);
@@ -634,11 +638,11 @@ class EditTableSession {
   async onUpdate(message, callback) {
     const et = this;
     try {
-      if (message.id_table !== et._id_table) {
-        callback(false);
+      if (message.id_session && message.id_session !== et._id_session) {
         return;
       }
-      if (message.id_session && message.id_session !== et._id_session) {
+      if (message.id_table !== et._id_table) {
+        callback(false);
         return;
       }
       if (message.write_db) {

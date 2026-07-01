@@ -78,6 +78,30 @@ export class QuickGeometryEditSession {
     });
   }
 
+  async isTableLocked() {
+    const qg = this;
+    return !!(await qg.emitGet({
+      type: "lock_table",
+    }));
+  }
+
+  async setTableLock(lock) {
+    const qg = this;
+    return ws.emitAsync(
+      events.client_edit_updates,
+      qg.message({
+        update_state: true,
+        updates: [
+          {
+            type: "lock_table",
+            lock: !!lock,
+          },
+        ],
+      }),
+      qg._config.timeout_emit,
+    );
+  }
+
   async updateGeometry(gid, geometry) {
     const qg = this;
     return ws.emitAsync(
