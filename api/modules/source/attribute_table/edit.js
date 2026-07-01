@@ -39,7 +39,7 @@ import {
   isSourceId,
   isSafeName,
 } from "@fxi/mx_valid";
-import { pgWrite, redisSetJSON, redisGetJSON } from "#mapx/db";
+import { pgWrite, redisSetJSON, redisGetJSON, clientRedis } from "#mapx/db";
 import { toPgColumn } from "#mapx/helpers";
 import {
   ioUpdateDbViewsAltStyleBySource,
@@ -61,6 +61,34 @@ export async function ioEditSource(socket, options, callback) {
   }
 }
 
+export async function ioEditSourceStatus(socket, options, callback) {
+  try {
+    const idTable = options?.id_table;
+    if (!isSourceId(idTable)) {
+      return callback(false);
+    }
+    const exists = await tableExists(idTable);
+    if (!exists) {
+      return callback(false);
+    }
+    const allowed = await isSocketAllowedToEditSource(socket, idTable);
+    if (!allowed) {
+      return callback(false);
+    }
+    return callback({
+      id_table: idTable,
+      locked: !!(await getEditState(idTable, def.state_lock_table)),
+      geometryEditLock: await getEditState(
+        idTable,
+        def.state_geometry_edit_lock
+      ),
+    });
+  } catch (e) {
+    console.error("Edit source status failed", e);
+    callback(false);
+  }
+}
+
 const def = {
   start_percent: 0.001, //initial progress value ( 0 remove it )
   log_perf: false,
@@ -70,7 +98,44 @@ const def = {
   col_geom: "geom",
   col_gid: "gid",
   col_geom_status: "__mx_geom_status",
+  state_lock_table: "lock_table",
+  state_geometry_edit_lock: "geometry_edit_lock",
 };
+
+function getStateId(idTable, key) {
+  return `${idTable}:state:${key}`;
+}
+
+async function getEditState(idTable, key) {
+  return redisGetJSON(getStateId(idTable, key));
+}
+
+async function isSocketAllowedToEditSource(socket, idTable) {
+  const session = socket.session || {};
+  return isUserAllowedToEditSource({
+    idTable,
+    isAuthenticated: session.user_authenticated || false,
+    idUser: session.user_id,
+    rolesGroup: session.user_roles?.group || [],
+  });
+}
+
+async function isUserAllowedToEditSource({
+  idTable,
+  isAuthenticated,
+  idUser,
+  rolesGroup = [],
+}) {
+  if (!isAuthenticated) {
+    return false;
+  }
+  const sourceData = await getSourceEditors(idTable);
+  const isEditor = sourceData.editor === idUser;
+  const isGroupMember = sourceData.editors.some((group) => {
+    return rolesGroup.includes(group);
+  });
+  return isEditor || isGroupMember;
+}
 
 export const events = {
   /**
@@ -347,7 +412,11 @@ class EditTableSession {
   async setState(key, value) {
     const et = this;
     try {
-      const id = `${et._id_table}:state:${key}`;
+      const id = et.getStateId(key);
+      if (value === null) {
+        await clientRedis.del(id);
+        return;
+      }
       await redisSetJSON(id, value);
     } catch (err) {
       et.error("Set state error", err);
@@ -356,11 +425,70 @@ class EditTableSession {
   async getState(key) {
     const et = this;
     try {
-      const id = `${et._id_table}:state:${key}`;
+      const id = et.getStateId(key);
       return redisGetJSON(id);
     } catch (err) {
       et.error("Set state error", err);
     }
+  }
+
+  getStateId(key) {
+    const et = this;
+    return getStateId(et._id_table, key);
+  }
+
+  async getGeometryEditLock() {
+    const et = this;
+    return et.getState(def.state_geometry_edit_lock);
+  }
+
+  isGeometryEditLockOwner(lock) {
+    const et = this;
+    return lock?.id_session === et._id_session;
+  }
+
+  async isGeometryEditAllowed() {
+    const et = this;
+    const lock = await et.getGeometryEditLock();
+    return !lock?.locked || et.isGeometryEditLockOwner(lock);
+  }
+
+  async acquireGeometryEditLock(update = {}) {
+    const et = this;
+    const nextLock = {
+      locked: true,
+      id_session: et._id_session,
+      id_user: et._id_user,
+      gid: update.gid,
+      mode: update.mode || "table",
+      started_at: Date.now(),
+    };
+    const id = et.getStateId(def.state_geometry_edit_lock);
+    const acquired = await clientRedis.set(id, JSON.stringify(nextLock), {
+      NX: true,
+    });
+    if (!acquired) {
+      const lock = await et.getGeometryEditLock();
+      if (!et.isGeometryEditLockOwner(lock)) {
+        return false;
+      }
+    }
+    await et.setState(def.state_geometry_edit_lock, nextLock);
+    update.lock = nextLock;
+    return true;
+  }
+
+  async releaseGeometryEditLock() {
+    const et = this;
+    const lock = await et.getGeometryEditLock();
+    if (!lock?.locked) {
+      return true;
+    }
+    if (!et.isGeometryEditLockOwner(lock)) {
+      return false;
+    }
+    await et.setState(def.state_geometry_edit_lock, null);
+    return true;
   }
 
   perf(label) {
@@ -432,7 +560,7 @@ class EditTableSession {
     /**
      * Join a common room
      */
-    et._socket.join(et._id_room);
+    et.joinRoom();
 
     /**
      * Listen for events
@@ -498,13 +626,54 @@ class EditTableSession {
     return members;
   }
 
+  joinRoom() {
+    const et = this;
+    const rooms = (et._socket.data.edit_table_rooms ||= {});
+    const count = rooms[et._id_room] || 0;
+    rooms[et._id_room] = count + 1;
+    if (count === 0) {
+      et._socket.join(et._id_room);
+    }
+  }
+
+  leaveRoom() {
+    const et = this;
+    const rooms = (et._socket.data.edit_table_rooms ||= {});
+    const count = rooms[et._id_room] || 0;
+    if (count <= 1) {
+      delete rooms[et._id_room];
+      et._socket.leave(et._id_room);
+      return;
+    }
+    rooms[et._id_room] = count - 1;
+  }
+
   async destroy() {
     const et = this;
     if (et._destroyed) {
       return;
     }
     et._destroyed = true;
-    et._socket.leave(et._id_room);
+    const geometryLock = await et.getGeometryEditLock();
+    const hadGeometryLock = et.isGeometryEditLockOwner(geometryLock);
+    await et.releaseGeometryEditLock();
+    if (hadGeometryLock) {
+      et.emitRoom(events.server_dispatch, {
+        nParts: 1,
+        part: 1,
+        start: true,
+        end: true,
+        update_state: true,
+        updates: [
+          {
+            type: "geometry_edit_lock",
+            action: "release",
+            lock: null,
+          },
+        ],
+      });
+    }
+    et.leaveRoom();
     const members = await et.getMembers();
 
     et.emitRoom(events.server_member_exit, {
@@ -572,8 +741,11 @@ class EditTableSession {
       }
       switch (message.type) {
         case "lock_table": {
-          const locked = await et.getState("lock_table");
+          const locked = await et.getState(def.state_lock_table);
           return callback(!!locked);
+        }
+        case "geometry_edit_lock": {
+          return callback(await et.getGeometryEditLock());
         }
         case "columns_used": {
           const data = await getLayerUsedAttributes(et._id_table);
@@ -653,7 +825,11 @@ class EditTableSession {
         }
       }
       if (message.update_state) {
-        et.updateState(message);
+        const updated = await et.updateState(message);
+        if (!updated) {
+          callback(false);
+          return;
+        }
       }
 
       et.dispatch(message);
@@ -665,7 +841,7 @@ class EditTableSession {
     callback(true);
   }
 
-  updateState(message) {
+  async updateState(message) {
     const et = this;
     if (message.id_table !== et._id_table) {
       return;
@@ -677,10 +853,21 @@ class EditTableSession {
     for (const update of updates) {
       switch (update.type) {
         case "lock_table":
-          et.setState("lock_table", !!update.lock);
+          await et.setState(def.state_lock_table, !!update.lock);
+          break;
+        case "geometry_edit_lock":
+          if (update.action === "acquire") {
+            return et.acquireGeometryEditLock(update);
+          }
+          if (update.action === "release") {
+            const released = await et.releaseGeometryEditLock();
+            update.lock = null;
+            return released;
+          }
           break;
       }
     }
+    return true;
   }
 
   async write(message) {
@@ -734,7 +921,8 @@ class EditTableSession {
         def.col_geom_status,
       ]);
       const title = await getLayerTitle(et._id_table);
-      const locked = await et.getState("lock_table");
+      const locked = await et.getState(def.state_lock_table);
+      const geometryEditLock = await et.getGeometryEditLock();
       const columnsOrderSaved = await getMxSourceData(et._id_table, [
         "settings",
         "editor",
@@ -750,6 +938,7 @@ class EditTableSession {
         types,
         title,
         locked,
+        geometryEditLock,
       };
 
       const iL = Math.ceil(nRow / def.size_chunk);
@@ -822,7 +1011,6 @@ class EditTableSession {
       const idUser = et._id_user;
       const ttl = 15 * 60 * 1000; // 15 minutes;
       const now = Date.now();
-      let isGroupMember = false;
 
       if (!isAuthenticated) {
         return false;
@@ -831,15 +1019,13 @@ class EditTableSession {
       if (et._tables.includes(idTable) && now < et._table_cache_time_limit) {
         return true;
       }
-      const sourceData = await getSourceEditors(idTable);
-      const isEditor = sourceData.editor === idUser;
-      const rolesGroup = et._user_roles?.group;
-      for (const group of sourceData.editors) {
-        if (!isGroupMember) {
-          isGroupMember = rolesGroup.includes(group);
-        }
-      }
-      if (isEditor || isGroupMember) {
+      const allowed = await isUserAllowedToEditSource({
+        idTable,
+        isAuthenticated,
+        idUser,
+        rolesGroup: et._user_roles?.group || [],
+      });
+      if (allowed) {
         et._tables.push(idTable);
         et._table_cache_time_limit = now + ttl;
         return true;
@@ -1117,6 +1303,10 @@ class EditTableSession {
             break;
           case "update_geom":
             {
+              const allowed = await et.isGeometryEditAllowed();
+              if (!allowed) {
+                throw new Error("Geometry edit is locked by another session");
+              }
               const row = await updateFeatureGeometry(
                 id_table,
                 update.gid,

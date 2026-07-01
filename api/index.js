@@ -40,6 +40,7 @@ import {
 import {
   ioDownloadSource,
   ioEditSource,
+  ioEditSourceStatus,
   ioSourceList,
   ioSourceListColumns,
   ioSourceJoin,
@@ -126,6 +127,7 @@ io.use((socket, next) => {
   socket.on("/client/source/download", use(ioDownloadSource));
   socket.on("/client/source/upload", use(ioUploadSource));
   socket.on("/client/source/edit/table", use(ioEditSource));
+  socket.on("/client/source/edit/table/status", use(ioEditSourceStatus));
   socket.on("/client/source/get/list", use(ioSourceList));
   socket.on("/client/source/get/list/columns", use(ioSourceListColumns));
   socket.on("/client/source/get/services", use(ioSourceServices));

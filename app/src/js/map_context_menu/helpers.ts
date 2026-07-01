@@ -1,6 +1,7 @@
 import type {
   AnyRecord,
   MapContextMenuMapApi,
+  MapContextMenuEditState,
   MapContextMenuEvent,
   MapContextMenuItem,
   MapContextMenuMap,
@@ -17,6 +18,7 @@ import {
 } from "../is_test/index.js";
 
 const DEFAULT_BUFFER_PIXELS = 5;
+export const EDIT_STATE_TIMEOUT_MS = 2500;
 
 function cloneValue<T>(value: T): T {
   if (value === null || value === undefined) {
@@ -100,6 +102,71 @@ export function canEditFromSummary(
     return groups.includes(role) || role === idUser;
   });
   return isProject && isEditable && (isEditor || isAllowed);
+}
+
+export function getInitialEditState(
+  item: MapContextMenuItem,
+  settings: AnyRecord,
+): MapContextMenuEditState {
+  return canAttemptEdit(item, settings) ? "loading" : "hidden";
+}
+
+export function getResolvedEditState(opt: {
+  item: MapContextMenuItem;
+  summary: SourceSummary;
+  settings: AnyRecord;
+  editLocked: boolean;
+}): MapContextMenuEditState {
+  const { item, summary, settings, editLocked } = opt;
+  if (!canEditFromSummary(item, summary, settings)) {
+    return "unavailable";
+  }
+  return editLocked ? "locked" : "enabled";
+}
+
+export function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs = EDIT_STATE_TIMEOUT_MS,
+): Promise<T> {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  const timeoutPromise = new Promise<T>((_resolve, reject) => {
+    timeout = setTimeout(() => {
+      reject(new Error("Edit status request timed out"));
+    }, timeoutMs);
+  });
+  return Promise.race([promise, timeoutPromise]).finally(() => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+  });
+}
+
+export async function resolveEditState(opt: {
+  item: MapContextMenuItem;
+  settings: AnyRecord;
+  getSummary: () => Promise<SourceSummary>;
+  isLocked: () => Promise<boolean>;
+  timeoutMs?: number;
+}): Promise<MapContextMenuEditState> {
+  const { item, settings, getSummary, isLocked, timeoutMs } = opt;
+  if (!canAttemptEdit(item, settings)) {
+    return "hidden";
+  }
+  try {
+    const started = Date.now();
+    const summary = await withTimeout(getSummary(), timeoutMs);
+    if (!canEditFromSummary(item, summary, settings)) {
+      return "unavailable";
+    }
+    const remainingTimeout = Math.max(
+      1,
+      (timeoutMs || EDIT_STATE_TIMEOUT_MS) - (Date.now() - started),
+    );
+    const editLocked = await withTimeout(isLocked(), remainingTimeout);
+    return getResolvedEditState({ item, summary, settings, editLocked });
+  } catch (_e) {
+    return "unavailable";
+  }
 }
 
 export function buildFeatureGeoJSON(

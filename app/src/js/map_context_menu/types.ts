@@ -38,7 +38,16 @@ export interface MapContextMenuItem {
   properties: AnyRecord;
   geometry: AnyRecord | null;
   canEdit?: boolean;
+  editLocked?: boolean;
+  editState?: MapContextMenuEditState;
 }
+
+export type MapContextMenuEditState =
+  | "hidden"
+  | "loading"
+  | "enabled"
+  | "locked"
+  | "unavailable";
 
 export interface SourceSummary {
   type?: string;

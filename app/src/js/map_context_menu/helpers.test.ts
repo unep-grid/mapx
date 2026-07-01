@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   buildFeatureFilename,
   buildFeatureGeoJSON,
@@ -6,7 +6,10 @@ import {
   canEditFromSummary,
   collectFeatureItems,
   formatCoordinates,
+  getInitialEditState,
   getGeometryType,
+  getResolvedEditState,
+  resolveEditState,
 } from "./helpers";
 import type { MapContextMenuMapApi } from "./types";
 
@@ -66,6 +69,10 @@ const api = {
 } as MapContextMenuMapApi;
 
 describe("map context menu helpers", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("formats coordinates", () => {
     expect(formatCoordinates({ lng: 7.1234567, lat: 46.9876543 })).toBe(
       "7.123457, 46.987654",
@@ -153,6 +160,141 @@ describe("map context menu helpers", () => {
         settings,
       ),
     ).toBe(false);
+  });
+
+  it("initializes edit UI state before remote checks", () => {
+    const settings = {
+      mode: { static: false },
+      user: { id: "user_a" },
+    };
+    expect(getInitialEditState(baseItem, settings)).toBe("loading");
+    expect(
+      getInitialEditState(baseItem, {
+        ...settings,
+        mode: { static: true },
+      }),
+    ).toBe("hidden");
+  });
+
+  it("maps resolved edit checks to menu button states", () => {
+    const settings = {
+      project: { id: idProject },
+      user: {
+        id: "user_a",
+        roles: {
+          groups: ["editors"],
+        },
+      },
+    };
+    const summary = {
+      type: "vector",
+      roles: { editor: "other", editors: ["editors"] },
+    };
+    expect(
+      getResolvedEditState({
+        item: baseItem,
+        summary,
+        settings,
+        editLocked: false,
+      }),
+    ).toBe("enabled");
+    expect(
+      getResolvedEditState({
+        item: baseItem,
+        summary,
+        settings,
+        editLocked: true,
+      }),
+    ).toBe("locked");
+    expect(
+      getResolvedEditState({
+        item: baseItem,
+        summary: { type: "vector", roles: { editor: "other", editors: [] } },
+        settings,
+        editLocked: false,
+      }),
+    ).toBe("unavailable");
+  });
+
+  it("resolves edit state asynchronously and falls back to unavailable", async () => {
+    const settings = {
+      mode: { static: false },
+      project: { id: idProject },
+      user: {
+        id: "user_a",
+        roles: {
+          groups: ["editors"],
+        },
+      },
+    };
+    const summary = {
+      type: "vector",
+      roles: { editor: "other", editors: ["editors"] },
+    };
+    await expect(
+      resolveEditState({
+        item: baseItem,
+        settings,
+        getSummary: async () => summary,
+        isLocked: async () => false,
+      }),
+    ).resolves.toBe("enabled");
+    await expect(
+      resolveEditState({
+        item: baseItem,
+        settings,
+        getSummary: async () => summary,
+        isLocked: async () => true,
+      }),
+    ).resolves.toBe("locked");
+    await expect(
+      resolveEditState({
+        item: baseItem,
+        settings,
+        getSummary: async () => {
+          throw new Error("summary failed");
+        },
+        isLocked: async () => false,
+      }),
+    ).resolves.toBe("unavailable");
+    const isLocked = vi.fn(async () => false);
+    await expect(
+      resolveEditState({
+        item: baseItem,
+        settings,
+        getSummary: async () => ({
+          type: "vector",
+          roles: { editor: "other", editors: [] },
+        }),
+        isLocked,
+      }),
+    ).resolves.toBe("unavailable");
+    expect(isLocked).not.toHaveBeenCalled();
+  });
+
+  it("resolves timed-out edit checks as unavailable", async () => {
+    vi.useFakeTimers();
+    const settings = {
+      mode: { static: false },
+      project: { id: idProject },
+      user: {
+        id: "user_a",
+        roles: {
+          groups: ["editors"],
+        },
+      },
+    };
+    const isLocked = vi.fn(async () => false);
+    const promise = resolveEditState({
+      item: baseItem,
+      settings,
+      getSummary: () => new Promise(() => {}),
+      isLocked,
+      timeoutMs: 10,
+    });
+    vi.advanceTimersByTime(10);
+    await expect(promise).resolves.toBe("unavailable");
+    expect(isLocked).not.toHaveBeenCalled();
   });
 
   it("builds feature GeoJSON and strips geom from properties", () => {

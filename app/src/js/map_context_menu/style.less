@@ -2,7 +2,8 @@
   position: absolute;
   z-index: 30;
   min-width: 220px;
-  max-width: 320px;
+  width: 280px;
+  max-width: calc(100vw - 24px);
   padding: 6px;
   color: var(--mx_ui_text);
   background: var(--mx_ui_background);
@@ -36,6 +37,7 @@
 .mx-map-context-menu__button {
   display: block;
   width: 100%;
+  min-height: 28px;
   padding: 6px 8px;
   color: var(--mx_ui_text);
   background: transparent;
@@ -56,4 +58,9 @@
 .mx-map-context-menu__button[disabled] {
   cursor: default;
   opacity: 0.55;
+}
+
+.mx-map-context-menu__button[disabled]:hover,
+.mx-map-context-menu__button[disabled]:focus {
+  background: transparent;
 }

@@ -7,6 +7,7 @@ const events = {
   server_error: "/server/source/edit/table/error",
   client_get: "/client/get",
   client_edit_start: "/client/source/edit/table",
+  client_edit_status: "/client/source/edit/table/status",
   client_edit_updates: "/client/source/edit/table/update",
   client_exit: "/client/source/edit/table/exit",
 };
@@ -18,6 +19,20 @@ const defaults = {
 };
 
 export class QuickGeometryEditSession {
+  static async getStatus(idTable, timeout = defaults.timeout_emit) {
+    return ws.emitAsync(
+      events.client_edit_status,
+      {
+        id_table: idTable,
+      },
+      timeout,
+    );
+  }
+
+  static isStatusLocked(status) {
+    return !!status?.locked || !!status?.geometryEditLock?.locked;
+  }
+
   constructor(config) {
     const qg = this;
     qg._config = Object.assign({}, defaults, config);
@@ -25,6 +40,7 @@ export class QuickGeometryEditSession {
     qg._id_table = qg._config.id_table;
     qg._id_room = `room/source/edit/table/${qg._id_table}`;
     qg._id_session = null;
+    qg._members = [];
     qg._socket = ws.socket;
     qg.onJoined = qg.onJoined.bind(qg);
     qg.onServerError = qg.onServerError.bind(qg);
@@ -78,6 +94,89 @@ export class QuickGeometryEditSession {
     });
   }
 
+  async getGeometryEditLock() {
+    const qg = this;
+    return qg.emitGet({
+      type: "geometry_edit_lock",
+    });
+  }
+
+  async isGeometryEditLocked() {
+    const qg = this;
+    const lock = await qg.getGeometryEditLock();
+    return !!lock?.locked && lock.id_session !== qg._id_session;
+  }
+
+  async acquireGeometryEditLock(gid) {
+    const qg = this;
+    return ws.emitAsync(
+      events.client_edit_updates,
+      qg.message({
+        nParts: 1,
+        part: 1,
+        start: true,
+        end: true,
+        update_state: true,
+        updates: [
+          {
+            type: "geometry_edit_lock",
+            action: "acquire",
+            mode: "quick",
+            gid,
+          },
+        ],
+      }),
+      qg._config.timeout_emit,
+    );
+  }
+
+  async releaseGeometryEditLock() {
+    const qg = this;
+    return ws.emitAsync(
+      events.client_edit_updates,
+      qg.message({
+        nParts: 1,
+        part: 1,
+        start: true,
+        end: true,
+        update_state: true,
+        updates: [
+          {
+            type: "geometry_edit_lock",
+            action: "release",
+          },
+        ],
+      }),
+      qg._config.timeout_emit,
+    );
+  }
+
+  async withGeometryEditLock(gid, callback) {
+    const qg = this;
+    await qg.assertEditable();
+    const lockAccepted = await qg.acquireGeometryEditLock(gid);
+    if (!lockAccepted) {
+      throw new Error("This table is already being edited.");
+    }
+
+    let callbackError = null;
+    try {
+      return await callback();
+    } catch (e) {
+      callbackError = e;
+      throw e;
+    } finally {
+      try {
+        await qg.releaseGeometryEditLock();
+      } catch (e) {
+        console.error(e);
+        if (!callbackError) {
+          throw e;
+        }
+      }
+    }
+  }
+
   async isTableLocked() {
     const qg = this;
     return !!(await qg.emitGet({
@@ -85,21 +184,21 @@ export class QuickGeometryEditSession {
     }));
   }
 
-  async setTableLock(lock) {
+  hasConcurrentMembers() {
     const qg = this;
-    return ws.emitAsync(
-      events.client_edit_updates,
-      qg.message({
-        update_state: true,
-        updates: [
-          {
-            type: "lock_table",
-            lock: !!lock,
-          },
-        ],
-      }),
-      qg._config.timeout_emit,
-    );
+    return qg._members.length > 1;
+  }
+
+  async isEditLocked() {
+    const qg = this;
+    return (await qg.isTableLocked()) || (await qg.isGeometryEditLocked());
+  }
+
+  async assertEditable() {
+    const qg = this;
+    if (await qg.isEditLocked()) {
+      throw new Error("This table is already being edited.");
+    }
   }
 
   async updateGeometry(gid, geometry) {
@@ -156,6 +255,7 @@ export class QuickGeometryEditSession {
       return;
     }
     qg._id_session = message.id_session;
+    qg._members = message.members || [];
     qg._resolve_joined?.(message);
   }
 

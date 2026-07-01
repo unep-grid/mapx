@@ -1,14 +1,16 @@
 import {
   collectFeatureItems,
-  canAttemptEdit,
-  canEditFromSummary,
+  EDIT_STATE_TIMEOUT_MS,
   formatCoordinates,
   getGeometryType,
+  getInitialEditState,
+  resolveEditState,
   buildFeatureFilename,
   buildFeatureGeoJSON,
 } from "./helpers.ts";
 import type {
   AnyRecord,
+  MapContextMenuEditState,
   MapContextMenuMapApi,
   MapContextMenuEvent,
   MapContextMenuItem,
@@ -43,17 +45,16 @@ export async function handleMapContextMenuEvent(
     return;
   }
 
-  await Promise.all(features.map((item) => addEditState(item, api)));
-  if (activeToken !== token) {
-    return;
-  }
+  features.forEach(initEditState);
 
-  activeMenu = new MapContextMenu({
+  const menu = new MapContextMenu({
     event,
     map,
     features,
     api,
   });
+  activeMenu = menu;
+  features.forEach((item) => updateEditStateAsync(item, api, menu, token));
 }
 
 function destroyMapContextMenu() {
@@ -61,24 +62,60 @@ function destroyMapContextMenu() {
   activeMenu = null;
 }
 
-async function addEditState(
+function initEditState(item: MapContextMenuItem) {
+  setEditState(item, getInitialEditState(item, settings));
+}
+
+function setEditState(
+  item: MapContextMenuItem,
+  editState: MapContextMenuEditState,
+) {
+  item.editState = editState;
+  item.canEdit = editState === "enabled" || editState === "locked";
+  item.editLocked = editState === "locked";
+}
+
+async function updateEditStateAsync(
   item: MapContextMenuItem,
   api: MapContextMenuMapApi,
+  menu: MapContextMenu,
+  token: string,
 ) {
-  item.canEdit = false;
-  if (!canAttemptEdit(item, settings)) {
-    return item;
+  if (item.editState !== "loading") {
+    return;
   }
+  let editState: MapContextMenuEditState = "unavailable";
   try {
-    const summary = await api.getViewSourceSummary(item.view.id, {
-      stats: ["base", "roles"],
-      useCache: false,
+    editState = await resolveEditState({
+      item,
+      settings,
+      timeoutMs: EDIT_STATE_TIMEOUT_MS,
+      getSummary: () =>
+        api.getViewSourceSummary(item.view.id, {
+          stats: ["base", "roles"],
+          useCache: false,
+        }),
+      isLocked: () => isQuickEditLocked(item, EDIT_STATE_TIMEOUT_MS),
     });
-    item.canEdit = canEditFromSummary(item, summary, settings);
   } catch (e) {
     console.error(e);
   }
-  return item;
+  if (activeToken !== token || activeMenu !== menu || menu.destroyed) {
+    return;
+  }
+  setEditState(item, editState);
+  menu.updateEditButton(item);
+}
+
+async function isQuickEditLocked(
+  item: MapContextMenuItem,
+  timeout = EDIT_STATE_TIMEOUT_MS,
+) {
+  const status = await QuickGeometryEditSession.getStatus(
+    item.idSource,
+    timeout,
+  );
+  return !status || QuickGeometryEditSession.isStatusLocked(status);
 }
 
 async function startQuickEdit(
@@ -89,48 +126,41 @@ async function startQuickEdit(
     id_table: item.idSource,
   });
   let mainPanelWasVisible = false;
-  let tableLockAcquired = false;
   try {
     await session.init();
-    if (await session.isTableLocked()) {
-      throw new Error("This table is already being edited.");
-    }
-    const lockAccepted = await session.setTableLock(true);
-    if (!lockAccepted) {
-      throw new Error("Table lock was not accepted.");
-    }
-    tableLockAcquired = true;
-    const feature = await session.getFeature(item.gid);
-    if (!feature) {
-      throw new Error("Feature not found");
-    }
-    mainPanelWasVisible =
-      panels.idExists("main_panel") && panels.isVisible("main_panel");
-    if (panels.idExists("main_panel")) {
-      panels.hide("main_panel");
-    }
-    const geometry = feature.geom || item.geometry || null;
-    const result = await draw.startEditSession({
-      type: getGeometryType(geometry),
-      feature: {
-        type: "Feature",
-        properties: {
-          gid: feature.gid,
+    await session.withGeometryEditLock(item.gid, async () => {
+      const feature = await session.getFeature(item.gid);
+      if (!feature) {
+        throw new Error("Feature not found");
+      }
+      mainPanelWasVisible =
+        panels.idExists("main_panel") && panels.isVisible("main_panel");
+      if (panels.idExists("main_panel")) {
+        panels.hide("main_panel");
+      }
+      const geometry = feature.geom || item.geometry || null;
+      const result = await draw.startEditSession({
+        type: getGeometryType(geometry),
+        feature: {
+          type: "Feature",
+          properties: {
+            gid: feature.gid,
+          },
+          geometry,
         },
-        geometry,
-      },
-      minZoom: 12,
-      singleFeature: true,
-      onSave: async ({ geometry }: { geometry: AnyRecord | null }) => {
-        const saved = await session.updateGeometry(feature.gid, geometry);
-        if (!saved) {
-          throw new Error("Geometry update was not accepted");
-        }
-      },
+        minZoom: 12,
+        singleFeature: true,
+        onSave: async ({ geometry }: { geometry: AnyRecord | null }) => {
+          const saved = await session.updateGeometry(feature.gid, geometry);
+          if (!saved) {
+            throw new Error("Geometry update was not accepted");
+          }
+        },
+      });
+      if (result?.status === "saved") {
+        await refreshTableViews(session, api);
+      }
     });
-    if (result?.status === "saved") {
-      await refreshTableViews(session, api);
-    }
   } catch (e: any) {
     console.error(e);
     await modalDialog({
@@ -140,13 +170,6 @@ async function startQuickEdit(
   } finally {
     if (mainPanelWasVisible && panels.idExists("main_panel")) {
       panels.show("main_panel");
-    }
-    if (tableLockAcquired) {
-      try {
-        await session.setTableLock(false);
-      } catch (e) {
-        console.error(e);
-      }
     }
     await session.destroy();
   }
@@ -203,6 +226,7 @@ class MapContextMenu {
   left: number;
   coordinates: string;
   el: HTMLElement;
+  editButtons = new Map<MapContextMenuItem, HTMLButtonElement>();
   _destroyed = false;
 
   constructor(opt: {
@@ -267,10 +291,9 @@ class MapContextMenu {
         return downloadFeature(item, this.api);
       }),
     ];
-    if (item.canEdit) {
-      buttons.unshift(
-        this.button("Edit geometry", () => startQuickEdit(item, this.api)),
-      );
+    const editButton = this.buildEditButton(item);
+    if (editButton) {
+      buttons.unshift(editButton);
     }
     return el(
       "div",
@@ -280,16 +303,50 @@ class MapContextMenu {
     );
   }
 
-  button(label: string, action: () => Promise<any>) {
+  buildEditButton(item: MapContextMenuItem) {
+    if (item.editState === "hidden" || !item.editState) {
+      return null;
+    }
+    const button = this.button(
+      getEditButtonLabel(item.editState),
+      () => startQuickEdit(item, this.api),
+      { disabled: item.editState !== "enabled" },
+    );
+    this.editButtons.set(item, button);
+    return button;
+  }
+
+  updateEditButton(item: MapContextMenuItem) {
+    if (this._destroyed) {
+      return;
+    }
+    const button = this.editButtons.get(item);
+    if (!button || item.editState === "hidden" || !item.editState) {
+      return;
+    }
+    button.textContent = getEditButtonLabel(item.editState);
+    button.disabled = item.editState !== "enabled";
+    this.adjustPosition();
+  }
+
+  button(
+    label: string,
+    action: () => Promise<any>,
+    opt: { disabled?: boolean } = {},
+  ): HTMLButtonElement {
     return el(
       "button",
       {
         class: "mx-map-context-menu__button",
         type: "button",
+        ...(opt.disabled ? { disabled: true } : {}),
         on: {
           click: async (event: MouseEvent) => {
             event.preventDefault();
             event.stopPropagation();
+            if ((event.currentTarget as HTMLButtonElement).disabled) {
+              return;
+            }
             try {
               await action();
             } catch (e) {
@@ -301,7 +358,7 @@ class MapContextMenu {
         },
       },
       label,
-    );
+    ) as HTMLButtonElement;
   }
 
   adjustPosition() {
@@ -356,5 +413,23 @@ class MapContextMenu {
     if (activeMenu === this) {
       activeMenu = null;
     }
+  }
+
+  get destroyed() {
+    return this._destroyed;
+  }
+}
+
+function getEditButtonLabel(editState: MapContextMenuEditState) {
+  switch (editState) {
+    case "loading":
+      return "Edit geometry (loading)";
+    case "locked":
+      return "Edit geometry (locked)";
+    case "unavailable":
+      return "Edit geometry unavailable";
+    case "enabled":
+    default:
+      return "Edit geometry";
   }
 }

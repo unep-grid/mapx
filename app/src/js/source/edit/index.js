@@ -146,6 +146,7 @@ export class EditTableSessionClient extends EditTableBase {
       et._select_auto = [];
       et._lock_table_concurrent = false;
       et._lock_table_by_user_id = null;
+      et._geometry_lock_by_session = null;
       et._initialized = true;
       et._id_table = et._config?.id_table;
       et._id_user = settings.user.id;
@@ -323,6 +324,10 @@ export class EditTableSessionClient extends EditTableBase {
       et._destroying = true;
       et._lock_table_concurrent = false;
       et._lock_table_by_user_id = null;
+      et._geometry_lock_by_session = null;
+      if (et._id_session) {
+        await et.releaseGeometryEditLock();
+      }
 
       /**
        * Close modal
@@ -1042,11 +1047,21 @@ export class EditTableSessionClient extends EditTableBase {
     const et = this;
     if (update.lock) {
       et._lock_table_by_user_id = message.id_user;
-      et.lock();
     } else {
       et._lock_table_by_user_id = null;
-      et.unlock();
     }
+    et.updateLockedState();
+  }
+
+  async handlerUpdateGeometryLock(update) {
+    const et = this;
+    const lock = update.lock;
+    if (lock?.locked && lock.id_session !== et._id_session) {
+      et._geometry_lock_by_session = lock.id_session;
+    } else {
+      et._geometry_lock_by_session = null;
+    }
+    et.updateLockedState();
   }
 
   /**
@@ -1562,7 +1577,14 @@ export class EditTableSessionClient extends EditTableBase {
     /**
      * Build handsontable object
      */
-    const initLocked = table.locked && et.hasConcurrentMembers();
+    const geometryLock = table.geometryEditLock;
+    const initGeometryLocked =
+      geometryLock?.locked && geometryLock.id_session !== et._id_session;
+    const initLocked =
+      (table.locked && et.hasConcurrentMembers()) || initGeometryLocked;
+    if (initGeometryLocked) {
+      et._geometry_lock_by_session = geometryLock.id_session;
+    }
     const handsontable = await moduleLoad("handsontable");
     et._handsontable = handsontable;
 
@@ -2010,6 +2032,9 @@ export class EditTableSessionClient extends EditTableBase {
             switch (update.type) {
               case "lock_table":
                 await et.handlerUpdateLock(update, message);
+                break;
+              case "geometry_edit_lock":
+                await et.handlerUpdateGeometryLock(update, message);
                 break;
               case "update_cell":
                 await et.handlerUpdateCellsCollect(update, message);
@@ -3403,6 +3428,15 @@ export class EditTableSessionClient extends EditTableBase {
     et.enable();
   }
 
+  updateLockedState() {
+    const et = this;
+    if (et._lock_table_by_user_id || et._geometry_lock_by_session) {
+      et.lock();
+    } else {
+      et.unlock();
+    }
+  }
+
   /**
    * Send lock event to other concurent user
    * @param {Boolean} lock Enable/disable lock for other. If empty, use _auto_save state
@@ -3415,6 +3449,26 @@ export class EditTableSessionClient extends EditTableBase {
       lock: et._lock_table_concurrent,
     };
     await et.emitUpdatesState([update]);
+  }
+
+  async acquireGeometryEditLock(gid) {
+    const et = this;
+    const update = {
+      type: "geometry_edit_lock",
+      action: "acquire",
+      mode: "table",
+      gid,
+    };
+    return et.emitUpdatesState([update]);
+  }
+
+  async releaseGeometryEditLock() {
+    const et = this;
+    const update = {
+      type: "geometry_edit_lock",
+      action: "release",
+    };
+    return et.emitUpdatesState([update], true);
   }
 
   async lockAll() {
@@ -3519,11 +3573,11 @@ export class EditTableSessionClient extends EditTableBase {
    * @param {Array} update Array of updates
    * @param {Object} opt Options pased to emit message
    */
-  async emitUpdates(updates, opt) {
+  async emitUpdates(updates, opt, force = false) {
     const et = this;
     const e = et._config.events;
-    if (et.locked) {
-      return;
+    if (et.locked && !force) {
+      return false;
     }
     if (et._config.test_mode) {
       console.warn("Test mode. Updates not emited:", updates);
@@ -3537,14 +3591,24 @@ export class EditTableSessionClient extends EditTableBase {
     try {
       for (let iChunk = 0; iChunk < nChunk; iChunk++) {
         const chunk = updates.splice(0, max);
-        await et.emit(e.client_edit_updates, {
+        const message = {
           nParts: nChunk,
           part: iChunk + 1,
           start: iChunk === 0,
           end: iChunk === nChunk - 1,
           updates: chunk,
           ...opt,
-        });
+        };
+        const accepted = force
+          ? await et._ws.emitAsync(
+              e.client_edit_updates,
+              et.message_formater(message),
+              et._config.timeout_emit,
+            )
+          : await et.emit(e.client_edit_updates, message);
+        if (!accepted) {
+          return false;
+        }
       }
     } catch (e) {
       console.error(e);
@@ -3566,9 +3630,9 @@ export class EditTableSessionClient extends EditTableBase {
    * emit state update (e.g. lock state change )
    * @param {Array} updates
    */
-  async emitUpdatesState(updates) {
+  async emitUpdatesState(updates, force = false) {
     const et = this;
-    await et.emitUpdates(updates, { update_state: true });
+    return et.emitUpdates(updates, { update_state: true }, force);
   }
 
   /**
@@ -3663,6 +3727,15 @@ export class EditTableSessionClient extends EditTableBase {
       return;
     }
 
+    const locked = await et.acquireGeometryEditLock(gid);
+    if (!locked) {
+      await modalDialog({
+        title: "Geometry edit locked",
+        content: "Another user is already editing geometry for this source.",
+      });
+      return;
+    }
+
     await et.setGeometryMode(true);
     try {
       const result = await draw.startEditSession({
@@ -3705,6 +3778,7 @@ export class EditTableSessionClient extends EditTableBase {
       console.error(e);
     } finally {
       await et.setGeometryMode(false);
+      await et.releaseGeometryEditLock();
     }
   }
 
@@ -3734,14 +3808,12 @@ export class EditTableSessionClient extends EditTableBase {
       if (panels.idExists("main_panel")) {
         panels.hide("main_panel");
       }
-      await et.lockTableConcurrent(true);
     } else {
       et._modal?.show?.();
       if (et._main_panel_was_visible && panels.idExists("main_panel")) {
         panels.show("main_panel");
       }
       et._main_panel_was_visible = false;
-      await et.lockTableConcurrent(!et._auto_save);
     }
     et.updateButtons();
   }
