@@ -39,8 +39,9 @@ import {
   isSourceId,
   isSafeName,
 } from "@fxi/mx_valid";
-import { pgWrite, redisSetJSON, redisGetJSON, clientRedis } from "#mapx/db";
+import { pgWrite } from "#mapx/db";
 import { toPgColumn } from "#mapx/helpers";
+import { acquireLock, getLock, isLockOwner, releaseLock, refreshLock } from "./locks.js";
 import {
   ioUpdateDbViewsAltStyleBySource,
   getViewsTableBySource,
@@ -77,11 +78,8 @@ export async function ioEditSourceStatus(socket, options, callback) {
     }
     return callback({
       id_table: idTable,
-      locked: !!(await getEditState(idTable, def.state_lock_table)),
-      geometryEditLock: await getEditState(
-        idTable,
-        def.state_geometry_edit_lock
-      ),
+      locked: !!(await getLock(idTable, "table")),
+      geometryEditLock: await getLock(idTable, "geometry"),
     });
   } catch (e) {
     console.error("Edit source status failed", e);
@@ -98,18 +96,7 @@ const def = {
   col_geom: "geom",
   col_gid: "gid",
   col_geom_status: "__mx_geom_status",
-  state_lock_table: "lock_table",
-  state_geometry_edit_lock: "geometry_edit_lock",
-  geometry_edit_lock_ttl_seconds: 120, // safety net: expire orphaned locks (refreshed on activity)
 };
-
-function getStateId(idTable, key) {
-  return `${idTable}:state:${key}`;
-}
-
-async function getEditState(idTable, key) {
-  return redisGetJSON(getStateId(idTable, key));
-}
 
 async function isSocketAllowedToEditSource(socket, idTable) {
   const session = socket.session || {};
@@ -147,6 +134,7 @@ export const events = {
   client_geom_validate: "/client/source/edit/table/geom/validate",
   client_value_validate: "/client/source/edit/table/value/validate",
   client_changes_sanitize: "/client/source/edit/table/changes/sanitize",
+  client_lock_refresh: "/client/source/edit/table/lock/refresh",
   client_get: "/client/get",
   /**
    * from here server
@@ -394,6 +382,8 @@ class EditTableSession {
     et.onValidate = et.onValidate.bind(et);
     et.onSanitize = et.onSanitize.bind(et);
     et.onGet = et.onGet.bind(et);
+    et.onLockRefresh = et.onLockRefresh.bind(et);
+    et.onDisconnect = et.onDisconnect.bind(et);
     et.progress = et.progress.bind(et);
     et.progressAll = et.progressAll.bind(et);
   }
@@ -410,108 +400,56 @@ class EditTableSession {
     return !!et._busy;
   }
 
-  async setState(key, value) {
-    const et = this;
-    try {
-      const id = et.getStateId(key);
-      if (value === null) {
-        await clientRedis.del(id);
-        return;
-      }
-      await redisSetJSON(id, value);
-    } catch (err) {
-      et.error("Set state error", err);
-    }
-  }
-  async getState(key) {
-    const et = this;
-    try {
-      const id = et.getStateId(key);
-      return redisGetJSON(id);
-    } catch (err) {
-      et.error("Get state error", err);
-    }
-  }
-
-  getStateId(key) {
-    const et = this;
-    return getStateId(et._id_table, key);
-  }
-
   async getGeometryEditLock() {
     const et = this;
-    return et.getState(def.state_geometry_edit_lock);
+    return getLock(et._id_table, "geometry");
   }
 
   isGeometryEditLockOwner(lock) {
     const et = this;
-    return lock?.id_session === et._id_session;
+    return isLockOwner(lock, et._id_session);
   }
 
   async isGeometryEditAllowed() {
     const et = this;
     const lock = await et.getGeometryEditLock();
-    return !lock?.locked || et.isGeometryEditLockOwner(lock);
+    return !lock || et.isGeometryEditLockOwner(lock);
   }
 
   async acquireGeometryEditLock(update = {}) {
     const et = this;
-    const nextLock = {
-      locked: true,
-      id_session: et._id_session,
-      id_user: et._id_user,
+    const lock = await acquireLock({
+      idTable: et._id_table,
+      scope: "geometry",
+      idSession: et._id_session,
+      idUser: et._id_user,
       gid: update.gid,
       mode: update.mode || "table",
-      started_at: Date.now(),
-    };
-    const id = et.getStateId(def.state_geometry_edit_lock);
-    const serialized = JSON.stringify(nextLock);
-    const ex = def.geometry_edit_lock_ttl_seconds;
-    // NX + EX: only acquire if free, and always carry a TTL so an orphaned
-    // lock (client crash / disconnect / node crash) self-expires.
-    const acquired = await clientRedis.set(id, serialized, { NX: true, EX: ex });
-    if (!acquired) {
-      const lock = await et.getGeometryEditLock();
-      if (!et.isGeometryEditLockOwner(lock)) {
-        return false;
-      }
-      // Same session already owns it: refresh value + TTL.
-      await clientRedis.set(id, serialized, { EX: ex });
+    });
+    if (!lock) {
+      return false;
     }
-    update.lock = nextLock;
+    update.lock = lock;
     return true;
-  }
-
-  /**
-   * Refresh the geometry edit lock TTL while this session actively edits,
-   * so a legitimate long-running edit never expires mid-session. No-op when
-   * the session does not (or no longer) owns the lock.
-   */
-  async refreshGeometryEditLockTtl() {
-    const et = this;
-    try {
-      const lock = await et.getGeometryEditLock();
-      if (!lock?.locked || !et.isGeometryEditLockOwner(lock)) {
-        return;
-      }
-      const id = et.getStateId(def.state_geometry_edit_lock);
-      await clientRedis.expire(id, def.geometry_edit_lock_ttl_seconds);
-    } catch (err) {
-      et.error("Refresh geometry edit lock ttl error", err);
-    }
   }
 
   async releaseGeometryEditLock() {
     const et = this;
-    const lock = await et.getGeometryEditLock();
-    if (!lock?.locked) {
-      return true;
+    return releaseLock(et._id_table, "geometry", et._id_session);
+  }
+
+  /**
+   * Keep owned locks alive : called on client heartbeat and on any
+   * update activity. No-op for locks this session does not own.
+   */
+  async refreshOwnedLocks() {
+    const et = this;
+    try {
+      await refreshLock(et._id_table, "table", et._id_session);
+      await refreshLock(et._id_table, "geometry", et._id_session);
+    } catch (err) {
+      et.error("Refresh locks error", err);
     }
-    if (!et.isGeometryEditLockOwner(lock)) {
-      return false;
-    }
-    await et.setState(def.state_geometry_edit_lock, null);
-    return true;
   }
 
   perf(label) {
@@ -593,6 +531,8 @@ class EditTableSession {
     et._socket.on(events.client_geom_validate, et.onValidate);
     et._socket.on(events.client_changes_sanitize, et.onSanitize);
     et._socket.on(events.client_get, et.onGet);
+    et._socket.on(events.client_lock_refresh, et.onLockRefresh);
+    et._socket.on("disconnect", et.onDisconnect);
 
     /*
      * Get list of current members
@@ -677,23 +617,32 @@ class EditTableSession {
       return;
     }
     et._destroyed = true;
+    const releasedUpdates = [];
     const geometryLock = await et.getGeometryEditLock();
-    const hadGeometryLock = et.isGeometryEditLockOwner(geometryLock);
-    await et.releaseGeometryEditLock();
-    if (hadGeometryLock) {
+    if (et.isGeometryEditLockOwner(geometryLock)) {
+      await et.releaseGeometryEditLock();
+      releasedUpdates.push({
+        type: "geometry_edit_lock",
+        action: "release",
+        lock: null,
+      });
+    }
+    const tableLock = await getLock(et._id_table, "table");
+    if (isLockOwner(tableLock, et._id_session)) {
+      await releaseLock(et._id_table, "table", et._id_session);
+      releasedUpdates.push({
+        type: "lock_table",
+        lock: false,
+      });
+    }
+    if (releasedUpdates.length > 0) {
       et.emitRoom(events.server_dispatch, {
         nParts: 1,
         part: 1,
         start: true,
         end: true,
         update_state: true,
-        updates: [
-          {
-            type: "geometry_edit_lock",
-            action: "release",
-            lock: null,
-          },
-        ],
+        updates: releasedUpdates,
       });
     }
     et.leaveRoom();
@@ -710,6 +659,36 @@ class EditTableSession {
     et._socket.off(events.client_geom_validate, et.onValidate);
     et._socket.off(events.client_changes_sanitize, et.onSanitize);
     et._socket.off(events.client_get, et.onGet);
+    et._socket.off(events.client_lock_refresh, et.onLockRefresh);
+    et._socket.off("disconnect", et.onDisconnect);
+  }
+
+  /**
+   * Socket gone without clean exit ( crash, tab closed, network loss ) :
+   * same cleanup as an explicit exit. Locks owned by this session are
+   * released now; if this handler never runs ( api crash ), the lock TTL
+   * is the safety net.
+   */
+  onDisconnect() {
+    const et = this;
+    et.destroy().catch((e) => {
+      console.error("Edit session disconnect cleanup failed", e);
+    });
+  }
+
+  /**
+   * Client heartbeat : keep owned locks alive during long, otherwise
+   * silent, edit sessions ( e.g. hours in the geometry editor )
+   */
+  async onLockRefresh(message, callback) {
+    const et = this;
+    if (message.id_session !== et._id_session) {
+      return;
+    }
+    await et.refreshOwnedLocks();
+    if (typeof callback === "function") {
+      callback(true);
+    }
   }
 
   dispatch(message) {
@@ -764,7 +743,7 @@ class EditTableSession {
       }
       switch (message.type) {
         case "lock_table": {
-          const locked = await et.getState(def.state_lock_table);
+          const locked = await getLock(et._id_table, "table");
           return callback(!!locked);
         }
         case "geometry_edit_lock": {
@@ -855,6 +834,9 @@ class EditTableSession {
         }
       }
 
+      // any accepted activity counts as a heartbeat for owned locks
+      await et.refreshOwnedLocks();
+
       et.dispatch(message);
     } catch (e) {
       callback(false);
@@ -877,7 +859,19 @@ class EditTableSession {
     for (const update of updates) {
       switch (update.type) {
         case "lock_table":
-          await et.setState(def.state_lock_table, !!update.lock);
+          if (update.lock) {
+            const lock = await acquireLock({
+              idTable: et._id_table,
+              scope: "table",
+              idSession: et._id_session,
+              idUser: et._id_user,
+            });
+            ok = !!lock && ok;
+          } else {
+            // only the owner ( or a free lock ) can be released :
+            // a joining client can no longer clear someone else's batch lock
+            ok = (await releaseLock(et._id_table, "table", et._id_session)) && ok;
+          }
           break;
         case "geometry_edit_lock":
           if (update.action === "acquire") {
@@ -944,7 +938,7 @@ class EditTableSession {
         def.col_geom_status,
       ]);
       const title = await getLayerTitle(et._id_table);
-      const locked = await et.getState(def.state_lock_table);
+      const locked = !!(await getLock(et._id_table, "table"));
       const geometryEditLock = await et.getGeometryEditLock();
       const columnsOrderSaved = await getMxSourceData(et._id_table, [
         "settings",
@@ -1337,8 +1331,6 @@ class EditTableSession {
                 update.geom,
                 client
               );
-              // Keep the lock alive while the owner is actively editing.
-              await et.refreshGeometryEditLockTtl();
               update.row = row;
               update[def.col_geom_status] = row[def.col_geom_status];
               message._include_sender = true;
