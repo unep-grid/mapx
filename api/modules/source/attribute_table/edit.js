@@ -100,6 +100,7 @@ const def = {
   col_geom_status: "__mx_geom_status",
   state_lock_table: "lock_table",
   state_geometry_edit_lock: "geometry_edit_lock",
+  geometry_edit_lock_ttl_seconds: 120, // safety net: expire orphaned locks (refreshed on activity)
 };
 
 function getStateId(idTable, key) {
@@ -464,18 +465,40 @@ class EditTableSession {
       started_at: Date.now(),
     };
     const id = et.getStateId(def.state_geometry_edit_lock);
-    const acquired = await clientRedis.set(id, JSON.stringify(nextLock), {
-      NX: true,
-    });
+    const serialized = JSON.stringify(nextLock);
+    const ex = def.geometry_edit_lock_ttl_seconds;
+    // NX + EX: only acquire if free, and always carry a TTL so an orphaned
+    // lock (client crash / disconnect / node crash) self-expires.
+    const acquired = await clientRedis.set(id, serialized, { NX: true, EX: ex });
     if (!acquired) {
       const lock = await et.getGeometryEditLock();
       if (!et.isGeometryEditLockOwner(lock)) {
         return false;
       }
+      // Same session already owns it: refresh value + TTL.
+      await clientRedis.set(id, serialized, { EX: ex });
     }
-    await et.setState(def.state_geometry_edit_lock, nextLock);
     update.lock = nextLock;
     return true;
+  }
+
+  /**
+   * Refresh the geometry edit lock TTL while this session actively edits,
+   * so a legitimate long-running edit never expires mid-session. No-op when
+   * the session does not (or no longer) owns the lock.
+   */
+  async refreshGeometryEditLockTtl() {
+    const et = this;
+    try {
+      const lock = await et.getGeometryEditLock();
+      if (!lock?.locked || !et.isGeometryEditLockOwner(lock)) {
+        return;
+      }
+      const id = et.getStateId(def.state_geometry_edit_lock);
+      await clientRedis.expire(id, def.geometry_edit_lock_ttl_seconds);
+    } catch (err) {
+      et.error("Refresh geometry edit lock ttl error", err);
+    }
   }
 
   async releaseGeometryEditLock() {
@@ -1313,6 +1336,8 @@ class EditTableSession {
                 update.geom,
                 client
               );
+              // Keep the lock alive while the owner is actively editing.
+              await et.refreshGeometryEditLockTtl();
               update.row = row;
               update[def.col_geom_status] = row[def.col_geom_status];
               message._include_sender = true;
