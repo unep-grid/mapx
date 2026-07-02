@@ -383,9 +383,9 @@ class EditTableSession {
     et._io = et._socket.server;
     et._config = config;
     et._perf = {};
-    et._tables = [];
+    et._tables_allowed = new Map();
     et._is_authenticated = session.user_authenticated || false;
-    et._is_busy = false;
+    et._busy = false;
     et._id_user = session.user_id;
     et._id_project = session.project_id;
     et._user_roles = session.user_roles;
@@ -429,7 +429,7 @@ class EditTableSession {
       const id = et.getStateId(key);
       return redisGetJSON(id);
     } catch (err) {
-      et.error("Set state error", err);
+      et.error("Get state error", err);
     }
   }
 
@@ -873,6 +873,7 @@ class EditTableSession {
     if (isEmpty(updates)) {
       return;
     }
+    let ok = true;
     for (const update of updates) {
       switch (update.type) {
         case "lock_table":
@@ -880,17 +881,16 @@ class EditTableSession {
           break;
         case "geometry_edit_lock":
           if (update.action === "acquire") {
-            return et.acquireGeometryEditLock(update);
+            ok = (await et.acquireGeometryEditLock(update)) && ok;
           }
           if (update.action === "release") {
-            const released = await et.releaseGeometryEditLock();
+            ok = (await et.releaseGeometryEditLock()) && ok;
             update.lock = null;
-            return released;
           }
           break;
       }
     }
-    return true;
+    return ok;
   }
 
   async write(message) {
@@ -1039,7 +1039,8 @@ class EditTableSession {
         return false;
       }
 
-      if (et._tables.includes(idTable) && now < et._table_cache_time_limit) {
+      const validUntil = et._tables_allowed.get(idTable);
+      if (validUntil && now < validUntil) {
         return true;
       }
       const allowed = await isUserAllowedToEditSource({
@@ -1049,8 +1050,7 @@ class EditTableSession {
         rolesGroup: et._user_roles?.group || [],
       });
       if (allowed) {
-        et._tables.push(idTable);
-        et._table_cache_time_limit = now + ttl;
+        et._tables_allowed.set(idTable, now + ttl);
         return true;
       }
     } catch (e) {
@@ -1128,8 +1128,9 @@ class EditTableSession {
               );
 
               if (!colsExist) {
-                console.warn("Invalid columns", columns_order);
-                return;
+                throw new Error(
+                  `Invalid columns order: unknown columns in ${columns_order}`
+                );
               }
 
               await setMxSourceData(

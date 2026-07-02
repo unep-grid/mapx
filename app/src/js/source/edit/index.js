@@ -61,7 +61,7 @@ const defaults = {
   min_columns: 3,
   max_changes_large: 1e3,
   max_columns: 1e3, // should match server
-  timeout_emit: 1e3 * 60, // 10s round trip
+  timeout_emit: 1e3 * 60, // 60s round trip
   timeout_emit_short: 1e3, // 1s round trip
   timeout_sanizing: 1e3 * 60,
   timeout_geom_valid: 1e3 * 120,
@@ -101,25 +101,6 @@ export class EditTableSessionClient extends EditTableBase {
     super(ws);
     const et = this;
     et._config = Object.assign(et._config, et._config, defaults, config);
-  }
-
-  /**
-   * Get generic state
-   * TODO : remove, as not used
-   */
-  get state() {
-    const et = this;
-
-    const state = {
-      id: et.id,
-      disabled: !!et._disabled,
-      initialized: !!et._initialized,
-      destroyed: !!et._destroyed,
-      built: !!et._built,
-      locked: !!et._locked,
-      validation_geom: et._valdiation_geom,
-    };
-    return state;
   }
 
   /**
@@ -565,8 +546,6 @@ export class EditTableSessionClient extends EditTableBase {
       addTrack: true,
       addText: true,
     });
-    window._et = et;
-
     et._el_content = el(
       "div",
       { class: ["mx_handsontable", "edit-table--container"] },
@@ -1807,7 +1786,7 @@ export class EditTableSessionClient extends EditTableBase {
     );
 
     const ro = new ResizeObserver(() => {
-      if ((!grid) instanceof Muuri) {
+      if (!(grid instanceof Muuri)) {
         return;
       }
       clearTimeout(grid._id_ro);
@@ -2204,13 +2183,6 @@ export class EditTableSessionClient extends EditTableBase {
   redo() {
     const et = this;
     et._ht.redo();
-  }
-
-  /**
-   * Get a list of columns (handsontable style)
-   */
-  getColumns() {
-    return this._columns;
   }
 
   /**
@@ -2761,7 +2733,7 @@ export class EditTableSessionClient extends EditTableBase {
     }
   }
 
-  async handlerUpdateGeom(update) {
+  async handlerUpdateGeom(update, source) {
     const et = this;
     try {
       const row = et.rowForTable(update.row);
@@ -2783,7 +2755,7 @@ export class EditTableSessionClient extends EditTableBase {
       const dataUpdated = data.map((r, i) => {
         return i === idRow ? { ...r, [keyStatus]: geomStatus } : r;
       });
-      await et.updateData(dataUpdated, et._config.id_source_geom);
+      await et.updateData(dataUpdated, source || et._config.id_source_geom);
       await et.refreshTableViews();
       return true;
     } catch (e) {
