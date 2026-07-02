@@ -49,7 +49,13 @@ const defaults = {
   id_column_valid: "_mx_valid",
   id_column_geom_action: "__mx_geom_action",
   id_column_geom_status: "__mx_geom_status",
-  id_columns_reserved: ["gid", "_mx_valid", "geom", "__mx_geom_status"],
+  id_columns_reserved: [
+    "gid",
+    "_mx_valid",
+    "geom",
+    "__mx_geom_status",
+    "__mx_geom_action",
+  ],
   id_columns_hidden: ["gid"],
   max_changes: 1e5, //max one column at max rows
   min_columns: 3,
