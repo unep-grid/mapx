@@ -13,11 +13,16 @@ import { getArrayDistinct } from "./../../array_stat";
 import { prefGet, prefSet } from "./../../user_pref";
 import { clone, makeId, buttonEnable } from "../../mx_helper_misc.js";
 import { RadialProgress } from "../../radial_progress";
-import { draw, panels, theme } from "../../mx.js";
+import { draw, theme } from "../../mx.js";
 import { Popup } from "../../popup";
 import { viewLink, getView, viewsReplace } from "../../map_helpers/index.js";
 import { getSourceVtSummaryUI } from "../../mx_helper_source_summary";
 import { EditTableBase } from "./base.js";
+import { events as channelEvents, createLockHeartbeat } from "./channel.js";
+import {
+  editFeatureGeometry,
+  refreshTableViews as refreshTableViewsFlow,
+} from "./geometry_flow.js";
 import {
   isPgType,
   isPgTypeDate,
@@ -30,7 +35,6 @@ import {
   isNotEmpty,
   isFunction,
   isEmpty,
-  isView,
   isNumeric,
   isString,
   isStringRange,
@@ -66,29 +70,7 @@ const defaults = {
   timeout_sanizing: 1e3 * 60,
   timeout_geom_valid: 1e3 * 120,
   timeout_cache: 1e3 * 10,
-  events: {
-    /**
-     * server to here
-     */
-    server_joined: "/server/source/edit/table/joined",
-    server_error: "/server/source/edit/table/error",
-    server_new_member: "/server/source/edit/table/new_member",
-    server_member_exit: "/server/source/edit/table/member_exit",
-    server_table_data: "/server/source/edit/table/data",
-    server_dispatch: "/server/source/edit/table/dispatch",
-    server_progress: "/server/source/edit/table/progress",
-    server_geom_validate_result: "/server/source/edit/table/geom/result",
-    /**
-     * here to server
-     */
-    client_get: "/client/get",
-    client_edit_start: "/client/source/edit/table",
-    client_edit_updates: "/client/source/edit/table/update",
-    client_exit: "/client/source/edit/table/exit",
-    client_geom_validate: "/client/source/edit/table/geom/validate",
-    client_value_validate: "/client/source/edit/table/value/validate",
-    client_changes_sanitize: "/client/source/edit/table/changes/sanitize",
-  },
+  events: channelEvents,
   id_source_dialog: "from_dialog",
   id_source_dispatch: "from_dispatch",
   id_source_geom: "from_geom",
@@ -200,6 +182,16 @@ export class EditTableSessionClient extends EditTableBase {
        * Start data edition
        */
       await et.start();
+
+      /**
+       * Keep server-side owned locks ( batch lock, geometry lock ) alive
+       * for the whole editor session : refresh is a no-op server-side
+       * when this session owns nothing
+       */
+      et._heartbeat = createLockHeartbeat(() =>
+        et.emitGet(e.client_lock_refresh, null, et._config.timeout_emit_short),
+      );
+      et._heartbeat.start();
 
       await et.once("table_ready", null);
 
@@ -340,6 +332,7 @@ export class EditTableSessionClient extends EditTableBase {
       /**
        * Remove listeners, clear
        */
+      et._heartbeat?.stop();
       et._popups.forEach((p) => p.destroy());
       et._resize_observer?.disconnect();
       et._socket.off(e.server_joined, et.onJoined);
@@ -1268,17 +1261,7 @@ export class EditTableSessionClient extends EditTableBase {
 
   async refreshTableViews() {
     const et = this;
-    const tableViews = await et.getTableViews();
-    if (!tableViews) {
-      return false;
-    }
-    const views = tableViews
-      .map((row) => getView(row.id))
-      .filter((v) => isView(v));
-    if (isEmpty(views)) {
-      return false;
-    }
-    return viewsReplace(views);
+    return refreshTableViewsFlow(et, { getView, viewsReplace });
   }
 
   /**
@@ -3689,13 +3672,9 @@ export class EditTableSessionClient extends EditTableBase {
     if (et.unsaved) {
       await modalDialog({
         title: "Pending changes",
-        content: "Save or discard pending attribute changes before editing geometry.",
+        content:
+          "Save or discard pending attribute changes before editing geometry.",
       });
-      return;
-    }
-
-    const feature = await et.getFeature(gid);
-    if (!feature) {
       return;
     }
 
@@ -3710,48 +3689,36 @@ export class EditTableSessionClient extends EditTableBase {
 
     await et.setGeometryMode(true);
     try {
-      const result = await draw.startEditSession({
-        type: et._geom_type,
-        feature: {
-          type: "Feature",
-          properties: {
-            gid: feature.gid,
-          },
-          geometry: feature.geom || null,
-        },
-        minZoom: 12,
-        singleFeature: true,
-        onSave: async ({ geometry }) => {
-          try {
-            const saved = await et.emitUpdatesDb([
-              {
-                type: "update_geom",
-                id_table: et._id_table,
-                gid: feature.gid,
-                geom: geometry,
-              },
-            ]);
-            if (!saved) {
-              throw new Error("Geometry update was not accepted");
-            }
-          } catch (e) {
-            await modalDialog({
-              title: "Geometry save failed",
-              content: "The geometry could not be saved. The edit session is still active.",
-            });
-            throw e;
-          }
-        },
+      await editFeatureGeometry({
+        session: et,
+        gid,
+        geomType: et._geom_type,
+        viewsApi: { getView, viewsReplace },
       });
-      if (result?.status === "saved") {
-        await et.refreshTableViews();
-      }
     } catch (e) {
       console.error(e);
     } finally {
       await et.setGeometryMode(false);
       await et.releaseGeometryEditLock();
     }
+  }
+
+  /**
+   * Write a feature geometry ( session interface for geometry_flow )
+   * @param {Number} gid Feature id
+   * @param {Object} geometry GeoJSON geometry or null
+   * @return {Promise<Boolean>} accepted
+   */
+  async updateGeometry(gid, geometry) {
+    const et = this;
+    return et.emitUpdatesDb([
+      {
+        type: "update_geom",
+        id_table: et._id_table,
+        gid,
+        geom: geometry,
+      },
+    ]);
   }
 
   async dialogZoomFeature(gid) {
@@ -3768,6 +3735,10 @@ export class EditTableSessionClient extends EditTableBase {
     });
   }
 
+  /**
+   * Toggle the editor UI for a map geometry edit session
+   * ( main panel visibility is handled by geometry_flow )
+   */
   async setGeometryMode(enable) {
     const et = this;
     et._geom_mode = !!enable;
@@ -3775,17 +3746,8 @@ export class EditTableSessionClient extends EditTableBase {
     et.setReadOnly(et._geom_mode);
     if (et._geom_mode) {
       et._modal?.hide?.();
-      et._main_panel_was_visible =
-        panels.idExists("main_panel") && panels.isVisible("main_panel");
-      if (panels.idExists("main_panel")) {
-        panels.hide("main_panel");
-      }
     } else {
       et._modal?.show?.();
-      if (et._main_panel_was_visible && panels.idExists("main_panel")) {
-        panels.show("main_panel");
-      }
-      et._main_panel_was_visible = false;
     }
     et.updateButtons();
   }

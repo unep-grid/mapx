@@ -2,14 +2,12 @@ import {
   collectFeatureItems,
   EDIT_STATE_TIMEOUT_MS,
   formatCoordinates,
-  getGeometryType,
   getInitialEditState,
   resolveEditState,
   buildFeatureFilename,
   buildFeatureGeoJSON,
 } from "./helpers.ts";
 import type {
-  AnyRecord,
   MapContextMenuEditState,
   MapContextMenuMapApi,
   MapContextMenuEvent,
@@ -18,10 +16,10 @@ import type {
 } from "./types";
 import { downloadJSON } from "../download/index.js";
 import { el } from "../el_mapx";
-import { isEmpty, isView } from "../is_test/index.js";
-import { draw, panels, settings } from "../mx.js";
+import { settings } from "../mx.js";
 import { copyToClipboard, makeId } from "../mx_helper_misc.js";
 import { modalDialog } from "../mx_helper_modal.js";
+import { editFeatureGeometry } from "../source/edit/geometry_flow.js";
 import { QuickGeometryEditSession } from "../source/edit/quick_geometry.js";
 import "./style.less";
 
@@ -125,41 +123,15 @@ async function startQuickEdit(
   const session = new QuickGeometryEditSession({
     id_table: item.idSource,
   });
-  let mainPanelWasVisible = false;
   try {
     await session.init();
     await session.withGeometryEditLock(item.gid, async () => {
-      const feature = await session.getFeature(item.gid);
-      if (!feature) {
-        throw new Error("Feature not found");
-      }
-      mainPanelWasVisible =
-        panels.idExists("main_panel") && panels.isVisible("main_panel");
-      if (panels.idExists("main_panel")) {
-        panels.hide("main_panel");
-      }
-      const geometry = feature.geom || item.geometry || null;
-      const result = await draw.startEditSession({
-        type: getGeometryType(geometry),
-        feature: {
-          type: "Feature",
-          properties: {
-            gid: feature.gid,
-          },
-          geometry,
-        },
-        minZoom: 12,
-        singleFeature: true,
-        onSave: async ({ geometry }: { geometry: AnyRecord | null }) => {
-          const saved = await session.updateGeometry(feature.gid, geometry);
-          if (!saved) {
-            throw new Error("Geometry update was not accepted");
-          }
-        },
+      await editFeatureGeometry({
+        session,
+        gid: item.gid,
+        geometry: item.geometry || null,
+        viewsApi: api,
       });
-      if (result?.status === "saved") {
-        await refreshTableViews(session, api);
-      }
     });
   } catch (e: any) {
     console.error(e);
@@ -168,28 +140,8 @@ async function startQuickEdit(
       content: e.message || "The feature could not be edited.",
     });
   } finally {
-    if (mainPanelWasVisible && panels.idExists("main_panel")) {
-      panels.show("main_panel");
-    }
     await session.destroy();
   }
-}
-
-async function refreshTableViews(
-  session: AnyRecord,
-  api: MapContextMenuMapApi,
-) {
-  const tableViews = await session.getTableViews();
-  if (!tableViews) {
-    return false;
-  }
-  const views = tableViews
-    .map((row: AnyRecord) => api.getView(row.id))
-    .filter((view: AnyRecord) => isView(view));
-  if (isEmpty(views)) {
-    return false;
-  }
-  return api.viewsReplace(views);
 }
 
 async function downloadFeature(
