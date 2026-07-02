@@ -1,0 +1,287 @@
+import { pgWrite } from "#mapx/db";
+import { isEmpty, isNumeric, isSourceId, isSafeName } from "@fxi/mx_valid";
+import {
+  columnExists,
+  columnsExist,
+  getColumnsTypesSimple,
+  renameTableColumn,
+  duplicateTableColumn,
+  removeTableColumn,
+  addTableColumn,
+  setMxSourceData,
+  updateMxSourceTimestamp,
+  renameColumnMetadata,
+  addColumnMetadata,
+  getColumnCells,
+  duplicateColumnMetadata,
+  removeColumnMetadata,
+  updateTableCellByGid,
+  updateViewsAttributeBatch,
+  deleteRowByGid,
+  updateLayerExtentMeta,
+} from "#mapx/db_utils";
+import { updateJoinColumnsNames } from "#mapx/source";
+import { events } from "./events.js";
+import { cols, insertTableRow, updateFeatureGeometry } from "./geometry.js";
+
+/**
+ * Apply a message's updates in one transaction.
+ *
+ * Each update type has a handler receiving a shared context :
+ * - client        : pg client, inside the transaction
+ * - update        : the update object ( mutated to enrich the dispatch )
+ * - message       : the container message ( e.g. _include_sender flag )
+ * - session       : EditTableSession ( emitSpread, lock checks, ... )
+ * - postScripts   : Map of scripts run once, after COMMIT
+ * - tablesUpdated : tables needing a source timestamp update
+ *
+ * @param {EditTableSession} session
+ * @param {Object} message
+ */
+export async function writeUpdates(session, message) {
+  const { updates } = message;
+  if (isEmpty(updates)) {
+    return;
+  }
+  const postScripts = new Map();
+  const tablesUpdated = new Set();
+  const client = await pgWrite.connect();
+  await client.query("BEGIN");
+
+  try {
+    for (const update of updates) {
+      if (!isSourceId(update.id_table)) {
+        throw new Error("Invalid update table");
+      }
+      const handler = handlers[update.type];
+      if (!handler) {
+        throw new Error(`Unknown update type: ${update.type}`);
+      }
+      await handler({
+        client,
+        update,
+        message,
+        session,
+        postScripts,
+        tablesUpdated,
+      });
+    }
+
+    for (const id_table of tablesUpdated) {
+      await updateMxSourceTimestamp(id_table, client);
+    }
+
+    await client.query("COMMIT");
+  } catch (e) {
+    await client.query("ROLLBACK");
+    throw e;
+  } finally {
+    client.release();
+  }
+
+  /**
+   * Scripts that require the committed state
+   * ( i.e. updated views, source, meta )
+   */
+  for (const script of postScripts.values()) {
+    await script();
+  }
+}
+
+const handlers = {
+  order_columns: handlerOrderColumns,
+  update_cell: handlerUpdateCell,
+  add_column: handlerAddColumn,
+  remove_column: handlerRemoveColumn,
+  duplicate_column: handlerDuplicateColumn,
+  rename_column: handlerRenameColumn,
+  remove_rows: handlerRemoveRows,
+  add_row: handlerAddRow,
+  update_geom: handlerUpdateGeom,
+};
+
+async function handlerOrderColumns({ client, update }) {
+  const { id_table, columns_order } = update;
+  const colsExistOk = await columnsExist(columns_order, id_table, client);
+  if (!colsExistOk) {
+    throw new Error(`Invalid columns order: unknown columns`);
+  }
+  await setMxSourceData(
+    id_table,
+    ["settings", "editor", "columns_order"],
+    columns_order
+  );
+}
+
+async function handlerUpdateCell({ client, update, tablesUpdated }) {
+  const { id_table, column_name, column_type, gid, value_new } = update;
+
+  if (!isSafeName(column_name)) {
+    throw new Error("Invalid update column");
+  }
+
+  const valid = isNumeric(gid);
+  const colExists = await columnExists(column_name, id_table, client);
+
+  if (valid && colExists) {
+    await updateTableCellByGid(
+      id_table,
+      gid,
+      column_name,
+      column_type,
+      value_new,
+      client
+    );
+    tablesUpdated.add(id_table);
+  }
+}
+
+async function handlerAddColumn({ client, update, message, tablesUpdated }) {
+  const { id_table, column_name, column_type, is_identity } = update;
+
+  if (!isSafeName(column_name)) {
+    throw new Error("Invalid update column");
+  }
+
+  const colExists = await columnExists(column_name, id_table, client);
+  if (colExists) {
+    return;
+  }
+
+  await addTableColumn(id_table, column_name, column_type, is_identity, client);
+  await addColumnMetadata(id_table, column_name, client);
+  tablesUpdated.add(id_table);
+
+  if (is_identity) {
+    update._column_config = {
+      type: await getColumnsTypesSimple(id_table, column_name),
+      rows: await getColumnCells(id_table, column_name, client),
+    };
+    message._include_sender = true;
+  }
+}
+
+async function handlerRemoveColumn({ client, update, tablesUpdated }) {
+  const { id_table, column_name } = update;
+  const colExists = await columnExists(column_name, id_table, client);
+  if (!colExists) {
+    return;
+  }
+  await removeTableColumn(id_table, column_name, client);
+  await removeColumnMetadata(id_table, column_name, client);
+  tablesUpdated.add(id_table);
+}
+
+async function handlerDuplicateColumn({ client, update, tablesUpdated }) {
+  const { id_table, column_name, column_name_new } = update;
+  await duplicateTableColumn(id_table, column_name, column_name_new, client);
+  await duplicateColumnMetadata(id_table, column_name, column_name_new);
+  tablesUpdated.add(id_table);
+}
+
+async function handlerRenameColumn({
+  client,
+  update,
+  session,
+  postScripts,
+  tablesUpdated,
+}) {
+  const { id_table, column_name, column_name_new } = update;
+
+  /**
+   * Table and metadata
+   */
+  await renameTableColumn(id_table, column_name, column_name_new, client);
+  await renameColumnMetadata(id_table, column_name, column_name_new, client);
+  tablesUpdated.add(id_table);
+
+  /**
+   * Update joins
+   */
+  const joinUpdates = await updateJoinColumnsNames(
+    id_table,
+    column_name,
+    column_name_new,
+    client
+  );
+
+  /**
+   * Update views's attribute, considering source update and join updates
+   */
+  joinUpdates.push({
+    id_source: id_table,
+    old_column: column_name,
+    new_column: column_name_new,
+  });
+
+  const views = await updateViewsAttributeBatch(joinUpdates, client);
+
+  postScripts.set(`${id_table}_rename_column_spread`, async () => {
+    session.emitSpread(events.server_spread_views_update, {
+      views,
+    });
+    session.emitSpread(events.server_spread_join_editor_update, {
+      source_columns_rename: joinUpdates,
+    });
+    await session.updateAltStyleClient(id_table);
+  });
+}
+
+async function handlerRemoveRows({ update, tablesUpdated }) {
+  const { id_table, id_rows } = update;
+  await deleteRowByGid(id_table, id_rows);
+  await updateLayerExtentMeta(id_table);
+  tablesUpdated.add(id_table);
+}
+
+async function handlerAddRow({
+  client,
+  update,
+  message,
+  postScripts,
+  tablesUpdated,
+}) {
+  const { id_table } = update;
+  const row = await insertTableRow(id_table, update.geom, client);
+  update.row = row;
+  update.gid = row.gid;
+  message._include_sender = true;
+  addExtentPostScript(postScripts, id_table);
+  tablesUpdated.add(id_table);
+}
+
+async function handlerUpdateGeom({
+  client,
+  update,
+  message,
+  session,
+  postScripts,
+  tablesUpdated,
+}) {
+  const { id_table } = update;
+  const allowed = await session.isGeometryEditAllowed();
+  if (!allowed) {
+    throw new Error("Geometry edit is locked by another session");
+  }
+  const row = await updateFeatureGeometry(
+    id_table,
+    update.gid,
+    update.geom,
+    client
+  );
+  update.row = row;
+  update[cols.geom_status] = row[cols.geom_status];
+  message._include_sender = true;
+  addExtentPostScript(postScripts, id_table);
+  tablesUpdated.add(id_table);
+}
+
+function addExtentPostScript(postScripts, id_table) {
+  postScripts.set(`${id_table}_update_extent`, async () => {
+    try {
+      await updateLayerExtentMeta(id_table);
+    } catch (e) {
+      console.warn("Unable to update layer extent", e.message);
+    }
+  });
+}

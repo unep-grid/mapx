@@ -1,51 +1,40 @@
 import {
   tableExists,
   columnExists,
-  columnsExist,
   getColumnsTypesSimple,
   getLayerTitle,
   getLayerUsedAttributes,
   getTableDimension,
   isLayerValid,
   sanitizeUpdates,
-  renameTableColumn,
-  duplicateTableColumn,
-  removeTableColumn,
-  addTableColumn,
-  setMxSourceData,
   getMxSourceData,
-  updateMxSourceTimestamp,
-  // update metadata
-  renameColumnMetadata,
-  addColumnMetadata,
-  getColumnCells,
-  duplicateColumnMetadata,
-  removeColumnMetadata,
-  updateTableCellByGid,
-  updateViewsAttributeBatch,
-  deleteRowByGid,
-  updateLayerExtentMeta,
 } from "#mapx/db_utils";
-import {
-  getSourceAttributeTable,
-  getSourceEditors,
-  updateJoinColumnsNames,
-} from "#mapx/source";
+import { getSourceAttributeTable } from "#mapx/source";
 import { randomString } from "#mapx/helpers";
-import {
-  isEmpty,
-  isNumeric,
-  isString,
-  isSourceId,
-  isSafeName,
-} from "@fxi/mx_valid";
-import { pgWrite } from "#mapx/db";
-import { toPgColumn } from "#mapx/helpers";
-import { acquireLock, getLock, isLockOwner, releaseLock, refreshLock } from "./locks.js";
+import { isEmpty, isString, isSourceId } from "@fxi/mx_valid";
 import {
   ioUpdateDbViewsAltStyleBySource,
   getViewsTableBySource,
 } from "#mapx/view";
+import { events } from "./events.js";
+import {
+  acquireLock,
+  getLock,
+  isLockOwner,
+  releaseLock,
+  refreshLock,
+} from "./locks.js";
+import {
+  isSocketAllowedToEditSource,
+  isUserAllowedToEditSource,
+} from "./permissions.js";
+import { writeUpdates } from "./writes.js";
+import {
+  addGeometryStatusToRows,
+  cols,
+  getFeatureByGid,
+  getGeometryTypeSimple,
+} from "./geometry.js";
 
 /**
  * Triggered by '/client/source/edit/table' in ..api/index.js
@@ -93,275 +82,7 @@ const def = {
   max_rows: 1e5,
   max_columns: 1000, // should match client
   size_chunk: 1e3,
-  col_geom: "geom",
-  col_gid: "gid",
-  col_geom_status: "__mx_geom_status",
 };
-
-async function isSocketAllowedToEditSource(socket, idTable) {
-  const session = socket.session || {};
-  return isUserAllowedToEditSource({
-    idTable,
-    isAuthenticated: session.user_authenticated || false,
-    idUser: session.user_id,
-    rolesGroup: session.user_roles?.group || [],
-  });
-}
-
-async function isUserAllowedToEditSource({
-  idTable,
-  isAuthenticated,
-  idUser,
-  rolesGroup = [],
-}) {
-  if (!isAuthenticated) {
-    return false;
-  }
-  const sourceData = await getSourceEditors(idTable);
-  const isEditor = sourceData.editor === idUser;
-  const isGroupMember = sourceData.editors.some((group) => {
-    return rolesGroup.includes(group);
-  });
-  return isEditor || isGroupMember;
-}
-
-export const events = {
-  /**
-   * from client
-   */
-  client_edit_updates: "/client/source/edit/table/update",
-  client_exit: "/client/source/edit/table/exit",
-  client_geom_validate: "/client/source/edit/table/geom/validate",
-  client_value_validate: "/client/source/edit/table/value/validate",
-  client_changes_sanitize: "/client/source/edit/table/changes/sanitize",
-  client_lock_refresh: "/client/source/edit/table/lock/refresh",
-  client_get: "/client/get",
-  /**
-   * from here server
-   */
-  server_joined: "/server/source/edit/table/joined",
-  server_error: "/server/source/edit/table/error",
-  server_new_member: "/server/source/edit/table/new_member",
-  server_member_exit: "/server/source/edit/table/member_exit",
-  server_table_data: "/server/source/edit/table/data",
-  server_dispatch: "/server/source/edit/table/dispatch",
-  server_progress: "/server/source/edit/table/progress",
-  /**
-   *
-   * server broaddcast / spread
-   */
-  server_spread_views_update: "/server/spread/views/update",
-  server_spread_join_editor_update: "/server/spread/join_editor/update",
-};
-
-function quoteId(id) {
-  return `"${id}"`;
-}
-
-function normalizeGeometry(geometry) {
-  if (isEmpty(geometry)) {
-    return null;
-  }
-  if (geometry?.type === "Feature") {
-    return geometry.geometry || null;
-  }
-  return geometry;
-}
-
-function toGeomTypeSimple(type) {
-  const t = `${type || ""}`.toLowerCase();
-  if (t.includes("point")) {
-    return "point";
-  }
-  if (t.includes("line")) {
-    return "line";
-  }
-  if (t.includes("polygon")) {
-    return "polygon";
-  }
-  return null;
-}
-
-async function getGeometryColumnInfo(idTable, client = pgWrite) {
-  const res = await client.query(
-    `
-    SELECT type, srid
-    FROM geometry_columns
-    WHERE f_table_schema = 'public'
-      AND f_table_name = $1
-      AND f_geometry_column = $2
-    LIMIT 1
-    `,
-    [idTable, def.col_geom]
-  );
-  const row = res.rows[0] || {};
-  return {
-    type: row.type || "GEOMETRY",
-    srid: row.srid || 4326,
-    simpleType: toGeomTypeSimple(row.type),
-  };
-}
-
-async function getGeometryTypeSimple(idTable, client = pgWrite) {
-  const columnInfo = await getGeometryColumnInfo(idTable, client);
-  if (columnInfo.simpleType) {
-    return columnInfo.simpleType;
-  }
-  const res = await client.query(
-    `
-    SELECT ST_GeometryType(${quoteId(def.col_geom)}) AS geom_type
-    FROM ${quoteId(idTable)}
-    WHERE ${quoteId(def.col_geom)} IS NOT NULL
-      AND NOT ST_IsEmpty(${quoteId(def.col_geom)})
-    LIMIT 1
-    `
-  );
-  return toGeomTypeSimple(res.rows[0]?.geom_type) || "polygon";
-}
-
-function getGeomSqlExpression(type) {
-  const t = `${type || ""}`.toUpperCase();
-  const base = `ST_SetSRID(ST_GeomFromGeoJSON($1), 4326)`;
-  if (t.startsWith("MULTI")) {
-    return `ST_Multi(${base})`;
-  }
-  return base;
-}
-
-function getGeomStatusSql() {
-  return `
-    CASE
-      WHEN ${quoteId(def.col_geom)} IS NULL THEN 'null'
-      WHEN ST_IsEmpty(${quoteId(def.col_geom)}) THEN 'empty'
-      ELSE 'present'
-    END AS ${quoteId(def.col_geom_status)}
-  `;
-}
-
-async function getFeatureByGid(idTable, gid, client = pgWrite) {
-  if (!isSourceId(idTable) || !isNumeric(gid)) {
-    throw new Error("Invalid feature request");
-  }
-  const columns = await getColumnsTypesSimple(idTable, null, [def.col_geom]);
-  const names = columns
-    .map((c) => c.column_name)
-    .filter((name) => name !== def.col_geom_status);
-  const selectColumns = toPgColumn(names);
-  const hasGeom = await columnExists(def.col_geom, idTable, client);
-  const geomSelect = hasGeom
-    ? `,
-      ${getGeomStatusSql()},
-      ST_AsGeoJSON(${quoteId(def.col_geom)})::json AS geom`
-    : "";
-  const res = await client.query(
-    `
-    SELECT ${selectColumns}${geomSelect}
-    FROM ${quoteId(idTable)}
-    WHERE ${quoteId(def.col_gid)} = $1
-    LIMIT 1
-    `,
-    [gid]
-  );
-  if (res.rowCount !== 1) {
-    throw new Error("Feature not found");
-  }
-  return res.rows[0];
-}
-
-async function addGeometryStatusToRows(idTable, rows, client = pgWrite) {
-  if (isEmpty(rows)) {
-    return rows;
-  }
-  const gids = rows.map((row) => row[def.col_gid]).filter(isNumeric);
-  if (isEmpty(gids)) {
-    return rows;
-  }
-  const res = await client.query(
-    `
-    SELECT ${quoteId(def.col_gid)}, ${getGeomStatusSql()}
-    FROM ${quoteId(idTable)}
-    WHERE ${quoteId(def.col_gid)} = ANY($1::int[])
-    `,
-    [gids]
-  );
-  const statusByGid = new Map(
-    res.rows.map((row) => [row[def.col_gid], row[def.col_geom_status]])
-  );
-  for (const row of rows) {
-    row[def.col_geom_status] = statusByGid.get(row[def.col_gid]) || "null";
-  }
-  return rows;
-}
-
-async function insertTableRow(idTable, geometry, client = pgWrite) {
-  if (!isSourceId(idTable)) {
-    throw new Error("Invalid table");
-  }
-  const hasGeom = await columnExists(def.col_geom, idTable, client);
-  const columnsSql = [];
-  const valuesSql = [];
-  const params = [];
-
-  const geom = normalizeGeometry(geometry);
-  if (hasGeom && !isEmpty(geom)) {
-    const columnInfo = await getGeometryColumnInfo(idTable, client);
-    columnsSql.push(quoteId(def.col_geom));
-    params.push(JSON.stringify(geom));
-    valuesSql.push(getGeomSqlExpression(columnInfo.type).replaceAll("$1", `$${params.length}`));
-  }
-
-  let res;
-  if (columnsSql.length === 0) {
-    res = await client.query(
-      `INSERT INTO ${quoteId(idTable)} DEFAULT VALUES RETURNING ${quoteId(def.col_gid)}`
-    );
-  } else {
-    res = await client.query(
-      `
-      INSERT INTO ${quoteId(idTable)} (${columnsSql.join(", ")})
-      VALUES (${valuesSql.join(", ")})
-      RETURNING ${quoteId(def.col_gid)}
-      `,
-      params
-    );
-  }
-
-  const gid = res.rows[0]?.[def.col_gid];
-  return getFeatureByGid(idTable, gid, client);
-}
-
-async function updateFeatureGeometry(idTable, gid, geometry, client = pgWrite) {
-  if (!isSourceId(idTable) || !isNumeric(gid)) {
-    throw new Error("Invalid geometry update");
-  }
-  const hasGeom = await columnExists(def.col_geom, idTable, client);
-  if (!hasGeom) {
-    throw new Error("Table has no geometry column");
-  }
-  const geom = normalizeGeometry(geometry);
-  if (isEmpty(geom)) {
-    await client.query(
-      `
-      UPDATE ${quoteId(idTable)}
-      SET ${quoteId(def.col_geom)} = NULL
-      WHERE ${quoteId(def.col_gid)} = $1
-      `,
-      [gid]
-    );
-  } else {
-    const columnInfo = await getGeometryColumnInfo(idTable, client);
-    const geomSql = getGeomSqlExpression(columnInfo.type);
-    await client.query(
-      `
-      UPDATE ${quoteId(idTable)}
-      SET ${quoteId(def.col_geom)} = ${geomSql}
-      WHERE ${quoteId(def.col_gid)} = $2
-      `,
-      [JSON.stringify(geom), gid]
-    );
-  }
-  return getFeatureByGid(idTable, gid, client);
-}
 
 class EditTableSession {
   constructor(socket, config) {
@@ -899,7 +620,7 @@ class EditTableSession {
       et.error("Not allowed");
       return false;
     }
-    await et.writePostgres(message);
+    await writeUpdates(et, message);
     et.perfEnd("write");
     return true;
   }
@@ -909,7 +630,7 @@ class EditTableSession {
     et.perf("sendTable");
     try {
       et.progress({ init: true });
-      const hasGeom = await columnExists(def.col_geom, et._id_table);
+      const hasGeom = await columnExists(cols.geom, et._id_table);
       const validation = {};
       if (hasGeom) {
         Object.assign(
@@ -932,10 +653,10 @@ class EditTableSession {
       }
       const attributes = pgRes.fields
         .map((f) => f.name)
-        .filter((name) => name !== def.col_geom_status);
+        .filter((name) => name !== cols.geom_status);
       const types = await getColumnsTypesSimple(et._id_table, attributes, [
-        "geom",
-        def.col_geom_status,
+        cols.geom,
+        cols.geom_status,
       ]);
       const title = await getLayerTitle(et._id_table);
       const locked = !!(await getLock(et._id_table, "table"));
@@ -1091,294 +812,4 @@ class EditTableSession {
     return true;
   }
 
-  async writePostgres(message) {
-    const et = this;
-    const { updates } = message;
-    if (isEmpty(updates)) {
-      return;
-    }
-    const postScripts = new Map();
-    const tables_update = new Set();
-    const client = await pgWrite.connect();
-    await client.query("BEGIN");
-
-    try {
-      for (const update of updates) {
-        const { id_table, column_name, column_name_new } = update;
-
-        if (!isSourceId(id_table)) {
-          throw new Error("Invalid update table or column");
-        }
-
-        switch (update.type) {
-          case "order_columns":
-            {
-              const { columns_order } = update;
-
-              const colsExist = await columnsExist(
-                columns_order,
-                id_table,
-                client
-              );
-
-              if (!colsExist) {
-                throw new Error(
-                  `Invalid columns order: unknown columns in ${columns_order}`
-                );
-              }
-
-              await setMxSourceData(
-                id_table,
-                ["settings", "editor", "columns_order"],
-                columns_order
-              );
-            }
-            break;
-          case "update_cell":
-            {
-              const { gid, column_type } = update;
-
-              if (!isSafeName(column_name)) {
-                throw new Error("Invalid update column");
-              }
-
-              let { value_new } = update;
-              const valid = isNumeric(gid);
-              const colExists = await columnExists(
-                column_name,
-                id_table,
-                client
-              );
-
-              if (valid && colExists) {
-                await updateTableCellByGid(
-                  id_table,
-                  gid,
-                  column_name,
-                  column_type,
-                  value_new,
-                  client
-                );
-
-                tables_update.add(id_table);
-              }
-            }
-            break;
-          case "add_column":
-            {
-              const { column_type, is_identity } = update;
-              const colExists = await columnExists(
-                column_name,
-                id_table,
-                client
-              );
-
-              if (!isSafeName(column_name)) {
-                throw new Error("Invalid update column");
-              }
-
-              if (!colExists) {
-                await addTableColumn(
-                  id_table,
-                  column_name,
-                  column_type,
-                  is_identity,
-                  client
-                );
-
-                await addColumnMetadata(id_table, column_name, client);
-
-                tables_update.add(id_table);
-
-                if (is_identity) {
-                  update._column_config = {
-                    type: await getColumnsTypesSimple(id_table, column_name),
-                    rows: await getColumnCells(id_table, column_name, client),
-                  };
-                  message._include_sender = true;
-                }
-              }
-            }
-            break;
-          case "remove_column":
-            {
-              const colExists = await columnExists(
-                column_name,
-                id_table,
-                client
-              );
-
-              if (colExists) {
-                await removeTableColumn(id_table, column_name, client);
-                await removeColumnMetadata(id_table, column_name, client);
-                tables_update.add(id_table);
-              }
-            }
-            break;
-          case "duplicate_column":
-            {
-              await duplicateTableColumn(
-                id_table,
-                column_name,
-                column_name_new,
-                client
-              );
-
-              await duplicateColumnMetadata(
-                id_table,
-                column_name,
-                column_name_new
-              );
-
-              tables_update.add(id_table);
-            }
-            break;
-          case "rename_column":
-            {
-              /**
-               * Table and metadata
-               */
-              await renameTableColumn(
-                id_table,
-                column_name,
-                column_name_new,
-                client
-              );
-
-              await renameColumnMetadata(
-                id_table,
-                column_name,
-                column_name_new,
-                client
-              );
-              tables_update.add(id_table);
-
-              /**
-               * Update joins
-               */
-              const updates = await updateJoinColumnsNames(
-                id_table,
-                column_name,
-                column_name_new,
-                client
-              );
-
-              /**
-               * Update views's attribute
-               * considering source update and join updates
-               */
-              const updateSourceViews = {
-                id_source: id_table,
-                old_column: column_name,
-                new_column: column_name_new,
-              };
-              updates.push(updateSourceViews);
-
-              const views = await updateViewsAttributeBatch(updates, client);
-
-              postScripts.set(
-                `${id_table}_update_views_rename_rename`,
-                async () => {
-                  et.emitSpread(events.server_spread_views_update, {
-                    views,
-                  });
-                  et.emitSpread(events.server_spread_join_editor_update, {
-                    source_columns_rename: updates,
-                  });
-                  await et.updateAltStyleClient(id_table);
-                  return;
-                }
-              );
-            }
-            break;
-          case "remove_rows":
-            {
-              const { id_rows } = update;
-              await deleteRowByGid(id_table, id_rows);
-              await updateLayerExtentMeta(id_table);
-              tables_update.add(id_table);
-            }
-            break;
-          case "add_row":
-            {
-              const row = await insertTableRow(
-                id_table,
-                update.geom,
-                client
-              );
-              update.row = row;
-              update.gid = row.gid;
-              message._include_sender = true;
-              postScripts.set(`${id_table}_update_extent_add_row`, async () => {
-                try {
-                  await updateLayerExtentMeta(id_table);
-                } catch (e) {
-                  console.warn("Unable to update layer extent", e.message);
-                }
-              });
-              tables_update.add(id_table);
-            }
-            break;
-          case "update_geom":
-            {
-              const allowed = await et.isGeometryEditAllowed();
-              if (!allowed) {
-                throw new Error("Geometry edit is locked by another session");
-              }
-              const row = await updateFeatureGeometry(
-                id_table,
-                update.gid,
-                update.geom,
-                client
-              );
-              update.row = row;
-              update[def.col_geom_status] = row[def.col_geom_status];
-              message._include_sender = true;
-              postScripts.set(`${id_table}_update_extent_update_geom`, async () => {
-                try {
-                  await updateLayerExtentMeta(id_table);
-                } catch (e) {
-                  console.warn("Unable to update layer extent", e.message);
-                }
-              });
-              tables_update.add(id_table);
-            }
-            break;
-
-          default:
-            throw new Error(
-              `Error during write: unknow method: ${update.type}`
-            );
-        }
-      }
-
-      /**
-       * Update table date_modifed
-       */
-      for (const id_table of tables_update) {
-        await updateMxSourceTimestamp(id_table, client);
-      }
-
-      /**
-       * Update done. Commit.
-       */
-
-      await client.query("COMMIT");
-    } catch (e) {
-      await client.query("ROLLBACK");
-      throw new Error(e);
-    } finally {
-      client.release();
-    }
-
-    /**
-     * Scripts that require to be launched after the commit
-     * ( i.e. require updated views, source, meta )
-     */
-    if (postScripts.size) {
-      for (const [key, script] of postScripts.entries()) {
-        await script(key);
-      }
-    }
-  }
 }
