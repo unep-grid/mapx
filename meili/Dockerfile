@@ -1,43 +1,30 @@
-# Compile
-FROM rust:alpine3.14 AS compiler
+#
+# Thin layer over the official Meilisearch image (multi-arch amd64/arm64).
+# Adds the MapX user/group convention and keeps the historical /data.ms
+# volume path (official image defaults to /meili_data).
+#
+# ⚠️  Meilisearch >= 1.0 cannot open a data.ms created by v0.20:
+# use a fresh volume; indexes are derived data, rebuilt by the api
+# routines at boot ("updateIndexesRoutine").
+#
+ARG VERSION=1.48.2
+FROM getmeili/meilisearch:v${VERSION}
 
-RUN apk add -q --update-cache --no-cache build-base openssl-dev curl
-
-ARG VERSION=0.20.0
-ARG REPO=https://github.com/meilisearch/MeiliSearch/archive/refs/tags/
-
-ENV RUSTFLAGS="-C target-feature=-crt-static"
-
-WORKDIR /build
-RUN curl -L ${REPO}/v${VERSION}.tar.gz | tar xzv
-WORKDIR /build/meilisearch-${VERSION}
-
-RUN set -eux; \
-    apkArch="$(apk --print-arch)"; \
-    if [ "$apkArch" = "aarch64" ]; then \
-        export JEMALLOC_SYS_WITH_LG_PAGE=16; \
-    fi && \
-    cargo build --release
-
-# Run
-FROM alpine:3.14
-
-ENV MEILI_HTTP_ADDR 0.0.0.0:7700
-ENV MEILI_SERVER_PROVIDER docker
-
-ARG VERSION=0.20.0
-
-RUN apk update --quiet \
-    && apk add -q --no-cache libgcc tini curl
-
-COPY --from=compiler /build/meilisearch-${VERSION}/target/release/meilisearch .
+ENV MEILI_HTTP_ADDR=0.0.0.0:7700
+ENV MEILI_SERVER_PROVIDER=docker
+ENV MEILI_NO_ANALYTICS=true
+ENV MEILI_DB_PATH=/data.ms
+# Dump / snapshot dirs default to the (root-owned) workdir: keep them
+# in the data volume so they are writable and persisted.
+ENV MEILI_DUMP_DIR=/data.ms/dumps
+ENV MEILI_SNAPSHOT_DIR=/data.ms/snapshots
 
 #--------------------- Debian / alpine user setting ----------------------------
 ENV USER=meili
 ENV GROUP=mapx
 ENV UID=89129
 ENV GID=101
-ENV DATADIR=/data.ms 
+ENV DATADIR=/data.ms
 
 RUN addgroup \
     --system \
@@ -49,14 +36,14 @@ RUN addgroup \
      --gecos ""\
      --ingroup $GROUP \
      --no-create-home \
-     --uid $UID $USER 
+     --uid $UID $USER
 
-RUN mkdir -p $DATADIR && chown -R $USER:$GROUP $DATADIR 
+RUN mkdir -p $DATADIR && chown -R $USER:$GROUP $DATADIR /meili_data
 
-USER $USER 
+USER $USER
 VOLUME $DATADIR
 #-------------------------------------------------------------------------------
 
 EXPOSE 7700/tcp
 ENTRYPOINT ["tini", "--"]
-CMD ./meilisearch
+CMD ["/bin/meilisearch"]
