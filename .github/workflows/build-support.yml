@@ -16,6 +16,9 @@ on:
         type: boolean
         default: true
 
+env:
+  GEOSERVER_VERSION: 2.28.4
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -50,8 +53,10 @@ jobs:
           context: ./geoserver
           platforms: linux/amd64,linux/arm64
           push: ${{ inputs.push_images }}
+          build-args: |
+            GEOSERVER_VERSION=${{ env.GEOSERVER_VERSION }}
           tags: |
-            fredmoser/mapx_geoserver:${{ steps.version.outputs.version }}
+            fredmoser/mapx_geoserver:${{ env.GEOSERVER_VERSION }}
             ${{ inputs.push_images && 'fredmoser/mapx_geoserver:latest' || '' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

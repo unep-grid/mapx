@@ -165,7 +165,7 @@ services:
       traefik.http.routers.apidev.middlewares: wcompress,nocache
       traefik.http.services.apidev.loadbalancer.server.port: 3333
   geoserver:
-    image: fredmoser/mapx_geoserver:2.22.2
+    image: fredmoser/mapx_geoserver:2.28.4
     restart: on-failure
     env_file: mapx.dev.env
     ports:

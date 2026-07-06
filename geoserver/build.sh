@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-VERSION=${1:-"2.22.2"}
+VERSION=${1:-"2.28.4"}
 PLATFORMS=${2:-"linux/amd64,linux/arm64"}
 IMAGE="fredmoser/mapx_geoserver"
 

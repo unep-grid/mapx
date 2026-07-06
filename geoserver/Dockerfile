@@ -4,7 +4,7 @@ FROM eclipse-temurin:21-jre-jammy
 
 LABEL maintainer="Fred Moser <frederic.moser@unepgrid.ch>"
 
-ARG GEOSERVER_VERSION=2.28.3
+ARG GEOSERVER_VERSION=2.28.4
 
 # Used in startup script, can be changed
 ENV GEOSERVER_ADMIN_PASSWORD=1234
