@@ -63,13 +63,13 @@ class Search extends EventSimple {
      * Dynamic import
      */
     s._nouislider = await moduleLoad("nouislider");
-    s._MeiliSearch = (await import("meilisearch")).MeiliSearch;
+    s._MeiliSearch = (await import("meilisearch")).Meilisearch;
     s._flatpickr = (await import("flatpickr")).default;
     s._flatpickr_langs = await import("./flatpickr_locales");
     s._elContainer = document.querySelector(s.opt("container"));
     s._meili = new s._MeiliSearch({
       host: `${s.opt("protocol")}${s.opt("host")}:${s.opt("port")}`,
-      apiKey: s.opt("key") || null,
+      apiKey: s.opt("key") || undefined,
     });
     await import("./style.less");
     await import("./style_flatpickr.less");
@@ -131,7 +131,8 @@ class Search extends EventSimple {
         el(
           "pre",
           `curl '${url}/indexes/views_${language}/search' \\\n` +
-            `-H 'X-Meili-API-Key: ${s.opt("key")}' \\\n` +
+            `-H 'Authorization: Bearer ${s.opt("key")}' \\\n` +
+            `-H 'Content-Type: application/json' \\\n` +
             `--data-raw '{"q":"water"}' \\\n` +
             `--compressed;\n`,
         ),
@@ -216,7 +217,7 @@ class Search extends EventSimple {
     if (!s._meili) {
       return;
     }
-    s._index = await s._meili.getIndex(id);
+    s._index = s._meili.index(id);
   }
 
   async build() {
@@ -1251,10 +1252,11 @@ class Search extends EventSimple {
     for (let key of keys) {
       const facet = s.facets[key];
       if (facet.checked) {
+        const expression = s._facet_filter_expression(key);
         if (op === "AND") {
-          inner.push(key);
+          inner.push(expression);
         } else {
-          outer.push(key);
+          outer.push(expression);
         }
       }
     }
@@ -1265,6 +1267,21 @@ class Search extends EventSimple {
       return inner;
     }
     return;
+  }
+  /**
+   * Convert a facet key 'attr:value' to a filter expression
+   * 'attr = "value"' : values may contain spaces / quotes.
+   * @param {String} key Facet key
+   * @return {String} Filter expression
+   */
+  _facet_filter_expression(key) {
+    const pos = key.indexOf(":");
+    const attr = key.slice(0, pos);
+    const value = key
+      .slice(pos + 1)
+      .replace(/\\/g, "\\\\")
+      .replace(/"/g, '\\"');
+    return `${attr} = "${value}"`;
   }
   /**
    * Check if keyword/tag has enabled facet
@@ -1357,19 +1374,24 @@ class Search extends EventSimple {
       const hPage = s.opt("hitsPerPage");
       const attrKeys = s.opt("keywords").map((k) => k.type);
       const strFilters = s.getFilters();
-      const facetFilters = s.getFiltersFacets();
+      const facetFilters = s.getFiltersFacets() || [];
+      /**
+       * Top level filter items are AND-ed, nested arrays are OR-ed
+       */
+      const filter = [...facetFilters];
+      if (strFilters) {
+        filter.push(strFilters);
+      }
       s._search_timer = timer;
       const results = await s.search({
         q: s._elInput.value,
         offset: options.page * hPage,
         limit: hPage,
-        filters: strFilters,
-        facetFilters: facetFilters,
+        filter: filter.length ? filter : undefined,
         attributesToRetrieve: attr.retrieve,
         attributesToHighlight: attr.text,
         attributesToCrop: attr.text,
-        facetsDistribution: attrKeys,
-        matches: false,
+        facets: attrKeys,
       });
       /**
        * Search is not cancellable, but if the timer
@@ -1430,7 +1452,7 @@ class Search extends EventSimple {
        * Facets are built on the very first "placeholder" search, when all
        * items are returned, then, subsequent results only update facets.
        */
-      s._build_facets_or_update(results.facetsDistribution);
+      s._build_facets_or_update(results.facetDistribution);
 
       /**
        * Reset item toggle: new result could have displayed views that
@@ -1490,14 +1512,17 @@ class Search extends EventSimple {
         q: "",
         offset: 0,
         limit: 20,
-        filters: null,
-        facetFilters: null,
-        facetsDistribution: null,
+        filter: undefined,
+        facets: undefined,
         attributesToRetrieve: ["*"],
-        attributesToCrop: null,
+        attributesToCrop: undefined,
         cropLength: 60,
-        attributesToHighlight: null,
-        matches: false,
+        /**
+         * The default crop marker '…' is already added
+         * by formatCroppedText
+         */
+        cropMarker: "",
+        attributesToHighlight: undefined,
       },
       opt,
     );
@@ -1510,12 +1535,11 @@ class Search extends EventSimple {
    */
   async _update_stats_pagination(results) {
     const s = this;
-    const nPage = Math.ceil(results.nbHits / results.limit);
-    const cPage = Math.ceil(
-      nPage - (results.nbHits - results.offset) / results.limit,
-    );
+    const nHits = results.estimatedTotalHits;
+    const nPage = Math.ceil(nHits / results.limit);
+    const cPage = Math.ceil(nPage - (nHits - results.offset) / results.limit);
     const strTime = `${results.processingTimeMs}`;
-    const strNbHit = `${results.nbHits}`;
+    const strNbHit = `${nHits}`;
     const tmpl = await getDictItem("search_results_stats_pagination");
     const txt = s.template(tmpl, { strNbHit, strTime, cPage, nPage });
     s._elStatHits.setAttribute("stat", txt);
@@ -1527,8 +1551,8 @@ class Search extends EventSimple {
   async _update_stats_simple(results) {
     const s = this;
     const strTime = `${results.processingTimeMs}`;
-    // NOTE: rounding due to issue in MeiliSearch  #711
-    const strNbHit = `${s.customRound(results.nbHits)}`;
+    // NOTE: rounding as estimatedTotalHits is approximate by design, see #711
+    const strNbHit = `${s.customRound(results.estimatedTotalHits)}`;
     const tmpl = await getDictItem("search_results_stats_simple");
     const txt = s.template(tmpl, { strNbHit, strTime });
     s._elStatHits.setAttribute("stat", txt);
@@ -1538,9 +1562,10 @@ class Search extends EventSimple {
    */
   _build_pagination_items(results) {
     const elItems = el("div", { class: ["search--pagination-items"] });
-    const nPage = Math.ceil(results.nbHits / results.limit);
+    const nHits = results.estimatedTotalHits;
+    const nPage = Math.ceil(nHits / results.limit);
     const cPage =
-      Math.ceil(nPage - (results.nbHits - results.offset) / results.limit) - 1;
+      Math.ceil(nPage - (nHits - results.offset) / results.limit) - 1;
     let type = "";
     let fillerPos = [];
     /*

@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "flatpickr": "^4.6.9",
-    "meilisearch": "^0.18.1",
+    "meilisearch": "0.58.0",
     "p-debounce": "^4.0.0"
   }
 }

@@ -83,6 +83,12 @@ module.exports = {
         __dirname,
         "../../submodules/zartigl/dist/zartigl.js",
       ),
+      // webpack 4 ignores the package "exports" field : alias the
+      // vendored meilisearch client ( app/src/js/search sub-package )
+      meilisearch$: path.resolve(
+        __dirname,
+        "../src/js/search/node_modules/meilisearch/dist/index.js",
+      ),
     },
   },
   module: {
