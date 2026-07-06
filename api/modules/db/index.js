@@ -1,7 +1,7 @@
 import { settings as s } from "#root/settings";
 import pg from "pg";
 import redis from "redis";
-import { MeiliSearch } from "meilisearch";
+import { Meilisearch } from "meilisearch";
 import { GeoServerRestClient } from "geoserver-node-client";
 
 const { Pool, types } = pg;
@@ -177,9 +177,9 @@ try {
   /**
    * MeiliSearch
    */
-  meili = new MeiliSearch({
+  meili = new Meilisearch({
     host: `http://${s.meili.host}:${s.meili.port}`,
-    apiKey: s.meili.master_key || null,
+    apiKey: s.meili.master_key || undefined,
   });
 
   /**

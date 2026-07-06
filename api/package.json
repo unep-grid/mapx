@@ -11,6 +11,9 @@
   "author": "unepgrid.ch",
   "license": "MIT",
   "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
   "imports": {
     "#root/*": "./*/index.js",
     "#mapx/*": "./modules/*/index.js",
@@ -32,7 +35,7 @@
     "html-to-text": "^8.1.0",
     "martinez-polygon-clipping": "^0.7.1",
     "md5-file": "^5.0.0",
-    "meilisearch": "0.18.1",
+    "meilisearch": "0.58.0",
     "multer": "^1.4.4",
     "node-fetch": "^3.2.0",
     "node-sql-parser": "^4.1.1",
