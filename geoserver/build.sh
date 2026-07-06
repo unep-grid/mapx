@@ -3,17 +3,20 @@ set -e
 
 VERSION=${1:-"2.22.2"}
 PLATFORMS=${2:-"linux/amd64,linux/arm64"}
+IMAGE="fredmoser/mapx_geoserver"
 
-echo "Building geoserver image with version: $VERSION for platforms: $PLATFORMS"
+# Multi-arch manifest lists cannot be loaded into the local docker
+# daemon : the image is built + pushed to the registry ( docker login
+# first ), then referenced by tag in docker-compose.yml / deployments.
+echo "Building + pushing $IMAGE:$VERSION for $PLATFORMS"
 
-# Build and push the image using the existing mx_builder
 docker buildx build \
   --builder mx_builder \
   --platform $PLATFORMS \
   --progress plain \
   --build-arg GEOSERVER_VERSION=$VERSION \
-  --tag fredmoser/mapx_geoserver:$VERSION \
-  --load \
+  --tag $IMAGE:$VERSION \
+  --push \
   .
 
-echo "Build complete. Image: fredmoser/mapx_geoserver:$VERSION"
+echo "Pushed $IMAGE:$VERSION"

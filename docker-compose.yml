@@ -1,5 +1,8 @@
 volumes:
-  searchmeili:
+  # searchmeili (v0.20 data.ms) is incompatible with meilisearch >= 1.0:
+  # fresh volume, indexes are rebuilt from postgres by the api routines at boot.
+  # The old "searchmeili" volume can be pruned once v1 is verified.
+  searchmeili_v1:
 networks:
   backend:
   frontend:
@@ -27,7 +30,7 @@ services:
       - ~/.docker/run/docker.sock:/var/run/docker.sock
       - ./_shared/traefik/certs:/certs
   search:
-    image: fredmoser/meili:0.20.0-alpine
+    image: fredmoser/mapx_search:1.48.2
     restart: on-failure
     env_file: mapx.dev.env
     ports:
@@ -36,7 +39,7 @@ services:
       - backend
       - frontend
     volumes:
-      - searchmeili:/data.ms
+      - searchmeili_v1:/data.ms
     labels:
       traefik.enable: true
       traefik.http.routers.search.rule: Host(`search.mapx.localhost`)
@@ -162,7 +165,7 @@ services:
       traefik.http.routers.apidev.middlewares: wcompress,nocache
       traefik.http.services.apidev.loadbalancer.server.port: 3333
   geoserver:
-    image: fredmoser/geoserver:2.20.4
+    image: fredmoser/mapx_geoserver:2.22.2
     restart: on-failure
     env_file: mapx.dev.env
     ports:
@@ -195,7 +198,8 @@ services:
       - ./pg/init/script_initdb.sh:/docker-entrypoint-initdb.d/script_initdb.sh
       - ./pg/init/sql_files:/docker-entrypoint-initdb.d/sql_files
   routines:
-    image: fredmoser/mapx_api:1.9.42
+    # node >= 18 required ( meilisearch client uses the fetch API )
+    image: fredmoser/mapx_api:local
     restart: on-failure
     env_file: mapx.dev.env
     networks:
