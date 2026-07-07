@@ -66,6 +66,8 @@ const settings = Object.assign({}, settings_global, {
     password: env.GEOSERVER_ADMIN_PASSWORD,
     user: env.GEOSERVER_ADMIN_USERNAME,
     url: env.GEOSERVER_URL,
+    urlcheck_style_svg_base_urls: env.GEOSERVER_URLCHECK_STYLE_SVG_BASE_URLS,
+    urlcheck_style_svg_regex: env.GEOSERVER_URLCHECK_STYLE_SVG_REGEX,
   },
   geoserver_public: {
     url: env.GEOSERVER_URL_PUBLIC,

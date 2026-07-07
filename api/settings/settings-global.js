@@ -85,6 +85,8 @@ const settings_global = {
     user: "admin",
     url: "http://localhost:8080",
     url_public: "http://localhost:8080",
+    urlcheck_style_svg_base_urls: "",
+    urlcheck_style_svg_regex: "",
   },
   db: {
     name: "postgres",

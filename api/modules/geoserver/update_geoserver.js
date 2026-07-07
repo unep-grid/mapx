@@ -13,6 +13,7 @@ import { isNotEmpty, isNumericRange, isObject } from "@fxi/mx_valid";
 import { ioUpdateDbViewAltStyle } from "#mapx/view";
 import { geoserver as grc } from "#mapx/db";
 import { mwNotify } from "#mapx/io";
+import { ensureGeoserverUrlChecks } from "./url_checks.js";
 
 const validateParamsHandler = getParamsValidator({
   required: ["idUser", "token"],
@@ -169,8 +170,17 @@ async function rebuild(socket, options) {
   await socket.notifyProgress({
     idGroup: idGroup,
     idMerge: idProgress,
+    message: `Configuring GeoServer URL checks...`,
+    value: 2,
+  });
+
+  await ensureGeoserverUrlChecks();
+
+  await socket.notifyProgress({
+    idGroup: idGroup,
+    idMerge: idProgress,
     message: `Extracting projects info...`,
-    value: 1,
+    value: 5,
   });
 
   const ids_db = await getProjectsIdAll();
