@@ -242,6 +242,7 @@ WITH
       p.projects_id,
       p.projects_title_multilingual,
       p.projects_description_multilingual,
+      m.meta #> '{spatial,bbox}' AS source_bbox,
       /**
        * R jsonlite bug : list of one converted to 'string'
        * more info in known_bugs.txt 
@@ -405,6 +406,7 @@ WITH
       projects_id,
       projects_title_multilingual,
       projects_description_multilingual,
+      source_bbox,
       view_type,
       source_keywords,
       source_keywords_m49,

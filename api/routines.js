@@ -1,6 +1,7 @@
 import * as migrate from "#mapx/migrate";
 import * as language from "#mapx/language";
 import { updateIndexes } from "#mapx/search";
+import { updateOgcMetaCatalog } from "#mapx/ogc_meta";
 import { updateGeoIpTable } from "#mapx/ip";
 import { updateGeoserver } from "#mapx/geoserver";
 import { clearDownload } from "#mapx/helpers";
@@ -19,6 +20,7 @@ import { settings } from "#root/settings";
 const updateDbRoutine = () => migrate.apply();
 const updateLanguageRoutine = () => language.init();
 const updateIndexesRoutine = () => updateIndexes({});
+const updateOgcMetaCatalogRoutine = () => updateOgcMetaCatalog();
 const updateGeoIpTableRoutine = () => updateGeoIpTable();
 const updateGeoserverRoutine = () => updateGeoserver();
 const clearDownloadRoutine = () => clearDownload();
@@ -86,6 +88,7 @@ once(
     updateDbRoutine,
     updateLanguageRoutine,
     updateIndexesRoutine,
+    updateOgcMetaCatalogRoutine,
     updateGeoIpTableRoutine,
   ],
   optCommon
@@ -95,5 +98,6 @@ once(
  * Apply at interval
  */
 onceInterval([updateIndexesRoutine], optHourly);
+onceInterval([updateOgcMetaCatalogRoutine], optHourly);
 onceInterval([updateGeoIpTableRoutine], optWeekly);
 onceInterval([updateGeoserverRoutine, clearDownloadRoutine], optDaily);

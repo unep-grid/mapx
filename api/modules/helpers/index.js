@@ -91,6 +91,7 @@ function toRes(obj) {
  * @param {Boolean} opt.toRes If true, add '\t\n' for message delimiter (see toRes)
  * @param {Boolean} opt.end If true, send, else continue writing
  * @param {String} opt.etag If set, add custom etag
+ * @param {String} opt.contentType If set, use custom content type
  * @param {Function} opt.write_cb Function for the write function, if not 'end'.
  */
 function sendJSON(res, data, opt) {
@@ -103,7 +104,7 @@ function sendJSON(res, data, opt) {
     data = isString(data) ? data : JSON.stringify(data || "");
     if (!res.headersSent) {
       res.setHeader("Mapx-Content-Length", data.length || 0);
-      res.setHeader("Content-Type", "application/json");
+      res.setHeader("Content-Type", opt.contentType || "application/json");
       res.setHeader("Cache-Control", "max-age=0, s-maxage=0");
 
       if (opt.etag) {
