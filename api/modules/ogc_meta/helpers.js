@@ -20,11 +20,15 @@ function buildCatalogSnapshot(rows, {
   updatedAt = new Date().toISOString(),
   version = 1,
 } = {}) {
+  const records = [...rows].sort((a, b) =>
+    String(a.view_id || "").localeCompare(String(b.view_id || ""))
+  );
+
   return {
     version,
     updated_at: updatedAt,
-    count: rows.length,
-    records: rows,
+    count: records.length,
+    records,
   };
 }
 
@@ -133,7 +137,12 @@ function getRecordLinks({
 }
 
 function getGeoServerLinks(row, publicUrl) {
-  if (!publicUrl || !row.project_id || !row.view_id) {
+  if (
+    !publicUrl
+    || row.is_geoserver_published !== true
+    || !row.project_id
+    || !row.view_id
+  ) {
     return [];
   }
 

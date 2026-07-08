@@ -280,7 +280,19 @@ WITH
       ) AS source_modified_at,
       c.created_at AS view_created_at,
       v.date_modified AS view_modified_at,
-      v.type AS view_type
+      v.type AS view_type,
+      EXISTS (
+        SELECT
+          1
+        FROM
+          mx_sources s
+          INNER JOIN mx_projects sp ON s.project = sp.id
+        WHERE
+          v.type = 'vt'
+          AND v.data #>> '{source, layerInfo, name}' = s.id
+          AND sp.public
+          AND (s.services ? 'gs_ws_a' OR s.services ? 'gs_ws_b')
+      ) AS is_geoserver_published
     FROM
       views_public v
       INNER JOIN tmp_views_meta m ON v.id = m.id_view
@@ -408,6 +420,7 @@ WITH
       projects_description_multilingual,
       source_bbox,
       view_type,
+      is_geoserver_published,
       source_keywords,
       source_keywords_m49,
       source_keywords_gemet,

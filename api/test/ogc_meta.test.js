@@ -226,6 +226,52 @@ describe("OGC metadata", () => {
     assert.equal(record.links[2].href, "http://app.mapx.localhost:8880/static.html?views=MX-ABC12-ABC12-ABC12&zoomToViews=true");
   });
 
+  it("adds GeoServer service links only for published GeoServer rows", () => {
+    const record = buildRecord({
+      ...row,
+      is_geoserver_published: true,
+    }, {
+      baseUrl,
+      collectionUrl,
+      geoserverPublicUrl: "http://geoserver.mapx.localhost:8080/geoserver/",
+      req,
+    });
+    const serviceLinks = record.links.filter((item) => item.rel === "service");
+
+    assert.equal(serviceLinks.length, 2);
+    assert.equal(serviceLinks[0].title, "WMS");
+    assert.equal(serviceLinks[0].href, "http://geoserver.mapx.localhost:8080/geoserver/wms?service=WMS&version=1.3.0&request=GetCapabilities&layers=MX-PROJECT%3AMX-ABC12-ABC12-ABC12");
+    assert.equal(serviceLinks[1].title, "WFS");
+    assert.equal(serviceLinks[1].href, "http://geoserver.mapx.localhost:8080/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities&typeName=MX-PROJECT%3AMX-ABC12-ABC12-ABC12");
+  });
+
+  it("omits GeoServer service links for rows that are not published in GeoServer", () => {
+    const record = buildRecord({
+      ...row,
+      is_geoserver_published: false,
+    }, {
+      baseUrl,
+      collectionUrl,
+      geoserverPublicUrl: "http://geoserver.mapx.localhost:8080/geoserver",
+      req,
+    });
+
+    assert.equal(record.links.some((item) => item.rel === "service"), false);
+  });
+
+  it("omits GeoServer service links without a public GeoServer URL", () => {
+    const record = buildRecord({
+      ...row,
+      is_geoserver_published: true,
+    }, {
+      baseUrl,
+      collectionUrl,
+      req,
+    });
+
+    assert.equal(record.links.some((item) => item.rel === "service"), false);
+  });
+
   it("validates representative responses against vendored OGC schemas", () => {
     const record = buildRecord(row, {
       language: "fr",
@@ -271,7 +317,8 @@ describe("OGC metadata", () => {
   });
 
   it("builds a versioned catalog snapshot", () => {
-    const snapshot = buildCatalogSnapshot([row, rowNoBbox], {
+    const rows = [rowNoBbox, row];
+    const snapshot = buildCatalogSnapshot(rows, {
       updatedAt: "2026-07-08T00:00:00.000Z",
       version: 1,
     });
@@ -282,6 +329,10 @@ describe("OGC metadata", () => {
     assert.deepEqual(snapshot.records.map((item) => item.view_id), [
       "MX-ABC12-ABC12-ABC12",
       "MX-DEF34-DEF34-DEF34",
+    ]);
+    assert.deepEqual(rows.map((item) => item.view_id), [
+      "MX-DEF34-DEF34-DEF34",
+      "MX-ABC12-ABC12-ABC12",
     ]);
   });
 
