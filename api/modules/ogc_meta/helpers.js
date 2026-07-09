@@ -95,7 +95,6 @@ function buildRecord(row, {
       project_id: row.project_id,
       view_type: row.view_type,
       projects_id: row.projects_id || [],
-      translations: row.meta_multilingual || {},
     },
   };
 
@@ -129,7 +128,8 @@ function getRecordLinks({
   const links = [
     link("self", itemUrl, "application/geo+json", "This record"),
     link("collection", `${baseUrl}/collections/mapx`, "application/json", "MapX public metadata"),
-    link("alternate", getViewUrl(req, row.view_id), "text/html", "Preview in MapX"),
+    link("alternate", getAppViewUrl(req, row), "text/html", "Open in MapX"),
+    link("preview", getStaticViewUrl(req, row.view_id), "text/html", "MapX static preview"),
   ];
   const serviceLinks = getGeoServerLinks(row, geoserverPublicUrl);
 
@@ -412,12 +412,31 @@ function link(rel, href, type, title) {
   };
 }
 
-function getViewUrl(req, idView) {
+function getAppBaseUrl(req) {
   const host = req?.get("host") || "api.mapx.org";
   const appHost = host
     .replace(/^api\./, "app.")
     .replace(/^apidev\./, "dev.");
-  const url = new URL(`${req?.protocol || "https"}://${appHost}/static.html`);
+  return `${req?.protocol || "https"}://${appHost}`;
+}
+
+function getAppViewUrl(req, row) {
+  const url = new URL(`${getAppBaseUrl(req)}/`);
+
+  if (row.project_id) {
+    url.searchParams.set("project", row.project_id);
+  }
+
+  url.searchParams.set("viewsOpen", row.view_id);
+  url.searchParams.set("viewsListFilterActivated", "true");
+  url.searchParams.set("zoomToViews", "true");
+
+  return url.toString();
+}
+
+function getStaticViewUrl(req, idView) {
+  const url = new URL(`${getAppBaseUrl(req)}/static.html`);
+
   url.searchParams.set("views", idView);
   url.searchParams.set("zoomToViews", "true");
   return url.toString();

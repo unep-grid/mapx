@@ -68,7 +68,24 @@
         },
         "mapx": {
           "type": "object",
-          "required": ["view_id", "project_id", "view_type", "projects_id", "translations"]
+          "required": ["view_id", "project_id", "view_type", "projects_id"],
+          "properties": {
+            "view_id": {
+              "type": "string"
+            },
+            "project_id": {
+              "type": ["string", "null"]
+            },
+            "view_type": {
+              "type": "string"
+            },
+            "projects_id": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
         }
       }
     },

@@ -224,8 +224,20 @@ describe("OGC metadata", () => {
     assert.equal(record.properties.title, "Titre francais");
     assert.equal(record.properties.description, "Resume francais");
     assert.equal(record.properties.themes[0].concepts[0].title, "eau");
-    assert.equal(record.links[2].title, "Preview in MapX");
-    assert.equal(record.links[2].href, "http://app.mapx.localhost:8880/static.html?views=MX-ABC12-ABC12-ABC12&zoomToViews=true");
+    assert.deepEqual(record.properties.mapx, {
+      view_id: "MX-ABC12-ABC12-ABC12",
+      project_id: "MX-PROJECT",
+      view_type: "vt",
+      projects_id: ["MX-PROJECT"],
+    });
+    assert.equal("translations" in record.properties.mapx, false);
+    assert.equal(record.links[2].rel, "alternate");
+    assert.equal(record.links[2].title, "Open in MapX");
+    assert.equal(record.links[2].href, "http://app.mapx.localhost:8880/?project=MX-PROJECT&viewsOpen=MX-ABC12-ABC12-ABC12&viewsListFilterActivated=true&zoomToViews=true");
+    assert.equal(record.links[3].rel, "preview");
+    assert.equal(record.links[3].title, "MapX static preview");
+    assert.equal(record.links[3].href, "http://app.mapx.localhost:8880/static.html?views=MX-ABC12-ABC12-ABC12&zoomToViews=true");
+    assert.equal(record.links.some((item) => item.rel === "tiles"), false);
   });
 
   it("adds GeoServer service links only for published GeoServer rows", () => {
@@ -291,8 +303,11 @@ describe("OGC metadata", () => {
     assert.equal(record.title, "English title");
     assert.equal(record.xml, record.metadata);
     assert.equal(metadata.properties.language, "en");
+    assert.equal("translations" in metadata.properties.mapx, false);
     assert.equal(record.relation, `${collectionUrl}/items/${row.view_id}`);
     assert.equal(record.wkt_geometry, "POLYGON((5 45,11 45,11 48,5 48,5 45))");
+    assert.equal(links.some((item) => item.name === "Open in MapX"), true);
+    assert.equal(links.some((item) => item.name === "MapX vector tiles"), false);
     assert.equal(links.some((item) => item.protocol === "OGC:WMS"), true);
     assert.equal(links.some((item) => item.protocol === "OGC:WFS"), true);
   });
