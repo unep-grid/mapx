@@ -1,0 +1,79 @@
+server:
+  url: ${PYCSW_PUBLIC_URL}
+  mimetype: application/xml; charset=UTF-8
+  encoding: UTF-8
+  language: en-US
+  maxrecords: 100
+  gzip_compresslevel: 0
+
+logging:
+  level: INFO
+  logfile:
+
+profiles:
+  - apiso
+
+manager:
+  transactions: false
+  allowed_ips:
+    - 127.0.0.1
+  csw_harvest_pagesize: 10
+
+metadata:
+  identification:
+    title: MapX public metadata catalogue
+    description: Public MapX view and source metadata exposed through OGC catalogue standards.
+    keywords:
+      - MapX
+      - metadata
+      - catalogue
+      - geospatial
+    keywords_type: theme
+    fees: None
+    accessconstraints: None
+    terms_of_service: https://creativecommons.org/licenses/by/4.0
+    url: https://www.mapx.org
+    license:
+      name: CC-BY 4.0 license
+      url: https://creativecommons.org/licenses/by/4.0
+  provider:
+    name: UNEP/GRID-Geneva
+    url: https://unepgrid.ch
+  contact:
+    name: MapX
+    position: MapX team
+    address: 11 Chemin des Anemones
+    city: Chatelaine
+    stateorprovince: Geneva
+    postalcode: "1219"
+    country: Switzerland
+    phone:
+    fax:
+    email: info@mapx.org
+    url: https://www.mapx.org
+    hours: Mo-Fr 09:00-17:00
+    instructions: Contact by email.
+    role: pointOfContact
+  inspire:
+    enabled: true
+    languages_supported:
+      - eng
+    default_language: eng
+    date: "2026-07-08"
+    gemet_keywords:
+      - Environmental monitoring facilities
+    conformity_service: notEvaluated
+    contact_name: UNEP/GRID-Geneva
+    contact_email: info@mapx.org
+    temp_extent:
+      begin: "2000-01-01"
+      end:
+
+repository:
+  database: postgresql://${POSTGRES_USER_READ}:${POSTGRES_USER_READ_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+  table: ${PYCSW_TABLE}
+  mappings: /etc/pycsw/mappings.py
+  stable_sort: true
+  facets:
+    - type
+    - keywords

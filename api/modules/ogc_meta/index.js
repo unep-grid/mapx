@@ -11,6 +11,7 @@ import {
   parseBbox,
   parseDatetime,
 } from "./helpers.js";
+import { updatePycswCatalog } from "./pycsw.js";
 
 const collectionId = "mapx";
 const collectionTitle = "MapX public metadata";
@@ -306,9 +307,10 @@ async function updateOgcMetaCatalog() {
   const catalog = buildCatalogSnapshot(rows, {
     version: cacheVersion,
   });
+  const pycsw = await updatePycswCatalog(catalog.records);
 
   await redisSetJSON(cacheKey, catalog);
-  console.log(`Updated OGC metadata catalog (${catalog.count} records) in ${Date.now() - start} ms`);
+  console.log(`Updated OGC metadata catalog (${catalog.count} records, ${pycsw.count} pycsw records) in ${Date.now() - start} ms`);
 
   return catalog;
 }

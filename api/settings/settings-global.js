@@ -88,6 +88,12 @@ const settings_global = {
     urlcheck_style_svg_base_urls: "",
     urlcheck_style_svg_regex: "",
   },
+  pycsw: {
+    enabled: true,
+    public_url: "http://meta.mapx.localhost:8880",
+    language: "en",
+    table: "mx_pycsw_records",
+  },
   db: {
     name: "postgres",
     port: 5432,

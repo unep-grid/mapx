@@ -48,6 +48,7 @@ Some browsers require to modify your hosts file to link custom MapX local "subdo
 127.0.0.1 apidev.mapx.localhost
 127.0.0.1 dev.mapx.localhost
 127.0.0.1 geoserver.mapx.localhost
+127.0.0.1 meta.mapx.localhost
 ```
 
 ### Docker

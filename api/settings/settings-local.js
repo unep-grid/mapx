@@ -72,6 +72,12 @@ const settings = Object.assign({}, settings_global, {
   geoserver_public: {
     url: env.GEOSERVER_URL_PUBLIC,
   },
+  pycsw: {
+    enabled: env.PYCSW_ENABLED !== "false",
+    public_url: env.PYCSW_PUBLIC_URL || settings_global.pycsw.public_url,
+    language: env.PYCSW_LANGUAGE || settings_global.pycsw.language,
+    table: env.PYCSW_TABLE || settings_global.pycsw.table,
+  },
   db: {
     name: env.POSTGRES_DB,
     port: env.POSTGRES_PORT,

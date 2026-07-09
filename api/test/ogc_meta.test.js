@@ -13,6 +13,7 @@ import {
   parseBbox,
   parseDatetime,
 } from "../modules/ogc_meta/helpers.js";
+import { buildPycswRecord } from "../modules/ogc_meta/pycsw_helpers.js";
 
 const schemaPath = new URL("./fixtures/ogc_records/", import.meta.url);
 const schemaFiles = [
@@ -223,6 +224,7 @@ describe("OGC metadata", () => {
     assert.equal(record.properties.title, "Titre francais");
     assert.equal(record.properties.description, "Resume francais");
     assert.equal(record.properties.themes[0].concepts[0].title, "eau");
+    assert.equal(record.links[2].title, "Preview in MapX");
     assert.equal(record.links[2].href, "http://app.mapx.localhost:8880/static.html?views=MX-ABC12-ABC12-ABC12&zoomToViews=true");
   });
 
@@ -270,6 +272,42 @@ describe("OGC metadata", () => {
     });
 
     assert.equal(record.links.some((item) => item.rel === "service"), false);
+  });
+
+  it("builds default-language pycsw records without duplicating identifiers per language", () => {
+    const record = buildPycswRecord({
+      ...row,
+      is_geoserver_published: true,
+    }, {
+      language: "en",
+      apiBaseUrl: baseUrl.replace("/ogc_meta", ""),
+      geoserverPublicUrl: "http://geoserver.mapx.localhost:8880/geoserver",
+    });
+    const metadata = JSON.parse(record.metadata);
+    const links = JSON.parse(record.links);
+
+    assert.equal(record.identifier, row.view_id);
+    assert.equal(record.language, "en");
+    assert.equal(record.title, "English title");
+    assert.equal(record.xml, record.metadata);
+    assert.equal(metadata.properties.language, "en");
+    assert.equal(record.relation, `${collectionUrl}/items/${row.view_id}`);
+    assert.equal(record.wkt_geometry, "POLYGON((5 45,11 45,11 48,5 48,5 45))");
+    assert.equal(links.some((item) => item.protocol === "OGC:WMS"), true);
+    assert.equal(links.some((item) => item.protocol === "OGC:WFS"), true);
+  });
+
+  it("keeps translated metadata available through the MapX-native OGC endpoint", () => {
+    const record = buildRecord(row, {
+      language: "fr",
+      baseUrl,
+      collectionUrl,
+      req,
+    });
+
+    assert.equal(record.properties.language, "fr");
+    assert.equal(record.properties.title, "Titre francais");
+    assert.equal(record.properties.description, "Resume francais");
   });
 
   it("validates representative responses against vendored OGC schemas", () => {

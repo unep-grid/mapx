@@ -129,7 +129,7 @@ function getRecordLinks({
   const links = [
     link("self", itemUrl, "application/geo+json", "This record"),
     link("collection", `${baseUrl}/collections/mapx`, "application/json", "MapX public metadata"),
-    link("alternate", getViewUrl(req, row.view_id), "text/html", "MapX view"),
+    link("alternate", getViewUrl(req, row.view_id), "text/html", "Preview in MapX"),
   ];
   const serviceLinks = getGeoServerLinks(row, geoserverPublicUrl);
 

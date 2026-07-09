@@ -185,6 +185,29 @@ services:
       traefik.http.services.geoserver.loadbalancer.server.port: 8080
     deploy:
       replicas: 1
+  pycsw:
+    image: geopython/pycsw:latest
+    restart: on-failure
+    depends_on:
+      - pg
+      - traefik
+    env_file: mapx.dev.env
+    environment:
+      PYCSW_PUBLIC_URL: ${PYCSW_PUBLIC_URL:-http://meta.mapx.localhost:8880}
+      PYCSW_TABLE: ${PYCSW_TABLE:-mx_pycsw_records}
+    ports:
+      - 8000
+    networks:
+      - backend
+      - frontend
+    volumes:
+      - ./pycsw/pycsw.yml:/etc/pycsw/pycsw.yml:ro
+      - ./pycsw/mappings.py:/etc/pycsw/mappings.py:ro
+    labels:
+      traefik.enable: true
+      traefik.http.routers.pycsw.rule: Host(`meta.mapx.localhost`)
+      traefik.http.routers.pycsw.entrypoints: web
+      traefik.http.services.pycsw.loadbalancer.server.port: 8000
   pg:
     image: ghcr.io/baosystems/postgis:13-3.3
     restart: on-failure
