@@ -1,0 +1,432 @@
+<script>
+  (() => {
+    "use strict";
+
+    const container = document.getElementById("records-map");
+    if (!container) return;
+
+    const mode = container.dataset.mapxMode || "items";
+    const itemBaseUrl = container.dataset.mapxItemBaseUrl || "";
+    let geojson;
+
+    try {
+      geojson = JSON.parse(container.dataset.mapxGeojson || "null");
+    } catch (error) {
+      console.error("Could not parse catalogue extent GeoJSON", error);
+      geojson = null;
+    }
+
+    const RECORD_ID_PROPERTY = "__mapx_record_id";
+    const sourceFeatures =
+      geojson?.type === "FeatureCollection"
+        ? geojson.features || []
+        : geojson?.type === "Feature"
+          ? [geojson]
+          : Array.isArray(geojson)
+            ? geojson
+            : [];
+    const features = sourceFeatures.map((feature) => ({
+      ...feature,
+      properties: {
+        ...(feature.properties || {}),
+        [RECORD_ID_PROPERTY]: feature.id,
+      },
+    }));
+    const featureCollection = { type: "FeatureCollection", features };
+    const status = document.createElement("div");
+    status.className = "mapx-map-status";
+    status.setAttribute("role", "status");
+    container.append(status);
+
+    function validCoordinate(value, min, max) {
+      return Number.isFinite(value) && value >= min && value <= max;
+    }
+
+    function coordinatesBounds(value, bounds = null) {
+      if (!Array.isArray(value)) return bounds;
+      if (
+        value.length >= 2 &&
+        typeof value[0] === "number" &&
+        typeof value[1] === "number"
+      ) {
+        const lng = value[0];
+        const lat = value[1];
+        if (
+          !validCoordinate(lng, -180, 180) ||
+          !validCoordinate(lat, -90, 90)
+        ) {
+          return bounds;
+        }
+        if (!bounds) return [lng, lat, lng, lat];
+        bounds[0] = Math.min(bounds[0], lng);
+        bounds[1] = Math.min(bounds[1], lat);
+        bounds[2] = Math.max(bounds[2], lng);
+        bounds[3] = Math.max(bounds[3], lat);
+        return bounds;
+      }
+      for (const child of value) bounds = coordinatesBounds(child, bounds);
+      return bounds;
+    }
+
+    function geojsonBounds(collection) {
+      let bounds = null;
+      for (const feature of collection.features || []) {
+        bounds = coordinatesBounds(feature?.geometry?.coordinates, bounds);
+      }
+      return bounds && bounds[0] < bounds[2] && bounds[1] < bounds[3]
+        ? bounds
+        : null;
+    }
+
+    function normalizeBbox(value) {
+      if (!Array.isArray(value) || value.length !== 4) return null;
+      const [west, south, east, north] = value.map(Number);
+      if (
+        !validCoordinate(west, -180, 180) ||
+        !validCoordinate(east, -180, 180) ||
+        !validCoordinate(south, -90, 90) ||
+        !validCoordinate(north, -90, 90) ||
+        west >= east ||
+        south >= north
+      )
+        return null;
+      return [west, south, east, north];
+    }
+
+    function bboxPolygon(bbox) {
+      const [west, south, east, north] = bbox;
+      return {
+        type: "Feature",
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [west, south],
+              [east, south],
+              [east, north],
+              [west, north],
+              [west, south],
+            ],
+          ],
+        },
+        properties: {},
+      };
+    }
+
+    function parseUrlBbox() {
+      const value = new URL(window.location.href).searchParams.get("bbox");
+      return value ? normalizeBbox(value.split(",")) : null;
+    }
+
+    function escapeHtml(value) {
+      const node = document.createElement("span");
+      node.textContent = String(value ?? "");
+      return node.innerHTML;
+    }
+
+    if (
+      !window.maplibregl ||
+      !window.mlcontour ||
+      !window.MapxStyle?.MapxStyle
+    ) {
+      status.textContent = "Map unavailable";
+      return;
+    }
+
+    const language = (document.documentElement.lang || "en").split(/[-_]/)[0];
+    const mxStyle = new window.MapxStyle.MapxStyle({
+      maplibregl: window.maplibregl,
+      mlcontour: window.mlcontour,
+      theme: "color_light",
+      language,
+    });
+    const map = new window.maplibregl.Map({
+      container,
+      style: mxStyle.getStyle(),
+      center: [0, 15],
+      zoom: 1,
+      attributionControl: {
+        compact: true,
+      },
+    });
+
+    let attributionInitialized = false;
+    function collapseAttributionOnce() {
+      if (attributionInitialized) return;
+      const control = container.querySelector(".maplibregl-ctrl-attrib");
+      if (!control?.classList.contains("maplibregl-compact")) return;
+      if (control.classList.contains("maplibregl-compact-show")) {
+        control.querySelector(".maplibregl-ctrl-attrib-button")?.click();
+      }
+      attributionInitialized = true;
+      map.off("styledata", collapseAttributionOnce);
+    }
+    map.on("styledata", collapseAttributionOnce);
+    collapseAttributionOnce();
+
+    map.on("style.load", () => {
+      map.setProjection({
+        type: "globe",
+      });
+    });
+    map.addControl(new window.maplibregl.NavigationControl(), "top-right");
+
+    let hoveredId = null;
+    let filterBbox = null;
+    let filterMarkers = [];
+
+    function fitBbox(bbox) {
+      if (!bbox) return;
+      map.fitBounds(
+        [
+          [bbox[0], bbox[1]],
+          [bbox[2], bbox[3]],
+        ],
+        { padding: 35, duration: 0, maxZoom: 10 },
+      );
+    }
+
+    function setHovered(id, hovered) {
+      if (
+        id === undefined ||
+        id === null ||
+        !map.getSource("catalogue-extents")
+      )
+        return;
+      map.setFeatureState({ source: "catalogue-extents", id }, { hovered });
+    }
+
+    function clearHovered() {
+      if (hoveredId !== null) setHovered(hoveredId, false);
+      hoveredId = null;
+    }
+
+    function setFilterData(bbox) {
+      const source = map.getSource("catalogue-filter");
+      if (!source) return;
+      source.setData(
+        bbox
+          ? { type: "FeatureCollection", features: [bboxPolygon(bbox)] }
+          : { type: "FeatureCollection", features: [] },
+      );
+    }
+
+    function markerPositions(bbox) {
+      const [west, south, east, north] = bbox;
+      return [
+        [west, north],
+        [east, north],
+        [east, south],
+        [west, south],
+      ];
+    }
+
+    function removeFilterMarkers() {
+      filterMarkers.forEach((marker) => marker.remove());
+      filterMarkers = [];
+    }
+
+    function refreshFilterMarkers() {
+      removeFilterMarkers();
+      if (!filterBbox) return;
+      markerPositions(filterBbox).forEach((position, index) => {
+        const marker = new window.maplibregl.Marker({
+          color: "#198754",
+          draggable: true,
+          scale: 0.65,
+          className: "mapx-filter-marker",
+        })
+          .setLngLat(position)
+          .addTo(map);
+        marker.on("drag", () => {
+          const point = marker.getLngLat();
+          const next = [...filterBbox];
+          if (index === 0 || index === 3) next[0] = point.lng;
+          else next[2] = point.lng;
+          if (index === 0 || index === 1) next[3] = point.lat;
+          else next[1] = point.lat;
+          filterBbox = normalizeBbox(next);
+          if (filterBbox) setFilterData(filterBbox);
+        });
+        marker.on("dragend", refreshFilterMarkers);
+        filterMarkers.push(marker);
+      });
+    }
+
+    function setFilter(bbox) {
+      filterBbox = normalizeBbox(bbox);
+      setFilterData(filterBbox);
+      refreshFilterMarkers();
+    }
+
+    function viewportFilterBbox() {
+      const bounds = map.getBounds();
+      const west = Math.max(-180, bounds.getWest());
+      const east = Math.min(180, bounds.getEast());
+      const south = Math.max(-90, bounds.getSouth());
+      const north = Math.min(90, bounds.getNorth());
+      const insetLng = (east - west) * 0.1;
+      const insetLat = (north - south) * 0.1;
+      return normalizeBbox([
+        west + insetLng,
+        south + insetLat,
+        east - insetLng,
+        north - insetLat,
+      ]);
+    }
+
+    window.trigger_spatial_filter = () => {
+      const enabled = document.getElementById("spatial-filter-check")?.checked;
+      if (enabled) setFilter(filterBbox || viewportFilterBbox());
+      else setFilter(null);
+    };
+
+    window.apply_spatial_filter = () => {
+      const url = new URL(window.location.href);
+      const enabled = document.getElementById("spatial-filter-check")?.checked;
+      if (enabled && filterBbox)
+        url.searchParams.set("bbox", filterBbox.join(","));
+      else url.searchParams.delete("bbox");
+      url.searchParams.delete("offset");
+      window.location.assign(url);
+    };
+
+    async function initialize() {
+      try {
+        await mxStyle.attachMap(map);
+        map.addSource("catalogue-extents", {
+          type: "geojson",
+          data: featureCollection,
+          promoteId: RECORD_ID_PROPERTY,
+        });
+
+        map.addLayer({
+          id: "catalogue-extents-fill",
+          type: "fill",
+          source: "catalogue-extents",
+          paint: {
+            "fill-color": [
+              "case",
+              ["boolean", ["feature-state", "hovered"], false],
+              "#0e8dc6", // darker hover variant
+              "#12b0f8", // base
+            ],
+            "fill-outline-color": [
+              "case",
+              ["boolean", ["feature-state", "hovered"], false],
+              "#0875a6",
+              "#12b0f8",
+            ],
+            "fill-opacity": [
+              "case",
+              ["boolean", ["feature-state", "hovered"], false],
+              0.15,
+              0.07,
+            ],
+          },
+        });
+        map.addLayer({
+          id: "catalogue-extents-outline",
+          type: "line",
+          source: "catalogue-extents",
+          paint: {
+            "line-color": [
+              "case",
+              ["boolean", ["feature-state", "hovered"], false],
+              "#0875a6", // Hover outline
+              "#12b0f8", // Base outline
+            ],
+            "line-width": [
+              "case",
+              ["boolean", ["feature-state", "hovered"], false],
+              2,
+              1,
+            ],
+            "line-opacity": 0.9,
+          },
+        });
+
+        map.addSource("catalogue-filter", {
+          type: "geojson",
+          data: { type: "FeatureCollection", features: [] },
+        });
+        map.addLayer({
+          id: "catalogue-filter-fill",
+          type: "fill",
+          source: "catalogue-filter",
+          paint: { "fill-color": "#198754", "fill-opacity": 0.08 },
+        });
+        map.addLayer({
+          id: "catalogue-filter-line",
+          type: "line",
+          source: "catalogue-filter",
+          paint: {
+            "line-color": "#198754",
+            "line-width": 2,
+            "line-dasharray": [2, 1],
+          },
+        });
+
+        if (mode !== "item") {
+          map.on("click", "catalogue-extents-fill", (event) => {
+            const feature = event.features?.[0];
+            const recordId = feature?.properties?.[RECORD_ID_PROPERTY];
+            if (!recordId || !itemBaseUrl) return;
+            const link = `${itemBaseUrl.replace(/\/$/, "")}/${encodeURIComponent(recordId)}`;
+            new window.maplibregl.Popup()
+              .setLngLat(event.lngLat)
+              .setHTML(
+                `<a href="${escapeHtml(link)}">${escapeHtml(feature.properties?.title || recordId)}</a>`,
+              )
+              .addTo(map);
+          });
+          map.on("mouseenter", "catalogue-extents-fill", () => {
+            map.getCanvas().style.cursor = "pointer";
+          });
+          map.on("mouseleave", "catalogue-extents-fill", () => {
+            map.getCanvas().style.cursor = "";
+          });
+        }
+
+        document
+          .querySelectorAll("#items-table-table tbody tr")
+          .forEach((row) => {
+            const id = row.querySelector("[id]")?.id;
+            if (!id) return;
+            row.addEventListener("mouseenter", () => {
+              clearHovered();
+              hoveredId = id;
+              setHovered(id, true);
+            });
+            row.addEventListener("mouseleave", clearHovered);
+          });
+
+        const urlBbox = mode === "items" ? parseUrlBbox() : null;
+        if (urlBbox) {
+          setFilter(urlBbox);
+          fitBbox(urlBbox);
+        } else {
+          const bounds = geojsonBounds(featureCollection);
+          if (bounds) fitBbox(bounds);
+          else status.textContent = "Extent unavailable";
+        }
+
+        const queryInput = document.getElementById("q");
+        queryInput?.addEventListener("keydown", (event) => {
+          if (event.key !== "Enter" || event.shiftKey) return;
+          event.preventDefault();
+          const url = new URL(itemBaseUrl || window.location.href);
+          url.searchParams.set("q", queryInput.value);
+          window.location.assign(url);
+        });
+
+        window.__mapxCatalogueMap = { map, mxStyle };
+      } catch (error) {
+        console.error("Could not initialize MapX catalogue map", error);
+        status.textContent = "Map unavailable";
+      }
+    }
+
+    initialize();
+  })();
+</script>

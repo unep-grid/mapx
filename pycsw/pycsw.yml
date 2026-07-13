@@ -5,6 +5,8 @@ server:
   language: en-US
   maxrecords: 100
   gzip_compresslevel: 0
+  templates:
+    path: /etc/pycsw/templates
 
 logging:
   level: INFO

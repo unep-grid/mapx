@@ -1,0 +1,47 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css"
+  integrity="sha384-uTttxo/aOKbdE5RlD/SPzSDoDmNvGlUYPjONi2MN/b7c9HPSvW07OIuyP7uL6jxK"
+  crossorigin="anonymous"
+>
+<script
+  src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js"
+  integrity="sha384-5+cfbwT0iiub6VsQAdn6yz16nr6sDiQoHx6tm4O8OVYXHYOxcffFmCJBL0dgdvGp"
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/maplibre-contour@0.1.0/dist/index.min.js"
+  integrity="sha384-rKd9nNV3F43xwxeA6WNNsPH+cMYQl6SEM+/HDoU/sgeuK+faXwhqXYA0Pwp0COXT"
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/@unep-grid/mapx-style@0.9.0/dist/mapx-style.umd.js"
+  integrity="sha384-8ccpxBrTcLcev7subeAmk/d0sOmQFoLoVhv0n9z8FBNFlnBvIhUbWRwaoXj+nchB"
+  crossorigin="anonymous"
+></script>
+<style>
+  #records-map {
+    height: 350px;
+    position: relative;
+  }
+
+  .mapx-map-status {
+    background: rgb(255 255 255 / 90%);
+    border-radius: 0.25rem;
+    left: 50%;
+    padding: 0.35rem 0.6rem;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+
+  .mapx-map-status:empty {
+    display: none;
+  }
+
+  .mapx-filter-marker {
+    border: 2px solid white;
+    box-shadow: 0 0 0 1px #198754;
+  }
+</style>

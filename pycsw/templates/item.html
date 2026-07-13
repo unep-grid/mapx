@@ -1,0 +1,254 @@
+{% extends "_base.html" %}
+{% set properties = data.get('properties', {}) %}
+{% set metadata = properties.get('metadata', {}) %}
+{% set identification = metadata.get('identification', {}) %}
+{% set temporal = metadata.get('temporal', {}) %}
+{% set distribution = metadata.get('distribution', {}) %}
+{% set constraints = metadata.get('constraints', {}) %}
+{% block title %}{{ properties.get('title', data['id']) }} - {{ super() }}{% endblock %}
+{% block content_width %}row w-100{% endblock %}
+{% block extrahead %}
+    {% include "_mapx_head.html" %}
+    <style>
+      .catalogue-item-header {
+        border-bottom: 1px solid #dee2e6;
+        margin-bottom: 1.75rem;
+        padding-bottom: 1.25rem;
+      }
+
+      .catalogue-item-header h2 {
+        font-size: clamp(1.75rem, 3vw, 2.7rem);
+        line-height: 1.15;
+        margin: 0.35rem 0 0.75rem;
+      }
+
+      .catalogue-item-section {
+        margin-top: 2rem;
+      }
+
+      .catalogue-item-section h3 {
+        font-size: 1.15rem;
+        margin-bottom: 1rem;
+      }
+
+      .catalogue-summary dt {
+        color: #6c757d;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+      }
+
+      .catalogue-summary dd {
+        margin-bottom: 1rem;
+      }
+
+      .catalogue-badge {
+        background: #e7f3ff;
+        color: #075985;
+        display: inline-block;
+        font-weight: 500;
+        margin: 0 0.35rem 0.45rem 0;
+        padding: 0.45rem 0.65rem;
+      }
+
+      .catalogue-detail-card {
+        border: 1px solid #dee2e6;
+        border-radius: 0.35rem;
+        height: 100%;
+        padding: 1rem;
+      }
+
+      .catalogue-detail-card h4 {
+        font-size: 1rem;
+      }
+
+      #records-map {
+        border: 1px solid #dee2e6;
+        border-radius: 0.35rem;
+        height: 430px;
+        overflow: hidden;
+      }
+    </style>
+{% endblock %}
+
+{% block crumbs %}
+{{ super() }} /
+<a href="{{ config['server']['url'] }}/collections">Collections</a> /
+<a href="{{ config['server']['url'] }}/collections/{{ data['collection'] }}">{{ data['title'] }}</a> /
+<a href="{{ config['server']['url'] }}/collections/{{ data['collection'] }}/items">Items</a> /
+{{ data['id'] }}
+{% endblock %}
+
+{% block body %}
+<article id="item" class="catalogue-item">
+  <header class="catalogue-item-header">
+    <div class="text-primary fw-bold small text-uppercase">{{ properties.get('type', 'dataset') }}</div>
+    <h2>{{ properties.get('title', data['id']) }}</h2>
+    {% if properties.get('description') %}
+      <div class="lead">{{ properties.get('description') | urlize }}</div>
+    {% endif %}
+  </header>
+
+  <div class="row g-4 align-items-start">
+    <div class="col-lg-7">
+      <div
+        id="records-map"
+        data-mapx-mode="item"
+        data-mapx-geojson="{{ data | to_json | forceescape }}"
+      ></div>
+    </div>
+    <div class="col-lg-5">
+      <div class="card border-0 bg-light">
+        <div class="card-body">
+          <h3 class="h5 card-title mb-4">Record summary</h3>
+          <dl class="row catalogue-summary mb-0">
+            <dt class="col-sm-5">Identifier</dt>
+            <dd class="col-sm-7"><code>{{ data['id'] }}</code></dd>
+            <dt class="col-sm-5">Language</dt>
+            <dd class="col-sm-7">{{ properties.get('language', '—') }}</dd>
+            {% if properties.get('created') %}
+              <dt class="col-sm-5">Created</dt>
+              <dd class="col-sm-7">{{ properties.get('created') }}</dd>
+            {% endif %}
+            {% if properties.get('updated') %}
+              <dt class="col-sm-5">Updated</dt>
+              <dd class="col-sm-7">{{ properties.get('updated') }}</dd>
+            {% endif %}
+            {% if temporal.get('periodicity') %}
+              <dt class="col-sm-5">Update cycle</dt>
+              <dd class="col-sm-7">{{ temporal.get('periodicity') }}</dd>
+            {% endif %}
+          </dl>
+
+          {% set action_links = data.get('links', []) %}
+          {% if action_links %}
+            <div class="d-flex flex-wrap gap-2 mt-3">
+              {% for link in action_links %}
+                {% set label = link.get('title') or link.get('name') or link.get('description') %}
+                {% if label in ['Open in MapX', 'MapX static preview', 'WMS', 'WFS'] %}
+                  <a class="btn btn-sm {% if label == 'Open in MapX' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="{{ link.get('href') }}">{{ label }}</a>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if properties.get('keywords') or properties.get('themes') %}
+    <section class="catalogue-item-section">
+      <h3>Classification</h3>
+      {% for keyword in properties.get('keywords', []) %}
+        <span class="badge rounded-pill catalogue-badge">{{ keyword }}</span>
+      {% endfor %}
+      {% for theme in properties.get('themes', []) %}
+        {% for concept in theme.get('concepts', []) %}
+          {% set concept_label = concept.get('title') or concept.get('id') or concept.get('url') %}
+          {% if concept_label %}
+            {% if concept.get('url') %}
+              <a class="badge rounded-pill catalogue-badge text-decoration-none" href="{{ concept.get('url') }}" title="{{ theme.get('scheme', 'Theme') }}">{{ concept_label }}</a>
+            {% else %}
+              <span class="badge rounded-pill catalogue-badge" title="{{ theme.get('scheme', 'Theme') }}">{{ concept_label }}</span>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    </section>
+  {% endif %}
+
+  {% if identification.get('attribution') or identification.get('citation') or metadata.get('contacts') or constraints.get('licenses') %}
+    <section class="catalogue-item-section">
+      <h3>Provenance and use</h3>
+      <div class="row g-3">
+        {% if identification.get('attribution') or identification.get('citation') %}
+          <div class="col-md-6">
+            <div class="catalogue-detail-card">
+              <h4>Citation</h4>
+              {% if identification.get('citation') %}<p>{{ identification.get('citation') | urlize }}</p>{% endif %}
+              {% if identification.get('attribution') %}<p class="mb-0"><strong>Attribution:</strong> {{ identification.get('attribution') | urlize }}</p>{% endif %}
+            </div>
+          </div>
+        {% endif %}
+        {% if metadata.get('contacts') %}
+          <div class="col-md-6">
+            <div class="catalogue-detail-card">
+              <h4>Contacts</h4>
+              {% for contact in metadata.get('contacts', []) %}
+                <div{% if not loop.last %} class="mb-3"{% endif %}>
+                  <strong>{{ contact.get('organization') or contact.get('name') }}</strong>
+                  {% if contact.get('name') and contact.get('organization') and contact.get('name') != contact.get('organization') %}<br>{{ contact.get('name') }}{% endif %}
+                  {% if contact.get('function') %}<br><span class="text-muted">{{ contact.get('function') }}</span>{% endif %}
+                  {% if contact.get('email') %}<br><a href="mailto:{{ contact.get('email') }}">{{ contact.get('email') }}</a>{% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+        {% if constraints.get('licenses') %}
+          <div class="col-md-6">
+            <div class="catalogue-detail-card">
+              <h4>Licence and conditions</h4>
+              {% for license in constraints.get('licenses', []) %}
+                <p{% if loop.last %} class="mb-0"{% endif %}><strong>{{ license.get('name', 'Licence') }}</strong>{% if license.get('text') %}<br>{{ license.get('text') | urlize }}{% endif %}</p>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </section>
+  {% endif %}
+
+  {% set range = temporal.get('range', {}) %}
+  {% if range.get('start_at') or range.get('end_at') or temporal.get('issued') or temporal.get('modified') or metadata.get('lineage', {}).get('statement') %}
+    <section class="catalogue-item-section">
+      <h3>Temporal coverage and lineage</h3>
+      <div class="row g-3">
+        {% if range.get('start_at') or range.get('end_at') or temporal.get('issued') or temporal.get('modified') %}
+          <div class="col-md-6">
+            <div class="catalogue-detail-card">
+              <h4>Dates</h4>
+              <dl class="row catalogue-summary mb-0">
+                {% if range.get('start_at') %}<dt class="col-sm-4">Start</dt><dd class="col-sm-8">{{ range.get('start_at') }}</dd>{% endif %}
+                {% if range.get('end_at') %}<dt class="col-sm-4">End</dt><dd class="col-sm-8">{{ range.get('end_at') }}</dd>{% endif %}
+                {% if temporal.get('issued') %}<dt class="col-sm-4">Issued</dt><dd class="col-sm-8">{{ temporal.get('issued') }}</dd>{% endif %}
+                {% if temporal.get('modified') %}<dt class="col-sm-4">Source updated</dt><dd class="col-sm-8">{{ temporal.get('modified') }}</dd>{% endif %}
+              </dl>
+            </div>
+          </div>
+        {% endif %}
+        {% if metadata.get('lineage', {}).get('statement') %}
+          <div class="col-md-6">
+            <div class="catalogue-detail-card">
+              <h4>Lineage</h4>
+              <p class="mb-0">{{ metadata.get('lineage', {}).get('statement') | urlize }}</p>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </section>
+  {% endif %}
+
+  {% set distribution_links = [distribution.get('homepage')] + distribution.get('source_urls', []) + distribution.get('annex_urls', []) %}
+  {% if distribution_links | select | list %}
+    <section class="catalogue-item-section pb-4">
+      <h3>Related resources</h3>
+      <div class="list-group">
+        {% for link in distribution_links %}
+          {% if link and link.get('url') %}
+            <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="{{ link.get('url') }}">
+              <span>{{ link.get('label') or link.get('url') }}</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+</article>
+{% endblock %}
+
+{% block extrafoot %}
+{% include "_mapx_runtime.html" %}
+{% endblock %}

@@ -186,7 +186,7 @@ services:
     deploy:
       replicas: 1
   pycsw:
-    image: geopython/pycsw:latest
+    image: geopython/pycsw@sha256:442dc8ac95a3b4fcd0852f5f8d7cb760203f00cfea7a0f903a66f5791118cba4
     restart: on-failure
     depends_on:
       - pg
@@ -203,6 +203,7 @@ services:
     volumes:
       - ./pycsw/pycsw.yml:/etc/pycsw/pycsw.yml:ro
       - ./pycsw/mappings.py:/etc/pycsw/mappings.py:ro
+      - ./pycsw/templates:/etc/pycsw/templates:ro
     labels:
       traefik.enable: true
       traefik.http.routers.pycsw.rule: Host(`meta.mapx.localhost`)

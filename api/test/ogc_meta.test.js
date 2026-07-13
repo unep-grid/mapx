@@ -525,6 +525,8 @@ describe("OGC metadata", () => {
     const links = JSON.parse(record.links);
 
     assert.equal(record.identifier, row.view_id);
+    assert.equal(record.typename, "pycsw:CoreMetadata");
+    assert.equal(record.schema, "http://pycsw.org/metadata");
     assert.equal(record.language, "en");
     assert.equal(record.title, "English title");
     assert.equal(record.xml, record.metadata);
@@ -537,6 +539,13 @@ describe("OGC metadata", () => {
     assert.equal(record.anytext.includes("Alice Publisher"), true);
     assert.equal(record.anytext.includes("Creative Commons Attribution"), true);
     assert.equal(record.anytext.includes("https://www.fao.org"), true);
+    assert.equal(record.date_publication, "2010-01-01T00:00:00.000Z");
+    assert.equal(record.date_revision, "2011-01-01T00:00:00.000Z");
+    assert.equal(record.resourcelanguage, "en, fr");
+    assert.equal(record.otherconstraints, "CC BY — Creative Commons Attribution");
+    assert.equal(record.lineage, "Source notes");
+    assert.equal(JSON.parse(record.contacts)[0].organization, "UNEP");
+    assert.equal(JSON.parse(record.contacts)[0].role, "custodian");
     assert.equal(links.some((item) => item.name === "Open in MapX"), true);
     assert.equal(links.some((item) => item.name === "MapX vector tiles"), false);
     assert.equal(links.some((item) => item.protocol === "OGC:WMS"), true);
