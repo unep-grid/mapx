@@ -97,9 +97,34 @@ function getAnyText(record) {
     properties.language,
     ...(properties.keywords || []),
     ...themeText,
+    ...flattenText(properties.metadata),
     properties.mapx?.project_id,
     ...(properties.mapx?.projects_id || []),
   ].filter(Boolean).join(" ");
+}
+
+function flattenText(value) {
+  if (!value) {
+    return [];
+  }
+
+  if (typeof value === "string") {
+    return [value];
+  }
+
+  if (typeof value === "number" || typeof value === "boolean") {
+    return [String(value)];
+  }
+
+  if (Array.isArray(value)) {
+    return value.flatMap(flattenText);
+  }
+
+  if (typeof value === "object") {
+    return Object.values(value).flatMap(flattenText);
+  }
+
+  return [];
 }
 
 function getContacts() {

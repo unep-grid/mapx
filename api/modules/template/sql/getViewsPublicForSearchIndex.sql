@@ -25,6 +25,52 @@ WITH
       vl.readers @> '["public"]'
   ),
   /**
+   * Compute the approximate extent once per distinct public vector source.
+   * Joining geometry_columns prevents missing source tables from aborting the
+   * catalogue refresh. ST_EstimatedExtent returns NULL when statistics are not
+   * available, in which case stored metadata is used later as a fallback.
+   */
+  public_vector_sources AS MATERIALIZED (
+    SELECT DISTINCT
+      v.data #>> '{source,layerInfo,name}' AS source_id,
+      gc.f_table_schema AS table_schema,
+      gc.f_geometry_column AS geometry_column
+    FROM
+      views_public v
+      INNER JOIN geometry_columns gc
+        ON gc.f_table_name = v.data #>> '{source,layerInfo,name}'
+        AND gc.f_table_schema = current_schema()
+        AND gc.f_geometry_column = 'geom'
+    WHERE
+      v.type = 'vt'
+  ),
+  public_vector_source_extents_raw AS MATERIALIZED (
+    SELECT
+      source_id,
+      ST_EstimatedExtent(
+        table_schema,
+        source_id,
+        geometry_column
+      ) AS extent
+    FROM
+      public_vector_sources
+  ),
+  public_vector_source_extents AS MATERIALIZED (
+    SELECT
+      source_id,
+      CASE
+        WHEN extent IS NULL THEN NULL
+        ELSE jsonb_build_object(
+          'lat_min', GREATEST(-90, ST_YMin(extent)),
+          'lng_min', GREATEST(-180, ST_XMin(extent)),
+          'lat_max', LEAST(90, ST_YMax(extent)),
+          'lng_max', LEAST(180, ST_XMax(extent))
+        )
+      END AS estimated_bbox
+    FROM
+      public_vector_source_extents_raw
+  ),
+  /**
    * Any view imported
    * ⚠️  Some views id could have been removed from the db, but
    * still exists in views_external.
@@ -243,6 +289,8 @@ WITH
       p.projects_title_multilingual,
       p.projects_description_multilingual,
       m.meta #> '{spatial,bbox}' AS source_bbox,
+      e.estimated_bbox AS source_estimated_bbox,
+      v.data #> '{geometry,extent}' AS view_extent,
       /**
        * R jsonlite bug : list of one converted to 'string'
        * more info in known_bugs.txt 
@@ -262,6 +310,21 @@ WITH
         WHEN 'string' THEN jsonb_build_array(m.meta #> '{text, keywords, keys_gemet}')
         ELSE '[]'::jsonb
       END AS source_keywords_gemet,
+      CASE jsonb_typeof(m.meta #> '{text, keywords, keys_topic}')
+        WHEN 'array' THEN m.meta #> '{text, keywords, keys_topic}'
+        WHEN 'string' THEN jsonb_build_array(m.meta #> '{text, keywords, keys_topic}')
+        ELSE '[]'::jsonb
+      END AS source_keywords_topic,
+      m.meta #>> '{text,data_attribution}' AS source_data_attribution,
+      m.meta #>> '{text,citation}' AS source_citation,
+      m.meta #> '{text,language,codes}' AS source_language_codes,
+      m.meta #> '{contact,contacts}' AS source_contacts,
+      m.meta #> '{license,licenses}' AS source_licenses,
+      m.meta #> '{origin,homepage}' AS source_homepage,
+      m.meta #> '{origin,source,urls}' AS source_urls,
+      m.meta #> '{annex,references}' AS source_annex_urls,
+      m.meta #>> '{temporal,issuance,periodicity}' AS source_periodicity,
+      m.meta #> '{temporal,range,is_timeless}' AS source_is_timeless,
       NULLIF(
         m.meta #>> '{temporal, range, start_at}',
         '0001-01-01'
@@ -298,6 +361,8 @@ WITH
       INNER JOIN tmp_views_meta m ON v.id = m.id_view
       INNER JOIN tmp_views_created_at c ON v.id = c.id_view
       INNER JOIN tmp_views_public p ON v.id = p.id_view
+      LEFT JOIN public_vector_source_extents e
+        ON v.data #>> '{source,layerInfo,name}' = e.source_id
   ),
   /**
    * Gemet multilingual
@@ -419,11 +484,24 @@ WITH
       projects_title_multilingual,
       projects_description_multilingual,
       source_bbox,
+      source_estimated_bbox,
+      view_extent,
       view_type,
       is_geoserver_published,
       source_keywords,
       source_keywords_m49,
       source_keywords_gemet,
+      source_keywords_topic,
+      source_data_attribution,
+      source_citation,
+      COALESCE(source_language_codes, '[]'::jsonb) AS source_language_codes,
+      COALESCE(source_contacts, '[]'::jsonb) AS source_contacts,
+      COALESCE(source_licenses, '[]'::jsonb) AS source_licenses,
+      COALESCE(source_homepage, '{}'::jsonb) AS source_homepage,
+      COALESCE(source_urls, '[]'::jsonb) AS source_urls,
+      COALESCE(source_annex_urls, '[]'::jsonb) AS source_annex_urls,
+      source_periodicity,
+      source_is_timeless,
       COALESCE(source_keywords_gemet_multilingual, '[]'::jsonb) AS source_keywords_gemet_multilingual,
       COALESCE(source_keywords_m49_multilingual, '[]'::jsonb) AS source_keywords_m49_multilingual,
       EXTRACT(

@@ -5,6 +5,7 @@ import fs from "node:fs";
 import Ajv from "ajv";
 import {
   buildCatalogSnapshot,
+  buildCatalogMetadata,
   buildRecord,
   filterCatalogRows,
   getLanguage,
@@ -62,8 +63,13 @@ const row = {
       en: "<p>English abstract</p>",
       fr: "<p>Resume francais</p>",
     },
+    source_notes: {
+      en: "<p>Source notes</p>",
+      fr: "<p>Notes source</p>",
+    },
   },
   source_keywords: ["water"],
+  source_keywords_topic: ["climate"],
   source_keywords_gemet_multilingual: [
     {
       id: 123,
@@ -78,12 +84,59 @@ const row = {
       fr: "Suisse",
     },
   ],
+  source_data_attribution: "<p>Attribution <strong>text</strong></p>",
+  source_citation: "<p>Citation text</p>",
+  source_language_codes: [
+    {
+      code: "en",
+    },
+    {
+      code: "fr",
+    },
+  ],
+  source_contacts: [
+    {
+      name: "Alice Publisher",
+      email: "alice@example.org",
+      function: "Administrator",
+      organisation_name: "UNEP",
+      address: "Do not publish",
+    },
+  ],
+  source_licenses: [
+    {
+      name: "CC BY",
+      text: "<p>Creative Commons Attribution</p>",
+    },
+  ],
+  source_homepage: {
+    label: "FAO",
+    url: "https://www.fao.org",
+  },
+  source_urls: [
+    {
+      label: "Download data",
+      url: "https://example.org/data.zip",
+    },
+  ],
+  source_annex_urls: [
+    {
+      label: "Methodology",
+      url: "https://example.org/methodology.pdf",
+    },
+  ],
   source_bbox: {
     lng_min: 5,
     lat_min: 45,
     lng_max: 11,
     lat_max: 48,
   },
+  source_start_at: 1577836800,
+  source_end_at: 1609459200,
+  source_released_at: 1262304000,
+  source_modified_at: 1293840000,
+  source_periodicity: "continual",
+  source_is_timeless: false,
   view_created_at: 1704067200,
   view_modified_at: 1704153600,
   range_start_at: 1704067200,
@@ -95,6 +148,16 @@ const rowNoBbox = {
   project_id: "MX-OTHER",
   source_bbox: null,
   source_keywords: ["forest"],
+  source_keywords_topic: [],
+  source_data_attribution: "",
+  source_citation: "",
+  source_language_codes: [],
+  source_contacts: [],
+  source_licenses: [],
+  source_homepage: {},
+  source_urls: [],
+  source_annex_urls: [],
+  source_periodicity: "",
   range_start_at: 1609459200,
   range_end_at: 1609545600,
 };
@@ -240,6 +303,169 @@ describe("OGC metadata", () => {
     assert.equal(record.links.some((item) => item.rel === "tiles"), false);
   });
 
+  it("normalizes MapX metadata into ISO-oriented catalogue groups", () => {
+    const metadata = buildCatalogMetadata(row, {
+      language: "fr",
+    });
+
+    assert.deepEqual(metadata.identification, {
+      title: "Titre francais",
+      abstract: "Resume francais",
+      notes: "Notes source",
+      attribution: "Attribution text",
+      citation: "Citation text",
+      languages: ["en", "fr"],
+    });
+    assert.deepEqual(metadata.contacts, [{
+      name: "Alice Publisher",
+      email: "alice@example.org",
+      function: "Administrator",
+      organization: "UNEP",
+    }]);
+    assert.deepEqual(metadata.keywords, {
+      free: ["water"],
+      gemet: [{
+        id: 123,
+        title: "eau",
+      }],
+      m49: [{
+        id: "CHE",
+        title: "Suisse",
+      }],
+      topic: ["climate"],
+    });
+    assert.deepEqual(metadata.temporal, {
+      range: {
+        start_at: "2020-01-01T00:00:00.000Z",
+        end_at: "2021-01-01T00:00:00.000Z",
+      },
+      issued: "2010-01-01T00:00:00.000Z",
+      modified: "2011-01-01T00:00:00.000Z",
+      periodicity: "continual",
+      is_timeless: false,
+    });
+    assert.deepEqual(metadata.constraints.licenses, [{
+      name: "CC BY",
+      text: "Creative Commons Attribution",
+    }]);
+    assert.deepEqual(metadata.distribution, {
+      homepage: {
+        label: "FAO",
+        url: "https://www.fao.org",
+      },
+      source_urls: [{
+        label: "Download data",
+        url: "https://example.org/data.zip",
+      }],
+      annex_urls: [{
+        label: "Methodology",
+        url: "https://example.org/methodology.pdf",
+      }],
+    });
+    assert.deepEqual(metadata.lineage, {
+      statement: "Notes source",
+    });
+    assert.deepEqual(metadata.mapx, {
+      view_id: "MX-ABC12-ABC12-ABC12",
+      project_id: "MX-PROJECT",
+      view_type: "vt",
+      projects_id: ["MX-PROJECT"],
+    });
+  });
+
+  it("prefers the estimated source extent for vector-table records", () => {
+    const record = buildRecord({
+      ...row,
+      source_estimated_bbox: {
+        lng_min: -17.6,
+        lat_min: 1.4,
+        lng_max: 24.0,
+        lat_max: 37.1,
+      },
+      view_extent: {
+        lng1: -20,
+        lat1: 0,
+        lng2: 25,
+        lat2: 40,
+      },
+    });
+
+    assert.deepEqual(record.bbox, [-17.6, 1.4, 24, 37.1]);
+    assert.deepEqual(record.properties.metadata.extent.spatial.bbox, [
+      -17.6,
+      1.4,
+      24,
+      37.1,
+    ]);
+    assert.deepEqual(record.geometry.coordinates[0][0], [-17.6, 1.4]);
+  });
+
+  it("falls back to metadata when a vector source has no estimated extent", () => {
+    const record = buildRecord({
+      ...row,
+      source_estimated_bbox: null,
+      view_extent: {
+        lng1: -20,
+        lat1: 0,
+        lng2: 25,
+        lat2: 40,
+      },
+    });
+
+    assert.deepEqual(record.bbox, [5, 45, 11, 48]);
+  });
+
+  it("does not use a cached view extent for vector-table records", () => {
+    const record = buildRecord({
+      ...row,
+      source_estimated_bbox: null,
+      source_bbox: {
+        lng_min: 0,
+        lat_min: 0,
+        lng_max: 0,
+        lat_max: 0,
+      },
+      view_extent: {
+        lng1: -20,
+        lat1: 0,
+        lng2: 25,
+        lat2: 40,
+      },
+    });
+
+    assert.equal(record.bbox, undefined);
+    assert.equal(record.geometry, null);
+    assert.equal(record.properties.metadata.extent, undefined);
+  });
+
+  it("uses the precomputed view extent for non-table records with invalid metadata", () => {
+    const record = buildRecord({
+      ...row,
+      view_type: "gj",
+      source_bbox: {
+        lng_min: 0,
+        lat_min: 0,
+        lng_max: 0,
+        lat_max: 0,
+      },
+      view_extent: {
+        lng1: -17.6,
+        lat1: 1.4,
+        lng2: 24.0,
+        lat2: 37.1,
+      },
+    });
+
+    assert.deepEqual(record.bbox, [-17.6, 1.4, 24, 37.1]);
+    assert.deepEqual(record.properties.metadata.extent.spatial.bbox, [
+      -17.6,
+      1.4,
+      24,
+      37.1,
+    ]);
+    assert.deepEqual(record.geometry.coordinates[0][0], [-17.6, 1.4]);
+  });
+
   it("adds GeoServer service links only for published GeoServer rows", () => {
     const record = buildRecord({
       ...row,
@@ -304,8 +530,13 @@ describe("OGC metadata", () => {
     assert.equal(record.xml, record.metadata);
     assert.equal(metadata.properties.language, "en");
     assert.equal("translations" in metadata.properties.mapx, false);
+    assert.equal(metadata.properties.metadata.identification.attribution, "Attribution text");
+    assert.equal(metadata.properties.metadata.constraints.licenses[0].text, "Creative Commons Attribution");
     assert.equal(record.relation, `${collectionUrl}/items/${row.view_id}`);
     assert.equal(record.wkt_geometry, "POLYGON((5 45,11 45,11 48,5 48,5 45))");
+    assert.equal(record.anytext.includes("Alice Publisher"), true);
+    assert.equal(record.anytext.includes("Creative Commons Attribution"), true);
+    assert.equal(record.anytext.includes("https://www.fao.org"), true);
     assert.equal(links.some((item) => item.name === "Open in MapX"), true);
     assert.equal(links.some((item) => item.name === "MapX vector tiles"), false);
     assert.equal(links.some((item) => item.protocol === "OGC:WMS"), true);
@@ -399,6 +630,10 @@ describe("OGC metadata", () => {
     assert.deepEqual(
       filterCatalogRows(rows, { q: "forest" }).map((item) => item.view_id),
       ["MX-DEF34-DEF34-DEF34"]
+    );
+    assert.deepEqual(
+      filterCatalogRows(rows, { q: "alice" }).map((item) => item.view_id),
+      ["MX-ABC12-ABC12-ABC12"]
     );
     assert.deepEqual(
       filterCatalogRows(rows, { bbox: [4, 44, 12, 49] }).map((item) => item.view_id),

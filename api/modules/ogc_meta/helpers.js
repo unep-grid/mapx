@@ -6,6 +6,7 @@ const defaultLanguages = {
 };
 
 export {
+  buildCatalogMetadata,
   buildRecord,
   buildCatalogSnapshot,
   filterCatalogRows,
@@ -48,7 +49,7 @@ function filterCatalogRows(rows, {
   }
 
   if (bbox) {
-    rows = rows.filter((row) => bboxIntersects(row.source_bbox, bbox));
+    rows = rows.filter((row) => bboxIntersects(row, bbox));
   }
 
   if (datetime) {
@@ -78,7 +79,11 @@ function buildRecord(row, {
     localize(row.meta_multilingual?.view_abstract, language, languages)
       || localize(row.meta_multilingual?.source_abstract, language, languages)
   );
-  const bbox = normalizeBbox(row.source_bbox);
+  const bbox = getRowBbox(row);
+  const metadata = buildCatalogMetadata(row, {
+    language,
+    languages,
+  });
   const itemUrl = `${collectionUrl}/items/${row.view_id}`;
   const properties = {
     type: "dataset",
@@ -90,6 +95,7 @@ function buildRecord(row, {
     updated: epochToIso(row.view_modified_at),
     keywords: row.source_keywords || [],
     themes: getThemes(row, language, languages),
+    metadata,
     mapx: {
       view_id: row.view_id,
       project_id: row.project_id,
@@ -116,6 +122,77 @@ function buildRecord(row, {
       geoserverPublicUrl,
     }),
   };
+}
+
+function buildCatalogMetadata(row, {
+  language = defaultLanguages.default,
+  languages = defaultLanguages,
+} = {}) {
+  const title = localize(row.meta_multilingual?.view_title, language, languages);
+  const abstract = cleanText(
+    localize(row.meta_multilingual?.view_abstract, language, languages)
+      || localize(row.meta_multilingual?.source_abstract, language, languages)
+  );
+  const notes = cleanText(
+    localize(row.meta_multilingual?.source_notes, language, languages)
+  );
+  const bbox = getRowBbox(row);
+
+  return removeEmpty({
+    identification: {
+      title,
+      abstract,
+      notes,
+      attribution: cleanText(row.source_data_attribution),
+      citation: cleanText(row.source_citation),
+      languages: normalizeLanguageCodes(row.source_language_codes),
+    },
+    contacts: normalizeContacts(row.source_contacts),
+    keywords: {
+      free: normalizeTextArray(row.source_keywords),
+      gemet: (row.source_keywords_gemet_multilingual || []).map((item) => removeEmpty({
+        id: item.id,
+        title: localize(item, language, languages),
+      })),
+      m49: (row.source_keywords_m49_multilingual || []).map((item) => removeEmpty({
+        id: item.id,
+        title: localize(item, language, languages),
+      })),
+      topic: normalizeTextArray(row.source_keywords_topic),
+    },
+    extent: {
+      spatial: {
+        bbox,
+      },
+    },
+    temporal: {
+      range: {
+        start_at: epochToIso(row.source_start_at),
+        end_at: epochToIso(row.source_end_at),
+      },
+      issued: epochToIso(row.source_released_at),
+      modified: epochToIso(row.source_modified_at),
+      periodicity: cleanText(row.source_periodicity),
+      is_timeless: normalizeBoolean(row.source_is_timeless),
+    },
+    constraints: {
+      licenses: normalizeLicenses(row.source_licenses),
+    },
+    distribution: {
+      homepage: normalizeUrlItem(row.source_homepage),
+      source_urls: normalizeUrlItems(row.source_urls),
+      annex_urls: normalizeUrlItems(row.source_annex_urls),
+    },
+    lineage: {
+      statement: notes,
+    },
+    mapx: {
+      view_id: row.view_id,
+      project_id: row.project_id,
+      view_type: row.view_type,
+      projects_id: row.projects_id || [],
+    },
+  });
 }
 
 function getRecordLinks({
@@ -204,9 +281,136 @@ function cleanText(value) {
     return "";
   }
 
+  if (typeof value !== "string") {
+    return "";
+  }
+
   return htmlToText(value, {
     wordwrap: false,
   });
+}
+
+function normalizeContacts(items) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+
+  return items.map((item) => removeEmpty({
+    name: cleanText(item?.name),
+    email: cleanText(item?.email),
+    function: cleanText(item?.function),
+    organization: cleanText(item?.organisation_name),
+  }));
+}
+
+function normalizeLicenses(items) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+
+  return items.map((item) => removeEmpty({
+    name: cleanText(item?.name),
+    text: cleanText(item?.text),
+  }));
+}
+
+function normalizeUrlItems(items) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+
+  return items.map(normalizeUrlItem);
+}
+
+function normalizeUrlItem(item) {
+  if (!item) {
+    return null;
+  }
+
+  return removeEmpty({
+    label: cleanText(item.label),
+    url: cleanText(item.url),
+  });
+}
+
+function normalizeTextArray(items) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+
+  return items.map(cleanText).filter(Boolean);
+}
+
+function normalizeLanguageCodes(items) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+
+  return items
+    .map((item) => {
+      if (typeof item === "string") {
+        return cleanText(item);
+      }
+
+      return cleanText(item?.code);
+    })
+    .filter(Boolean);
+}
+
+function normalizeBoolean(value) {
+  if (typeof value === "boolean") {
+    return value;
+  }
+
+  if (typeof value === "string") {
+    if (value === "true") {
+      return true;
+    }
+
+    if (value === "false") {
+      return false;
+    }
+  }
+
+  return null;
+}
+
+function removeEmpty(value) {
+  if (Array.isArray(value)) {
+    const items = value.map(removeEmpty).filter((item) => !isEmptyValue(item));
+    return items.length > 0 ? items : undefined;
+  }
+
+  if (value && typeof value === "object") {
+    const out = {};
+
+    for (const [key, item] of Object.entries(value)) {
+      const clean = removeEmpty(item);
+
+      if (!isEmptyValue(clean)) {
+        out[key] = clean;
+      }
+    }
+
+    return Object.keys(out).length > 0 ? out : undefined;
+  }
+
+  return value;
+}
+
+function isEmptyValue(value) {
+  return (
+    value === undefined
+    || value === null
+    || value === ""
+    || (Array.isArray(value) && value.length === 0)
+    || (
+      value
+      && typeof value === "object"
+      && !Array.isArray(value)
+      && Object.keys(value).length === 0
+    )
+  );
 }
 
 function getThemes(row, language, languages) {
@@ -295,15 +499,25 @@ function getSearchText(row) {
     JSON.stringify(row.source_keywords || []),
     JSON.stringify(row.source_keywords_m49 || []),
     JSON.stringify(row.source_keywords_gemet || []),
+    JSON.stringify(row.source_keywords_topic || []),
     JSON.stringify(row.source_keywords_m49_multilingual || []),
     JSON.stringify(row.source_keywords_gemet_multilingual || []),
+    row.source_data_attribution,
+    row.source_citation,
+    JSON.stringify(row.source_language_codes || []),
+    JSON.stringify(row.source_contacts || []),
+    JSON.stringify(row.source_licenses || []),
+    JSON.stringify(row.source_homepage || {}),
+    JSON.stringify(row.source_urls || []),
+    JSON.stringify(row.source_annex_urls || []),
+    row.source_periodicity,
     JSON.stringify(row.projects_id || []),
     JSON.stringify(row.projects_title_multilingual || []),
   ].join(" ").toLowerCase();
 }
 
-function bboxIntersects(value, bbox) {
-  const recordBbox = normalizeBbox(value);
+function bboxIntersects(row, bbox) {
+  const recordBbox = getRowBbox(row);
 
   if (!recordBbox) {
     return false;
@@ -352,21 +566,37 @@ function normalizeBbox(value) {
     return null;
   }
 
-  const west = Number(value.lng_min);
-  const south = Number(value.lat_min);
-  const east = Number(value.lng_max);
-  const north = Number(value.lat_max);
+  const west = Number(value.lng_min ?? value.lng1);
+  const south = Number(value.lat_min ?? value.lat1);
+  const east = Number(value.lng_max ?? value.lng2);
+  const north = Number(value.lat_max ?? value.lat2);
 
   if (
     !Number.isFinite(west)
     || !Number.isFinite(south)
     || !Number.isFinite(east)
     || !Number.isFinite(north)
+    || west < -180
+    || east > 180
+    || south < -90
+    || north > 90
+    || west >= east
+    || south >= north
   ) {
     return null;
   }
 
   return [west, south, east, north];
+}
+
+function getRowBbox(row) {
+  const metadataBbox = normalizeBbox(row.source_bbox);
+
+  if (row.view_type === "vt") {
+    return normalizeBbox(row.source_estimated_bbox) || metadataBbox;
+  }
+
+  return metadataBbox || normalizeBbox(row.view_extent);
 }
 
 function bboxToGeometry(bbox) {
