@@ -186,6 +186,7 @@ services:
     deploy:
       replicas: 1
   pycsw:
+    platform: linux/amd64
     image: fredmoser/mapx_pycsw:3.0-dev-mapx.1
     restart: on-failure
     depends_on:
