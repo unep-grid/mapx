@@ -1,3 +1,37 @@
+  - [1.14.1-alpha.0](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.0) 
+
+    - feat(metadata): custom pycsw image with config files included
+    - feat(metadata): enrich OGC records and customize pycsw catalogue
+    - fix(ogc-meta): derive vector extents from PostGIS statistics
+    - feat(meta): cleanup
+    - feat(meta): added metadata catalog service, connected to routines and db patch
+    - fix(api): ogc meta search index geoserver publication flag and catalog order snapshot
+    - feat(api): expose OGC metadata catalog
+    - fix(geoserver): provision URL checks for MapX SVG symbols
+    - chore: update submodules
+    - fix(geoserver): upgrade image to 2.28.4
+    - chore: update docker-compose with latest meili and geoserver built images
+    - chore: meili Dockerfile and script update
+    - refactor(search): migrate app client to meilisearch 1.x API
+    - fix(search): atomic index swap with retries, meilisearch client 1.x (#1102)
+    - chore: gitignore PLANS
+    - fix(edit_table): __mx_geom_action column should not be listed as removable column
+    - test(edit_table): cover channel and geometry flow
+    - refactor(edit_table): split 4300-line client editor into mixins
+    - refactor(edit_table): split server module by concern
+    - refactor(edit_table): shared client channel + geometry edit flow
+    - feat(edit_table): owned heartbeat locks + disconnect cleanup
+    - fix(edit_table): correct logic bugs in table editor client/server
+    - fix(geom_edit): improved lock approach
+    - fix(map-context-menu): make quick edit status non-blocking
+    - fix: table editor / geometry lock mecanism and stability
+    - refactor: map_context_menu to prevent large api import
+    - feat: context menu to improve vector data cycle
+    - feat: add + edit feature + row, should cover #1047
+    - fix: removed log in mx_modal
+    - feat: modal hide/show method
+
+
   - [1.14.0](https://github.com/unep-grid/mapx/tree/1.14.0) 
 
 
