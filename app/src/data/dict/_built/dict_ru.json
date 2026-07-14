@@ -3110,6 +3110,11 @@
     "ru": "Отмена "
   },
   {
+    "id": "btn_clear_all",
+    "en": "Clear all",
+    "ru": "Очистить все"
+  },
+  {
     "id": "btn_next",
     "en": "Next...",
     "ru": "Следующий..."
@@ -8928,6 +8933,26 @@
     "id": "schema_style_label",
     "en": "Label",
     "ru": "Этикетка "
+  },
+  {
+    "id": "schema_style_label_translations",
+    "en": "Label translations",
+    "ru": "Перевод меток"
+  },
+  {
+    "id": "schema_style_label_open_translations",
+    "en": "Edit label translations",
+    "ru": "Редактировать перевод меток"
+  },
+  {
+    "id": "schema_style_label_copy_source",
+    "en": "Copy source",
+    "ru": "Скопировать источник"
+  },
+  {
+    "id": "schema_style_label_copy_to_all_languages",
+    "en": "Copy to all languages",
+    "ru": "Копировать на все языки"
   },
   {
     "id": "schema_style_last_rule",

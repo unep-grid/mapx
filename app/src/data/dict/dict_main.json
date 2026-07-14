@@ -377,6 +377,19 @@
     "de": "Abbrechen"
   },
   {
+    "id": "btn_clear_all",
+    "en": "Clear all",
+    "fr": "Tout effacer",
+    "es": "Borrar todo",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": "Alle leeren"
+  },
+  {
     "id": "btn_next",
     "en": "Next...",
     "fr": "Suivant..",

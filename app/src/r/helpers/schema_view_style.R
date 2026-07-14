@@ -102,12 +102,28 @@ mxSchemaViewStyle <- function(
   labels <- list()
 
   for (i in ll) {
+    isCurrentLanguage <- identical(i, l)
     r <- list(
       list(
-        title = tt("schema_style_label"),
+        title = if (isCurrentLanguage) {
+          sprintf("%s (%s)", tt("schema_style_label"), toupper(i))
+        } else {
+          tt("schema_style_label")
+        },
         type = "string",
+        format = if (isCurrentLanguage) "mapx-multilingual-label" else NULL,
+        mx_options = if (isCurrentLanguage) {
+          list(
+            renderer = "mapx-multilingual-label",
+            language = l,
+            languages = ll,
+            prefix = "label_"
+          )
+        } else {
+          NULL
+        },
         options = list(
-          hidden = i != l
+          hidden = !isCurrentLanguage
         )
       )
     )

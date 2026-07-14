@@ -3110,6 +3110,11 @@
     "fr": "Annuler"
   },
   {
+    "id": "btn_clear_all",
+    "en": "Clear all",
+    "fr": "Tout effacer"
+  },
+  {
     "id": "btn_next",
     "en": "Next...",
     "fr": "Suivant.."
@@ -8928,6 +8933,26 @@
     "id": "schema_style_label",
     "en": "Label",
     "fr": "Etiquette"
+  },
+  {
+    "id": "schema_style_label_translations",
+    "en": "Label translations",
+    "fr": "Traductions du libellé"
+  },
+  {
+    "id": "schema_style_label_open_translations",
+    "en": "Edit label translations",
+    "fr": "Modifier les traductions du libellé"
+  },
+  {
+    "id": "schema_style_label_copy_source",
+    "en": "Copy source",
+    "fr": "Source de la copie"
+  },
+  {
+    "id": "schema_style_label_copy_to_all_languages",
+    "en": "Copy to all languages",
+    "fr": "Copier vers toutes les langues"
   },
   {
     "id": "schema_style_last_rule",

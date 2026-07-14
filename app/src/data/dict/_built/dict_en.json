@@ -2488,6 +2488,10 @@
     "en": "Cancel"
   },
   {
+    "id": "btn_clear_all",
+    "en": "Clear all"
+  },
+  {
     "id": "btn_next",
     "en": "Next..."
   },
@@ -7142,6 +7146,22 @@
   {
     "id": "schema_style_label",
     "en": "Label"
+  },
+  {
+    "id": "schema_style_label_translations",
+    "en": "Label translations"
+  },
+  {
+    "id": "schema_style_label_open_translations",
+    "en": "Edit label translations"
+  },
+  {
+    "id": "schema_style_label_copy_source",
+    "en": "Copy source"
+  },
+  {
+    "id": "schema_style_label_copy_to_all_languages",
+    "en": "Copy to all languages"
   },
   {
     "id": "schema_style_last_rule",

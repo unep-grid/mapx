@@ -3110,6 +3110,11 @@
     "fa": "لغو "
   },
   {
+    "id": "btn_clear_all",
+    "en": "Clear all",
+    "fa": "پاک کردن همه"
+  },
+  {
     "id": "btn_next",
     "en": "Next...",
     "fa": "بعد..."
@@ -8928,6 +8933,26 @@
     "id": "schema_style_label",
     "en": "Label",
     "fa": "لیبل"
+  },
+  {
+    "id": "schema_style_label_translations",
+    "en": "Label translations",
+    "fa": "ترجمه‌های برچسب"
+  },
+  {
+    "id": "schema_style_label_open_translations",
+    "en": "Edit label translations",
+    "fa": "ویرایش ترجمه‌های برچسب"
+  },
+  {
+    "id": "schema_style_label_copy_source",
+    "en": "Copy source",
+    "fa": "منبع کپی"
+  },
+  {
+    "id": "schema_style_label_copy_to_all_languages",
+    "en": "Copy to all languages",
+    "fa": "کپی به همه زبان‌ها"
   },
   {
     "id": "schema_style_last_rule",

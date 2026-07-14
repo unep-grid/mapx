@@ -3110,6 +3110,11 @@
     "zh": "取消"
   },
   {
+    "id": "btn_clear_all",
+    "en": "Clear all",
+    "zh": "全部清除"
+  },
+  {
     "id": "btn_next",
     "en": "Next...",
     "zh": "下一个..."
@@ -8928,6 +8933,26 @@
     "id": "schema_style_label",
     "en": "Label",
     "zh": "标签"
+  },
+  {
+    "id": "schema_style_label_translations",
+    "en": "Label translations",
+    "zh": "标签翻译"
+  },
+  {
+    "id": "schema_style_label_open_translations",
+    "en": "Edit label translations",
+    "zh": "编辑标签翻译"
+  },
+  {
+    "id": "schema_style_label_copy_source",
+    "en": "Copy source",
+    "zh": "复制源文件"
+  },
+  {
+    "id": "schema_style_label_copy_to_all_languages",
+    "en": "Copy to all languages",
+    "zh": "复制到所有语言"
   },
   {
     "id": "schema_style_last_rule",

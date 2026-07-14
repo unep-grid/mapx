@@ -8086,6 +8086,19 @@
     "de": "Abbrechen"
   },
   {
+    "id": "btn_clear_all",
+    "en": "Clear all",
+    "fr": "Tout effacer",
+    "es": "Borrar todo",
+    "ru": "Очистить все",
+    "zh": "全部清除",
+    "ar": "مسح الكل",
+    "fa": "پاک کردن همه",
+    "ps": "ټول پاک کړئ",
+    "bn": "সব পরিষ্কার করুন",
+    "de": "Alle leeren"
+  },
+  {
     "id": "btn_next",
     "en": "Next...",
     "fr": "Suivant..",
@@ -23216,6 +23229,58 @@
     "ps": "نښه",
     "bn": "লেবেল ",
     "de": "Etikette "
+  },
+  {
+    "id": "schema_style_label_translations",
+    "en": "Label translations",
+    "fr": "Traductions du libellé",
+    "es": "Traducciones de la etiqueta",
+    "ru": "Перевод меток",
+    "zh": "标签翻译",
+    "ar": "ترجمات التسميات",
+    "fa": "ترجمه‌های برچسب",
+    "ps": "د لیبل ژباړې",
+    "bn": "লেবেল অনুবাদ",
+    "de": "Übersetzungen der Beschriftung"
+  },
+  {
+    "id": "schema_style_label_open_translations",
+    "en": "Edit label translations",
+    "fr": "Modifier les traductions du libellé",
+    "es": "Editar las traducciones de la etiqueta",
+    "ru": "Редактировать перевод меток",
+    "zh": "编辑标签翻译",
+    "ar": "تعديل ترجمات التسميات",
+    "fa": "ویرایش ترجمه‌های برچسب",
+    "ps": "د لیبل ژباړې سم کړئ",
+    "bn": "লেবেল অনুবাদ সম্পাদনা করুন",
+    "de": "Übersetzungen der Beschriftung bearbeiten"
+  },
+  {
+    "id": "schema_style_label_copy_source",
+    "en": "Copy source",
+    "fr": "Source de la copie",
+    "es": "Fuente de la copia",
+    "ru": "Скопировать источник",
+    "zh": "复制源文件",
+    "ar": "المصدر المنسوخ",
+    "fa": "منبع کپی",
+    "ps": "د سرچینې کاپي",
+    "bn": "উৎস কপি করুন",
+    "de": "Kopierquelle"
+  },
+  {
+    "id": "schema_style_label_copy_to_all_languages",
+    "en": "Copy to all languages",
+    "fr": "Copier vers toutes les langues",
+    "es": "Copiar a todos los idiomas",
+    "ru": "Копировать на все языки",
+    "zh": "复制到所有语言",
+    "ar": "انسخ إلى جميع اللغات",
+    "fa": "کپی به همه زبان‌ها",
+    "ps": "ټولو ژبو ته کاپي کړئ",
+    "bn": "সকল ভাষায় কপি করুন",
+    "de": "In alle Sprachen kopieren"
   },
   {
     "id": "schema_style_last_rule",

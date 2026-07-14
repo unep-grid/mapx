@@ -3110,6 +3110,11 @@
     "bn": "বাতিল "
   },
   {
+    "id": "btn_clear_all",
+    "en": "Clear all",
+    "bn": "সব পরিষ্কার করুন"
+  },
+  {
     "id": "btn_next",
     "en": "Next...",
     "bn": "পরবর্তী..."
@@ -8928,6 +8933,26 @@
     "id": "schema_style_label",
     "en": "Label",
     "bn": "লেবেল "
+  },
+  {
+    "id": "schema_style_label_translations",
+    "en": "Label translations",
+    "bn": "লেবেল অনুবাদ"
+  },
+  {
+    "id": "schema_style_label_open_translations",
+    "en": "Edit label translations",
+    "bn": "লেবেল অনুবাদ সম্পাদনা করুন"
+  },
+  {
+    "id": "schema_style_label_copy_source",
+    "en": "Copy source",
+    "bn": "উৎস কপি করুন"
+  },
+  {
+    "id": "schema_style_label_copy_to_all_languages",
+    "en": "Copy to all languages",
+    "bn": "সকল ভাষায় কপি করুন"
   },
   {
     "id": "schema_style_last_rule",

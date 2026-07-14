@@ -3110,6 +3110,11 @@
     "ar": "يلغي "
   },
   {
+    "id": "btn_clear_all",
+    "en": "Clear all",
+    "ar": "مسح الكل"
+  },
+  {
     "id": "btn_next",
     "en": "Next...",
     "ar": "التالي..."
@@ -8928,6 +8933,26 @@
     "id": "schema_style_label",
     "en": "Label",
     "ar": "ملصق "
+  },
+  {
+    "id": "schema_style_label_translations",
+    "en": "Label translations",
+    "ar": "ترجمات التسميات"
+  },
+  {
+    "id": "schema_style_label_open_translations",
+    "en": "Edit label translations",
+    "ar": "تعديل ترجمات التسميات"
+  },
+  {
+    "id": "schema_style_label_copy_source",
+    "en": "Copy source",
+    "ar": "المصدر المنسوخ"
+  },
+  {
+    "id": "schema_style_label_copy_to_all_languages",
+    "en": "Copy to all languages",
+    "ar": "انسخ إلى جميع اللغات"
   },
   {
     "id": "schema_style_last_rule",

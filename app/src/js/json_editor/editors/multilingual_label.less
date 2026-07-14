@@ -1,0 +1,58 @@
+.mx-multilingual-label {
+  min-width: 150px;
+
+  .form-control {
+    min-width: 80px;
+  }
+
+  .mx-multilingual-label-trigger {
+    font-size: 11px;
+    padding-left: 7px;
+    padding-right: 7px;
+
+    .btn-icon {
+      align-items: center;
+      display: flex;
+      flex-direction: row-reverse;
+      gap: 4px;
+    }
+  }
+}
+
+.mx-multilingual-label-modal {
+  display: grid;
+  gap: 12px 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  .form-group {
+    margin: 0;
+  }
+
+  .mx-multilingual-label-modal-header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+
+    > label:first-child {
+      margin-right: 8px;
+    }
+  }
+
+  .mx-multilingual-label-source {
+    cursor: pointer;
+    margin: 0;
+    padding: 0 2px;
+  }
+
+  .mx-multilingual-label-modal-active
+    .mx-multilingual-label-modal-header
+    > label:first-child {
+    font-weight: 700;
+  }
+}
+
+@media (max-width: 600px) {
+  .mx-multilingual-label-modal {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
