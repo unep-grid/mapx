@@ -1,3 +1,9 @@
+  - [1.14.1-alpha.1](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.1) 
+
+    - fix(1073): label management in vt style editor
+    - fix: specify amd64 as platform for pycsw image
+
+
   - [1.14.1-alpha.0](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.0) 
 
     - feat(metadata): custom pycsw image with config files included
