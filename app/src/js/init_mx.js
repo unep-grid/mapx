@@ -11,6 +11,7 @@ import '../css/mx_modifiers.css';
 import '../css/mx_mapbox.css';
 import '../css/mx_table.css';
 import '../css/mx_modal.css';
+import '../css/mx_window.css';
 import '../css/mx_project_list.css';
 import '../css/mx_legends.css';
 import '../css/mx_icons.less';
