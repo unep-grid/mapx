@@ -1,0 +1,49 @@
+# Scope the project graph to the application frontend and API.
+*
+!/.graphifyignore
+!/app/
+!/app/src/
+!/app/src/**
+!/api/
+!/api/**
+
+# Dependencies and generated output.
+**/node_modules/
+**/dist/
+**/build/
+**/coverage/
+**/.cache/
+**/_cache/
+**/_built/
+**/_archives/
+**/package-lock.json
+*.min.js
+*.map
+
+# Non-code corpus excluded from this architecture graph.
+*.md
+*.markdown
+*.txt
+*.html
+*.yml
+*.yaml
+*.pdf
+*.bib
+
+# Images and media.
+*.svg
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.ico
+*.bmp
+*.tif
+*.tiff
+*.mp3
+*.mp4
+*.wav
+*.ogg
+*.mov
+*.webm
