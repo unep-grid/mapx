@@ -8255,6 +8255,251 @@
     "ps": "د حذف کولو لپاره د موضوعاتو جدول"
   },
   {
+    "id": "project_themes",
+    "en": "Project themes",
+    "ps": "د پروژې موضوعات"
+  },
+  {
+    "id": "project_themes_desc",
+    "en": "ISO 19115 topic categories describing this project",
+    "ps": "د ISO 19115 موضوع کټګورۍ چې دا پروژه تشریح کوي"
+  },
+  {
+    "id": "project_list_all_accessible",
+    "en": "All accessible",
+    "ps": "ټول د لاسرسي وړ"
+  },
+  {
+    "id": "project_list_my_projects",
+    "en": "My projects",
+    "ps": "زما پروژې"
+  },
+  {
+    "id": "project_list_all_roles",
+    "en": "All roles",
+    "ps": "ټول رولونه"
+  },
+  {
+    "id": "project_list_all_themes",
+    "en": "All themes",
+    "ps": "ټولې موضوعګانې"
+  },
+  {
+    "id": "project_list_sort_updated_desc",
+    "en": "Recently updated",
+    "ps": "په دې وروستیو کې تازه شوی"
+  },
+  {
+    "id": "project_list_sort_updated_asc",
+    "en": "Least recently updated",
+    "ps": "لږ تر لږه تازه شوي"
+  },
+  {
+    "id": "project_list_sort_name_asc",
+    "en": "Name A–Z",
+    "ps": "نوم الف – ی"
+  },
+  {
+    "id": "project_list_sort_name_desc",
+    "en": "Name Z–A",
+    "ps": "نوم Z–A"
+  },
+  {
+    "id": "project_list_sort_theme",
+    "en": "Theme A–Z",
+    "ps": "موضوع الف څخه تر یا"
+  },
+  {
+    "id": "project_list_project",
+    "en": "Project",
+    "ps": "پروژه"
+  },
+  {
+    "id": "project_list_role",
+    "en": "Role",
+    "ps": "رول"
+  },
+  {
+    "id": "project_list_views",
+    "en": "Views",
+    "ps": "لیدونه"
+  },
+  {
+    "id": "project_list_collaborators",
+    "en": "Collaborators",
+    "ps": "همکاران"
+  },
+  {
+    "id": "project_list_updated",
+    "en": "Updated",
+    "ps": "تازه شوی"
+  },
+  {
+    "id": "project_list_results",
+    "en": "projects",
+    "ps": "پروژې"
+  },
+  {
+    "id": "project_list_loading",
+    "en": "Loading projects…",
+    "ps": "پروژې بارېږي…"
+  },
+  {
+    "id": "project_list_error",
+    "en": "Projects could not be loaded.",
+    "ps": "پروژې نشي پورته کېدای."
+  },
+  {
+    "id": "project_list_empty",
+    "en": "No project matches these filters.",
+    "ps": "هیڅ پروژه د دې فلټرونو سره سمون نه خوري."
+  },
+  {
+    "id": "project_list_previous",
+    "en": "Previous",
+    "ps": "مخکینی"
+  },
+  {
+    "id": "project_list_next",
+    "en": "Next",
+    "ps": "بل"
+  },
+  {
+    "id": "project_list_page",
+    "en": "Page",
+    "ps": "پاڼه"
+  },
+  {
+    "id": "project_theme_biota",
+    "en": "Biota",
+    "ps": "بایوټا"
+  },
+  {
+    "id": "project_theme_boundaries",
+    "en": "Boundaries",
+    "ps": "پولې"
+  },
+  {
+    "id": "project_theme_farming",
+    "en": "Farming",
+    "ps": "کرنه"
+  },
+  {
+    "id": "project_theme_climatologyMeteorologyAtmosphere",
+    "en": "Climatology, meteorology and atmosphere",
+    "ps": "اقلیم پېژندنه، هوا پېژندنه او اتموسفیر"
+  },
+  {
+    "id": "project_theme_economy",
+    "en": "Economy",
+    "ps": "اقتصاد"
+  },
+  {
+    "id": "project_theme_elevation",
+    "en": "Elevation",
+    "ps": "لوړوالی"
+  },
+  {
+    "id": "project_theme_environment",
+    "en": "Environment",
+    "ps": "چاپیریال"
+  },
+  {
+    "id": "project_theme_geoscientificInformation",
+    "en": "Geoscientific information",
+    "ps": "جیو ساینسي معلومات"
+  },
+  {
+    "id": "project_theme_health",
+    "en": "Health",
+    "ps": "روغتیا"
+  },
+  {
+    "id": "project_theme_imageryBaseMapsEarthCover",
+    "en": "Imagery, base maps and land cover",
+    "ps": "انځورونه، د بنسټ نقشې او د ځمکې پوښښ"
+  },
+  {
+    "id": "project_theme_intelligenceMilitary",
+    "en": "Intelligence and military",
+    "ps": "استخبارات او پوځ"
+  },
+  {
+    "id": "project_theme_inlandWaters",
+    "en": "Inland waters",
+    "ps": "داخلي اوبه"
+  },
+  {
+    "id": "project_theme_location",
+    "en": "Location",
+    "ps": "ځای"
+  },
+  {
+    "id": "project_theme_oceans",
+    "en": "Oceans",
+    "ps": "سمندرونه"
+  },
+  {
+    "id": "project_theme_planningCadastre",
+    "en": "Planning and cadastre",
+    "ps": "پلان جوړونه او کادستر"
+  },
+  {
+    "id": "project_theme_society",
+    "en": "Society",
+    "ps": "ټولنه"
+  },
+  {
+    "id": "project_theme_structure",
+    "en": "Structures",
+    "ps": "جوړښتونه"
+  },
+  {
+    "id": "project_theme_transportation",
+    "en": "Transportation",
+    "ps": "ترانسپورت"
+  },
+  {
+    "id": "project_theme_utilitiesCommunication",
+    "en": "Utilities and communication",
+    "ps": "اسانتیاوې او مخابرات"
+  },
+  {
+    "id": "project_list_sort_views_desc",
+    "en": "Most views",
+    "ps": "ډیری لیدل شوي"
+  },
+  {
+    "id": "project_list_sort_views_asc",
+    "en": "Fewest views",
+    "ps": "تر ټولو لږ لیدل شوي"
+  },
+  {
+    "id": "project_list_sort_collaborators_desc",
+    "en": "Most collaborators",
+    "ps": "ډیری همکاران"
+  },
+  {
+    "id": "project_list_sort_collaborators_asc",
+    "en": "Fewest collaborators",
+    "ps": "لږ همکاران"
+  },
+  {
+    "id": "project_list_clear",
+    "en": "Clear",
+    "ps": "روښانه"
+  },
+  {
+    "id": "project_list_showing",
+    "en": "Showing",
+    "ps": "ښودل"
+  },
+  {
+    "id": "project_list_of",
+    "en": "of",
+    "ps": "د"
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix",
     "ps": "د پروژې رول میټریکس"

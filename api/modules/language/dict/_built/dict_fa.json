@@ -8255,6 +8255,251 @@
     "fa": "جدول تم‌هایی که باید حذف شوند"
   },
   {
+    "id": "project_themes",
+    "en": "Project themes",
+    "fa": "مضامین پروژه"
+  },
+  {
+    "id": "project_themes_desc",
+    "en": "ISO 19115 topic categories describing this project",
+    "fa": "دسته‌بندی‌های موضوعی ISO 19115 که این پروژه را توصیف می‌کنند"
+  },
+  {
+    "id": "project_list_all_accessible",
+    "en": "All accessible",
+    "fa": "همه قابل دسترسی"
+  },
+  {
+    "id": "project_list_my_projects",
+    "en": "My projects",
+    "fa": "پروژه‌های من"
+  },
+  {
+    "id": "project_list_all_roles",
+    "en": "All roles",
+    "fa": "همه نقش‌ها"
+  },
+  {
+    "id": "project_list_all_themes",
+    "en": "All themes",
+    "fa": "همه تم‌ها"
+  },
+  {
+    "id": "project_list_sort_updated_desc",
+    "en": "Recently updated",
+    "fa": "اخیراً به‌روزرسانی شده است"
+  },
+  {
+    "id": "project_list_sort_updated_asc",
+    "en": "Least recently updated",
+    "fa": "اخیراً به روز نشده است"
+  },
+  {
+    "id": "project_list_sort_name_asc",
+    "en": "Name A–Z",
+    "fa": "نام از الف تا ی"
+  },
+  {
+    "id": "project_list_sort_name_desc",
+    "en": "Name Z–A",
+    "fa": "نام ز-الف"
+  },
+  {
+    "id": "project_list_sort_theme",
+    "en": "Theme A–Z",
+    "fa": "تم A تا Z"
+  },
+  {
+    "id": "project_list_project",
+    "en": "Project",
+    "fa": "پروژه"
+  },
+  {
+    "id": "project_list_role",
+    "en": "Role",
+    "fa": "نقش"
+  },
+  {
+    "id": "project_list_views",
+    "en": "Views",
+    "fa": "بازدیدها"
+  },
+  {
+    "id": "project_list_collaborators",
+    "en": "Collaborators",
+    "fa": "همکاران"
+  },
+  {
+    "id": "project_list_updated",
+    "en": "Updated",
+    "fa": "به‌روزرسانی‌شده"
+  },
+  {
+    "id": "project_list_results",
+    "en": "projects",
+    "fa": "پروژه‌ها"
+  },
+  {
+    "id": "project_list_loading",
+    "en": "Loading projects…",
+    "fa": "در حال بارگذاری پروژه‌ها…"
+  },
+  {
+    "id": "project_list_error",
+    "en": "Projects could not be loaded.",
+    "fa": "پروژه‌ها قابل بارگذاری نبودند."
+  },
+  {
+    "id": "project_list_empty",
+    "en": "No project matches these filters.",
+    "fa": "هیچ پروژه‌ای با این فیلترها مطابقت ندارد."
+  },
+  {
+    "id": "project_list_previous",
+    "en": "Previous",
+    "fa": "قبلی"
+  },
+  {
+    "id": "project_list_next",
+    "en": "Next",
+    "fa": "بعدی"
+  },
+  {
+    "id": "project_list_page",
+    "en": "Page",
+    "fa": "صفحه"
+  },
+  {
+    "id": "project_theme_biota",
+    "en": "Biota",
+    "fa": "زیست‌بوم"
+  },
+  {
+    "id": "project_theme_boundaries",
+    "en": "Boundaries",
+    "fa": "مرزها"
+  },
+  {
+    "id": "project_theme_farming",
+    "en": "Farming",
+    "fa": "کشاورزی"
+  },
+  {
+    "id": "project_theme_climatologyMeteorologyAtmosphere",
+    "en": "Climatology, meteorology and atmosphere",
+    "fa": "اقلیم شناسی، هواشناسی و جو"
+  },
+  {
+    "id": "project_theme_economy",
+    "en": "Economy",
+    "fa": "اقتصاد"
+  },
+  {
+    "id": "project_theme_elevation",
+    "en": "Elevation",
+    "fa": "ارتفاع"
+  },
+  {
+    "id": "project_theme_environment",
+    "en": "Environment",
+    "fa": "محیط زیست"
+  },
+  {
+    "id": "project_theme_geoscientificInformation",
+    "en": "Geoscientific information",
+    "fa": "اطلاعات زمین‌شناسی"
+  },
+  {
+    "id": "project_theme_health",
+    "en": "Health",
+    "fa": "سلامت"
+  },
+  {
+    "id": "project_theme_imageryBaseMapsEarthCover",
+    "en": "Imagery, base maps and land cover",
+    "fa": "تصاویر، نقشه‌های پایه و پوشش زمین"
+  },
+  {
+    "id": "project_theme_intelligenceMilitary",
+    "en": "Intelligence and military",
+    "fa": "اطلاعات و ارتش"
+  },
+  {
+    "id": "project_theme_inlandWaters",
+    "en": "Inland waters",
+    "fa": "آب‌های داخلی"
+  },
+  {
+    "id": "project_theme_location",
+    "en": "Location",
+    "fa": "مکان"
+  },
+  {
+    "id": "project_theme_oceans",
+    "en": "Oceans",
+    "fa": "اقیانوس‌ها"
+  },
+  {
+    "id": "project_theme_planningCadastre",
+    "en": "Planning and cadastre",
+    "fa": "برنامه ریزی و کاداستر"
+  },
+  {
+    "id": "project_theme_society",
+    "en": "Society",
+    "fa": "جامعه"
+  },
+  {
+    "id": "project_theme_structure",
+    "en": "Structures",
+    "fa": "سازه‌ها"
+  },
+  {
+    "id": "project_theme_transportation",
+    "en": "Transportation",
+    "fa": "حمل و نقل"
+  },
+  {
+    "id": "project_theme_utilitiesCommunication",
+    "en": "Utilities and communication",
+    "fa": "خدمات رفاهی و ارتباطی"
+  },
+  {
+    "id": "project_list_sort_views_desc",
+    "en": "Most views",
+    "fa": "بیشترین بازدیدها"
+  },
+  {
+    "id": "project_list_sort_views_asc",
+    "en": "Fewest views",
+    "fa": "کمترین بازدیدها"
+  },
+  {
+    "id": "project_list_sort_collaborators_desc",
+    "en": "Most collaborators",
+    "fa": "بیشتر همکاران"
+  },
+  {
+    "id": "project_list_sort_collaborators_asc",
+    "en": "Fewest collaborators",
+    "fa": "کمترین تعداد همکار"
+  },
+  {
+    "id": "project_list_clear",
+    "en": "Clear",
+    "fa": "پاک کردن"
+  },
+  {
+    "id": "project_list_showing",
+    "en": "Showing",
+    "fa": "نمایش"
+  },
+  {
+    "id": "project_list_of",
+    "en": "of",
+    "fa": "از"
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix",
     "fa": "ماتریس نقش‌های پروژه"

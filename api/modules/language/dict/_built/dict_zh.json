@@ -8255,6 +8255,251 @@
     "zh": "要删除的主题表"
   },
   {
+    "id": "project_themes",
+    "en": "Project themes",
+    "zh": "项目主题"
+  },
+  {
+    "id": "project_themes_desc",
+    "en": "ISO 19115 topic categories describing this project",
+    "zh": "描述此项目的 ISO 19115 主题类别"
+  },
+  {
+    "id": "project_list_all_accessible",
+    "en": "All accessible",
+    "zh": "所有通道均可通行"
+  },
+  {
+    "id": "project_list_my_projects",
+    "en": "My projects",
+    "zh": "我的项目"
+  },
+  {
+    "id": "project_list_all_roles",
+    "en": "All roles",
+    "zh": "所有角色"
+  },
+  {
+    "id": "project_list_all_themes",
+    "en": "All themes",
+    "zh": "所有主题"
+  },
+  {
+    "id": "project_list_sort_updated_desc",
+    "en": "Recently updated",
+    "zh": "最近更新"
+  },
+  {
+    "id": "project_list_sort_updated_asc",
+    "en": "Least recently updated",
+    "zh": "最近更新"
+  },
+  {
+    "id": "project_list_sort_name_asc",
+    "en": "Name A–Z",
+    "zh": "姓名 A–Z"
+  },
+  {
+    "id": "project_list_sort_name_desc",
+    "en": "Name Z–A",
+    "zh": "名称 Z–A"
+  },
+  {
+    "id": "project_list_sort_theme",
+    "en": "Theme A–Z",
+    "zh": "主题 A–Z"
+  },
+  {
+    "id": "project_list_project",
+    "en": "Project",
+    "zh": "项目"
+  },
+  {
+    "id": "project_list_role",
+    "en": "Role",
+    "zh": "角色"
+  },
+  {
+    "id": "project_list_views",
+    "en": "Views",
+    "zh": "浏览量"
+  },
+  {
+    "id": "project_list_collaborators",
+    "en": "Collaborators",
+    "zh": "合作者"
+  },
+  {
+    "id": "project_list_updated",
+    "en": "Updated",
+    "zh": "更新"
+  },
+  {
+    "id": "project_list_results",
+    "en": "projects",
+    "zh": "项目"
+  },
+  {
+    "id": "project_list_loading",
+    "en": "Loading projects…",
+    "zh": "正在加载项目…"
+  },
+  {
+    "id": "project_list_error",
+    "en": "Projects could not be loaded.",
+    "zh": "项目加载失败。"
+  },
+  {
+    "id": "project_list_empty",
+    "en": "No project matches these filters.",
+    "zh": "没有项目符合这些筛选条件。"
+  },
+  {
+    "id": "project_list_previous",
+    "en": "Previous",
+    "zh": "以前的"
+  },
+  {
+    "id": "project_list_next",
+    "en": "Next",
+    "zh": "下一个"
+  },
+  {
+    "id": "project_list_page",
+    "en": "Page",
+    "zh": "页"
+  },
+  {
+    "id": "project_theme_biota",
+    "en": "Biota",
+    "zh": "生物群"
+  },
+  {
+    "id": "project_theme_boundaries",
+    "en": "Boundaries",
+    "zh": "边界"
+  },
+  {
+    "id": "project_theme_farming",
+    "en": "Farming",
+    "zh": "农业"
+  },
+  {
+    "id": "project_theme_climatologyMeteorologyAtmosphere",
+    "en": "Climatology, meteorology and atmosphere",
+    "zh": "气候学、气象学和大气学"
+  },
+  {
+    "id": "project_theme_economy",
+    "en": "Economy",
+    "zh": "经济"
+  },
+  {
+    "id": "project_theme_elevation",
+    "en": "Elevation",
+    "zh": "海拔"
+  },
+  {
+    "id": "project_theme_environment",
+    "en": "Environment",
+    "zh": "环境"
+  },
+  {
+    "id": "project_theme_geoscientificInformation",
+    "en": "Geoscientific information",
+    "zh": "地球科学信息"
+  },
+  {
+    "id": "project_theme_health",
+    "en": "Health",
+    "zh": "健康"
+  },
+  {
+    "id": "project_theme_imageryBaseMapsEarthCover",
+    "en": "Imagery, base maps and land cover",
+    "zh": "影像、底图和土地覆盖"
+  },
+  {
+    "id": "project_theme_intelligenceMilitary",
+    "en": "Intelligence and military",
+    "zh": "情报和军事"
+  },
+  {
+    "id": "project_theme_inlandWaters",
+    "en": "Inland waters",
+    "zh": "内陆水域"
+  },
+  {
+    "id": "project_theme_location",
+    "en": "Location",
+    "zh": "地点"
+  },
+  {
+    "id": "project_theme_oceans",
+    "en": "Oceans",
+    "zh": "海洋"
+  },
+  {
+    "id": "project_theme_planningCadastre",
+    "en": "Planning and cadastre",
+    "zh": "规划和地籍"
+  },
+  {
+    "id": "project_theme_society",
+    "en": "Society",
+    "zh": "社会"
+  },
+  {
+    "id": "project_theme_structure",
+    "en": "Structures",
+    "zh": "结构"
+  },
+  {
+    "id": "project_theme_transportation",
+    "en": "Transportation",
+    "zh": "运输"
+  },
+  {
+    "id": "project_theme_utilitiesCommunication",
+    "en": "Utilities and communication",
+    "zh": "公用事业和通信"
+  },
+  {
+    "id": "project_list_sort_views_desc",
+    "en": "Most views",
+    "zh": "浏览量最高"
+  },
+  {
+    "id": "project_list_sort_views_asc",
+    "en": "Fewest views",
+    "zh": "浏览量最少"
+  },
+  {
+    "id": "project_list_sort_collaborators_desc",
+    "en": "Most collaborators",
+    "zh": "大多数合作者"
+  },
+  {
+    "id": "project_list_sort_collaborators_asc",
+    "en": "Fewest collaborators",
+    "zh": "合作者最少"
+  },
+  {
+    "id": "project_list_clear",
+    "en": "Clear",
+    "zh": "清除"
+  },
+  {
+    "id": "project_list_showing",
+    "en": "Showing",
+    "zh": "显示"
+  },
+  {
+    "id": "project_list_of",
+    "en": "of",
+    "zh": "的"
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix",
     "zh": "项目角色矩阵"

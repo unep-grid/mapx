@@ -8255,6 +8255,251 @@
     "bn": "মুছে ফেলার জন্য থিমগুলির তালিকা"
   },
   {
+    "id": "project_themes",
+    "en": "Project themes",
+    "bn": "প্রকল্পের বিষয়বস্তু"
+  },
+  {
+    "id": "project_themes_desc",
+    "en": "ISO 19115 topic categories describing this project",
+    "bn": "এই প্রকল্পের বর্ণনাকারী ISO 19115 বিষয়শ্রেণীসমূহ"
+  },
+  {
+    "id": "project_list_all_accessible",
+    "en": "All accessible",
+    "bn": "সকলের প্রবেশগম্য"
+  },
+  {
+    "id": "project_list_my_projects",
+    "en": "My projects",
+    "bn": "আমার প্রকল্পগুলি"
+  },
+  {
+    "id": "project_list_all_roles",
+    "en": "All roles",
+    "bn": "সকল ভূমিকা"
+  },
+  {
+    "id": "project_list_all_themes",
+    "en": "All themes",
+    "bn": "সমস্ত থিম"
+  },
+  {
+    "id": "project_list_sort_updated_desc",
+    "en": "Recently updated",
+    "bn": "সম্প্রতি আপডেট করা হয়েছে"
+  },
+  {
+    "id": "project_list_sort_updated_asc",
+    "en": "Least recently updated",
+    "bn": "সর্বশেষ আপডেট করা হয়েছে"
+  },
+  {
+    "id": "project_list_sort_name_asc",
+    "en": "Name A–Z",
+    "bn": "নাম A–Z"
+  },
+  {
+    "id": "project_list_sort_name_desc",
+    "en": "Name Z–A",
+    "bn": "নাম Z–A"
+  },
+  {
+    "id": "project_list_sort_theme",
+    "en": "Theme A–Z",
+    "bn": "থিম এ–জেড"
+  },
+  {
+    "id": "project_list_project",
+    "en": "Project",
+    "bn": "প্রকল্প"
+  },
+  {
+    "id": "project_list_role",
+    "en": "Role",
+    "bn": "ভূমিকা"
+  },
+  {
+    "id": "project_list_views",
+    "en": "Views",
+    "bn": "মতামত"
+  },
+  {
+    "id": "project_list_collaborators",
+    "en": "Collaborators",
+    "bn": "সহযোগীরা"
+  },
+  {
+    "id": "project_list_updated",
+    "en": "Updated",
+    "bn": "আপডেট করা হয়েছে"
+  },
+  {
+    "id": "project_list_results",
+    "en": "projects",
+    "bn": "প্রকল্পগুলি"
+  },
+  {
+    "id": "project_list_loading",
+    "en": "Loading projects…",
+    "bn": "প্রকল্পগুলি লোড হচ্ছে…"
+  },
+  {
+    "id": "project_list_error",
+    "en": "Projects could not be loaded.",
+    "bn": "প্রকল্পগুলো লোড করা যায়নি।"
+  },
+  {
+    "id": "project_list_empty",
+    "en": "No project matches these filters.",
+    "bn": "এই ফিল্টারগুলোর সাথে কোনো প্রজেক্ট মেলে না।"
+  },
+  {
+    "id": "project_list_previous",
+    "en": "Previous",
+    "bn": "পূর্ববর্তী"
+  },
+  {
+    "id": "project_list_next",
+    "en": "Next",
+    "bn": "পরবর্তী"
+  },
+  {
+    "id": "project_list_page",
+    "en": "Page",
+    "bn": "পৃষ্ঠা"
+  },
+  {
+    "id": "project_theme_biota",
+    "en": "Biota",
+    "bn": "বায়োটা"
+  },
+  {
+    "id": "project_theme_boundaries",
+    "en": "Boundaries",
+    "bn": "সীমানা"
+  },
+  {
+    "id": "project_theme_farming",
+    "en": "Farming",
+    "bn": "কৃষি"
+  },
+  {
+    "id": "project_theme_climatologyMeteorologyAtmosphere",
+    "en": "Climatology, meteorology and atmosphere",
+    "bn": "জলবায়ুবিদ্যা, আবহাওয়াবিদ্যা এবং বায়ুমণ্ডল"
+  },
+  {
+    "id": "project_theme_economy",
+    "en": "Economy",
+    "bn": "অর্থনীতি"
+  },
+  {
+    "id": "project_theme_elevation",
+    "en": "Elevation",
+    "bn": "উচ্চতা"
+  },
+  {
+    "id": "project_theme_environment",
+    "en": "Environment",
+    "bn": "পরিবেশ"
+  },
+  {
+    "id": "project_theme_geoscientificInformation",
+    "en": "Geoscientific information",
+    "bn": "ভূ-বৈজ্ঞানিক তথ্য"
+  },
+  {
+    "id": "project_theme_health",
+    "en": "Health",
+    "bn": "স্বাস্থ্য"
+  },
+  {
+    "id": "project_theme_imageryBaseMapsEarthCover",
+    "en": "Imagery, base maps and land cover",
+    "bn": "চিত্রাবলী, ভিত্তি মানচিত্র এবং ভূমি আচ্ছাদন"
+  },
+  {
+    "id": "project_theme_intelligenceMilitary",
+    "en": "Intelligence and military",
+    "bn": "গোয়েন্দা ও সামরিক"
+  },
+  {
+    "id": "project_theme_inlandWaters",
+    "en": "Inland waters",
+    "bn": "অভ্যন্তরীণ জলরাশি"
+  },
+  {
+    "id": "project_theme_location",
+    "en": "Location",
+    "bn": "অবস্থান"
+  },
+  {
+    "id": "project_theme_oceans",
+    "en": "Oceans",
+    "bn": "মহাসাগর"
+  },
+  {
+    "id": "project_theme_planningCadastre",
+    "en": "Planning and cadastre",
+    "bn": "পরিকল্পনা এবং ক্যাডাস্টার"
+  },
+  {
+    "id": "project_theme_society",
+    "en": "Society",
+    "bn": "সমাজ"
+  },
+  {
+    "id": "project_theme_structure",
+    "en": "Structures",
+    "bn": "কাঠামো"
+  },
+  {
+    "id": "project_theme_transportation",
+    "en": "Transportation",
+    "bn": "পরিবহন"
+  },
+  {
+    "id": "project_theme_utilitiesCommunication",
+    "en": "Utilities and communication",
+    "bn": "ইউটিলিটি এবং যোগাযোগ"
+  },
+  {
+    "id": "project_list_sort_views_desc",
+    "en": "Most views",
+    "bn": "বেশিরভাগ মতামত"
+  },
+  {
+    "id": "project_list_sort_views_asc",
+    "en": "Fewest views",
+    "bn": "সর্বনিম্ন দৃশ্য"
+  },
+  {
+    "id": "project_list_sort_collaborators_desc",
+    "en": "Most collaborators",
+    "bn": "বেশিরভাগ সহযোগীরা"
+  },
+  {
+    "id": "project_list_sort_collaborators_asc",
+    "en": "Fewest collaborators",
+    "bn": "সবচেয়ে কম সহযোগী"
+  },
+  {
+    "id": "project_list_clear",
+    "en": "Clear",
+    "bn": "পরিষ্কার"
+  },
+  {
+    "id": "project_list_showing",
+    "en": "Showing",
+    "bn": "দেখানো হচ্ছে"
+  },
+  {
+    "id": "project_list_of",
+    "en": "of",
+    "bn": "এর"
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix",
     "bn": "প্রকল্প ভূমিকা ম্যাট্রিক্স"

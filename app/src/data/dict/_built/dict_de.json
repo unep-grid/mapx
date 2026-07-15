@@ -8255,6 +8255,251 @@
     "de": "Tabelle der zu löschenden Themen"
   },
   {
+    "id": "project_themes",
+    "en": "Project themes",
+    "de": "Projektthemen"
+  },
+  {
+    "id": "project_themes_desc",
+    "en": "ISO 19115 topic categories describing this project",
+    "de": "ISO 19115-Themenkategorien, die dieses Projekt beschreiben"
+  },
+  {
+    "id": "project_list_all_accessible",
+    "en": "All accessible",
+    "de": "Alle zugänglich"
+  },
+  {
+    "id": "project_list_my_projects",
+    "en": "My projects",
+    "de": "Meine Projekte"
+  },
+  {
+    "id": "project_list_all_roles",
+    "en": "All roles",
+    "de": "Alle Rollen"
+  },
+  {
+    "id": "project_list_all_themes",
+    "en": "All themes",
+    "de": "Alle Themen"
+  },
+  {
+    "id": "project_list_sort_updated_desc",
+    "en": "Recently updated",
+    "de": "Kürzlich aktualisiert"
+  },
+  {
+    "id": "project_list_sort_updated_asc",
+    "en": "Least recently updated",
+    "de": "Zuletzt aktualisiert"
+  },
+  {
+    "id": "project_list_sort_name_asc",
+    "en": "Name A–Z",
+    "de": "Name A–Z"
+  },
+  {
+    "id": "project_list_sort_name_desc",
+    "en": "Name Z–A",
+    "de": "Name Z–A"
+  },
+  {
+    "id": "project_list_sort_theme",
+    "en": "Theme A–Z",
+    "de": "Thema A–Z"
+  },
+  {
+    "id": "project_list_project",
+    "en": "Project",
+    "de": "Projekt"
+  },
+  {
+    "id": "project_list_role",
+    "en": "Role",
+    "de": "Rolle"
+  },
+  {
+    "id": "project_list_views",
+    "en": "Views",
+    "de": "Ansichten"
+  },
+  {
+    "id": "project_list_collaborators",
+    "en": "Collaborators",
+    "de": "Mitarbeiter"
+  },
+  {
+    "id": "project_list_updated",
+    "en": "Updated",
+    "de": "Aktualisiert"
+  },
+  {
+    "id": "project_list_results",
+    "en": "projects",
+    "de": "Projekte"
+  },
+  {
+    "id": "project_list_loading",
+    "en": "Loading projects…",
+    "de": "Projekte werden geladen…"
+  },
+  {
+    "id": "project_list_error",
+    "en": "Projects could not be loaded.",
+    "de": "Die Projekte konnten nicht geladen werden."
+  },
+  {
+    "id": "project_list_empty",
+    "en": "No project matches these filters.",
+    "de": "Kein Projekt entspricht diesen Filtern."
+  },
+  {
+    "id": "project_list_previous",
+    "en": "Previous",
+    "de": "Vorherige"
+  },
+  {
+    "id": "project_list_next",
+    "en": "Next",
+    "de": "Nächste"
+  },
+  {
+    "id": "project_list_page",
+    "en": "Page",
+    "de": "Seite"
+  },
+  {
+    "id": "project_theme_biota",
+    "en": "Biota",
+    "de": "Lebewesen"
+  },
+  {
+    "id": "project_theme_boundaries",
+    "en": "Boundaries",
+    "de": "Grenzen"
+  },
+  {
+    "id": "project_theme_farming",
+    "en": "Farming",
+    "de": "Landwirtschaft"
+  },
+  {
+    "id": "project_theme_climatologyMeteorologyAtmosphere",
+    "en": "Climatology, meteorology and atmosphere",
+    "de": "Klimatologie, Meteorologie und Atmosphäre"
+  },
+  {
+    "id": "project_theme_economy",
+    "en": "Economy",
+    "de": "Wirtschaft"
+  },
+  {
+    "id": "project_theme_elevation",
+    "en": "Elevation",
+    "de": "Elevation"
+  },
+  {
+    "id": "project_theme_environment",
+    "en": "Environment",
+    "de": "Umfeld"
+  },
+  {
+    "id": "project_theme_geoscientificInformation",
+    "en": "Geoscientific information",
+    "de": "Geowissenschaftliche Informationen"
+  },
+  {
+    "id": "project_theme_health",
+    "en": "Health",
+    "de": "Gesundheit"
+  },
+  {
+    "id": "project_theme_imageryBaseMapsEarthCover",
+    "en": "Imagery, base maps and land cover",
+    "de": "Bildmaterial, Basiskarten und Landbedeckung"
+  },
+  {
+    "id": "project_theme_intelligenceMilitary",
+    "en": "Intelligence and military",
+    "de": "Geheimdienste und Militär"
+  },
+  {
+    "id": "project_theme_inlandWaters",
+    "en": "Inland waters",
+    "de": "Binnengewässer"
+  },
+  {
+    "id": "project_theme_location",
+    "en": "Location",
+    "de": "Standort"
+  },
+  {
+    "id": "project_theme_oceans",
+    "en": "Oceans",
+    "de": "Ozeane"
+  },
+  {
+    "id": "project_theme_planningCadastre",
+    "en": "Planning and cadastre",
+    "de": "Planung und Kataster"
+  },
+  {
+    "id": "project_theme_society",
+    "en": "Society",
+    "de": "Gesellschaft"
+  },
+  {
+    "id": "project_theme_structure",
+    "en": "Structures",
+    "de": "Strukturen"
+  },
+  {
+    "id": "project_theme_transportation",
+    "en": "Transportation",
+    "de": "Transport"
+  },
+  {
+    "id": "project_theme_utilitiesCommunication",
+    "en": "Utilities and communication",
+    "de": "Versorgungsunternehmen und Kommunikation"
+  },
+  {
+    "id": "project_list_sort_views_desc",
+    "en": "Most views",
+    "de": "Die meisten Ansichten"
+  },
+  {
+    "id": "project_list_sort_views_asc",
+    "en": "Fewest views",
+    "de": "Wenigste Aufrufe"
+  },
+  {
+    "id": "project_list_sort_collaborators_desc",
+    "en": "Most collaborators",
+    "de": "Die meisten Mitarbeiter"
+  },
+  {
+    "id": "project_list_sort_collaborators_asc",
+    "en": "Fewest collaborators",
+    "de": "Die wenigsten Mitarbeiter"
+  },
+  {
+    "id": "project_list_clear",
+    "en": "Clear",
+    "de": "Klar"
+  },
+  {
+    "id": "project_list_showing",
+    "en": "Showing",
+    "de": "Anzeige"
+  },
+  {
+    "id": "project_list_of",
+    "en": "of",
+    "de": "von"
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix",
     "de": "Projektrollenmatrix"

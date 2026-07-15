@@ -8255,6 +8255,251 @@
     "ru": "Таблица тем для удаления"
   },
   {
+    "id": "project_themes",
+    "en": "Project themes",
+    "ru": "Темы проектов"
+  },
+  {
+    "id": "project_themes_desc",
+    "en": "ISO 19115 topic categories describing this project",
+    "ru": "Категории тем ISO 19115, описывающие данный проект."
+  },
+  {
+    "id": "project_list_all_accessible",
+    "en": "All accessible",
+    "ru": "Все доступно"
+  },
+  {
+    "id": "project_list_my_projects",
+    "en": "My projects",
+    "ru": "Мои проекты"
+  },
+  {
+    "id": "project_list_all_roles",
+    "en": "All roles",
+    "ru": "Все роли"
+  },
+  {
+    "id": "project_list_all_themes",
+    "en": "All themes",
+    "ru": "Все темы"
+  },
+  {
+    "id": "project_list_sort_updated_desc",
+    "en": "Recently updated",
+    "ru": "Недавно обновлено"
+  },
+  {
+    "id": "project_list_sort_updated_asc",
+    "en": "Least recently updated",
+    "ru": "Последнее обновление"
+  },
+  {
+    "id": "project_list_sort_name_asc",
+    "en": "Name A–Z",
+    "ru": "Имя от А до Я"
+  },
+  {
+    "id": "project_list_sort_name_desc",
+    "en": "Name Z–A",
+    "ru": "Имя Z–A"
+  },
+  {
+    "id": "project_list_sort_theme",
+    "en": "Theme A–Z",
+    "ru": "Тема от А до Я"
+  },
+  {
+    "id": "project_list_project",
+    "en": "Project",
+    "ru": "Проект"
+  },
+  {
+    "id": "project_list_role",
+    "en": "Role",
+    "ru": "Роль"
+  },
+  {
+    "id": "project_list_views",
+    "en": "Views",
+    "ru": "Мнения"
+  },
+  {
+    "id": "project_list_collaborators",
+    "en": "Collaborators",
+    "ru": "Сотрудники"
+  },
+  {
+    "id": "project_list_updated",
+    "en": "Updated",
+    "ru": "Обновлено"
+  },
+  {
+    "id": "project_list_results",
+    "en": "projects",
+    "ru": "проекты"
+  },
+  {
+    "id": "project_list_loading",
+    "en": "Loading projects…",
+    "ru": "Загрузка проектов…"
+  },
+  {
+    "id": "project_list_error",
+    "en": "Projects could not be loaded.",
+    "ru": "Проекты не удалось загрузить."
+  },
+  {
+    "id": "project_list_empty",
+    "en": "No project matches these filters.",
+    "ru": "Ни один проект не соответствует этим фильтрам."
+  },
+  {
+    "id": "project_list_previous",
+    "en": "Previous",
+    "ru": "Предыдущий"
+  },
+  {
+    "id": "project_list_next",
+    "en": "Next",
+    "ru": "Следующий"
+  },
+  {
+    "id": "project_list_page",
+    "en": "Page",
+    "ru": "Страница"
+  },
+  {
+    "id": "project_theme_biota",
+    "en": "Biota",
+    "ru": "Биота"
+  },
+  {
+    "id": "project_theme_boundaries",
+    "en": "Boundaries",
+    "ru": "Границы"
+  },
+  {
+    "id": "project_theme_farming",
+    "en": "Farming",
+    "ru": "Сельское хозяйство"
+  },
+  {
+    "id": "project_theme_climatologyMeteorologyAtmosphere",
+    "en": "Climatology, meteorology and atmosphere",
+    "ru": "Климатология, метеорология и атмосфера"
+  },
+  {
+    "id": "project_theme_economy",
+    "en": "Economy",
+    "ru": "Экономика"
+  },
+  {
+    "id": "project_theme_elevation",
+    "en": "Elevation",
+    "ru": "Высота"
+  },
+  {
+    "id": "project_theme_environment",
+    "en": "Environment",
+    "ru": "Среда"
+  },
+  {
+    "id": "project_theme_geoscientificInformation",
+    "en": "Geoscientific information",
+    "ru": "Геонаучная информация"
+  },
+  {
+    "id": "project_theme_health",
+    "en": "Health",
+    "ru": "Здоровье"
+  },
+  {
+    "id": "project_theme_imageryBaseMapsEarthCover",
+    "en": "Imagery, base maps and land cover",
+    "ru": "Изображения, базовые карты и данные о растительном покрове."
+  },
+  {
+    "id": "project_theme_intelligenceMilitary",
+    "en": "Intelligence and military",
+    "ru": "разведка и военное дело"
+  },
+  {
+    "id": "project_theme_inlandWaters",
+    "en": "Inland waters",
+    "ru": "Внутренние воды"
+  },
+  {
+    "id": "project_theme_location",
+    "en": "Location",
+    "ru": "Расположение"
+  },
+  {
+    "id": "project_theme_oceans",
+    "en": "Oceans",
+    "ru": "Океаны"
+  },
+  {
+    "id": "project_theme_planningCadastre",
+    "en": "Planning and cadastre",
+    "ru": "Планирование и кадастр"
+  },
+  {
+    "id": "project_theme_society",
+    "en": "Society",
+    "ru": "Общество"
+  },
+  {
+    "id": "project_theme_structure",
+    "en": "Structures",
+    "ru": "Структуры"
+  },
+  {
+    "id": "project_theme_transportation",
+    "en": "Transportation",
+    "ru": "Транспорт"
+  },
+  {
+    "id": "project_theme_utilitiesCommunication",
+    "en": "Utilities and communication",
+    "ru": "Коммунальные услуги и связь"
+  },
+  {
+    "id": "project_list_sort_views_desc",
+    "en": "Most views",
+    "ru": "Наибольшее количество просмотров"
+  },
+  {
+    "id": "project_list_sort_views_asc",
+    "en": "Fewest views",
+    "ru": "Наименьшее количество просмотров"
+  },
+  {
+    "id": "project_list_sort_collaborators_desc",
+    "en": "Most collaborators",
+    "ru": "Большинство сотрудников"
+  },
+  {
+    "id": "project_list_sort_collaborators_asc",
+    "en": "Fewest collaborators",
+    "ru": "Наименьшее количество сотрудников"
+  },
+  {
+    "id": "project_list_clear",
+    "en": "Clear",
+    "ru": "Прозрачный"
+  },
+  {
+    "id": "project_list_showing",
+    "en": "Showing",
+    "ru": "Показано"
+  },
+  {
+    "id": "project_list_of",
+    "en": "of",
+    "ru": "из"
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix",
     "ru": "Матрица ролей проекта"

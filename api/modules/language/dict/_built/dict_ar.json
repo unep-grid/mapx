@@ -8255,6 +8255,251 @@
     "ar": "جدول المواضيع المراد حذفها"
   },
   {
+    "id": "project_themes",
+    "en": "Project themes",
+    "ar": "موضوعات المشروع"
+  },
+  {
+    "id": "project_themes_desc",
+    "en": "ISO 19115 topic categories describing this project",
+    "ar": "فئات موضوعات معيار ISO 19115 التي تصف هذا المشروع"
+  },
+  {
+    "id": "project_list_all_accessible",
+    "en": "All accessible",
+    "ar": "جميعها متاحة"
+  },
+  {
+    "id": "project_list_my_projects",
+    "en": "My projects",
+    "ar": "مشاريعي"
+  },
+  {
+    "id": "project_list_all_roles",
+    "en": "All roles",
+    "ar": "جميع الأدوار"
+  },
+  {
+    "id": "project_list_all_themes",
+    "en": "All themes",
+    "ar": "جميع السمات"
+  },
+  {
+    "id": "project_list_sort_updated_desc",
+    "en": "Recently updated",
+    "ar": "تم التحديث مؤخراً"
+  },
+  {
+    "id": "project_list_sort_updated_asc",
+    "en": "Least recently updated",
+    "ar": "آخر تحديث"
+  },
+  {
+    "id": "project_list_sort_name_asc",
+    "en": "Name A–Z",
+    "ar": "الأسماء من الألف إلى الياء"
+  },
+  {
+    "id": "project_list_sort_name_desc",
+    "en": "Name Z–A",
+    "ar": "الاسم Z–A"
+  },
+  {
+    "id": "project_list_sort_theme",
+    "en": "Theme A–Z",
+    "ar": "الموضوع من الألف إلى الياء"
+  },
+  {
+    "id": "project_list_project",
+    "en": "Project",
+    "ar": "مشروع"
+  },
+  {
+    "id": "project_list_role",
+    "en": "Role",
+    "ar": "دور"
+  },
+  {
+    "id": "project_list_views",
+    "en": "Views",
+    "ar": "المشاهدات"
+  },
+  {
+    "id": "project_list_collaborators",
+    "en": "Collaborators",
+    "ar": "المتعاونون"
+  },
+  {
+    "id": "project_list_updated",
+    "en": "Updated",
+    "ar": "تم التحديث"
+  },
+  {
+    "id": "project_list_results",
+    "en": "projects",
+    "ar": "المشاريع"
+  },
+  {
+    "id": "project_list_loading",
+    "en": "Loading projects…",
+    "ar": "جارٍ تحميل المشاريع…"
+  },
+  {
+    "id": "project_list_error",
+    "en": "Projects could not be loaded.",
+    "ar": "تعذر تحميل المشاريع."
+  },
+  {
+    "id": "project_list_empty",
+    "en": "No project matches these filters.",
+    "ar": "لا يوجد مشروع يطابق هذه المعايير."
+  },
+  {
+    "id": "project_list_previous",
+    "en": "Previous",
+    "ar": "سابق"
+  },
+  {
+    "id": "project_list_next",
+    "en": "Next",
+    "ar": "التالي"
+  },
+  {
+    "id": "project_list_page",
+    "en": "Page",
+    "ar": "صفحة"
+  },
+  {
+    "id": "project_theme_biota",
+    "en": "Biota",
+    "ar": "الكائنات الحية"
+  },
+  {
+    "id": "project_theme_boundaries",
+    "en": "Boundaries",
+    "ar": "حدود"
+  },
+  {
+    "id": "project_theme_farming",
+    "en": "Farming",
+    "ar": "الزراعة"
+  },
+  {
+    "id": "project_theme_climatologyMeteorologyAtmosphere",
+    "en": "Climatology, meteorology and atmosphere",
+    "ar": "علم المناخ والأرصاد الجوية والغلاف الجوي"
+  },
+  {
+    "id": "project_theme_economy",
+    "en": "Economy",
+    "ar": "اقتصاد"
+  },
+  {
+    "id": "project_theme_elevation",
+    "en": "Elevation",
+    "ar": "ارتفاع"
+  },
+  {
+    "id": "project_theme_environment",
+    "en": "Environment",
+    "ar": "بيئة"
+  },
+  {
+    "id": "project_theme_geoscientificInformation",
+    "en": "Geoscientific information",
+    "ar": "المعلومات الجيولوجية العلمية"
+  },
+  {
+    "id": "project_theme_health",
+    "en": "Health",
+    "ar": "صحة"
+  },
+  {
+    "id": "project_theme_imageryBaseMapsEarthCover",
+    "en": "Imagery, base maps and land cover",
+    "ar": "الصور والخرائط الأساسية وغطاء الأرض"
+  },
+  {
+    "id": "project_theme_intelligenceMilitary",
+    "en": "Intelligence and military",
+    "ar": "الاستخبارات والجيش"
+  },
+  {
+    "id": "project_theme_inlandWaters",
+    "en": "Inland waters",
+    "ar": "المياه الداخلية"
+  },
+  {
+    "id": "project_theme_location",
+    "en": "Location",
+    "ar": "موقع"
+  },
+  {
+    "id": "project_theme_oceans",
+    "en": "Oceans",
+    "ar": "المحيطات"
+  },
+  {
+    "id": "project_theme_planningCadastre",
+    "en": "Planning and cadastre",
+    "ar": "التخطيط والمسح العقاري"
+  },
+  {
+    "id": "project_theme_society",
+    "en": "Society",
+    "ar": "مجتمع"
+  },
+  {
+    "id": "project_theme_structure",
+    "en": "Structures",
+    "ar": "الهياكل"
+  },
+  {
+    "id": "project_theme_transportation",
+    "en": "Transportation",
+    "ar": "مواصلات"
+  },
+  {
+    "id": "project_theme_utilitiesCommunication",
+    "en": "Utilities and communication",
+    "ar": "المرافق والاتصالات"
+  },
+  {
+    "id": "project_list_sort_views_desc",
+    "en": "Most views",
+    "ar": "معظم المشاهدات"
+  },
+  {
+    "id": "project_list_sort_views_asc",
+    "en": "Fewest views",
+    "ar": "أقل عدد من المشاهدات"
+  },
+  {
+    "id": "project_list_sort_collaborators_desc",
+    "en": "Most collaborators",
+    "ar": "معظم المتعاونين"
+  },
+  {
+    "id": "project_list_sort_collaborators_asc",
+    "en": "Fewest collaborators",
+    "ar": "أقل عدد من المتعاونين"
+  },
+  {
+    "id": "project_list_clear",
+    "en": "Clear",
+    "ar": "واضح"
+  },
+  {
+    "id": "project_list_showing",
+    "en": "Showing",
+    "ar": "عرض"
+  },
+  {
+    "id": "project_list_of",
+    "en": "of",
+    "ar": "ل"
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix",
     "ar": "مصفوفة أدوار المشروع"

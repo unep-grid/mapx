@@ -6604,6 +6604,202 @@
     "en": "Table of themes to delete"
   },
   {
+    "id": "project_themes",
+    "en": "Project themes"
+  },
+  {
+    "id": "project_themes_desc",
+    "en": "ISO 19115 topic categories describing this project"
+  },
+  {
+    "id": "project_list_all_accessible",
+    "en": "All accessible"
+  },
+  {
+    "id": "project_list_my_projects",
+    "en": "My projects"
+  },
+  {
+    "id": "project_list_all_roles",
+    "en": "All roles"
+  },
+  {
+    "id": "project_list_all_themes",
+    "en": "All themes"
+  },
+  {
+    "id": "project_list_sort_updated_desc",
+    "en": "Recently updated"
+  },
+  {
+    "id": "project_list_sort_updated_asc",
+    "en": "Least recently updated"
+  },
+  {
+    "id": "project_list_sort_name_asc",
+    "en": "Name A–Z"
+  },
+  {
+    "id": "project_list_sort_name_desc",
+    "en": "Name Z–A"
+  },
+  {
+    "id": "project_list_sort_theme",
+    "en": "Theme A–Z"
+  },
+  {
+    "id": "project_list_project",
+    "en": "Project"
+  },
+  {
+    "id": "project_list_role",
+    "en": "Role"
+  },
+  {
+    "id": "project_list_views",
+    "en": "Views"
+  },
+  {
+    "id": "project_list_collaborators",
+    "en": "Collaborators"
+  },
+  {
+    "id": "project_list_updated",
+    "en": "Updated"
+  },
+  {
+    "id": "project_list_results",
+    "en": "projects"
+  },
+  {
+    "id": "project_list_loading",
+    "en": "Loading projects…"
+  },
+  {
+    "id": "project_list_error",
+    "en": "Projects could not be loaded."
+  },
+  {
+    "id": "project_list_empty",
+    "en": "No project matches these filters."
+  },
+  {
+    "id": "project_list_previous",
+    "en": "Previous"
+  },
+  {
+    "id": "project_list_next",
+    "en": "Next"
+  },
+  {
+    "id": "project_list_page",
+    "en": "Page"
+  },
+  {
+    "id": "project_theme_biota",
+    "en": "Biota"
+  },
+  {
+    "id": "project_theme_boundaries",
+    "en": "Boundaries"
+  },
+  {
+    "id": "project_theme_farming",
+    "en": "Farming"
+  },
+  {
+    "id": "project_theme_climatologyMeteorologyAtmosphere",
+    "en": "Climatology, meteorology and atmosphere"
+  },
+  {
+    "id": "project_theme_economy",
+    "en": "Economy"
+  },
+  {
+    "id": "project_theme_elevation",
+    "en": "Elevation"
+  },
+  {
+    "id": "project_theme_environment",
+    "en": "Environment"
+  },
+  {
+    "id": "project_theme_geoscientificInformation",
+    "en": "Geoscientific information"
+  },
+  {
+    "id": "project_theme_health",
+    "en": "Health"
+  },
+  {
+    "id": "project_theme_imageryBaseMapsEarthCover",
+    "en": "Imagery, base maps and land cover"
+  },
+  {
+    "id": "project_theme_intelligenceMilitary",
+    "en": "Intelligence and military"
+  },
+  {
+    "id": "project_theme_inlandWaters",
+    "en": "Inland waters"
+  },
+  {
+    "id": "project_theme_location",
+    "en": "Location"
+  },
+  {
+    "id": "project_theme_oceans",
+    "en": "Oceans"
+  },
+  {
+    "id": "project_theme_planningCadastre",
+    "en": "Planning and cadastre"
+  },
+  {
+    "id": "project_theme_society",
+    "en": "Society"
+  },
+  {
+    "id": "project_theme_structure",
+    "en": "Structures"
+  },
+  {
+    "id": "project_theme_transportation",
+    "en": "Transportation"
+  },
+  {
+    "id": "project_theme_utilitiesCommunication",
+    "en": "Utilities and communication"
+  },
+  {
+    "id": "project_list_sort_views_desc",
+    "en": "Most views"
+  },
+  {
+    "id": "project_list_sort_views_asc",
+    "en": "Fewest views"
+  },
+  {
+    "id": "project_list_sort_collaborators_desc",
+    "en": "Most collaborators"
+  },
+  {
+    "id": "project_list_sort_collaborators_asc",
+    "en": "Fewest collaborators"
+  },
+  {
+    "id": "project_list_clear",
+    "en": "Clear"
+  },
+  {
+    "id": "project_list_showing",
+    "en": "Showing"
+  },
+  {
+    "id": "project_list_of",
+    "en": "of"
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix"
   },
