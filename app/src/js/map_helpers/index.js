@@ -773,14 +773,14 @@ export function initListenersApp() {
   listeners.addListener({
     target: document.getElementById("btnShowProject"),
     type: "click",
-    callback: showSelectProject,
+    callback: showProjectInfo,
     group: "mapx_base",
   });
 
   listeners.addListener({
     target: document.getElementById("btnShowProjectInfo"),
     type: "click",
-    callback: showProjectInfo,
+    callback: showSelectProject,
     group: "mapx_base",
   });
 
@@ -953,6 +953,7 @@ async function updateUiSettings() {
      * Project labels
      */
     const elBtnProject = document.getElementById("btnShowProject");
+    const elBtnProjectList = document.getElementById("btnShowProjectInfo");
     const elBtnProjectLabel = document.getElementById("btnShowProjectLabel");
     const elBtnProjectPrivate = document.getElementById(
       "btnShowProjectPrivate",
@@ -962,7 +963,12 @@ async function updateUiSettings() {
     const label = title[lang] || title[langDef] || settings.project.id;
 
     elBtnProjectLabel.innerText = label;
-    elBtnProject.setAttribute("aria-label", label);
+    const [projectInfoLabel, projectListLabel] = await getDictItem([
+      "project_basic_info",
+      "project_list",
+    ]);
+    elBtnProject.setAttribute("aria-label", `${projectInfoLabel}: ${label}`);
+    elBtnProjectList.setAttribute("aria-label", projectListLabel);
 
     if (settings.project.public) {
       elBtnProjectPrivate.classList.remove("fa-lock");
