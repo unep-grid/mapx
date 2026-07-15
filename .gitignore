@@ -9,6 +9,8 @@ _shared
 _data
 _postgres
 .claude
+.codex
+AGENTS.md
 claude
 sample_shader_layer
 TODO
