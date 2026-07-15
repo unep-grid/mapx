@@ -1,3 +1,21 @@
+  - [1.14.1-alpha.2](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.2) 
+
+    - fix(api): use long read pool for catalog refresh
+    - chore: updated agent file, removed graphify for now
+    - feat(projects): swapped project meta with project list open for more clarity
+    - chore: set initial graphifyignore
+    - docs(agents): add temporary R-aware graph workflow
+    - chore(i18n): rebuild project dictionaries
+    - feat(i18n): add project browser translations
+    - feat(project): modernize the project browser
+    - feat(ui): add MapX window component
+    - refactor(project): thin the R project list bridge
+    - feat(api): add project browser endpoints
+    - feat(project): add project theme metadata
+    - chore: add shared agent development guidelines
+    - chore: ignore agents md files and local config for now
+
+
   - [1.14.1-alpha.1](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.1) 
 
     - fix(1073): label management in vt style editor
