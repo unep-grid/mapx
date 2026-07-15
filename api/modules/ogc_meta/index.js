@@ -1,4 +1,4 @@
-import { pgRead, redisGetJSON, redisSetJSON } from "#mapx/db";
+import { pgReadLong, redisGetJSON, redisSetJSON } from "#mapx/db";
 import { sendError, sendJSON } from "#mapx/helpers";
 import { templates } from "#mapx/template";
 import { settings } from "#root/settings";
@@ -303,7 +303,7 @@ function getGeoServerPublicUrl() {
 
 async function updateOgcMetaCatalog() {
   const start = Date.now();
-  const { rows } = await pgRead.query(templates.getViewsPublicForSearchIndex);
+  const { rows } = await pgReadLong.query(templates.getViewsPublicForSearchIndex);
   const catalog = buildCatalogSnapshot(rows, {
     version: cacheVersion,
   });

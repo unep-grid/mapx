@@ -1,4 +1,4 @@
-import { meili, pgRead } from "#mapx/db";
+import { meili, pgReadLong } from "#mapx/db";
 import { getParamsValidator } from "#mapx/route_validation";
 import { isObject } from "@fxi/mx_valid";
 import { validateTokenHandler } from "#mapx/authentication";
@@ -40,7 +40,7 @@ async function updateIndexes() {
   try {
     const cid = config.idx_views;
     const start = Date.now();
-    const { rows: results } = await pgRead.query(
+    const { rows: results } = await pgReadLong.query(
       templates.getViewsPublicForSearchIndex
     );
     const documents = results.map((doc) => ({
