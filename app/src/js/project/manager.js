@@ -3,10 +3,13 @@ import { modalConfirm, modalPrompt } from "./../mx_helper_modal.js";
 import { ws } from "./../mx.js";
 import { el } from "./../el/src/index.js";
 import { bindAll } from "../bind_class_methods";
-import { setProject } from "../map_helpers";
+import { requestProjectMembership, setProject } from "../map_helpers";
 import { tt } from "../el_mapx";
 import { getDictItem } from "./../language";
+import { getQueryParameterInit } from "../url_utils/url_utils.js";
+import { parseInitialProjectListFilters } from "./list_helpers.js";
 import { RoleMatrix } from "./roles_matrix.js";
+import { getMapxWindowManager } from "../window/index.js";
 
 const options = {
   roles: ["root", "project_creator"],
@@ -163,7 +166,94 @@ export class ProjectManager {
 
   async delete() {}
   async remove() {}
-  async list() {}
+  // Shiny.addCustomMessageHandler requires a handler whose Function.length is 1.
+  // Keep this parameter required syntactically and normalize it inside.
+  async list(request) {
+    const pm = this;
+    request = request || {};
+    const windowManager = getMapxWindowManager();
+    if (pm._projectListWindow) {
+      windowManager.close(pm._projectListWindow, "replace");
+    }
+    const projectList =
+      windowManager.root.ownerDocument.createElement("mx-project-list");
+    const initialFilters = pm._projectListQueryConsumed
+      ? {}
+      : parseInitialProjectListFilters({
+          role: getQueryParameterInit("showProjectsListByRole")[0],
+          title: getQueryParameterInit("showProjectsListByTitle")[0],
+        });
+    pm._projectListQueryConsumed = true;
+
+    projectList.configure({
+      request,
+      language: settings.language,
+      initialFilters,
+    });
+
+    const buttons = [];
+    const roles = settings.user.roles || {};
+    const isMember = roles.admin || roles.publisher || roles.member;
+    if (
+      settings.project.allow_join &&
+      settings.user.guest !== true &&
+      !isMember
+    ) {
+      const label = await getDictItem(
+        "btn_join_current_project",
+        settings.language,
+      );
+      const currentTitle =
+        settings.project.title?.[settings.language] ||
+        settings.project.title?.en ||
+        settings.project.id;
+      const button = el(
+        "button",
+        {
+          class: ["btn", "btn-default"],
+          on: {
+            click: () => requestProjectMembership(settings.project.id),
+          },
+        },
+        label.replace("%s", currentTitle),
+      );
+      buttons.push(button);
+    }
+
+    const closeButton = el(
+      "button",
+      {
+        class: ["btn", "btn-default"],
+        type: "button",
+        on: { click: () => pm._projectListWindow?.close("footer") },
+      },
+      await getDictItem("btn_close", settings.language),
+    );
+    buttons.unshift(closeButton);
+
+    pm._projectListWindow = windowManager.open({
+      key: "project-list",
+      replace: true,
+      modal: true,
+      title: await getDictItem("project_list", settings.language),
+      content: projectList,
+      footerStart: buttons,
+      draggable: true,
+      resizable: true,
+      collapsible: true,
+      snappable: true,
+      closeable: true,
+      geometry: {
+        width: "min(1080px, calc(100vw - 32px))",
+        height: "min(88vh, 900px)",
+        maxHeight: "calc(100vh - 32px)",
+      },
+      onClose: () => {
+        pm._projectListWindow = null;
+      },
+    });
+    return pm._projectListWindow;
+  }
 
   testAuth() {
     return new Promise((resolve, reject) => {

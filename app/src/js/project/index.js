@@ -1,2 +1,2 @@
 export * from "./manager.js";
-export * from "./list_instance.js";
+export * from "./list.js";
