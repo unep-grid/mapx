@@ -18,7 +18,6 @@ import {
   viewsCloseAll,
 } from "./map_helpers/index.js";
 import { writeCookie } from "./mx_helper_cookies.js";
-import { renderUserProjectsList } from "./project/index.js";
 import { validateMetadataModal } from "./metadata/validation.js";
 import {
   buttonToggle,
@@ -101,7 +100,7 @@ function mapxBindings() {
   bind("mxJsonToObj", jsonToObj);
   bind("mxJsonToHtml", objectToHTML);
   bind("mxProgress", progressScreen);
-  bind("mxRenderUserProjectsList", renderUserProjectsList);
+  bind("mxProjectList", project.list);
   bind("mxUpdateSelectizeItems", updateSelectizeItems);
   bind("mxInitSelectizeAll", initSelectizeAll);
   bind("mxFlashIcon", itemFlash);

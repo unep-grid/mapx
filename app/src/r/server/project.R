@@ -183,8 +183,7 @@ observe({
 #
 # Query request -> show project list
 # showProjectsListByTitle or showProjectsListByRole
-# Trigger the project panel
-# Trigger -> user not logged in -> show login panel -> retry show project list
+# Trigger the client-side project panel once the map is ready.
 #
 observeEvent(reactData$mapIsReady, {
   if (!reactData$mapIsReady) {
@@ -207,118 +206,7 @@ observeEvent(reactData$mapIsReady, {
 # Show project panel
 #
 observeEvent(reactChain$showProjectsList, {
-  userRole <- getUserRole()
-  userData <- reactUser$data
-  project <- reactData$project
-  language <- reactData$language
-  idUser <- .get(reactUser, c("data", "id"))
-  projectData <- mxDbGetProjectData(project)
-  projectName <- .get(projectData, c("title", language))
-  projectAllowsJoin <- isTRUE(.get(projectData, c("allow_join")))
-  userIsMember <- FALSE
-  userIsGuest <- isGuestUser()
-
-  filterRoles <- "any"
-  filterTitle <- NULL
-
-  # "showProjectsList" requested with required authentication.
-  # If the user is not logged in, display the login panel and try again after
-  # logged in.
-  reactChainCallbackHandler(reactChain$showProjectsList,
-    type = "show_projects_query",
-    expr = {
-      if (userIsGuest) {
-        #
-        # Trigger show login panel with a callback :
-        # Retry showsProjectList after log in
-        #
-        reactChainCallback("showLogin",
-          message = d("login_required_for_project_list", language),
-          type = "login_requested_project_list",
-          callback = function() {
-            reactChainCallback("showProjectsList",
-              message = "",
-              type = "show_projects_query"
-            )
-          }
-        )
-
-        return()
-      }
-
-      filterRoles <- mxQueryRoleParser(query$showProjectsListByRole, "any")
-      filterTitle <- mxQueryTitleParser(query$showProjectsListByTitle, "")
-      #
-      # Reset query parameters
-      #
-      query$showProjectsListByRole <<- NULL
-      query$showProjectsListByTitle <<- NULL
-    }
-  )
-
-
-  btn <- list()
-
-  projects <- mxDbGetProjectListByUser(
-    id = idUser,
-    language = language,
-    whereUserRoleIs = filterRoles,
-    whereTitleMatch = filterTitle,
-    asDataFrame = TRUE,
-    token = reactUser$token
-  )
-
-  if (isEmpty(projects)) {
-    return()
-  }
-
-  projects <- projects[with(projects, order(-admin, -publisher, -member, title)), ]
-  projectsMember <- projects[projects$member, ]
-  userIsMember <- project %in% projectsMember$id
-
-  btnJoinProject <- actionButton(
-    inputId = "btnJoinProject",
-    label = sprintf(d("btn_join_current_project", language), projectName)
-  )
-
-  reactChainCallback("renderUserProjectsList",
-    data = list(
-      idList = "mxListProjects",
-      projects = projects
-    )
-  )
-
-  uiProjects <- tagList(
-    tags$h3(d("project_list", language)),
-    tags$p(d("project_list_select_desc", language)),
-    tags$div(id = "mxListProjects")
-  )
-
-  if (!userIsGuest && !userIsMember && projectAllowsJoin) {
-    btn <- tagList(
-      btn,
-      btnJoinProject
-    )
-  }
-
-  mxModal(
-    id = "uiSelectProject",
-    buttons = btn,
-    title = d("project_list", language),
-    content = uiProjects,
-    textCloseButton = d("btn_close", language)
-  )
-})
-
-
-#
-# Render project list
-#
-observeEvent(reactChain$renderUserProjectsList, {
-  session$sendCustomMessage(
-    "mxRenderUserProjectsList",
-    reactChain$renderUserProjectsList$data
-  )
+  mxProjectList(reactChain$showProjectsList)
 })
 
 

@@ -1,3 +1,23 @@
+#' Show the project list
+#'
+#' @param request Serializable project-list request.
+#' @param session Shiny session object.
+#' @export
+mxProjectList <- function(
+  request = list(),
+  session = shiny:::getDefaultReactiveDomain()
+) {
+  # A react-chain callback may contain an R function. Only forward its data
+  # fields; all project-list decisions belong to the browser and API session.
+  fields <- c("time", "message", "data", "type", "value")
+  request <- request[intersect(fields, names(request))]
+
+  session$sendCustomMessage(
+    type = "mxProjectList",
+    request
+  )
+}
+
 #' Create new project
 #'
 #' @param session Shiny session object.

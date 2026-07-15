@@ -15,16 +15,6 @@ mxParseQuery <- function(urlSearch) {
   query <- cleanQueryString(urlSearch)
 
   #
-  # Parse role for project list modal
-  #
-  query$showProjectsListByRole <- mxQueryRoleParser(query$showProjectsListByRole)
-
-  #
-  # Parse project title for project list modal
-  #
-  query$showProjectsListByTitle <- mxQueryTitleParser(query$showProjectsListByTitle)
-
-  #
   # Forced map position
   #
   query$lat <- as.numeric(query$lat)
