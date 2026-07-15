@@ -23,7 +23,8 @@ export const project = sql.define({
     'alias',
     'allow_join',
     'contacts',
-    'states_views'
+    'states_views',
+    'themes'
   ]
 });
 
@@ -42,6 +43,6 @@ project.default = {
   alias: '',
   allow_join: 'f',
   contacts: '[]',
-  states_views: '[]'
+  states_views: '[]',
+  themes: '{}'
 };
-

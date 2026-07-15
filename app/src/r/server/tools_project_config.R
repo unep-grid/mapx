@@ -189,6 +189,7 @@ observeEvent(input$btnSaveProjectConfig, {
     # Basic info section
     title <- .get(data, c("basic_info", "title"))
     description <- .get(data, c("basic_info", "description"))
+    themes <- .get(data, c("basic_info", "themes"), list())
     aliasProject <- .get(data, c("basic_info", "alias"))
     termsOfUse <- .get(data, c("basic_info", "terms_of_use"))
     orgName <- .get(data, c("basic_info", "organisation", "org_name"))
@@ -239,6 +240,7 @@ observeEvent(input$btnSaveProjectConfig, {
       active = TRUE,
       title = title,
       description = description,
+      themes = themes,
       alias = aliasProject,
       terms_of_use = termsOfUse,
       org_name = orgName,

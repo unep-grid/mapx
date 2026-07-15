@@ -50,6 +50,61 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
             minLength = v$projectAbstract$min,
             maxLength = v$projectAbstract$max
           ),
+          themes = list(
+            type = "array",
+            title = tt("project_themes"),
+            description = tt("project_themes_desc"),
+            format = "select_tom_simple",
+            uniqueItems = TRUE,
+            default = .get(projectData, c("themes"), list()),
+            items = list(
+              type = "string",
+              enum = c(
+                "biota",
+                "boundaries",
+                "farming",
+                "climatologyMeteorologyAtmosphere",
+                "economy",
+                "elevation",
+                "environment",
+                "geoscientificInformation",
+                "health",
+                "imageryBaseMapsEarthCover",
+                "intelligenceMilitary",
+                "inlandWaters",
+                "location",
+                "oceans",
+                "planningCadastre",
+                "society",
+                "structure",
+                "transportation",
+                "utilitiesCommunication"
+              ),
+              options = list(
+                enum_titles = c(
+                  tt("project_theme_biota"),
+                  tt("project_theme_boundaries"),
+                  tt("project_theme_farming"),
+                  tt("project_theme_climatologyMeteorologyAtmosphere"),
+                  tt("project_theme_economy"),
+                  tt("project_theme_elevation"),
+                  tt("project_theme_environment"),
+                  tt("project_theme_geoscientificInformation"),
+                  tt("project_theme_health"),
+                  tt("project_theme_imageryBaseMapsEarthCover"),
+                  tt("project_theme_intelligenceMilitary"),
+                  tt("project_theme_inlandWaters"),
+                  tt("project_theme_location"),
+                  tt("project_theme_oceans"),
+                  tt("project_theme_planningCadastre"),
+                  tt("project_theme_society"),
+                  tt("project_theme_structure"),
+                  tt("project_theme_transportation"),
+                  tt("project_theme_utilitiesCommunication")
+                )
+              )
+            )
+          ),
           alias = list(
             type = "string",
             title = tt("project_alias_name"),
@@ -272,6 +327,7 @@ mxCreateProjectConfigSchema <- function(projectData, language, project) {
     basic_info = list(
       title = projectData$title,
       description = projectData$description,
+      themes = .get(projectData, c("themes"), list()),
       alias = projectData$alias,
       organisation = list(
         org_name = projectData$org_name,

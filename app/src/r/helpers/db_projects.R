@@ -383,6 +383,19 @@ mxDbGetProjectData <- function(idProject) {
   for (i in 1:length(projectData)) {
     p <- projectData[i]
     n <- names(p)
+    if (n == "themes") {
+      val <- p[[1]]
+      if (is.character(val) && length(val) == 1) {
+        val <- gsub("^\\{|\\}$", "", val)
+        projectData[[i]] <- if (isEmpty(val)) {
+          list()
+        } else {
+          as.list(strsplit(val, ",", fixed = TRUE)[[1]])
+        }
+      } else {
+        projectData[[i]] <- as.list(val)
+      }
+    }
     if (n %in% c(
       "title",
       "description",
@@ -450,7 +463,8 @@ mxDbSaveProjectData <- function(idProject, values = list(
   logo = NULL,
   org_name = NULL,
   org_contact_email = NULL,
-  org_contact_name = NULL
+  org_contact_name = NULL,
+  themes = NULL
 )
 ) {
   hasChanged <- FALSE
@@ -537,6 +551,18 @@ mxDbSaveProjectData <- function(idProject, values = list(
         value = as.character(value)
       )
     }
+  }
+
+  if (notNull(values$themes)) {
+    themes <- as.character(unlist(values$themes))
+    themes <- sprintf("{%s}", paste(themes, collapse = ","))
+    mxDbUpdate(
+      table = "mx_projects",
+      idCol = "id",
+      id = idProject,
+      column = "themes",
+      value = themes
+    )
   }
 
   if (hasChanged) {

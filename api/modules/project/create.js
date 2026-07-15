@@ -49,11 +49,12 @@ async function addProject(idUser, name) {
     views_external: [],
     alias: "",
     states_views: [],
-    logo : "",
-    theme : "color_light", 
-    org_name : "", 
-    org_contact_name : "", 
-    org_contact_email : "", 
+    themes: "{}",
+    logo: "",
+    theme: "color_light",
+    org_name: "",
+    org_contact_name: "",
+    org_contact_email: "",
   };
 
   await insertRow(project, "mx_projects");
