@@ -10,7 +10,6 @@ _data
 _postgres
 .claude
 .codex
-graphify-out/
 claude
 sample_shader_layer
 TODO
