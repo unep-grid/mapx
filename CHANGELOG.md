@@ -1,3 +1,11 @@
+  - [1.14.1-alpha.3](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.3) 
+
+    - fix: project change, once loaded, should close the window
+    - feat(api_test): migrated to vitest + colocate test file with modules
+    - fix(join): better quoting system, support special characters and improved messages
+    - feat(sources): add append-only revisions and latest source view
+
+
   - [1.14.1-alpha.2](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.2) 
 
     - fix(api): use long read pool for catalog refresh
