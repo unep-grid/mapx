@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { emitAsync } = vi.hoisted(() => ({ emitAsync: vi.fn() }));
+const { emitAsync, setProject } = vi.hoisted(() => ({
+  emitAsync: vi.fn(),
+  setProject: vi.fn(),
+}));
 
 vi.mock("../mx.js", () => ({ ws: { emitAsync } }));
 vi.mock("../language", () => ({
@@ -15,7 +18,7 @@ vi.mock("../settings", () => ({
 }));
 vi.mock("../map_helpers/index.js", () => ({
   requestProjectMembership: vi.fn(),
-  setProject: vi.fn(),
+  setProject,
 }));
 
 import { ProjectListElement } from "./list.js";
@@ -49,6 +52,7 @@ describe("mx-project-list", () => {
   beforeEach(() => {
     emitAsync.mockReset();
     emitAsync.mockResolvedValue({ projects });
+    setProject.mockReset();
   });
 
   it("applies native filters and header sorting to rendered rows", async () => {
@@ -84,5 +88,20 @@ describe("mx-project-list", () => {
     element.sortButtons.get("name").click();
     expect(element.state.sort).toBe("name_desc");
     element.remove();
+  });
+
+  it("reports only successfully loaded projects to its owner", async () => {
+    const onProjectLoaded = vi.fn();
+    const element = new ProjectListElement();
+    element.configure({ onProjectLoaded });
+
+    setProject.mockResolvedValueOnce(true);
+    await element.runAction("open", "ONE");
+    expect(onProjectLoaded).toHaveBeenCalledWith("ONE");
+
+    onProjectLoaded.mockClear();
+    setProject.mockResolvedValueOnce(false);
+    await element.runAction("open", "TWO");
+    expect(onProjectLoaded).not.toHaveBeenCalled();
   });
 });

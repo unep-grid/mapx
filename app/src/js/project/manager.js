@@ -177,6 +177,7 @@ export class ProjectManager {
     }
     const projectList =
       windowManager.root.ownerDocument.createElement("mx-project-list");
+    let projectListWindow = null;
     const initialFilters = pm._projectListQueryConsumed
       ? {}
       : parseInitialProjectListFilters({
@@ -189,6 +190,11 @@ export class ProjectManager {
       request,
       language: settings.language,
       initialFilters,
+      onProjectLoaded: () => {
+        if (pm._projectListWindow === projectListWindow) {
+          projectListWindow?.close("project-loaded");
+        }
+      },
     });
 
     const buttons = [];
@@ -225,13 +231,13 @@ export class ProjectManager {
       {
         class: ["btn", "btn-default"],
         type: "button",
-        on: { click: () => pm._projectListWindow?.close("footer") },
+        on: { click: () => projectListWindow?.close("footer") },
       },
       await getDictItem("btn_close", settings.language),
     );
     buttons.unshift(closeButton);
 
-    pm._projectListWindow = windowManager.open({
+    projectListWindow = windowManager.open({
       key: "project-list",
       replace: true,
       modal: true,
@@ -249,10 +255,13 @@ export class ProjectManager {
         maxHeight: "calc(100vh - 32px)",
       },
       onClose: () => {
-        pm._projectListWindow = null;
+        if (pm._projectListWindow === projectListWindow) {
+          pm._projectListWindow = null;
+        }
       },
     });
-    return pm._projectListWindow;
+    pm._projectListWindow = projectListWindow;
+    return projectListWindow;
   }
 
   testAuth() {

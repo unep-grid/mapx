@@ -122,6 +122,12 @@ export class ProjectListElement extends HTMLElement {
     this._connected = false;
   }
 
+  /**
+   * @param {Object} [options]
+   * @param {string} [options.language]
+   * @param {Object} [options.initialFilters]
+   * @param {(projectId: string) => void} [options.onProjectLoaded]
+   */
   configure(options = {}) {
     this.options = options;
     const initial = options.initialFilters || {};
@@ -693,7 +699,10 @@ export class ProjectListElement extends HTMLElement {
       return;
     }
     if (action === "open") {
-      await setProject(projectId, {}, "project_list");
+      const projectLoaded = await setProject(projectId, {}, "project_list");
+      if (projectLoaded === true) {
+        this.options?.onProjectLoaded?.(projectId);
+      }
     }
   }
 }
