@@ -43,33 +43,28 @@ export async function getSourceJoinLayers(idSource, client = pgRead) {
  * Helper used in schema mx_validate
  */
 export async function validateJoins(config, client = pgRead) {
-  try {
-    const joins = config.joins;
+  const joins = config.joins;
 
-    for (const join of joins) {
-      const query = templates.getSourceJoinTypeCheck;
+  for (const join of joins) {
+    const query = templates.getSourceJoinTypeCheck;
 
-      const res = await client.query(query, [
-        config.base.id_source,
-        join.column_base,
-        join.id_source,
-        join.column_join,
-      ]);
+    const res = await client.query(query, [
+      config.base.id_source,
+      join.column_base,
+      join.id_source,
+      join.column_join,
+    ]);
 
-      if (res.rowCount === 0) {
-        return false; // No matching columns found
-      }
-
-      if (res.rows[0].base_type !== res.rows[0].join_type) {
-        return false; // Incompatible types
-      }
+    if (res.rowCount === 0) {
+      return false; // No matching columns found
     }
 
-    return true; // All joins are compatible
-  } catch (error) {
-    console.error(error);
-    return false; // Return false in case of any error
+    if (res.rows[0].base_type !== res.rows[0].join_type) {
+      return false; // Incompatible types
+    }
   }
+
+  return true; // All joins are compatible
 }
 
 export async function register(config, session, client) {
@@ -194,39 +189,31 @@ export async function updatePgView(config, client) {
 }
 
 export async function getCount(config, client = pgRead) {
-  try {
-    const errors = await validator.validate(config, client);
-    if (isNotEmpty(errors)) {
-      return 0;
-    }
-    await updatePrefixConfig(config);
-    const sqb = new SQLQueryBuilder(config);
-    const sql = sqb.rowCountSQL();
-    const res = await client.query(sql);
-    if (res.rowsCount === 0) {
-      return 0;
-    }
-    const { count } = res.rows[0];
-    return count;
-  } catch (e) {
+  const errors = await validator.validate(config, client);
+  if (isNotEmpty(errors)) {
     return 0;
   }
+  await updatePrefixConfig(config);
+  const sqb = new SQLQueryBuilder(config);
+  const sql = sqb.rowCountSQL();
+  const res = await client.query(sql);
+  if (res.rowCount === 0) {
+    return 0;
+  }
+  const { count } = res.rows[0];
+  return count;
 }
 
 export async function getPreview(config, client = pgRead) {
-  try {
-    await updatePrefixConfig(config);
-    const errors = await validator.validate(config, client);
-    if (isNotEmpty(errors)) {
-      return null;
-    }
-    const sqb = new SQLQueryBuilder(config);
-    const sql = sqb.firstNRowsSQL(50);
-    const res = await client.query(sql);
-    return res.rows;
-  } catch (e) {
+  await updatePrefixConfig(config);
+  const errors = await validator.validate(config, client);
+  if (isNotEmpty(errors)) {
     return null;
   }
+  const sqb = new SQLQueryBuilder(config);
+  const sql = sqb.firstNRowsSQL(50);
+  const res = await client.query(sql);
+  return res.rows;
 }
 
 export async function getColumnsMissingInJoin(joinConfig) {

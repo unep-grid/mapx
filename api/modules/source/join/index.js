@@ -35,6 +35,7 @@ export async function ioSourceJoin(socket, data, cb) {
 
     cb(response);
   } catch (e) {
+    cb(false);
     console.error(e);
     await socket.notifyInfoError({
       message: e.message,

@@ -512,6 +512,9 @@ export class SourcesJoinManager extends EventSimple {
 
   async preview() {
     const sjm = this;
+    let handsontable;
+    let ht;
+    let tableObserver;
 
     if (!sjm._allow_preview) {
       return;
@@ -539,20 +542,24 @@ export class SourcesJoinManager extends EventSimple {
     const config = await sjm.getConfigEditor();
     const data = await sjm.emit("get_preview", config);
     elTable.innerHTML = "";
+    if (!Array.isArray(data)) {
+      elTable.appendChild(tt("error"));
+      return;
+    }
     const columns = Object.keys(data[0] || {});
-    const handsontable = await moduleLoad("handsontable");
-    const ht = new handsontable(elTable, {
+    handsontable = await moduleLoad("handsontable");
+    ht = new handsontable(elTable, {
       data: data,
       colHeaders: columns,
       rowHeaders: true,
       licenseKey: "non-commercial-and-evaluation",
     });
-    const tableObserver = new TableResizer(ht, elTable, elModal);
+    tableObserver = new TableResizer(ht, elTable, elModal);
 
     function destroy() {
-      if (ht instanceof handsontable) {
+      if (handsontable && ht instanceof handsontable) {
         ht.destroy();
-        tableObserver.disconnect();
+        tableObserver?.disconnect();
       }
     }
   }

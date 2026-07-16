@@ -1,4 +1,22 @@
 import { isNotEmpty } from "@fxi/mx_valid";
+
+/**
+ * Quote a PostgreSQL identifier.
+ *
+ * @param {string} identifier Identifier to quote.
+ * @returns {string} Safely quoted identifier.
+ */
+export function quoteIdentifier(identifier) {
+  if (typeof identifier !== "string" || identifier.length === 0) {
+    throw new TypeError("SQL identifiers must be non-empty strings");
+  }
+  return `"${identifier.replaceAll('"', '""')}"`;
+}
+
+function qualifiedIdentifier(tableAlias, column) {
+  return `${quoteIdentifier(tableAlias)}.${quoteIdentifier(column)}`;
+}
+
 /**
  * Class for building SQL queries for various operations like creating views,
  * counting rows, and fetching the first N rows based on a configuration.
@@ -27,7 +45,12 @@ export class SQLQueryBuilder {
     const sql =
       `${addComma ? "," : ""}` +
       columns
-        .map((col) => `${tableAlias}.${col} AS ${columnPrefix}${col}`)
+        .map(
+          (col) =>
+            `${qualifiedIdentifier(tableAlias, col)} AS ${quoteIdentifier(
+              `${columnPrefix}${col}`
+            )}`
+        )
         .join(", ");
     return sql;
   }
@@ -41,16 +64,31 @@ export class SQLQueryBuilder {
 
     switch (config?.geom) {
       case "include":
-        colsBase.push(...[`${this.baseAlias}.geom`, `${this.baseAlias}.gid`]);
+        colsBase.push(
+          ...[
+            qualifiedIdentifier(this.baseAlias, "geom"),
+            qualifiedIdentifier(this.baseAlias, "gid"),
+          ]
+        );
         break;
       case "type":
-        colsBase.push(...[`ST_GeometryType(${this.baseAlias}.geom) geom`]);
+        colsBase.push(
+          ...[
+            `ST_GeometryType(${qualifiedIdentifier(
+              this.baseAlias,
+              "geom"
+            )}) AS ${quoteIdentifier("geom")}`,
+          ]
+        );
         break;
       case "type_gid":
         colsBase.push(
           ...[
-            `ST_GeometryType(${this.baseAlias}.geom) geom`,
-            `${this.baseAlias}.gid`,
+            `ST_GeometryType(${qualifiedIdentifier(
+              this.baseAlias,
+              "geom"
+            )}) AS ${quoteIdentifier("geom")}`,
+            qualifiedIdentifier(this.baseAlias, "gid"),
           ]
         );
         break;
@@ -83,15 +121,18 @@ export class SQLQueryBuilder {
     let joinClauses = this.config.joins
       .map((join) => {
         const joinAlias = `join_${join._prefix}_alias`;
-        return `${join.type} JOIN ${join.id_source}
-            AS ${joinAlias}
-            ON ${this.baseAlias}.${join.column_base} = ${joinAlias}.${join.column_join}`;
+        return `${join.type} JOIN ${quoteIdentifier(join.id_source)}
+            AS ${quoteIdentifier(joinAlias)}
+            ON ${qualifiedIdentifier(
+              this.baseAlias,
+              join.column_base
+            )} = ${qualifiedIdentifier(joinAlias, join.column_join)}`;
       })
       .join("\n");
 
     const query = `${selectClause}
-                 FROM ${this.config.base.id_source}
-                 AS ${this.baseAlias} ${joinClauses}`;
+                 FROM ${quoteIdentifier(this.config.base.id_source)}
+                 AS ${quoteIdentifier(this.baseAlias)} ${joinClauses}`;
 
     return query;
   }
@@ -103,8 +144,8 @@ export class SQLQueryBuilder {
   createViewSQL() {
     let coreQuery = this.buildCoreQuery({ geom: "include" });
     return `
-    DROP VIEW IF EXISTS ${this.config.id_source};
-    CREATE VIEW ${this.config.id_source} AS ${coreQuery};`;
+    DROP VIEW IF EXISTS ${quoteIdentifier(this.config.id_source)};
+    CREATE VIEW ${quoteIdentifier(this.config.id_source)} AS ${coreQuery};`;
   }
 
   /**
