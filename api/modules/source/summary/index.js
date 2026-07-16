@@ -280,7 +280,7 @@ async function updateSourceFromView(opt) {
  */
 export async function getSourceEditors(idSource) {
   const res = await pgRead.query(
-    "select editor, editors, readers from mx_sources where id=$1",
+    "select editor, editors, readers from mx_sources_latest where id=$1",
     [idSource]
   );
   if (res.rowCount === 0) {

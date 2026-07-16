@@ -660,7 +660,7 @@ mxGetTitleFromSourceID <- function(id, language = "en") {
   SELECT
   data#>>'{\"meta\",\"text\",\"title\",\"" + language + "\"}' as " + language + ",
   data#>>'{\"meta\",\"text\",\"title\",\"en\"}' as en
-  FROM mx_sources
+  FROM mx_sources_latest
   WHERE id ='" + id + "' "
 
   df <- mxDbGetQuery(sql)

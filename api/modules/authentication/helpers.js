@@ -13,12 +13,13 @@ import { settings } from "#root/settings";
  * - If not, remove inheritance
  * @param {Numeric} idUser User id
  * @param {Character} idProject Project id
+ * @param {Object} client PostgreSQL client or pool
  * @return {Object} list with keys like {list:roles,admin:boolean,...}
  */
-export async function getUserRoles(idUser, idProject) {
+export async function getUserRoles(idUser, idProject, client = pgWrite) {
   idUser = idUser * 1 || null;
   const sqlProject = templates.getUserRoles;
-  const res = await pgWrite.query(sqlProject, [idProject]);
+  const res = await client.query(sqlProject, [idProject]);
 
   const roles = {
     list: [],

@@ -6,7 +6,7 @@ WITH
       data #>> '{join,base,id_source}' AS source_base,
       jsonb_array_elements(data #> '{join,joins}') ->> 'id_source' as source_join
     FROM
-      mx_sources
+      mx_sources_latest
     WHERE
     type = 'join'
   )

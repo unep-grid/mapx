@@ -1,99 +1,131 @@
-import { pgWrite } from "#mapx/db";
 import { settings } from "#root/settings";
-import { templates } from "#mapx/template";
+import { createSourceRevision } from "../source/revision.js";
+
 const languages = settings.validation_defaults.languages.codes;
+const emptyLanguageItem = Object.fromEntries(
+  languages.map((language) => [language, ""]),
+);
 
-/*
- * Populate an empty language item
- */
-const emptyLanguageItem = {};
-for (const language of languages) {
-  emptyLanguageItem[language] = "";
+function getAttributes(revision) {
+  revision.data ||= {};
+  revision.data.meta ||= {};
+  revision.data.meta.text ||= {};
+  revision.data.meta.text.attributes ||= {};
+  revision.data.meta.text.attributes_alias ||= {};
+  return revision.data.meta.text;
 }
 
-// Helper to add a new column metadata
-export async function addColumnMetadata(
-  id,
-  newColumnName,
-  db_client = pgWrite
+export function addColumnMetadata(
+  idSource,
+  column,
+  idUser,
+  client = null,
+  revisions = null,
 ) {
-  try {
-    const emptyItemString = JSON.stringify(emptyLanguageItem);
-    const query = templates.updateMetaSourceAttributesAdd;
-    const res = await db_client.query(query, [
-      id,
-      newColumnName,
-      emptyItemString,
-    ]);
-    if (res.rowCount > 1) {
-      throw new Error("N rows affected > 1");
-    }
-  } catch (error) {
-    console.error("Error adding column metadata:", error);
-    throw error;
+  if (revisions) {
+    return revisions.mutate(idSource, (revision) => {
+      const text = getAttributes(revision);
+      text.attributes[column] = structuredClone(emptyLanguageItem);
+      text.attributes_alias[column] = structuredClone(emptyLanguageItem);
+    });
   }
+  return createSourceRevision({
+    idSource,
+    idUser,
+    client,
+    mutate(revision) {
+      const text = getAttributes(revision);
+      text.attributes[column] = structuredClone(emptyLanguageItem);
+      text.attributes_alias[column] = structuredClone(emptyLanguageItem);
+    },
+  });
 }
 
-// Helper to rename a column metadata
-export async function renameColumnMetadata(
-  id,
-  oldColumnName,
-  newColumnName,
-  db_client = pgWrite
+export function renameColumnMetadata(
+  idSource,
+  oldColumn,
+  newColumn,
+  idUser,
+  client = null,
+  revisions = null,
 ) {
-  try {
-    const query = templates.updateMetaSourceAttributesRename;
-    const res = await db_client.query(query, [
-      id,
-      oldColumnName,
-      newColumnName,
-    ]);
-    if (res.rowCount > 1) {
-      throw new Error("N rows affected > 1");
-    }
-  } catch (error) {
-    console.error("Error renaming column metadata:", error);
-    throw error;
+  if (revisions) {
+    return revisions.mutate(idSource, (revision) => {
+      renameAttributes(revision, oldColumn, newColumn);
+    });
   }
+  return createSourceRevision({
+    idSource,
+    idUser,
+    client,
+    mutate(revision) {
+      renameAttributes(revision, oldColumn, newColumn);
+    },
+  });
 }
 
-// Helper to remove a column metadata
-export async function removeColumnMetadata(
-  id,
-  columnName,
-  db_client = pgWrite
+export function removeColumnMetadata(
+  idSource,
+  column,
+  idUser,
+  client = null,
+  revisions = null,
 ) {
-  try {
-    const query = templates.updateMetaSourceAttributesRemove;
-    const res = await db_client.query(query, [id, columnName]);
-    if (res.rowCount > 1) {
-      throw new Error("N rows affected > 1");
-    }
-  } catch (error) {
-    console.error("Error removing column metadata:", error);
-    throw error;
+  if (revisions) {
+    return revisions.mutate(idSource, (revision) => {
+      const text = getAttributes(revision);
+      delete text.attributes[column];
+      delete text.attributes_alias[column];
+    });
   }
+  return createSourceRevision({
+    idSource,
+    idUser,
+    client,
+    mutate(revision) {
+      const text = getAttributes(revision);
+      delete text.attributes[column];
+      delete text.attributes_alias[column];
+    },
+  });
 }
 
-// Helper to duplicate a column metadata
-export async function duplicateColumnMetadata(
-  id,
-  sourceColumnName,
-  newColumnName,
-  db_client = pgWrite
+export function duplicateColumnMetadata(
+  idSource,
+  sourceColumn,
+  newColumn,
+  idUser,
+  client = null,
+  revisions = null,
 ) {
-  try {
-    const query = templates.updateMetaSourceAttributesDuplicate;
-    const res = await db_client.query(query, [
-      id,
-      sourceColumnName,
-      newColumnName,
-    ]);
-    if (res.rowCount > 1) {
-      throw new Error("N rows affected > 1");
-    }
-  } catch (error) {
-    console.error("Error duplicating column metadata:", error);
-    throw error;
+  if (revisions) {
+    return revisions.mutate(idSource, (revision) => {
+      duplicateAttributes(revision, sourceColumn, newColumn);
+    });
   }
+  return createSourceRevision({
+    idSource,
+    idUser,
+    client,
+    mutate(revision) {
+      duplicateAttributes(revision, sourceColumn, newColumn);
+    },
+  });
+}
+
+function renameAttributes(revision, oldColumn, newColumn) {
+  duplicateAttributes(revision, oldColumn, newColumn);
+  const text = getAttributes(revision);
+  delete text.attributes[oldColumn];
+  delete text.attributes_alias[oldColumn];
+}
+
+function duplicateAttributes(revision, sourceColumn, newColumn) {
+  const text = getAttributes(revision);
+  text.attributes[newColumn] = structuredClone(
+    text.attributes[sourceColumn] ?? {},
+  );
+  text.attributes_alias[newColumn] = structuredClone(
+    text.attributes_alias[sourceColumn] ?? {},
+  );
 }

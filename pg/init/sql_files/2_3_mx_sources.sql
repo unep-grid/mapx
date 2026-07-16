@@ -14,7 +14,8 @@ CREATE TABLE public.mx_sources (
   readers jsonb,
   editors jsonb,
   services jsonb DEFAULT '[]'::jsonb,
-  validated boolean DEFAULT false
+  validated boolean DEFAULT false,
+  global boolean DEFAULT false
 );
 
 
@@ -54,11 +55,31 @@ SELECT pg_catalog.setval('public.mx_sources_pid_seq', 1, true);
 
 
 --
--- Name: mx_sources mx_sources_id_key; Type: CONSTRAINT; Schema: public; Owner: mapxw
+-- Name: mx_sources_id_idx; Type: INDEX; Schema: public; Owner: mapxw
 --
 
-ALTER TABLE ONLY public.mx_sources
-ADD CONSTRAINT mx_sources_id_key UNIQUE (id);
+CREATE INDEX mx_sources_id_idx ON public.mx_sources USING btree (id);
+
+
+--
+-- Name: mx_sources_id_latest_idx; Type: INDEX; Schema: public; Owner: mapxw
+--
+
+CREATE INDEX mx_sources_id_latest_idx ON public.mx_sources USING btree (id, pid DESC);
+
+
+--
+-- Name: mx_sources_date_modified_idx; Type: INDEX; Schema: public; Owner: mapxw
+--
+
+CREATE INDEX mx_sources_date_modified_idx ON public.mx_sources USING btree (date_modified);
+
+
+--
+-- Name: mx_sources_editor_idx; Type: INDEX; Schema: public; Owner: mapxw
+--
+
+CREATE INDEX mx_sources_editor_idx ON public.mx_sources USING btree (editor);
 
 
 --
@@ -89,5 +110,4 @@ CREATE INDEX mx_sources_readers_idx ON public.mx_sources USING gin (readers);
 --
 
 GRANT SELECT ON TABLE public.mx_sources TO readonly;
-
 

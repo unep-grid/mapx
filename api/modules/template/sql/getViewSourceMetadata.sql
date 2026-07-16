@@ -14,7 +14,7 @@ WITH
       s.data -> 'meta' AS meta
     FROM
       mx_views_latest v
-      JOIN mx_sources s ON v.data #>> '{source,layerInfo,name}' = s.id
+      JOIN mx_sources_latest s ON v.data #>> '{source,layerInfo,name}' = s.id
     WHERE
       v.type = 'vt'
       AND v.id = '{{idView}}'

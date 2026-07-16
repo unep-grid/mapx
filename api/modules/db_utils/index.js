@@ -15,6 +15,10 @@ import {
 import { isLayerValid, areLayersValid } from "./geom_validation.js";
 import { insertRow } from "./insert.js";
 import { hasSourceDependencies } from "#mapx/source";
+import {
+  createSourceRevision,
+  setSourceDataRevision,
+} from "../source/revision.js";
 export * from "./metadata.js";
 
 /**
@@ -263,10 +267,10 @@ async function analyzeSource(idTable) {
  * @param {String} [options.language"] langauge 2 letters code
  * @param {Boolean} [options.enable_download=false] Enable download option.
  * @param {Boolean} [options.enable_wms=false] Enable WMS (Web Map Service).
- * @param {PgClient} [client=pgWrite] The PostgreSQL client for database operations.
+ * @param {PgClient} [client] The PostgreSQL client for database operations.
  * @return {Promise<Boolean>} inserted - Promise resolving to a boolean indicating success.
  */
-async function registerSource(options, client = pgWrite) {
+async function registerSource(options, client = null) {
   const {
     idSource,
     idUser,
@@ -314,7 +318,7 @@ async function registerSource(options, client = pgWrite) {
 
   titleLanguage[language] = title;
 
-  const extent = await getLayerExtent(idSource);
+  const extent = await getLayerExtent(idSource, false, client || pgWrite);
 
   const meta = {
     meta: {
@@ -351,43 +355,66 @@ async function registerSource(options, client = pgWrite) {
             $6::jsonb
         )`;
 
-  await client.query(sqlAddSource, [
-    idSource,
-    idUser,
-    type,
-    idProject,
-    JSON.stringify(meta),
-    JSON.stringify(services),
-  ]);
+  const ownsClient = !client;
+  const pgClient = client || (await pgWrite.connect());
+  try {
+    if (ownsClient) {
+      await pgClient.query("BEGIN");
+    }
+    await pgClient.query(
+      "SELECT pg_advisory_xact_lock(hashtextextended($1::text, 0))",
+      [idSource],
+    );
+    const existing = await pgClient.query(
+      "SELECT 1 FROM mx_sources_latest WHERE id = $1",
+      [idSource],
+    );
+    if (existing.rowCount > 0) {
+      throw new Error(`Source already registered: ${idSource}`);
+    }
+    await pgClient.query(sqlAddSource, [
+      idSource,
+      idUser,
+      type,
+      idProject,
+      JSON.stringify(meta),
+      JSON.stringify(services),
+    ]);
+    if (ownsClient) {
+      await pgClient.query("COMMIT");
+    }
+  } catch (error) {
+    if (ownsClient) {
+      await pgClient.query("ROLLBACK");
+    }
+    throw error;
+  } finally {
+    if (ownsClient) {
+      pgClient.release();
+    }
+  }
 
   return true;
 }
 /**
- * Updates the date_modified column of the mx_sources table for the specified source ID.
+ * Creates a new source revision with an updated modification timestamp.
  *
  * @param {string} idSource - The ID of the source in the mx_sources table.
+ * @param {number} idUser - Authenticated actor creating the revision.
+ * @param {PgClient} [pgClient] - Client for an existing transaction.
  * @returns {Promise<boolean>} - Returns true if the update is successful, false otherwise.
  * @throws {Error} - Throws an error if there's an issue with the database operation.
  */
-export async function updateMxSourceTimestamp(idSource, pgClient = null) {
+export async function updateMxSourceTimestamp(
+  idSource,
+  idUser,
+  pgClient = null,
+) {
   if (!isSourceId(idSource)) {
     return false;
   }
 
-  const client = pgClient || pgWrite;
-
-  const updateMxSourcesQuery = `
-      UPDATE mx_sources
-      SET date_modified = NOW()
-      WHERE id = $1
-    `;
-
-  const result = await client.query(updateMxSourcesQuery, [idSource]);
-
-  if (result.rowCount !== 1) {
-    throw new Error("Rows affected is not equal to 1");
-  }
-
+  await createSourceRevision({ idSource, idUser, client: pgClient });
   return true;
 }
 
@@ -398,34 +425,34 @@ export async function updateMxSourceTimestamp(idSource, pgClient = null) {
  * @param {array|object} value value stringifiable
  * @return {Promise<array>} rows affected
  */
-export async function setMxSourceData(idSource, path, value) {
-  const client = await pgWrite.connect();
-  await client.query("BEGIN");
-  const out = [];
-  try {
-    const pathArray = path.map((item) => `'${item}'`).join(",");
-    const valueString = JSON.stringify(value);
-    const qsql = parseTemplate(templates.setMxSourceData, {
-      path: pathArray,
-      value: valueString,
-      idSource,
+export async function setMxSourceData(
+  idSource,
+  path,
+  value,
+  idUser,
+  client = null,
+  revisions = null,
+) {
+  if (revisions) {
+    const revision = await revisions.mutate(idSource, (source) => {
+      source.data ||= {};
+      let parent = source.data;
+      for (const key of path.slice(0, -1)) {
+        parent[key] ||= {};
+        parent = parent[key];
+      }
+      parent[path.at(-1)] = structuredClone(value);
     });
-    const res = await client.query(qsql);
-
-    if (res.rowCount !== 1) {
-      throw new Error("Row count not 1");
-    }
-
-    out.push(...res.rows);
-
-    client.query("COMMIT");
-  } catch (e) {
-    client.query("ROLLBACK");
-    throw new Error("setSourceData failed");
-  } finally {
-    client.release();
+    return [revision];
   }
-  return out;
+  const revision = await setSourceDataRevision({
+    idSource,
+    idUser,
+    path,
+    value,
+    client,
+  });
+  return [revision];
 }
 /**
  * Sget mx_source data values
@@ -437,7 +464,7 @@ export async function getMxSourceData(idSource, path) {
   const pathJSON = path.map((item) => `"${item}"`).join(",");
   const res = await pgRead.query(`
 SELECT data #> '{${pathJSON}}' as value
-FROM mx_sources
+FROM mx_sources_latest
 WHERE id = '${idSource}'
 LIMIT 1`);
   return res.rows?.[0]?.value;
@@ -482,18 +509,23 @@ export async function getLayerExtent(
 
 /**
  * Updates the spatial bounding box metadata for a layer in the mx_sources table
- * @param {string|number} idSource Layer ID to update
- * @param {pg.Client} [client=pgWrite] PostgreSQL client instance
+ * @param {string} idSource Layer ID to update
+ * @param {number} idUser Authenticated actor creating the revision
+ * @param {PgClient} [client] Client for an existing transaction
  * @returns {Promise<Object|false>} Returns the updated source row if successful, false if bbox validation fails
  * @throws {Error} Throws if source ID is invalid, exactly one row is not updated, or if database operations fail
  * @example
  * // Update bbox for source id 123
- * const result = await updateLayerExtentMeta(123);
+ * const result = await updateLayerExtentMeta("mx_layer_123", 123);
  * if (!result) {
  *   console.error('Invalid bbox metadata');
  * }
  */
-export async function updateLayerExtentMeta(idSource, client = pgWrite) {
+export async function updateLayerExtentMeta(
+  idSource,
+  idUser,
+  client = null,
+) {
   if (!isSourceId(idSource)) {
     throw new Error(`Invalid source id: ${idSource}`);
   }
@@ -506,37 +538,17 @@ export async function updateLayerExtentMeta(idSource, client = pgWrite) {
 
   const extJson = JSON.stringify(ext);
 
-  try {
-    await client.query("BEGIN");
-
-    // Update source metadata for vt views
-    const query = `
-      UPDATE mx_sources
-      SET data = jsonb_set(
-        data,
-        '{meta,spatial,bbox}',
-        $1::jsonb,
-        true
-      )
-      WHERE id = $2
-      RETURNING id;
-    `;
-
-    const result = await client.query(query, [extJson, idSource]);
-
-    if (result.rowCount !== 1) {
-      await client.query("ROLLBACK");
-      throw new Error(
-        `Expected to update exactly 1 row, but updated ${result.rowCount} rows instead`
-      );
-    }
-
-    await client.query("COMMIT");
-    return result.rows[0];
-  } catch (error) {
-    await client.query("ROLLBACK");
-    throw error;
-  }
+  return createSourceRevision({
+    idSource,
+    idUser,
+    client,
+    mutate(revision) {
+      revision.data ||= {};
+      revision.data.meta ||= {};
+      revision.data.meta.spatial ||= {};
+      revision.data.meta.spatial.bbox = JSON.parse(extJson);
+    },
+  });
 }
 
 /**
@@ -600,15 +612,41 @@ async function registerOrRemoveSource(
  * @param {Object} client Database client (optional)
  * @return {Promise<Boolean>} True if removed successfully, otherwise throws an error
  */
-async function removeSource(idSource, idUser, client = pgWrite) {
-  const pgClient = await client.connect();
+async function removeSource(idSource, idUser, client = null) {
+  const ownsClient = !client;
+  const pgClient = client || (await pgWrite.connect());
   try {
-    await pgClient.query("BEGIN");
-    const hasDep = await hasSourceDependencies(idSource);
+    if (ownsClient) {
+      await pgClient.query("BEGIN");
+    }
+    await pgClient.query(
+      "SELECT pg_advisory_xact_lock(hashtextextended($1::text, 0))",
+      [idSource],
+    );
+    const sourceResult = await pgClient.query(
+      "SELECT editor, editors, project, type FROM mx_sources_latest WHERE id = $1",
+      [idSource],
+    );
+    const source = sourceResult.rows[0];
+    if (!source) {
+      throw new Error(`Source not registered: ${idSource}`);
+    }
 
     if (idUser) {
-      // Implement user rights check here
+      const roles = await getUserRoles(idUser, source.project, pgClient);
+      const groups = roles.group || [];
+      const editors = source.editors || [];
+      const allowed =
+        roles.root === true ||
+        source.editor === Number(idUser) ||
+        editors.includes(String(idUser)) ||
+        editors.some((editor) => groups.includes(editor));
+      if (!allowed) {
+        throw new Error(`Source deletion not allowed: ${idSource}`);
+      }
     }
+
+    const hasDep = await hasSourceDependencies(idSource, pgClient);
 
     if (hasDep) {
       throw new Error(`Source ${idSource} can't be removed [has dependencies]`);
@@ -618,21 +656,26 @@ async function removeSource(idSource, idUser, client = pgWrite) {
       text: `DELETE FROM mx_sources WHERE id = $1::text`,
       values: [idSource],
     };
-    const sqlDrop = {
-      text: `DROP TABLE IF EXISTS ${idSource}`,
-    };
+    const resourceType = source.type === "join" ? "VIEW" : "TABLE";
+    const sqlDrop = { text: `DROP ${resourceType} IF EXISTS ${idSource}` };
     await pgClient.query(sqlDrop);
     await pgClient.query(sqlDelete);
     const sourceExists = await tableExists(idSource, "public", pgClient);
     if (sourceExists) {
       throw new Error(`Source ${idSource} not removed`);
     }
-    await pgClient.query("COMMIT");
+    if (ownsClient) {
+      await pgClient.query("COMMIT");
+    }
   } catch (e) {
-    await pgClient.query("ROLLBACK");
+    if (ownsClient) {
+      await pgClient.query("ROLLBACK");
+    }
     throw e; // Rethrow the error for external handling
   } finally {
-    pgClient.release();
+    if (ownsClient) {
+      pgClient.release();
+    }
   }
   return true;
 }
@@ -775,7 +818,7 @@ async function getSourceType(idSource, client = pgRead) {
   }
   const q = `
     SELECT type
-    FROM mx_sources
+    FROM mx_sources_latest
     WHERE id = $1
   `;
   const data = await client.query(q, [idSource]);
@@ -802,7 +845,7 @@ async function isSourceRegistered(idSource, client = pgRead) {
   const query = `
     SELECT EXISTS (
       SELECT 1
-      FROM mx_sources
+      FROM mx_sources_latest
       WHERE id = $1
     )`;
 
@@ -873,7 +916,7 @@ async function getLayerTitle(idLayer, language) {
     text: `SELECT
     data#>>'{"meta","text","title","${language}"}' AS title_lang,
     data#>>'{"meta","text","title","en"}' AS title_en
-    FROM mx_sources
+    FROM mx_sources_latest
     WHERE id=$1`,
     values: [idLayer],
   };

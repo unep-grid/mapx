@@ -1,5 +1,6 @@
 import { isArray, isEmpty, isNotEmpty, isSourceId } from "@fxi/mx_valid";
 import { pgRead, pgWrite } from "#mapx/db";
+import { createSourceRevision } from "../revision.js";
 import { getSourceData } from "#mapx/source";
 import {
   getColumnsTypesSimple,
@@ -100,7 +101,7 @@ export async function register(config, session, client) {
 
   const newJoin = Object.assign({}, config_default, { id_source });
 
-  await updateJoin(newJoin, client);
+  await updateJoin(newJoin, client, id_user);
 
   return newJoin;
 }
@@ -132,7 +133,7 @@ export async function setJoinConfig(config, client = pgWrite, socket) {
   await stopIfNotValid(config, client);
   await updatePrefixConfig(config);
   await updatePgView(config, client);
-  await updateJoin(config, client);
+  await updateJoin(config, client, socket.session.user_id);
   await updateViews(config, socket);
   return true;
 }
@@ -163,17 +164,16 @@ export async function emitUpdateViews(views, socket) {
   return true;
 }
 
-export async function updateJoin(config, client) {
-  const result = await client.query(templates.updateJoinConfig, [
-    config,
-    config.id_source,
-  ]);
-
-  if (result.rowCount !== 1) {
-    throw new Error(
-      `Expected 1 row to be updated, but got ${result.rowCount} rows.`
-    );
-  }
+export async function updateJoin(config, client, idUser) {
+  return createSourceRevision({
+    idSource: config.id_source,
+    idUser,
+    client,
+    mutate(revision) {
+      revision.data ||= {};
+      revision.data.join = structuredClone(config);
+    },
+  });
 }
 
 export async function updatePrefixConfig(config) {
@@ -306,7 +306,9 @@ export async function updateJoinColumnsNames(
   idSourceUpdate,
   oldColumnName,
   newColumnName,
-  client = pgRead
+  client = pgRead,
+  idUser,
+  revisions = null,
 ) {
   const updates = [];
   const query = templates.getSourceJoinDataUsingSourceId;
@@ -397,7 +399,14 @@ export async function updateJoinColumnsNames(
    
     await stopIfNotValid(joinConfig, client);
     await updatePgView(joinConfig, client);
-    await updateJoin(joinConfig, client);
+    if (revisions) {
+      await revisions.mutate(idSourceJoin, (revision) => {
+        revision.data ||= {};
+        revision.data.join = structuredClone(joinConfig);
+      });
+    } else {
+      await updateJoin(joinConfig, client, idUser);
+    }
   }
 
   return updates;

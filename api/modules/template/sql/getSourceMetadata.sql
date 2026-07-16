@@ -6,7 +6,7 @@ SELECT
   u.email AS email_editor,
   s.services AS services
 FROM
-  mx_sources s
+  mx_sources_latest s
   JOIN mx_users u ON s.editor = u.id
 WHERE
   s.id = $1;

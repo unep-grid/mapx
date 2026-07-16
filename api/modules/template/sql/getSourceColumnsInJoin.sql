@@ -4,7 +4,7 @@ WITH
       jsonb_array_elements_text(data #> '{join,base,columns}') AS column_name,
       jsonb_array_elements(data #> '{join,joins}') ->> 'column_base' as column_base
     FROM
-      mx_sources
+      mx_sources_latest
     WHERE
     type = 'join'
     AND data #>> '{join,base,id_source}' = $1
@@ -14,7 +14,7 @@ WITH
       jsonb_array_elements_text(je -> 'columns') AS column_name,
       je ->> 'column_join' AS column_join
     FROM
-      mx_sources s,
+      mx_sources_latest s,
       jsonb_array_elements(s.data #> '{join,joins}') je
     WHERE
       s.type = 'join'

@@ -21,7 +21,7 @@ FROM
   JOIN pg_class st ON pd.refobjid = st.oid
   JOIN pg_namespace dns ON dns.oid = dv.relnamespace
   JOIN pg_namespace sns ON sns.oid = st.relnamespace
-  JOIN mx_sources ms ON ms.id = dv.relname
+  JOIN mx_sources_latest ms ON ms.id = dv.relname
   JOIN mx_projects p ON ms.project = p.id
   JOIN mx_users u on ms.editor = u.id
 WHERE

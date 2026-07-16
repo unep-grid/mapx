@@ -19,6 +19,7 @@
   "getViewsListGlobalPublic": "/get/views/list/global/public",
   "uploadImage": "/upload/image/",
   "uploadVector": "/upload/vector/",
+  "postSourceRevise": "/source/revise",
   "postEmail": "/send/mail",
   "collectLogs": "/collect/logs/",
   "s3": "/s3"

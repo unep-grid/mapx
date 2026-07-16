@@ -8,3 +8,5 @@ export * from "./list/index.js";
 export * from "./attributes/index.js";
 export * from "./join/index.js";
 export * from "./summary/index.js";
+export * from "./revision.js";
+export * from "./update.js";

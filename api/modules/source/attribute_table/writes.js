@@ -9,7 +9,6 @@ import {
   removeTableColumn,
   addTableColumn,
   setMxSourceData,
-  updateMxSourceTimestamp,
   renameColumnMetadata,
   addColumnMetadata,
   getColumnCells,
@@ -20,7 +19,7 @@ import {
   deleteRowByGid,
   updateLayerExtentMeta,
 } from "#mapx/db_utils";
-import { updateJoinColumnsNames } from "#mapx/source";
+import { SourceRevisionBatch, updateJoinColumnsNames } from "#mapx/source";
 import { events } from "./events.js";
 import { cols, insertTableRow, updateFeatureGeometry } from "./geometry.js";
 
@@ -46,6 +45,7 @@ export async function writeUpdates(session, message) {
   const postScripts = new Map();
   const tablesUpdated = new Set();
   const client = await pgWrite.connect();
+  const revisions = new SourceRevisionBatch(client, session._id_user);
   await client.query("BEGIN");
 
   try {
@@ -64,12 +64,14 @@ export async function writeUpdates(session, message) {
         session,
         postScripts,
         tablesUpdated,
+        revisions,
       });
     }
 
     for (const id_table of tablesUpdated) {
-      await updateMxSourceTimestamp(id_table, client);
+      await revisions.touch(id_table);
     }
+    await revisions.save();
 
     await client.query("COMMIT");
   } catch (e) {
@@ -100,7 +102,7 @@ const handlers = {
   update_geom: handlerUpdateGeom,
 };
 
-async function handlerOrderColumns({ client, update }) {
+async function handlerOrderColumns({ client, update, session, revisions }) {
   const { id_table, columns_order } = update;
   const colsExistOk = await columnsExist(columns_order, id_table, client);
   if (!colsExistOk) {
@@ -109,7 +111,10 @@ async function handlerOrderColumns({ client, update }) {
   await setMxSourceData(
     id_table,
     ["settings", "editor", "columns_order"],
-    columns_order
+    columns_order,
+    session._id_user,
+    client,
+    revisions,
   );
 }
 
@@ -136,7 +141,14 @@ async function handlerUpdateCell({ client, update, tablesUpdated }) {
   }
 }
 
-async function handlerAddColumn({ client, update, message, tablesUpdated }) {
+async function handlerAddColumn({
+  client,
+  update,
+  message,
+  session,
+  tablesUpdated,
+  revisions,
+}) {
   const { id_table, column_name, column_type, is_identity } = update;
 
   if (!isSafeName(column_name)) {
@@ -149,7 +161,13 @@ async function handlerAddColumn({ client, update, message, tablesUpdated }) {
   }
 
   await addTableColumn(id_table, column_name, column_type, is_identity, client);
-  await addColumnMetadata(id_table, column_name, client);
+  await addColumnMetadata(
+    id_table,
+    column_name,
+    session._id_user,
+    client,
+    revisions,
+  );
   tablesUpdated.add(id_table);
 
   if (is_identity) {
@@ -161,21 +179,46 @@ async function handlerAddColumn({ client, update, message, tablesUpdated }) {
   }
 }
 
-async function handlerRemoveColumn({ client, update, tablesUpdated }) {
+async function handlerRemoveColumn({
+  client,
+  update,
+  session,
+  tablesUpdated,
+  revisions,
+}) {
   const { id_table, column_name } = update;
   const colExists = await columnExists(column_name, id_table, client);
   if (!colExists) {
     return;
   }
   await removeTableColumn(id_table, column_name, client);
-  await removeColumnMetadata(id_table, column_name, client);
+  await removeColumnMetadata(
+    id_table,
+    column_name,
+    session._id_user,
+    client,
+    revisions,
+  );
   tablesUpdated.add(id_table);
 }
 
-async function handlerDuplicateColumn({ client, update, tablesUpdated }) {
+async function handlerDuplicateColumn({
+  client,
+  update,
+  session,
+  tablesUpdated,
+  revisions,
+}) {
   const { id_table, column_name, column_name_new } = update;
   await duplicateTableColumn(id_table, column_name, column_name_new, client);
-  await duplicateColumnMetadata(id_table, column_name, column_name_new);
+  await duplicateColumnMetadata(
+    id_table,
+    column_name,
+    column_name_new,
+    session._id_user,
+    client,
+    revisions,
+  );
   tablesUpdated.add(id_table);
 }
 
@@ -185,6 +228,7 @@ async function handlerRenameColumn({
   session,
   postScripts,
   tablesUpdated,
+  revisions,
 }) {
   const { id_table, column_name, column_name_new } = update;
 
@@ -192,7 +236,14 @@ async function handlerRenameColumn({
    * Table and metadata
    */
   await renameTableColumn(id_table, column_name, column_name_new, client);
-  await renameColumnMetadata(id_table, column_name, column_name_new, client);
+  await renameColumnMetadata(
+    id_table,
+    column_name,
+    column_name_new,
+    session._id_user,
+    client,
+    revisions,
+  );
   tablesUpdated.add(id_table);
 
   /**
@@ -202,7 +253,9 @@ async function handlerRenameColumn({
     id_table,
     column_name,
     column_name_new,
-    client
+    client,
+    session._id_user,
+    revisions,
   );
 
   /**
@@ -227,10 +280,15 @@ async function handlerRenameColumn({
   });
 }
 
-async function handlerRemoveRows({ update, tablesUpdated }) {
+async function handlerRemoveRows({
+  update,
+  session,
+  postScripts,
+  tablesUpdated,
+}) {
   const { id_table, id_rows } = update;
   await deleteRowByGid(id_table, id_rows);
-  await updateLayerExtentMeta(id_table);
+  addExtentPostScript(postScripts, id_table, session._id_user);
   tablesUpdated.add(id_table);
 }
 
@@ -238,6 +296,7 @@ async function handlerAddRow({
   client,
   update,
   message,
+  session,
   postScripts,
   tablesUpdated,
 }) {
@@ -246,7 +305,7 @@ async function handlerAddRow({
   update.row = row;
   update.gid = row.gid;
   message._include_sender = true;
-  addExtentPostScript(postScripts, id_table);
+  addExtentPostScript(postScripts, id_table, session._id_user);
   tablesUpdated.add(id_table);
 }
 
@@ -272,14 +331,14 @@ async function handlerUpdateGeom({
   update.row = row;
   update[cols.geom_status] = row[cols.geom_status];
   message._include_sender = true;
-  addExtentPostScript(postScripts, id_table);
+  addExtentPostScript(postScripts, id_table, session._id_user);
   tablesUpdated.add(id_table);
 }
 
-function addExtentPostScript(postScripts, id_table) {
+function addExtentPostScript(postScripts, id_table, idUser) {
   postScripts.set(`${id_table}_update_extent`, async () => {
     try {
-      await updateLayerExtentMeta(id_table);
+      await updateLayerExtentMeta(id_table, idUser);
     } catch (e) {
       console.warn("Unable to update layer extent", e.message);
     }

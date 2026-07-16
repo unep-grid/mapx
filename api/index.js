@@ -48,6 +48,7 @@ import {
   ioSourceServices,
   ioSourceMetadata,
   ioSourceAttributesAlias,
+  ioSourceRevise,
 } from "#mapx/source";
 import {
   ioProjectNameValidate,
@@ -135,6 +136,7 @@ io.use((socket, next) => {
   socket.on("/client/source/get/list/columns", use(ioSourceListColumns));
   socket.on("/client/source/get/services", use(ioSourceServices));
   socket.on("/client/source/get/metadata", use(ioSourceMetadata));
+  socket.on("/client/source/revise", use(ioSourceRevise));
   socket.on("/client/source/join", use(ioSourceJoin));
   socket.on("/client/view/pin", use(ioViewPin));
   socket.on("/client/view/source/get/metadata", use(ioViewSourceMetaGet));
@@ -211,6 +213,7 @@ app.get("/ogc_meta/collections/:collectionId/items/:id", ogcMeta.mwItem);
 
 app.post("/upload/image/", upload.mwImage);
 app.post("/upload/vector/", upload.mwVector);
+app.post("/source/revise", source.mwSourceRevise);
 app.post("/send/mail/", mwSendMail);
 
 server.listen(port);

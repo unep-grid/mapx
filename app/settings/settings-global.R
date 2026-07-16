@@ -172,6 +172,7 @@ config[["pg"]] <- list(
     "views_latest" = "mx_views_latest",
     "projects" = "mx_projects",
     "sources" = "mx_sources",
+    "sources_latest" = "mx_sources_latest",
     "config" = "mx_config"
   ),
   poolMin = 1,

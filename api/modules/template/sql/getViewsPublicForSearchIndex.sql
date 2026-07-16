@@ -232,7 +232,7 @@ WITH
       v.id AS id_view,
       coalesce(s.data #> '{meta}', '{}'::jsonb) AS meta
     FROM
-      mx_sources s,
+      mx_sources_latest s,
       views_public v
     WHERE
       v.type = 'vt'
@@ -348,7 +348,7 @@ WITH
         SELECT
           1
         FROM
-          mx_sources s
+          mx_sources_latest s
           INNER JOIN mx_projects sp ON s.project = sp.id
         WHERE
           v.type = 'vt'

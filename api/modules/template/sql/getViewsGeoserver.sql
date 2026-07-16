@@ -2,7 +2,7 @@ WITH src_enabled AS (
   SELECT
     s.id id_source
   FROM
-    mx_sources s,
+    mx_sources_latest s,
     mx_projects p
   WHERE
     s.project = p.id

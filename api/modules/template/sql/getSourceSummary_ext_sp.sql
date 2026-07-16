@@ -8,7 +8,7 @@ WITH
           SELECT
             data #>> '{join,base,id_source}'
           FROM
-            mx_sources
+            mx_sources_latest
           WHERE
             id = '{{idSource}}'
         )

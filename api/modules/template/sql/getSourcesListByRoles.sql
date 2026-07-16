@@ -36,7 +36,7 @@ WITH
     services,
     global
     FROM
-      mx_sources
+      mx_sources_latest
     WHERE
       /**
        * At least read or edit mode

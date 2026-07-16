@@ -2,7 +2,7 @@ WITH sources_project AS (
    SELECT 
     data, id, type
    FROM 
-    mx_sources 
+    mx_sources_latest
    WHERE 
     ($2::text IS NULL OR project = $2) OR global = true
 ),

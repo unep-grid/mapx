@@ -79,25 +79,29 @@ const optDaily = {
   before: true,
 };
 
-/**
- * Apply at start, once
- */
-once(
-  [
-    clearDownloadRoutine,
-    updateDbRoutine,
-    updateLanguageRoutine,
-    updateIndexesRoutine,
-    updateOgcMetaCatalogRoutine,
-    updateGeoIpTableRoutine,
-  ],
-  optCommon
-);
+async function startRoutines() {
+  /**
+   * Complete startup, including migrations, before any interval routine can
+   * query the upgraded schema.
+   */
+  await once(
+    [
+      clearDownloadRoutine,
+      updateDbRoutine,
+      updateLanguageRoutine,
+      updateIndexesRoutine,
+      updateOgcMetaCatalogRoutine,
+      updateGeoIpTableRoutine,
+    ],
+    optCommon,
+  );
 
-/**
- * Apply at interval
- */
-onceInterval([updateIndexesRoutine], optHourly);
-onceInterval([updateOgcMetaCatalogRoutine], optHourly);
-onceInterval([updateGeoIpTableRoutine], optWeekly);
-onceInterval([updateGeoserverRoutine, clearDownloadRoutine], optDaily);
+  onceInterval([updateIndexesRoutine], optHourly);
+  onceInterval([updateOgcMetaCatalogRoutine], optHourly);
+  onceInterval([updateGeoIpTableRoutine], optWeekly);
+  onceInterval([updateGeoserverRoutine, clearDownloadRoutine], optDaily);
+}
+
+startRoutines().catch((error) => {
+  optCommon.onError([updateDbRoutine], error);
+});

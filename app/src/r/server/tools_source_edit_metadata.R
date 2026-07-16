@@ -217,6 +217,7 @@ observeEvent(input$jedSourceMetadata_values, {
         userRole <- getUserRole()
         userData <- reactUser$data
         idUser <- .get(userData, c("id"))
+        token <- reactUser$token
         isPublisher <- "publishers" %in% userRole$groups
         language <- reactData$language
         layer <- reactData$triggerSourceMetadata$idSource
@@ -230,56 +231,22 @@ observeEvent(input$jedSourceMetadata_values, {
           stop("Save source metadata : operation not allowed")
         }
 
-        tryCatch(
-          {
-            mxDbUpdate(
-              table = .get(config, c("pg", "tables", "sources")),
-              idCol = "id",
-              id = idSource,
-              column = "data",
-              path = c("meta"),
-              value = meta
-            )
-
-            mxDbUpdate(
-              table = .get(config, c("pg", "tables", "sources")),
-              idCol = "id",
-              id = idSource,
-              column = "date_modified",
-              value = Sys.time()
-            )
-
-            mxDbUpdate(
-              table = .get(config, c("pg", "tables", "sources")),
-              idCol = "id",
-              id = idSource,
-              column = "editor",
-              value = idUser
-            )
-          },
-          error = function(cond) {
-            stop("Error writing metadata in DB, check the DB logs")
-          }
+        mxApiReviseSource(
+          method = "metadata",
+          idSource = idSource,
+          changes = list(metadata = meta),
+          idUser = idUser,
+          token = token
         )
 
         mxFlashIcon("floppy-o")
-
         mxUpdateText(
           "editSourceMetadata_txt",
           "Saved at " + format(Sys.time(), "%H:%M")
         )
-
         reactData$updateSourceLayerList <- runif(1)
-
-        #
-        # Reload views that use this source
-        #
         views <- mxDbGetViewsTableBySourceId(idSource, language = language)
-
-        # NOTE: meta no more included -> use metadata from server
-        mglUpdateViewsBadges(list(
-          views = as.list(views$view_id)
-        ))
+        mglUpdateViewsBadges(list(views = as.list(views$view_id)))
       })
     }
   )

@@ -103,9 +103,11 @@ mxListToQueryStringParam <- function(data) {
 #'
 #' @param route {Character} route. E.g. '/post/views'
 #' @param listParam {List} Query param. E.g. list(idUser=1,idProject="MX-TEST")
+#' @param shutdownOnError {Logical} Preserve the legacy behavior of stopping
+#'   the Shiny process when the API transport is unavailable.
 #' @return Data {List}
 #'
-mxApiPost <- function(route, listParam) {
+mxApiPost <- function(route, listParam, shutdownOnError = TRUE) {
   out <- list()
   tryCatch(
     {
@@ -132,11 +134,52 @@ mxApiPost <- function(route, listParam) {
       out$status <- req$status
     },
     error = function(e) {
-      mxKillProcess(sprintf("mxApiFetch: api issue, shut down. Details: %s", e$message))
+      message <- sprintf("mxApiPost: API issue. Details: %s", e$message)
+      if (isTRUE(shutdownOnError)) {
+        mxKillProcess(message)
+      } else {
+        stop(message)
+      }
     }
   )
 
   return(out)
+}
+
+
+#' Apply an authenticated source revision through the MapX API.
+#'
+#' @param method One of metadata, settings, or delete.
+#' @param idSource Source identifier.
+#' @param changes Method-specific values.
+#' @param idUser Authenticated user identifier.
+#' @param token Authenticated user token.
+#' @return Successful API response.
+mxApiReviseSource <- function(method, idSource, changes, idUser, token) {
+  route <- .get(config, c("api", "routes", "postSourceRevise"))
+  result <- mxApiPost(
+    route = route,
+    listParam = list(
+      method = method,
+      idSource = idSource,
+      changes = changes,
+      idUser = idUser,
+      token = token
+    ),
+    shutdownOnError = FALSE
+  )
+
+  status <- .get(result, "status", 0)
+  if (status < 200 || status >= 300 || !isTRUE(result$ok)) {
+    message <- .get(
+      result,
+      "message",
+      .get(result, "error", "Source revision failed")
+    )
+    stop(message)
+  }
+
+  result
 }
 
 

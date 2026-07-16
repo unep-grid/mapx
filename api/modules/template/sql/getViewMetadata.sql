@@ -21,10 +21,10 @@ WITH
     SELECT
       coalesce(services, '[]') AS services
     FROM
-      mx_sources,
+      mx_sources_latest,
       v_source_id
     WHERE
-      mx_sources.id = v_source_id.id_source
+      mx_sources_latest.id = v_source_id.id_source
   ),
   v_last_editor AS (
     SELECT

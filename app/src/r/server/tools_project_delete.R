@@ -122,7 +122,7 @@ observeEvent(input$btnDeleteProject, {
       querySource <- sprintf(
         "
       SELECT id, global
-      FROM mx_sources
+      FROM mx_sources_latest
       WHERE project = '%1$s'
       ",
         project
@@ -473,7 +473,7 @@ observeEvent(input$btnDeleteProjectConfirm, {
           # Fetch the type of the source
           #
           querySourceType <- sprintf(
-            "SELECT type FROM mx_sources WHERE id = '%s'",
+            "SELECT type FROM mx_sources_latest WHERE id = '%s'",
             s
           )
           sourceType <- dbGetQuery(con, querySourceType)$type
@@ -510,7 +510,7 @@ observeEvent(input$btnDeleteProjectConfirm, {
             s
           )
           rowsAffected <- dbExecute(con, querySourceDelete)
-          if (rowsAffected != 1) {
+          if (rowsAffected < 1) {
             msg <- sprintf(
               "Error removing source '%s': %d rows were affected",
               s,

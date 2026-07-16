@@ -186,6 +186,7 @@ const settings_global = {
       name_not_queryable: [
         "mx_users",
         "mx_sources",
+        "mx_sources_latest",
         "mx_views",
         "mx_views_latest",
         "mx_config",

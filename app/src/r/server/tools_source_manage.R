@@ -395,9 +395,8 @@ observeEvent(input$btnDeleteSourceConfirm, {
     idSource <- reactData$triggerSourceManage$idSource
     userRole <- getUserRole()
     isPublisher <- isTRUE(userRole$publisher)
-    project <- reactData$project
-    language <- reactData$language
     idUser <- reactUser$data$id
+    token <- reactUser$token
 
     if (blockDelete || !isPublisher) {
       return()
@@ -409,8 +408,15 @@ observeEvent(input$btnDeleteSourceConfirm, {
     )
 
 
-    mxDbDropLayer(idSource)
+    mxApiReviseSource(
+      method = "delete",
+      idSource = idSource,
+      changes = list(),
+      idUser = idUser,
+      token = token
+    )
 
+    language <- reactData$language
     mxModal(
       id = "editSourceSettings",
       close = TRUE
@@ -435,12 +441,10 @@ observeEvent(input$btnUpdateSource, {
   mxCatch(title = "Edit source : update", {
     userRole <- getUserRole()
     idSource <- reactData$triggerSourceManage$idSource
-    project <- reactData$project
-    language <- reactData$language
-    idUser <- reactUser$data$id
-    email <- reactUser$data$email
     isPublisher <- isTRUE(userRole$publisher)
     isRoot <- isTRUE(userRole$root)
+    idUser <- reactUser$data$id
+    token <- reactUser$token
     idGroupsServices <- input$selectSourceServicesUpdate
     readers <- input$selectSourceReadersUpdate
     editors <- input$selectSourceEditorsUpdate
@@ -474,56 +478,21 @@ observeEvent(input$btnUpdateSource, {
     #
     # Control roles
     #
-    mxDbUpdate(
-      table = .get(config, c("pg", "tables", "sources")),
-      idCol = "id",
-      id = idSource,
-      column = "date_modified",
-      value = Sys.time()
+    changes <- list(
+      services = as.list(idGroupsServices),
+      readers = as.list(readers),
+      editors = as.list(editors)
     )
-
-    mxDbUpdate(
-      table = .get(config, c("pg", "tables", "sources")),
-      idCol = "id",
-      id = idSource,
-      column = "services",
-      value = as.list(idGroupsServices)
-    )
-
-    mxDbUpdate(
-      table = .get(config, c("pg", "tables", "sources")),
-      idCol = "id",
-      id = idSource,
-      column = "readers",
-      value = as.list(readers)
-    )
-
-    mxDbUpdate(
-      table = .get(config, c("pg", "tables", "sources")),
-      idCol = "id",
-      id = idSource,
-      column = "editor",
-      value = idUser
-    )
-
-    mxDbUpdate(
-      table = .get(config, c("pg", "tables", "sources")),
-      idCol = "id",
-      id = idSource,
-      column = "editors",
-      value = as.list(editors)
-    )
-
-
     if (isRoot) {
-      mxDbUpdate(
-        table = .get(config, c("pg", "tables", "sources")),
-        idCol = "id",
-        id = idSource,
-        column = "global",
-        value = isGlobal
-      )
+      changes$global <- isGlobal
     }
+    mxApiReviseSource(
+      method = "settings",
+      idSource = idSource,
+      changes = changes,
+      idUser = idUser,
+      token = token
+    )
 
     #
     # Generate the modal panel

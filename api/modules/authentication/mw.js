@@ -68,6 +68,7 @@ export async function validateTokenHandler(req, res, next) {
     sendError(
       res,
       {
+        message: "Authentication failed",
         reason: "authentication failed",
         status: {
           token_is_valid: tokenData.isValid,

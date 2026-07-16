@@ -335,7 +335,7 @@ mxDbGetSourceEditInfo <- function(idProject, idSource, idUser, language = "en") 
 #' @param tableSource Default to mx_sources
 #' @param exludes Default to mx_sources, mx_users, mx_views
 #'
-mxDbGetUnregisteredTable <- function(tableSource = "mx_sources", excludes = c("mx_users", "mx_sources", "mx_views", "spatial_ref_sys")) {
+mxDbGetUnregisteredTable <- function(tableSource = "mx_sources_latest", excludes = c("mx_users", "mx_sources", "mx_views", "spatial_ref_sys")) {
   tbls <- c()
 
   tryCatch(
@@ -695,7 +695,7 @@ mxDbGetTableColumnsNames <- function(table, notIn = NULL, notType = NULL) {
 mxDbGetSourceLastDateModified <- function(idSource) {
   timeSourceDb <- mxDbGetQuery("
     SELECT date_modified as date
-    FROM mx_sources
+    FROM mx_sources_latest
     WHERE id = '" + idSource + "'
     LIMIT 1")$date
 
@@ -1005,7 +1005,7 @@ mxDbDropLayer <- function(layerName) {
   layer <- mxDbGetQuery(sprintf(
     "
     SELECT id,type
-    FROM mx_sources
+    FROM mx_sources_latest
     WHERE id='%1$s'",
     layerName
   ))
@@ -1200,7 +1200,7 @@ mxDbGetLayerSummary <- function(layer = NULL, variable = NULL, geomType = "empty
 #' @param layer Postgis layer stored in layer table. Should have a meta field.
 #' @export
 mxDbGetSourceMeta <- function(layer) {
-  layerTable <- .get(config, c("pg", "tables", "sources"))
+  layerTable <- .get(config, c("pg", "tables", "sources_latest"))
 
   if (!mxDbExistsTable(layerTable)) {
     mxDebugMsg("mxGetMeta requested, but no layer table available")
@@ -1249,7 +1249,7 @@ mxDbGetSourceServices <- function(idSource) {
       sprintf(
         "
       SELECT data#>>'{meta,license,allowDownload}' as allow_download
-      FROM mx_sources
+      FROM mx_sources_latest
       WHERE id ='%1$s'",
         idSource
       )
@@ -1259,7 +1259,7 @@ mxDbGetSourceServices <- function(idSource) {
   qSql <- sprintf(
     "
         SELECT services
-        FROM mx_sources
+        FROM mx_sources_latest
         WHERE id ='%1$s'",
     idSource
   )
@@ -1293,7 +1293,7 @@ mxDbGetSourceData <- function(idSource) {
     sprintf(
       "
    SELECT editor, readers, editors, type, global
-   FROM mx_sources
+   FROM mx_sources_latest
    WHERE id ='%1$s'",
       idSource
     )
@@ -1331,7 +1331,7 @@ mxDbGetSourceTitle <- function(
       NULLIF(data #>> '{meta,text,title,en}',''),
       id
       ) AS title
-  FROM mx_sources
+  FROM mx_sources_latest
   WHERE id in (%1$s)",
     layer,
     language
@@ -1357,7 +1357,7 @@ mxDbGetSourceTitle <- function(
 #' @param layer Postgis layer stored in layer table.
 #' @export
 mxDbGetSourceProject <- function(layer) {
-  mxDbGetQuery("SELECT project FROM mx_sources where id = '" + tolower(layer) + "'")$project
+  mxDbGetQuery("SELECT project FROM mx_sources_latest where id = '" + tolower(layer) + "'")$project
 }
 
 
@@ -1757,7 +1757,7 @@ mxDbGetTableDependencies <- function(idTable, language = "en") {
     JOIN pg_class st ON pd.refobjid = st.oid
     JOIN pg_namespace dns ON dns.oid = dv.relnamespace
     JOIN pg_namespace sns ON sns.oid = st.relnamespace
-    JOIN mx_sources ms ON ms.id = dv.relname
+    JOIN mx_sources_latest ms ON ms.id = dv.relname
     JOIN mx_projects p ON ms.project = p.id
     JOIN mx_users u on ms.editor = u.id
     WHERE

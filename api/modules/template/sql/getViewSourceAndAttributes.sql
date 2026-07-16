@@ -20,7 +20,7 @@ WITH
       id,
       coalesce(services, '[]'::jsonb) @> '"mx_postgis_tiler"'::jsonb AS use_postgis_tiles
     FROM
-      mx_sources s,
+      mx_sources_latest s,
       view_data v
     WHERE
       s.id = v.layer

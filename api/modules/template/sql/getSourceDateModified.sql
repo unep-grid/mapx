@@ -5,7 +5,7 @@ WITH source_data AS (
   date_modified,
   data
   FROM 
-  mx_sources 
+  mx_sources_latest
   WHERE 
   id = $1
 ),
@@ -22,7 +22,7 @@ join_source_ids AS (
 ),
 join_dates AS (
   SELECT MAX(date_modified) AS join_date_modified
-  FROM mx_sources
+  FROM mx_sources_latest
   WHERE id IN (SELECT id_source FROM join_source_ids)
 )
 SELECT 

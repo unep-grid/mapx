@@ -11,6 +11,7 @@ import {
   isBbox,
 } from "@fxi/mx_valid";
 import { getSourceMetadata } from "#mapx/source";
+import { createSourceRevision } from "#mapx/source";
 
 export async function ioSetViewSourceMetaBbox(socket, config, cb) {
   try {
@@ -25,7 +26,13 @@ export async function ioSetViewSourceMetaBbox(socket, config, cb) {
       throw new Error("Not allowed");
     }
 
-    const res = await setViewSourceMetaBbox(idView, type, extent, overwrite);
+    const res = await setViewSourceMetaBbox(
+      idView,
+      type,
+      extent,
+      overwrite,
+      session.user_id,
+    );
     cb(res);
   } catch (e) {
     socket.notifyInfoError({
@@ -245,7 +252,8 @@ export async function setViewSourceMetaBbox(
   type,
   bbox,
   overwrite = false,
-  client = pgWrite
+  idUser,
+  client = null,
 ) {
   if (!isViewId(idView)) {
     throw new Error("Invalid view");
@@ -286,31 +294,23 @@ export async function setViewSourceMetaBbox(
   }
 
   const bboxJson = JSON.stringify(bbox);
-  let query;
-  let params;
-
-
   if (type === "vt") {
-    // Update source metadata for vt views
-    query = `
-      UPDATE mx_sources
-      SET data = jsonb_set(
-        data,
-        '{meta,spatial,bbox}',
-        $1::jsonb,
-        true
-      )
-      WHERE id = $2
-      RETURNING id;
-    `;
-
     const view = await getView(idView);
-
     const sourceId = view?.data?.source?.layerInfo?.name;
-    params = [bboxJson, sourceId];
+    return createSourceRevision({
+      idSource: sourceId,
+      idUser,
+      client,
+      mutate(revision) {
+        revision.data ||= {};
+        revision.data.meta ||= {};
+        revision.data.meta.spatial ||= {};
+        revision.data.meta.spatial.bbox = JSON.parse(bboxJson);
+      },
+    });
   } else if (type === "cc" || type === "rt") {
     // Update view metadata directly for cc/rt views
-    query = `
+    const query = `
       WITH latest_view AS (
         SELECT id, pid
         FROM mx_views
@@ -329,27 +329,35 @@ export async function setViewSourceMetaBbox(
       WHERE v.id = lv.id AND v.pid = lv.pid
       RETURNING v.id, v.pid;
     `;
-    params = [bboxJson, idView];
+    const params = [bboxJson, idView];
+
+    const ownsClient = !client;
+    const pgClient = client || (await pgWrite.connect());
+    try {
+      if (ownsClient) {
+        await pgClient.query("BEGIN");
+      }
+      const result = await pgClient.query(query, params);
+      if (result.rowCount !== 1) {
+        throw new Error(
+          `Expected to update exactly 1 row, but updated ${result.rowCount} rows instead`,
+        );
+      }
+      if (ownsClient) {
+        await pgClient.query("COMMIT");
+      }
+      return result.rows[0];
+    } catch (error) {
+      if (ownsClient) {
+        await pgClient.query("ROLLBACK");
+      }
+      throw error;
+    } finally {
+      if (ownsClient) {
+        pgClient.release();
+      }
+    }
   } else {
     throw new Error(`Unsupported view type: ${type}`);
-  }
-
-  try {
-    await client.query("BEGIN");
-
-    const result = await client.query(query, params);
-
-    if (result.rowCount !== 1) {
-      await client.query("ROLLBACK");
-      throw new Error(
-        `Expected to update exactly 1 row, but updated ${result.rowCount} rows instead`
-      );
-    }
-
-    await client.query("COMMIT");
-    return result.rows[0];
-  } catch (error) {
-    await client.query("ROLLBACK");
-    throw error;
   }
 }
