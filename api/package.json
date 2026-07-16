@@ -4,9 +4,11 @@
   "description": "MapX express api",
   "main": "index.js",
   "scripts": {
-    "test": "echo 'test disabled' && exit 1",
-    "lint": "eslint ./index.js && eslint ./routines.js",
-    "ci": "npm install && npm run lint && echo 'missing tests'"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint ./index.js ./routines.js ./vitest.config.js \"./modules/**/*.test.js\"",
+    "ci": "npm ci && npm run lint && npm run test:coverage"
   },
   "author": "unepgrid.ch",
   "license": "MIT",
@@ -51,8 +53,9 @@
     "wellknown": "^0.5.0"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^2.1.8",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^8.4.0",
-    "mocha": "^9.2.0"
+    "vitest": "^2.1.8"
   }
 }

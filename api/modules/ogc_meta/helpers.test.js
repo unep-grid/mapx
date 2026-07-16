@@ -1,8 +1,6 @@
-/* global describe, it */
-
-import assert from "node:assert/strict";
 import fs from "node:fs";
 import Ajv from "ajv";
+import { describe, expect, it } from "vitest";
 import {
   buildCatalogSnapshot,
   buildCatalogMetadata,
@@ -13,8 +11,8 @@ import {
   pageRows,
   parseBbox,
   parseDatetime,
-} from "../modules/ogc_meta/helpers.js";
-import { buildPycswRecord } from "../modules/ogc_meta/pycsw_helpers.js";
+} from "./helpers.js";
+import { buildPycswRecord } from "./pycsw_helpers.js";
 
 const schemaPath = new URL("./fixtures/ogc_records/", import.meta.url);
 const schemaFiles = [
@@ -24,10 +22,12 @@ const schemaFiles = [
   "recordGeoJSON.schema.json",
   "recordCollectionGeoJSON.schema.json",
 ];
-const schemas = Object.fromEntries(schemaFiles.map((file) => [
-  file,
-  JSON.parse(fs.readFileSync(new URL(file, schemaPath), "utf8")),
-]));
+const schemas = Object.fromEntries(
+  schemaFiles.map((file) => [
+    file,
+    JSON.parse(fs.readFileSync(new URL(file, schemaPath), "utf8")),
+  ]),
+);
 const ajv = new Ajv({
   allErrors: true,
   strict: false,
@@ -169,17 +169,14 @@ function assertValid(schemaId, data) {
   const validate = ajv.getSchema(schemaId);
   const valid = validate(data);
 
-  assert.equal(
-    valid,
-    true,
-    JSON.stringify(validate.errors, null, 2)
-  );
+  expect(valid, JSON.stringify(validate.errors, null, 2)).toBe(true);
 }
 
 function getLandingFixture() {
   return {
     title: "MapX OGC API - Records",
-    description: "Public MapX view and source metadata exposed as OGC API records.",
+    description:
+      "Public MapX view and source metadata exposed as OGC API records.",
     links: [
       {
         rel: "self",
@@ -229,45 +226,49 @@ function getCatalogFixture() {
 
 describe("OGC metadata", () => {
   it("localizes multilingual objects with default fallback", () => {
-    assert.equal(localize({ fr: "Bonjour", en: "Hello" }, "fr"), "Bonjour");
-    assert.equal(localize({ en: "Hello" }, "de"), "Hello");
-    assert.equal(localize("Plain", "fr"), "Plain");
+    expect(localize({ fr: "Bonjour", en: "Hello" }, "fr")).toBe("Bonjour");
+    expect(localize({ en: "Hello" }, "de")).toBe("Hello");
+    expect(localize("Plain", "fr")).toBe("Plain");
   });
 
   it("selects query language before Accept-Language", () => {
-    assert.equal(getLanguage({
-      query: {
-        lang: "fr",
-      },
-      headers: {
-        "accept-language": "de-CH,de;q=0.9",
-      },
-    }), "fr");
+    expect(
+      getLanguage({
+        query: {
+          lang: "fr",
+        },
+        headers: {
+          "accept-language": "de-CH,de;q=0.9",
+        },
+      }),
+    ).toBe("fr");
   });
 
   it("falls back to English for unsupported languages", () => {
-    assert.equal(getLanguage({
-      query: {
-        lang: "it",
-      },
-      headers: {},
-    }), "en");
+    expect(
+      getLanguage({
+        query: {
+          lang: "it",
+        },
+        headers: {},
+      }),
+    ).toBe("en");
   });
 
   it("parses valid bbox values", () => {
-    assert.deepEqual(parseBbox("5,45,11,48"), [5, 45, 11, 48]);
+    expect(parseBbox("5,45,11,48")).toEqual([5, 45, 11, 48]);
   });
 
   it("rejects invalid bbox values", () => {
-    assert.throws(() => parseBbox("11,45,5,48"), /Invalid bbox/);
+    expect(() => parseBbox("11,45,5,48")).toThrow(/Invalid bbox/);
   });
 
   it("parses datetime instants and intervals as epoch seconds", () => {
-    assert.deepEqual(parseDatetime("2024-01-01"), {
+    expect(parseDatetime("2024-01-01")).toEqual({
       start: 1704067200,
       end: 1704067200,
     });
-    assert.deepEqual(parseDatetime("2024-01-01/2024-01-02"), {
+    expect(parseDatetime("2024-01-01/2024-01-02")).toEqual({
       start: 1704067200,
       end: 1704153600,
     });
@@ -281,26 +282,30 @@ describe("OGC metadata", () => {
       req,
     });
 
-    assert.equal(record.type, "Feature");
-    assert.equal(record.id, row.view_id);
-    assert.deepEqual(record.bbox, [5, 45, 11, 48]);
-    assert.equal(record.properties.title, "Titre francais");
-    assert.equal(record.properties.description, "Resume francais");
-    assert.equal(record.properties.themes[0].concepts[0].title, "eau");
-    assert.deepEqual(record.properties.mapx, {
+    expect(record.type).toBe("Feature");
+    expect(record.id).toBe(row.view_id);
+    expect(record.bbox).toEqual([5, 45, 11, 48]);
+    expect(record.properties.title).toBe("Titre francais");
+    expect(record.properties.description).toBe("Resume francais");
+    expect(record.properties.themes[0].concepts[0].title).toBe("eau");
+    expect(record.properties.mapx).toEqual({
       view_id: "MX-ABC12-ABC12-ABC12",
       project_id: "MX-PROJECT",
       view_type: "vt",
       projects_id: ["MX-PROJECT"],
     });
-    assert.equal("translations" in record.properties.mapx, false);
-    assert.equal(record.links[2].rel, "alternate");
-    assert.equal(record.links[2].title, "Open in MapX");
-    assert.equal(record.links[2].href, "http://app.mapx.localhost:8880/?project=MX-PROJECT&viewsOpen=MX-ABC12-ABC12-ABC12&viewsListFilterActivated=true&zoomToViews=true");
-    assert.equal(record.links[3].rel, "preview");
-    assert.equal(record.links[3].title, "MapX static preview");
-    assert.equal(record.links[3].href, "http://app.mapx.localhost:8880/static.html?views=MX-ABC12-ABC12-ABC12&zoomToViews=true");
-    assert.equal(record.links.some((item) => item.rel === "tiles"), false);
+    expect("translations" in record.properties.mapx).toBe(false);
+    expect(record.links[2].rel).toBe("alternate");
+    expect(record.links[2].title).toBe("Open in MapX");
+    expect(record.links[2].href).toBe(
+      "http://app.mapx.localhost:8880/?project=MX-PROJECT&viewsOpen=MX-ABC12-ABC12-ABC12&viewsListFilterActivated=true&zoomToViews=true",
+    );
+    expect(record.links[3].rel).toBe("preview");
+    expect(record.links[3].title).toBe("MapX static preview");
+    expect(record.links[3].href).toBe(
+      "http://app.mapx.localhost:8880/static.html?views=MX-ABC12-ABC12-ABC12&zoomToViews=true",
+    );
+    expect(record.links.some((item) => item.rel === "tiles")).toBe(false);
   });
 
   it("normalizes MapX metadata into ISO-oriented catalogue groups", () => {
@@ -308,7 +313,7 @@ describe("OGC metadata", () => {
       language: "fr",
     });
 
-    assert.deepEqual(metadata.identification, {
+    expect(metadata.identification).toEqual({
       title: "Titre francais",
       abstract: "Resume francais",
       notes: "Notes source",
@@ -316,25 +321,31 @@ describe("OGC metadata", () => {
       citation: "Citation text",
       languages: ["en", "fr"],
     });
-    assert.deepEqual(metadata.contacts, [{
-      name: "Alice Publisher",
-      email: "alice@example.org",
-      function: "Administrator",
-      organization: "UNEP",
-    }]);
-    assert.deepEqual(metadata.keywords, {
+    expect(metadata.contacts).toEqual([
+      {
+        name: "Alice Publisher",
+        email: "alice@example.org",
+        function: "Administrator",
+        organization: "UNEP",
+      },
+    ]);
+    expect(metadata.keywords).toEqual({
       free: ["water"],
-      gemet: [{
-        id: 123,
-        title: "eau",
-      }],
-      m49: [{
-        id: "CHE",
-        title: "Suisse",
-      }],
+      gemet: [
+        {
+          id: 123,
+          title: "eau",
+        },
+      ],
+      m49: [
+        {
+          id: "CHE",
+          title: "Suisse",
+        },
+      ],
       topic: ["climate"],
     });
-    assert.deepEqual(metadata.temporal, {
+    expect(metadata.temporal).toEqual({
       range: {
         start_at: "2020-01-01T00:00:00.000Z",
         end_at: "2021-01-01T00:00:00.000Z",
@@ -344,28 +355,34 @@ describe("OGC metadata", () => {
       periodicity: "continual",
       is_timeless: false,
     });
-    assert.deepEqual(metadata.constraints.licenses, [{
-      name: "CC BY",
-      text: "Creative Commons Attribution",
-    }]);
-    assert.deepEqual(metadata.distribution, {
+    expect(metadata.constraints.licenses).toEqual([
+      {
+        name: "CC BY",
+        text: "Creative Commons Attribution",
+      },
+    ]);
+    expect(metadata.distribution).toEqual({
       homepage: {
         label: "FAO",
         url: "https://www.fao.org",
       },
-      source_urls: [{
-        label: "Download data",
-        url: "https://example.org/data.zip",
-      }],
-      annex_urls: [{
-        label: "Methodology",
-        url: "https://example.org/methodology.pdf",
-      }],
+      source_urls: [
+        {
+          label: "Download data",
+          url: "https://example.org/data.zip",
+        },
+      ],
+      annex_urls: [
+        {
+          label: "Methodology",
+          url: "https://example.org/methodology.pdf",
+        },
+      ],
     });
-    assert.deepEqual(metadata.lineage, {
+    expect(metadata.lineage).toEqual({
       statement: "Notes source",
     });
-    assert.deepEqual(metadata.mapx, {
+    expect(metadata.mapx).toEqual({
       view_id: "MX-ABC12-ABC12-ABC12",
       project_id: "MX-PROJECT",
       view_type: "vt",
@@ -390,14 +407,11 @@ describe("OGC metadata", () => {
       },
     });
 
-    assert.deepEqual(record.bbox, [-17.6, 1.4, 24, 37.1]);
-    assert.deepEqual(record.properties.metadata.extent.spatial.bbox, [
-      -17.6,
-      1.4,
-      24,
-      37.1,
+    expect(record.bbox).toEqual([-17.6, 1.4, 24, 37.1]);
+    expect(record.properties.metadata.extent.spatial.bbox).toEqual([
+      -17.6, 1.4, 24, 37.1,
     ]);
-    assert.deepEqual(record.geometry.coordinates[0][0], [-17.6, 1.4]);
+    expect(record.geometry.coordinates[0][0]).toEqual([-17.6, 1.4]);
   });
 
   it("falls back to metadata when a vector source has no estimated extent", () => {
@@ -412,7 +426,7 @@ describe("OGC metadata", () => {
       },
     });
 
-    assert.deepEqual(record.bbox, [5, 45, 11, 48]);
+    expect(record.bbox).toEqual([5, 45, 11, 48]);
   });
 
   it("does not use a cached view extent for vector-table records", () => {
@@ -433,9 +447,9 @@ describe("OGC metadata", () => {
       },
     });
 
-    assert.equal(record.bbox, undefined);
-    assert.equal(record.geometry, null);
-    assert.equal(record.properties.metadata.extent, undefined);
+    expect(record.bbox).toBe(undefined);
+    expect(record.geometry).toBe(null);
+    expect(record.properties.metadata.extent).toBe(undefined);
   });
 
   it("uses the precomputed view extent for non-table records with invalid metadata", () => {
@@ -456,100 +470,119 @@ describe("OGC metadata", () => {
       },
     });
 
-    assert.deepEqual(record.bbox, [-17.6, 1.4, 24, 37.1]);
-    assert.deepEqual(record.properties.metadata.extent.spatial.bbox, [
-      -17.6,
-      1.4,
-      24,
-      37.1,
+    expect(record.bbox).toEqual([-17.6, 1.4, 24, 37.1]);
+    expect(record.properties.metadata.extent.spatial.bbox).toEqual([
+      -17.6, 1.4, 24, 37.1,
     ]);
-    assert.deepEqual(record.geometry.coordinates[0][0], [-17.6, 1.4]);
+    expect(record.geometry.coordinates[0][0]).toEqual([-17.6, 1.4]);
   });
 
   it("adds GeoServer service links only for published GeoServer rows", () => {
-    const record = buildRecord({
-      ...row,
-      is_geoserver_published: true,
-    }, {
-      baseUrl,
-      collectionUrl,
-      geoserverPublicUrl: "http://geoserver.mapx.localhost:8080/geoserver/",
-      req,
-    });
+    const record = buildRecord(
+      {
+        ...row,
+        is_geoserver_published: true,
+      },
+      {
+        baseUrl,
+        collectionUrl,
+        geoserverPublicUrl: "http://geoserver.mapx.localhost:8080/geoserver/",
+        req,
+      },
+    );
     const serviceLinks = record.links.filter((item) => item.rel === "service");
 
-    assert.equal(serviceLinks.length, 2);
-    assert.equal(serviceLinks[0].title, "WMS");
-    assert.equal(serviceLinks[0].href, "http://geoserver.mapx.localhost:8080/geoserver/wms?service=WMS&version=1.3.0&request=GetCapabilities&layers=MX-PROJECT%3AMX-ABC12-ABC12-ABC12");
-    assert.equal(serviceLinks[1].title, "WFS");
-    assert.equal(serviceLinks[1].href, "http://geoserver.mapx.localhost:8080/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities&typeName=MX-PROJECT%3AMX-ABC12-ABC12-ABC12");
+    expect(serviceLinks.length).toBe(2);
+    expect(serviceLinks[0].title).toBe("WMS");
+    expect(serviceLinks[0].href).toBe(
+      "http://geoserver.mapx.localhost:8080/geoserver/wms?service=WMS&version=1.3.0&request=GetCapabilities&layers=MX-PROJECT%3AMX-ABC12-ABC12-ABC12",
+    );
+    expect(serviceLinks[1].title).toBe("WFS");
+    expect(serviceLinks[1].href).toBe(
+      "http://geoserver.mapx.localhost:8080/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities&typeName=MX-PROJECT%3AMX-ABC12-ABC12-ABC12",
+    );
   });
 
   it("omits GeoServer service links for rows that are not published in GeoServer", () => {
-    const record = buildRecord({
-      ...row,
-      is_geoserver_published: false,
-    }, {
-      baseUrl,
-      collectionUrl,
-      geoserverPublicUrl: "http://geoserver.mapx.localhost:8080/geoserver",
-      req,
-    });
+    const record = buildRecord(
+      {
+        ...row,
+        is_geoserver_published: false,
+      },
+      {
+        baseUrl,
+        collectionUrl,
+        geoserverPublicUrl: "http://geoserver.mapx.localhost:8080/geoserver",
+        req,
+      },
+    );
 
-    assert.equal(record.links.some((item) => item.rel === "service"), false);
+    expect(record.links.some((item) => item.rel === "service")).toBe(false);
   });
 
   it("omits GeoServer service links without a public GeoServer URL", () => {
-    const record = buildRecord({
-      ...row,
-      is_geoserver_published: true,
-    }, {
-      baseUrl,
-      collectionUrl,
-      req,
-    });
+    const record = buildRecord(
+      {
+        ...row,
+        is_geoserver_published: true,
+      },
+      {
+        baseUrl,
+        collectionUrl,
+        req,
+      },
+    );
 
-    assert.equal(record.links.some((item) => item.rel === "service"), false);
+    expect(record.links.some((item) => item.rel === "service")).toBe(false);
   });
 
   it("builds default-language pycsw records without duplicating identifiers per language", () => {
-    const record = buildPycswRecord({
-      ...row,
-      is_geoserver_published: true,
-    }, {
-      language: "en",
-      apiBaseUrl: baseUrl.replace("/ogc_meta", ""),
-      geoserverPublicUrl: "http://geoserver.mapx.localhost:8880/geoserver",
-    });
+    const record = buildPycswRecord(
+      {
+        ...row,
+        is_geoserver_published: true,
+      },
+      {
+        language: "en",
+        apiBaseUrl: baseUrl.replace("/ogc_meta", ""),
+        geoserverPublicUrl: "http://geoserver.mapx.localhost:8880/geoserver",
+      },
+    );
     const metadata = JSON.parse(record.metadata);
     const links = JSON.parse(record.links);
 
-    assert.equal(record.identifier, row.view_id);
-    assert.equal(record.typename, "pycsw:CoreMetadata");
-    assert.equal(record.schema, "http://pycsw.org/metadata");
-    assert.equal(record.language, "en");
-    assert.equal(record.title, "English title");
-    assert.equal(record.xml, record.metadata);
-    assert.equal(metadata.properties.language, "en");
-    assert.equal("translations" in metadata.properties.mapx, false);
-    assert.equal(metadata.properties.metadata.identification.attribution, "Attribution text");
-    assert.equal(metadata.properties.metadata.constraints.licenses[0].text, "Creative Commons Attribution");
-    assert.equal(record.relation, `${collectionUrl}/items/${row.view_id}`);
-    assert.equal(record.wkt_geometry, "POLYGON((5 45,11 45,11 48,5 48,5 45))");
-    assert.equal(record.anytext.includes("Alice Publisher"), true);
-    assert.equal(record.anytext.includes("Creative Commons Attribution"), true);
-    assert.equal(record.anytext.includes("https://www.fao.org"), true);
-    assert.equal(record.date_publication, "2010-01-01T00:00:00.000Z");
-    assert.equal(record.date_revision, "2011-01-01T00:00:00.000Z");
-    assert.equal(record.resourcelanguage, "en, fr");
-    assert.equal(record.otherconstraints, "CC BY — Creative Commons Attribution");
-    assert.equal(record.lineage, "Source notes");
-    assert.equal(JSON.parse(record.contacts)[0].organization, "UNEP");
-    assert.equal(JSON.parse(record.contacts)[0].role, "custodian");
-    assert.equal(links.some((item) => item.name === "Open in MapX"), true);
-    assert.equal(links.some((item) => item.name === "MapX vector tiles"), false);
-    assert.equal(links.some((item) => item.protocol === "OGC:WMS"), true);
-    assert.equal(links.some((item) => item.protocol === "OGC:WFS"), true);
+    expect(record.identifier).toBe(row.view_id);
+    expect(record.typename).toBe("pycsw:CoreMetadata");
+    expect(record.schema).toBe("http://pycsw.org/metadata");
+    expect(record.language).toBe("en");
+    expect(record.title).toBe("English title");
+    expect(record.xml).toBe(record.metadata);
+    expect(metadata.properties.language).toBe("en");
+    expect("translations" in metadata.properties.mapx).toBe(false);
+    expect(metadata.properties.metadata.identification.attribution).toBe(
+      "Attribution text",
+    );
+    expect(metadata.properties.metadata.constraints.licenses[0].text).toBe(
+      "Creative Commons Attribution",
+    );
+    expect(record.relation).toBe(`${collectionUrl}/items/${row.view_id}`);
+    expect(record.wkt_geometry).toBe("POLYGON((5 45,11 45,11 48,5 48,5 45))");
+    expect(record.anytext.includes("Alice Publisher")).toBe(true);
+    expect(record.anytext.includes("Creative Commons Attribution")).toBe(true);
+    expect(record.anytext.includes("https://www.fao.org")).toBe(true);
+    expect(record.date_publication).toBe("2010-01-01T00:00:00.000Z");
+    expect(record.date_revision).toBe("2011-01-01T00:00:00.000Z");
+    expect(record.resourcelanguage).toBe("en, fr");
+    expect(record.otherconstraints).toBe(
+      "CC BY — Creative Commons Attribution",
+    );
+    expect(record.lineage).toBe("Source notes");
+    expect(JSON.parse(record.contacts)[0].organization).toBe("UNEP");
+    expect(JSON.parse(record.contacts)[0].role).toBe("custodian");
+    expect(links.some((item) => item.name === "Open in MapX")).toBe(true);
+    expect(links.some((item) => item.name === "MapX vector tiles")).toBe(false);
+    expect(links.some((item) => item.protocol === "OGC:WMS")).toBe(true);
+    expect(links.some((item) => item.protocol === "OGC:WFS")).toBe(true);
   });
 
   it("keeps translated metadata available through the MapX-native OGC endpoint", () => {
@@ -560,9 +593,9 @@ describe("OGC metadata", () => {
       req,
     });
 
-    assert.equal(record.properties.language, "fr");
-    assert.equal(record.properties.title, "Titre francais");
-    assert.equal(record.properties.description, "Resume francais");
+    expect(record.properties.language).toBe("fr");
+    expect(record.properties.title).toBe("Titre francais");
+    expect(record.properties.description).toBe("Resume francais");
   });
 
   it("validates representative responses against vendored OGC schemas", () => {
@@ -577,9 +610,7 @@ describe("OGC metadata", () => {
       timeStamp: "2026-07-08T00:00:00.000Z",
       numberMatched: 1,
       numberReturned: 1,
-      features: [
-        record,
-      ],
+      features: [record],
       links: [
         {
           rel: "self",
@@ -593,9 +624,7 @@ describe("OGC metadata", () => {
     assertValid("landingPage.schema.json", getLandingFixture());
     assertValid("catalog.schema.json", getCatalogFixture());
     assertValid("catalogs.schema.json", {
-      collections: [
-        getCatalogFixture(),
-      ],
+      collections: [getCatalogFixture()],
       links: [
         {
           rel: "self",
@@ -616,14 +645,14 @@ describe("OGC metadata", () => {
       version: 1,
     });
 
-    assert.equal(snapshot.version, 1);
-    assert.equal(snapshot.updated_at, "2026-07-08T00:00:00.000Z");
-    assert.equal(snapshot.count, 2);
-    assert.deepEqual(snapshot.records.map((item) => item.view_id), [
+    expect(snapshot.version).toBe(1);
+    expect(snapshot.updated_at).toBe("2026-07-08T00:00:00.000Z");
+    expect(snapshot.count).toBe(2);
+    expect(snapshot.records.map((item) => item.view_id)).toEqual([
       "MX-ABC12-ABC12-ABC12",
       "MX-DEF34-DEF34-DEF34",
     ]);
-    assert.deepEqual(rows.map((item) => item.view_id), [
+    expect(rows.map((item) => item.view_id)).toEqual([
       "MX-DEF34-DEF34-DEF34",
       "MX-ABC12-ABC12-ABC12",
     ]);
@@ -632,26 +661,27 @@ describe("OGC metadata", () => {
   it("filters cached catalog rows and keeps exact numberMatched possible", () => {
     const rows = [row, rowNoBbox];
 
-    assert.deepEqual(
-      filterCatalogRows(rows, { id: "MX-ABC12-ABC12-ABC12" }).map((item) => item.view_id),
-      ["MX-ABC12-ABC12-ABC12"]
-    );
-    assert.deepEqual(
+    expect(
+      filterCatalogRows(rows, { id: "MX-ABC12-ABC12-ABC12" }).map(
+        (item) => item.view_id,
+      ),
+    ).toEqual(["MX-ABC12-ABC12-ABC12"]);
+    expect(
       filterCatalogRows(rows, { q: "forest" }).map((item) => item.view_id),
-      ["MX-DEF34-DEF34-DEF34"]
-    );
-    assert.deepEqual(
+    ).toEqual(["MX-DEF34-DEF34-DEF34"]);
+    expect(
       filterCatalogRows(rows, { q: "alice" }).map((item) => item.view_id),
-      ["MX-ABC12-ABC12-ABC12"]
-    );
-    assert.deepEqual(
-      filterCatalogRows(rows, { bbox: [4, 44, 12, 49] }).map((item) => item.view_id),
-      ["MX-ABC12-ABC12-ABC12"]
-    );
-    assert.deepEqual(
-      filterCatalogRows(rows, { datetime: { start: 1704067200, end: 1704067200 } }).map((item) => item.view_id),
-      ["MX-ABC12-ABC12-ABC12"]
-    );
+    ).toEqual(["MX-ABC12-ABC12-ABC12"]);
+    expect(
+      filterCatalogRows(rows, { bbox: [4, 44, 12, 49] }).map(
+        (item) => item.view_id,
+      ),
+    ).toEqual(["MX-ABC12-ABC12-ABC12"]);
+    expect(
+      filterCatalogRows(rows, {
+        datetime: { start: 1704067200, end: 1704067200 },
+      }).map((item) => item.view_id),
+    ).toEqual(["MX-ABC12-ABC12-ABC12"]);
   });
 
   it("pages cached catalog rows without changing total count", () => {
@@ -661,9 +691,7 @@ describe("OGC metadata", () => {
       offset: 1,
     });
 
-    assert.equal(rows.length, 2);
-    assert.deepEqual(page.map((item) => item.view_id), [
-      "MX-DEF34-DEF34-DEF34",
-    ]);
+    expect(rows.length).toBe(2);
+    expect(page.map((item) => item.view_id)).toEqual(["MX-DEF34-DEF34-DEF34"]);
   });
 });

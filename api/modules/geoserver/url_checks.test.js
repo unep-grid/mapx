@@ -1,6 +1,4 @@
-/* global describe, it */
-
-import assert from "node:assert/strict";
+import { describe, expect, it } from "vitest";
 import {
   URL_CHECK_CLASS,
   buildManagedUrlCheck,
@@ -11,7 +9,7 @@ import {
   getStyleSvgBaseUrls,
   normalizeUrlCheck,
   normalizeUrlChecks,
-} from "../modules/geoserver/url_checks.js";
+} from "./url_checks.js";
 
 const baseSettings = {
   api: {
@@ -42,7 +40,7 @@ const matchingCheck = {
 
 describe("GeoServer URL checks", () => {
   it("derives the expected local regex from configured URL bases", () => {
-    assert.equal(
+    expect(
       deriveStyleSvgRegex([
         "http://api.mapx.localhost:8880",
         "https://api.mapx.localhost:8880",
@@ -51,21 +49,19 @@ describe("GeoServer URL checks", () => {
         "http://0.0.0.0:8880",
         "https://mapx.unepgrid.s3.unige.ch/mapx",
       ]),
-      matchingRegex
-    );
+    ).toBe(matchingRegex);
   });
 
   it("escapes regex metacharacters in the configured base URL", () => {
     const regex = deriveStyleSvgRegex("https://cdn.example.com/mapx.assets");
 
-    assert.equal(
-      regex,
-      "^(?:https://cdn\\.example\\.com/mapx\\.assets)/s3/style/v[0-9]+/svg/[^?#]+\\.svg(\\?.*)?$"
+    expect(regex).toBe(
+      "^(?:https://cdn\\.example\\.com/mapx\\.assets)/s3/style/v[0-9]+/svg/[^?#]+\\.svg(\\?.*)?$",
     );
   });
 
   it("builds URL check bases from API public settings, local dev aliases, and S3 upstream", () => {
-    assert.deepEqual(getStyleSvgBaseUrls(baseSettings), [
+    expect(getStyleSvgBaseUrls(baseSettings)).toEqual([
       "http://api.mapx.localhost:8880",
       "https://api.mapx.localhost:8880",
       "http://apidev.mapx.localhost:8880",
@@ -76,7 +72,7 @@ describe("GeoServer URL checks", () => {
   });
 
   it("includes explicit extra URL check bases from comma-separated settings", () => {
-    assert.deepEqual(
+    expect(
       getStyleSvgBaseUrls({
         ...baseSettings,
         geoserver: {
@@ -85,8 +81,7 @@ describe("GeoServer URL checks", () => {
             "https://api.example.org, http://custom.mapx.localhost:8880",
         },
       }).slice(0, 2),
-      ["https://api.example.org", "http://custom.mapx.localhost:8880"]
-    );
+    ).toEqual(["https://api.example.org", "http://custom.mapx.localhost:8880"]);
   });
 
   it("preserves an explicit URL check regex exactly", () => {
@@ -98,46 +93,48 @@ describe("GeoServer URL checks", () => {
       },
     });
 
-    assert.equal(check.regex, "^https://example\\.org/icons/.+$");
+    expect(check.regex).toBe("^https://example\\.org/icons/.+$");
   });
 
   it("allows SVG URLs with query parameters", () => {
     const regex = new RegExp(buildManagedUrlCheck(baseSettings).regex);
 
-    assert.equal(
+    expect(
       regex.test(
-        "http://apidev.mapx.localhost:8880/s3/style/v1/svg/maki-campsite-11.svg?fill=%23f6f609"
+        "http://apidev.mapx.localhost:8880/s3/style/v1/svg/maki-campsite-11.svg?fill=%23f6f609",
       ),
-      true
-    );
+    ).toBe(true);
   });
 
   it("treats empty GeoServer urlChecks responses as an empty list", () => {
-    assert.deepEqual(normalizeUrlChecks(""), []);
-    assert.deepEqual(normalizeUrlChecks({}), []);
+    expect(normalizeUrlChecks("")).toEqual([]);
+    expect(normalizeUrlChecks({})).toEqual([]);
   });
 
   it("normalizes a single GeoServer URL check response object", () => {
-    assert.deepEqual(normalizeUrlChecks({ urlCheck: matchingCheck }), [
+    expect(normalizeUrlChecks({ urlCheck: matchingCheck })).toEqual([
       matchingCheck,
     ]);
   });
 
   it("normalizes GeoServer concrete regex URL check detail responses", () => {
-    assert.deepEqual(normalizeUrlCheck({ regexUrlCheck: matchingCheck }), matchingCheck);
-    assert.deepEqual(normalizeUrlCheck({ urlCheck: matchingCheck }), matchingCheck);
-    assert.deepEqual(normalizeUrlCheck(matchingCheck), matchingCheck);
+    expect(normalizeUrlCheck({ regexUrlCheck: matchingCheck })).toEqual(
+      matchingCheck,
+    );
+    expect(normalizeUrlCheck({ urlCheck: matchingCheck })).toEqual(
+      matchingCheck,
+    );
+    expect(normalizeUrlCheck(matchingCheck)).toEqual(matchingCheck);
   });
 
   it("builds REST URLs relative to a GEOSERVER_URL ending in /rest", () => {
-    assert.equal(
-      buildRestUrl(baseSettings, "urlchecks.json"),
-      "http://geoserver:8080/geoserver/rest/urlchecks.json"
+    expect(buildRestUrl(baseSettings, "urlchecks.json")).toBe(
+      "http://geoserver:8080/geoserver/rest/urlchecks.json",
     );
   });
 
   it("adds GeoServer concrete class metadata to JSON write payloads", () => {
-    assert.deepEqual(buildUrlCheckJson(matchingCheck), {
+    expect(buildUrlCheckJson(matchingCheck)).toEqual({
       "@class": URL_CHECK_CLASS,
       ...matchingCheck,
     });
@@ -155,9 +152,9 @@ describe("GeoServer URL checks", () => {
       fetch,
     });
 
-    assert.equal(result.action, "created");
-    assert.equal(fetch.calls[1].options.method, "POST");
-    assert.deepEqual(JSON.parse(fetch.calls[1].options.body), {
+    expect(result.action).toBe("created");
+    expect(fetch.calls[1].options.method).toBe("POST");
+    expect(JSON.parse(fetch.calls[1].options.body)).toEqual({
       urlCheck: {
         "@class": URL_CHECK_CLASS,
         ...matchingCheck,
@@ -186,11 +183,10 @@ describe("GeoServer URL checks", () => {
       fetch,
     });
 
-    assert.equal(result.action, "updated");
-    assert.equal(fetch.calls[2].options.method, "PUT");
-    assert.equal(
-      fetch.calls[2].url,
-      "http://geoserver:8080/geoserver/rest/urlchecks/mapx-style-svg.json"
+    expect(result.action).toBe("updated");
+    expect(fetch.calls[2].options.method).toBe("PUT");
+    expect(fetch.calls[2].url).toBe(
+      "http://geoserver:8080/geoserver/rest/urlchecks/mapx-style-svg.json",
     );
   });
 
@@ -218,7 +214,7 @@ describe("GeoServer URL checks", () => {
       fetch,
     });
 
-    assert.equal(result.action, "updated");
+    expect(result.action).toBe("updated");
   });
 
   it("no-ops when the managed check already matches", async () => {
@@ -241,8 +237,8 @@ describe("GeoServer URL checks", () => {
       fetch,
     });
 
-    assert.equal(result.action, "unchanged");
-    assert.equal(fetch.calls.length, 2);
+    expect(result.action).toBe("unchanged");
+    expect(fetch.calls.length).toBe(2);
   });
 
   it("no-ops when GeoServer returns XML-style class metadata", async () => {
@@ -265,8 +261,8 @@ describe("GeoServer URL checks", () => {
       fetch,
     });
 
-    assert.equal(result.action, "unchanged");
-    assert.equal(fetch.calls.length, 2);
+    expect(result.action).toBe("unchanged");
+    expect(fetch.calls.length).toBe(2);
   });
 
   it("updates when sparse list item exists but detail response is stale", async () => {
@@ -291,9 +287,9 @@ describe("GeoServer URL checks", () => {
       fetch,
     });
 
-    assert.equal(result.action, "updated");
-    assert.equal(fetch.calls[1].url, sparseListItem().href);
-    assert.equal(fetch.calls[2].options.method, "PUT");
+    expect(result.action).toBe("updated");
+    expect(fetch.calls[1].url).toBe(sparseListItem().href);
+    expect(fetch.calls[2].options.method).toBe("PUT");
   });
 
   it("falls back to XML if GeoServer rejects the JSON write payload", async () => {
@@ -309,13 +305,14 @@ describe("GeoServer URL checks", () => {
       fetch,
     });
 
-    assert.equal(result.action, "created");
-    assert.equal(fetch.calls[2].options.headers["Content-Type"], "application/xml");
-    assert.match(
-      fetch.calls[2].options.body,
-      /<urlCheck class="org\.geoserver\.security\.urlchecks\.RegexURLCheck">/
+    expect(result.action).toBe("created");
+    expect(fetch.calls[2].options.headers["Content-Type"]).toBe(
+      "application/xml",
     );
-    assert.match(fetch.calls[2].options.body, /http:\/\/apidev\\\.mapx/);
+    expect(fetch.calls[2].options.body).toMatch(
+      /<urlCheck class="org\.geoserver\.security\.urlchecks\.RegexURLCheck">/,
+    );
+    expect(fetch.calls[2].options.body).toMatch(/http:\/\/apidev\\\.mapx/);
   });
 
   it("throws when persisted verification does not match after create or update", async () => {
@@ -330,13 +327,12 @@ describe("GeoServer URL checks", () => {
       }),
     ]);
 
-    await assert.rejects(
+    await expect(
       ensureGeoserverUrlChecks({
         settings: baseSettings,
         fetch,
       }),
-      /verification failed/
-    );
+    ).rejects.toThrow(/verification failed/);
   });
 });
 
