@@ -72,13 +72,12 @@ mglUpdateViewsBadges <- function(opt, session = shiny::getDefaultReactiveDomain(
   )
 }
 
-#' Get overlap result
-#' @param opt {List} list of option : idTextResult, layers, countries, method
+#' Open the client-side area intersection tool
 #' @export
-mglGetOverlapAnalysis <- function(opt, session = shiny::getDefaultReactiveDomain()) {
+mglOpenSourceOverlap <- function(session = shiny::getDefaultReactiveDomain()) {
   session$sendCustomMessage(
-    "mglGetOverlapAnalysis",
-    opt
+    "mglOpenSourceOverlap",
+    list()
   )
 }
 

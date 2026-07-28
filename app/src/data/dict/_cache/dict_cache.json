@@ -5590,6 +5590,71 @@
     "de": "Ausgewählte Zeilen entfernen"
   },
   {
+    "id": "edit_table_identity_repair_title",
+    "en": "Repair source row identifiers",
+    "fr": "Réparer les identificateurs de lignes sources",
+    "es": "Reparar identificadores de fila de origen",
+    "ru": "Исправить идентификаторы исходных строк",
+    "zh": "修复源行标识符",
+    "ar": "إصلاح مُعرّفات صفوف المصدر",
+    "fa": "شناسه‌های ردیف منبع را تعمیر کنید",
+    "ps": "د سرچینې قطار پیژندونکي ترمیم کړئ",
+    "bn": "মেরামত উৎস সারি শনাক্তকারী",
+    "de": "Quellzeilenbezeichner reparieren"
+  },
+  {
+    "id": "edit_table_identity_repair_content",
+    "en": "This source has an invalid gid identity ({{issues}}). Editing it could affect multiple rows. Repair compatible duplicate geometry parts and restore automatic row identifiers before continuing?",
+    "fr": "Cette source possède une identité gid invalide ( {{issues}} La modification pourrait affecter plusieurs lignes. Veuillez réparer les éléments géométriques dupliqués compatibles et rétablir les identifiants de ligne automatiques avant de continuer.",
+    "es": "Esta fuente tiene una identidad gid no válida ( {{issues}} Editarlo podría afectar a varias filas. ¿Reparar las partes geométricas duplicadas compatibles y restaurar los identificadores de fila automáticos antes de continuar?",
+    "ru": "Этот источник имеет недействительный идентификатор gid ( {{issues}} Редактирование может затронуть несколько строк. Необходимо исправить совместимые дублирующиеся геометрические элементы и восстановить автоматические идентификаторы строк, прежде чем продолжить?",
+    "zh": "此源具有无效的 gid 标识（ {{issues}}编辑此内容可能会影响多行。是否应在继续之前修复兼容的重复几何体部件并恢复自动行标识符？",
+    "ar": "يحتوي هذا المصدر على هوية gid غير صالحة ( {{issues}} قد يؤثر تعديلها على عدة صفوف. هل يجب إصلاح أجزاء الهندسة المكررة المتوافقة واستعادة مُعرّفات الصفوف التلقائية قبل المتابعة؟",
+    "fa": "این منبع دارای شناسه g نامعتبر است ( {{issues}} ). ویرایش آن می‌تواند چندین ردیف را تحت تأثیر قرار دهد. آیا قطعات هندسی تکراری سازگار را تعمیر کرده و شناسه‌های خودکار ردیف را قبل از ادامه بازیابی می‌کنید؟",
+    "ps": "دا سرچینه د gid ناسمه پیژندنه لري ( {{issues}} ). د دې ترمیم کول کولی شي په څو قطارونو اغیزه وکړي. د دوام ورکولو دمخه د مطابقت وړ نقل جیومیټري برخې ترمیم کړئ او د اتوماتیک قطار پیژندونکي بیرته راګرځوئ؟",
+    "bn": "এই উৎসের জিআইডি পরিচয়টি অবৈধ ( {{issues}} এটি সম্পাদনা করলে একাধিক সারি প্রভাবিত হতে পারে। চালিয়ে যাওয়ার আগে সামঞ্জস্যপূর্ণ সদৃশ জ্যামিতিক অংশগুলি মেরামত করুন এবং স্বয়ংক্রিয় সারি শনাক্তকারীগুলি পুনরুদ্ধার করুন।",
+    "de": "Diese Quelle hat eine ungültige GID-Identität ( {{issues}} Die Bearbeitung könnte mehrere Zeilen betreffen. Reparieren Sie kompatible, doppelte Geometrieteile und stellen Sie die automatischen Zeilenkennungen wieder her, bevor Sie fortfahren."
+  },
+  {
+    "id": "edit_table_identity_repair_confirm",
+    "en": "Repair source",
+    "fr": "Source de réparation",
+    "es": "Fuente de reparación",
+    "ru": "Источник ремонта",
+    "zh": "源",
+    "ar": "مصدر الإصلاح",
+    "fa": "منبع تعمیر",
+    "ps": "د ترمیم سرچینه",
+    "bn": "মেরামতের উৎস",
+    "de": "Reparaturquelle"
+  },
+  {
+    "id": "edit_table_identity_repair_failed_title",
+    "en": "Source repair failed",
+    "fr": "La réparation de la source a échoué",
+    "es": "Falló la reparación de la fuente.",
+    "ru": "Восстановление исходного кода не удалось.",
+    "zh": "源修复失败",
+    "ar": "فشل إصلاح المصدر",
+    "fa": "تعمیر منبع ناموفق بود",
+    "ps": "د سرچینې ترمیم ناکام شو",
+    "bn": "উৎস মেরামত ব্যর্থ হয়েছে",
+    "de": "Die Reparatur der Quelle ist fehlgeschlagen."
+  },
+  {
+    "id": "edit_table_identity_repair_failed_content",
+    "en": "The source could not be repaired automatically. No changes were saved.",
+    "fr": "La source n'a pas pu être réparée automatiquement. Aucune modification n'a été enregistrée.",
+    "es": "No se pudo reparar el origen automáticamente. No se guardaron los cambios.",
+    "ru": "Автоматическое восстановление источника не удалось. Изменения не были сохранены.",
+    "zh": "源文件无法自动修复。未保存任何更改。",
+    "ar": "تعذر إصلاح المصدر تلقائيًا. لم يتم حفظ أي تغييرات.",
+    "fa": "منبع به طور خودکار قابل تعمیر نیست. هیچ تغییری ذخیره نشده است.",
+    "ps": "سرچینه په اتوماتيک ډول ترمیم نشوه. هیڅ بدلونونه خوندي نه شول.",
+    "bn": "উৎসটি স্বয়ংক্রিয়ভাবে মেরামত করা সম্ভব হয়নি। কোনো পরিবর্তন সংরক্ষিত হয়নি।",
+    "de": "Die Quelle konnte nicht automatisch repariert werden. Es wurden keine Änderungen gespeichert."
+  },
+  {
     "id": "gc_btn_save",
     "en": "Save results as view",
     "fr": "Enregistrer comme vue",
@@ -22106,11 +22171,11 @@
     "es": "Herramientas de búsqueda",
     "ru": "Инструменты поиска",
     "zh": "搜索工具",
-    "de": "Suchwerkzeuge",
-    "bn": "অনুসন্ধান সরঞ্জাম",
+    "ar": "أدوات البحث",
     "fa": "ابزارهای جستجو",
     "ps": "د لټون وسایل",
-    "ar": "أدوات البحث"
+    "bn": "অনুসন্ধান সরঞ্জাম",
+    "de": "Suchwerkzeuge"
   },
   {
     "id": "project_list_filters_active",
@@ -22119,11 +22184,11 @@
     "es": "filtros activos",
     "ru": "активные фильтры",
     "zh": "过滤器已激活",
-    "de": "Aktive Filter",
-    "bn": "সক্রিয় ফিল্টার",
+    "ar": "تم تفعيل الفلتر",
     "fa": "فیلترهای فعال",
     "ps": "فلټرونه فعال دي",
-    "ar": "تم تفعيل الفلتر"
+    "bn": "সক্রিয় ফিল্টার",
+    "de": "Aktive Filter"
   },
   {
     "id": "project_favorite_add",
@@ -22132,11 +22197,11 @@
     "es": "Añadir a favoritos",
     "ru": "Добавить в избранное",
     "zh": "添加到收藏夹",
-    "de": "Zu Favoriten hinzufügen",
-    "bn": "পছন্দের তালিকায় যোগ করুন",
+    "ar": "أضف إلى المفضلة",
     "fa": "افزودن به علاقه‌مندی‌ها",
     "ps": "په خوښیو کې اضافه کړئ",
-    "ar": "أضف إلى المفضلة"
+    "bn": "পছন্দের তালিকায় যোগ করুন",
+    "de": "Zu Favoriten hinzufügen"
   },
   {
     "id": "project_favorite_remove",
@@ -22145,11 +22210,11 @@
     "es": "Eliminar de favoritos",
     "ru": "Удалить из избранного",
     "zh": "从收藏夹中移除",
-    "de": "Aus Favoriten entfernen",
-    "bn": "পছন্দের তালিকা থেকে সরান",
+    "ar": "إزالة من المفضلة",
     "fa": "حذف از موارد دلخواه",
     "ps": "د خوښې څخه لرې کړئ",
-    "ar": "إزالة من المفضلة"
+    "bn": "পছন্দের তালিকা থেকে সরান",
+    "de": "Aus Favoriten entfernen"
   },
   {
     "id": "project_favorite_error",
@@ -22158,11 +22223,11 @@
     "es": "No se pudo actualizar este favorito. Inténtelo de nuevo.",
     "ru": "Не удалось обновить избранное. Пожалуйста, попробуйте еще раз.",
     "zh": "无法更新此收藏夹。请重试。",
-    "de": "Dieser Favorit konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
-    "bn": "এই প্রিয় পোস্টটি আপডেট করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।",
+    "ar": "تعذر تحديث هذه المفضلة. يرجى المحاولة مرة أخرى.",
     "fa": "به‌روزرسانی این مورد علاقه امکان‌پذیر نیست. لطفاً دوباره امتحان کنید.",
     "ps": "دا خوښه تازه نشوه. مهرباني وکړئ بیا هڅه وکړئ.",
-    "ar": "تعذر تحديث هذه المفضلة. يرجى المحاولة مرة أخرى."
+    "bn": "এই প্রিয় পোস্টটি আপডেট করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।",
+    "de": "Dieser Favorit konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
   },
   {
     "id": "project_featured_by_mapx",
@@ -22171,11 +22236,11 @@
     "es": "Destacado por MapX",
     "ru": "Представлено компанией MapX",
     "zh": "MapX 精选",
-    "de": "Empfohlen von MapX",
-    "bn": "MapX দ্বারা বৈশিষ্ট্যযুক্ত",
+    "ar": "تم عرضه بواسطة MapX",
     "fa": "ویژه توسط MapX",
     "ps": "د MapX لخوا ځانګړی شوی",
-    "ar": "تم عرضه بواسطة MapX"
+    "bn": "MapX দ্বারা বৈশিষ্ট্যযুক্ত",
+    "de": "Empfohlen von MapX"
   },
   {
     "id": "project_featured_actions",
@@ -22184,11 +22249,11 @@
     "es": "Acciones de proyecto destacado",
     "ru": "Основные действия проекта",
     "zh": "特色项目操作",
-    "de": "Ausgewählte Projektaktionen",
-    "bn": "প্রকল্পের উল্লেখযোগ্য কার্যক্রম",
+    "ar": "مشاريع مميزة",
     "fa": "اقدامات ویژه پروژه",
     "ps": "د پروژې ځانګړې کړنې",
-    "ar": "مشاريع مميزة"
+    "bn": "প্রকল্পের উল্লেখযোগ্য কার্যক্রম",
+    "de": "Ausgewählte Projektaktionen"
   },
   {
     "id": "project_featured_add",
@@ -22197,11 +22262,11 @@
     "es": "Destacar proyecto",
     "ru": "Проект-проект",
     "zh": "特色项目",
-    "de": "Feature-Projekt",
-    "bn": "ফিচার প্রজেক্ট",
+    "ar": "مشروع مميز",
     "fa": "پروژه ویژه",
     "ps": "د پروژې ځانګړتیا",
-    "ar": "مشروع مميز"
+    "bn": "ফিচার প্রজেক্ট",
+    "de": "Feature-Projekt"
   },
   {
     "id": "project_featured_remove",
@@ -22210,11 +22275,11 @@
     "es": "Quitar de destacados",
     "ru": "Удалить из списка рекомендуемых",
     "zh": "从精选列表中移除",
-    "de": "Aus der Liste entfernen",
-    "bn": "বৈশিষ্ট্যযুক্ত থেকে সরান",
+    "ar": "إزالة من المميز",
     "fa": "حذف از موارد ویژه",
     "ps": "له ځانګړي شوي څخه لرې کړئ",
-    "ar": "إزالة من المميز"
+    "bn": "বৈশিষ্ট্যযুক্ত থেকে সরান",
+    "de": "Aus der Liste entfernen"
   },
   {
     "id": "project_featured_rank",
@@ -22223,11 +22288,11 @@
     "es": "Orden destacado",
     "ru": "Рейтинг \"Избранное\"",
     "zh": "精选排名",
-    "de": "Hervorgehobener Rang",
-    "bn": "বৈশিষ্ট্যযুক্ত র‍্যাঙ্ক",
+    "ar": "تصنيف مميز",
     "fa": "رتبه ویژه",
     "ps": "ځانګړی درجه بندي",
-    "ar": "تصنيف مميز"
+    "bn": "বৈশিষ্ট্যযুক্ত র‍্যাঙ্ক",
+    "de": "Hervorgehobener Rang"
   },
   {
     "id": "project_featured_save_rank",
@@ -22236,11 +22301,11 @@
     "es": "Guardar orden",
     "ru": "Сохранить рейтинг",
     "zh": "保存排名",
-    "de": "Rang speichern",
-    "bn": "র‍্যাঙ্ক সংরক্ষণ করুন",
+    "ar": "حفظ الرتبة",
     "fa": "رتبه را ذخیره کنید",
     "ps": "درجه خوندي کړئ",
-    "ar": "حفظ الرتبة"
+    "bn": "র‍্যাঙ্ক সংরক্ষণ করুন",
+    "de": "Rang speichern"
   },
   {
     "id": "project_featured_error",
@@ -22249,11 +22314,11 @@
     "es": "No se pudo actualizar el estado destacado. Inténtelo de nuevo.",
     "ru": "Не удалось обновить статус \"рекомендуемое\". Пожалуйста, попробуйте еще раз.",
     "zh": "无法更新精选状态。请重试。",
-    "de": "Der Status „Hervorgehoben“ konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
-    "bn": "ফিচার্ড স্ট্যাটাস আপডেট করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।",
+    "ar": "تعذر تحديث حالة العرض المميز. يرجى المحاولة مرة أخرى.",
     "fa": "وضعیت ویژه به‌روزرسانی نشد. لطفاً دوباره امتحان کنید.",
     "ps": "د مشخص حالت تازه نشو. مهرباني وکړئ بیا هڅه وکړئ.",
-    "ar": "تعذر تحديث حالة العرض المميز. يرجى المحاولة مرة أخرى."
+    "bn": "ফিচার্ড স্ট্যাটাস আপডেট করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।",
+    "de": "Der Status „Hervorgehoben“ konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
   },
   {
     "id": "project_roles_matrix_title",

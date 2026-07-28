@@ -2150,6 +2150,31 @@
     "fr": "Supprimer les lignes sélectionnées"
   },
   {
+    "id": "edit_table_identity_repair_title",
+    "en": "Repair source row identifiers",
+    "fr": "Réparer les identificateurs de lignes sources"
+  },
+  {
+    "id": "edit_table_identity_repair_content",
+    "en": "This source has an invalid gid identity ({{issues}}). Editing it could affect multiple rows. Repair compatible duplicate geometry parts and restore automatic row identifiers before continuing?",
+    "fr": "Cette source possède une identité gid invalide ( {{issues}} La modification pourrait affecter plusieurs lignes. Veuillez réparer les éléments géométriques dupliqués compatibles et rétablir les identifiants de ligne automatiques avant de continuer."
+  },
+  {
+    "id": "edit_table_identity_repair_confirm",
+    "en": "Repair source",
+    "fr": "Source de réparation"
+  },
+  {
+    "id": "edit_table_identity_repair_failed_title",
+    "en": "Source repair failed",
+    "fr": "La réparation de la source a échoué"
+  },
+  {
+    "id": "edit_table_identity_repair_failed_content",
+    "en": "The source could not be repaired automatically. No changes were saved.",
+    "fr": "La source n'a pas pu être réparée automatiquement. Aucune modification n'a été enregistrée."
+  },
+  {
     "id": "gc_btn_save",
     "en": "Save results as view",
     "fr": "Enregistrer comme vue"

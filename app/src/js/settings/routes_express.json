@@ -9,7 +9,6 @@
   "getTile": "/get/tile/{x}/{y}/{z}.mvt",
   "getSourceSummary": "/get/source/summary/",
   "getEpsgCodesFull": "/get/epsg/codes/full",
-  "getSourceOverlap": "/get/source/overlap/",
   "getFileFormatsList": "/get/file/formats/list",
   "getProjectsListByUser": "/get/projects/list/user",
   "getViewsListByProject": "/get/views/list/project/",

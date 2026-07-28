@@ -1,5 +1,5 @@
 import { el } from "../../el_mapx";
-import { wsGetSourcesList } from "../../source";
+import { wsGetSourcesList } from "../../source/utils/index.js";
 
 export const config = {
   /*
@@ -64,12 +64,12 @@ export const config = {
     editable: false,
     add_global: false,
     add_views: false,
+    include_dimensions: true,
     addional_items: [], // e.g. already configured id, to avoid missing
     placeholder_wait: "Please wait...",
     placeholder_ready: "Select source...",
   },
 };
-
 
 async function update() {
   const tom = this;
@@ -85,6 +85,7 @@ async function update() {
       readable,
       add_global,
       add_views,
+      include_dimensions,
       addional_items,
       max_rows,
       max_cols,
@@ -104,6 +105,7 @@ async function update() {
       addional_items,
       add_global,
       add_views,
+      include_dimensions,
     });
     const items = list || [];
     for (const item of items) {
@@ -124,9 +126,9 @@ async function update() {
 }
 
 function formaterItem(data, escape) {
-  const type = escape(data.type);
-  const title = escape(data.title);
-  const txt_global = escape(data._global_txt);
+  const type = escape(`${data.type || ""}`);
+  const title = escape(`${data.title || data.id || ""}`);
+  const txt_global = escape(`${data._global_txt || ""}`);
 
   return el("div", [
     el(
@@ -140,7 +142,11 @@ function formaterItem(data, escape) {
       },
       [
         el("span", title),
-        el("span", { class: ["text-muted", "space-around"] }, `${type}${txt_global}`),
+        el(
+          "span",
+          { class: ["text-muted", "space-around"] },
+          `${type}${txt_global}`,
+        ),
       ],
     ),
   ]);
@@ -149,19 +155,23 @@ function formaterItem(data, escape) {
 function formaterOptions(data, escape) {
   const tom = this;
   const { max_cols, max_rows } = tom.settings.loader_config;
-  const warnRow = data.nrow > max_rows ? ` ⚠️ ` : "";
-  const warnCol = data.ncol > max_cols ? ` ⚠️ ` : "";
-  const nCol = warnCol + escape(data.ncol);
-  const nRow = warnRow + escape(data.nrow);
-  const type = escape(data.type);
-  const title = escape(data.title);
-  const abstr = escape(data.abstract.substr(0, 100));
-  const date = escape(data.date_modified);
+  const hasDimensions =
+    Number.isFinite(Number(data.nrow)) && Number.isFinite(Number(data.ncol));
+  const warnRow = hasDimensions && data.nrow > max_rows ? ` ⚠️ ` : "";
+  const warnCol = hasDimensions && data.ncol > max_cols ? ` ⚠️ ` : "";
+  const dimensions = hasDimensions
+    ? `${warnRow}${escape(data.nrow)} x ${warnCol}${escape(data.ncol)}`
+    : "";
+  const type = escape(`${data.type || ""}`);
+  const title = escape(`${data.title || data.id || ""}`);
+  const abstr = escape(`${data.abstract || ""}`.substr(0, 100));
+  const date = escape(`${data.date_modified || ""}`);
   const views = data?.views || [];
   const dateObject = new Date(date);
-  const time = dateObject.toLocaleTimeString();
-  const dateUi = dateObject.toLocaleDateString();
-  const txt_global = escape(data._global_txt);
+  const hasDate = !Number.isNaN(dateObject.valueOf());
+  const time = hasDate ? dateObject.toLocaleTimeString() : "";
+  const dateUi = hasDate ? dateObject.toLocaleDateString() : "";
+  const txt_global = escape(`${data._global_txt || ""}`);
 
   return el(
     "div",
@@ -189,9 +199,9 @@ function formaterOptions(data, escape) {
             },
           },
           [
-            el("span", `${nRow} x ${nCol}`),
+            el("span", dimensions),
             el("span", `${type}${txt_global}`),
-            el("span", `${dateUi} – ${time}`),
+            el("span", hasDate ? `${dateUi} – ${time}` : ""),
           ],
         ),
         el("span", { style: { display: "block" } }, title),

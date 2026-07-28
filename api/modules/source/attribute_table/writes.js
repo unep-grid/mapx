@@ -22,6 +22,7 @@ import {
 import { SourceRevisionBatch, updateJoinColumnsNames } from "#mapx/source";
 import { events } from "./events.js";
 import { cols, insertTableRow, updateFeatureGeometry } from "./geometry.js";
+import { getSourceIdentityStatus } from "./identity.js";
 
 /**
  * Apply a message's updates in one transaction.
@@ -49,6 +50,12 @@ export async function writeUpdates(session, message) {
   await client.query("BEGIN");
 
   try {
+    const identity = await getSourceIdentityStatus(session._id_table, client);
+    if (!identity.valid) {
+      throw new Error(
+        `Source gid identity is invalid: ${identity.issues.join(", ")}`,
+      );
+    }
     for (const update of updates) {
       if (!isSourceId(update.id_table)) {
         throw new Error("Invalid update table");

@@ -2150,6 +2150,31 @@
     "fa": "حذف ردیف‌های انتخاب شده"
   },
   {
+    "id": "edit_table_identity_repair_title",
+    "en": "Repair source row identifiers",
+    "fa": "شناسه‌های ردیف منبع را تعمیر کنید"
+  },
+  {
+    "id": "edit_table_identity_repair_content",
+    "en": "This source has an invalid gid identity ({{issues}}). Editing it could affect multiple rows. Repair compatible duplicate geometry parts and restore automatic row identifiers before continuing?",
+    "fa": "این منبع دارای شناسه g نامعتبر است ( {{issues}} ). ویرایش آن می‌تواند چندین ردیف را تحت تأثیر قرار دهد. آیا قطعات هندسی تکراری سازگار را تعمیر کرده و شناسه‌های خودکار ردیف را قبل از ادامه بازیابی می‌کنید؟"
+  },
+  {
+    "id": "edit_table_identity_repair_confirm",
+    "en": "Repair source",
+    "fa": "منبع تعمیر"
+  },
+  {
+    "id": "edit_table_identity_repair_failed_title",
+    "en": "Source repair failed",
+    "fa": "تعمیر منبع ناموفق بود"
+  },
+  {
+    "id": "edit_table_identity_repair_failed_content",
+    "en": "The source could not be repaired automatically. No changes were saved.",
+    "fa": "منبع به طور خودکار قابل تعمیر نیست. هیچ تغییری ذخیره نشده است."
+  },
+  {
     "id": "gc_btn_save",
     "en": "Save results as view",
     "fa": "ذخیره نتایج به عنوان نما"

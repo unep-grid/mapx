@@ -1,0 +1,354 @@
+import { pgWrite } from "#mapx/db";
+import { columnExists } from "#mapx/db_utils";
+import { isSourceId } from "@fxi/mx_valid";
+import { cols, getGeometryColumnInfo, quoteId } from "./geometry.js";
+
+const supportedGidTypes = new Set(["smallint", "integer", "bigint"]);
+
+/**
+ * Audit the row identity contract required by the attribute-table editor.
+ *
+ * @param {string} idTable
+ * @param {Object} [client]
+ * @returns {Promise<Object>}
+ */
+export async function getSourceIdentityStatus(idTable, client = pgWrite) {
+  if (!isSourceId(idTable)) {
+    throw new Error("Invalid source identity request");
+  }
+
+  const columnResult = await client.query(
+    `
+    SELECT
+      format_type(a.atttypid, a.atttypmod) AS data_type,
+      a.attnotnull AS not_null,
+      a.attidentity <> '' AS is_identity,
+      pg_get_expr(d.adbin, d.adrelid) AS column_default,
+      EXISTS (
+        SELECT 1
+        FROM pg_index i
+        WHERE i.indrelid = a.attrelid
+          AND i.indisunique
+          AND i.indisvalid
+          AND i.indisready
+          AND i.indpred IS NULL
+          AND i.indexprs IS NULL
+          AND i.indnkeyatts = 1
+          AND i.indkey[0] = a.attnum
+      ) AS is_unique
+    FROM pg_attribute a
+    LEFT JOIN pg_attrdef d
+      ON d.adrelid = a.attrelid
+      AND d.adnum = a.attnum
+    WHERE a.attrelid = $1::regclass
+      AND a.attname = $2
+      AND a.attnum > 0
+      AND NOT a.attisdropped
+    `,
+    [idTable, cols.gid],
+  );
+
+  if (columnResult.rowCount !== 1) {
+    return makeIdentityStatus({
+      exists: false,
+      dataType: null,
+      notNull: false,
+      generated: false,
+      unique: false,
+      rowCount: 0,
+      nullCount: 0,
+      duplicateCount: 0,
+      duplicateGids: [],
+    });
+  }
+
+  const column = columnResult.rows[0];
+  const columnDetails = {
+    exists: true,
+    dataType: column.data_type,
+    notNull: column.not_null === true,
+    generated:
+      column.is_identity === true ||
+      `${column.column_default || ""}`.includes("nextval("),
+    unique: column.is_unique === true,
+  };
+
+  // The database constraints prove that null and duplicate gids cannot exist.
+  // Avoid scanning every row on the normal editor-open path.
+  if (columnDetails.notNull && columnDetails.unique) {
+    return makeIdentityStatus({
+      ...columnDetails,
+      rowCount: null,
+      nullCount: 0,
+      duplicateCount: 0,
+      duplicateGids: [],
+    });
+  }
+
+  const countsResult = await client.query(
+    `
+    SELECT
+      count(*)::integer AS row_count,
+      count(*) FILTER (WHERE ${quoteId(cols.gid)} IS NULL)::integer
+        AS null_count,
+      (
+        count(${quoteId(cols.gid)}) -
+        count(DISTINCT ${quoteId(cols.gid)})
+      )::integer AS duplicate_count
+    FROM ${quoteId(idTable)}
+    `,
+  );
+  const duplicateResult = await client.query(
+    `
+    SELECT ${quoteId(cols.gid)}
+    FROM ${quoteId(idTable)}
+    WHERE ${quoteId(cols.gid)} IS NOT NULL
+    GROUP BY ${quoteId(cols.gid)}
+    HAVING count(*) > 1
+    ORDER BY ${quoteId(cols.gid)}
+    LIMIT 10
+    `,
+  );
+  const counts = countsResult.rows[0] || {};
+
+  return makeIdentityStatus({
+    ...columnDetails,
+    rowCount: Number(counts.row_count) || 0,
+    nullCount: Number(counts.null_count) || 0,
+    duplicateCount: Number(counts.duplicate_count) || 0,
+    duplicateGids: duplicateResult.rows.map((row) => row[cols.gid]),
+  });
+}
+
+function makeIdentityStatus(details) {
+  const issues = [];
+  if (!details.exists) {
+    issues.push("missing_gid");
+  } else {
+    if (!supportedGidTypes.has(details.dataType)) {
+      issues.push("invalid_gid_type");
+    }
+    if (!details.notNull || details.nullCount > 0) {
+      issues.push("null_gid");
+    }
+    if (!details.unique || details.duplicateCount > 0) {
+      issues.push("duplicate_gid");
+    }
+    if (!details.generated) {
+      issues.push("missing_gid_default");
+    }
+  }
+  return {
+    valid: issues.length === 0,
+    repairable: !issues.includes("invalid_gid_type"),
+    issues,
+    ...details,
+  };
+}
+
+/**
+ * Restore the editor row identity contract. Duplicate spatial rows are only
+ * merged when every non-geometry attribute is identical.
+ *
+ * The caller owns the transaction.
+ *
+ * @param {string} idTable
+ * @param {number} idUser
+ * @param {Object} [client]
+ */
+export async function repairSourceIdentity(idTable, idUser, client = pgWrite) {
+  if (!isSourceId(idTable) || !Number.isInteger(Number(idUser))) {
+    throw new Error("Invalid source identity repair");
+  }
+
+  await client.query(`LOCK TABLE ${quoteId(idTable)} IN ACCESS EXCLUSIVE MODE`);
+  let status = await getSourceIdentityStatus(idTable, client);
+  if (status.valid) {
+    return { ...status, repaired: false };
+  }
+  if (!status.repairable) {
+    throw new Error("The gid column type cannot be repaired automatically");
+  }
+
+  if (!status.exists) {
+    await client.query(
+      `ALTER TABLE ${quoteId(idTable)}
+       ADD COLUMN ${quoteId(cols.gid)}
+       BIGINT GENERATED BY DEFAULT AS IDENTITY`,
+    );
+    status = await getSourceIdentityStatus(idTable, client);
+  }
+
+  const hasGeom = await columnExists(cols.geom, idTable, client);
+  if (status.duplicateCount > 0) {
+    if (!hasGeom) {
+      throw new Error(
+        "Duplicate gids in a tabular source require manual repair",
+      );
+    }
+    await assertDuplicateAttributesMatch(idTable, client);
+    await mergeDuplicateGeometries(idTable, client);
+  }
+
+  await client.query(
+    `
+    WITH current_max AS (
+      SELECT COALESCE(max(${quoteId(cols.gid)}), 0)::bigint AS value
+      FROM ${quoteId(idTable)}
+    ),
+    null_rows AS (
+      SELECT
+        ctid,
+        row_number() OVER (ORDER BY ctid)::bigint AS offset
+      FROM ${quoteId(idTable)}
+      WHERE ${quoteId(cols.gid)} IS NULL
+    )
+    UPDATE ${quoteId(idTable)} AS target
+    SET ${quoteId(cols.gid)} = current_max.value + null_rows.offset
+    FROM current_max, null_rows
+    WHERE target.ctid = null_rows.ctid
+    `,
+  );
+  await client.query(
+    `ALTER TABLE ${quoteId(idTable)}
+     ALTER COLUMN ${quoteId(cols.gid)} SET NOT NULL`,
+  );
+
+  if (!status.generated) {
+    await client.query(
+      `ALTER TABLE ${quoteId(idTable)}
+       ALTER COLUMN ${quoteId(cols.gid)} DROP DEFAULT`,
+    );
+    await client.query(
+      `ALTER TABLE ${quoteId(idTable)}
+       ALTER COLUMN ${quoteId(cols.gid)}
+       ADD GENERATED BY DEFAULT AS IDENTITY`,
+    );
+  }
+
+  await client.query(
+    `
+    SELECT setval(
+      pg_get_serial_sequence($1, $2),
+      GREATEST(COALESCE(max(${quoteId(cols.gid)}), 0), 1),
+      COALESCE(max(${quoteId(cols.gid)}), 0) > 0
+    )
+    FROM ${quoteId(idTable)}
+    `,
+    [idTable, cols.gid],
+  );
+  status = await getSourceIdentityStatus(idTable, client);
+  if (!status.unique) {
+    await client.query(
+      `ALTER TABLE ${quoteId(idTable)}
+       ADD CONSTRAINT ${quoteId(`${idTable}_gid_key`)}
+       UNIQUE (${quoteId(cols.gid)})`,
+    );
+  }
+
+  status = await getSourceIdentityStatus(idTable, client);
+  if (!status.valid) {
+    throw new Error(
+      `Source identity repair incomplete: ${status.issues.join(", ")}`,
+    );
+  }
+  return { ...status, repaired: true };
+}
+
+async function assertDuplicateAttributesMatch(idTable, client) {
+  const result = await client.query(
+    `
+    SELECT ${quoteId(cols.gid)}
+    FROM ${quoteId(idTable)} AS source_row
+    WHERE ${quoteId(cols.gid)} IS NOT NULL
+    GROUP BY ${quoteId(cols.gid)}
+    HAVING count(*) > 1
+      AND count(
+        DISTINCT (
+          to_jsonb(source_row) -
+          ARRAY[$1::text, $2::text, $3::text]
+        )
+      ) > 1
+    ORDER BY ${quoteId(cols.gid)}
+    LIMIT 10
+    `,
+    [cols.gid, cols.geom, "_mx_valid"],
+  );
+  if (result.rowCount > 0) {
+    const gids = result.rows.map((row) => row[cols.gid]).join(", ");
+    throw new Error(
+      `Conflicting duplicate gids require manual repair: ${gids}`,
+    );
+  }
+}
+
+async function mergeDuplicateGeometries(idTable, client) {
+  const columnInfo = await getGeometryColumnInfo(idTable, client);
+  const singletonToMulti = {
+    POINT: "MULTIPOINT",
+    LINESTRING: "MULTILINESTRING",
+    POLYGON: "MULTIPOLYGON",
+  };
+  const declaredType = `${columnInfo.type || ""}`.toUpperCase();
+  const promotedType = singletonToMulti[declaredType];
+  if (promotedType) {
+    const srid = Number(columnInfo.srid) || 4326;
+    await client.query(
+      `
+      ALTER TABLE ${quoteId(idTable)}
+      ALTER COLUMN ${quoteId(cols.geom)}
+      TYPE geometry(${promotedType}, ${srid})
+      USING CASE
+        WHEN ${quoteId(cols.geom)} IS NULL THEN NULL
+        ELSE ST_Multi(${quoteId(cols.geom)})
+      END
+      `,
+    );
+  }
+  const promote = [
+    "GEOMETRY",
+    "MULTIPOINT",
+    "MULTILINESTRING",
+    "MULTIPOLYGON",
+  ].includes(promotedType || declaredType);
+  const aggregate = `ST_UnaryUnion(ST_Collect(${quoteId(cols.geom)}))`;
+  const geometry = promote ? `ST_Multi(${aggregate})` : aggregate;
+  const hasValidation = await columnExists("_mx_valid", idTable, client);
+  const validationSet = hasValidation ? `, "_mx_valid" = NULL` : "";
+
+  await client.query(
+    `
+    WITH duplicate_rows AS (
+      SELECT
+        ${quoteId(cols.gid)},
+        (array_agg(ctid ORDER BY ctid))[1] AS survivor,
+        ${geometry} AS merged_geom
+      FROM ${quoteId(idTable)}
+      WHERE ${quoteId(cols.gid)} IS NOT NULL
+      GROUP BY ${quoteId(cols.gid)}
+      HAVING count(*) > 1
+    )
+    UPDATE ${quoteId(idTable)} AS target
+    SET ${quoteId(cols.geom)} = duplicate_rows.merged_geom${validationSet}
+    FROM duplicate_rows
+    WHERE target.ctid = duplicate_rows.survivor
+    `,
+  );
+  await client.query(
+    `
+    WITH survivors AS (
+      SELECT
+        ${quoteId(cols.gid)},
+        (array_agg(ctid ORDER BY ctid))[1] AS survivor
+      FROM ${quoteId(idTable)}
+      WHERE ${quoteId(cols.gid)} IS NOT NULL
+      GROUP BY ${quoteId(cols.gid)}
+      HAVING count(*) > 1
+    )
+    DELETE FROM ${quoteId(idTable)} AS target
+    USING survivors
+    WHERE target.${quoteId(cols.gid)} = survivors.${quoteId(cols.gid)}
+      AND target.ctid <> survivors.survivor
+    `,
+  );
+}

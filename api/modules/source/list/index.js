@@ -138,7 +138,7 @@ export async function getSourceDependencies(
 /**
  *  Get source list
  */
-async function getSourcesList(options) {
+export async function getSourcesList(options) {
   const def = {
     idProject: null,
     idUser: null,
@@ -151,6 +151,7 @@ async function getSourcesList(options) {
     add_global: false,
     add_views: false,
     exclude_empty_join: false,
+    include_dimensions: true,
   };
 
   const config = Object.assign({}, def, options);
@@ -172,6 +173,7 @@ async function getSourcesList(options) {
     add_views,
     add_global,
     exclude_empty_join,
+    include_dimensions,
   } = config;
 
   if (editable && readable) {
@@ -209,15 +211,17 @@ async function getSourcesList(options) {
   /**
    * Add table dimensions
    */
-  for (const row of res.rows) {
-    row.exists = await tableExists(row.id);
-    if (row.exists) {
-      const dim = await getTableDimension(row.id);
-      row.nrow = dim.nrow;
-      row.ncol = dim.ncol;
-    } else {
-      row.nrow = 0;
-      row.ncol = 0;
+  if (include_dimensions) {
+    for (const row of res.rows) {
+      row.exists = await tableExists(row.id);
+      if (row.exists) {
+        const dim = await getTableDimension(row.id);
+        row.nrow = dim.nrow;
+        row.ncol = dim.ncol;
+      } else {
+        row.nrow = 0;
+        row.ncol = 0;
+      }
     }
   }
 

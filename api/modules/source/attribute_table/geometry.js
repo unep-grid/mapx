@@ -122,12 +122,14 @@ export async function getFeatureByGid(idTable, gid, client = pgWrite) {
     SELECT ${selectColumns}${geomSelect}
     FROM ${quoteId(idTable)}
     WHERE ${quoteId(cols.gid)} = $1
-    LIMIT 1
     `,
     [gid]
   );
-  if (res.rowCount !== 1) {
+  if (res.rowCount === 0) {
     throw new Error("Feature not found");
+  }
+  if (res.rowCount !== 1) {
+    throw new Error(`Feature gid is not unique: ${gid}`);
   }
   return res.rows[0];
 }
@@ -202,7 +204,7 @@ export async function updateFeatureGeometry(
   }
   const geom = normalizeGeometry(geometry);
   if (isEmpty(geom)) {
-    await client.query(
+    const res = await client.query(
       `
       UPDATE ${quoteId(idTable)}
       SET ${quoteId(cols.geom)} = NULL
@@ -210,10 +212,11 @@ export async function updateFeatureGeometry(
       `,
       [gid]
     );
+    assertSingleGeometryUpdate(res);
   } else {
     const columnInfo = await getGeometryColumnInfo(idTable, client);
     const geomSql = getGeomSqlExpression(columnInfo.type);
-    await client.query(
+    const res = await client.query(
       `
       UPDATE ${quoteId(idTable)}
       SET ${quoteId(cols.geom)} = ${geomSql}
@@ -221,6 +224,15 @@ export async function updateFeatureGeometry(
       `,
       [JSON.stringify(geom), gid]
     );
+    assertSingleGeometryUpdate(res);
   }
   return getFeatureByGid(idTable, gid, client);
+}
+
+function assertSingleGeometryUpdate(result) {
+  if (result.rowCount !== 1) {
+    throw new Error(
+      `Expected to update one feature geometry, updated ${result.rowCount}`,
+    );
+  }
 }

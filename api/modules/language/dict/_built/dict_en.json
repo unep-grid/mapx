@@ -1720,6 +1720,26 @@
     "en": "Remove selected rows"
   },
   {
+    "id": "edit_table_identity_repair_title",
+    "en": "Repair source row identifiers"
+  },
+  {
+    "id": "edit_table_identity_repair_content",
+    "en": "This source has an invalid gid identity ({{issues}}). Editing it could affect multiple rows. Repair compatible duplicate geometry parts and restore automatic row identifiers before continuing?"
+  },
+  {
+    "id": "edit_table_identity_repair_confirm",
+    "en": "Repair source"
+  },
+  {
+    "id": "edit_table_identity_repair_failed_title",
+    "en": "Source repair failed"
+  },
+  {
+    "id": "edit_table_identity_repair_failed_content",
+    "en": "The source could not be repaired automatically. No changes were saved."
+  },
+  {
     "id": "gc_btn_save",
     "en": "Save results as view"
   },

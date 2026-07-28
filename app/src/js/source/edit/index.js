@@ -36,6 +36,7 @@ import { htAdapterMixin } from "./ht_adapter.js";
 import { toolbarMixin } from "./toolbar.js";
 import { changesMixin } from "./changes.js";
 import { locksClientMixin } from "./locks_client.js";
+import { ensureEditableSourceIdentity } from "./identity_client.js";
 
 import "./types.js";
 import "./style.less";
@@ -130,6 +131,9 @@ export class EditTableSessionClient extends EditTableBase {
       const valid = isSourceId(et._id_table);
       if (!valid) {
         throw new Error("Invalid table id");
+      }
+      if (!(await ensureEditableSourceIdentity(et._id_table))) {
+        throw new Error("Source identity repair was cancelled");
       }
 
       /**

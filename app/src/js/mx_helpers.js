@@ -46,7 +46,6 @@ export * from "./mx_helper_misc.js";
 export * from "./mx_helper_modal.js";
 export * from "./mx_helper_selectize.js";
 export * from "./mx_helper_intersect.js";
-export * from "./mx_helper_overlap_tool.js";
 export * from "./mx_helper_validate_geom_tool.js";
 export * from "./mx_helper_draggable.js";
 export * from "./mx_helper_map_dragdrop.js";

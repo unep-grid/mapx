@@ -9,10 +9,11 @@ const store = new Map();
  * @return {Promise<EditTableSessionClient>}
  */
 export async function editTable(opt) {
+  opt = opt || {};
   if (opt.idTable) {
     opt.id_table = opt.idTable;
   }
-  const idTable = opt.idTable;
+  const idTable = opt.id_table;
 
   if (store.has(idTable)) {
     return store.get(idTable);

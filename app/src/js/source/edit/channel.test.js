@@ -114,6 +114,35 @@ describe("EditChannel", () => {
     );
   });
 
+  it("treats an invalid gid identity as an edit lock", () => {
+    expect(
+      EditChannel.isStatusLocked({
+        locked: false,
+        geometryEditLock: null,
+        identity: { valid: false },
+      }),
+    ).toBe(true);
+    expect(
+      EditChannel.isStatusLocked({
+        locked: false,
+        geometryEditLock: null,
+        identity: { valid: true },
+      }),
+    ).toBe(false);
+  });
+
+  it("requests an explicit identity repair", async () => {
+    wsMock.emitAsync.mockResolvedValue({ success: true });
+
+    await EditChannel.repairIdentity("mx_vector_a_b_c_d_e");
+
+    expect(wsMock.emitAsync).toHaveBeenCalledWith(
+      events.client_identity_repair,
+      { id_table: "mx_vector_a_b_c_d_e" },
+      defaults.timeout_emit,
+    );
+  });
+
   it("joins the edit room and resolves on server_joined", async () => {
     wsMock.emitAsync.mockResolvedValue(true);
     const ec = new EditChannel({ id_table: "mx_vector_a_b_c_d_e" });

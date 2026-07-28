@@ -15,6 +15,7 @@ export const events = {
    */
   client_edit_start: "/client/source/edit/table",
   client_edit_status: "/client/source/edit/table/status",
+  client_identity_repair: "/client/source/edit/table/identity/repair",
   client_edit_updates: "/client/source/edit/table/update",
   client_exit: "/client/source/edit/table/exit",
   client_geom_validate: "/client/source/edit/table/geom/validate",
@@ -87,7 +88,21 @@ export class EditChannel {
   }
 
   static isStatusLocked(status) {
-    return !!status?.locked || !!status?.geometryEditLock?.locked;
+    return (
+      !!status?.locked ||
+      !!status?.geometryEditLock?.locked ||
+      !!(status?.identity && status.identity.valid === false)
+    );
+  }
+
+  static async repairIdentity(idTable, timeout = defaults.timeout_emit) {
+    return ws.emitAsync(
+      events.client_identity_repair,
+      {
+        id_table: idTable,
+      },
+      timeout,
+    );
   }
 
   constructor(config) {

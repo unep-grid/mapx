@@ -2150,6 +2150,31 @@
     "ru": "Удалить выбранные строки"
   },
   {
+    "id": "edit_table_identity_repair_title",
+    "en": "Repair source row identifiers",
+    "ru": "Исправить идентификаторы исходных строк"
+  },
+  {
+    "id": "edit_table_identity_repair_content",
+    "en": "This source has an invalid gid identity ({{issues}}). Editing it could affect multiple rows. Repair compatible duplicate geometry parts and restore automatic row identifiers before continuing?",
+    "ru": "Этот источник имеет недействительный идентификатор gid ( {{issues}} Редактирование может затронуть несколько строк. Необходимо исправить совместимые дублирующиеся геометрические элементы и восстановить автоматические идентификаторы строк, прежде чем продолжить?"
+  },
+  {
+    "id": "edit_table_identity_repair_confirm",
+    "en": "Repair source",
+    "ru": "Источник ремонта"
+  },
+  {
+    "id": "edit_table_identity_repair_failed_title",
+    "en": "Source repair failed",
+    "ru": "Восстановление исходного кода не удалось."
+  },
+  {
+    "id": "edit_table_identity_repair_failed_content",
+    "en": "The source could not be repaired automatically. No changes were saved.",
+    "ru": "Автоматическое восстановление источника не удалось. Изменения не были сохранены."
+  },
+  {
     "id": "gc_btn_save",
     "en": "Save results as view",
     "ru": "Сохранить результаты как вид"

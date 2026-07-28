@@ -36,6 +36,9 @@ import {
   getGeometryColumnInfo,
   getGeometryTypeSimple,
 } from "./geometry.js";
+import { getSourceIdentityStatus, repairSourceIdentity } from "./identity.js";
+import { pgWrite } from "#mapx/db";
+import { createSourceRevision } from "../revision.js";
 
 /**
  * Triggered by '/client/source/edit/table' in ..api/index.js
@@ -70,10 +73,66 @@ export async function ioEditSourceStatus(socket, options, callback) {
       id_table: idTable,
       locked: !!(await getLock(idTable, "table")),
       geometryEditLock: await getLock(idTable, "geometry"),
+      identity: await getSourceIdentityStatus(idTable),
     });
   } catch (e) {
     console.error("Edit source status failed", e);
     callback(false);
+  }
+}
+
+export async function ioEditSourceIdentityRepair(socket, options, callback) {
+  const idTable = options?.id_table;
+  let client;
+  try {
+    if (!isSourceId(idTable)) {
+      throw new Error("Invalid source");
+    }
+    if (!(await isSocketAllowedToEditSource(socket, idTable))) {
+      throw new Error("Source identity repair is not allowed");
+    }
+    const tableLock = await getLock(idTable, "table");
+    const geometryLock = await getLock(idTable, "geometry");
+    if (tableLock || geometryLock) {
+      throw new Error(
+        "Close active edit sessions before repairing this source",
+      );
+    }
+    const room = `room/source/edit/table/${idTable}`;
+    const activeEditors = await socket.server.in(room).fetchSockets();
+    if (activeEditors.length > 0) {
+      throw new Error(
+        "Close active edit sessions before repairing this source",
+      );
+    }
+
+    client = await pgWrite.connect();
+    await client.query("BEGIN");
+    const identity = await repairSourceIdentity(
+      idTable,
+      socket.session.user_id,
+      client,
+    );
+    if (identity.repaired) {
+      await createSourceRevision({
+        idSource: idTable,
+        idUser: Number(socket.session.user_id),
+        client,
+      });
+    }
+    await client.query("COMMIT");
+    callback({ id_table: idTable, identity, success: true });
+  } catch (error) {
+    if (client) {
+      await client.query("ROLLBACK");
+    }
+    callback({
+      id_table: idTable,
+      success: false,
+      error: error?.message || error,
+    });
+  } finally {
+    client?.release();
   }
 }
 
@@ -223,6 +282,13 @@ class EditTableSession {
     if (!exists) {
       et.error("Table not found");
       return;
+    }
+
+    const identity = await getSourceIdentityStatus(et._id_table);
+    if (!identity.valid) {
+      throw new Error(
+        `Source gid identity is invalid: ${identity.issues.join(", ")}`,
+      );
     }
 
     const lightweight = et._config.lightweight === true;

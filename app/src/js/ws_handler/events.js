@@ -30,7 +30,9 @@ export const eventsHandlers = {
 
 async function handlerSourceAdded(data, cb) {
   triggerUpdateSourcesList();
-  cb(data);
+  if (isFunction(cb)) {
+    cb(data);
+  }
 }
 
 async function handlerError(message) {

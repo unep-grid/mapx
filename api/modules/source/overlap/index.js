@@ -1,471 +1,291 @@
-import { isArray } from "@fxi/mx_valid";
-import { parse as wktToJson } from "wellknown";
-import martinez from "martinez-polygon-clipping";
-import { multiPolygon, area as getArea } from "@turf/turf";
-import { toRes, randomString, attrToPgCol } from "#mapx/helpers";
-import { sendMailAuto } from "#mapx/mail";
 import { pgWrite } from "#mapx/db";
 import {
-  validateTokenHandler,
-  validateRoleHandlerFor,
-} from "#mapx/authentication";
-import {
-  registerOrRemoveSource,
-  removeSource,
-  getColumnsNames,
   areLayersValid,
-  analyzeSource,
+  getColumnsNames,
+  registerSource,
 } from "#mapx/db_utils";
+import { randomString } from "#mapx/helpers";
+import { sendMailAuto } from "#mapx/mail";
+import { getSourcesList } from "../list/index.js";
+import { getGeometryColumnInfo } from "../attribute_table/geometry.js";
+import { getSourceIdentityStatus } from "../attribute_table/identity.js";
+import { isSourceId, isString } from "@fxi/mx_valid";
+import {
+  buildAreaOverlapSql,
+  buildCreateOverlapSql,
+  buildFinalizeOverlapSql,
+  buildOverlapGeometryProfileSql,
+  deriveOverlapGeometryType,
+} from "./sql.js";
 
-/**
- * Upload's middleware
- */
-export const mwGetOverlap = [
-  validateTokenHandler,
-  validateRoleHandlerFor("member"),
-  getOverlapHandler,
-];
+const modes = new Set(["area", "create_source"]);
+const maxLayers = 3;
 
-async function getOverlapHandler(req, res) {
-  const start = Date.now();
-  const layers = req.query.layers ? req.query.layers.split(",") || [] : [];
-  const countries = req.query.countries
-    ? req.query.countries.split(",") || []
-    : [];
-  const {
-    idProject,
-
-    sourceTitle = "Overlap " + Math.random().toString(36).substring(1, 7),
-  } = req.query;
-  const idUser = req.query.idUser * 1;
-  const emailUser = req.query.email;
-
-  const idSource = randomString("mx_vector", 4, 5).toLowerCase();
-
-  const method = req.query.method || "getArea" || "createSource";
-  res.setHeader("Content-Type", "application/json");
-
-  const config = {
-    emailUser: emailUser,
-    countries: countries,
-    layers: layers,
-    mainLayer: layers[0],
-    method: method,
-    idProject: idProject,
-    idSource: idSource,
-    idUser: idUser,
-    sourceTitle: sourceTitle,
-    send: {
-      message: function (msg) {
-        res.write(
-          toRes({
-            type: "message",
-            msg: msg,
-          })
-        );
-      },
-      area: function (area) {
-        res.write(
-          toRes({
-            type: "result",
-            msg: {
-              content: "area",
-              unit: "m2",
-              value: area,
-            },
-          })
-        );
-      },
-      sourceMeta: function (sourceMeta) {
-        res.write(
-          toRes({
-            type: "result",
-            msg: {
-              content: "sourceMeta",
-              value: sourceMeta,
-            },
-          })
-        );
-      },
-    },
-  };
-
+export async function ioSourceOverlap(socket, request, callback) {
+  const idRequest =
+    isString(request?.id_request) && request.id_request.length <= 100
+      ? request.id_request
+      : randomString("mx_overlap");
   try {
-    res.write(
-      toRes({
-        type: "message",
-        msg: `Geometries validation. This could take a while, please be patient. In case of error, a message will appear.`,
-      })
-    );
-
-    const layersValidated = await areLayersValid(layers, true, false);
-
-    for (const layer of layersValidated) {
-      if (!layer.valid) {
-        res.write(
-          toRes({
-            type: "error",
-            msg: ` Layer ${layer.title} ( ${layer.id} ) has invalid geometries. Please correct them and try again`,
-          })
-        );
-        throw Error("Invalid geometry found");
-      } else {
-        res.write(
-          toRes({
-            type: "message",
-            msg: `Geometries seem valid`,
-          })
-        );
-      }
-    }
-
-    if (method === "createSource") {
-      await getOverlapCreateSource(config);
-      await analyzeSource(idSource);
-    } else {
-      await getOverlapArea(config);
-    }
-
-    res.write(
-      toRes({
-        type: "timing",
-        msg: {
-          duration: Date.now() - start,
-          unit: "ms",
-        },
-      })
-    );
-
-    res.end();
-  } catch (e) {
-    try {
-      res.write(
-        toRes({
-          type: "error",
-          msg: e.message,
-        })
-      );
-
-      res.end();
-
-      if (method === "createSource" && config.emailUser) {
-        await sendMailAuto({
-          to: [config.emailUser],
-          content: `Source '${config.sourceTitle}' not created. Error : ${e.message}`,
-          subject: `MapX - overlap tool error : source '${config.sourceTitle}' not created.`,
-        });
-      }
-
-      /**
-       * Cleaning if needed
-       */
-      await removeSource(idSource);
-    } catch (e) {
-      console.error(e);
-    }
+    const options = await validateOverlapRequest(socket, {
+      ...request,
+      id_request: idRequest,
+    });
+    callback({ accepted: true, id_request: idRequest });
+    await runOverlap(socket, options);
+  } catch (error) {
+    const result = {
+      id_request: idRequest,
+      success: false,
+      error: error?.message || error,
+    };
+    callback({ accepted: false, ...result });
+    await emitResult(socket, result);
   }
 }
 
-/**
- * Create a new source based on intersection of feature
- * using a multilayer and multi-country approach.
- */
-async function getOverlapCreateSource(options) {
-  var send = options.send;
-  send.message = send.message || function () {};
-  //send.area = send.area || function(){};
-  send.sourceMeta = send.sourceMeta || function () {};
-
-  var layers = options.layers;
-  var nLayers = layers.length;
-
-  var layerAliasPrevious;
-  var layerAlias;
-  var layerCurrent;
-  var attr;
-  var finalBlock = false;
-
-  let attrOut = await getColumnsNames(options.mainLayer);
-
-  attrOut = attrOut.filter((a) => a !== "geom");
-  attrOut = attrToPgCol(attrOut);
-
-  send.message("Build query");
-
-  /**
-   * New table block
-   */
-  var sqlQuery = `
-      CREATE TABLE ${options.idSource} AS
-      `;
-  /**
-   * Country block
-   */
-  sqlQuery += `
-    WITH countries as (
-      SELECT ST_Union(geom) geom from mx_countries
-      WHERE iso3code = ANY($1::text[])
-    ),`;
-
-  /**
-   * Layers block
-   */
-  for (var i = nLayers - 1; i >= 0; i--) {
-    finalBlock = i === 0;
-    layerCurrent = layers[i];
-    layerAlias = "layer_" + i;
-    layerAliasPrevious = layerAliasPrevious ? "layer_" + (i + 1) : "countries";
-    attr = finalBlock ? attrOut + "," : "";
-    /**
-     * Template with block
-     */
-    sqlQuery =
-      sqlQuery +
-      `
-        ${layerAlias} as (
-          SELECT ${attr}
-          CASE WHEN GeometryType(m.geom) = $$POINT$$
-          THEN
-          m.geom
-          ELSE
-          CASE 
-          WHEN ST_CoveredBy(
-            m.geom,
-            k.geom
-          ) 
-          THEN 
-          m.geom 
-          ELSE
-          ST_Multi(
-            ST_Intersection(
-              k.geom,
-              m.geom
-            )
-          )
-          END
-          END geom
-          FROM ${layerCurrent} m, ${layerAliasPrevious} k
-          WHERE m.geom && k.geom AND ST_Intersects(m.geom, k.geom)
-        )` +
-      (finalBlock ? "" : ",");
-
-    /**
-     * Final query to build the table
-     */
-    if (finalBlock) {
-      sqlQuery += `
-        SELECT ${attr} geom from ${layerAlias}`;
-    }
+async function validateOverlapRequest(socket, request) {
+  const session = socket?.session || {};
+  if (!session.user_authenticated || !session.user_roles?.publisher) {
+    throw new Error("Overlap tool is not allowed");
   }
 
-  send.message("Query built, create table, please wait");
-  options.query = sqlQuery;
-  await pgWrite.query({
-    text: sqlQuery,
-    values: [options.countries],
-  });
-  const reg = await registerOrRemoveSource(options);
-
-  if (!reg.registered) {
-    send.message("No records, table removed");
-    if (options.emailUser) {
-      await sendMailAuto({
-        to: [options.emailUser],
-        content: `Source '${options.sourceTitle}' not created. No intersection found.`,
-        subject: `MapX - overlap tool failed : source '${options.sourceTitle}' not created.`,
-      });
-    }
-  } else {
-    send.message(
-      `New source ${options.sourceTitle} created ( ${options.idSource} )`
-    );
-
-    if (options.emailUser) {
-      await sendMailAuto({
-        to: [options.emailUser],
-        content: `Source '${options.sourceTitle}' created ( id : ${options.idSource} )`,
-        subject: `MapX - overlap tool success : source '${options.sourceTitle}' created`,
-      });
-    }
-
-    send.sourceMeta({
-      idSource: options.idSource,
-      idUser: options.idUser,
-      idProject: options.idProject,
-      sourceTitle: options.sourceTitle,
-    });
+  const mode = request?.mode;
+  const layers = Array.isArray(request?.layers)
+    ? [...new Set(request.layers)]
+    : [];
+  const country = `${request?.country || ""}`.toUpperCase();
+  const language = /^[a-z]{2}$/i.test(request?.language || "")
+    ? request.language.toLowerCase()
+    : "en";
+  if (!modes.has(mode)) {
+    throw new Error("Invalid overlap mode");
   }
-}
-
-async function getOverlapArea(options) {
-  var queryCountries = {};
-  var dataCountries = [];
-  var dataCountriesWKT = null;
-  var dataLayers = [];
-  var area = 0;
-  var send = options.send;
-  var cIntersect = [];
-  var cIntersectMultiPolygon = {};
-  var countries = options.countries || [];
-  var layers = options.layers || [];
-
-  send.message = send.message || "";
-  send.area = send.area || function () {};
-
-  send.message(
-    "Start overlap with countries = " +
-      JSON.stringify(countries) +
-      " and layers = " +
-      JSON.stringify(layers)
-  );
-
-  var hasCountries = countries.length > 0;
-  var queryLayers = [];
-  var req = "";
-
-  // Test countries input
-  if (countries.length !== 1) {
-    throw Error("The number of countries is invalid!");
-  }
-
-  // Test layers input
-  if (layers.length === 0 || layers.length > 3) {
-    throw Error("The number of layers is invalid!");
-  }
-
-  // Parameterized query that returns a GeometryCollection containing the countries' geom
-  queryCountries = {
-    text: `SELECT ST_AsText(ST_Buffer(ST_Collect(geom),0)) as geom
-      FROM mx_countries 
-      WHERE CASE WHEN $1 
-      THEN 
-      iso3code = ANY($2::text[]) 
-      ELSE 
-      false 
-      END`,
-    values: [hasCountries, countries],
-    rowMode: "array",
-  };
-
-  // Parameterized query that returns a GeometryCollection containing the layer's geom
-  for (var i = 0, iL = layers.length; i < iL; i++) {
-    if (hasCountries) {
-      req = {
-        text: `WITH countries AS(
-            SELECT geom as geom
-            FROM mx_countries
-            WHERE iso3code = ANY($1::text[]))
-          SELECT ST_AsText(ST_Buffer(ST_Collect(l.geom),0)) 
-          FROM ${layers[i]} l, countries c
-          WHERE l.geom && c.geom AND ST_Intersects(l.geom,c.geom)`,
-        values: [countries],
-        rowMode: "array",
-      };
-    } else if (!hasCountries) {
-      req = {
-        text: `SELECT ST_AsText(ST_Buffer(ST_Collect(l.geom),0))
-          FROM ' + layers[i] + ' l`,
-        rowMode: "array",
-      };
-    }
-    queryLayers.push(req);
-  }
-
-  // Query to fetch the countries & layers geometries + conversion to GeoJSON
-  var promLayers = queryLayers.map((l, i) => {
-    var data = [];
-    var out = {};
-
-    return pgWrite.query(l).then((res) => {
-      send.message("Extract data of layer " + i);
-      [data] = res.rows;
-      out = wktArrayToJson(data);
-      return out;
-    });
-  });
-
-  const dataLayersJSON = await Promise.all(promLayers);
-
-  send.message("Data extracted : " + dataLayersJSON.length + " layers");
-
-  var dataLayersJSONFiltered = dataLayersJSON.filter(function (el) {
-    return el !== null;
-  });
-
   if (
-    dataLayersJSON.length >= 2 &&
-    dataLayersJSON.length === dataLayersJSONFiltered.length
+    layers.length < 1 ||
+    layers.length > maxLayers ||
+    !layers.every(isSourceId)
   ) {
-    dataLayers = dataLayersJSONFiltered.reduce((intersection, layer, index) => {
-      var lc = layer.coordinates;
-      if (!isArray(intersection)) intersection = intersection.coordinates;
-      send.message("Intersect between layer " + index + " and previous");
-      if (areCoordsValid(lc, intersection)) {
-        return martinez.intersection(lc, intersection);
-      } else {
-        return [];
+    throw new Error("Select between one and three vector sources");
+  }
+  if (!/^[A-Z]{3}$/.test(country)) {
+    throw new Error("Select one country");
+  }
+  const title = `${request?.title || ""}`.trim();
+  if (mode === "create_source" && (title.length < 5 || title.length > 200)) {
+    throw new Error("Source title must contain between 5 and 200 characters");
+  }
+
+  const available = await getSourcesList({
+    idProject: session.project_id,
+    idUser: session.user_id,
+    groups: session.user_roles.group || [],
+    types: ["vector"],
+    language,
+    readable: true,
+    editable: false,
+    add_global: true,
+    add_views: true,
+    include_dimensions: false,
+  });
+  const readable = new Set(available.map((source) => source.id));
+  if (!layers.every((id) => readable.has(id))) {
+    throw new Error("One or more overlap sources are not readable");
+  }
+
+  const mainIdentity = await getSourceIdentityStatus(layers[0]);
+  if (!mainIdentity.valid) {
+    throw new Error(
+      `Base source gid identity is invalid: ${mainIdentity.issues.join(", ")}`,
+    );
+  }
+
+  return {
+    id_request: request.id_request,
+    mode,
+    layers,
+    country,
+    title,
+    language,
+    idUser: Number(session.user_id),
+    idProject: session.project_id,
+    email: session.user_email,
+  };
+}
+
+async function runOverlap(socket, options) {
+  const start = Date.now();
+  try {
+    await notify(socket, options, "Validating source geometries");
+    const validation = await areLayersValid(options.layers, true, false);
+    const invalid = validation.find((item) => !item.valid);
+    if (invalid) {
+      throw new Error(
+        `Source ${invalid.title} (${invalid.id}) contains invalid geometries`,
+      );
+    }
+
+    const result =
+      options.mode === "area"
+        ? await calculateOverlapArea(socket, options)
+        : await createOverlapSource(options);
+    result.id_request = options.id_request;
+    result.mode = options.mode;
+    result.success = true;
+    result.duration_ms = Date.now() - start;
+    await emitResult(socket, result);
+
+    if (result.source) {
+      try {
+        await socket.mx_emit_ws_response?.("/server/source/added", {
+          idSource: result.source.id,
+        });
+      } catch (error) {
+        console.warn("Unable to notify source creation", error);
       }
+      await sendCompletionEmail(options, result.source).catch((error) => {
+        console.warn("Unable to send overlap completion email", error);
+      });
+    }
+  } catch (error) {
+    const result = {
+      id_request: options.id_request,
+      mode: options.mode,
+      success: false,
+      duration_ms: Date.now() - start,
+      error: error?.message || error,
+    };
+    await socket.notifyInfoError?.({
+      idGroup: options.id_request,
+      message: result.error,
     });
-  } else if (
-    dataLayersJSON.length === 1 &&
-    dataLayersJSONFiltered.length === 1
-  ) {
-    dataLayers = dataLayersJSONFiltered[0].coordinates;
-  } else {
-    dataLayers = [];
-  }
-
-  if (isArray(dataLayers) && dataLayers.length > 0) {
-    dataCountriesWKT = await pgWrite.query(queryCountries);
-  }
-
-  if (!dataCountriesWKT) {
-    send.message("No layers intersect, skip countries");
-  } else {
-    var data = dataCountriesWKT.rows[0];
-    send.message("Extract data of countries");
-    dataCountries = wktArrayToJson(data);
-    var cCountries = dataCountries.coordinates;
-    var cLayers = dataLayers;
-
-    send.message("Intersect between the layers intersection and countries");
-    if (areCoordsValid(cCountries, cLayers)) {
-      cIntersect = martinez.intersection(cCountries, cLayers);
-    }
-
-    if (isArray(cIntersect) && cIntersect.length > 0) {
-      send.message("Build geometry");
-      cIntersectMultiPolygon = multiPolygon(cIntersect);
-      send.message("Compute area");
-      area = getArea(cIntersectMultiPolygon);
+    await emitResult(socket, result);
+    if (options.mode === "create_source") {
+      await sendFailureEmail(options, result.error).catch((emailError) => {
+        console.warn("Unable to send overlap failure email", emailError);
+      });
     }
   }
-  send.area(area);
 }
 
-/**
- * helpers
- *
- *
- *
- */
-
-/* Check if both input are valid before being processed by martinez
- *  @param {Array} a Array of coordinates
- *  @param {Array} b Array of coordinates
- *  @return {Boolean} Both are valid
- */
-function areCoordsValid(a, b) {
-  return isArray(a) && isArray(b) && a.length > 0 && b.length > 0;
+async function calculateOverlapArea(socket, options) {
+  await notify(socket, options, "Calculating overlap area");
+  const result = await pgWrite.query({
+    text: buildAreaOverlapSql(options),
+    values: [options.country],
+  });
+  return {
+    area_m2: Number(result.rows[0]?.area_m2) || 0,
+  };
 }
 
-/* Parse & stringify Well-Known Text (WKT) into GeoJSON
- *  @param {Array} res Array of WKT geometries (as string)
- *  @return {Boolean} GeoJSON geometry object or null if parse fails
- */
-function wktArrayToJson(a) {
-  var out = {};
-  a = isArray(a) ? a[0] : null;
-  out = a && wktToJson(a);
-  return out;
+async function createOverlapSource(options) {
+  const idSource = randomString("mx_vector", 4, 5).toLowerCase();
+  const client = await pgWrite.connect();
+  try {
+    const attributes = (await getColumnsNames(options.layers[0])).filter(
+      (name) => !["gid", "geom", "_mx_valid"].includes(name),
+    );
+    const geometryInfo = await getGeometryColumnInfo(options.layers[0]);
+
+    await client.query("BEGIN");
+    await client.query({
+      text: buildCreateOverlapSql({
+        idSource,
+        layers: options.layers,
+        attributes,
+      }),
+      values: [options.country],
+    });
+    const count = await client.query(
+      `SELECT count(*)::integer AS count FROM "${idSource}"`,
+    );
+    if ((Number(count.rows[0]?.count) || 0) === 0) {
+      throw new Error("No intersection found");
+    }
+    const profile = await client.query(
+      buildOverlapGeometryProfileSql({ idSource }),
+    );
+    const geometryType = deriveOverlapGeometryType(profile.rows[0]?.dimensions);
+    const finalize = buildFinalizeOverlapSql({
+      idSource,
+      geometryType,
+      srid: geometryInfo.srid,
+    });
+    for (const text of finalize) {
+      await client.query({
+        text,
+        values: text.includes("pg_get_serial_sequence")
+          ? [idSource]
+          : undefined,
+      });
+    }
+    await registerSource(
+      {
+        idSource,
+        idUser: options.idUser,
+        idProject: options.idProject,
+        title: options.title,
+        type: "vector",
+        language: options.language,
+      },
+      client,
+    );
+    await client.query(`ANALYZE "${idSource}"`);
+    await client.query("COMMIT");
+    return {
+      source: {
+        id: idSource,
+        title: options.title,
+      },
+    };
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 }
+
+async function notify(socket, options, message) {
+  await socket?.notifyInfoMessage?.({
+    idGroup: options.id_request,
+    message,
+  });
+  await socket?.mx_emit_ws?.("/server/source/overlap/progress", {
+    id_request: options.id_request,
+    message,
+  });
+}
+
+async function emitResult(socket, result) {
+  await socket?.mx_emit_ws?.("/server/source/overlap/result", result);
+}
+
+async function sendCompletionEmail(options, source) {
+  if (!options.email) {
+    return;
+  }
+  await sendMailAuto({
+    to: [options.email],
+    content: `Source '${source.title}' created (id: ${source.id}).`,
+    subject: `MapX - overlap source '${source.title}' created`,
+  });
+}
+
+async function sendFailureEmail(options, error) {
+  if (!options.email) {
+    return;
+  }
+  await sendMailAuto({
+    to: [options.email],
+    content: `Source '${options.title}' was not created. Error: ${error}`,
+    subject: `MapX - overlap source '${options.title}' failed`,
+  });
+}
+
+export const overlapInternals = {
+  calculateOverlapArea,
+  createOverlapSource,
+  validateOverlapRequest,
+};

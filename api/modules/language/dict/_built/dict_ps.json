@@ -2150,6 +2150,31 @@
     "ps": "ټاکل شوي قطارونه لرې کړئ"
   },
   {
+    "id": "edit_table_identity_repair_title",
+    "en": "Repair source row identifiers",
+    "ps": "د سرچینې قطار پیژندونکي ترمیم کړئ"
+  },
+  {
+    "id": "edit_table_identity_repair_content",
+    "en": "This source has an invalid gid identity ({{issues}}). Editing it could affect multiple rows. Repair compatible duplicate geometry parts and restore automatic row identifiers before continuing?",
+    "ps": "دا سرچینه د gid ناسمه پیژندنه لري ( {{issues}} ). د دې ترمیم کول کولی شي په څو قطارونو اغیزه وکړي. د دوام ورکولو دمخه د مطابقت وړ نقل جیومیټري برخې ترمیم کړئ او د اتوماتیک قطار پیژندونکي بیرته راګرځوئ؟"
+  },
+  {
+    "id": "edit_table_identity_repair_confirm",
+    "en": "Repair source",
+    "ps": "د ترمیم سرچینه"
+  },
+  {
+    "id": "edit_table_identity_repair_failed_title",
+    "en": "Source repair failed",
+    "ps": "د سرچینې ترمیم ناکام شو"
+  },
+  {
+    "id": "edit_table_identity_repair_failed_content",
+    "en": "The source could not be repaired automatically. No changes were saved.",
+    "ps": "سرچینه په اتوماتيک ډول ترمیم نشوه. هیڅ بدلونونه خوندي نه شول."
+  },
+  {
     "id": "gc_btn_save",
     "en": "Save results as view",
     "ps": "پایلې د لید په توګه خوندي کړئ"

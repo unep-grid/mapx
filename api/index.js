@@ -42,6 +42,7 @@ import {
   ioDownloadSource,
   ioEditSource,
   ioEditSourceStatus,
+  ioEditSourceIdentityRepair,
   ioSourceList,
   ioSourceListColumns,
   ioSourceJoin,
@@ -49,6 +50,7 @@ import {
   ioSourceMetadata,
   ioSourceAttributesAlias,
   ioSourceRevise,
+  ioSourceOverlap,
 } from "#mapx/source";
 import {
   ioProjectNameValidate,
@@ -134,12 +136,17 @@ io.use((socket, next) => {
   socket.on("/client/source/upload", use(ioUploadSource));
   socket.on("/client/source/edit/table", use(ioEditSource));
   socket.on("/client/source/edit/table/status", use(ioEditSourceStatus));
+  socket.on(
+    "/client/source/edit/table/identity/repair",
+    use(ioEditSourceIdentityRepair),
+  );
   socket.on("/client/source/get/list", use(ioSourceList));
   socket.on("/client/source/get/list/columns", use(ioSourceListColumns));
   socket.on("/client/source/get/services", use(ioSourceServices));
   socket.on("/client/source/get/metadata", use(ioSourceMetadata));
   socket.on("/client/source/revise", use(ioSourceRevise));
   socket.on("/client/source/join", use(ioSourceJoin));
+  socket.on("/client/source/overlap/run", use(ioSourceOverlap));
   socket.on("/client/view/pin", use(ioViewPin));
   socket.on("/client/view/source/get/metadata", use(ioViewSourceMetaGet));
   socket.on("/client/view/get/metadata", use(ioViewMetaGet));
@@ -197,7 +204,6 @@ app.get("/get/epsg/codes/full", mwGetEpsgCodesFull);
 app.get("/get/file/formats/list", mwGetFormatsList);
 app.get("/get/source/summary/", source.mwGetSummary);
 app.get("/get/source/table/attribute/", source.mwGetAttributeTable);
-app.get("/get/source/overlap/", source.mwGetOverlap); //countries=[]&layers=[]&='area';
 app.get("/get/source/validate/geom", source.mwGetGeomValidate);
 app.get("/get/sources/list/user", source.mwGetSourcesList);
 app.get("/get/ip", ip.mwGet);

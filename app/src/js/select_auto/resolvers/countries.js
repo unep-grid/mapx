@@ -17,8 +17,11 @@ export const config = {
   load: null,
   onInitialize: async function () {
     const tom = this;
+    const { update_on_init } = tom.settings.loader_config;
     tom._update = update.bind(tom);
-    await tom._update();
+    if (update_on_init) {
+      await tom._update();
+    }
   },
   render: {
     option: (data, escape) => {
@@ -49,6 +52,9 @@ export const config = {
         ),
       );
     },
+  },
+  loader_config: {
+    update_on_init: true,
   },
 };
 

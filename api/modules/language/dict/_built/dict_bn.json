@@ -2150,6 +2150,31 @@
     "bn": "নির্বাচিত সারিগুলি মুছে ফেলুন"
   },
   {
+    "id": "edit_table_identity_repair_title",
+    "en": "Repair source row identifiers",
+    "bn": "মেরামত উৎস সারি শনাক্তকারী"
+  },
+  {
+    "id": "edit_table_identity_repair_content",
+    "en": "This source has an invalid gid identity ({{issues}}). Editing it could affect multiple rows. Repair compatible duplicate geometry parts and restore automatic row identifiers before continuing?",
+    "bn": "এই উৎসের জিআইডি পরিচয়টি অবৈধ ( {{issues}} এটি সম্পাদনা করলে একাধিক সারি প্রভাবিত হতে পারে। চালিয়ে যাওয়ার আগে সামঞ্জস্যপূর্ণ সদৃশ জ্যামিতিক অংশগুলি মেরামত করুন এবং স্বয়ংক্রিয় সারি শনাক্তকারীগুলি পুনরুদ্ধার করুন।"
+  },
+  {
+    "id": "edit_table_identity_repair_confirm",
+    "en": "Repair source",
+    "bn": "মেরামতের উৎস"
+  },
+  {
+    "id": "edit_table_identity_repair_failed_title",
+    "en": "Source repair failed",
+    "bn": "উৎস মেরামত ব্যর্থ হয়েছে"
+  },
+  {
+    "id": "edit_table_identity_repair_failed_content",
+    "en": "The source could not be repaired automatically. No changes were saved.",
+    "bn": "উৎসটি স্বয়ংক্রিয়ভাবে মেরামত করা সম্ভব হয়নি। কোনো পরিবর্তন সংরক্ষিত হয়নি।"
+  },
+  {
     "id": "gc_btn_save",
     "en": "Save results as view",
     "bn": "ফলাফল ভিউ হিসাবে সংরক্ষণ করুন"

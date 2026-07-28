@@ -1,0 +1,139 @@
+mx-source-overlap {
+  display: block;
+  max-height: calc(100vh - 100px);
+  overflow: auto;
+}
+
+.mx-source-overlap {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+}
+
+.mx-source-overlap [hidden] {
+  display: none !important;
+}
+
+.mx-source-overlap .form-group {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.mx-source-overlap .form-group .ts-wrapper,
+.mx-source-overlap .form-group .ts-control {
+  width: 100%;
+  font-weight: normal;
+}
+
+.mx-source-overlap__mode {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+
+.mx-source-overlap__mode legend {
+  width: auto;
+  padding: 0;
+  border: 0;
+  margin: 0 0 6px;
+  color: inherit;
+  font-size: inherit;
+  font-weight: 600;
+}
+
+.mx-source-overlap__mode-options {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid var(--mx_ui_border);
+  border-radius: 4px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mx-source-overlap__mode-option {
+  display: flex;
+  min-width: 0;
+  padding: 10px 12px;
+  margin: 0;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+.mx-source-overlap__mode-option + .mx-source-overlap__mode-option {
+  border-left: 1px solid var(--mx_ui_border);
+}
+
+.mx-source-overlap__mode-option:focus-within {
+  outline: 2px solid var(--mx_ui_link);
+  outline-offset: -2px;
+}
+
+.mx-source-overlap__mode-option:has(input:checked) {
+  background: color-mix(
+    in srgb,
+    var(--mx_ui_link) 12%,
+    var(--mx_ui_background)
+  );
+}
+
+.mx-source-overlap__mode-option input {
+  margin: 0;
+}
+
+.mx-source-overlap__run {
+  min-width: 160px;
+  justify-self: end;
+}
+
+.mx-source-overlap__status {
+  padding: 10px 12px;
+  border: 1px solid var(--mx_ui_border);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--mx_ui_link) 7%, var(--mx_ui_background));
+}
+
+.mx-source-overlap__result {
+  font-weight: 600;
+}
+
+.mx-source-overlap__result--error {
+  color: #b52b27;
+}
+
+.mx-source-overlap__logs-details {
+  padding-top: 10px;
+  border-top: 1px solid var(--mx_ui_border);
+}
+
+.mx-source-overlap__logs-details summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.mx-source-overlap__logs {
+  max-height: 150px;
+  padding: 8px 8px 8px 28px;
+  margin: 8px 0 0;
+  overflow: auto;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--mx_ui_text) 4%, var(--mx_ui_background));
+}
+
+@media (max-width: 520px) {
+  .mx-source-overlap__mode-options {
+    grid-template-columns: 1fr;
+  }
+
+  .mx-source-overlap__mode-option + .mx-source-overlap__mode-option {
+    border-top: 1px solid var(--mx_ui_border);
+    border-left: 0;
+  }
+
+  .mx-source-overlap__run {
+    width: 100%;
+  }
+}
