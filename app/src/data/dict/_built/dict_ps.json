@@ -8500,6 +8500,66 @@
     "ps": "د"
   },
   {
+    "id": "project_list_search_tools",
+    "en": "Search tools",
+    "ps": "د لټون وسایل"
+  },
+  {
+    "id": "project_list_filters_active",
+    "en": "filters active",
+    "ps": "فلټرونه فعال دي"
+  },
+  {
+    "id": "project_favorite_add",
+    "en": "Add to favorites",
+    "ps": "په خوښیو کې اضافه کړئ"
+  },
+  {
+    "id": "project_favorite_remove",
+    "en": "Remove from favorites",
+    "ps": "د خوښې څخه لرې کړئ"
+  },
+  {
+    "id": "project_favorite_error",
+    "en": "Could not update this favorite. Please try again.",
+    "ps": "دا خوښه تازه نشوه. مهرباني وکړئ بیا هڅه وکړئ."
+  },
+  {
+    "id": "project_featured_by_mapx",
+    "en": "Featured by MapX",
+    "ps": "د MapX لخوا ځانګړی شوی"
+  },
+  {
+    "id": "project_featured_actions",
+    "en": "Featured project actions",
+    "ps": "د پروژې ځانګړې کړنې"
+  },
+  {
+    "id": "project_featured_add",
+    "en": "Feature project",
+    "ps": "د پروژې ځانګړتیا"
+  },
+  {
+    "id": "project_featured_remove",
+    "en": "Remove from featured",
+    "ps": "له ځانګړي شوي څخه لرې کړئ"
+  },
+  {
+    "id": "project_featured_rank",
+    "en": "Featured rank",
+    "ps": "ځانګړی درجه بندي"
+  },
+  {
+    "id": "project_featured_save_rank",
+    "en": "Save rank",
+    "ps": "درجه خوندي کړئ"
+  },
+  {
+    "id": "project_featured_error",
+    "en": "Could not update featured status. Please try again.",
+    "ps": "د مشخص حالت تازه نشو. مهرباني وکړئ بیا هڅه وکړئ."
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix",
     "ps": "د پروژې رول میټریکس"

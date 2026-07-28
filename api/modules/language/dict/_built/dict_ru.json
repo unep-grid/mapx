@@ -8500,6 +8500,66 @@
     "ru": "из"
   },
   {
+    "id": "project_list_search_tools",
+    "en": "Search tools",
+    "ru": "Инструменты поиска"
+  },
+  {
+    "id": "project_list_filters_active",
+    "en": "filters active",
+    "ru": "активные фильтры"
+  },
+  {
+    "id": "project_favorite_add",
+    "en": "Add to favorites",
+    "ru": "Добавить в избранное"
+  },
+  {
+    "id": "project_favorite_remove",
+    "en": "Remove from favorites",
+    "ru": "Удалить из избранного"
+  },
+  {
+    "id": "project_favorite_error",
+    "en": "Could not update this favorite. Please try again.",
+    "ru": "Не удалось обновить избранное. Пожалуйста, попробуйте еще раз."
+  },
+  {
+    "id": "project_featured_by_mapx",
+    "en": "Featured by MapX",
+    "ru": "Представлено компанией MapX"
+  },
+  {
+    "id": "project_featured_actions",
+    "en": "Featured project actions",
+    "ru": "Основные действия проекта"
+  },
+  {
+    "id": "project_featured_add",
+    "en": "Feature project",
+    "ru": "Проект-проект"
+  },
+  {
+    "id": "project_featured_remove",
+    "en": "Remove from featured",
+    "ru": "Удалить из списка рекомендуемых"
+  },
+  {
+    "id": "project_featured_rank",
+    "en": "Featured rank",
+    "ru": "Рейтинг \"Избранное\""
+  },
+  {
+    "id": "project_featured_save_rank",
+    "en": "Save rank",
+    "ru": "Сохранить рейтинг"
+  },
+  {
+    "id": "project_featured_error",
+    "en": "Could not update featured status. Please try again.",
+    "ru": "Не удалось обновить статус \"рекомендуемое\". Пожалуйста, попробуйте еще раз."
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix",
     "ru": "Матрица ролей проекта"

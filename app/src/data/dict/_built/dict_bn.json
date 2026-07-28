@@ -8500,6 +8500,66 @@
     "bn": "এর"
   },
   {
+    "id": "project_list_search_tools",
+    "en": "Search tools",
+    "bn": "অনুসন্ধান সরঞ্জাম"
+  },
+  {
+    "id": "project_list_filters_active",
+    "en": "filters active",
+    "bn": "সক্রিয় ফিল্টার"
+  },
+  {
+    "id": "project_favorite_add",
+    "en": "Add to favorites",
+    "bn": "পছন্দের তালিকায় যোগ করুন"
+  },
+  {
+    "id": "project_favorite_remove",
+    "en": "Remove from favorites",
+    "bn": "পছন্দের তালিকা থেকে সরান"
+  },
+  {
+    "id": "project_favorite_error",
+    "en": "Could not update this favorite. Please try again.",
+    "bn": "এই প্রিয় পোস্টটি আপডেট করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।"
+  },
+  {
+    "id": "project_featured_by_mapx",
+    "en": "Featured by MapX",
+    "bn": "MapX দ্বারা বৈশিষ্ট্যযুক্ত"
+  },
+  {
+    "id": "project_featured_actions",
+    "en": "Featured project actions",
+    "bn": "প্রকল্পের উল্লেখযোগ্য কার্যক্রম"
+  },
+  {
+    "id": "project_featured_add",
+    "en": "Feature project",
+    "bn": "ফিচার প্রজেক্ট"
+  },
+  {
+    "id": "project_featured_remove",
+    "en": "Remove from featured",
+    "bn": "বৈশিষ্ট্যযুক্ত থেকে সরান"
+  },
+  {
+    "id": "project_featured_rank",
+    "en": "Featured rank",
+    "bn": "বৈশিষ্ট্যযুক্ত র‍্যাঙ্ক"
+  },
+  {
+    "id": "project_featured_save_rank",
+    "en": "Save rank",
+    "bn": "র‍্যাঙ্ক সংরক্ষণ করুন"
+  },
+  {
+    "id": "project_featured_error",
+    "en": "Could not update featured status. Please try again.",
+    "bn": "ফিচার্ড স্ট্যাটাস আপডেট করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।"
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix",
     "bn": "প্রকল্প ভূমিকা ম্যাট্রিক্স"

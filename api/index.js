@@ -56,6 +56,8 @@ import {
   ioProjectRolesGet,
   ioProjectRolesUpdate,
   ioProjectList,
+  ioProjectFavoriteSet,
+  ioProjectFeaturedSet,
   ioProjectLogosGet,
 } from "#mapx/project";
 import { ioKeywordsSearch } from "#mapx/keywords";
@@ -149,6 +151,8 @@ io.use((socket, next) => {
   socket.on("/client/project/roles/update", use(ioProjectRolesUpdate));
   socket.on("/client/project/list", use(ioProjectList));
   socket.on("/client/project/logos/get", use(ioProjectLogosGet));
+  socket.on("/client/project/favorite/set", use(ioProjectFavoriteSet));
+  socket.on("/client/project/featured/set", use(ioProjectFeaturedSet));
   socket.on("/client/issue/report", use(ioIssueReport));
   socket.on(
     "/client/source/get/attributes/alias",

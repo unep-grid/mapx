@@ -8500,6 +8500,66 @@
     "es": "de"
   },
   {
+    "id": "project_list_search_tools",
+    "en": "Search tools",
+    "es": "Herramientas de búsqueda"
+  },
+  {
+    "id": "project_list_filters_active",
+    "en": "filters active",
+    "es": "filtros activos"
+  },
+  {
+    "id": "project_favorite_add",
+    "en": "Add to favorites",
+    "es": "Añadir a favoritos"
+  },
+  {
+    "id": "project_favorite_remove",
+    "en": "Remove from favorites",
+    "es": "Eliminar de favoritos"
+  },
+  {
+    "id": "project_favorite_error",
+    "en": "Could not update this favorite. Please try again.",
+    "es": "No se pudo actualizar este favorito. Inténtelo de nuevo."
+  },
+  {
+    "id": "project_featured_by_mapx",
+    "en": "Featured by MapX",
+    "es": "Destacado por MapX"
+  },
+  {
+    "id": "project_featured_actions",
+    "en": "Featured project actions",
+    "es": "Acciones de proyecto destacado"
+  },
+  {
+    "id": "project_featured_add",
+    "en": "Feature project",
+    "es": "Destacar proyecto"
+  },
+  {
+    "id": "project_featured_remove",
+    "en": "Remove from featured",
+    "es": "Quitar de destacados"
+  },
+  {
+    "id": "project_featured_rank",
+    "en": "Featured rank",
+    "es": "Orden destacado"
+  },
+  {
+    "id": "project_featured_save_rank",
+    "en": "Save rank",
+    "es": "Guardar orden"
+  },
+  {
+    "id": "project_featured_error",
+    "en": "Could not update featured status. Please try again.",
+    "es": "No se pudo actualizar el estado destacado. Inténtelo de nuevo."
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix",
     "es": "Matriz de roles del proyecto"

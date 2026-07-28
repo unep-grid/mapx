@@ -2,12 +2,12 @@ import { requestProjectMembership, setProject } from "../map_helpers/index.js";
 import { getDictItem } from "../language";
 import { settings } from "../settings";
 import { ws } from "../mx.js";
+import { el } from "../el/src/index.js";
 import {
   PROJECT_LIST_CHUNK_SIZE,
   PROJECT_LIST_INITIAL_SIZE,
   PROJECT_THEMES,
   nextProjectRenderLimit,
-  nextProjectSort,
   normalizeProject,
   selectProjects,
 } from "./list_helpers.js";
@@ -20,6 +20,8 @@ export {
 
 const UI_KEYS = [
   "project_search_values",
+  "project_list_search_tools",
+  "project_list_filters_active",
   "project_list_all_accessible",
   "project_list_my_projects",
   "project_list_all_roles",
@@ -34,17 +36,25 @@ const UI_KEYS = [
   "project_list_sort_collaborators_desc",
   "project_list_sort_collaborators_asc",
   "project_list_clear",
-  "project_list_project",
   "project_list_role",
   "project_list_views",
   "project_list_collaborators",
-  "project_list_updated",
   "project_list_results",
   "project_list_showing",
   "project_list_of",
   "project_list_loading",
   "project_list_error",
   "project_list_empty",
+  "project_favorite_add",
+  "project_favorite_remove",
+  "project_favorite_error",
+  "project_featured_by_mapx",
+  "project_featured_actions",
+  "project_featured_add",
+  "project_featured_remove",
+  "project_featured_rank",
+  "project_featured_save_rank",
+  "project_featured_error",
   "btn_join_project",
   "admin",
   "publisher",
@@ -61,21 +71,30 @@ const DEFAULT_STATE = {
   search: "",
 };
 
-function makeElement(tag, className, text) {
-  const element = document.createElement(tag);
-  if (className) {
-    element.className = className;
-  }
-  if (text !== undefined && text !== null) {
-    element.textContent = text;
-  }
-  return element;
-}
+const SORT_OPTIONS = [
+  ["updated_desc", "project_list_sort_updated_desc"],
+  ["updated_asc", "project_list_sort_updated_asc"],
+  ["name_asc", "project_list_sort_name_asc"],
+  ["name_desc", "project_list_sort_name_desc"],
+  ["theme_asc", "project_list_sort_theme"],
+  ["views_desc", "project_list_sort_views_desc"],
+  ["views_asc", "project_list_sort_views_asc"],
+  ["collaborators_desc", "project_list_sort_collaborators_desc"],
+  ["collaborators_asc", "project_list_sort_collaborators_asc"],
+];
 
-function makeOption(value, text) {
-  const option = makeElement("option", null, text);
-  option.value = value;
-  return option;
+function iconButton(className, iconClass, label, action) {
+  return el(
+    "button",
+    {
+      class: className,
+      type: "button",
+      dataset: { action },
+      "aria-label": label,
+      title: label,
+    },
+    el("i", { class: iconClass, "aria-hidden": "true" }),
+  );
 }
 
 export class ProjectListElement extends HTMLElement {
@@ -85,29 +104,37 @@ export class ProjectListElement extends HTMLElement {
     this.logos = new Map();
     this.pendingLogos = new Set();
     this.avatarElements = new Map();
-    this.scopeButtons = [];
-    this.sortButtons = new Map();
     this.state = { ...DEFAULT_STATE, themes: [] };
     this.renderLimit = PROJECT_LIST_INITIAL_SIZE;
     this.labels = {};
     this.themeLabels = {};
+    this.canCurateFeatured = false;
+    this.pendingProjects = new Set();
+    this.curatorTriggers = new Map();
+    this.curatorControls = [];
     this._onClick = this.onClick.bind(this);
     this._onChange = this.onChange.bind(this);
     this._onInput = this.onInput.bind(this);
     this._onKeydown = this.onKeydown.bind(this);
     this._onScroll = this.onScroll.bind(this);
+    this._onContextMenu = this.onContextMenu.bind(this);
+    this._onOutsidePointerDown = this.onOutsidePointerDown.bind(this);
   }
 
   connectedCallback() {
-    if (this._connected) {
-      return;
-    }
+    if (this._connected) return;
     this._connected = true;
     this.classList.add("mx-project-browser");
     this.addEventListener("click", this._onClick);
     this.addEventListener("change", this._onChange);
     this.addEventListener("input", this._onInput);
     this.addEventListener("keydown", this._onKeydown);
+    this.addEventListener("contextmenu", this._onContextMenu);
+    this.ownerDocument.addEventListener(
+      "pointerdown",
+      this._onOutsidePointerDown,
+      true,
+    );
     this.init();
   }
 
@@ -116,6 +143,12 @@ export class ProjectListElement extends HTMLElement {
     this.removeEventListener("change", this._onChange);
     this.removeEventListener("input", this._onInput);
     this.removeEventListener("keydown", this._onKeydown);
+    this.removeEventListener("contextmenu", this._onContextMenu);
+    this.ownerDocument.removeEventListener(
+      "pointerdown",
+      this._onOutsidePointerDown,
+      true,
+    );
     this.results?.removeEventListener("scroll", this._onScroll);
     this._intersectionObserver?.disconnect();
     clearTimeout(this._searchTimer);
@@ -140,9 +173,7 @@ export class ProjectListElement extends HTMLElement {
 
   async init() {
     await this.loadLabels();
-    if (!this._connected) {
-      return;
-    }
+    if (!this._connected) return;
     this.buildShell();
     await this.loadProjects();
   }
@@ -166,15 +197,17 @@ export class ProjectListElement extends HTMLElement {
 
   buildShell() {
     this.replaceChildren();
-    const controls = makeElement("div", "mx-project-browser-controls");
-
-    const searchWrap = makeElement("label", "mx-project-browser-search-wrap");
-    const searchIcon = makeElement("i", "fa fa-search");
-    searchIcon.setAttribute("aria-hidden", "true");
-    this.searchInput = makeElement(
-      "input",
-      "form-control mx-project-browser-search",
-    );
+    const controls = el("div", { class: "mx-project-browser-controls" });
+    const searchWrap = el("label", {
+      class: "mx-project-browser-search-wrap",
+    });
+    const searchIcon = el("i", {
+      class: "fa fa-search",
+      "aria-hidden": "true",
+    });
+    this.searchInput = el("input", {
+      class: "form-control mx-project-browser-search",
+    });
     this.searchInput.type = "search";
     this.searchInput.value = this.state.search;
     this.searchInput.placeholder = this.label("project_search_values");
@@ -184,120 +217,185 @@ export class ProjectListElement extends HTMLElement {
     );
     searchWrap.append(searchIcon, this.searchInput);
 
-    const scopes = makeElement("div", "btn-group mx-project-browser-scopes");
+    this.toolsButton = iconButton(
+      "btn btn-circle btn-circle-medium mx-project-browser-tools-button",
+      "fa fa-sliders",
+      this.label("project_list_search_tools"),
+      "toggle-tools",
+    );
+    this.toolsButton.setAttribute("aria-expanded", "false");
+    this.toolsButton.setAttribute("aria-haspopup", "dialog");
+    this.toolsButton.setAttribute("aria-controls", "mx-project-browser-tools");
+
+    this.toolsPopover = el("div", {
+      class: "mx-project-browser-tools-popover",
+    });
+    this.toolsPopover.id = "mx-project-browser-tools";
+    this.toolsPopover.hidden = true;
+    this.toolsPopover.setAttribute("role", "dialog");
+    this.toolsPopover.setAttribute(
+      "aria-label",
+      this.label("project_list_search_tools"),
+    );
+    controls.append(searchWrap, this.toolsButton, this.toolsPopover);
+
+    this.results = el("div", { class: "mx-project-browser-results" });
+    this.results.setAttribute("role", "list");
+    this.results.setAttribute("aria-busy", "true");
+    this.rows = el("div", { class: "mx-project-browser-rows" });
+    this.message = el(
+      "div",
+      { class: "mx-project-browser-message" },
+      this.label("project_list_loading"),
+    );
+    this.message.setAttribute("aria-live", "polite");
+    this.sentinel = el("div", { class: "mx-project-browser-sentinel" });
+    this.sentinel.setAttribute("aria-hidden", "true");
+    this.results.append(this.rows, this.message, this.sentinel);
+
+    this.curatorPopover = el("div", {
+      class: "mx-project-browser-curator-popover",
+    });
+    this.curatorPopover.hidden = true;
+    this.curatorPopover.setAttribute("role", "menu");
+    this.curatorPopover.setAttribute(
+      "aria-label",
+      this.label("project_featured_actions"),
+    );
+
+    const footer = el("div", { class: "mx-project-browser-footer" });
+    this.counter = el("span", { class: "mx-project-browser-counter" });
+    this.counter.setAttribute("aria-live", "polite");
+    footer.appendChild(this.counter);
+    this.append(controls, this.results, this.curatorPopover, footer);
+    this.results.addEventListener("scroll", this._onScroll, { passive: true });
+    this.setupIntersectionObserver();
+    this.buildTools();
+  }
+
+  buildSelect(filter, labelKey, options, value) {
+    const select = el("select", {
+      class: "form-control",
+      dataset: { filter },
+      "aria-label": this.label(labelKey),
+    });
+    for (const [optionValue, optionLabel] of options) {
+      const option = el("option", this.label(optionLabel));
+      option.value = optionValue;
+      select.appendChild(option);
+    }
+    select.value = value;
+    return select;
+  }
+
+  buildTools() {
+    this.toolsPopover.replaceChildren();
+    const scopes = el("div", {
+      class: "btn-group mx-project-browser-scopes",
+    });
     scopes.setAttribute("role", "group");
+    scopes.setAttribute(
+      "aria-label",
+      this.label("project_list_all_accessible"),
+    );
+    this.scopeButtons = [];
     for (const [scope, key] of [
       ["accessible", "project_list_all_accessible"],
       ["mine", "project_list_my_projects"],
     ]) {
-      const button = makeElement("button", "btn btn-default", this.label(key));
-      button.type = "button";
-      button.dataset.scope = scope;
+      const button = el(
+        "button",
+        {
+          class: "btn btn-default",
+          type: "button",
+          dataset: { scope },
+        },
+        this.label(key),
+      );
       this.scopeButtons.push(button);
       scopes.appendChild(button);
     }
 
+    const availableRoles = [...new Set(this.projects.map((p) => p.role))];
+    if (
+      ["admin", "publisher", "member", "public"].includes(this.state.role) &&
+      !availableRoles.includes(this.state.role)
+    ) {
+      availableRoles.push(this.state.role);
+    }
     this.roleSelect = this.buildSelect(
       "role",
       "project_list_role",
       [
         ["any", "project_list_all_roles"],
-        ["admin", "admin"],
-        ["publisher", "publisher"],
-        ["member", "member"],
-        ["public", "public"],
+        ...["admin", "publisher", "member", "public"]
+          .filter((role) => availableRoles.includes(role))
+          .map((role) => [role, role]),
       ],
       this.state.role,
+    );
+    const roleWrap = this.wrapTool(this.roleSelect);
+    roleWrap.hidden = availableRoles.length <= 1;
+
+    const availableThemes = [
+      ...new Set(this.projects.flatMap((project) => project.themes)),
+    ];
+    for (const theme of this.state.themes) {
+      if (PROJECT_THEMES.includes(theme) && !availableThemes.includes(theme)) {
+        availableThemes.push(theme);
+      }
+    }
+    availableThemes.sort((a, b) =>
+      (this.themeLabels[a] || a).localeCompare(this.themeLabels[b] || b),
     );
     this.themeSelect = this.buildSelect(
       "theme",
       "project_list_all_themes",
       [
         ["", "project_list_all_themes"],
-        ...PROJECT_THEMES.map((theme) => [theme, `project_theme_${theme}`]),
+        ...availableThemes.map((theme) => [theme, `project_theme_${theme}`]),
       ],
       this.state.themes[0] || "",
     );
+    const themeWrap = this.wrapTool(this.themeSelect);
+    themeWrap.hidden = availableThemes.length <= 1;
+
     this.sortSelect = this.buildSelect(
       "sort",
       "project_list_sort_updated_desc",
-      [
-        ["updated_desc", "project_list_sort_updated_desc"],
-        ["updated_asc", "project_list_sort_updated_asc"],
-        ["name_asc", "project_list_sort_name_asc"],
-        ["name_desc", "project_list_sort_name_desc"],
-        ["theme_asc", "project_list_sort_theme"],
-        ["views_desc", "project_list_sort_views_desc"],
-        ["views_asc", "project_list_sort_views_asc"],
-        ["collaborators_desc", "project_list_sort_collaborators_desc"],
-        ["collaborators_asc", "project_list_sort_collaborators_asc"],
-      ],
+      SORT_OPTIONS,
       this.state.sort,
     );
-    this.sortSelect.classList.add("mx-project-browser-compact-sort");
-
-    this.clearButton = makeElement(
+    this.clearButton = el(
       "button",
-      "btn btn-link mx-project-browser-clear",
+      {
+        class: "btn btn-link mx-project-browser-clear",
+        type: "button",
+        dataset: { action: "clear" },
+      },
       this.label("project_list_clear"),
     );
-    this.clearButton.type = "button";
-    this.clearButton.dataset.action = "clear";
-
-    controls.append(
-      searchWrap,
+    this.toolsPopover.append(
       scopes,
-      this.roleSelect,
-      this.themeSelect,
-      this.sortSelect,
+      roleWrap,
+      themeWrap,
+      this.wrapTool(this.sortSelect),
       this.clearButton,
     );
-
-    this.results = makeElement("div", "mx-project-browser-results");
-    this.results.setAttribute("role", "table");
-    this.results.setAttribute("aria-busy", "true");
-    this.header = this.buildHeader();
-    this.rows = makeElement("div", "mx-project-browser-rows");
-    this.message = makeElement(
-      "div",
-      "mx-project-browser-message",
-      this.label("project_list_loading"),
-    );
-    this.sentinel = makeElement("div", "mx-project-browser-sentinel");
-    this.sentinel.setAttribute("aria-hidden", "true");
-    this.results.append(this.header, this.rows, this.message, this.sentinel);
-
-    const footer = makeElement("div", "mx-project-browser-footer");
-    this.counter = makeElement("span", "mx-project-browser-counter");
-    this.counter.setAttribute("aria-live", "polite");
-    footer.appendChild(this.counter);
-    this.append(controls, this.results, footer);
-
-    this.results.addEventListener("scroll", this._onScroll, { passive: true });
-    this.setupIntersectionObserver();
     this.updateControls();
   }
 
-  buildSelect(filter, labelKey, options, value) {
-    const select = makeElement("select", "form-control");
-    select.dataset.filter = filter;
-    select.setAttribute("aria-label", this.label(labelKey));
-    for (const [optionValue, optionLabel] of options) {
-      select.appendChild(makeOption(optionValue, this.label(optionLabel)));
-    }
-    select.value = value;
-    return select;
+  wrapTool(control) {
+    const wrapper = el("div", { class: "mx-project-browser-tool" });
+    wrapper.appendChild(control);
+    return wrapper;
   }
 
   setupIntersectionObserver() {
-    if (typeof IntersectionObserver !== "function") {
-      return;
-    }
+    if (typeof IntersectionObserver !== "function") return;
     this._intersectionObserver = new IntersectionObserver(
       (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          this.loadMore();
-        }
+        if (entries.some((entry) => entry.isIntersecting)) this.loadMore();
       },
       { root: this.results, rootMargin: "160px 0px" },
     );
@@ -311,19 +409,18 @@ export class ProjectListElement extends HTMLElement {
         { language: this.options?.language || settings.language },
         30 * 1000,
       );
-      if (response?.error) {
-        throw new Error(response.error);
-      }
+      if (response?.error) throw new Error(response.error);
       this.projects = (response?.projects || [])
         .map((project) => normalizeProject(project, this.themeLabels))
         .filter((project) => project.id !== settings.project.id);
+      this.canCurateFeatured = response?.can_curate_featured === true;
+      this.buildTools();
       this.results.setAttribute("aria-busy", "false");
       this.renderResults();
     } catch (error) {
       console.error("Project list error", error);
       this.results?.setAttribute("aria-busy", "false");
-      this.message.textContent = this.label("project_list_error");
-      this.message.classList.add("text-danger");
+      this.showError("project_list_error");
     }
   }
 
@@ -334,11 +431,12 @@ export class ProjectListElement extends HTMLElement {
   renderResults({ resetScroll = false } = {}) {
     const projects = this.selectedProjects;
     const visibleProjects = projects.slice(0, this.renderLimit);
+    this.closeCuratorMenu();
     this.avatarElements.clear();
+    this.curatorTriggers.clear();
     this.rows.replaceChildren(
       ...visibleProjects.map((project) => this.buildRow(project)),
     );
-
     const isEmpty = projects.length === 0;
     this.message.hidden = !isEmpty;
     this.message.classList.remove("text-danger");
@@ -350,202 +448,446 @@ export class ProjectListElement extends HTMLElement {
       "project_list_results",
     )}`;
     this.updateControls();
-    if (resetScroll) {
-      this.results.scrollTop = 0;
-    }
+    if (resetScroll) this.results.scrollTop = 0;
     this.loadLogos(visibleProjects);
   }
 
-  buildHeader() {
-    const header = makeElement("div", "mx-project-browser-header");
-    header.setAttribute("role", "row");
-    this.sortButtons.clear();
-    for (const [key, column] of [
-      ["project_list_project", "name"],
-      ["project_list_role", null],
-      ["project_list_views", "views"],
-      ["project_list_collaborators", "collaborators"],
-      ["project_list_updated", "updated"],
-    ]) {
-      const cell = makeElement("div");
-      cell.setAttribute("role", "columnheader");
-      if (column) {
-        const button = makeElement("button", "mx-project-browser-sort-button");
-        button.type = "button";
-        button.dataset.sortColumn = column;
-        const sortIcon = makeElement("i", "mx-project-browser-sort-icon");
-        sortIcon.hidden = true;
-        sortIcon.setAttribute("aria-hidden", "true");
-        button.append(makeElement("span", null, this.label(key)), sortIcon);
-        cell.appendChild(button);
-        this.sortButtons.set(column, button);
-      } else {
-        cell.textContent = this.label(key);
-      }
-      header.appendChild(cell);
-    }
-    header.appendChild(makeElement("span"));
-    return header;
-  }
-
   buildRow(project) {
-    const row = makeElement("div", "mx-project-browser-row");
-    row.dataset.projectId = project.id;
-    row.dataset.action = "open";
-    row.tabIndex = 0;
-    row.setAttribute("role", "row");
+    const row = el("div", {
+      class: "mx-project-browser-row",
+      dataset: { projectId: project.id, action: "open" },
+      tabindex: "0",
+      role: "listitem",
+    });
 
-    const main = makeElement("div", "mx-project-browser-main");
-    main.setAttribute("role", "cell");
-    const avatar = makeElement(
+    const avatar = el(
       "span",
-      "mx-project-browser-avatar",
+      {
+        class: "mx-project-browser-avatar",
+        dataset: { logoFor: project.id },
+      },
       project.title.slice(0, 1).toUpperCase(),
     );
-    avatar.dataset.logoFor = project.id;
+    avatar.dataset.tone = String(
+      [...project.id].reduce((sum, character) => {
+        return sum + character.charCodeAt(0);
+      }, 0) % 4,
+    );
     this.avatarElements.set(project.id, avatar);
     if (this.logos.has(project.id)) {
       this.setLogo(avatar, this.logos.get(project.id), project.title);
     }
-    const text = makeElement("div", "mx-project-browser-text");
-    text.appendChild(
-      makeElement("strong", "mx-project-browser-title", project.title),
+
+    const text = el("div", { class: "mx-project-browser-text" });
+    const heading = el("div", { class: "mx-project-browser-heading" });
+    heading.append(
+      el("strong", { class: "mx-project-browser-title" }, project.title),
     );
+    if (this.canCurateFeatured) {
+      const featuredLabel = this.label("project_featured_actions");
+      const featured = iconButton(
+        "mx-project-browser-heading-action mx-project-browser-featured",
+        project.featured_rank === null
+          ? "fa fa-bookmark-o"
+          : "fa fa-bookmark",
+        featuredLabel,
+        "curator-menu",
+      );
+      featured.dataset.projectId = project.id;
+      featured.setAttribute("aria-haspopup", "menu");
+      featured.setAttribute("aria-expanded", "false");
+      featured.disabled = this.pendingProjects.has(project.id);
+      this.curatorTriggers.set(project.id, featured);
+      heading.appendChild(featured);
+    } else if (project.featured_rank !== null) {
+      heading.appendChild(
+        el(
+          "span",
+          {
+            class: "mx-project-browser-featured",
+            title: this.label("project_featured_by_mapx"),
+            "aria-label": this.label("project_featured_by_mapx"),
+          },
+          el("i", {
+            class: "fa fa-bookmark",
+            "aria-hidden": "true",
+          }),
+        ),
+      );
+    }
+    if (settings.user.guest !== true) {
+      const favoriteLabel = this.label(
+        project.is_favorite
+          ? "project_favorite_remove"
+          : "project_favorite_add",
+      );
+      const favorite = iconButton(
+        "mx-project-browser-heading-action mx-project-browser-favorite",
+        project.is_favorite ? "fa fa-star" : "fa fa-star-o",
+        favoriteLabel,
+        "favorite",
+      );
+      favorite.dataset.projectId = project.id;
+      favorite.setAttribute("aria-pressed", String(project.is_favorite));
+      favorite.disabled = this.pendingProjects.has(project.id);
+      heading.appendChild(favorite);
+    }
+    text.appendChild(heading);
     if (project.description) {
       text.appendChild(
-        makeElement(
+        el(
           "span",
-          "mx-project-browser-description",
+          { class: "mx-project-browser-description" },
           project.description,
         ),
       );
     }
-    const meta = makeElement("span", "mx-project-browser-meta");
+    const meta = el("span", { class: "mx-project-browser-meta" });
+    const stats = el("span", { class: "mx-project-browser-stats" });
+    stats.append(
+      this.buildStat(
+        "mx-icon mx-view",
+        project.view_count,
+        "project_list_views",
+      ),
+      this.buildStat(
+        "fa fa-users",
+        project.collaborator_count,
+        "project_list_collaborators",
+      ),
+    );
+    if (project.role === "public" && settings.user.guest !== true) {
+      const join = el(
+        "button",
+        {
+          class: "btn btn-link btn-xs mx-project-browser-join",
+          type: "button",
+          dataset: { action: "join", projectId: project.id },
+          disabled: !project.allow_join,
+        },
+        this.label("btn_join_project"),
+      );
+      stats.appendChild(join);
+    }
+    meta.appendChild(stats);
     if (project.org_name) {
       meta.appendChild(
-        makeElement(
+        el(
           "span",
-          "mx-project-browser-organisation",
+          { class: "mx-project-browser-organisation" },
           project.org_name,
         ),
       );
     }
     for (const theme of project.themes.slice(0, 2)) {
       meta.appendChild(
-        makeElement(
+        el(
           "span",
-          "mx-project-browser-theme",
+          { class: "mx-project-browser-theme" },
           this.themeLabels[theme] || theme,
         ),
       );
     }
-    if (project.themes.length > 2) {
-      meta.appendChild(
-        makeElement(
-          "span",
-          "mx-project-browser-theme mx-project-browser-theme-more",
-          `+${project.themes.length - 2}`,
-        ),
-      );
-    }
-    if (meta.childElementCount > 0) {
-      text.appendChild(meta);
-    }
-    main.append(avatar, text);
+    text.appendChild(meta);
 
-    const role = makeElement("div", "mx-project-browser-role");
-    role.setAttribute("role", "cell");
-    role.appendChild(
-      makeElement(
-        "span",
-        `mx-project-role mx-project-role-${project.role}`,
-        this.label(project.role),
-      ),
+    const role = el(
+      "span",
+      {
+        class: `mx-project-role mx-project-role-${project.role}`,
+        title: this.label(project.role),
+        "aria-label": `${this.label("project_list_role")}: ${this.label(
+          project.role,
+        )}`,
+      },
+      this.label(project.role),
     );
-    if (project.role === "public" && settings.user.guest !== true) {
-      const join = makeElement(
-        "button",
-        "btn btn-link btn-xs",
-        this.label("btn_join_project"),
-      );
-      join.type = "button";
-      join.dataset.action = "join";
-      join.dataset.projectId = project.id;
-      join.disabled = !project.allow_join;
-      role.appendChild(join);
-    }
+    role.dataset.roleInitial = this.label(project.role)
+      .slice(0, 1)
+      .toUpperCase();
 
-    const views = this.buildStat(
-      "mx-icon mx-view",
-      project.view_count,
-      "project_list_views",
-    );
-    const collaborators = this.buildStat(
-      "fa fa-users",
-      project.collaborator_count,
-      "project_list_collaborators",
-    );
-    const date = makeElement("div", "mx-project-browser-date");
-    date.setAttribute("role", "cell");
-    const dateIcon = makeElement("i", "fa fa-calendar");
-    dateIcon.setAttribute("aria-hidden", "true");
-    const dateText = project.modified_time
-      ? new Intl.DateTimeFormat(this.options?.language || settings.language, {
-          dateStyle: "medium",
-        }).format(project.modified_time)
-      : "\u2014";
-    date.append(dateIcon, this.ownerDocument.createTextNode(` ${dateText}`));
-    const chevron = makeElement(
-      "i",
-      "fa fa-chevron-right mx-project-browser-open",
-    );
-    chevron.setAttribute("aria-hidden", "true");
-    row.append(main, role, views, collaborators, date, chevron);
+    const actions = el("span", { class: "mx-project-browser-actions" });
+    const chevron = el("i", {
+      class: "fa fa-chevron-right mx-project-browser-open",
+      "aria-hidden": "true",
+    });
+    actions.appendChild(chevron);
+    row.append(avatar, text, role, actions);
     return row;
   }
 
   buildStat(iconClasses, value, labelKey) {
-    const stat = makeElement("div", "mx-project-browser-stat");
-    stat.setAttribute("role", "cell");
-    stat.setAttribute("aria-label", `${this.label(labelKey)}: ${value}`);
-    const iconElement = makeElement("i", iconClasses);
-    iconElement.setAttribute("aria-hidden", "true");
-    stat.append(iconElement, this.ownerDocument.createTextNode(` ${value}`));
-    return stat;
+    const label = `${this.label(labelKey)}: ${value}`;
+    return el(
+      "span",
+      {
+        class: "mx-project-browser-stat",
+        "aria-label": label,
+        title: label,
+      },
+      el("i", { class: iconClasses, "aria-hidden": "true" }),
+      el("span", { class: "mx-project-browser-stat-value" }, String(value)),
+    );
   }
 
   updateControls() {
-    for (const button of this.scopeButtons) {
+    for (const button of this.scopeButtons || []) {
       const active = button.dataset.scope === this.state.scope;
       button.classList.toggle("btn-primary", active);
       button.classList.toggle("btn-default", !active);
       button.setAttribute("aria-pressed", String(active));
     }
-    for (const [column, button] of this.sortButtons) {
-      const active = this.state.sort.startsWith(`${column}_`);
-      const direction = this.state.sort.endsWith("_asc")
-        ? "ascending"
-        : "descending";
-      button.parentElement.setAttribute(
-        "aria-sort",
-        active ? direction : "none",
-      );
-      button.dataset.sortActive = String(active);
-      const icon = button.lastElementChild;
-      icon.hidden = !active;
-      icon.className = `fa ${
-        this.state.sort.endsWith("_asc") ? "fa-caret-up" : "fa-caret-down"
-      } mx-project-browser-sort-icon`;
-    }
     if (this.clearButton) {
-      const isDefault =
-        this.state.scope === DEFAULT_STATE.scope &&
-        this.state.role === DEFAULT_STATE.role &&
-        this.state.sort === DEFAULT_STATE.sort &&
-        this.state.search === DEFAULT_STATE.search &&
-        this.state.themes.length === 0;
-      this.clearButton.hidden = isDefault;
+      const isDefault = this.filtersAreDefault();
+      this.clearButton.hidden = isDefault && !this.state.search;
+      this.toolsButton.classList.toggle(
+        "mx-project-browser-tools-active",
+        !isDefault,
+      );
+      const label = !isDefault
+        ? `${this.label("project_list_search_tools")}: ${this.label(
+            "project_list_filters_active",
+          )}`
+        : this.label("project_list_search_tools");
+      this.toolsButton.setAttribute("aria-label", label);
+      this.toolsButton.title = label;
     }
+  }
+
+  filtersAreDefault() {
+    return (
+      this.state.scope === DEFAULT_STATE.scope &&
+      this.state.role === DEFAULT_STATE.role &&
+      this.state.sort === DEFAULT_STATE.sort &&
+      this.state.themes.length === 0
+    );
+  }
+
+  toggleTools(force) {
+    const open =
+      typeof force === "boolean" ? force : this.toolsPopover.hidden === true;
+    this.toolsPopover.hidden = !open;
+    this.toolsButton.setAttribute("aria-expanded", String(open));
+    if (open) {
+      this.closeCuratorMenu();
+      this.scopeButtons[0]?.focus();
+    } else if (force === false) {
+      this.toolsButton.focus();
+    }
+  }
+
+  openCuratorMenu(projectId, trigger) {
+    const project = this.projects.find((item) => item.id === projectId);
+    if (!project || !this.canCurateFeatured) return;
+    this.toggleTools(false);
+    this._curatorTrigger = trigger;
+    this._curatorProjectId = projectId;
+    this.curatorControls = [];
+    this.curatorRankInput = null;
+    this.curatorPopover.replaceChildren();
+    const header = el(
+      "div",
+      { class: "mx-project-browser-curator-header" },
+      el(
+        "span",
+        { class: "mx-project-browser-curator-header-icon" },
+        el("i", { class: "fa fa-bookmark", "aria-hidden": "true" }),
+      ),
+      el(
+        "strong",
+        { class: "mx-project-browser-curator-title" },
+        this.label("project_featured_by_mapx"),
+      ),
+    );
+    const toggle = el(
+      "button",
+      {
+        class: "btn mx-project-browser-curator-action",
+        type: "button",
+        dataset: { action: "featured-toggle", projectId },
+        role: "menuitem",
+      },
+      this.label(
+        project.featured_rank === null
+          ? "project_featured_add"
+          : "project_featured_remove",
+      ),
+    );
+    toggle.prepend(
+      el("i", {
+        class:
+          project.featured_rank === null
+            ? "fa fa-bookmark"
+            : "fa fa-bookmark-o",
+        "aria-hidden": "true",
+      }),
+    );
+    this.curatorControls.push(toggle);
+    this.curatorPopover.append(header, toggle);
+    const rankLabel = el(
+      "label",
+      { class: "mx-project-browser-rank-label" },
+      this.label("project_featured_rank"),
+    );
+    const rank = el("input", {
+      class: "form-control mx-project-browser-rank-input",
+      type: "number",
+      min: "1",
+      step: "1",
+      dataset: { featuredRank: projectId },
+    });
+    rank.value =
+      project.featured_rank === null ? "" : String(project.featured_rank);
+    this.curatorRankInput = rank;
+    this.curatorControls.push(rank);
+    rankLabel.appendChild(rank);
+    const save = el(
+      "button",
+      {
+        class: "btn btn-primary mx-project-browser-rank-save",
+        type: "button",
+        dataset: { action: "featured-rank", projectId },
+      },
+      this.label("project_featured_save_rank"),
+    );
+    save.prepend(
+      el("i", {
+        class: "fa fa-check",
+        "aria-hidden": "true",
+      }),
+    );
+    this.curatorControls.push(save);
+    this.curatorPopover.append(rankLabel, save);
+    this.curatorPopover.hidden = false;
+    if (trigger) {
+      const hostRect = this.getBoundingClientRect();
+      const triggerRect = trigger.getBoundingClientRect();
+      const popoverHeight = this.curatorPopover.offsetHeight;
+      const spaceBelow = hostRect.bottom - triggerRect.bottom;
+      const top =
+        spaceBelow >= popoverHeight + 8
+          ? triggerRect.bottom - hostRect.top + 4
+          : triggerRect.top - hostRect.top - popoverHeight - 4;
+      const popoverWidth = this.curatorPopover.offsetWidth;
+      const preferredLeft =
+        triggerRect.left -
+        hostRect.left +
+        triggerRect.width / 2 -
+        popoverWidth / 2;
+      const maxLeft = Math.max(8, hostRect.width - popoverWidth - 8);
+      const maxTop = Math.max(8, hostRect.height - popoverHeight - 8);
+      this.curatorPopover.style.top = `${Math.min(
+        Math.max(8, top),
+        maxTop,
+      )}px`;
+      this.curatorPopover.style.left = `${Math.min(
+        Math.max(8, preferredLeft),
+        maxLeft,
+      )}px`;
+    }
+    trigger?.setAttribute("aria-expanded", "true");
+    toggle.focus();
+  }
+
+  closeCuratorMenu({ restoreFocus = false } = {}) {
+    if (!this.curatorPopover || this.curatorPopover.hidden) return;
+    this._curatorTrigger?.setAttribute("aria-expanded", "false");
+    this.curatorPopover.hidden = true;
+    if (restoreFocus) this._curatorTrigger?.focus();
+    this._curatorTrigger = null;
+    this._curatorProjectId = null;
+  }
+
+  onOutsidePointerDown(event) {
+    if (!this.contains(event.target)) {
+      this.toolsPopover && (this.toolsPopover.hidden = true);
+      this.toolsButton?.setAttribute("aria-expanded", "false");
+      this.closeCuratorMenu();
+      return;
+    }
+    if (
+      this.toolsPopover &&
+      !this.toolsPopover.hidden &&
+      !this.toolsPopover.contains(event.target) &&
+      !this.toolsButton.contains(event.target)
+    ) {
+      this.toolsPopover.hidden = true;
+      this.toolsButton.setAttribute("aria-expanded", "false");
+    }
+    if (
+      this.curatorPopover &&
+      !this.curatorPopover.hidden &&
+      !this.curatorPopover.contains(event.target) &&
+      !event.target.closest('[data-action="curator-menu"]')
+    ) {
+      this.closeCuratorMenu();
+    }
+  }
+
+  async setFavorite(projectId) {
+    const project = this.projects.find((item) => item.id === projectId);
+    if (!project || this.pendingProjects.has(projectId)) return;
+    const previous = project.is_favorite;
+    project.is_favorite = !previous;
+    this.pendingProjects.add(projectId);
+    this.renderResults();
+    let errorKey = null;
+    try {
+      const response = await ws.emitAsync(
+        "/client/project/favorite/set",
+        { id_project: projectId, favorite: project.is_favorite },
+        30 * 1000,
+      );
+      if (response?.error) throw new Error(response.error);
+    } catch (error) {
+      console.error("Project favorite error", error);
+      project.is_favorite = previous;
+      errorKey = "project_favorite_error";
+    } finally {
+      this.pendingProjects.delete(projectId);
+      this.renderResults();
+      if (errorKey) this.showError(errorKey);
+    }
+  }
+
+  async setFeatured(projectId, { featured, rank } = {}) {
+    const project = this.projects.find((item) => item.id === projectId);
+    if (!project || this.pendingProjects.has(projectId)) return;
+    const previous = project.featured_rank;
+    const restoreCuratorFocus = this._curatorProjectId === projectId;
+    this.pendingProjects.add(projectId);
+    for (const control of this.curatorControls) {
+      control.disabled = true;
+    }
+    let errorKey = null;
+    try {
+      const payload = { id_project: projectId, featured };
+      if (rank !== undefined) payload.rank = rank;
+      const response = await ws.emitAsync(
+        "/client/project/featured/set",
+        payload,
+        30 * 1000,
+      );
+      if (response?.error) throw new Error(response.error);
+      project.featured_rank =
+        response.featured_rank === null ? null : Number(response.featured_rank);
+    } catch (error) {
+      console.error("Project featured error", error);
+      project.featured_rank = previous;
+      errorKey = "project_featured_error";
+    } finally {
+      this.pendingProjects.delete(projectId);
+      this.renderResults();
+      if (restoreCuratorFocus) {
+        this.curatorTriggers.get(projectId)?.focus();
+      }
+      if (errorKey) this.showError(errorKey);
+    }
+  }
+
+  showError(key) {
+    this.message.hidden = false;
+    this.message.textContent = this.label(key);
+    this.message.classList.add("text-danger");
   }
 
   async loadLogos(projects) {
@@ -566,9 +908,7 @@ export class ProjectListElement extends HTMLElement {
           { ids: batch },
           30 * 1000,
         );
-        if (response?.error) {
-          throw new Error(response.error);
-        }
+        if (response?.error) throw new Error(response.error);
         for (const [id, logo] of Object.entries(response?.logos || {})) {
           this.logos.set(id, logo);
           const avatar = this.avatarElements.get(id);
@@ -589,9 +929,8 @@ export class ProjectListElement extends HTMLElement {
   }
 
   setLogo(container, logo, title) {
-    const image = makeElement("img");
+    const image = el("img", { title: title || "" });
     image.alt = "";
-    image.title = title || "";
     image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(logo)}`;
     container.replaceChildren(image);
   }
@@ -604,9 +943,7 @@ export class ProjectListElement extends HTMLElement {
   loadMore() {
     const total = this.selectedProjects.length;
     const nextLimit = nextProjectRenderLimit(this.renderLimit, total);
-    if (nextLimit === this.renderLimit) {
-      return;
-    }
+    if (nextLimit === this.renderLimit) return;
     this.renderLimit = nextLimit;
     this.renderResults();
   }
@@ -621,9 +958,7 @@ export class ProjectListElement extends HTMLElement {
   }
 
   onInput(event) {
-    if (event.target !== this.searchInput) {
-      return;
-    }
+    if (event.target !== this.searchInput) return;
     clearTimeout(this._searchTimer);
     this._searchTimer = setTimeout(() => {
       this.state.search = event.target.value;
@@ -633,9 +968,7 @@ export class ProjectListElement extends HTMLElement {
 
   onChange(event) {
     const filter = event.target.dataset.filter;
-    if (!filter) {
-      return;
-    }
+    if (!filter) return;
     if (filter === "theme") {
       this.state.themes = event.target.value ? [event.target.value] : [];
     } else {
@@ -645,16 +978,6 @@ export class ProjectListElement extends HTMLElement {
   }
 
   async onClick(event) {
-    const sortButton = event.target.closest("[data-sort-column]");
-    if (sortButton) {
-      this.state.sort = nextProjectSort(
-        this.state.sort,
-        sortButton.dataset.sortColumn,
-      );
-      this.sortSelect.value = this.state.sort;
-      this.resetResults();
-      return;
-    }
     const scopeButton = event.target.closest("[data-scope]");
     if (scopeButton) {
       this.state.scope = scopeButton.dataset.scope;
@@ -662,25 +985,83 @@ export class ProjectListElement extends HTMLElement {
       return;
     }
     const action = event.target.closest("[data-action]");
-    if (!action) {
-      return;
+    if (!action) return;
+    const projectId = action.dataset.projectId;
+    switch (action.dataset.action) {
+      case "toggle-tools":
+        this.toggleTools();
+        return;
+      case "clear":
+        this.state = { ...DEFAULT_STATE, themes: [] };
+        this.searchInput.value = "";
+        this.roleSelect.value = this.state.role;
+        this.themeSelect.value = "";
+        this.sortSelect.value = this.state.sort;
+        this.resetResults();
+        return;
+      case "favorite":
+        await this.setFavorite(projectId);
+        return;
+      case "curator-menu":
+        if (
+          !this.curatorPopover.hidden &&
+          this._curatorProjectId === projectId
+        ) {
+          this.closeCuratorMenu({ restoreFocus: true });
+        } else {
+          this.openCuratorMenu(projectId, action);
+        }
+        return;
+      case "featured-toggle": {
+        const project = this.projects.find((item) => item.id === projectId);
+        await this.setFeatured(projectId, {
+          featured: project?.featured_rank === null,
+        });
+        return;
+      }
+      case "featured-rank": {
+        const input = this.curatorRankInput;
+        const rank = Number(input?.value);
+        if (!Number.isInteger(rank) || rank <= 0) {
+          input?.setCustomValidity(this.label("project_featured_rank"));
+          input?.reportValidity();
+          return;
+        }
+        await this.setFeatured(projectId, { featured: true, rank });
+        return;
+      }
+      default:
+        await this.runAction(action.dataset.action, projectId);
     }
-    if (action.dataset.action === "clear") {
-      this.state = { ...DEFAULT_STATE, themes: [] };
-      this.searchInput.value = "";
-      this.roleSelect.value = this.state.role;
-      this.themeSelect.value = "";
-      this.sortSelect.value = this.state.sort;
-      this.resetResults();
-      return;
-    }
-    await this.runAction(action.dataset.action, action.dataset.projectId);
   }
 
   async onKeydown(event) {
-    if (event.key !== "Enter") {
+    if (event.key === "Escape") {
+      if (!this.curatorPopover.hidden) {
+        event.preventDefault();
+        this.closeCuratorMenu({ restoreFocus: true });
+      } else if (!this.toolsPopover.hidden) {
+        event.preventDefault();
+        this.toggleTools(false);
+      }
       return;
     }
+    if (
+      !this.curatorPopover.hidden &&
+      ["ArrowDown", "ArrowUp"].includes(event.key)
+    ) {
+      const controls = this.curatorControls;
+      const current = controls.indexOf(event.target);
+      if (current >= 0) {
+        event.preventDefault();
+        const direction = event.key === "ArrowDown" ? 1 : -1;
+        controls[
+          (current + direction + controls.length) % controls.length
+        ].focus();
+      }
+      return;
+    }
+    if (event.key !== "Enter" && event.key !== " ") return;
     const row = event.target.closest(
       '.mx-project-browser-row[data-action="open"]',
     );
@@ -690,19 +1071,24 @@ export class ProjectListElement extends HTMLElement {
     }
   }
 
+  onContextMenu(event) {
+    if (!this.canCurateFeatured) return;
+    const row = event.target.closest(".mx-project-browser-row");
+    if (!row) return;
+    event.preventDefault();
+    const trigger = this.curatorTriggers.get(row.dataset.projectId);
+    this.openCuratorMenu(row.dataset.projectId, trigger);
+  }
+
   async runAction(action, projectId) {
-    if (!projectId) {
-      return;
-    }
+    if (!projectId) return;
     if (action === "join") {
       requestProjectMembership(projectId);
       return;
     }
     if (action === "open") {
       const projectLoaded = await setProject(projectId, {}, "project_list");
-      if (projectLoaded === true) {
-        this.options?.onProjectLoaded?.(projectId);
-      }
+      if (projectLoaded === true) this.options?.onProjectLoaded?.(projectId);
     }
   }
 }

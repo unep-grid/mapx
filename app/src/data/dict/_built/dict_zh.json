@@ -8500,6 +8500,66 @@
     "zh": "的"
   },
   {
+    "id": "project_list_search_tools",
+    "en": "Search tools",
+    "zh": "搜索工具"
+  },
+  {
+    "id": "project_list_filters_active",
+    "en": "filters active",
+    "zh": "过滤器已激活"
+  },
+  {
+    "id": "project_favorite_add",
+    "en": "Add to favorites",
+    "zh": "添加到收藏夹"
+  },
+  {
+    "id": "project_favorite_remove",
+    "en": "Remove from favorites",
+    "zh": "从收藏夹中移除"
+  },
+  {
+    "id": "project_favorite_error",
+    "en": "Could not update this favorite. Please try again.",
+    "zh": "无法更新此收藏夹。请重试。"
+  },
+  {
+    "id": "project_featured_by_mapx",
+    "en": "Featured by MapX",
+    "zh": "MapX 精选"
+  },
+  {
+    "id": "project_featured_actions",
+    "en": "Featured project actions",
+    "zh": "特色项目操作"
+  },
+  {
+    "id": "project_featured_add",
+    "en": "Feature project",
+    "zh": "特色项目"
+  },
+  {
+    "id": "project_featured_remove",
+    "en": "Remove from featured",
+    "zh": "从精选列表中移除"
+  },
+  {
+    "id": "project_featured_rank",
+    "en": "Featured rank",
+    "zh": "精选排名"
+  },
+  {
+    "id": "project_featured_save_rank",
+    "en": "Save rank",
+    "zh": "保存排名"
+  },
+  {
+    "id": "project_featured_error",
+    "en": "Could not update featured status. Please try again.",
+    "zh": "无法更新精选状态。请重试。"
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix",
     "zh": "项目角色矩阵"

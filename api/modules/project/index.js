@@ -6,6 +6,10 @@ export { ioProjectRolesGet, ioProjectRolesUpdate } from "./roles_matrix.js";
 export {
   ioProjectList,
   ioProjectLogosGet,
+  ioProjectFavoriteSet,
+  ioProjectFeaturedSet,
   getAccessibleProjects,
   getAccessibleProjectLogos,
+  setFavoriteProject,
+  setFeaturedProject,
 } from "./browser.js";

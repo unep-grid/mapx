@@ -8500,6 +8500,66 @@
     "de": "von"
   },
   {
+    "id": "project_list_search_tools",
+    "en": "Search tools",
+    "de": "Suchwerkzeuge"
+  },
+  {
+    "id": "project_list_filters_active",
+    "en": "filters active",
+    "de": "Aktive Filter"
+  },
+  {
+    "id": "project_favorite_add",
+    "en": "Add to favorites",
+    "de": "Zu Favoriten hinzufügen"
+  },
+  {
+    "id": "project_favorite_remove",
+    "en": "Remove from favorites",
+    "de": "Aus Favoriten entfernen"
+  },
+  {
+    "id": "project_favorite_error",
+    "en": "Could not update this favorite. Please try again.",
+    "de": "Dieser Favorit konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
+  },
+  {
+    "id": "project_featured_by_mapx",
+    "en": "Featured by MapX",
+    "de": "Empfohlen von MapX"
+  },
+  {
+    "id": "project_featured_actions",
+    "en": "Featured project actions",
+    "de": "Ausgewählte Projektaktionen"
+  },
+  {
+    "id": "project_featured_add",
+    "en": "Feature project",
+    "de": "Feature-Projekt"
+  },
+  {
+    "id": "project_featured_remove",
+    "en": "Remove from featured",
+    "de": "Aus der Liste entfernen"
+  },
+  {
+    "id": "project_featured_rank",
+    "en": "Featured rank",
+    "de": "Hervorgehobener Rang"
+  },
+  {
+    "id": "project_featured_save_rank",
+    "en": "Save rank",
+    "de": "Rang speichern"
+  },
+  {
+    "id": "project_featured_error",
+    "en": "Could not update featured status. Please try again.",
+    "de": "Der Status „Hervorgehoben“ konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix",
     "de": "Projektrollenmatrix"

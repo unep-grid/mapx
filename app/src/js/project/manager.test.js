@@ -64,4 +64,13 @@ describe("ProjectManager Shiny bridge", () => {
     onProjectLoaded("LATE");
     expect(projectListWindow.close).not.toHaveBeenCalled();
   });
+
+  it("opens the project list at the compact default width", async () => {
+    const manager = new ProjectManager();
+    await manager.list({});
+
+    const config = windowManager.open.mock.calls.at(-1)[0];
+    expect(config.geometry.width).toBe("min(760px, calc(100vw - 32px))");
+    expect(config.resizable).toBe(true);
+  });
 });

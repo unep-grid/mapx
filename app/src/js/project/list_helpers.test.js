@@ -103,6 +103,53 @@ describe("project list helpers", () => {
     ).toBe("MX-TWO");
   });
 
+  it("keeps favorites first, then featured projects, then selected sorting", () => {
+    const ordered = [
+      normalizeProject({
+        id: "MX-AAA11-BBB22-CCC33",
+        title: "Zulu favorite",
+        is_favorite: true,
+        featured_rank: 5,
+      }),
+      normalizeProject({
+        id: "MX-DDD44-EEE55-FFF66",
+        title: "Alpha favorite",
+        is_favorite: true,
+      }),
+      normalizeProject({
+        id: "MX-GGG77-HHH88-III99",
+        title: "Zulu featured",
+        featured_rank: 1000,
+      }),
+      normalizeProject({
+        id: "MX-JJJ11-KKK22-LLL33",
+        title: "Alpha featured",
+        featured_rank: 1000,
+      }),
+      normalizeProject({
+        id: "MX-MMM44-NNN55-OOO66",
+        title: "Regular older",
+        date_modified: "2020-01-01T00:00:00Z",
+      }),
+      normalizeProject({
+        id: "MX-PPP77-QQQ88-RRR99",
+        title: "Regular newer",
+        date_modified: "2026-01-01T00:00:00Z",
+      }),
+    ];
+
+    expect(
+      selectProjects(ordered, state()).map((project) => project.title),
+    ).toEqual([
+      "Alpha favorite",
+      "Zulu favorite",
+      "Alpha featured",
+      "Zulu featured",
+      "Regular newer",
+      "Regular older",
+    ]);
+  });
+
   it("parses legacy URL filters without making access decisions", () => {
     expect(
       parseInitialProjectListFilters({ role: "publish", title: "Demo*" }),

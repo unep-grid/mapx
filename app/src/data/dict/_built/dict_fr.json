@@ -8500,6 +8500,66 @@
     "fr": "sur"
   },
   {
+    "id": "project_list_search_tools",
+    "en": "Search tools",
+    "fr": "Outils de recherche"
+  },
+  {
+    "id": "project_list_filters_active",
+    "en": "filters active",
+    "fr": "filtres actifs"
+  },
+  {
+    "id": "project_favorite_add",
+    "en": "Add to favorites",
+    "fr": "Ajouter aux favoris"
+  },
+  {
+    "id": "project_favorite_remove",
+    "en": "Remove from favorites",
+    "fr": "Retirer des favoris"
+  },
+  {
+    "id": "project_favorite_error",
+    "en": "Could not update this favorite. Please try again.",
+    "fr": "Impossible de mettre à jour ce favori. Veuillez réessayer."
+  },
+  {
+    "id": "project_featured_by_mapx",
+    "en": "Featured by MapX",
+    "fr": "Mis en avant par MapX"
+  },
+  {
+    "id": "project_featured_actions",
+    "en": "Featured project actions",
+    "fr": "Actions de mise en avant"
+  },
+  {
+    "id": "project_featured_add",
+    "en": "Feature project",
+    "fr": "Mettre le projet en avant"
+  },
+  {
+    "id": "project_featured_remove",
+    "en": "Remove from featured",
+    "fr": "Retirer des projets mis en avant"
+  },
+  {
+    "id": "project_featured_rank",
+    "en": "Featured rank",
+    "fr": "Rang de mise en avant"
+  },
+  {
+    "id": "project_featured_save_rank",
+    "en": "Save rank",
+    "fr": "Enregistrer le rang"
+  },
+  {
+    "id": "project_featured_error",
+    "en": "Could not update featured status. Please try again.",
+    "fr": "Impossible de mettre à jour la mise en avant. Veuillez réessayer."
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix",
     "fr": "Matrice des rôles du projet"

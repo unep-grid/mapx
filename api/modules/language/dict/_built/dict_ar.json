@@ -8500,6 +8500,66 @@
     "ar": "ل"
   },
   {
+    "id": "project_list_search_tools",
+    "en": "Search tools",
+    "ar": "أدوات البحث"
+  },
+  {
+    "id": "project_list_filters_active",
+    "en": "filters active",
+    "ar": "تم تفعيل الفلتر"
+  },
+  {
+    "id": "project_favorite_add",
+    "en": "Add to favorites",
+    "ar": "أضف إلى المفضلة"
+  },
+  {
+    "id": "project_favorite_remove",
+    "en": "Remove from favorites",
+    "ar": "إزالة من المفضلة"
+  },
+  {
+    "id": "project_favorite_error",
+    "en": "Could not update this favorite. Please try again.",
+    "ar": "تعذر تحديث هذه المفضلة. يرجى المحاولة مرة أخرى."
+  },
+  {
+    "id": "project_featured_by_mapx",
+    "en": "Featured by MapX",
+    "ar": "تم عرضه بواسطة MapX"
+  },
+  {
+    "id": "project_featured_actions",
+    "en": "Featured project actions",
+    "ar": "مشاريع مميزة"
+  },
+  {
+    "id": "project_featured_add",
+    "en": "Feature project",
+    "ar": "مشروع مميز"
+  },
+  {
+    "id": "project_featured_remove",
+    "en": "Remove from featured",
+    "ar": "إزالة من المميز"
+  },
+  {
+    "id": "project_featured_rank",
+    "en": "Featured rank",
+    "ar": "تصنيف مميز"
+  },
+  {
+    "id": "project_featured_save_rank",
+    "en": "Save rank",
+    "ar": "حفظ الرتبة"
+  },
+  {
+    "id": "project_featured_error",
+    "en": "Could not update featured status. Please try again.",
+    "ar": "تعذر تحديث حالة العرض المميز. يرجى المحاولة مرة أخرى."
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix",
     "ar": "مصفوفة أدوار المشروع"

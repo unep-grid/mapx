@@ -250,7 +250,7 @@ export class ProjectManager {
       snappable: true,
       closeable: true,
       geometry: {
-        width: "min(1080px, calc(100vw - 32px))",
+        width: "min(760px, calc(100vw - 32px))",
         height: "min(88vh, 900px)",
         maxHeight: "calc(100vh - 32px)",
       },

@@ -110,7 +110,7 @@ export function selectProjects(projects, state, themeLabels = {}) {
     return true;
   });
 
-  return filtered.sort((a, b) => {
+  const selectedSort = (a, b) => {
     const byTitle = () => compareText(a.title, b.title);
     switch (state.sort) {
       case "updated_asc":
@@ -135,6 +135,24 @@ export function selectProjects(projects, state, themeLabels = {}) {
       default:
         return (b.modified_time || 0) - (a.modified_time || 0) || byTitle();
     }
+  };
+
+  return filtered.sort((a, b) => {
+    if (a.is_favorite !== b.is_favorite) {
+      return a.is_favorite ? -1 : 1;
+    }
+    if (a.is_favorite && b.is_favorite) {
+      return compareText(a.title, b.title);
+    }
+    const aFeatured = a.featured_rank !== null;
+    const bFeatured = b.featured_rank !== null;
+    if (aFeatured !== bFeatured) {
+      return aFeatured ? -1 : 1;
+    }
+    if (aFeatured && bFeatured) {
+      return a.featured_rank - b.featured_rank || compareText(a.title, b.title);
+    }
+    return selectedSort(a, b);
   });
 }
 
@@ -151,6 +169,12 @@ export function normalizeProject(project, themeLabels = {}) {
     themes,
     view_count: Number(project.view_count) || 0,
     collaborator_count: Number(project.collaborator_count) || 0,
+    featured_rank:
+      Number.isInteger(Number(project.featured_rank)) &&
+      Number(project.featured_rank) > 0
+        ? Number(project.featured_rank)
+        : null,
+    is_favorite: project.is_favorite === true,
     modified_time: project.date_modified
       ? new Date(project.date_modified).getTime()
       : 0,

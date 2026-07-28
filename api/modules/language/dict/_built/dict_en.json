@@ -6800,6 +6800,54 @@
     "en": "of"
   },
   {
+    "id": "project_list_search_tools",
+    "en": "Search tools"
+  },
+  {
+    "id": "project_list_filters_active",
+    "en": "filters active"
+  },
+  {
+    "id": "project_favorite_add",
+    "en": "Add to favorites"
+  },
+  {
+    "id": "project_favorite_remove",
+    "en": "Remove from favorites"
+  },
+  {
+    "id": "project_favorite_error",
+    "en": "Could not update this favorite. Please try again."
+  },
+  {
+    "id": "project_featured_by_mapx",
+    "en": "Featured by MapX"
+  },
+  {
+    "id": "project_featured_actions",
+    "en": "Featured project actions"
+  },
+  {
+    "id": "project_featured_add",
+    "en": "Feature project"
+  },
+  {
+    "id": "project_featured_remove",
+    "en": "Remove from featured"
+  },
+  {
+    "id": "project_featured_rank",
+    "en": "Featured rank"
+  },
+  {
+    "id": "project_featured_save_rank",
+    "en": "Save rank"
+  },
+  {
+    "id": "project_featured_error",
+    "en": "Could not update featured status. Please try again."
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix"
   },

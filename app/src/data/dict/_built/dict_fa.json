@@ -8500,6 +8500,66 @@
     "fa": "از"
   },
   {
+    "id": "project_list_search_tools",
+    "en": "Search tools",
+    "fa": "ابزارهای جستجو"
+  },
+  {
+    "id": "project_list_filters_active",
+    "en": "filters active",
+    "fa": "فیلترهای فعال"
+  },
+  {
+    "id": "project_favorite_add",
+    "en": "Add to favorites",
+    "fa": "افزودن به علاقه‌مندی‌ها"
+  },
+  {
+    "id": "project_favorite_remove",
+    "en": "Remove from favorites",
+    "fa": "حذف از موارد دلخواه"
+  },
+  {
+    "id": "project_favorite_error",
+    "en": "Could not update this favorite. Please try again.",
+    "fa": "به‌روزرسانی این مورد علاقه امکان‌پذیر نیست. لطفاً دوباره امتحان کنید."
+  },
+  {
+    "id": "project_featured_by_mapx",
+    "en": "Featured by MapX",
+    "fa": "ویژه توسط MapX"
+  },
+  {
+    "id": "project_featured_actions",
+    "en": "Featured project actions",
+    "fa": "اقدامات ویژه پروژه"
+  },
+  {
+    "id": "project_featured_add",
+    "en": "Feature project",
+    "fa": "پروژه ویژه"
+  },
+  {
+    "id": "project_featured_remove",
+    "en": "Remove from featured",
+    "fa": "حذف از موارد ویژه"
+  },
+  {
+    "id": "project_featured_rank",
+    "en": "Featured rank",
+    "fa": "رتبه ویژه"
+  },
+  {
+    "id": "project_featured_save_rank",
+    "en": "Save rank",
+    "fa": "رتبه را ذخیره کنید"
+  },
+  {
+    "id": "project_featured_error",
+    "en": "Could not update featured status. Please try again.",
+    "fa": "وضعیت ویژه به‌روزرسانی نشد. لطفاً دوباره امتحان کنید."
+  },
+  {
     "id": "project_roles_matrix_title",
     "en": "Project Roles Matrix",
     "fa": "ماتریس نقش‌های پروژه"
