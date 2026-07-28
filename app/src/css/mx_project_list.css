@@ -336,8 +336,7 @@
   cursor: wait;
 }
 
-.mx-project-browser-stat,
-.mx-project-browser-join {
+.mx-project-browser-stat {
   white-space: nowrap;
 }
 

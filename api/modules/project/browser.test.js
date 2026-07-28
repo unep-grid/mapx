@@ -10,6 +10,14 @@ vi.mock("#mapx/db", () => ({
   pgRead: { query: readQuery },
   pgWrite: { query: writeQuery, connect },
 }));
+vi.mock("#mapx/template", () => ({
+  templates: {
+    getAccessibleProjectLogos: "SELECT project logos",
+    getAccessibleProjects: "SELECT accessible projects",
+    setFavoriteProject:
+      "UPDATE favorite projects WITH jsonb_set_nested SELECT DISTINCT ON",
+  },
+}));
 vi.mock("#mapx/authentication", () => ({
   isRoot: (socket) =>
     socket?.session?.user_authenticated === true &&
@@ -25,10 +33,16 @@ import {
 
 const projectId = "MX-T6R-PJF-2DF-3OI-LBF";
 
-function socket({ authenticated = true, root = false, id = 7 } = {}) {
+function socket({
+  authenticated = true,
+  guest = false,
+  root = false,
+  id = 7,
+} = {}) {
   return {
     session: {
       user_authenticated: authenticated,
+      user_is_guest: guest,
       user_id: id,
       user_roles: { root },
     },
@@ -68,6 +82,9 @@ describe("project browser API", () => {
   });
 
   it("rejects guest favorites and never accepts a browser user id", async () => {
+    await expect(
+      setFavoriteProject(socket({ guest: true }), projectId, true),
+    ).rejects.toThrow("authentication_required");
     await expect(
       setFavoriteProject(socket({ authenticated: false }), projectId, true),
     ).rejects.toThrow("authentication_required");

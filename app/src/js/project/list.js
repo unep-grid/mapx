@@ -159,6 +159,7 @@ export class ProjectListElement extends HTMLElement {
    * @param {Object} [options]
    * @param {string} [options.language]
    * @param {Object} [options.initialFilters]
+   * @param {(projectId: string) => void} [options.onProjectRequested]
    * @param {(projectId: string) => void} [options.onProjectLoaded]
    */
   configure(options = {}) {
@@ -532,6 +533,20 @@ export class ProjectListElement extends HTMLElement {
       favorite.disabled = this.pendingProjects.has(project.id);
       heading.appendChild(favorite);
     }
+    if (
+      project.role === "public" &&
+      project.allow_join === true &&
+      settings.user.guest !== true
+    ) {
+      const join = iconButton(
+        "mx-project-browser-heading-action mx-project-browser-join",
+        "fa fa-sign-in",
+        this.label("btn_join_project"),
+        "join",
+      );
+      join.dataset.projectId = project.id;
+      heading.appendChild(join);
+    }
     text.appendChild(heading);
     if (project.description) {
       text.appendChild(
@@ -556,19 +571,6 @@ export class ProjectListElement extends HTMLElement {
         "project_list_collaborators",
       ),
     );
-    if (project.role === "public" && settings.user.guest !== true) {
-      const join = el(
-        "button",
-        {
-          class: "btn btn-link btn-xs mx-project-browser-join",
-          type: "button",
-          dataset: { action: "join", projectId: project.id },
-          disabled: !project.allow_join,
-        },
-        this.label("btn_join_project"),
-      );
-      stats.appendChild(join);
-    }
     meta.appendChild(stats);
     if (project.org_name) {
       meta.appendChild(
@@ -1087,7 +1089,15 @@ export class ProjectListElement extends HTMLElement {
       return;
     }
     if (action === "open") {
-      const projectLoaded = await setProject(projectId, {}, "project_list");
+      const projectLoaded = await setProject(
+        projectId,
+        {
+          onRequest: (requestedProjectId) => {
+            this.options?.onProjectRequested?.(requestedProjectId);
+          },
+        },
+        "project_list",
+      );
       if (projectLoaded === true) this.options?.onProjectLoaded?.(projectId);
     }
   }

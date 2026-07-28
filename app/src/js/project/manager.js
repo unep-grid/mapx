@@ -190,9 +190,9 @@ export class ProjectManager {
       request,
       language: settings.language,
       initialFilters,
-      onProjectLoaded: () => {
+      onProjectRequested: () => {
         if (pm._projectListWindow === projectListWindow) {
-          projectListWindow?.close("project-loaded");
+          projectListWindow?.close("project-requested");
         }
       },
     });

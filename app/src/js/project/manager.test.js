@@ -50,18 +50,18 @@ describe("ProjectManager Shiny bridge", () => {
     expect(manager.list.length).toBe(1);
   });
 
-  it("closes the owning project-list window after a project loads", async () => {
+  it("closes the owning project-list window when a project is requested", async () => {
     const manager = new ProjectManager();
     await manager.list({});
 
-    const { onProjectLoaded } = projectList.configure.mock.calls[0][0];
-    onProjectLoaded("NEXT");
+    const { onProjectRequested } = projectList.configure.mock.calls[0][0];
+    onProjectRequested("NEXT");
 
-    expect(projectListWindow.close).toHaveBeenCalledWith("project-loaded");
+    expect(projectListWindow.close).toHaveBeenCalledWith("project-requested");
 
     projectListWindow.close.mockClear();
     manager._projectListWindow = { close: vi.fn() };
-    onProjectLoaded("LATE");
+    onProjectRequested("LATE");
     expect(projectListWindow.close).not.toHaveBeenCalled();
   });
 

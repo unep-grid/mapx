@@ -21,7 +21,11 @@ export async function ioMwAuthenticate(socket, next) {
     const ipGeo = await getGeoInfo(ip);
 
     // Validate the token
-    const { key, isValid: isKeyValid } = await validateToken(userToken);
+    const {
+      isGuest,
+      key,
+      isValid: isKeyValid,
+    } = await validateToken(userToken);
 
     // Validate the user
     const { email, isValid: isUserValid } = await validateUser(idUser, key);
@@ -36,6 +40,7 @@ export async function ioMwAuthenticate(socket, next) {
     // Store session data on the socket object
     socket.session = {
       user_authenticated: userAuthenticated,
+      user_is_guest: isGuest === true,
       user_roles: roles,
       user_email: email,
       user_id: idUser,

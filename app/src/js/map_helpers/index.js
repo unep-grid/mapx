@@ -521,9 +521,11 @@ export function triggerUpdateSourcesList() {
 /**
  * Set the project manually
  * @param {String} idProject project to load
- * @param {Object} opt Options
- * @param {Function} opt.onSuccess : Optional callback if project is changed
- * @return null
+ * @param {Object} [opt] Options
+ * @param {(projectId: string) => void} [opt.onRequest] Called after the change
+ * request is emitted
+ * @param {String} [origin] Request origin
+ * @returns {Promise<boolean|undefined>}
  */
 export async function setProject(idProject, opt, origin) {
   const hasShiny = isShinyReady();
@@ -568,6 +570,7 @@ export async function setProject(idProject, opt, origin) {
   const promRes = events.once("settings_project_change");
 
   Shiny.onInputChange("selectProject", idProject);
+  opt.onRequest?.(idProject);
 
   const res = await Promise.race([promRes, promWait]);
 

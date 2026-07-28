@@ -1,7 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { emitAsync, setProject, settingsValue } = vi.hoisted(() => ({
+const {
+  emitAsync,
+  requestProjectMembership,
+  setProject,
+  settingsValue,
+} = vi.hoisted(() => ({
   emitAsync: vi.fn(),
+  requestProjectMembership: vi.fn(),
   setProject: vi.fn(),
   settingsValue: {
     language: "en",
@@ -18,7 +24,7 @@ vi.mock("../settings", () => ({
   settings: settingsValue,
 }));
 vi.mock("../map_helpers/index.js", () => ({
-  requestProjectMembership: vi.fn(),
+  requestProjectMembership,
   setProject,
 }));
 
@@ -47,6 +53,7 @@ const projects = [
     is_member: false,
     is_favorite: false,
     featured_rank: 1000,
+    allow_join: true,
     view_count: 20,
     collaborator_count: 2,
     date_modified: "2026-01-01T00:00:00Z",
@@ -65,6 +72,7 @@ async function mount(response = { projects }) {
 describe("mx-project-list", () => {
   beforeEach(() => {
     emitAsync.mockReset();
+    requestProjectMembership.mockReset();
     setProject.mockReset();
     settingsValue.user.guest = false;
     document.body.replaceChildren();
@@ -162,6 +170,42 @@ describe("mx-project-list", () => {
     expect(meta.firstElementChild).toBe(stats);
   });
 
+  it("keeps the compact Join action outside responsive-hidden statistics", async () => {
+    const element = await mount();
+    const publicRow = element.rows.querySelector(
+      `[data-project-id="${projects[1].id}"]`,
+    );
+    const join = publicRow.querySelector("[data-action='join']");
+
+    expect(join.parentElement).toBe(
+      publicRow.querySelector(".mx-project-browser-heading"),
+    );
+    expect(join.closest(".mx-project-browser-stats")).toBeNull();
+    expect(join.querySelector(".fa-sign-in")).not.toBeNull();
+    expect(join.getAttribute("aria-label")).toBe("btn_join_project");
+    expect(join.title).toBe("btn_join_project");
+    expect(join.disabled).toBe(false);
+
+    join.click();
+    await vi.waitFor(() =>
+      expect(requestProjectMembership).toHaveBeenCalledWith(projects[1].id),
+    );
+    expect(setProject).not.toHaveBeenCalled();
+  });
+
+  it("hides Join when membership requests are not allowed", async () => {
+    const element = await mount({
+      projects: projects.map((project) => ({
+        ...project,
+        allow_join: false,
+      })),
+    });
+    const join = element.rows.querySelector("[data-action='join']");
+
+    expect(join).toBeNull();
+    expect(requestProjectMembership).not.toHaveBeenCalled();
+  });
+
   it("refreshes the root bookmark state after successful mutations", async () => {
     const element = await mount({
       projects,
@@ -217,6 +261,7 @@ describe("mx-project-list", () => {
       can_curate_featured: false,
     });
     expect(element.rows.querySelector("[data-action='favorite']")).toBeNull();
+    expect(element.rows.querySelector("[data-action='join']")).toBeNull();
     expect(
       element.rows.querySelector("[data-action='curator-menu']"),
     ).toBeNull();
@@ -361,15 +406,37 @@ describe("mx-project-list", () => {
     expect(refreshedTrigger.querySelector(".fa-bookmark-o")).not.toBeNull();
   });
 
-  it("reports only successfully loaded projects to its owner", async () => {
+  it("reports project requests immediately and successful loads afterward", async () => {
+    let resolveProject;
+    const projectLoad = new Promise((resolve) => {
+      resolveProject = resolve;
+    });
+    const onProjectRequested = vi.fn();
     const onProjectLoaded = vi.fn();
     const element = new ProjectListElement();
-    element.configure({ onProjectLoaded });
-    setProject.mockResolvedValueOnce(true);
-    await element.runAction("open", projects[0].id);
+    element.configure({ onProjectRequested, onProjectLoaded });
+    setProject.mockImplementationOnce((projectId, options) => {
+      options.onRequest(projectId);
+      return projectLoad;
+    });
+
+    const action = element.runAction("open", projects[0].id);
+
+    expect(setProject).toHaveBeenCalledWith(
+      projects[0].id,
+      expect.objectContaining({ onRequest: expect.any(Function) }),
+      "project_list",
+    );
+    expect(onProjectRequested).toHaveBeenCalledWith(projects[0].id);
+    expect(onProjectLoaded).not.toHaveBeenCalled();
+
+    resolveProject(true);
+    await action;
     expect(onProjectLoaded).toHaveBeenCalledWith(projects[0].id);
+
     setProject.mockResolvedValueOnce(false);
     await element.runAction("open", projects[1].id);
+    expect(onProjectRequested).toHaveBeenCalledTimes(1);
     expect(onProjectLoaded).toHaveBeenCalledTimes(1);
   });
 });
