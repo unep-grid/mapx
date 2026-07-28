@@ -12,8 +12,6 @@
       justify-content: space-evenly;
       width: 100%;
       box-sizing: border-box;
-      // Keep the project-list button clear of the panel's top-right resize tools.
-      padding-right: 44px;
     }
     .mx-panel--header-btn {
       position: relative;
@@ -30,6 +28,9 @@
       margin: 5px;
       border: none;
       background: none;
+      // should provide enough space for the project browser button 
+      // to prevent overlap with the panel resize buttons
+      min-width: 100px;
       * {
         pointer-events: none;
       }
