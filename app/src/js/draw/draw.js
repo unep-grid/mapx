@@ -1,6 +1,11 @@
 import { el } from "./../el/src/index.js";
 import { elSpanTranslate } from "./../el_mapx/index.js";
-import { modal, modalConfirm, modalPrompt } from "./../mx_helper_modal.js";
+import {
+  modal,
+  modalConfirm,
+  modalDialog,
+  modalPrompt,
+} from "./../mx_helper_modal.js";
 import { modalIframe } from "../modal_iframe/index.js";
 import { Button } from "./../panel_controls/button.js";
 import { ControlsPanel } from "./../panel_controls/index.js";
@@ -11,12 +16,19 @@ import { viewsListAddSingle } from "./../views_list_manager";
 import { EventSimple } from "../event_simple";
 import { controls } from "./../mx.js";
 import { clone } from "./../mx_helper_misc.js";
+import {
+  applyGeometrySave,
+  getCircleCompatibleSelectModes,
+  getCompleteFeatureCollection,
+  getFeatureCollectionGeometryHash,
+  getGeometryFocus,
+  splitFeatureForEditing,
+} from "./edit_session.js";
 
 import "./style.less";
 
-
 const def = {
-  edit_min_zoom: 12,
+  edit_max_zoom: 12,
 };
 
 const local = {
@@ -180,6 +192,10 @@ class MapxDraw extends EventSimple {
         import("@mapbox/mapbox-gl-draw/src/lib/theme.js"),
       ]);
     const MapboxDraw = moduleDraw.default;
+    const selectModes = getCircleCompatibleSelectModes(
+      MapboxDraw.modes,
+      moduleDrawCircle,
+    );
 
     // MapLibre GL v3+ requires bare array values in paint expressions to be
     // wrapped in ["literal", [...]]. Patch line-dasharray entries accordingly.
@@ -205,11 +221,7 @@ class MapxDraw extends EventSimple {
          * Click to have circle center, ask user for the diameter
          */
         draw_circle: moduleDrawCircle.CircleMode,
-        /**
-         * Select circle handling
-         */
-        direct_select: moduleDrawCircle.DirectMode,
-        simple_select: moduleDrawCircle.SimpleSelectMode,
+        ...selectModes,
       },
     });
     md._map.addControl(md._draw);
@@ -389,6 +401,34 @@ class MapxDraw extends EventSimple {
     if (opt.type === "polygon") {
       md.addCircleModeButton();
     }
+    if (opt.allowMultipart) {
+      md.addButton({
+        key: "draw_btn_combine",
+        classesIcon: "mx-draw--btn-combine",
+        action: () => {
+          md.noActionIfEmpty(
+            "get_selected_ids",
+            "draw_btn_combine",
+            async () => {
+              md._draw.combineFeatures();
+            },
+          );
+        },
+      });
+      md.addButton({
+        key: "draw_btn_uncombine",
+        classesIcon: "mx-draw--btn-uncombine",
+        action: () => {
+          md.noActionIfEmpty(
+            "get_selected_ids",
+            "draw_btn_uncombine",
+            async () => {
+              md._draw.uncombineFeatures();
+            },
+          );
+        },
+      });
+    }
     md.addButton({
       key: "btn_edit_undo",
       classesIcon: ["fa", "fa-undo"],
@@ -402,10 +442,12 @@ class MapxDraw extends EventSimple {
     md.addButton({
       key: "draw_btn_trash",
       classesIcon: "mx-draw--btn-trash",
-      action: () => {
-        md._draw.deleteAll();
-        md.pushEditHistory();
-      },
+      action: opt.allowMultipart
+        ? md.trashSelected
+        : () => {
+            md._draw.deleteAll();
+            md.pushEditHistory();
+          },
     });
     md.addButton({
       key: "btn_save",
@@ -437,9 +479,11 @@ class MapxDraw extends EventSimple {
       key,
       classesIcon,
       action: () => {
-        md._draw.deleteAll();
+        if (!md._editSession.opt.allowMultipart) {
+          md._editSession.replacing = true;
+          md._draw.deleteAll();
+        }
         md._draw.changeMode(mode);
-        md.pushEditHistory();
       },
     });
   }
@@ -460,12 +504,14 @@ class MapxDraw extends EventSimple {
             type: "numeric",
           },
         });
-        md._draw.deleteAll();
+        if (!md._editSession.opt.allowMultipart) {
+          md._editSession.replacing = true;
+          md._draw.deleteAll();
+        }
         md._draw.changeMode("draw_circle", {
           initialRadiusInKm: radius || 10,
         });
         localStorage.setItem(idStorage, radius || 10);
-        md.pushEditHistory();
       },
     });
   }
@@ -599,8 +645,9 @@ class MapxDraw extends EventSimple {
         type: "polygon",
         feature: null,
         geometry: null,
-        minZoom: md._opt.edit_min_zoom,
-        singleFeature: true,
+        maxZoom: md._opt.edit_max_zoom,
+        allowMultipart: false,
+        promoteToMulti: false,
         onSave: null,
         onCancel: null,
       },
@@ -634,14 +681,16 @@ class MapxDraw extends EventSimple {
       }
     }
 
-    await md.ensureEditZoom(sessionOpt);
-
     return new Promise((resolve) => {
       md._editSession = {
         opt: sessionOpt,
+        initiallyEmpty: !(
+          md.getFeatureGeometry(sessionOpt.feature) || sessionOpt.geometry
+        ),
         history: [],
         historyIndex: -1,
         restoring: false,
+        replacing: false,
         listeners: [],
         resolve,
       };
@@ -661,16 +710,27 @@ class MapxDraw extends EventSimple {
     const md = this;
     const geometry = md.getFeatureGeometry(opt.feature) || opt.geometry;
     if (geometry) {
-      const ids = md._draw.add({
+      const feature = {
         type: "Feature",
         properties: {
           ...opt.feature?.properties,
           gid: opt.feature?.gid,
         },
         geometry,
+      };
+      const features = opt.allowMultipart
+        ? splitFeatureForEditing(feature)
+        : [feature];
+      const ids = md._draw.add({
+        type: "FeatureCollection",
+        features,
       });
-      md._draw.changeMode("simple_select", { featureIds: ids });
-      md.focusGeometry(geometry, { minZoom: opt.minZoom });
+      if (opt.allowMultipart) {
+        md._draw.changeMode("simple_select");
+      } else {
+        md._draw.changeMode("simple_select", { featureIds: ids });
+      }
+      md.focusGeometry(geometry, { maxZoom: opt.maxZoom });
     } else {
       md._draw.changeMode(md.getDrawMode(opt.type));
     }
@@ -706,7 +766,13 @@ class MapxDraw extends EventSimple {
     if (!session || session.restoring) {
       return;
     }
-    if (session.opt.singleFeature) {
+    const data = getCompleteFeatureCollection(md._draw.getAll());
+    if (session.replacing && data.features.length === 0) {
+      md.updateEditHistoryButtons();
+      return;
+    }
+    session.replacing = false;
+    if (!session.opt.allowMultipart) {
       md.enforceSingleEditFeature();
     }
     md.pushEditHistory();
@@ -715,7 +781,7 @@ class MapxDraw extends EventSimple {
   enforceSingleEditFeature() {
     const md = this;
     const session = md._editSession;
-    const data = md._draw.getAll();
+    const data = getCompleteFeatureCollection(md._draw.getAll());
     if (!session || data.features.length <= 1) {
       return;
     }
@@ -732,8 +798,8 @@ class MapxDraw extends EventSimple {
     if (!session || session.restoring) {
       return;
     }
-    const data = md._draw.getAll();
-    const next = JSON.stringify(data);
+    const data = getCompleteFeatureCollection(md._draw.getAll());
+    const next = getFeatureCollectionGeometryHash(data);
     const previous = session.history[session.historyIndex]?.hash;
     if (next === previous) {
       md.updateEditHistoryButtons();
@@ -756,11 +822,20 @@ class MapxDraw extends EventSimple {
       return;
     }
     session.restoring = true;
+    md._draw.changeMode("simple_select");
     md._draw.deleteAll();
     if (item.data.features.length) {
-      md._draw.add(clone(item.data));
+      const ids = md._draw.add(clone(item.data));
+      if (session.opt.allowMultipart) {
+        md._draw.changeMode("simple_select");
+      } else {
+        md._draw.changeMode("simple_select", { featureIds: ids });
+      }
+    } else {
+      md._draw.changeMode(md.getDrawMode(session.opt.type));
     }
     session.historyIndex = index;
+    session.replacing = false;
     session.restoring = false;
     md.updateEditHistoryButtons();
   }
@@ -807,19 +882,45 @@ class MapxDraw extends EventSimple {
     if (!session) {
       return;
     }
-    md.enforceSingleEditFeature();
-    const data = md._draw.getAll();
-    const geometry = data.features[0]?.geometry || null;
-    const result = {
-      status: "saved",
-      geometry,
-    };
+    const activeMode = md._draw.getMode();
+    if (
+      !session.opt.allowMultipart &&
+      !activeMode?.startsWith("draw_")
+    ) {
+      md.enforceSingleEditFeature();
+    }
+    let result;
     try {
-      if (typeof session.opt.onSave === "function") {
-        await session.opt.onSave(result);
-      }
+      result = await applyGeometrySave(
+        md._draw.getAll(),
+        {
+          type: session.opt.type,
+          allowMultipart: session.opt.allowMultipart,
+          promoteToMulti: session.opt.promoteToMulti,
+          allowEmptyPlaceholder: session.initiallyEmpty,
+          activeMode,
+        },
+        session.opt.onSave,
+      );
     } catch (e) {
       console.error("Draw edit session save failed", e);
+      return;
+    }
+    if (result.status !== "saved") {
+      const content = {
+        active_drawing:
+          "Finish the active drawing with Enter or double-click, or discard it with Escape, before saving.",
+        incomplete:
+          "Finish or discard the geometry currently being drawn before saving.",
+        incompatible:
+          "All geometry parts must use the source's point, line, or polygon type.",
+        multipart_not_allowed:
+          "This geometry column accepts only one geometry part.",
+      }[result.status];
+      await modalDialog({
+        title: "Geometry cannot be saved",
+        content,
+      });
       return;
     }
     md.finishEditSession(result);
@@ -879,98 +980,26 @@ class MapxDraw extends EventSimple {
     return feature.geom || feature.geometry || null;
   }
 
-  async ensureEditZoom(opt) {
-    const md = this;
-    const minZoom = Number(opt.minZoom || 0);
-    if (!minZoom || md._map.getZoom() >= minZoom) {
-      return;
-    }
-    const geometry = md.getFeatureGeometry(opt.feature) || opt.geometry;
-    if (geometry) {
-      md.focusGeometry(geometry, { minZoom });
-    } else {
-      md._map.flyTo({
-        center: md._map.getCenter(),
-        zoom: minZoom,
-        duration: 300,
-      });
-    }
-    await md.waitForMapMove();
-    if (md._map.getZoom() < minZoom) {
-      md._map.setZoom(minZoom);
-    }
-  }
-
-  waitForMapMove(timeout = 1200) {
-    const md = this;
-    return new Promise((resolve) => {
-      let done = false;
-      const finish = () => {
-        if (done) {
-          return;
-        }
-        done = true;
-        clearTimeout(timer);
-        md._map.off("moveend", finish);
-        resolve();
-      };
-      const timer = setTimeout(finish, timeout);
-      md._map.once("moveend", finish);
-    });
-  }
-
   focusGeometry(geometry, opt = {}) {
     const md = this;
-    const minZoom = Number(opt.minZoom || 0);
-    const coords = [];
-    collectCoordinates(geometry?.coordinates);
-    if (coords.length === 0) {
+    const maxZoom = Number(opt.maxZoom || 0);
+    const focus = getGeometryFocus(geometry);
+    if (!focus) {
       return;
     }
-    const lngs = coords.map((c) => c[0]);
-    const lats = coords.map((c) => c[1]);
-    const bounds = [
-      [Math.min(...lngs), Math.min(...lats)],
-      [Math.max(...lngs), Math.max(...lats)],
-    ];
-    const center = [
-      (bounds[0][0] + bounds[1][0]) / 2,
-      (bounds[0][1] + bounds[1][1]) / 2,
-    ];
-    if (bounds[0][0] === bounds[1][0] && bounds[0][1] === bounds[1][1]) {
+    if (focus.isPoint) {
       md._map.flyTo({
-        center,
-        zoom: Math.max(md._map.getZoom(), minZoom),
+        center: focus.center,
+        zoom: maxZoom || md._map.getZoom(),
         duration: 300,
       });
       return;
     }
-    if (md._map.getZoom() < minZoom) {
-      md._map.flyTo({
-        center,
-        zoom: minZoom,
-        duration: 300,
-      });
-      return;
-    }
-    md._map.fitBounds(bounds, {
+    md._map.fitBounds(focus.bounds, {
       padding: 80,
-      maxZoom: Math.max(md._map.getZoom(), minZoom),
+      maxZoom: maxZoom || md._map.getZoom(),
       duration: 300,
     });
-
-    function collectCoordinates(value) {
-      if (!Array.isArray(value)) {
-        return;
-      }
-      if (typeof value[0] === "number" && typeof value[1] === "number") {
-        coords.push(value);
-        return;
-      }
-      for (const item of value) {
-        collectCoordinates(item);
-      }
-    }
   }
 
   clearButtonsType() {

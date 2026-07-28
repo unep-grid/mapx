@@ -12,11 +12,13 @@ const mxMock = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("../../mx.js", () => mxMock);
-
-vi.mock("../../mx_helper_modal.js", () => ({
+const modalMock = vi.hoisted(() => ({
   modalDialog: vi.fn().mockResolvedValue(true),
 }));
+
+vi.mock("../../mx.js", () => mxMock);
+
+vi.mock("../../mx_helper_modal.js", () => modalMock);
 
 import {
   editFeatureGeometry,
@@ -29,7 +31,10 @@ describe("getGeometryTypeSimple", () => {
     expect(getGeometryTypeSimple({ type: "MultiPoint" })).toBe("point");
     expect(getGeometryTypeSimple({ type: "LineString" })).toBe("line");
     expect(getGeometryTypeSimple({ type: "MultiPolygon" })).toBe("polygon");
-    expect(getGeometryTypeSimple(null)).toBe("polygon");
+    expect(getGeometryTypeSimple(null)).toBeNull();
+    expect(
+      getGeometryTypeSimple({ type: "GeometryCollection", geometries: [] }),
+    ).toBeNull();
   });
 });
 
@@ -106,7 +111,65 @@ describe("editFeatureGeometry", () => {
     const call = mxMock.draw.startEditSession.mock.calls[0][0];
     expect(call.type).toBe("point");
     expect(call.feature.geometry).toBe(geom);
-    expect(call.singleFeature).toBe(true);
+    expect(call.allowMultipart).toBe(false);
+    expect(call.promoteToMulti).toBe(false);
+    expect(call.maxZoom).toBe(12);
+  });
+
+  it("uses the declared generic column policy for multipart editing", async () => {
+    const geom = { type: "Point", coordinates: [0, 0] };
+    const session = {
+      getFeature: vi.fn().mockResolvedValue({ gid: 7, geom }),
+      getGeometryInfo: vi.fn().mockResolvedValue({
+        type: "GEOMETRY",
+        srid: 4326,
+        simpleType: "point",
+      }),
+      updateGeometry: vi.fn(),
+      getTableViews: vi.fn().mockResolvedValue(null),
+    };
+    mxMock.draw.startEditSession.mockResolvedValue({ status: "cancelled" });
+
+    await editFeatureGeometry({
+      session,
+      gid: 7,
+      viewsApi: {},
+    });
+
+    const call = mxMock.draw.startEditSession.mock.calls[0][0];
+    expect(session.getGeometryInfo).toHaveBeenCalledOnce();
+    expect(call.allowMultipart).toBe(true);
+    expect(call.promoteToMulti).toBe(true);
+  });
+
+  it("uses each stored multipart geometry's own family", async () => {
+    const geom = {
+      type: "MultiLineString",
+      coordinates: [
+        [
+          [0, 0],
+          [1, 1],
+        ],
+      ],
+    };
+    const session = {
+      getFeature: vi.fn().mockResolvedValue({ gid: 7, geom }),
+      updateGeometry: vi.fn(),
+      getTableViews: vi.fn().mockResolvedValue(null),
+    };
+    mxMock.draw.startEditSession.mockResolvedValue({ status: "cancelled" });
+
+    await editFeatureGeometry({
+      session,
+      gid: 7,
+      geomType: "polygon",
+      viewsApi: {},
+    });
+
+    expect(mxMock.draw.startEditSession.mock.calls[0][0].type).toBe("line");
+    expect(mxMock.draw.startEditSession.mock.calls[0][0].feature.geometry).toBe(
+      geom,
+    );
   });
 
   it("uses the provided geomType for empty geometries", async () => {
@@ -125,6 +188,58 @@ describe("editFeatureGeometry", () => {
     });
 
     expect(mxMock.draw.startEditSession.mock.calls[0][0].type).toBe("line");
+  });
+
+  it("allows multipart drawing for an empty generic geometry row", async () => {
+    const session = {
+      getFeature: vi.fn().mockResolvedValue({ gid: 7, geom: null }),
+      getGeometryInfo: vi.fn().mockResolvedValue({
+        type: "GEOMETRY",
+        srid: 4326,
+        simpleType: "point",
+      }),
+      updateGeometry: vi.fn(),
+      getTableViews: vi.fn().mockResolvedValue(null),
+    };
+    mxMock.draw.startEditSession.mockResolvedValue({ status: "cancelled" });
+
+    await editFeatureGeometry({
+      session,
+      gid: 7,
+      geomType: "point",
+      viewsApi: {},
+    });
+
+    expect(mxMock.draw.startEditSession.mock.calls[0][0]).toEqual(
+      expect.objectContaining({
+        type: "point",
+        allowMultipart: true,
+        promoteToMulti: true,
+      }),
+    );
+  });
+
+  it("rejects GeometryCollection with a visible message", async () => {
+    const geom = {
+      type: "GeometryCollection",
+      geometries: [{ type: "Point", coordinates: [0, 0] }],
+    };
+    const session = {
+      getFeature: vi.fn().mockResolvedValue({ gid: 7, geom }),
+    };
+
+    await expect(
+      editFeatureGeometry({
+        session,
+        gid: 7,
+        viewsApi: {},
+      }),
+    ).rejects.toThrow("Unsupported geometry type: GeometryCollection");
+
+    expect(modalMock.modalDialog).toHaveBeenCalledWith(
+      expect.objectContaining({ title: "Unsupported geometry" }),
+    );
+    expect(mxMock.draw.startEditSession).not.toHaveBeenCalled();
   });
 
   it("restores the main panel even when the draw session fails", async () => {

@@ -1098,6 +1098,21 @@ export class EditTableSessionClient extends EditTableBase {
   }
 
   /**
+   * Read the server-owned declared geometry column type.
+   */
+  async getGeometryInfo() {
+    const et = this;
+    const e = et._config.events;
+    return et.emitGet(
+      e.client_get,
+      {
+        type: "geometry_info",
+      },
+      et._config.timeout_emit,
+    );
+  }
+
+  /**
    * Write a feature geometry ( session interface for geometry_flow )
    * @param {Number} gid Feature id
    * @param {Object} geometry GeoJSON geometry or null

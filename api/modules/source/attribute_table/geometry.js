@@ -79,13 +79,14 @@ export async function getGeometryTypeSimple(idTable, client = pgWrite) {
 }
 
 /**
- * GeoJSON -> geometry SQL expression, promoting to MULTI* when the
- * column type requires it. `$1` is a placeholder for the GeoJSON param.
+ * GeoJSON -> geometry SQL expression. Generic GEOMETRY columns are promoted
+ * to MULTI* like explicitly multipart columns; explicitly simple columns keep
+ * their declared type. `$1` is a placeholder for the GeoJSON param.
  */
 export function getGeomSqlExpression(type) {
   const t = `${type || ""}`.toUpperCase();
   const base = `ST_SetSRID(ST_GeomFromGeoJSON($1), 4326)`;
-  if (t.startsWith("MULTI")) {
+  if (t === "GEOMETRY" || t.startsWith("MULTI")) {
     return `ST_Multi(${base})`;
   }
   return base;

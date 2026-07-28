@@ -823,7 +823,7 @@ export const dialogsMixin = {
       return;
     }
     draw.focusGeometry(feature.geom, {
-      minZoom: 12,
+      maxZoom: 12,
     });
   },
 

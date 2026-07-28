@@ -93,6 +93,27 @@ describe("EditChannel", () => {
     });
   });
 
+  it("requests trusted geometry column metadata", async () => {
+    const info = {
+      type: "MULTIPOINT",
+      srid: 4326,
+      simpleType: "point",
+    };
+    wsMock.emitAsync.mockResolvedValue(info);
+    const ec = new EditChannel({ id_table: "mx_vector_a_b_c_d_e" });
+    ec._id_session = "session_id";
+
+    await expect(ec.getGeometryInfo()).resolves.toBe(info);
+    expect(wsMock.emitAsync).toHaveBeenCalledWith(
+      events.client_get,
+      expect.objectContaining({
+        id_session: "session_id",
+        type: "geometry_info",
+      }),
+      defaults.timeout_emit,
+    );
+  });
+
   it("joins the edit room and resolves on server_joined", async () => {
     wsMock.emitAsync.mockResolvedValue(true);
     const ec = new EditChannel({ id_table: "mx_vector_a_b_c_d_e" });

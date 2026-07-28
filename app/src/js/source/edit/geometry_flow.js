@@ -1,6 +1,7 @@
 import { draw, panels } from "../../mx.js";
 import { isEmpty, isView } from "../../is_test/index.js";
 import { modalDialog } from "../../mx_helper_modal.js";
+import { getEditableGeometryType } from "../../draw/edit_session.js";
 
 /**
  * Shared "edit one feature geometry" orchestration, used by the table
@@ -9,7 +10,7 @@ import { modalDialog } from "../../mx_helper_modal.js";
  * different lock flows and UI around it.
  */
 const def = {
-  min_zoom: 12,
+  max_zoom: 12,
   id_main_panel: "main_panel",
 };
 
@@ -19,14 +20,7 @@ const def = {
  * @return {String} point|line|polygon
  */
 export function getGeometryTypeSimple(geometry) {
-  const type = `${geometry?.type || ""}`.toLowerCase();
-  if (type.includes("point")) {
-    return "point";
-  }
-  if (type.includes("line")) {
-    return "line";
-  }
-  return "polygon";
+  return getEditableGeometryType(geometry);
 }
 
 /**
@@ -34,7 +28,8 @@ export function getGeometryTypeSimple(geometry) {
  * refresh dependent views. The main panel is hidden during the edit.
  *
  * @param {Object} opt
- * @param {Object} opt.session Edit session : {getFeature, updateGeometry, getTableViews}
+ * @param {Object} opt.session Edit session :
+ *        {getFeature, getGeometryInfo, updateGeometry, getTableViews}
  * @param {Number} opt.gid Feature id
  * @param {Object} [opt.geometry] Fallback geometry when the stored one is empty
  * @param {String} [opt.geomType] Geometry type ( point|line|polygon ).
@@ -50,7 +45,22 @@ export async function editFeatureGeometry(opt) {
     throw new Error("Feature not found");
   }
   const geom = feature.geom || geometry || null;
-  const type = geomType || getGeometryTypeSimple(geom);
+  const geometryInfo =
+    typeof session.getGeometryInfo === "function"
+      ? await session.getGeometryInfo()
+      : null;
+  const declaredType = `${geometryInfo?.type || geom?.type || ""}`.toUpperCase();
+  const allowMultipart =
+    declaredType === "GEOMETRY" || declaredType.startsWith("MULTI");
+  const type = geom ? getGeometryTypeSimple(geom) : geomType || "polygon";
+  if (geom && !type) {
+    await modalDialog({
+      title: "Unsupported geometry",
+      content:
+        "GeometryCollection cannot be edited. Point, line, polygon and their multipart variants are supported.",
+    });
+    throw new Error(`Unsupported geometry type: ${geom.type || "unknown"}`);
+  }
   const mainPanelWasVisible = hideMainPanel();
   try {
     const result = await draw.startEditSession({
@@ -62,8 +72,9 @@ export async function editFeatureGeometry(opt) {
         },
         geometry: geom,
       },
-      minZoom: def.min_zoom,
-      singleFeature: true,
+      maxZoom: def.max_zoom,
+      allowMultipart,
+      promoteToMulti: allowMultipart,
       onSave: async ({ geometry }) => {
         try {
           const saved = await session.updateGeometry(feature.gid, geometry);

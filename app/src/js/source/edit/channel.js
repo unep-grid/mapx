@@ -172,6 +172,13 @@ export class EditChannel {
     });
   }
 
+  async getGeometryInfo() {
+    const ec = this;
+    return ec.emitGet({
+      type: "geometry_info",
+    });
+  }
+
   async getTableViews() {
     const ec = this;
     return ec.emitGet({

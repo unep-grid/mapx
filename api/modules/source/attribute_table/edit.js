@@ -33,6 +33,7 @@ import {
   addGeometryStatusToRows,
   cols,
   getFeatureByGid,
+  getGeometryColumnInfo,
   getGeometryTypeSimple,
 } from "./geometry.js";
 
@@ -469,6 +470,12 @@ class EditTableSession {
         }
         case "geometry_edit_lock": {
           return callback(await et.getGeometryEditLock());
+        }
+        case "geometry_info": {
+          const hasGeom = await columnExists(cols.geom, et._id_table);
+          return callback(
+            hasGeom ? await getGeometryColumnInfo(et._id_table) : false
+          );
         }
         case "columns_used": {
           const data = await getLayerUsedAttributes(et._id_table);
