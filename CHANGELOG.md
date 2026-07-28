@@ -1,3 +1,11 @@
+  - [1.14.1-alpha.4](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.4) 
+
+    - fix(geometry-editor): support multipart geometries safely
+    - fix: project browser button panel resize overlap
+    - feat(#1117): fix project change bug, guest auth issue, join button, and api code cleaning
+    - feat(#1117): project list improvements featured/favorites settings and better UI
+
+
   - [1.14.1-alpha.3](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.3) 
 
     - fix: project change, once loaded, should close the window
