@@ -4,18 +4,11 @@ import { ws } from "../../mx";
 import { getDictItem } from "../../language";
 import { makeId } from "../../mx_helper_misc";
 import { SelectAuto } from "../../select_auto";
+import { ElementCreator } from "../../el/src/index.js";
 import "./style.less";
 
 const resultEvent = "/server/source/overlap/result";
 const progressEvent = "/server/source/overlap/progress";
-
-function make(doc, tag, options = {}) {
-  const element = doc.createElement(tag);
-  if (options.className) element.className = options.className;
-  if (options.text !== undefined) element.textContent = `${options.text}`;
-  if (options.type) element.type = options.type;
-  return element;
-}
 
 export class MxSourceOverlapElement extends HTMLElement {
   constructor() {
@@ -23,6 +16,15 @@ export class MxSourceOverlapElement extends HTMLElement {
     this.labels = {};
     this.onResult = this.onResult.bind(this);
     this.onProgress = this.onProgress.bind(this);
+  }
+
+  get elements() {
+    if (this.elementCreator?.document !== this.ownerDocument) {
+      this.elementCreator = new ElementCreator({
+        document: this.ownerDocument,
+      });
+    }
+    return this.elementCreator;
   }
 
   connectedCallback() {
@@ -34,10 +36,7 @@ export class MxSourceOverlapElement extends HTMLElement {
     this.initialize().catch((error) => {
       const message = error?.message || "Unable to load the overlap tool";
       this.replaceChildren(
-        make(this.ownerDocument, "p", {
-          className: "alert alert-danger",
-          text: message,
-        }),
+        this.elements.el("p", { class: "alert alert-danger" }, message),
       );
     });
   }
@@ -132,34 +131,37 @@ export class MxSourceOverlapElement extends HTMLElement {
   }
 
   render() {
-    const doc = this.ownerDocument;
-    const form = make(doc, "form", { className: "mx-source-overlap" });
+    const { el } = this.elements;
+    const form = el("form", { class: "mx-source-overlap" });
     const mode = this.makeModeField();
     const sources = this.makeSelectField("select_overlap_layers", true);
     const country = this.makeSelectField("select_overlap_countries");
     const title = this.makeInput("source_title");
-    const run = make(doc, "button", {
-      type: "submit",
-      text: this.labels.btn_analyse,
-      className: "btn btn-primary mx-source-overlap__run",
-    });
-    const outputWrapper = make(doc, "div", {
-      className: "mx-source-overlap__status",
+    const run = el(
+      "button",
+      {
+        type: "submit",
+        class: "btn btn-primary mx-source-overlap__run",
+      },
+      this.labels.btn_analyse,
+    );
+    const outputWrapper = el("div", {
+      class: "mx-source-overlap__status",
     });
     outputWrapper.hidden = true;
-    const output = make(doc, "output", {
-      className: "mx-source-overlap__result",
+    const output = el("output", {
+      class: "mx-source-overlap__result",
     });
     output.setAttribute("aria-live", "polite");
     outputWrapper.append(output);
 
-    const logsDetails = make(doc, "details", {
-      className: "mx-source-overlap__logs-details",
+    const logsDetails = el("details", {
+      class: "mx-source-overlap__logs-details",
     });
     logsDetails.hidden = true;
-    const logsSummary = make(doc, "summary", { text: this.labels.logs });
-    const logs = make(doc, "ul", {
-      className: "mx-source-overlap__logs",
+    const logsSummary = el("summary", this.labels.logs);
+    const logs = el("ul", {
+      class: "mx-source-overlap__logs",
     });
     logsDetails.append(logsSummary, logs);
 
@@ -197,15 +199,13 @@ export class MxSourceOverlapElement extends HTMLElement {
   }
 
   makeModeField() {
-    const doc = this.ownerDocument;
-    const wrapper = make(doc, "fieldset", {
-      className: "mx-source-overlap__mode",
+    const { el } = this.elements;
+    const wrapper = el("fieldset", {
+      class: "mx-source-overlap__mode",
     });
-    wrapper.append(
-      make(doc, "legend", { text: this.labels.radio_source_overlap_mode }),
-    );
-    const choices = make(doc, "div", {
-      className: "mx-source-overlap__mode-options",
+    wrapper.append(el("legend", this.labels.radio_source_overlap_mode));
+    const choices = el("div", {
+      class: "mx-source-overlap__mode-options",
     });
     const inputs = {};
     for (const option of [
@@ -218,14 +218,14 @@ export class MxSourceOverlapElement extends HTMLElement {
         label: this.labels.source_overlap_mode_create_source,
       },
     ]) {
-      const label = make(doc, "label", {
-        className: "mx-source-overlap__mode-option",
+      const label = el("label", {
+        class: "mx-source-overlap__mode-option",
       });
-      const input = make(doc, "input", { type: "radio" });
+      const input = el("input", { type: "radio" });
       input.name = "source-overlap-mode";
       input.value = option.key === "area" ? "area" : "create_source";
       input.checked = option.key === "area";
-      label.append(input, make(doc, "span", { text: option.label }));
+      label.append(input, el("span", option.label));
       choices.append(label);
       inputs[option.key] = input;
     }
@@ -234,22 +234,22 @@ export class MxSourceOverlapElement extends HTMLElement {
   }
 
   makeSelectField(labelKey, multiple = false) {
-    const doc = this.ownerDocument;
-    const wrapper = make(doc, "label", { className: "form-group" });
-    wrapper.append(make(doc, "span", { text: this.labels[labelKey] }));
-    const control = make(doc, "select", { className: "form-control" });
+    const { el } = this.elements;
+    const wrapper = el("label", { class: "form-group" });
+    wrapper.append(el("span", this.labels[labelKey]));
+    const control = el("select", { class: "form-control" });
     control.multiple = multiple;
     wrapper.append(control);
     return { wrapper, control };
   }
 
   makeInput(labelKey) {
-    const doc = this.ownerDocument;
-    const wrapper = make(doc, "label", { className: "form-group" });
-    wrapper.append(make(doc, "span", { text: this.labels[labelKey] }));
-    const control = make(doc, "input", {
+    const { el } = this.elements;
+    const wrapper = el("label", { class: "form-group" });
+    wrapper.append(el("span", this.labels[labelKey]));
+    const control = el("input", {
       type: "text",
-      className: "form-control",
+      class: "form-control",
     });
     control.minLength = 5;
     control.maxLength = 200;
@@ -395,7 +395,9 @@ export class MxSourceOverlapElement extends HTMLElement {
     if (firstMessage) {
       this.refs.logsDetails.open = true;
     }
-    this.refs.logs.append(make(this.ownerDocument, "li", { text: message }));
+    const item = this.elements.el("li");
+    item.textContent = message;
+    this.refs.logs.append(item);
   }
 }
 

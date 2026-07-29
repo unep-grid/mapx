@@ -1,4 +1,5 @@
 // @ts-check
+import { ElementCreator } from "../el/src/index.js";
 
 /** @typedef {"left" | "right"} MxWindowSnapSide */
 
@@ -31,16 +32,14 @@ export class MxWindowElement extends HTMLElement {
   }
 
   build() {
-    const doc = this.ownerDocument;
-    const make = (tag, className) => {
-      const node = doc.createElement(tag);
-      if (className) node.className = className;
-      return node;
-    };
-    const header = make("header", "mx-window__header");
+    this.elementCreator = new ElementCreator({
+      document: this.ownerDocument,
+    });
+    const { el } = this.elementCreator;
+    const header = el("header", { class: "mx-window__header" });
     this.tabIndex = -1;
-    const title = make("h2", "mx-window__title");
-    const actions = make("div", "mx-window__actions");
+    const title = el("h2", { class: "mx-window__title" });
+    const actions = el("div", { class: "mx-window__actions" });
     const snapLeft = this.makeAction("caret-left", "Snap left", "snap-left");
     const snapRight = this.makeAction(
       "caret-right",
@@ -52,15 +51,15 @@ export class MxWindowElement extends HTMLElement {
     actions.append(snapLeft, snapRight, collapse, close);
     header.append(title, actions);
 
-    const body = make("div", "mx-window__body");
-    const content = make("div", "mx-window__content");
+    const body = el("div", { class: "mx-window__body" });
+    const content = el("div", { class: "mx-window__content" });
     body.appendChild(content);
-    const footer = make("footer", "mx-window__footer");
-    const footerStart = make("div", "mx-window__footer-start");
-    const status = make("div", "mx-window__status");
-    const footerEnd = make("div", "mx-window__footer-end");
+    const footer = el("footer", { class: "mx-window__footer" });
+    const footerStart = el("div", { class: "mx-window__footer-start" });
+    const status = el("div", { class: "mx-window__status" });
+    const footerEnd = el("div", { class: "mx-window__footer-end" });
     footer.append(footerStart, status, footerEnd);
-    const resizeHandle = make("div", "mx-window__resize-handle");
+    const resizeHandle = el("div", { class: "mx-window__resize-handle" });
     resizeHandle.setAttribute("aria-hidden", "true");
     resizeHandle.dataset.windowAction = "resize";
     this.append(header, body, footer, resizeHandle);
@@ -87,12 +86,13 @@ export class MxWindowElement extends HTMLElement {
   }
 
   makeAction(icon, label, action) {
-    const button = this.ownerDocument.createElement("button");
+    const { el } = this.elementCreator;
+    const button = el("button");
     button.type = "button";
     button.className = "btn btn-default mx-window__action";
     button.dataset.windowAction = action;
     button.setAttribute("aria-label", label);
-    const glyph = this.ownerDocument.createElement("i");
+    const glyph = el("i");
     glyph.className = `fa fa-${icon}`;
     glyph.setAttribute("aria-hidden", "true");
     button.appendChild(glyph);
@@ -140,7 +140,7 @@ export class MxWindowElement extends HTMLElement {
   setNodes(target, value) {
     const values = Array.isArray(value) ? value : value == null ? [] : [value];
     const nodes = values.map((item) =>
-      item instanceof Node
+      item && typeof item === "object" && typeof item.nodeType === "number"
         ? item
         : this.ownerDocument.createTextNode(String(item)),
     );

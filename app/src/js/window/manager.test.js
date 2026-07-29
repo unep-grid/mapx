@@ -17,6 +17,9 @@ describe("MxWindowManager", () => {
   });
 
   it("opens, replaces and closes a keyed modal without global lookup", () => {
+    expect(manager.elementCreator.document).toBe(root.ownerDocument);
+    expect(manager.layer.ownerDocument).toBe(root.ownerDocument);
+
     const firstContent = document.createElement("p");
     firstContent.textContent = "First";
     const first = manager.open({

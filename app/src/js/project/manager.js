@@ -172,11 +172,11 @@ export class ProjectManager {
     const pm = this;
     request = request || {};
     const windowManager = getMapxWindowManager();
+    const createElement = windowManager.el;
     if (pm._projectListWindow) {
       windowManager.close(pm._projectListWindow, "replace");
     }
-    const projectList =
-      windowManager.root.ownerDocument.createElement("mx-project-list");
+    const projectList = createElement("mx-project-list");
     let projectListWindow = null;
     const initialFilters = pm._projectListQueryConsumed
       ? {}
@@ -213,7 +213,7 @@ export class ProjectManager {
         settings.project.title?.[settings.language] ||
         settings.project.title?.en ||
         settings.project.id;
-      const button = el(
+      const button = createElement(
         "button",
         {
           class: ["btn", "btn-default"],
@@ -226,7 +226,7 @@ export class ProjectManager {
       buttons.push(button);
     }
 
-    const closeButton = el(
+    const closeButton = createElement(
       "button",
       {
         class: ["btn", "btn-default"],

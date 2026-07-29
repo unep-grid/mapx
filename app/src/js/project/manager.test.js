@@ -3,10 +3,11 @@ import { describe, expect, it, vi } from "vitest";
 const { projectList, projectListWindow, windowManager } = vi.hoisted(() => {
   const projectList = { configure: vi.fn() };
   const projectListWindow = { close: vi.fn() };
+  const el = vi.fn((tag) =>
+    tag === "mx-project-list" ? projectList : document.createElement(tag),
+  );
   const windowManager = {
-    root: {
-      ownerDocument: { createElement: vi.fn(() => projectList) },
-    },
+    el,
     close: vi.fn(),
     open: vi.fn(() => projectListWindow),
   };

@@ -1,5 +1,7 @@
 // @ts-check
 import "./element.js";
+import { ElementCreator } from "../el/src/index.js";
+import { isElement } from "../is_test/index.js";
 
 /**
  * @typedef {Object} MxWindowConfig
@@ -32,10 +34,17 @@ if (!customElements.get("mx-window-layer")) {
 export class MxWindowManager {
   /** @param {{root: HTMLElement}} options */
   constructor({ root }) {
-    if (!(root instanceof HTMLElement))
+    if (
+      !isElement(root) ||
+      root.namespaceURI !== "http://www.w3.org/1999/xhtml"
+    )
       throw new TypeError("MxWindowManager requires a root element");
     this.root = root;
-    this.layer = root.ownerDocument.createElement("mx-window-layer");
+    this.elementCreator = new ElementCreator({
+      document: root.ownerDocument,
+    });
+    this.el = this.elementCreator.el;
+    this.layer = this.el("mx-window-layer");
     this.root.appendChild(this.layer);
     /** @type {Map<string, import("./element.js").MxWindowElement>} */
     this.windows = new Map();
@@ -76,19 +85,20 @@ export class MxWindowManager {
     if (existing) return existing;
 
     const doc = this.root.ownerDocument;
-    const backdrop = config.modal === false ? null : doc.createElement("div");
+    const backdrop = config.modal === false ? null : this.el("div");
     if (backdrop) {
       backdrop.className = "mx-window-backdrop";
       backdrop.dataset.windowKey = key;
       this.layer.appendChild(backdrop);
     }
     const element = /** @type {import("./element.js").MxWindowElement} */ (
-      doc.createElement("mx-window")
+      this.el("mx-window")
     );
     element.manager = this;
     element.backdrop = backdrop;
-    element.returnFocus =
-      doc.activeElement instanceof HTMLElement ? doc.activeElement : null;
+    element.returnFocus = isElement(doc.activeElement)
+      ? doc.activeElement
+      : null;
     element.configure({ ...config, key });
     this.layer.appendChild(element);
     this.windows.set(key, element);

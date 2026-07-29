@@ -80,6 +80,8 @@ describe("mx-project-list", () => {
 
   it("keeps search visible and applies metadata-derived popover filters", async () => {
     const element = await mount();
+    expect(element.elementCreator.document).toBe(element.ownerDocument);
+    expect(element.searchInput.ownerDocument).toBe(element.ownerDocument);
     expect(element.searchInput).not.toBeNull();
     expect(element.toolsPopover.hidden).toBe(true);
     element.toolsButton.click();

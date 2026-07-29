@@ -2,7 +2,7 @@ import { requestProjectMembership, setProject } from "../map_helpers/index.js";
 import { getDictItem } from "../language";
 import { settings } from "../settings";
 import { ws } from "../mx.js";
-import { el } from "../el/src/index.js";
+import { ElementCreator } from "../el/src/index.js";
 import {
   PROJECT_LIST_CHUNK_SIZE,
   PROJECT_LIST_INITIAL_SIZE,
@@ -83,7 +83,7 @@ const SORT_OPTIONS = [
   ["collaborators_asc", "project_list_sort_collaborators_asc"],
 ];
 
-function iconButton(className, iconClass, label, action) {
+function iconButton(el, className, iconClass, label, action) {
   return el(
     "button",
     {
@@ -119,6 +119,15 @@ export class ProjectListElement extends HTMLElement {
     this._onScroll = this.onScroll.bind(this);
     this._onContextMenu = this.onContextMenu.bind(this);
     this._onOutsidePointerDown = this.onOutsidePointerDown.bind(this);
+  }
+
+  get el() {
+    if (this.elementCreator?.document !== this.ownerDocument) {
+      this.elementCreator = new ElementCreator({
+        document: this.ownerDocument,
+      });
+    }
+    return this.elementCreator.el;
   }
 
   connectedCallback() {
@@ -198,15 +207,15 @@ export class ProjectListElement extends HTMLElement {
 
   buildShell() {
     this.replaceChildren();
-    const controls = el("div", { class: "mx-project-browser-controls" });
-    const searchWrap = el("label", {
+    const controls = this.el("div", { class: "mx-project-browser-controls" });
+    const searchWrap = this.el("label", {
       class: "mx-project-browser-search-wrap",
     });
-    const searchIcon = el("i", {
+    const searchIcon = this.el("i", {
       class: "fa fa-search",
       "aria-hidden": "true",
     });
-    this.searchInput = el("input", {
+    this.searchInput = this.el("input", {
       class: "form-control mx-project-browser-search",
     });
     this.searchInput.type = "search";
@@ -219,6 +228,7 @@ export class ProjectListElement extends HTMLElement {
     searchWrap.append(searchIcon, this.searchInput);
 
     this.toolsButton = iconButton(
+      this.el,
       "btn btn-circle btn-circle-medium mx-project-browser-tools-button",
       "fa fa-sliders",
       this.label("project_list_search_tools"),
@@ -228,7 +238,7 @@ export class ProjectListElement extends HTMLElement {
     this.toolsButton.setAttribute("aria-haspopup", "dialog");
     this.toolsButton.setAttribute("aria-controls", "mx-project-browser-tools");
 
-    this.toolsPopover = el("div", {
+    this.toolsPopover = this.el("div", {
       class: "mx-project-browser-tools-popover",
     });
     this.toolsPopover.id = "mx-project-browser-tools";
@@ -240,21 +250,21 @@ export class ProjectListElement extends HTMLElement {
     );
     controls.append(searchWrap, this.toolsButton, this.toolsPopover);
 
-    this.results = el("div", { class: "mx-project-browser-results" });
+    this.results = this.el("div", { class: "mx-project-browser-results" });
     this.results.setAttribute("role", "list");
     this.results.setAttribute("aria-busy", "true");
-    this.rows = el("div", { class: "mx-project-browser-rows" });
-    this.message = el(
+    this.rows = this.el("div", { class: "mx-project-browser-rows" });
+    this.message = this.el(
       "div",
       { class: "mx-project-browser-message" },
       this.label("project_list_loading"),
     );
     this.message.setAttribute("aria-live", "polite");
-    this.sentinel = el("div", { class: "mx-project-browser-sentinel" });
+    this.sentinel = this.el("div", { class: "mx-project-browser-sentinel" });
     this.sentinel.setAttribute("aria-hidden", "true");
     this.results.append(this.rows, this.message, this.sentinel);
 
-    this.curatorPopover = el("div", {
+    this.curatorPopover = this.el("div", {
       class: "mx-project-browser-curator-popover",
     });
     this.curatorPopover.hidden = true;
@@ -264,8 +274,8 @@ export class ProjectListElement extends HTMLElement {
       this.label("project_featured_actions"),
     );
 
-    const footer = el("div", { class: "mx-project-browser-footer" });
-    this.counter = el("span", { class: "mx-project-browser-counter" });
+    const footer = this.el("div", { class: "mx-project-browser-footer" });
+    this.counter = this.el("span", { class: "mx-project-browser-counter" });
     this.counter.setAttribute("aria-live", "polite");
     footer.appendChild(this.counter);
     this.append(controls, this.results, this.curatorPopover, footer);
@@ -275,13 +285,13 @@ export class ProjectListElement extends HTMLElement {
   }
 
   buildSelect(filter, labelKey, options, value) {
-    const select = el("select", {
+    const select = this.el("select", {
       class: "form-control",
       dataset: { filter },
       "aria-label": this.label(labelKey),
     });
     for (const [optionValue, optionLabel] of options) {
-      const option = el("option", this.label(optionLabel));
+      const option = this.el("option", this.label(optionLabel));
       option.value = optionValue;
       select.appendChild(option);
     }
@@ -291,7 +301,7 @@ export class ProjectListElement extends HTMLElement {
 
   buildTools() {
     this.toolsPopover.replaceChildren();
-    const scopes = el("div", {
+    const scopes = this.el("div", {
       class: "btn-group mx-project-browser-scopes",
     });
     scopes.setAttribute("role", "group");
@@ -304,7 +314,7 @@ export class ProjectListElement extends HTMLElement {
       ["accessible", "project_list_all_accessible"],
       ["mine", "project_list_my_projects"],
     ]) {
-      const button = el(
+      const button = this.el(
         "button",
         {
           class: "btn btn-default",
@@ -367,7 +377,7 @@ export class ProjectListElement extends HTMLElement {
       SORT_OPTIONS,
       this.state.sort,
     );
-    this.clearButton = el(
+    this.clearButton = this.el(
       "button",
       {
         class: "btn btn-link mx-project-browser-clear",
@@ -387,7 +397,7 @@ export class ProjectListElement extends HTMLElement {
   }
 
   wrapTool(control) {
-    const wrapper = el("div", { class: "mx-project-browser-tool" });
+    const wrapper = this.el("div", { class: "mx-project-browser-tool" });
     wrapper.appendChild(control);
     return wrapper;
   }
@@ -454,14 +464,14 @@ export class ProjectListElement extends HTMLElement {
   }
 
   buildRow(project) {
-    const row = el("div", {
+    const row = this.el("div", {
       class: "mx-project-browser-row",
       dataset: { projectId: project.id, action: "open" },
       tabindex: "0",
       role: "listitem",
     });
 
-    const avatar = el(
+    const avatar = this.el(
       "span",
       {
         class: "mx-project-browser-avatar",
@@ -479,18 +489,17 @@ export class ProjectListElement extends HTMLElement {
       this.setLogo(avatar, this.logos.get(project.id), project.title);
     }
 
-    const text = el("div", { class: "mx-project-browser-text" });
-    const heading = el("div", { class: "mx-project-browser-heading" });
+    const text = this.el("div", { class: "mx-project-browser-text" });
+    const heading = this.el("div", { class: "mx-project-browser-heading" });
     heading.append(
-      el("strong", { class: "mx-project-browser-title" }, project.title),
+      this.el("strong", { class: "mx-project-browser-title" }, project.title),
     );
     if (this.canCurateFeatured) {
       const featuredLabel = this.label("project_featured_actions");
       const featured = iconButton(
+        this.el,
         "mx-project-browser-heading-action mx-project-browser-featured",
-        project.featured_rank === null
-          ? "fa fa-bookmark-o"
-          : "fa fa-bookmark",
+        project.featured_rank === null ? "fa fa-bookmark-o" : "fa fa-bookmark",
         featuredLabel,
         "curator-menu",
       );
@@ -502,14 +511,14 @@ export class ProjectListElement extends HTMLElement {
       heading.appendChild(featured);
     } else if (project.featured_rank !== null) {
       heading.appendChild(
-        el(
+        this.el(
           "span",
           {
             class: "mx-project-browser-featured",
             title: this.label("project_featured_by_mapx"),
             "aria-label": this.label("project_featured_by_mapx"),
           },
-          el("i", {
+          this.el("i", {
             class: "fa fa-bookmark",
             "aria-hidden": "true",
           }),
@@ -523,6 +532,7 @@ export class ProjectListElement extends HTMLElement {
           : "project_favorite_add",
       );
       const favorite = iconButton(
+        this.el,
         "mx-project-browser-heading-action mx-project-browser-favorite",
         project.is_favorite ? "fa fa-star" : "fa fa-star-o",
         favoriteLabel,
@@ -539,6 +549,7 @@ export class ProjectListElement extends HTMLElement {
       settings.user.guest !== true
     ) {
       const join = iconButton(
+        this.el,
         "mx-project-browser-heading-action mx-project-browser-join",
         "fa fa-sign-in",
         this.label("btn_join_project"),
@@ -550,15 +561,15 @@ export class ProjectListElement extends HTMLElement {
     text.appendChild(heading);
     if (project.description) {
       text.appendChild(
-        el(
+        this.el(
           "span",
           { class: "mx-project-browser-description" },
           project.description,
         ),
       );
     }
-    const meta = el("span", { class: "mx-project-browser-meta" });
-    const stats = el("span", { class: "mx-project-browser-stats" });
+    const meta = this.el("span", { class: "mx-project-browser-meta" });
+    const stats = this.el("span", { class: "mx-project-browser-stats" });
     stats.append(
       this.buildStat(
         "mx-icon mx-view",
@@ -574,7 +585,7 @@ export class ProjectListElement extends HTMLElement {
     meta.appendChild(stats);
     if (project.org_name) {
       meta.appendChild(
-        el(
+        this.el(
           "span",
           { class: "mx-project-browser-organisation" },
           project.org_name,
@@ -583,7 +594,7 @@ export class ProjectListElement extends HTMLElement {
     }
     for (const theme of project.themes.slice(0, 2)) {
       meta.appendChild(
-        el(
+        this.el(
           "span",
           { class: "mx-project-browser-theme" },
           this.themeLabels[theme] || theme,
@@ -592,7 +603,7 @@ export class ProjectListElement extends HTMLElement {
     }
     text.appendChild(meta);
 
-    const role = el(
+    const role = this.el(
       "span",
       {
         class: `mx-project-role mx-project-role-${project.role}`,
@@ -607,8 +618,8 @@ export class ProjectListElement extends HTMLElement {
       .slice(0, 1)
       .toUpperCase();
 
-    const actions = el("span", { class: "mx-project-browser-actions" });
-    const chevron = el("i", {
+    const actions = this.el("span", { class: "mx-project-browser-actions" });
+    const chevron = this.el("i", {
       class: "fa fa-chevron-right mx-project-browser-open",
       "aria-hidden": "true",
     });
@@ -619,15 +630,19 @@ export class ProjectListElement extends HTMLElement {
 
   buildStat(iconClasses, value, labelKey) {
     const label = `${this.label(labelKey)}: ${value}`;
-    return el(
+    return this.el(
       "span",
       {
         class: "mx-project-browser-stat",
         "aria-label": label,
         title: label,
       },
-      el("i", { class: iconClasses, "aria-hidden": "true" }),
-      el("span", { class: "mx-project-browser-stat-value" }, String(value)),
+      this.el("i", { class: iconClasses, "aria-hidden": "true" }),
+      this.el(
+        "span",
+        { class: "mx-project-browser-stat-value" },
+        String(value),
+      ),
     );
   }
 
@@ -686,21 +701,21 @@ export class ProjectListElement extends HTMLElement {
     this.curatorControls = [];
     this.curatorRankInput = null;
     this.curatorPopover.replaceChildren();
-    const header = el(
+    const header = this.el(
       "div",
       { class: "mx-project-browser-curator-header" },
-      el(
+      this.el(
         "span",
         { class: "mx-project-browser-curator-header-icon" },
-        el("i", { class: "fa fa-bookmark", "aria-hidden": "true" }),
+        this.el("i", { class: "fa fa-bookmark", "aria-hidden": "true" }),
       ),
-      el(
+      this.el(
         "strong",
         { class: "mx-project-browser-curator-title" },
         this.label("project_featured_by_mapx"),
       ),
     );
-    const toggle = el(
+    const toggle = this.el(
       "button",
       {
         class: "btn mx-project-browser-curator-action",
@@ -715,7 +730,7 @@ export class ProjectListElement extends HTMLElement {
       ),
     );
     toggle.prepend(
-      el("i", {
+      this.el("i", {
         class:
           project.featured_rank === null
             ? "fa fa-bookmark"
@@ -725,12 +740,12 @@ export class ProjectListElement extends HTMLElement {
     );
     this.curatorControls.push(toggle);
     this.curatorPopover.append(header, toggle);
-    const rankLabel = el(
+    const rankLabel = this.el(
       "label",
       { class: "mx-project-browser-rank-label" },
       this.label("project_featured_rank"),
     );
-    const rank = el("input", {
+    const rank = this.el("input", {
       class: "form-control mx-project-browser-rank-input",
       type: "number",
       min: "1",
@@ -742,7 +757,7 @@ export class ProjectListElement extends HTMLElement {
     this.curatorRankInput = rank;
     this.curatorControls.push(rank);
     rankLabel.appendChild(rank);
-    const save = el(
+    const save = this.el(
       "button",
       {
         class: "btn btn-primary mx-project-browser-rank-save",
@@ -752,7 +767,7 @@ export class ProjectListElement extends HTMLElement {
       this.label("project_featured_save_rank"),
     );
     save.prepend(
-      el("i", {
+      this.el("i", {
         class: "fa fa-check",
         "aria-hidden": "true",
       }),
@@ -777,10 +792,7 @@ export class ProjectListElement extends HTMLElement {
         popoverWidth / 2;
       const maxLeft = Math.max(8, hostRect.width - popoverWidth - 8);
       const maxTop = Math.max(8, hostRect.height - popoverHeight - 8);
-      this.curatorPopover.style.top = `${Math.min(
-        Math.max(8, top),
-        maxTop,
-      )}px`;
+      this.curatorPopover.style.top = `${Math.min(Math.max(8, top), maxTop)}px`;
       this.curatorPopover.style.left = `${Math.min(
         Math.max(8, preferredLeft),
         maxLeft,
@@ -931,7 +943,7 @@ export class ProjectListElement extends HTMLElement {
   }
 
   setLogo(container, logo, title) {
-    const image = el("img", { title: title || "" });
+    const image = this.el("img", { title: title || "" });
     image.alt = "";
     image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(logo)}`;
     container.replaceChildren(image);

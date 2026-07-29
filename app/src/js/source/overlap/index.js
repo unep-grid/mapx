@@ -5,8 +5,7 @@ import { settings } from "../../settings";
 
 export async function openSourceOverlap(_request) {
   const manager = getMapxWindowManager();
-  const component =
-    manager.root.ownerDocument.createElement("mx-source-overlap");
+  const component = manager.el("mx-source-overlap");
   return manager.open({
     key: "source-overlap",
     replace: true,

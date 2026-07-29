@@ -78,6 +78,12 @@ describe("MxSourceOverlapElement", () => {
   });
 
   it("configures ordered source and searchable country selectors", () => {
+    expect(component.elements.document).toBe(component.ownerDocument);
+    expect(
+      Object.values(component.refs).every(
+        (element) => element.ownerDocument === component.ownerDocument,
+      ),
+    ).toBe(true);
     expect(component.sourceSelect.config).toMatchObject({
       closeAfterSelect: false,
       maxItems: 3,
