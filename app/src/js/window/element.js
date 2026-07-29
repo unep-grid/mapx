@@ -41,9 +41,9 @@ export class MxWindowElement extends HTMLElement {
     this.tabIndex = -1;
     const title = make("h2", "mx-window__title");
     const actions = make("div", "mx-window__actions");
-    const snapLeft = this.makeAction("arrow-left", "Snap left", "snap-left");
+    const snapLeft = this.makeAction("caret-left", "Snap left", "snap-left");
     const snapRight = this.makeAction(
-      "arrow-right",
+      "caret-right",
       "Snap right",
       "snap-right",
     );
