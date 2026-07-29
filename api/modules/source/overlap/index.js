@@ -93,11 +93,22 @@ async function validateOverlapRequest(socket, request) {
     throw new Error("One or more overlap sources are not readable");
   }
 
-  const mainIdentity = await getSourceIdentityStatus(layers[0]);
-  if (!mainIdentity.valid) {
-    throw new Error(
-      `Base source gid identity is invalid: ${mainIdentity.issues.join(", ")}`,
+  if (mode === "create_source") {
+    const mainIdentity = await getSourceIdentityStatus(layers[0]);
+    const requiredIssues = mainIdentity.issues.filter((issue) =>
+      ["missing_gid", "invalid_gid_type"].includes(issue),
     );
+    if (
+      mainIdentity.duplicateCount > 0 &&
+      !requiredIssues.includes("duplicate_gid")
+    ) {
+      requiredIssues.push("duplicate_gid");
+    }
+    if (requiredIssues.length > 0) {
+      throw new Error(
+        `Base source gid is invalid: ${requiredIssues.join(", ")}`,
+      );
+    }
   }
 
   return {

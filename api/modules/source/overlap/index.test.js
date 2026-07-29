@@ -70,7 +70,11 @@ describe("ioSourceOverlap", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mocks.getSourcesList.mockResolvedValue([{ id: base }]);
-    mocks.getIdentity.mockResolvedValue({ valid: true, issues: [] });
+    mocks.getIdentity.mockResolvedValue({
+      valid: true,
+      issues: [],
+      duplicateCount: 0,
+    });
     mocks.areLayersValid.mockResolvedValue([
       { id: base, title: "Base", valid: true },
     ]);
@@ -123,6 +127,40 @@ describe("ioSourceOverlap", () => {
         area_m2: 1234,
       }),
     );
+    expect(mocks.getIdentity).not.toHaveBeenCalled();
+  });
+
+  it("calculates area without enforcing the editor gid identity contract", async () => {
+    mocks.getIdentity.mockResolvedValue({
+      valid: false,
+      issues: [
+        "invalid_gid_type",
+        "null_gid",
+        "duplicate_gid",
+        "missing_gid_default",
+      ],
+      duplicateCount: 2,
+    });
+    const socket = makeSocket();
+    const callback = vi.fn();
+
+    await ioSourceOverlap(
+      socket,
+      {
+        id_request: "request_legacy_area",
+        mode: "area",
+        layers: [base],
+        country: "CHE",
+      },
+      callback,
+    );
+
+    expect(callback).toHaveBeenCalledWith({
+      accepted: true,
+      id_request: "request_legacy_area",
+    });
+    expect(mocks.getIdentity).not.toHaveBeenCalled();
+    expect(mocks.areaQuery).toHaveBeenCalled();
   });
 
   it("rejects unreadable sources before running geometry queries", async () => {
@@ -195,6 +233,91 @@ describe("ioSourceOverlap", () => {
       }),
     );
     expect(client.release).toHaveBeenCalled();
+  });
+
+  it("creates a source from a usable legacy gid without modern constraints", async () => {
+    mocks.getIdentity.mockResolvedValue({
+      valid: false,
+      issues: ["null_gid", "duplicate_gid", "missing_gid_default"],
+      duplicateCount: 0,
+    });
+    const client = {
+      query: vi.fn(async (query) => {
+        const text = typeof query === "string" ? query : query.text;
+        if (text.includes("SELECT count(*)")) {
+          return { rows: [{ count: 1 }] };
+        }
+        if (text.includes("ST_Dump(geom)")) {
+          return { rows: [{ dimensions: [2] }] };
+        }
+        return { rowCount: 1, rows: [] };
+      }),
+      release: vi.fn(),
+    };
+    mocks.connect.mockResolvedValue(client);
+    const socket = makeSocket();
+    const callback = vi.fn();
+
+    await ioSourceOverlap(
+      socket,
+      {
+        id_request: "request_legacy_create",
+        mode: "create_source",
+        layers: [base],
+        country: "CHE",
+        title: "Legacy intersection",
+      },
+      callback,
+    );
+
+    expect(callback).toHaveBeenCalledWith({
+      accepted: true,
+      id_request: "request_legacy_create",
+    });
+    expect(mocks.connect).toHaveBeenCalled();
+    expect(client.query).toHaveBeenCalledWith("COMMIT");
+  });
+
+  it.each([
+    [
+      "a missing gid",
+      { valid: false, issues: ["missing_gid"], duplicateCount: 0 },
+      "missing_gid",
+    ],
+    [
+      "an unsupported gid type",
+      { valid: false, issues: ["invalid_gid_type"], duplicateCount: 0 },
+      "invalid_gid_type",
+    ],
+    [
+      "duplicate gid values",
+      { valid: false, issues: ["duplicate_gid"], duplicateCount: 2 },
+      "duplicate_gid",
+    ],
+  ])("rejects source creation with %s", async (_, identity, issue) => {
+    mocks.getIdentity.mockResolvedValue(identity);
+    const socket = makeSocket();
+    const callback = vi.fn();
+
+    await ioSourceOverlap(
+      socket,
+      {
+        id_request: "request_invalid_create",
+        mode: "create_source",
+        layers: [base],
+        country: "CHE",
+        title: "Invalid intersection",
+      },
+      callback,
+    );
+
+    expect(callback).toHaveBeenCalledWith(
+      expect.objectContaining({
+        accepted: false,
+        error: `Base source gid is invalid: ${issue}`,
+      }),
+    );
+    expect(mocks.connect).not.toHaveBeenCalled();
   });
 
   it("rejects unauthenticated callers", async () => {
