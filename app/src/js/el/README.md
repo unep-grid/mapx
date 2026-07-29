@@ -9,7 +9,7 @@ ElementCreator is a JavaScript module designed to simplify the creation and mana
 - Manage attributes, classes, and styles.
 - Attach event listeners in a structured way.
 - Support for asynchronous content.
-- Automatic cleanup of event listeners for removed elements.
+- Create elements in an explicitly supplied document.
 
 ## Usage
 First, import the module:
@@ -19,6 +19,14 @@ import { el, svg } from 'path/to/ElementCreator';
 
 ### Creating an HTML Element
 ```javascript
+const div = el('div', { class: 'my-class' }, 'Hello, World!');
+```
+
+### Creating elements for an application root
+```javascript
+import { ElementCreator } from 'path/to/ElementCreator';
+
+const { el } = new ElementCreator({ document: applicationRoot.ownerDocument });
 const div = el('div', { class: 'my-class' }, 'Hello, World!');
 ```
 

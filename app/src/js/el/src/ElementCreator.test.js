@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { el, svg } from "./index.js";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { ElementCreator, el, svg } from "./index.js";
 import { waitTimeoutAsync } from "../../animation_frame/index.js";
 
 const settings = {
@@ -19,6 +19,23 @@ describe("ElementCreator", () => {
       const div = el("div");
       expect(div).toBeInstanceOf(HTMLElement);
       expect(div.tagName).toBe("DIV");
+    });
+
+    it("should create elements in a supplied document", () => {
+      const otherDocument = document.implementation.createHTMLDocument();
+      const creator = new ElementCreator({ document: otherDocument });
+      const div = creator.el("div", "Document scoped");
+      const icon = creator.svg("svg");
+
+      expect(div.ownerDocument).toBe(otherDocument);
+      expect(icon.ownerDocument).toBe(otherDocument);
+      expect(div.innerText).toBe("Document scoped");
+    });
+
+    it("should reject an invalid document", () => {
+      expect(() => new ElementCreator({ document: {} })).toThrow(
+        "ElementCreator requires a DOM document",
+      );
     });
 
     // Test for setting attributes
@@ -60,11 +77,9 @@ describe("ElementCreator", () => {
   });
 
   describe("Event Listeners", () => {
-    let elDiv, clickHandler, config;
+    let elDiv, clickHandler;
 
     beforeEach(() => {
-      config = el.parent.config;
-      config.interval_delay = settings.timeout;
       clickHandler = () => {
         elDiv.innerText = "test";
       };
@@ -73,43 +88,26 @@ describe("ElementCreator", () => {
     });
 
     afterEach(() => {
+      vi.useRealTimers();
       if (document.body.contains(elDiv)) {
         document.body.removeChild(elDiv);
       }
     });
 
-    it("should attach and track event listeners", () => {
-      const { listeners } = config;
-      expect(listeners.map((l) => l.target).includes(elDiv)).toBe(true);
-      expect(listeners.map((l) => l.eventHandler).includes(clickHandler)).toBe(
-        true
-      );
-    });
-
-    it("should listen to clickHandler", () => {
+    it("should attach event listeners", () => {
       elDiv.click();
       expect(elDiv.innerText).toBe("test");
     });
 
-    it("should check for altered interval_delay", () => {
-      const { interval_delay } = config;
-      expect(interval_delay).toBe(settings.timeout);
-    });
-
-    it("should remove child", () => {
+    it("should preserve listeners while an element is detached", () => {
+      vi.useFakeTimers();
       document.body.removeChild(elDiv);
-      expect(document.body.contains(elDiv)).toBe(false);
-    });
+      vi.advanceTimersByTime(30 * 1000);
+      document.body.appendChild(elDiv);
+      elDiv.click();
 
-    it("should have an interval id", () => {
-      expect(config.interval).toBeTruthy();
-    });
-
-    it("should clean up event listeners", async () => {
-      const { listeners } = config;
-      document.body.removeChild(elDiv);
-      await waitTimeoutAsync(settings.timeout * 2);
-      expect(listeners.map((l) => l.target).includes(elDiv)).toBe(false);
+      expect(elDiv.innerText).toBe("test");
+      expect(elDiv.dataset.el_id_listener).toBeUndefined();
     });
   });
 

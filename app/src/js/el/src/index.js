@@ -19,37 +19,25 @@ import DOMPurify from "dompurify";
 export class ElementCreator {
   /**
    * Creates an instance of ElementCreator.
+   * @param {{document?: Document}} [options]
    */
-  constructor() {
+  constructor({ document: documentRef = globalThis.document } = {}) {
+    if (
+      !documentRef ||
+      typeof documentRef.createElement !== "function" ||
+      typeof documentRef.createElementNS !== "function"
+    ) {
+      throw new TypeError("ElementCreator requires a DOM document");
+    }
+    this.document = documentRef;
+    this.purifier = documentRef.defaultView
+      ? DOMPurify(documentRef.defaultView)
+      : DOMPurify;
     this.NSSvg = "http://www.w3.org/2000/svg";
-    this.config = {
-      listeners: [],
-      debug: true,
-      interval: null,
-      interval_delay: 20 * 1e3,
-    };
     this.el = this.el.bind(this);
     this.svg = this.svg.bind(this);
     this.el.parent = this;
     this.svg.parent = this;
-  }
-
-  /**
-   * Initializes the interval for cleaning up event listeners.
-   * This method sets up a recurring task to remove event listeners from elements
-   * no longer in the DOM.
-   */
-  _init_clearing() {
-    if (this.config.interval) {
-      return;
-    }
-    /**
-     * Clean listener each n milliseconds
-     */
-    this.config.interval = setInterval(
-      this.cleanListeners.bind(this),
-      this.config.interval_delay,
-    );
   }
 
   /**
@@ -73,9 +61,9 @@ export class ElementCreator {
     let svgMode = opt[0] === true;
 
     if (svgMode) {
-      elOut = document.createElementNS(this.NSSvg, tagName);
+      elOut = this.document.createElementNS(this.NSSvg, tagName);
     } else {
-      elOut = document.createElement(tagName);
+      elOut = this.document.createElement(tagName);
     }
 
     this.processOptions(tagName, elOut, svgMode, opt);
@@ -269,7 +257,7 @@ export class ElementCreator {
    * - keep target, e.g target=_blank
    */
   sanitize(string) {
-    return DOMPurify.sanitize(string, {
+    return this.purifier.sanitize(string, {
       ADD_TAGS: ["iframe"],
       ADD_ATTR: [
         "target",
@@ -283,7 +271,7 @@ export class ElementCreator {
   }
 
   /**
-   * Tracks an event listener for later cleanup.
+   * Attaches a validated event listener.
    * @param {HTMLElement|SVGElement} elOut - The element with the listener.
    * @param {string} eventName - The name of the event.
    * @param {Function} eventHandler - The event handler function.
@@ -300,34 +288,7 @@ export class ElementCreator {
       );
       return;
     }
-    const listenerId = crypto.randomUUID();
-    elOut.dataset.el_id_listener = listenerId;
     elOut.addEventListener(eventName, eventHandler, options);
-
-    this.config.listeners.push({
-      target: elOut,
-      eventName: eventName,
-      eventHandler: eventHandler,
-      id: listenerId,
-    });
-
-    this._init_clearing();
-  }
-
-  /**
-   * Cleans up event listeners from elements no longer in the DOM.
-   */
-  cleanListeners() {
-    /**
-     * If user did not properly remove listener, remove it
-     */
-    for (let i = this.config.listeners.length - 1; i >= 0; i--) {
-      const item = this.config.listeners[i];
-      if (!document.contains(item.target)) {
-        this.config.listeners.splice(i, 1);
-        item.target.removeEventListener(item.eventName, item.eventHandler);
-      }
-    }
   }
 }
 

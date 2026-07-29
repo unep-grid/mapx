@@ -740,7 +740,7 @@ export function isString(str) {
  * @param {Function} fun Function to test
  */
 export function isFunction(fun) {
-  return fun instanceof Function;
+  return typeof fun === "function";
 }
 
 /**
@@ -748,10 +748,14 @@ export function isFunction(fun) {
  * @param {Object} obj object to test
  */
 export function isElement(obj) {
-  if (typeof Element === "undefined") {
+  if (!obj || obj.nodeType !== 1) {
     return false;
   }
-  return obj instanceof Element;
+  const ElementConstructor = obj.ownerDocument?.defaultView?.Element;
+  if (typeof ElementConstructor === "function") {
+    return obj instanceof ElementConstructor;
+  }
+  return typeof obj.nodeName === "string";
 }
 
 /**

@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { runInNewContext } from 'node:vm'
 import {
   isEmpty,
   isNotEmpty,
@@ -14,9 +15,27 @@ import {
   isEqual,
   isBbox,
   isEmail,
+  isElement,
+  isFunction,
 } from './index.js'
 
 describe('Core Type Checks', () => {
+  describe('cross-realm checks', () => {
+    it('should identify elements and functions from another window', () => {
+      class ForeignElement {}
+      const foreignElement = new ForeignElement()
+      foreignElement.nodeType = 1
+      foreignElement.nodeName = 'DIV'
+      foreignElement.ownerDocument = {
+        defaultView: { Element: ForeignElement },
+      }
+      const foreignFunction = runInNewContext('(function foreign() {})')
+
+      expect(isElement(foreignElement)).toBe(true)
+      expect(isFunction(foreignFunction)).toBe(true)
+    })
+  })
+
   describe('isObject', () => {
     it('should identify plain objects', () => {
       expect(isObject({})).toBe(true)
