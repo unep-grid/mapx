@@ -20,7 +20,7 @@ export async function openSourceOverlap(_request) {
     closeable: true,
     geometry: {
       width: "min(620px, calc(100vw - 32px))",
-      height: "auto",
+      height: "600px",
       minHeight: "360px",
       maxHeight: "calc(100vh - 32px)",
     },
