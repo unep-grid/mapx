@@ -291,6 +291,7 @@ WITH
       m.meta #> '{spatial,bbox}' AS source_bbox,
       e.estimated_bbox AS source_estimated_bbox,
       v.data #> '{geometry,extent}' AS view_extent,
+      COALESCE(v.data #> '{source,tiles}', '[]'::jsonb) AS source_tiles,
       /**
        * R jsonlite bug : list of one converted to 'string'
        * more info in known_bugs.txt 
@@ -486,6 +487,7 @@ WITH
       source_bbox,
       source_estimated_bbox,
       view_extent,
+      source_tiles,
       view_type,
       is_geoserver_published,
       source_keywords,

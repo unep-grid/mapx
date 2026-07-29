@@ -14,6 +14,7 @@ import { settings } from "#root/settings";
 import { htmlToText } from "html-to-text";
 import { config } from "./config.js";
 import { getDictM49iso3 } from "#mapx/language";
+import { buildSourceTiles } from "./tiles.js";
 const keysStripHTML = config.idx_views.attributesStripHTML;
 const {
   validation_defaults: { languages },
@@ -46,6 +47,7 @@ async function updateIndexes() {
     const documents = results.map((doc) => ({
       ...doc,
       source_keywords: cleanKeywords(doc.source_keywords),
+      source_tiles: buildSourceTiles(doc, settings.api),
     }));
 
     for (const language of languages.codes) {
