@@ -1,3 +1,11 @@
+/**
+ * Overlap SQL builders.
+ *
+ * Source creation preserves the gid and attributes of layers[0]; subsequent
+ * layers are dissolved geometry masks. Area calculation instead treats every
+ * layer as a dissolved mask.
+ */
+
 import { isSourceId, isSafeName } from "@fxi/mx_valid";
 
 function quoteId(identifier) {

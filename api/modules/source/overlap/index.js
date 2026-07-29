@@ -21,6 +21,30 @@ import {
 const modes = new Set(["area", "create_source"]);
 const maxLayers = 3;
 
+/**
+ * @typedef {object} OverlapRequest
+ * @property {string} [id_request]
+ * @property {"area" | "create_source"} mode
+ * @property {string[]} layers
+ * @property {string} country
+ * @property {string} [title]
+ * @property {string} [language]
+ */
+
+/**
+ * @typedef {{accepted: true, id_request: string} |
+ *   {accepted: false, id_request: string, success: false, error: unknown}}
+ *   OverlapAcknowledgement
+ */
+
+/**
+ * Validate and acknowledge an overlap request, then run it asynchronously.
+ *
+ * @param {import("socket.io").Socket} socket
+ * @param {OverlapRequest} request
+ * @param {(response: OverlapAcknowledgement) => void} callback
+ * @returns {Promise<void>}
+ */
 export async function ioSourceOverlap(socket, request, callback) {
   const idRequest =
     isString(request?.id_request) && request.id_request.length <= 100
@@ -31,6 +55,7 @@ export async function ioSourceOverlap(socket, request, callback) {
       ...request,
       id_request: idRequest,
     });
+    // Acknowledge before starting the potentially long-running calculation.
     callback({ accepted: true, id_request: idRequest });
     await runOverlap(socket, options);
   } catch (error) {
@@ -93,6 +118,7 @@ async function validateOverlapRequest(socket, request) {
     throw new Error("One or more overlap sources are not readable");
   }
 
+  // Only source creation needs a gid to preserve base rows and attributes.
   if (mode === "create_source") {
     const mainIdentity = await getSourceIdentityStatus(layers[0]);
     const requiredIssues = mainIdentity.issues.filter((issue) =>
@@ -194,6 +220,7 @@ async function createOverlapSource(options) {
   const idSource = randomString("mx_vector", 4, 5).toLowerCase();
   const client = await pgWrite.connect();
   try {
+    // The first layer supplies attributes; subsequent layers are geometry masks.
     const attributes = (await getColumnsNames(options.layers[0])).filter(
       (name) => !["gid", "geom", "_mx_valid"].includes(name),
     );
@@ -214,6 +241,7 @@ async function createOverlapSource(options) {
     if ((Number(count.rows[0]?.count) || 0) === 0) {
       throw new Error("No intersection found");
     }
+    // Derive geometry constraints from the actual intersection result.
     const profile = await client.query(
       buildOverlapGeometryProfileSql({ idSource }),
     );
