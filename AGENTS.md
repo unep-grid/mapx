@@ -10,12 +10,19 @@ architectural precedent for new work.
   the relevant architecture, call chain, helpers, tests, and current worktree.
   Search for an existing implementation before adding a helper, abstraction,
   dependency, or public interface. Ask if structure is not clear.
+- Treat established MapX paradigms as defaults, not as untouchable legacy. Reuse
+  a sound helper; improve it and its tests when its boundary is sound but
+  incomplete; replace or isolate it when it is outdated, an anti-pattern, or
+  conflicts with the modernization rules in this guide.
 - Preserve unrelated and pre-existing changes. Never discard or rewrite a dirty
   worktree to simplify a task.
 - Keep the requested scope. Do not turn a focused change into an unrequested
   legacy refactor; isolate legacy behind a small adapter when necessary.
 - Prefer the smallest cohesive implementation. Keep code readable, auditable,
   KISS, and DRY without speculative abstractions or duplicated methods.
+- Consolidate repeated behavior when its semantics and ownership are stable or
+  a parallel implementation would create maintenance drift. Do not abstract
+  incidental syntax merely because two snippets look similar.
 
 ## Architecture direction
 
@@ -27,8 +34,10 @@ architectural precedent for new work.
   forwarded from R.
 - Use explicit ESM imports and exports. Do not expose new mutable state or APIs
   through `window`, `globalThis`, or other application globals.
-- Reuse established modern boundaries and helpers before creating alternatives.
-  New windows use the `<mx-window>` system rather than legacy modal helpers.
+- Reuse established modern boundaries and helpers before creating alternatives,
+  including `ElementCreator` for DOM construction, `is_test` for shared
+  predicates, and `<mx-window>` for new windows rather than legacy modal
+  helpers.
 
 ## New frontend code
 
@@ -39,6 +48,9 @@ architectural precedent for new work.
   `document.querySelector*`, or similar calls. Inject the application root,
   retain direct element references, and scope any necessary lookup to the
   component that owns the DOM.
+- Create programmatic UI with an `ElementCreator` scoped to the injected root's
+  `ownerDocument`. Keep direct DOM operations when the shared creator cannot
+  express the operation clearly; do not add local element-factory wrappers.
 - Prefer Web Components for reusable or encapsulated UI. Keep lifecycle,
   listeners, observers, focus behavior, and cleanup explicit.
 - Add JSDoc types or TypeScript for new modules and public interfaces. Pass DOM
