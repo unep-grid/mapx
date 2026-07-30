@@ -19,6 +19,8 @@ const DEFAULT_CONFIG = {
   label: "Source",
   validateSelection: null,
 };
+const PAGE_SIZE = 50;
+const LOAD_MORE_THRESHOLD = 100;
 
 let pickerCounter = 0;
 
@@ -108,8 +110,13 @@ export class MxSourcePickerElement extends HTMLElement {
     this.selectionHydrationGeneration = 0;
     this.validationGeneration = 0;
     this.validating = false;
+    this.loadingMore = false;
+    this.nextOffset = 0;
+    this.resultTotal = 0;
+    this.hasMoreResults = false;
     this.controlId = `mx-source-picker-control-${++pickerCounter}`;
     this.onBrowserInput = debounce(() => this.loadResults(), 180);
+    this.onResultsScroll = debounce(() => this.handleResultsScroll(), 100);
   }
 
   get elements() {
@@ -583,11 +590,34 @@ export class MxSourcePickerElement extends HTMLElement {
     );
     toolbar.append(searchWrap, filtersButton, filters);
     const summary = el("p", { class: "mx-source-browser__summary" });
+    const resultsScroller = el("div", {
+      class: "mx-source-browser__results-scroller",
+    });
     const results = el("div", {
       class: "mx-source-browser__results",
       role: "listbox",
       "aria-multiselectable": String(this.config.multiple),
     });
+    const loadMore = el(
+      "button",
+      {
+        type: "button",
+        class: "btn btn-link mx-source-browser__load-more",
+      },
+      "Load more",
+    );
+    const loadStatus = el("span", {
+      class: "mx-source-browser__load-status",
+      role: "status",
+      "aria-live": "polite",
+    });
+    const loadControls = el(
+      "div",
+      { class: "mx-source-browser__load-controls" },
+      loadMore,
+      loadStatus,
+    );
+    resultsScroller.append(results, loadControls);
     const confirm = el(
       "button",
       {
@@ -602,7 +632,7 @@ export class MxSourcePickerElement extends HTMLElement {
       role: "alert",
     });
     validationStatus.hidden = true;
-    browser.append(toolbar, preview, summary, results);
+    browser.append(toolbar, preview, summary, resultsScroller);
     this.refs = {
       browser,
       previewCanvas,
@@ -615,7 +645,11 @@ export class MxSourcePickerElement extends HTMLElement {
       sort,
       clearFilters,
       summary,
+      resultsScroller,
       results,
+      loadMore,
+      loadStatus,
+      loadControls,
       confirm,
       validationStatus,
     };
@@ -636,6 +670,8 @@ export class MxSourcePickerElement extends HTMLElement {
     results.addEventListener("keydown", (event) =>
       this.onResultsKeydown(event),
     );
+    resultsScroller.addEventListener("scroll", this.onResultsScroll);
+    loadMore.addEventListener("click", () => this.loadMoreResults());
     browser.addEventListener("click", (event) => {
       if (
         !filters.hidden &&
@@ -651,13 +687,23 @@ export class MxSourcePickerElement extends HTMLElement {
     else this.renderNeutralPreview();
   }
 
-  async loadResults() {
+  async loadResults({ append = false } = {}) {
     const refs = this.refs;
-    if (!refs) return;
+    if (!refs || (append && (!this.hasMoreResults || this.loadingMore))) return;
     const generation = ++this.searchGeneration;
+    const requestOffset = append ? this.nextOffset : 0;
+    if (append) this.loadingMore = true;
     this.previewToken = null;
     refs.results.setAttribute("aria-busy", "true");
-    refs.summary.textContent = "Loading…";
+    if (append) {
+      this.updateLoadMoreState({ loading: true });
+    } else {
+      refs.summary.textContent = "Loading…";
+      this.nextOffset = 0;
+      this.resultTotal = 0;
+      this.hasMoreResults = false;
+      this.updateLoadMoreState({ loading: true });
+    }
     let response;
     try {
       response = await ws.emitAsync(
@@ -674,36 +720,71 @@ export class MxSourcePickerElement extends HTMLElement {
           sort: refs.sort.value,
           language: this.config.language,
           viewId: this.config.viewId,
-          limit: 50,
+          excludeIds: this.config.excludeIds,
+          offset: requestOffset,
+          limit: PAGE_SIZE,
+          includeFacets: !append,
         },
         15000,
       );
     } catch {
       response = { error: "source_search_failed" };
     }
-    if (generation !== this.searchGeneration || refs !== this.refs) return;
+    if (generation !== this.searchGeneration || refs !== this.refs) {
+      if (append) this.loadingMore = false;
+      return;
+    }
     if (response?.error) {
-      refs.summary.textContent = "Unable to load sources";
-      refs.results.replaceChildren();
+      if (append) {
+        this.loadingMore = false;
+        this.updateLoadMoreState({ error: true });
+      } else {
+        refs.summary.textContent = "Unable to load sources";
+        refs.results.replaceChildren();
+        this.updateLoadMoreState();
+      }
       refs.results.setAttribute("aria-busy", "false");
       return;
     }
-    this.items = (response?.items || []).filter(
+    const responseItems = Array.isArray(response?.items) ? response.items : [];
+    const pageItems = responseItems.filter(
       (item) => !this.config.excludeIds.includes(item.id),
     );
-    for (const item of this.items) {
+    const previousItems = append ? this.items || [] : [];
+    const knownIds = new Set(previousItems.map((item) => item.id));
+    const uniquePageItems = pageItems.filter((item) => {
+      if (knownIds.has(item.id)) return false;
+      knownIds.add(item.id);
+      return true;
+    });
+    this.items = [...previousItems, ...uniquePageItems];
+    for (const item of uniquePageItems) {
       if (this.selectedItems.has(item.id))
         this.selectedItems.set(item.id, item);
       if (this.pendingSelectedItems?.has(item.id))
         this.pendingSelectedItems.set(item.id, item);
     }
     this.renderField();
-    this.updateTagFacet(response?.facets?.tags || []);
-    refs.summary.textContent = `${response?.total || 0} matching sources`;
-    refs.results.replaceChildren(
-      ...this.items.map((item, index) => this.buildResult(item, index)),
+    if (!append) this.updateTagFacet(response?.facets?.tags || []);
+    this.resultTotal = Number(response?.total) || 0;
+    this.nextOffset =
+      Number(response?.offset ?? requestOffset) + responseItems.length;
+    this.hasMoreResults =
+      typeof response?.hasMore === "boolean"
+        ? response.hasMore
+        : this.nextOffset < this.resultTotal;
+    refs.summary.textContent = `${this.items.length} of ${this.resultTotal} matching sources`;
+    const rows = uniquePageItems.map((item, index) =>
+      this.buildResult(item, previousItems.length + index),
     );
+    if (append) refs.results.append(...rows);
+    else {
+      refs.results.replaceChildren(...rows);
+      refs.resultsScroller.scrollTop = 0;
+    }
     refs.results.setAttribute("aria-busy", "false");
+    this.loadingMore = false;
+    this.updateLoadMoreState();
     const activeId = this.activeItem?.id;
     this.activeItem =
       this.items.find((item) => item.id === activeId) ||
@@ -713,11 +794,50 @@ export class MxSourcePickerElement extends HTMLElement {
     this.renderBrowserSelection();
     this.updateConfirmButton();
     this.updateBrowserDisabledState();
-    if (this.activeItem) this.showPreview(this.activeItem);
+    if (this.activeItem && (!append || !activeId))
+      this.showPreview(this.activeItem);
     else {
-      refs.previewMeta.replaceChildren();
-      this.renderNeutralPreview();
+      if (!append) {
+        refs.previewMeta.replaceChildren();
+        this.renderNeutralPreview();
+      }
     }
+  }
+
+  handleResultsScroll() {
+    const scroller = this.refs?.resultsScroller;
+    if (
+      !scroller ||
+      this.loadingMore ||
+      !this.hasMoreResults ||
+      scroller.clientHeight + scroller.scrollTop <
+        scroller.scrollHeight - LOAD_MORE_THRESHOLD
+    ) {
+      return;
+    }
+    this.loadMoreResults();
+  }
+
+  loadMoreResults() {
+    return this.loadResults({ append: true });
+  }
+
+  updateLoadMoreState({ loading = false, error = false } = {}) {
+    if (!this.refs?.loadMore) return;
+    const hasMore = this.hasMoreResults || loading || error;
+    this.refs.loadControls.hidden = !hasMore;
+    this.refs.loadMore.hidden = !hasMore;
+    this.refs.loadMore.disabled = loading || this.disabled || this.validating;
+    this.refs.loadMore.textContent = loading
+      ? "Loading…"
+      : error
+        ? "Retry loading"
+        : "Load more";
+    this.refs.loadStatus.textContent = loading
+      ? "Loading more sources…"
+      : error
+        ? "Unable to load more sources."
+        : "";
   }
 
   updateTagFacet(tags) {
@@ -777,6 +897,7 @@ export class MxSourcePickerElement extends HTMLElement {
       this.refs.tag,
       this.refs.sort,
       this.refs.clearFilters,
+      this.refs.loadMore,
       ...this.refs.results.querySelectorAll("[data-source-id]"),
     ]) {
       control.disabled = this.disabled || this.validating;

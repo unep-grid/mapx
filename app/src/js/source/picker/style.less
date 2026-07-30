@@ -289,10 +289,35 @@ mx-source-picker.mx-source-picker--json-editor {
   color: var(--mx_ui_message_danger);
 }
 
-.mx-source-browser__results {
+.mx-source-browser__results-scroller {
   min-height: 0;
   overflow: auto;
   border-top: 1px solid var(--mx_ui_border);
+}
+
+.mx-source-browser__results {
+  min-height: 0;
+}
+
+.mx-source-browser__load-controls {
+  display: grid;
+  min-height: 42px;
+  padding: 4px 12px;
+  place-items: center;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.mx-source-browser__load-more {
+  margin: 0;
+  color: var(--mx_ui_link);
+}
+
+.mx-source-browser__load-status {
+  color: var(--mx_ui_text_faded);
+  font-size: 0.9em;
 }
 
 .mx-source-browser__row {

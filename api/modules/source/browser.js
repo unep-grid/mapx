@@ -35,8 +35,11 @@ const ALLOWED_CAPABILITIES = new Set(["geometry"]);
  * @property {string[]} [tags]
  * @property {string[]} [access]
  * @property {string[]} [selectedIds]
+ * @property {string[]} [excludeIds]
  * @property {string} [sort]
  * @property {number} [limit]
+ * @property {number} [offset]
+ * @property {boolean} [includeFacets]
  * @property {string} [language]
  * @property {string} [viewId]
  */
@@ -70,7 +73,8 @@ view_counts AS (
   WHERE project = $1
     AND type = 'vt'
   GROUP BY data #>> '{source,layerInfo,name}'
-)
+),
+accessible AS (
 SELECT
   s.id,
   s.type,
@@ -154,6 +158,165 @@ WHERE s.type = ANY($5::text[])
     s.type <> 'join'
     OR coalesce(s.data #>> '{join,base,id_source}', '') <> ''
   )
+),
+filtered AS (
+  SELECT *
+  FROM accessible
+  WHERE
+    (
+      NOT $9::boolean
+      OR id = ANY($8::text[])
+    )
+    AND NOT id = ANY($18::text[])
+    AND (
+      $7::text = ''
+      OR id ILIKE '%' || $7 || '%'
+      OR title ILIKE '%' || $7 || '%'
+      OR editor_email ILIKE '%' || $7 || '%'
+      OR EXISTS (
+        SELECT 1
+        FROM jsonb_array_elements_text(tags) tag(value)
+        WHERE tag.value ILIKE '%' || $7 || '%'
+      )
+    )
+    AND (
+      NOT $10::boolean
+      OR jsonb_array_length(geometry_types) > 0
+    )
+    AND (
+      cardinality($11::text[]) = 0
+      OR geometry_types ?| $11::text[]
+    )
+    AND (
+      cardinality($12::text[]) = 0
+      OR tags ?& $12::text[]
+    )
+    AND (
+      cardinality($13::text[]) = 0
+      OR access = ANY($13::text[])
+    )
+),
+ordered AS (
+  SELECT
+    filtered.*,
+    row_number() OVER (
+      ORDER BY
+        is_current DESC,
+        CASE
+          WHEN $14 = 'relevance' AND $7 <> '' AND title ILIKE '%' || $7 || '%'
+            THEN 0
+          WHEN $14 = 'relevance' AND $7 <> ''
+            THEN 1
+          ELSE 0
+        END,
+        CASE WHEN $14 = 'editor' THEN editor_email END ASC,
+        CASE WHEN $14 = 'uploaded' THEN date_uploaded END DESC NULLS LAST,
+        CASE WHEN $14 = 'modified' THEN date_modified END DESC NULLS LAST,
+        title ASC,
+        id ASC
+    ) AS result_order
+  FROM filtered
+),
+paged AS (
+  SELECT *
+  FROM ordered
+  ORDER BY result_order
+  LIMIT $15
+  OFFSET $16
+),
+facet_tags AS (
+  SELECT tag.value, count(*)::integer AS count
+  FROM accessible
+  CROSS JOIN LATERAL jsonb_array_elements_text(tags) tag(value)
+  WHERE tag.value <> ''
+  GROUP BY tag.value
+  ORDER BY count DESC, tag.value
+  LIMIT 40
+),
+facet_geometry AS (
+  SELECT geometry.value, count(*)::integer AS count
+  FROM accessible
+  CROSS JOIN LATERAL jsonb_array_elements_text(geometry_types) geometry(value)
+  WHERE geometry.value <> ''
+  GROUP BY geometry.value
+  ORDER BY count DESC, geometry.value
+  LIMIT 40
+),
+facet_types AS (
+  SELECT type AS value, count(*)::integer AS count
+  FROM accessible
+  GROUP BY type
+  ORDER BY count DESC, type
+  LIMIT 40
+),
+facet_access AS (
+  SELECT access AS value, count(*)::integer AS count
+  FROM accessible
+  GROUP BY access
+  ORDER BY count DESC, access
+  LIMIT 40
+)
+SELECT
+  coalesce(
+    (
+      SELECT jsonb_agg(
+        to_jsonb(paged) - 'result_order'
+        ORDER BY result_order
+      )
+      FROM paged
+    ),
+    '[]'::jsonb
+  ) AS items,
+  (SELECT count(*)::integer FROM filtered) AS total,
+  CASE
+    WHEN $17::boolean AND NOT $9::boolean THEN jsonb_build_object(
+      'tags',
+      coalesce(
+        (
+          SELECT jsonb_agg(
+            jsonb_build_object('value', value, 'count', count)
+            ORDER BY count DESC, value
+          )
+          FROM facet_tags
+        ),
+        '[]'::jsonb
+      ),
+      'geometryTypes',
+      coalesce(
+        (
+          SELECT jsonb_agg(
+            jsonb_build_object('value', value, 'count', count)
+            ORDER BY count DESC, value
+          )
+          FROM facet_geometry
+        ),
+        '[]'::jsonb
+      ),
+      'sourceTypes',
+      coalesce(
+        (
+          SELECT jsonb_agg(
+            jsonb_build_object('value', value, 'count', count)
+            ORDER BY count DESC, value
+          )
+          FROM facet_types
+        ),
+        '[]'::jsonb
+      ),
+      'access',
+      coalesce(
+        (
+          SELECT jsonb_agg(
+            jsonb_build_object('value', value, 'count', count)
+            ORDER BY count DESC, value
+          )
+          FROM facet_access
+        ),
+        '[]'::jsonb
+      )
+    )
+    ELSE '{}'::jsonb
+  END AS facets
 `;
 
 function requirePickerSession(socket) {
@@ -183,6 +346,11 @@ function normalizeStringArray(value, allowed, fallback = []) {
   return [...new Set(value.filter((item) => allowed.has(item)))];
 }
 
+function normalizePositiveInteger(value, fallback) {
+  const number = Math.trunc(Number(value));
+  return Number.isFinite(number) && number >= 0 ? number : fallback;
+}
+
 /** @param {SourcePickerRequest} [request] */
 function normalizeRequest(request = {}) {
   const types = normalizeStringArray(request.acceptedTypes, ALLOWED_TYPES, [
@@ -190,6 +358,10 @@ function normalizeRequest(request = {}) {
     "join",
   ]);
   const hasSelectedIds = Array.isArray(request.selectedIds);
+  const exactSelection = hasSelectedIds;
+  const offset = exactSelection
+    ? 0
+    : normalizePositiveInteger(request.offset, 0);
   return {
     query: String(request.query || "")
       .trim()
@@ -220,123 +392,26 @@ function normalizeRequest(request = {}) {
           ),
         ]
       : [],
-    exactSelection: hasSelectedIds,
+    excludeIds: Array.isArray(request.excludeIds)
+      ? [
+          ...new Set(
+            request.excludeIds
+              .filter((id) => typeof id === "string" && isSourceId(id))
+              .slice(0, 20),
+          ),
+        ]
+      : [],
+    exactSelection,
     sort: ALLOWED_SORTS.has(request.sort) ? request.sort : "relevance",
     limit: Math.min(
       MAX_RESULTS,
-      Math.max(1, Number(request.limit) || MAX_RESULTS),
+      Math.max(1, normalizePositiveInteger(request.limit, MAX_RESULTS)),
     ),
+    offset,
+    includeFacets:
+      !exactSelection && offset === 0 && request.includeFacets !== false,
     language: normalizeLanguage(request.language),
     viewId: isViewId(request.viewId) ? request.viewId : null,
-  };
-}
-
-function includesFolded(value, query) {
-  return String(value || "")
-    .toLocaleLowerCase()
-    .includes(query);
-}
-
-function compareNullableDates(a, b, field) {
-  return new Date(b[field] || 0).getTime() - new Date(a[field] || 0).getTime();
-}
-
-function makeFacets(rows) {
-  const facetFields = {
-    tags: "tags",
-    geometryTypes: "geometry_types",
-    sourceTypes: "type",
-    access: "access",
-  };
-  return Object.fromEntries(
-    Object.entries(facetFields).map(([name, field]) => {
-      const counts = new Map();
-      for (const row of rows) {
-        const values = Array.isArray(row[field]) ? row[field] : [row[field]];
-        for (const value of values.filter(Boolean)) {
-          counts.set(value, (counts.get(value) || 0) + 1);
-        }
-      }
-      return [
-        name,
-        [...counts.entries()]
-          .map(([value, count]) => ({ value, count }))
-          .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value))
-          .slice(0, 40),
-      ];
-    }),
-  );
-}
-
-/**
- * Apply picker search semantics to already-authorized compact rows.
- * Exported separately so filtering and payload bounds can be tested without DB.
- */
-/**
- * @param {Array<Record<string, any>>} rows
- * @param {SourcePickerRequest} [rawRequest]
- */
-export function filterAndSortSources(rows, rawRequest = {}) {
-  const request = normalizeRequest(rawRequest);
-  const accessible = rows.filter((row) => request.types.includes(row.type));
-  const facets = request.exactSelection ? {} : makeFacets(accessible);
-  const selectedIds = new Set(request.selectedIds);
-  const filtered = accessible.filter((row) => {
-    if (request.exactSelection && !selectedIds.has(row.id)) return false;
-    if (
-      request.query &&
-      ![row.id, row.title, row.editor_email, ...(row.tags || [])].some(
-        (value) => includesFolded(value, request.query),
-      )
-    )
-      return false;
-    if (
-      request.requiredCapabilities.includes("geometry") &&
-      (!Array.isArray(row.geometry_types) || row.geometry_types.length === 0)
-    )
-      return false;
-    if (
-      request.geometryTypes.length &&
-      !request.geometryTypes.some((type) => row.geometry_types?.includes(type))
-    )
-      return false;
-    if (
-      request.tags.length &&
-      !request.tags.every((tag) => row.tags?.includes(tag))
-    )
-      return false;
-    if (request.access.length && !request.access.includes(row.access))
-      return false;
-    return true;
-  });
-
-  const sorters = {
-    editor: (a, b) =>
-      a.editor_email.localeCompare(b.editor_email) ||
-      a.title.localeCompare(b.title),
-    uploaded: (a, b) =>
-      compareNullableDates(a, b, "date_uploaded") ||
-      a.title.localeCompare(b.title),
-    modified: (a, b) =>
-      compareNullableDates(a, b, "date_modified") ||
-      a.title.localeCompare(b.title),
-    title: (a, b) => a.title.localeCompare(b.title),
-    relevance: (a, b) => {
-      if (!request.query) return a.title.localeCompare(b.title);
-      const aTitle = includesFolded(a.title, request.query) ? 0 : 1;
-      const bTitle = includesFolded(b.title, request.query) ? 0 : 1;
-      return aTitle - bTitle || a.title.localeCompare(b.title);
-    },
-  };
-  filtered.sort(
-    (a, b) =>
-      Number(b.is_current === true) - Number(a.is_current === true) ||
-      sorters[request.sort](a, b),
-  );
-  return {
-    items: filtered.slice(0, request.limit),
-    total: filtered.length,
-    facets,
   };
 }
 
@@ -355,8 +430,30 @@ export async function searchSources(socket, request = {}, client = pgRead) {
     normalized.language,
     normalized.types,
     normalized.viewId,
+    normalized.query,
+    normalized.selectedIds,
+    normalized.exactSelection,
+    normalized.requiredCapabilities.includes("geometry"),
+    normalized.geometryTypes,
+    normalized.tags,
+    normalized.access,
+    normalized.sort,
+    normalized.limit,
+    normalized.offset,
+    normalized.includeFacets,
+    normalized.excludeIds,
   ]);
-  return filterAndSortSources(result.rows, request);
+  const row = result.rows[0] || {};
+  const items = Array.isArray(row.items) ? row.items : [];
+  const total = Number(row.total) || 0;
+  return {
+    items,
+    total,
+    facets: row.facets || {},
+    offset: normalized.offset,
+    limit: normalized.limit,
+    hasMore: normalized.offset + items.length < total,
+  };
 }
 
 export async function sourceIsAccessible(

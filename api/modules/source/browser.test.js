@@ -14,7 +14,6 @@ vi.mock("#mapx/authentication", () => ({
   validateTokenHandler: vi.fn(),
 }));
 import {
-  filterAndSortSources,
   searchSources,
   sourceBrowserInternals,
   validateSourceSelection,
@@ -57,95 +56,75 @@ const rows = [
 ];
 
 describe("source browser filtering", () => {
-  it("combines search and facets and returns bounded compact rows", () => {
-    const result = filterAndSortSources(rows, {
-      query: "road",
-      acceptedTypes: ["vector", "join"],
-      geometryTypes: ["line"],
-      tags: ["transport"],
-      limit: 1,
-    });
-    expect(result.total).toBe(2);
-    expect(result.items).toHaveLength(1);
-    expect(result.items[0].title).toBe("Road network");
-    expect(result.items[0]).not.toHaveProperty("abstract");
-  });
-
-  it("sorts by latest editor email without a special me label", () => {
-    const result = filterAndSortSources(rows, {
-      acceptedTypes: ["vector", "join"],
-      sort: "editor",
-    });
-    expect(result.items.map((item) => item.editor_email)).toEqual([
-      "alice@example.org",
-      "bob@example.org",
-      "zoe@example.org",
-    ]);
-  });
-
-  it("keeps an editable view's current source in the bounded result", () => {
-    const result = filterAndSortSources(
-      rows.map((row, index) => ({ ...row, is_current: index === 2 })),
-      {
-        acceptedTypes: ["vector", "join"],
-        sort: "title",
-        limit: 1,
-      },
-    );
-    expect(result.items[0].id).toBe("mx_join_k_l_m_n_o");
-  });
-
-  it("resolves only explicitly selected source IDs for field hydration", () => {
-    const result = filterAndSortSources(rows, {
-      acceptedTypes: ["vector", "join"],
-      selectedIds: ["mx_vector_f_g_h_i_j"],
-    });
-
-    expect(result.items.map((item) => item.id)).toEqual([
-      "mx_vector_f_g_h_i_j",
-    ]);
-    expect(result.total).toBe(1);
-  });
-
-  it("returns no hydration rows when selected IDs are malformed", () => {
-    const result = filterAndSortSources(rows, {
-      acceptedTypes: ["vector", "join"],
-      selectedIds: ["not-a-source"],
-    });
-
-    expect(result.items).toEqual([]);
-    expect(result.total).toBe(0);
-  });
-
-  it("caps request limits and ignores unsupported source kinds", () => {
+  it("normalizes bounded page requests and ignores unsupported source kinds", () => {
     const request = sourceBrowserInternals.normalizeRequest({
       acceptedTypes: ["vector", "executable"],
       limit: 5000,
+      offset: 51.8,
+      includeFacets: true,
     });
     expect(request.types).toEqual(["vector"]);
     expect(request.limit).toBe(50);
+    expect(request.offset).toBe(51);
+    expect(request.includeFacets).toBe(false);
     expect(request.selectedIds).toEqual([]);
   });
 
-  it("reads approximate dimensions from PostgreSQL catalogs", () => {
-    expect(sourceBrowserInternals.sourceBrowserSql).toContain("c.reltuples");
-    expect(sourceBrowserInternals.sourceBrowserSql).toContain(
-      "AS column_count",
-    );
-    expect(sourceBrowserInternals.sourceBrowserSql).not.toContain(
-      "SELECT count(*) FROM",
-    );
-    expect(sourceBrowserInternals.sourceBrowserSql).toContain(
-      "postgis_typmod_type",
-    );
-    expect(sourceBrowserInternals.sourceBrowserSql).not.toContain(
-      "mx_source_preview",
-    );
+  it("forces exact-selection hydration to its first page without facets", () => {
+    const request = sourceBrowserInternals.normalizeRequest({
+      selectedIds: ["mx_vector_f_g_h_i_j"],
+      offset: 100,
+      includeFacets: true,
+    });
+
+    expect(request.selectedIds).toEqual(["mx_vector_f_g_h_i_j"]);
+    expect(request.exactSelection).toBe(true);
+    expect(request.offset).toBe(0);
+    expect(request.includeFacets).toBe(false);
   });
 
-  it("does not turn a normal search into empty exact-selection hydration", async () => {
+  it("normalizes invalid offsets and exclusion IDs", () => {
+    const request = sourceBrowserInternals.normalizeRequest({
+      offset: -2,
+      excludeIds: ["mx_vector_a_b_c_d_e", "not-a-source"],
+    });
+
+    expect(request.offset).toBe(0);
+    expect(request.excludeIds).toEqual(["mx_vector_a_b_c_d_e"]);
+  });
+
+  it("filters, stably orders, counts, and pages compact rows in SQL", () => {
+    const sql = sourceBrowserInternals.sourceBrowserSql;
+    expect(sql).toContain("ILIKE '%' || $7 || '%'");
+    expect(sql).toContain("geometry_types ?| $11::text[]");
+    expect(sql).toContain("tags ?& $12::text[]");
+    expect(sql).toContain("is_current DESC");
+    expect(sql).toContain("id ASC");
+    expect(sql).toContain("LIMIT $15");
+    expect(sql).toContain("OFFSET $16");
+    expect(sql).toContain("(SELECT count(*)::integer FROM filtered)");
+    expect(sql).toContain("WHEN $17::boolean");
+  });
+
+  it("reads approximate dimensions from PostgreSQL catalogs", () => {
+    const sql = sourceBrowserInternals.sourceBrowserSql;
+    expect(sql).toContain("c.reltuples");
+    expect(sql).toContain("AS column_count");
+    expect(sql).toContain("postgis_typmod_type");
+    expect(sql).not.toContain("mx_source_preview");
+  });
+
+  it("returns a normalized intermediate page from the SQL result", async () => {
     const client = {
-      query: vi.fn().mockResolvedValue({ rows }),
+      query: vi.fn().mockResolvedValue({
+        rows: [
+          {
+            items: rows.slice(0, 2),
+            total: 125,
+            facets: {},
+          },
+        ],
+      }),
     };
     const socket = {
       session: {
@@ -158,73 +137,69 @@ describe("source browser filtering", () => {
 
     const result = await searchSources(
       socket,
-      { acceptedTypes: ["vector", "join"] },
+      {
+        acceptedTypes: ["vector", "join"],
+        offset: 50,
+        limit: 2,
+        includeFacets: false,
+      },
       client,
     );
 
-    expect(result.total).toBe(3);
-    expect(result.items).toHaveLength(3);
-  });
-
-  it("computes facets before active filters", () => {
-    const result = filterAndSortSources(rows, {
-      acceptedTypes: ["vector", "join"],
-      access: ["editable"],
+    expect(result).toEqual({
+      items: rows.slice(0, 2),
+      total: 125,
+      facets: {},
+      offset: 50,
+      limit: 2,
+      hasMore: true,
     });
-    expect(result.items).toHaveLength(1);
-    expect(result.facets.access).toEqual(
-      expect.arrayContaining([
-        { value: "editable", count: 1 },
-        { value: "readable", count: 1 },
-        { value: "global", count: 1 },
-      ]),
+    expect(client.query.mock.calls[0][1]).toEqual(
+      expect.arrayContaining([50, false]),
     );
   });
 
-  it("keeps generic PostGIS geometry declarations filterable as unspecified", () => {
-    const result = filterAndSortSources(
-      [
-        ...rows,
-        {
-          id: "mx_vector_p_q_r_s_t",
-          title: "Mixed geometry",
-          type: "vector",
-          editor_email: "alice@example.org",
-          access: "editable",
-          tags: [],
-          geometry_types: ["unspecified"],
-        },
-      ],
-      {
-        acceptedTypes: ["vector"],
-        geometryTypes: ["unspecified"],
+  it.each([
+    {
+      name: "final",
+      row: { items: rows.slice(0, 2), total: 52, facets: {} },
+      request: { offset: 50, limit: 2 },
+      total: 52,
+    },
+    {
+      name: "empty",
+      row: { items: [], total: 0, facets: { tags: [] } },
+      request: { offset: 0, limit: 50 },
+      total: 0,
+    },
+  ])("marks a $name page as complete", async ({ row, request, total }) => {
+    const client = {
+      query: vi.fn().mockResolvedValue({ rows: [row] }),
+    };
+    const socket = {
+      session: {
+        user_authenticated: true,
+        user_roles: { publisher: true, group: [] },
+        project_id: "MX-AAA-BBB-CCC-DDD-EEE",
+        user_id: 7,
       },
-    );
+    };
 
-    expect(result.items.map((item) => item.title)).toEqual(["Mixed geometry"]);
+    await expect(searchSources(socket, request, client)).resolves.toEqual(
+      expect.objectContaining({
+        total,
+        hasMore: false,
+      }),
+    );
   });
 
   it("enforces the normalized geometry capability", () => {
-    const result = filterAndSortSources(
-      [
-        ...rows,
-        {
-          id: "mx_tabular_p_q_r_s_t",
-          title: "No geometry",
-          type: "tabular",
-          editor_email: "alice@example.org",
-          access: "editable",
-          tags: [],
-          geometry_types: [],
-        },
-      ],
-      {
+    expect(
+      sourceBrowserInternals.normalizeRequest({
         acceptedTypes: ["vector", "tabular"],
         requiredCapabilities: ["geometry", "unsupported"],
-      },
-    );
-
-    expect(result.items.map((item) => item.title)).not.toContain("No geometry");
+      }).requiredCapabilities,
+    ).toEqual(["geometry"]);
     expect(
       sourceBrowserInternals.normalizeRequest({
         requiredCapabilities: ["geometry", "unsupported"],

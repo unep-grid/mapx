@@ -129,7 +129,9 @@ describe("MxSourcePickerElement", () => {
         acceptedTypes: ["vector", "join"],
         geometryTypes: [],
         tags: [],
+        offset: 0,
         limit: 50,
+        includeFacets: true,
       }),
       15000,
     );
@@ -141,6 +143,221 @@ describe("MxSourcePickerElement", () => {
     expect(
       picker.refs.results.querySelector(".mx-source-browser__meta").innerText,
     ).toContain("~291 rows · 12 fields");
+  });
+
+  it("automatically appends the next page near the result-list bottom", async () => {
+    picker.selectedItems.clear();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    mocks.emitAsync.mockReset();
+    picker.showPreview = vi.fn();
+    const first = {
+      id: "mx_vector_a_b_c_d_e",
+      title: "Road network",
+      type: "vector",
+      geometry_types: ["line"],
+    };
+    const second = {
+      id: "mx_vector_f_g_h_i_j",
+      title: "Population",
+      type: "vector",
+      geometry_types: ["polygon"],
+    };
+    mocks.emitAsync
+      .mockResolvedValueOnce({
+        success: true,
+        items: [first],
+        total: 2,
+        offset: 0,
+        limit: 50,
+        hasMore: true,
+        facets: { tags: [] },
+      })
+      .mockResolvedValueOnce({
+        success: true,
+        items: [second],
+        total: 2,
+        offset: 1,
+        limit: 50,
+        hasMore: false,
+        facets: {},
+      });
+    picker.buildBrowser();
+    await picker.loadResults();
+    Object.defineProperties(picker.refs.resultsScroller, {
+      clientHeight: { configurable: true, value: 100 },
+      scrollHeight: { configurable: true, value: 180 },
+      scrollTop: { configurable: true, writable: true, value: 0 },
+    });
+
+    picker.handleResultsScroll();
+
+    await vi.waitFor(() =>
+      expect(picker.refs.results.children).toHaveLength(2),
+    );
+    expect(mocks.emitAsync).toHaveBeenLastCalledWith(
+      "/client/source/search",
+      expect.objectContaining({
+        offset: 1,
+        limit: 50,
+        includeFacets: false,
+      }),
+      15000,
+    );
+    expect(picker.refs.summary.textContent).toBe("2 of 2 matching sources");
+    expect(picker.refs.loadControls.hidden).toBe(true);
+  });
+
+  it("keeps existing rows and offers retry when an appended page fails", async () => {
+    picker.selectedItems.clear();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    mocks.emitAsync.mockReset();
+    picker.showPreview = vi.fn();
+    const first = {
+      id: "mx_vector_a_b_c_d_e",
+      title: "Road network",
+      type: "vector",
+    };
+    const second = {
+      id: "mx_vector_f_g_h_i_j",
+      title: "Population",
+      type: "vector",
+    };
+    mocks.emitAsync
+      .mockResolvedValueOnce({
+        success: true,
+        items: [first],
+        total: 2,
+        offset: 0,
+        hasMore: true,
+        facets: { tags: [] },
+      })
+      .mockResolvedValueOnce({ error: "source_search_failed" });
+    picker.buildBrowser();
+    await picker.loadResults();
+
+    await picker.loadMoreResults();
+
+    expect(picker.refs.results.children).toHaveLength(1);
+    expect(picker.refs.loadMore.textContent).toBe("Retry loading");
+    expect(picker.refs.loadStatus.textContent).toBe(
+      "Unable to load more sources.",
+    );
+
+    mocks.emitAsync.mockResolvedValueOnce({
+      success: true,
+      items: [second],
+      total: 2,
+      offset: 1,
+      hasMore: false,
+      facets: {},
+    });
+    picker.refs.loadMore.click();
+    await vi.waitFor(() =>
+      expect(picker.refs.results.children).toHaveLength(2),
+    );
+  });
+
+  it("deduplicates appended rows and resets paging for a new search", async () => {
+    picker.selectedItems.clear();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    mocks.emitAsync.mockReset();
+    picker.showPreview = vi.fn();
+    const first = {
+      id: "mx_vector_a_b_c_d_e",
+      title: "Road network",
+      type: "vector",
+    };
+    const second = {
+      id: "mx_vector_f_g_h_i_j",
+      title: "Population",
+      type: "vector",
+    };
+    mocks.emitAsync
+      .mockResolvedValueOnce({
+        success: true,
+        items: [first],
+        total: 3,
+        offset: 0,
+        hasMore: true,
+        facets: { tags: [] },
+      })
+      .mockResolvedValueOnce({
+        success: true,
+        items: [first, second],
+        total: 3,
+        offset: 1,
+        hasMore: false,
+        facets: {},
+      })
+      .mockResolvedValueOnce({
+        success: true,
+        items: [second],
+        total: 1,
+        offset: 0,
+        hasMore: false,
+        facets: { tags: [] },
+      });
+    picker.buildBrowser();
+    await picker.loadResults();
+    await picker.loadMoreResults();
+
+    expect(picker.items.map((item) => item.id)).toEqual([first.id, second.id]);
+
+    picker.refs.search.value = "population";
+    await picker.loadResults();
+
+    expect(picker.items.map((item) => item.id)).toEqual([second.id]);
+    expect(mocks.emitAsync).toHaveBeenLastCalledWith(
+      "/client/source/search",
+      expect.objectContaining({ offset: 0, includeFacets: true }),
+      15000,
+    );
+  });
+
+  it("suppresses concurrent requests for the same appended page", async () => {
+    picker.selectedItems.clear();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    mocks.emitAsync.mockReset();
+    picker.showPreview = vi.fn();
+    let resolvePage;
+    mocks.emitAsync
+      .mockResolvedValueOnce({
+        success: true,
+        items: [
+          {
+            id: "mx_vector_a_b_c_d_e",
+            title: "Road network",
+            type: "vector",
+          },
+        ],
+        total: 2,
+        offset: 0,
+        hasMore: true,
+        facets: { tags: [] },
+      })
+      .mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            resolvePage = resolve;
+          }),
+      );
+    picker.buildBrowser();
+    await picker.loadResults();
+
+    const firstAppend = picker.loadMoreResults();
+    const duplicateAppend = picker.loadMoreResults();
+
+    await expect(duplicateAppend).resolves.toBeUndefined();
+    expect(mocks.emitAsync).toHaveBeenCalledTimes(2);
+    resolvePage({
+      success: true,
+      items: [],
+      total: 1,
+      offset: 1,
+      hasMore: false,
+      facets: {},
+    });
+    await firstAppend;
   });
 
   it("hydrates an initial ID into its localized compact source record", async () => {
