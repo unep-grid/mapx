@@ -1655,6 +1655,26 @@
     "bn": "সম্পাদনা করতে উৎস নির্বাচন করুন"
   },
   {
+    "id": "edit_table_picker_invalid_selection",
+    "en": "Select one source table.",
+    "bn": "একটি উৎস টেবিল নির্বাচন করুন।"
+  },
+  {
+    "id": "edit_table_picker_unavailable_table",
+    "en": "The selected source table is unavailable.",
+    "bn": "নির্বাচিত উৎস টেবিলটি অনুপলব্ধ।"
+  },
+  {
+    "id": "edit_table_picker_unavailable_dimensions",
+    "en": "The selected source dimensions are unavailable.",
+    "bn": "নির্বাচিত উৎসের মাত্রাগুলো অনুপলব্ধ।"
+  },
+  {
+    "id": "edit_table_picker_excessive_dimensions",
+    "en": "The selected source exceeds the table editor limit of {{max_rows}} rows or {{max_columns}} columns.",
+    "bn": "নির্বাচিত উৎসটি টেবিল এডিটরের সীমা অতিক্রম করেছে। {{max_rows}} সারি বা {{max_columns}} কলাম।"
+  },
+  {
     "id": "edit_table_modal_title",
     "en": "Edit source {{title}}",
     "bn": "উৎস সম্পাদনা করুন {{title}}"

@@ -1,6 +1,6 @@
 import { settings } from "../../settings";
 import { modalPrompt, modalConfirm, modalDialog } from "./../../mx_helper_modal.js";
-import { modalSelectSource } from "../../select_auto";
+import { pickEditableTableSource } from "./source_picker.js";
 import { el, elButtonFa, tt } from "../../el_mapx";
 import { getDictTemplate, getDictItem } from "./../../language";
 import { prefGet, prefSet } from "../../user_pref";
@@ -760,18 +760,12 @@ export const dialogsMixin = {
 
   /**
    * Display a dialog with source selection
-   * - built with tom select, in select_auto module
    */
   async dialogSelectTable() {
-    const res = await modalSelectSource({
-      types: ["vector", "tabular"],
-      disable_large: true,
-      disable_missing: true,
-      readable: false,
-      editable: true,
-      add_views: true,
+    const et = this;
+    return pickEditableTableSource({
+      root: et._config.root,
     });
-    return res;
   },
 
   async dialogEditGeometry(gid) {

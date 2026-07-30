@@ -1655,6 +1655,26 @@
     "ru": "Выберите источник для редактирования"
   },
   {
+    "id": "edit_table_picker_invalid_selection",
+    "en": "Select one source table.",
+    "ru": "Выберите одну исходную таблицу."
+  },
+  {
+    "id": "edit_table_picker_unavailable_table",
+    "en": "The selected source table is unavailable.",
+    "ru": "Выбранная исходная таблица недоступна."
+  },
+  {
+    "id": "edit_table_picker_unavailable_dimensions",
+    "en": "The selected source dimensions are unavailable.",
+    "ru": "Выбранные исходные параметры недоступны."
+  },
+  {
+    "id": "edit_table_picker_excessive_dimensions",
+    "en": "The selected source exceeds the table editor limit of {{max_rows}} rows or {{max_columns}} columns.",
+    "ru": "Выбранный источник превышает лимит, установленный редактором таблиц. {{max_rows}} ряды или {{max_columns}} столбцы."
+  },
+  {
     "id": "edit_table_modal_title",
     "en": "Edit source {{title}}",
     "ru": "Изменить источник {{title}}"

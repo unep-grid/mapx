@@ -32,7 +32,7 @@ window.addEventListener("load", () => {
       const isStatic = settings.mode.static;
       const resolvers = isStatic
         ? new MapxResolversStatic()
-        : new MapxResolversApp();
+        : new MapxResolversApp({ root: document.body });
       const sdkToken = getQueryParameter("sdkToken")[0];
 
       window.mxsdkworker = new Worker({

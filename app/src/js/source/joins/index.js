@@ -1,7 +1,7 @@
 import { el, elButtonFa, elSpanTranslate as tt } from "../../el_mapx";
 import { EventSimple } from "../../event_simple";
 import { isSourceId, isNotEmpty, isEmpty } from "../../is_test";
-import { modalSelectSource } from "../../select_auto";
+import { pickSources } from "../picker/index.js";
 import { settings, ws, nc } from "../../mx";
 import {
   modalPrompt,
@@ -34,11 +34,13 @@ const sjmSettings = {
 };
 
 export const sjm_instances = new Set();
+const managerRoots = new WeakMap();
 
 export class SourcesJoinManager extends EventSimple {
-  constructor() {
+  constructor({ root } = {}) {
     super();
     const sjm = this;
+    managerRoots.set(sjm, root);
     bindAll(sjm);
     window._sjm = sjm;
     return sjm;
@@ -481,14 +483,16 @@ export class SourcesJoinManager extends EventSimple {
   }
 
   async promptSelectSourceJoin() {
-    const idSource = await modalSelectSource({
-      disable_large: false,
-      disable_missing: false,
-      types: ["join"],
-      editable: true,
-      readable: false,
+    const result = await pickSources({
+      root: managerRoots.get(this),
+      multiple: false,
+      acceptedTypes: ["join"],
+      requiredCapabilities: [],
+      accessMode: "editable",
+      language: settings.language,
+      label: await getDictItem("join_source_join"),
     });
-    return idSource;
+    return result?.value || null;
   }
 
   get locked() {

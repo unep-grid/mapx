@@ -1,20 +1,31 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+const windowMock = vi.hoisted(() => ({
+  open: vi.fn(),
+}));
+
 vi.mock("../../mx.js", () => ({
   ws: { emitAsync: vi.fn() },
 }));
 
 vi.mock("../../window/index.js", () => ({
-  getMapxWindowManager: vi.fn(),
+  getMapxWindowManager: () => ({ open: windowMock.open }),
 }));
 
 import { MxSourcePickerElement } from "./index.js";
-import { installSourcePickerShinyBridge } from "./shiny_bridge.js";
+import {
+  installSourcePickerShinyBridge,
+  pickSourceForShiny,
+} from "./shiny_bridge.js";
 
 describe("source picker Shiny bridge", () => {
   let root;
 
-  afterEach(() => root?.remove());
+  afterEach(() => {
+    root?.remove();
+    vi.restoreAllMocks();
+    vi.clearAllMocks();
+  });
 
   it("clears and forwards a dependent selection that becomes excluded", async () => {
     root = document.createElement("div");
@@ -57,5 +68,74 @@ describe("source picker Shiny bridge", () => {
       null,
       { priority: "event" },
     );
+  });
+
+  it("forwards an explicitly confirmed editable source with the legacy payload", async () => {
+    root = document.createElement("div");
+    document.body.append(root);
+    const browserWindow = document.createElement("mx-window");
+    browserWindow.close = vi.fn();
+    windowMock.open.mockReturnValue(browserWindow);
+    const shiny = { setInputValue: vi.fn() };
+    vi.spyOn(Date, "now").mockReturnValue(1234);
+
+    const pending = pickSourceForShiny({
+      request: { id: "selectSourceLayerForManage" },
+      root,
+      shiny,
+      language: "fr",
+    });
+    await new Promise((resolve) => queueMicrotask(resolve));
+    const picker = root.querySelector("mx-source-picker");
+    expect(picker.config).toMatchObject({
+      acceptedTypes: ["vector", "tabular", "join"],
+      requiredCapabilities: [],
+      accessMode: "editable",
+      language: "fr",
+    });
+    picker.selectedItems = new Map([
+      [
+        "mx_vector_a_b_c_d_e",
+        {
+          id: "mx_vector_a_b_c_d_e",
+          title: "Road network",
+          type: "vector",
+        },
+      ],
+    ]);
+    browserWindow.dispatchEvent(
+      new CustomEvent("mx-window-close", {
+        detail: { reason: "selected" },
+      }),
+    );
+    await pending;
+
+    expect(shiny.setInputValue).toHaveBeenCalledWith(
+      "selectSourceLayerForManage",
+      { idSource: "mx_vector_a_b_c_d_e", update: 1234 },
+      { priority: "event" },
+    );
+  });
+
+  it("does not send a legacy input when selection is cancelled", async () => {
+    root = document.createElement("div");
+    document.body.append(root);
+    const browserWindow = document.createElement("mx-window");
+    browserWindow.close = vi.fn();
+    windowMock.open.mockReturnValue(browserWindow);
+    const shiny = { setInputValue: vi.fn() };
+    const pending = pickSourceForShiny({
+      request: { id: "selectSourceLayerForMeta" },
+      root,
+      shiny,
+    });
+    await new Promise((resolve) => queueMicrotask(resolve));
+    browserWindow.dispatchEvent(
+      new CustomEvent("mx-window-close", {
+        detail: { reason: "escape" },
+      }),
+    );
+    await pending;
+    expect(shiny.setInputValue).not.toHaveBeenCalled();
   });
 });

@@ -30,7 +30,6 @@ import {
   progressScreen,
   setElementAttribute,
   setImageAttributes,
-  showSelectSourceEdit,
   updateText,
   updateCheckboxInput,
 } from "./mx_helper_misc.js";
@@ -46,7 +45,7 @@ import {
   setQueryParametersUpdate,
 } from "./url_utils/url_utils.js";
 import { wmsBuildQueryUi } from "./wms/ui.js";
-import { project } from "./mx.js";
+import { project, settings } from "./mx.js";
 import { updateViewsBadges } from "./badges/index.js";
 import {
   viewsListRenderNew,
@@ -67,7 +66,10 @@ import { modalSourceJoin } from "./source/joins/instance.js";
 import { editTable } from "./source/edit/instance.js";
 import { uploadSource } from "./uploader/instance.js";
 import { geomTools } from "./source/geometry/instance.js";
-import { installSourcePickerShinyBridge } from "./source/picker/shiny_bridge.js";
+import {
+  installSourcePickerShinyBridge,
+  pickSourceForShiny,
+} from "./source/picker/shiny_bridge.js";
 
 $(document).on("shiny:connected", mapxBindings);
 
@@ -75,9 +77,11 @@ $(document).on("shiny:connected", mapxBindings);
  * MapX client - Shiny bindings
  */
 function mapxBindings() {
+  const root = document.body;
+  const shiny = window.Shiny;
   installSourcePickerShinyBridge({
-    root: document.body,
-    shiny: window.Shiny,
+    root,
+    shiny,
   });
   /**
    * Set init query parameters
@@ -89,7 +93,14 @@ function mapxBindings() {
   /**
    * General bindings
    */
-  bind("mxShowSelectSourceEdit", showSelectSourceEdit);
+  bind("mxShowSelectSourceEdit", (request) =>
+    pickSourceForShiny({
+      request,
+      root,
+      shiny,
+      language: settings.language,
+    }),
+  );
   bind("mxSetCookie", writeCookie);
   bind("mxModal", modal);
   bind("mxSetElementAttribute", setElementAttribute);
@@ -113,8 +124,8 @@ function mapxBindings() {
   bind("mxUpdateCheckboxInput", updateCheckboxInput);
   bind("mxNotify", shinyNotify);
   bind("mxGeoserverRebuild", geoserver.rebuild);
-  bind("mxJoinEditor", modalSourceJoin);
-  bind("mxEditTable", editTable);
+  bind("mxJoinEditor", (request) => modalSourceJoin(request, { root }));
+  bind("mxEditTable", (request) => editTable({ ...request, root }));
   bind("mxGeomTools", geomTools);
   bind("mxUploader", uploadSource);
   bind("mxProjectAdd", project.create);

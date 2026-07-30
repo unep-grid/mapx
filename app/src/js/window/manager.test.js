@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { MxWindowManager } from "./manager.js";
+import { getMapxWindowManager, MxWindowManager } from "./manager.js";
 
 describe("MxWindowManager", () => {
   let root;
@@ -75,9 +75,60 @@ describe("MxWindowManager", () => {
 
   it("closes the front window with Escape", () => {
     manager.open({ key: "back" });
-    manager.open({ key: "front" });
-    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    const front = manager.open({ key: "front" });
+    front.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
+    );
     expect(manager.windows.has("front")).toBe(false);
     expect(manager.windows.has("back")).toBe(true);
+  });
+
+  it("tracks viewport resize only while windows are open", () => {
+    const add = vi.spyOn(window, "addEventListener");
+    const remove = vi.spyOn(window, "removeEventListener");
+
+    manager.open({ key: "first" });
+    manager.open({ key: "second" });
+    expect(add.mock.calls.filter(([type]) => type === "resize")).toHaveLength(1);
+
+    manager.close("first");
+    expect(
+      remove.mock.calls.filter(([type]) => type === "resize"),
+    ).toHaveLength(0);
+
+    manager.close("second");
+    expect(
+      remove.mock.calls.filter(([type]) => type === "resize"),
+    ).toHaveLength(1);
+
+    manager.destroy();
+    expect(
+      remove.mock.calls.filter(([type]) => type === "resize"),
+    ).toHaveLength(1);
+  });
+
+  it("scopes cached managers and window layers to each supplied root", () => {
+    const otherRoot = document.createElement("aside");
+    document.body.append(otherRoot);
+    const rootManager = getMapxWindowManager(root);
+    const sameRootManager = getMapxWindowManager(root);
+    const otherManager = getMapxWindowManager(otherRoot);
+
+    expect(sameRootManager).toBe(rootManager);
+    expect(otherManager).not.toBe(rootManager);
+    expect(rootManager.layer.parentElement).toBe(root);
+    expect(otherManager.layer.parentElement).toBe(otherRoot);
+
+    const rootWindow = rootManager.open({ key: "root-window" });
+    otherManager.open({ key: "other-window" });
+    rootWindow.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
+    );
+    expect(rootManager.windows.has("root-window")).toBe(false);
+    expect(otherManager.windows.has("other-window")).toBe(true);
+
+    rootManager.destroy();
+    otherManager.destroy();
+    otherRoot.remove();
   });
 });

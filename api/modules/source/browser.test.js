@@ -204,6 +204,34 @@ describe("source browser filtering", () => {
     expect(result.items.map((item) => item.title)).toEqual(["Mixed geometry"]);
   });
 
+  it("enforces the normalized geometry capability", () => {
+    const result = filterAndSortSources(
+      [
+        ...rows,
+        {
+          id: "mx_tabular_p_q_r_s_t",
+          title: "No geometry",
+          type: "tabular",
+          editor_email: "alice@example.org",
+          access: "editable",
+          tags: [],
+          geometry_types: [],
+        },
+      ],
+      {
+        acceptedTypes: ["vector", "tabular"],
+        requiredCapabilities: ["geometry", "unsupported"],
+      },
+    );
+
+    expect(result.items.map((item) => item.title)).not.toContain("No geometry");
+    expect(
+      sourceBrowserInternals.normalizeRequest({
+        requiredCapabilities: ["geometry", "unsupported"],
+      }).requiredCapabilities,
+    ).toEqual(["geometry"]);
+  });
+
   it("validates every selected id with API-side project roles", async () => {
     mocks.getUserRoles.mockResolvedValue({ group: ["publishers"] });
     const client = {

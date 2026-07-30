@@ -1,9 +1,9 @@
 import { SourcesJoinManager } from "./index.js";
 
 
-export async function modalSourceJoin(opt) {
+export async function modalSourceJoin(opt, { root } = {}) {
   try {
-    const msj = new SourcesJoinManager();
+    const msj = new SourcesJoinManager({ root });
     const type = opt.create === true ? "create" : "edit";
     await msj.init(type);
   } catch (e) {
@@ -11,9 +11,9 @@ export async function modalSourceJoin(opt) {
   }
 }
 
-export async function modalSourceJoinNew() {
+export async function modalSourceJoinNew({ root } = {}) {
   try {
-    const msj = new SourcesJoinManager();
+    const msj = new SourcesJoinManager({ root });
     await msj.init("create");
   } catch (e) {
     console.error(e);

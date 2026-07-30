@@ -1324,6 +1324,22 @@
     "en": "Select source to edit"
   },
   {
+    "id": "edit_table_picker_invalid_selection",
+    "en": "Select one source table."
+  },
+  {
+    "id": "edit_table_picker_unavailable_table",
+    "en": "The selected source table is unavailable."
+  },
+  {
+    "id": "edit_table_picker_unavailable_dimensions",
+    "en": "The selected source dimensions are unavailable."
+  },
+  {
+    "id": "edit_table_picker_excessive_dimensions",
+    "en": "The selected source exceeds the table editor limit of {{max_rows}} rows or {{max_columns}} columns."
+  },
+  {
     "id": "edit_table_modal_title",
     "en": "Edit source {{title}}"
   },

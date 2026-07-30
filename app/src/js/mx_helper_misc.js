@@ -20,8 +20,6 @@ import { UAParser } from "ua-parser-js";
 
 import copy from "fast-copy";
 import { settings } from "./mx.js";
-import { modalSelectSource } from "./select_auto/modals";
-import { isSourceId } from "./is_test";
 import { el, tt } from "./el_mapx";
 import { cancelFrame, onNextFrame } from "./animation_frame";
 import { moduleLoad } from "./modules_loader_async";
@@ -1494,23 +1492,6 @@ export function updateCheckboxInput(o) {
     if (hasShiny) {
       Shiny.onInputChange(o.id, elInput.checked);
     }
-  }
-}
-
-/**
- * Show select source edit modal
- */
-export async function showSelectSourceEdit(opt) {
-  const idSource = await modalSelectSource({
-    disable_large: false,
-    readable: false,
-    editable: true,
-    add_views: true,
-    add_global: false,
-    types: ["vector", "tabular", "join"],
-  });
-  if (isSourceId(idSource)) {
-    Shiny.onInputChange(opt.id, { idSource: idSource, update: Date.now() });
   }
 }
 

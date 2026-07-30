@@ -4303,6 +4303,58 @@
     "de": "Quelle zum Bearbeiten auswählen"
   },
   {
+    "id": "edit_table_picker_invalid_selection",
+    "en": "Select one source table.",
+    "fr": "Sélectionnez une table source.",
+    "es": "Seleccione una tabla de origen.",
+    "ru": "Выберите одну исходную таблицу.",
+    "zh": "选择一个源表。",
+    "ar": "اختر جدول مصدر واحد.",
+    "fa": "یک جدول منبع انتخاب کنید.",
+    "ps": "یو د سرچینې جدول غوره کړئ.",
+    "bn": "একটি উৎস টেবিল নির্বাচন করুন।",
+    "de": "Wählen Sie eine Quelltabelle aus."
+  },
+  {
+    "id": "edit_table_picker_unavailable_table",
+    "en": "The selected source table is unavailable.",
+    "fr": "La table source sélectionnée n'est pas disponible.",
+    "es": "La tabla de origen seleccionada no está disponible.",
+    "ru": "Выбранная исходная таблица недоступна.",
+    "zh": "所选源表不可用。",
+    "ar": "جدول المصدر المحدد غير متوفر.",
+    "fa": "جدول منبع انتخاب شده در دسترس نیست.",
+    "ps": "ټاکل شوی سرچینه جدول شتون نلري.",
+    "bn": "নির্বাচিত উৎস টেবিলটি অনুপলব্ধ।",
+    "de": "Die ausgewählte Quelltabelle ist nicht verfügbar."
+  },
+  {
+    "id": "edit_table_picker_unavailable_dimensions",
+    "en": "The selected source dimensions are unavailable.",
+    "fr": "Les dimensions de la source sélectionnée ne sont pas disponibles.",
+    "es": "Las dimensiones de origen seleccionadas no están disponibles.",
+    "ru": "Выбранные исходные параметры недоступны.",
+    "zh": "所选源尺寸不可用。",
+    "ar": "أبعاد المصدر المحددة غير متوفرة.",
+    "fa": "ابعاد منبع انتخاب شده در دسترس نیست.",
+    "ps": "د ټاکل شوي سرچینې ابعاد شتون نلري.",
+    "bn": "নির্বাচিত উৎসের মাত্রাগুলো অনুপলব্ধ।",
+    "de": "Die ausgewählten Quelldimensionen sind nicht verfügbar."
+  },
+  {
+    "id": "edit_table_picker_excessive_dimensions",
+    "en": "The selected source exceeds the table editor limit of {{max_rows}} rows or {{max_columns}} columns.",
+    "fr": "La source sélectionnée dépasse la limite de l'éditeur de tableau. {{max_rows}} lignes ou {{max_columns}} colonnes.",
+    "es": "La fuente seleccionada excede el límite del editor de tablas. {{max_rows}} filas o {{max_columns}} columnas.",
+    "ru": "Выбранный источник превышает лимит, установленный редактором таблиц. {{max_rows}} ряды или {{max_columns}} столбцы.",
+    "zh": "所选数据源超出了表格编辑器的限制。 {{max_rows}}行或 {{max_columns}}列。",
+    "ar": "يتجاوز المصدر المحدد الحد الأقصى المسموح به لمحرر الجدول. {{max_rows}} صفوف أو {{max_columns}} أعمدة.",
+    "fa": "منبع انتخاب شده از محدودیت ویرایشگر جدول فراتر رفته است. {{max_rows}} ردیف‌ها یا {{max_columns}} ستون ها.",
+    "ps": "غوره شوې سرچینه د جدول مدیر حد څخه زیاته ده {{max_rows}} قطارونه یا {{max_columns}} ستنې.",
+    "bn": "নির্বাচিত উৎসটি টেবিল এডিটরের সীমা অতিক্রম করেছে। {{max_rows}} সারি বা {{max_columns}} কলাম।",
+    "de": "Die ausgewählte Quelle überschreitet das Limit des Tabelleneditors. {{max_rows}} Zeilen oder {{max_columns}} Spalten."
+  },
+  {
     "id": "edit_table_modal_title",
     "en": "Edit source {{title}}",
     "fr": "Modifier la source {{title}}",

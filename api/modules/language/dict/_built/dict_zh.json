@@ -1655,6 +1655,26 @@
     "zh": "选择要编辑的来源"
   },
   {
+    "id": "edit_table_picker_invalid_selection",
+    "en": "Select one source table.",
+    "zh": "选择一个源表。"
+  },
+  {
+    "id": "edit_table_picker_unavailable_table",
+    "en": "The selected source table is unavailable.",
+    "zh": "所选源表不可用。"
+  },
+  {
+    "id": "edit_table_picker_unavailable_dimensions",
+    "en": "The selected source dimensions are unavailable.",
+    "zh": "所选源尺寸不可用。"
+  },
+  {
+    "id": "edit_table_picker_excessive_dimensions",
+    "en": "The selected source exceeds the table editor limit of {{max_rows}} rows or {{max_columns}} columns.",
+    "zh": "所选数据源超出了表格编辑器的限制。 {{max_rows}}行或 {{max_columns}}列。"
+  },
+  {
     "id": "edit_table_modal_title",
     "en": "Edit source {{title}}",
     "zh": "编辑源 {{title}}"

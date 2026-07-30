@@ -1655,6 +1655,26 @@
     "fr": "Sélectionnez la source à modifier"
   },
   {
+    "id": "edit_table_picker_invalid_selection",
+    "en": "Select one source table.",
+    "fr": "Sélectionnez une table source."
+  },
+  {
+    "id": "edit_table_picker_unavailable_table",
+    "en": "The selected source table is unavailable.",
+    "fr": "La table source sélectionnée n'est pas disponible."
+  },
+  {
+    "id": "edit_table_picker_unavailable_dimensions",
+    "en": "The selected source dimensions are unavailable.",
+    "fr": "Les dimensions de la source sélectionnée ne sont pas disponibles."
+  },
+  {
+    "id": "edit_table_picker_excessive_dimensions",
+    "en": "The selected source exceeds the table editor limit of {{max_rows}} rows or {{max_columns}} columns.",
+    "fr": "La source sélectionnée dépasse la limite de l'éditeur de tableau. {{max_rows}} lignes ou {{max_columns}} colonnes."
+  },
+  {
     "id": "edit_table_modal_title",
     "en": "Edit source {{title}}",
     "fr": "Modifier la source {{title}}"

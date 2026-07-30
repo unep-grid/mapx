@@ -59,12 +59,9 @@ export class MxWindowManager {
         element.constrainToViewport();
       }
     };
+    this._trackingViewport = false;
     this.layer.addEventListener("pointerdown", this._onLayerPointerDown);
-    root.ownerDocument.addEventListener("keydown", this._onKeyDown);
-    root.ownerDocument.defaultView?.addEventListener(
-      "resize",
-      this._onViewportResize,
-    );
+    this.layer.addEventListener("keydown", this._onKeyDown);
   }
 
   /** @param {MxWindowConfig} config */
@@ -102,6 +99,7 @@ export class MxWindowManager {
     element.configure({ ...config, key });
     this.layer.appendChild(element);
     this.windows.set(key, element);
+    this.startViewportTracking();
     this.bringToFront(element);
     this.focusInitial(element);
     element.dispatchWindowEvent("mx-window-open");
@@ -121,6 +119,7 @@ export class MxWindowManager {
     element.backdrop?.remove();
     element.remove();
     this.windows.delete(key);
+    if (this.windows.size === 0) this.stopViewportTracking();
     element.returnFocus?.focus?.();
     return true;
   }
@@ -188,25 +187,44 @@ export class MxWindowManager {
     }
   }
 
-  destroy() {
-    this.closeAll();
-    this.layer.removeEventListener("pointerdown", this._onLayerPointerDown);
-    this.root.ownerDocument.removeEventListener("keydown", this._onKeyDown);
+  startViewportTracking() {
+    if (this._trackingViewport) return;
+    this.root.ownerDocument.defaultView?.addEventListener(
+      "resize",
+      this._onViewportResize,
+    );
+    this._trackingViewport = true;
+  }
+
+  stopViewportTracking() {
+    if (!this._trackingViewport) return;
     this.root.ownerDocument.defaultView?.removeEventListener(
       "resize",
       this._onViewportResize,
     );
+    this._trackingViewport = false;
+  }
+
+  destroy() {
+    this.closeAll();
+    this.layer.removeEventListener("pointerdown", this._onLayerPointerDown);
+    this.layer.removeEventListener("keydown", this._onKeyDown);
+    this.stopViewportTracking();
     this.layer.remove();
   }
 }
 
-/** @type {MxWindowManager | null} */
-let defaultManager = null;
+/** @type {WeakMap<HTMLElement, MxWindowManager>} */
+const managersByRoot = new WeakMap();
 
 /** Module-scoped default; deliberately not exposed on window/globalThis. */
 export function getMapxWindowManager(root = document.body) {
-  if (!defaultManager || !defaultManager.layer.isConnected) {
-    defaultManager = new MxWindowManager({ root });
+  const current = managersByRoot.get(root);
+  if (current?.layer.isConnected) {
+    return current;
   }
-  return defaultManager;
+  current?.destroy();
+  const manager = new MxWindowManager({ root });
+  managersByRoot.set(root, manager);
+  return manager;
 }

@@ -44,12 +44,10 @@ export function getSchema(language = "en") {
               type: "source_registered",
             },
             mx_options: {
-              renderer: "tom-select",
-              maxItems: 1,
-              loader: "sources",
-              types: ["vector"],
-              readable: true,
-              add_global: true,
+              renderer: "source-picker",
+              acceptedTypes: ["vector"],
+              requiredCapabilities: ["geometry"],
+              accessMode: "readable",
             },
           },
           columns: {
@@ -100,12 +98,10 @@ export function getSchema(language = "en") {
                 type: "source_registered",
               },
               mx_options: {
-                renderer: "tom-select",
-                maxItems: 1,
-                loader: "sources",
-                types: ["vector", "tabular"],
-                readable: true,
-                add_global: true,
+                renderer: "source-picker",
+                acceptedTypes: ["vector", "tabular"],
+                requiredCapabilities: [],
+                accessMode: "readable",
               },
             },
             columns: {

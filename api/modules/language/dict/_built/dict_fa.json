@@ -1655,6 +1655,26 @@
     "fa": "منبع را برای ویرایش انتخاب کنید"
   },
   {
+    "id": "edit_table_picker_invalid_selection",
+    "en": "Select one source table.",
+    "fa": "یک جدول منبع انتخاب کنید."
+  },
+  {
+    "id": "edit_table_picker_unavailable_table",
+    "en": "The selected source table is unavailable.",
+    "fa": "جدول منبع انتخاب شده در دسترس نیست."
+  },
+  {
+    "id": "edit_table_picker_unavailable_dimensions",
+    "en": "The selected source dimensions are unavailable.",
+    "fa": "ابعاد منبع انتخاب شده در دسترس نیست."
+  },
+  {
+    "id": "edit_table_picker_excessive_dimensions",
+    "en": "The selected source exceeds the table editor limit of {{max_rows}} rows or {{max_columns}} columns.",
+    "fa": "منبع انتخاب شده از محدودیت ویرایشگر جدول فراتر رفته است. {{max_rows}} ردیف‌ها یا {{max_columns}} ستون ها."
+  },
+  {
     "id": "edit_table_modal_title",
     "en": "Edit source {{title}}",
     "fa": "ویرایش منبع {{title}}"

@@ -4,6 +4,7 @@ const mocks = vi.hoisted(() => ({
   emitAsync: vi.fn(),
   close: vi.fn(),
   open: vi.fn(),
+  getManager: vi.fn(),
 }));
 
 vi.mock("../../mx.js", () => ({
@@ -11,17 +12,20 @@ vi.mock("../../mx.js", () => ({
 }));
 
 vi.mock("../../window/index.js", () => ({
-  getMapxWindowManager: () => ({ open: mocks.open }),
+  getMapxWindowManager: mocks.getManager,
 }));
 
-import { MxSourcePickerElement } from "./index.js";
+import { MxSourcePickerElement, pickSources } from "./index.js";
 
 describe("MxSourcePickerElement", () => {
   let picker;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mocks.open.mockReturnValue({ close: mocks.close });
+    const browserWindow = document.createElement("mx-window");
+    browserWindow.close = mocks.close;
+    mocks.open.mockReturnValue(browserWindow);
+    mocks.getManager.mockReturnValue({ open: mocks.open });
     mocks.emitAsync.mockResolvedValue({
       success: true,
       total: 0,
@@ -92,6 +96,14 @@ describe("MxSourcePickerElement", () => {
     expect(picker.refs.filters.hidden).toBe(true);
   });
 
+  it("closes its managed window when its application root disconnects", () => {
+    picker.open();
+
+    picker.remove();
+
+    expect(mocks.close).toHaveBeenCalledWith("picker-disconnected");
+  });
+
   it("sends only compact search criteria and hydrates the selected title", async () => {
     mocks.emitAsync.mockResolvedValue({
       success: true,
@@ -154,6 +166,8 @@ describe("MxSourcePickerElement", () => {
       "/client/source/search",
       expect.objectContaining({
         selectedIds: ["mx_vector_a_b_c_d_e"],
+        requiredCapabilities: ["geometry"],
+        access: [],
         language: "en",
         limit: 1,
       }),
@@ -201,6 +215,32 @@ describe("MxSourcePickerElement", () => {
     expect(
       picker.querySelector(".mx-source-picker__selected-title").innerText,
     ).toBe("Population");
+  });
+
+  it("keeps selected ID order when hydration results arrive out of order", async () => {
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    const ids = ["mx_vector_a_b_c_d_e", "mx_vector_f_g_h_i_j"];
+    picker.config = {
+      multiple: true,
+      maxItems: 2,
+      acceptedTypes: ["vector"],
+      requiredCapabilities: ["geometry"],
+    };
+    picker.value = ids;
+    mocks.emitAsync.mockResolvedValue({
+      success: true,
+      items: [
+        { id: ids[1], title: "Population", type: "vector" },
+        { id: ids[0], title: "Road network", type: "vector" },
+      ],
+    });
+
+    await picker.hydrateSelectedItems();
+
+    expect(picker.value).toEqual(ids);
+    expect([...picker.selectedItems.values()].map((item) => item.title)).toEqual(
+      ["Road network", "Population"],
+    );
   });
 
   it("ignores search responses superseded by a newer request", async () => {
@@ -493,6 +533,240 @@ describe("MxSourcePickerElement", () => {
     ]);
     expect(picker.value).toEqual([]);
   });
+
+  it("reorders and removes committed multiple selections with one event", () => {
+    const items = ["A", "B", "C"].map((title, index) => ({
+      id: `mx_vector_${String.fromCharCode(97 + index)}_b_c_d_e`,
+      title,
+      type: "vector",
+    }));
+    picker.config = {
+      multiple: true,
+      maxItems: 3,
+      reorderable: true,
+      value: [],
+      acceptedTypes: ["vector"],
+    };
+    picker.selectedItems = new Map(items.map((item) => [item.id, item]));
+    picker.renderField();
+    const listener = vi.fn();
+    picker.addEventListener("mx-source-picker-change", listener);
+
+    picker
+      .querySelector(
+        `[data-source-id="${items[1].id}"][data-action="move-up"]`,
+      )
+      .click();
+
+    expect(picker.value).toEqual([items[1].id, items[0].id, items[2].id]);
+    expect(listener).toHaveBeenCalledTimes(1);
+    expect(listener.mock.calls[0][0].detail.items.map((item) => item.id)).toEqual(
+      picker.value,
+    );
+    expect(
+      picker.querySelector(
+        `[data-source-id="${items[1].id}"][data-action="move-down"]`,
+      ),
+    ).toBe(document.activeElement);
+
+    listener.mockClear();
+    picker
+      .querySelector(
+        `[data-source-id="${items[0].id}"][data-action="remove-item"]`,
+      )
+      .click();
+    expect(picker.value).toEqual([items[1].id, items[2].id]);
+    expect(listener).toHaveBeenCalledTimes(1);
+  });
+
+  it("reflects disabled state and blocks field and browser actions", () => {
+    picker.open();
+    picker.disabled = true;
+
+    expect(picker.hasAttribute("disabled")).toBe(true);
+    expect(picker.querySelector("[data-action='open']").disabled).toBe(true);
+    expect(picker.refs.search.disabled).toBe(true);
+    expect(picker.refs.confirm.disabled).toBe(true);
+
+    picker.pendingSelectedItems = new Map([
+      [
+        "mx_vector_f_g_h_i_j",
+        { id: "mx_vector_f_g_h_i_j", title: "Population", type: "vector" },
+      ],
+    ]);
+    picker.confirmSelection();
+    expect(picker.value).toBe("mx_vector_a_b_c_d_e");
+
+    picker.disabled = false;
+    expect(picker.refs.search.disabled).toBe(false);
+    expect(picker.refs.confirm.disabled).toBe(false);
+  });
+
+  it("keeps the browser open when asynchronous confirmation is rejected", async () => {
+    let resolveValidation;
+    picker.config = {
+      ...picker.config,
+      validateSelection: vi.fn(
+        () =>
+          new Promise((resolve) => {
+            resolveValidation = resolve;
+          }),
+      ),
+    };
+    picker.open();
+    picker.pendingSelectedItems = new Map([
+      [
+        "mx_vector_f_g_h_i_j",
+        { id: "mx_vector_f_g_h_i_j", title: "Population", type: "vector" },
+      ],
+    ]);
+
+    picker.confirmSelection();
+    expect(picker.refs.search.disabled).toBe(true);
+    expect(picker.refs.confirm.disabled).toBe(true);
+    resolveValidation({ valid: false, message: "Table is too large." });
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(picker.value).toBe("mx_vector_a_b_c_d_e");
+    expect(mocks.close).not.toHaveBeenCalled();
+    expect(picker.refs.validationStatus.textContent).toBe(
+      "Table is too large.",
+    );
+    expect(picker.refs.search.disabled).toBe(false);
+    expect(picker.refs.confirm.disabled).toBe(false);
+  });
+
+  it("commits once after asynchronous confirmation succeeds", async () => {
+    await new Promise((resolve) => queueMicrotask(resolve));
+    const listener = vi.fn();
+    picker.addEventListener("mx-source-picker-change", listener);
+    picker.config = {
+      ...picker.config,
+      validateSelection: vi.fn(async () => ({ valid: true })),
+    };
+    picker.open();
+    picker.pendingSelectedItems = new Map([
+      [
+        "mx_vector_f_g_h_i_j",
+        { id: "mx_vector_f_g_h_i_j", title: "Population", type: "vector" },
+      ],
+    ]);
+
+    picker.confirmSelection();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(picker.value).toBe("mx_vector_f_g_h_i_j");
+    expect(listener).toHaveBeenCalledTimes(1);
+    expect(mocks.close).toHaveBeenCalledWith("selected");
+  });
+
+  it("ignores a late successful validation after cancellation", async () => {
+    let resolveValidation;
+    picker.config = {
+      ...picker.config,
+      validateSelection: () =>
+        new Promise((resolve) => {
+          resolveValidation = resolve;
+        }),
+    };
+    picker.open();
+    picker.pendingSelectedItems = new Map([
+      [
+        "mx_vector_f_g_h_i_j",
+        { id: "mx_vector_f_g_h_i_j", title: "Population", type: "vector" },
+      ],
+    ]);
+    picker.confirmSelection();
+    const options = mocks.open.mock.calls.at(-1)[0];
+
+    options.onClose("escape");
+    resolveValidation({ valid: true });
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(picker.value).toBe("mx_vector_a_b_c_d_e");
+    expect(mocks.close).not.toHaveBeenCalled();
+  });
+
+  it("imperative helper resolves only confirmed windows and cleans up", async () => {
+    const root = document.createElement("div");
+    document.body.append(root);
+    const pending = pickSources({
+      root,
+      multiple: false,
+      acceptedTypes: ["vector"],
+      requiredCapabilities: [],
+    });
+    await new Promise((resolve) => queueMicrotask(resolve));
+    const temporary = root.querySelector("mx-source-picker");
+    expect(mocks.getManager).toHaveBeenCalledWith(root);
+    temporary.selectedItems = new Map([
+      [
+        "mx_vector_f_g_h_i_j",
+        { id: "mx_vector_f_g_h_i_j", title: "Population", type: "vector" },
+      ],
+    ]);
+    temporary.browserWindow.dispatchEvent(
+      new CustomEvent("mx-window-close", {
+        detail: { reason: "selected" },
+      }),
+    );
+
+    await expect(pending).resolves.toEqual({
+      value: "mx_vector_f_g_h_i_j",
+      items: [
+        {
+          id: "mx_vector_f_g_h_i_j",
+          title: "Population",
+          type: "vector",
+        },
+      ],
+    });
+    expect(root.querySelector("mx-source-picker")).toBeNull();
+    root.remove();
+  });
+
+  it("imperative helper returns ordered multiple selections", async () => {
+    const root = document.createElement("div");
+    document.body.append(root);
+    const pending = pickSources({ root, multiple: true, maxItems: 3 });
+    await new Promise((resolve) => queueMicrotask(resolve));
+    const picker = root.querySelector("mx-source-picker");
+    const items = ["A", "B"].map((title, index) => ({
+      id: `mx_vector_${String.fromCharCode(97 + index)}_b_c_d_e`,
+      title,
+      type: "vector",
+    }));
+    picker.selectedItems = new Map(items.map((item) => [item.id, item]));
+    picker.browserWindow.dispatchEvent(
+      new CustomEvent("mx-window-close", {
+        detail: { reason: "selected" },
+      }),
+    );
+
+    await expect(pending).resolves.toEqual({
+      value: items.map((item) => item.id),
+      items,
+    });
+    root.remove();
+  });
+
+  it.each(["escape", "button", "api", "close-all"])(
+    "imperative helper resolves null on %s cancellation",
+    async (reason) => {
+      const root = document.createElement("div");
+      document.body.append(root);
+      const pending = pickSources({ root });
+      await new Promise((resolve) => queueMicrotask(resolve));
+      root.querySelector("mx-source-picker").browserWindow.dispatchEvent(
+        new CustomEvent("mx-window-close", {
+          detail: { reason },
+        }),
+      );
+      await expect(pending).resolves.toBeNull();
+      expect(root.children).toHaveLength(0);
+      root.remove();
+    },
+  );
 
   it("requests vector previews on demand and keeps a neutral fallback", async () => {
     await new Promise((resolve) => setTimeout(resolve, 0));

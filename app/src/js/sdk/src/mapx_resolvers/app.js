@@ -546,7 +546,10 @@ export class MapxResolversApp extends MapxResolversStatic {
    * @return {Object} instance state
    */
   async table_editor_open(opt) {
-    const instance = await editTable(opt);
+    const instance = await editTable({
+      ...opt,
+      root: this.opt.root,
+    });
     return instance?.state || {};
   }
 
@@ -557,7 +560,10 @@ export class MapxResolversApp extends MapxResolversStatic {
    * @return {Object} instance state
    */
   async table_editor_close(opt) {
-    const instance = await editTable(opt);
+    const instance = await editTable({
+      ...opt,
+      root: this.opt.root,
+    });
     if (!instance) {
       throw new Error(`Table editor close: no table`);
     }
@@ -575,7 +581,10 @@ export class MapxResolversApp extends MapxResolversStatic {
    * @return {Any} res Result. If null, instance state
    */
   async table_editor_exec(opt) {
-    const instance = await editTable(opt);
+    const instance = await editTable({
+      ...opt,
+      root: this.opt.root,
+    });
     if (!instance) {
       throw new Error(`Table editor exec: no table`);
     }

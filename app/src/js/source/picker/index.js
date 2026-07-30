@@ -8,6 +8,7 @@ const DEFAULT_CONFIG = {
   value: [],
   multiple: false,
   maxItems: 1,
+  reorderable: false,
   acceptedTypes: ["vector", "join"],
   requiredCapabilities: ["geometry"],
   geometryTypes: [],
@@ -16,9 +17,18 @@ const DEFAULT_CONFIG = {
   viewId: null,
   language: "en",
   label: "Source",
+  validateSelection: null,
 };
 
 let pickerCounter = 0;
+
+/**
+ * @typedef {Object} SourceBrowserItem
+ * @property {string} id
+ * @property {string} title
+ * @property {string} type
+ * @property {string[]} [geometry_types]
+ */
 
 function arrayValue(value) {
   if (Array.isArray(value)) return value.filter(Boolean).map(String);
@@ -80,6 +90,10 @@ function dimensionLabel(item) {
  * Changes emit `mx-source-picker-change` with `{ value, items }`.
  */
 export class MxSourcePickerElement extends HTMLElement {
+  static get observedAttributes() {
+    return ["disabled"];
+  }
+
   constructor() {
     super();
     this._config = { ...DEFAULT_CONFIG };
@@ -92,6 +106,8 @@ export class MxSourcePickerElement extends HTMLElement {
     };
     this.searchGeneration = 0;
     this.selectionHydrationGeneration = 0;
+    this.validationGeneration = 0;
+    this.validating = false;
     this.controlId = `mx-source-picker-control-${++pickerCounter}`;
     this.onBrowserInput = debounce(() => this.loadResults(), 180);
   }
@@ -126,6 +142,14 @@ export class MxSourcePickerElement extends HTMLElement {
   get value() {
     const values = [...this.selectedItems.keys()];
     return this.config.multiple ? values : values[0] || null;
+  }
+
+  get disabled() {
+    return this.hasAttribute("disabled");
+  }
+
+  set disabled(value) {
+    this.toggleAttribute("disabled", Boolean(value));
   }
 
   set value(value) {
@@ -163,10 +187,18 @@ export class MxSourcePickerElement extends HTMLElement {
     this.renderField();
   }
 
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name !== "disabled" || oldValue === newValue) return;
+    if (this.isConnected) this.renderField();
+    this.updateBrowserDisabledState();
+  }
+
   disconnectedCallback() {
     this.invalidateSearch();
     this.selectionHydrationGeneration += 1;
-    if (this.browserWindow?.isConnected) {
+    this.validationGeneration += 1;
+    this.validating = false;
+    if (this.browserWindow) {
       this.browserWindow.close("picker-disconnected");
     }
   }
@@ -217,6 +249,8 @@ export class MxSourcePickerElement extends HTMLElement {
         {
           selectedIds,
           acceptedTypes: this.config.acceptedTypes,
+          requiredCapabilities: this.config.requiredCapabilities,
+          access: this.config.accessMode === "editable" ? ["editable"] : [],
           language: this.config.language,
           viewId: this.config.viewId,
           limit: Math.min(20, selectedIds.length),
@@ -247,7 +281,10 @@ export class MxSourcePickerElement extends HTMLElement {
     }
   }
 
-  renderField() {
+  /**
+   * @param {{sourceId?: string, action?: string}} [focus]
+   */
+  renderField(focus) {
     const { el } = this.elements;
     const values = [...this.selectedItems.values()];
     const hasSelection = values.length > 0;
@@ -272,6 +309,7 @@ export class MxSourcePickerElement extends HTMLElement {
         class: "mx-source-picker__value",
         dataset: { action: "open" },
         title,
+        disabled: this.disabled || this.validating,
       },
       hasSelection
         ? el("i", {
@@ -297,6 +335,7 @@ export class MxSourcePickerElement extends HTMLElement {
         dataset: { action: hasSelection ? "remove" : "open" },
         "aria-label": hasSelection ? `Remove ${title}` : "Browse sources",
         title: hasSelection ? `Remove ${title}` : "Browse sources",
+        disabled: this.disabled || this.validating,
       },
       el("i", {
         class: hasSelection ? "fa fa-times" : "fa fa-clone",
@@ -305,27 +344,100 @@ export class MxSourcePickerElement extends HTMLElement {
     );
     control.append(open, endAction);
     group.append(label, control);
+    if (this.config.multiple && this.config.reorderable && hasSelection) {
+      const list = el("ol", {
+        class: "mx-source-picker__selected-list",
+        "aria-label": "Selected sources in submission order",
+      });
+      values.forEach((item, index) => {
+        const row = el("li", {
+          class: "mx-source-picker__selected-item",
+          dataset: { sourceId: item.id },
+        });
+        row.append(
+          el("span", { class: "mx-source-picker__selected-item-title" }, item.title),
+          this.buildSelectionAction("move-up", item, "Move up", {
+            disabled: this.disabled || this.validating || index === 0,
+          }),
+          this.buildSelectionAction("move-down", item, "Move down", {
+            disabled:
+              this.disabled || this.validating || index === values.length - 1,
+          }),
+          this.buildSelectionAction("remove-item", item, "Remove", {
+            disabled: this.disabled || this.validating,
+          }),
+        );
+        list.append(row);
+      });
+      group.append(list);
+    }
     this.replaceChildren(group);
+    if (focus?.sourceId && focus.action) {
+      const target = [...this.querySelectorAll("[data-source-id]")].find(
+        (candidate) =>
+          candidate.dataset.sourceId === focus.sourceId &&
+          candidate.dataset.action === focus.action,
+      );
+      target?.focus();
+    }
+  }
+
+  buildSelectionAction(action, item, label, { disabled = false } = {}) {
+    return this.elements.el(
+      "button",
+      {
+        type: "button",
+        class: "btn btn-default btn-sm mx-source-picker__selected-action",
+        dataset: { action, sourceId: item.id },
+        "aria-label": `${label} ${item.title}`,
+        title: `${label} ${item.title}`,
+        disabled,
+      },
+      this.elements.el("i", {
+        class:
+          action === "move-up"
+            ? "fa fa-arrow-up"
+            : action === "move-down"
+              ? "fa fa-arrow-down"
+              : "fa fa-times",
+        "aria-hidden": "true",
+      }),
+    );
   }
 
   onFieldClick(event) {
-    const action = event.target.closest("[data-action]")?.dataset.action;
+    if (this.disabled || this.validating) return;
+    const actionElement = event.target.closest("[data-action]");
+    const action = actionElement?.dataset.action;
     if (action === "open") this.open();
     if (action === "remove") {
       this.selectedItems.clear();
       this.commit();
     }
+    if (action === "move-up" || action === "move-down") {
+      this.moveCommittedItem(
+        actionElement.dataset.sourceId,
+        action === "move-up" ? -1 : 1,
+      );
+    }
+    if (action === "remove-item") {
+      this.removeCommittedItem(actionElement.dataset.sourceId);
+    }
   }
 
   open() {
+    if (this.disabled || this.validating) return;
     this.pendingSelectedItems = new Map(this.selectedItems);
     this.activeItem = [...this.pendingSelectedItems.values()][0] || null;
     this.buildBrowser();
-    this.browserWindow = getMapxWindowManager(this.ownerDocument.body).open({
-      key: `source-picker-${this.id || "default"}`,
+    this.browserWindow = getMapxWindowManager(
+      this.windowRoot || this.ownerDocument.body,
+    ).open({
+      key: `source-picker-${this.id || this.controlId}`,
       title: this.config.multiple ? "Select sources" : "Select source",
       content: this.refs.browser,
       footerEnd: this.refs.confirm,
+      status: this.refs.validationStatus,
       modal: true,
       alwaysOnTop: true,
       draggable: true,
@@ -335,12 +447,45 @@ export class MxSourcePickerElement extends HTMLElement {
       geometry: { width: 640, height: 520 },
       onClose: () => {
         this.invalidateSearch();
+        this.validationGeneration += 1;
+        this.validating = false;
         this.pendingSelectedItems = null;
         this.activeItem = null;
         this.browserWindow = null;
       },
     });
+    this.updateBrowserDisabledState();
     this.loadResults();
+  }
+
+  moveCommittedItem(id, offset) {
+    const entries = [...this.selectedItems.entries()];
+    const current = entries.findIndex(([sourceId]) => sourceId === id);
+    const target = current + offset;
+    if (current < 0 || target < 0 || target >= entries.length) return;
+    [entries[current], entries[target]] = [entries[target], entries[current]];
+    this.selectedItems = new Map(entries);
+    this.commit({
+      sourceId: id,
+      action: offset < 0 ? "move-down" : "move-up",
+    });
+  }
+
+  removeCommittedItem(id) {
+    const ids = [...this.selectedItems.keys()];
+    const index = ids.indexOf(id);
+    if (index < 0) return;
+    this.selectedItems.delete(id);
+    const remaining = [...this.selectedItems.keys()];
+    const focusId = remaining[Math.min(index, remaining.length - 1)];
+    this.commit(
+      focusId
+        ? { sourceId: focusId, action: "remove-item" }
+        : undefined,
+    );
+    if (!focusId) {
+      this.querySelector("[data-action='open']")?.focus();
+    }
   }
 
   buildBrowser() {
@@ -452,6 +597,11 @@ export class MxSourcePickerElement extends HTMLElement {
       },
       "Select",
     );
+    const validationStatus = el("span", {
+      class: "mx-source-browser__validation-status",
+      role: "alert",
+    });
+    validationStatus.hidden = true;
     browser.append(toolbar, preview, summary, results);
     this.refs = {
       browser,
@@ -467,6 +617,7 @@ export class MxSourcePickerElement extends HTMLElement {
       summary,
       results,
       confirm,
+      validationStatus,
     };
     search.addEventListener("input", this.onBrowserInput);
     search.addEventListener("keydown", (event) =>
@@ -514,6 +665,7 @@ export class MxSourcePickerElement extends HTMLElement {
         {
           query: refs.search.value,
           acceptedTypes: this.config.acceptedTypes,
+          requiredCapabilities: this.config.requiredCapabilities,
           geometryTypes: refs.geometry.value
             ? [refs.geometry.value]
             : this.config.geometryTypes,
@@ -536,7 +688,7 @@ export class MxSourcePickerElement extends HTMLElement {
       refs.results.setAttribute("aria-busy", "false");
       return;
     }
-    this.items = (response.items || []).filter(
+    this.items = (response?.items || []).filter(
       (item) => !this.config.excludeIds.includes(item.id),
     );
     for (const item of this.items) {
@@ -546,8 +698,8 @@ export class MxSourcePickerElement extends HTMLElement {
         this.pendingSelectedItems.set(item.id, item);
     }
     this.renderField();
-    this.updateTagFacet(response.facets?.tags || []);
-    refs.summary.textContent = `${response.total || 0} matching sources`;
+    this.updateTagFacet(response?.facets?.tags || []);
+    refs.summary.textContent = `${response?.total || 0} matching sources`;
     refs.results.replaceChildren(
       ...this.items.map((item, index) => this.buildResult(item, index)),
     );
@@ -560,6 +712,7 @@ export class MxSourcePickerElement extends HTMLElement {
       null;
     this.renderBrowserSelection();
     this.updateConfirmButton();
+    this.updateBrowserDisabledState();
     if (this.activeItem) this.showPreview(this.activeItem);
     else {
       refs.previewMeta.replaceChildren();
@@ -611,7 +764,24 @@ export class MxSourcePickerElement extends HTMLElement {
 
   updateConfirmButton() {
     if (!this.refs?.confirm) return;
-    this.refs.confirm.disabled = !this.pendingSelectedItems?.size;
+    this.refs.confirm.disabled =
+      this.disabled || this.validating || !this.pendingSelectedItems?.size;
+  }
+
+  updateBrowserDisabledState() {
+    if (!this.refs?.browser) return;
+    for (const control of [
+      this.refs.search,
+      this.refs.filtersButton,
+      this.refs.geometry,
+      this.refs.tag,
+      this.refs.sort,
+      this.refs.clearFilters,
+      ...this.refs.results.querySelectorAll("[data-source-id]"),
+    ]) {
+      control.disabled = this.disabled || this.validating;
+    }
+    this.updateConfirmButton();
   }
 
   buildResult(item, index = 0) {
@@ -628,6 +798,7 @@ export class MxSourcePickerElement extends HTMLElement {
       role: "option",
       "aria-selected": String(selected),
       tabindex: "-1",
+      disabled: this.disabled,
     });
     const icon = el("i", {
       class: `${sourceIconClass(item.type)} mx-source-browser__source-icon`,
@@ -662,6 +833,7 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   onResultAction(event) {
+    if (this.disabled || this.validating) return;
     const id = event.target.closest("[data-source-id]")?.dataset.sourceId;
     const item = this.items?.find((candidate) => candidate.id === id);
     if (!item) return;
@@ -684,6 +856,7 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   updatePendingSelection(item) {
+    this.setValidationMessage("");
     const id = item.id;
     if (this.config.multiple) {
       if (this.pendingSelectedItems.has(id))
@@ -721,6 +894,7 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   onSearchKeydown(event) {
+    if (this.disabled || this.validating) return;
     if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
     event.preventDefault();
     const selectedIndex = this.items?.findIndex((item) =>
@@ -742,6 +916,7 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   onResultsKeydown(event) {
+    if (this.disabled || this.validating) return;
     const row = event.target.closest("[data-source-id]");
     if (!row) return;
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -788,10 +963,68 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   confirmSelection() {
-    if (!this.pendingSelectedItems?.size) return;
+    if (
+      this.disabled ||
+      this.validating ||
+      !this.pendingSelectedItems?.size
+    ) {
+      return;
+    }
+    if (typeof this.config.validateSelection === "function") {
+      this.validateAndConfirm();
+      return;
+    }
+    this.commitPendingSelection();
+  }
+
+  commitPendingSelection() {
     this.selectedItems = new Map(this.pendingSelectedItems);
     this.commit();
     this.browserWindow?.close("selected");
+  }
+
+  async validateAndConfirm() {
+    if (this.validating || !this.pendingSelectedItems?.size) return;
+    const generation = ++this.validationGeneration;
+    const selectedItems = new Map(this.pendingSelectedItems);
+    const items = [...selectedItems.values()];
+    const values = [...selectedItems.keys()];
+    const value = this.config.multiple ? values : values[0] || null;
+    this.validating = true;
+    this.setValidationMessage("");
+    this.updateBrowserDisabledState();
+    let result;
+    try {
+      result = await this.config.validateSelection({ value, items });
+    } catch {
+      result = {
+        valid: false,
+        message: "Unable to validate this source selection.",
+      };
+    }
+    if (
+      generation !== this.validationGeneration ||
+      !this.pendingSelectedItems ||
+      !this.browserWindow
+    ) {
+      return;
+    }
+    this.validating = false;
+    if (result?.valid === true) {
+      this.pendingSelectedItems = selectedItems;
+      this.commitPendingSelection();
+      return;
+    }
+    this.setValidationMessage(
+      result?.message || "This source selection is not available.",
+    );
+    this.updateBrowserDisabledState();
+  }
+
+  setValidationMessage(message) {
+    if (!this.refs?.validationStatus) return;
+    this.refs.validationStatus.textContent = message;
+    this.refs.validationStatus.hidden = !message;
   }
 
   async showPreview(item) {
@@ -895,9 +1128,9 @@ export class MxSourcePickerElement extends HTMLElement {
     this.refs.previewCanvas.replaceChildren(graphic);
   }
 
-  commit() {
+  commit(focus) {
     this.selectionHydrationGeneration += 1;
-    this.renderField();
+    this.renderField(focus);
     const items = [...this.selectedItems.values()];
     this.dispatchEvent(
       new CustomEvent("mx-source-picker-change", {
@@ -906,6 +1139,94 @@ export class MxSourcePickerElement extends HTMLElement {
       }),
     );
   }
+}
+
+/**
+ * Open the standard source browser as an imperative, promise-based picker.
+ *
+ * @param {{
+ *   root: HTMLElement,
+ *   value?: string | string[],
+ *   multiple?: boolean,
+ *   maxItems?: number,
+ *   reorderable?: boolean,
+ *   acceptedTypes?: string[],
+ *   requiredCapabilities?: string[],
+ *   geometryTypes?: string[],
+ *   accessMode?: string,
+ *   excludeIds?: string[],
+ *   viewId?: string | null,
+ *   language?: string,
+ *   label?: string,
+ *   validateSelection?: (selection: {
+ *     value: string | string[],
+ *     items: SourceBrowserItem[]
+ *   }) => Promise<{valid: boolean, message?: string}>
+ * }} options
+ * @returns {Promise<{value: string | string[], items: SourceBrowserItem[]} | null>}
+ */
+export function pickSources(options = {}) {
+  const { root, ...config } = options;
+  if (!root || root.nodeType !== 1 || !root.ownerDocument) {
+    throw new TypeError("pickSources requires an application root");
+  }
+  return new Promise((resolve, reject) => {
+    const picker = /** @type {MxSourcePickerElement} */ (
+      root.ownerDocument.createElement("mx-source-picker")
+    );
+    picker.id = `mx-source-picker-imperative-${++pickerCounter}`;
+    picker.hidden = true;
+    picker.windowRoot = root;
+    picker.config = { ...config, value: config.value };
+    root.append(picker);
+
+    const cleanup = () => {
+      picker.browserWindow?.removeEventListener(
+        "mx-window-close",
+        onWindowClose,
+      );
+      picker.remove();
+    };
+    const finish = (result) => {
+      queueMicrotask(() => {
+        cleanup();
+        resolve(result);
+      });
+    };
+    const onWindowClose = (event) => {
+      const confirmed = event.detail?.reason === "selected";
+      finish(
+        confirmed
+          ? {
+              value: picker.value,
+              items: [...picker.selectedItems.values()],
+            }
+          : null,
+      );
+    };
+
+    queueMicrotask(() => {
+      if (!picker.isConnected) {
+        finish(null);
+        return;
+      }
+      try {
+        picker.open();
+        if (!picker.browserWindow) {
+          finish(null);
+          return;
+        }
+        picker.browserWindow.addEventListener(
+          "mx-window-close",
+          onWindowClose,
+          { once: true },
+        );
+      } catch (error) {
+        cleanup();
+        reject(error);
+      }
+    });
+  });
 }
 
 if (!customElements.get("mx-source-picker")) {

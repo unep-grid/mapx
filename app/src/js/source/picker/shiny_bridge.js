@@ -1,5 +1,5 @@
 // @ts-check
-import "./index.js";
+import { pickSources } from "./index.js";
 
 const installedRoots = new WeakSet();
 
@@ -46,6 +46,40 @@ export function installSourcePickerShinyBridge({ root, shiny }) {
       }
     }
   });
+}
+
+/**
+ * Select one editable source and forward it to a legacy Shiny message input.
+ *
+ * @param {{
+ *   request: {id?: string},
+ *   root: HTMLElement,
+ *   shiny: {setInputValue: (id: string, value: unknown, options?: object) => void},
+ *   language?: string
+ * }} options
+ */
+export async function pickSourceForShiny({
+  request,
+  root,
+  shiny,
+  language = "en",
+}) {
+  if (!request?.id || !shiny?.setInputValue) return;
+  const result = await pickSources({
+    root,
+    multiple: false,
+    acceptedTypes: ["vector", "tabular", "join"],
+    requiredCapabilities: [],
+    accessMode: "editable",
+    language,
+    label: "Source",
+  });
+  if (!result?.value || Array.isArray(result.value)) return;
+  shiny.setInputValue(
+    request.id,
+    { idSource: result.value, update: Date.now() },
+    { priority: "event" },
+  );
 }
 
 function arrayValue(value) {

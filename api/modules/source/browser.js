@@ -24,12 +24,14 @@ const ALLOWED_SORTS = new Set([
   "modified",
   "title",
 ]);
+const ALLOWED_CAPABILITIES = new Set(["geometry"]);
 
 /**
  * @typedef {Object} SourcePickerRequest
  * @property {string} [query]
  * @property {string[]} [acceptedTypes]
  * @property {string[]} [geometryTypes]
+ * @property {string[]} [requiredCapabilities]
  * @property {string[]} [tags]
  * @property {string[]} [access]
  * @property {string[]} [selectedIds]
@@ -197,6 +199,10 @@ function normalizeRequest(request = {}) {
     geometryTypes: Array.isArray(request.geometryTypes)
       ? request.geometryTypes.map(String).slice(0, 10)
       : [],
+    requiredCapabilities: normalizeStringArray(
+      request.requiredCapabilities,
+      ALLOWED_CAPABILITIES,
+    ),
     tags: Array.isArray(request.tags)
       ? request.tags.map(String).slice(0, 20)
       : [],
@@ -282,6 +288,11 @@ export function filterAndSortSources(rows, rawRequest = {}) {
       ![row.id, row.title, row.editor_email, ...(row.tags || [])].some(
         (value) => includesFolded(value, request.query),
       )
+    )
+      return false;
+    if (
+      request.requiredCapabilities.includes("geometry") &&
+      (!Array.isArray(row.geometry_types) || row.geometry_types.length === 0)
     )
       return false;
     if (

@@ -77,26 +77,22 @@ describe("MxSourceOverlapElement", () => {
     component.remove();
   });
 
-  it("configures ordered source and searchable country selectors", () => {
+  it("configures an ordered source picker and searchable country selector", () => {
     expect(component.elements.document).toBe(component.ownerDocument);
     expect(
       Object.values(component.refs).every(
         (element) => element.ownerDocument === component.ownerDocument,
       ),
     ).toBe(true);
-    expect(component.sourceSelect.config).toMatchObject({
-      closeAfterSelect: false,
+    expect(component.sourcePicker.config).toMatchObject({
+      label: "select_overlap_layers",
+      multiple: true,
       maxItems: 3,
-      plugins: ["remove_button", "drag_drop"],
-      loader_config: {
-        types: ["vector"],
-        readable: true,
-        add_global: true,
-        add_views: true,
-        include_dimensions: false,
-        disable_missing: false,
-        disable_large: false,
-      },
+      reorderable: true,
+      acceptedTypes: ["vector"],
+      requiredCapabilities: ["geometry"],
+      accessMode: "readable",
+      language: "en",
     });
     expect(component.countrySelect.type).toBe("countries");
     expect(component.countrySelect.config).toEqual({
@@ -106,7 +102,7 @@ describe("MxSourceOverlapElement", () => {
   });
 
   it("keeps the Tom Select item order in the request", async () => {
-    component.sourceSelect.value = [
+    component.sourcePicker.value = [
       "mx_vector_a_b_c_d_e",
       "mx_vector_f_g_h_i_j",
     ];
@@ -124,12 +120,12 @@ describe("MxSourceOverlapElement", () => {
       10000,
     );
     expect(component.refs.run.disabled).toBe(true);
-    expect(component.sourceSelect.disable).toHaveBeenCalled();
+    expect(component.sourcePicker.disabled).toBe(true);
     expect(component.countrySelect.disable).toHaveBeenCalled();
   });
 
   it("requires and reveals a valid title only when creating a source", () => {
-    component.sourceSelect.value = ["mx_vector_a_b_c_d_e"];
+    component.sourcePicker.value = ["mx_vector_a_b_c_d_e"];
     expect(component.refs.titleWrapper.hidden).toBe(true);
     expect(component.refs.title.required).toBe(false);
 
@@ -167,11 +163,11 @@ describe("MxSourceOverlapElement", () => {
     expect(component.refs.output.textContent).toContain("km²");
     expect(component.refs.outputWrapper.hidden).toBe(false);
     expect(component.refs.run.disabled).toBe(false);
-    expect(component.sourceSelect.enable).toHaveBeenCalled();
+    expect(component.sourcePicker.disabled).toBe(false);
   });
 
   it("clears prior output and logs before another run", async () => {
-    component.sourceSelect.value = ["mx_vector_a_b_c_d_e"];
+    component.sourcePicker.value = ["mx_vector_a_b_c_d_e"];
     component.setResult("Old result");
     component.appendLog("Old log");
 
@@ -185,7 +181,7 @@ describe("MxSourceOverlapElement", () => {
   });
 
   it("re-enables the form when request acknowledgement fails", async () => {
-    component.sourceSelect.value = ["mx_vector_a_b_c_d_e"];
+    component.sourcePicker.value = ["mx_vector_a_b_c_d_e"];
     wsMock.emitAsync.mockRejectedValue(new Error("offline"));
 
     await component.run();
@@ -196,12 +192,14 @@ describe("MxSourceOverlapElement", () => {
   });
 
   it("destroys selectors and socket listeners when disconnected", () => {
-    const sourceSelect = component.sourceSelect;
+    const sourcePicker = component.sourcePicker;
     const countrySelect = component.countrySelect;
+    const close = vi.fn();
+    sourcePicker.browserWindow = { isConnected: true, close };
 
     component.remove();
 
-    expect(sourceSelect.destroy).toHaveBeenCalled();
+    expect(close).toHaveBeenCalledWith("picker-disconnected");
     expect(countrySelect.destroy).toHaveBeenCalled();
     expect(wsMock.socket.off).toHaveBeenCalledWith(
       "/server/source/overlap/result",

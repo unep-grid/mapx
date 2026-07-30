@@ -180,6 +180,7 @@ async function loadJsonEditor() {
     import("./../json_editor/editors/svg_input.js"),
     import("./../json_editor/editors/mapx_sprite_picker.js"),
     import("./../json_editor/editors/multilingual_label.js"),
+    import("./../json_editor/editors/source_picker.js"),
   ]);
   return { JSONEditor };
 }

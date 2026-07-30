@@ -5,6 +5,7 @@ import { getDictItem } from "../../language";
 import { makeId } from "../../mx_helper_misc";
 import { SelectAuto } from "../../select_auto";
 import { ElementCreator } from "../../el/src/index.js";
+import "../picker/index.js";
 import "./style.less";
 
 const resultEvent = "/server/source/overlap/result";
@@ -44,9 +45,8 @@ export class MxSourceOverlapElement extends HTMLElement {
   disconnectedCallback() {
     ws.socket.off(resultEvent, this.onResult);
     ws.socket.off(progressEvent, this.onProgress);
-    this.sourceSelect?.destroy();
     this.countrySelect?.destroy();
-    this.sourceSelect = null;
+    this.sourcePicker = null;
     this.countrySelect = null;
     this.ready = false;
     this.initialized = false;
@@ -65,27 +65,6 @@ export class MxSourceOverlapElement extends HTMLElement {
   }
 
   async initializeSelects() {
-    this.sourceSelect = new SelectAuto({
-      target: this.refs.sources,
-      type: "sources",
-      config: {
-        closeAfterSelect: false,
-        maxItems: 3,
-        plugins: ["remove_button", "drag_drop"],
-        onChange: () => this.clearValidationResult(),
-        loader_config: {
-          types: ["vector"],
-          readable: true,
-          editable: false,
-          add_global: true,
-          add_views: true,
-          include_dimensions: false,
-          disable_missing: false,
-          disable_large: false,
-          update_on_init: false,
-        },
-      },
-    });
     this.countrySelect = new SelectAuto({
       target: this.refs.country,
       type: "countries",
@@ -96,11 +75,8 @@ export class MxSourceOverlapElement extends HTMLElement {
       },
     });
 
-    await Promise.all([this.sourceSelect.init(), this.countrySelect.init()]);
-    await Promise.all([
-      this.sourceSelect.update(),
-      this.countrySelect.update(),
-    ]);
+    await this.countrySelect.init();
+    await this.countrySelect.update();
 
     const projectCountry = settings.project?.countries?.[0];
     if (projectCountry) {
@@ -134,7 +110,7 @@ export class MxSourceOverlapElement extends HTMLElement {
     const { el } = this.elements;
     const form = el("form", { class: "mx-source-overlap" });
     const mode = this.makeModeField();
-    const sources = this.makeSelectField("select_overlap_layers", true);
+    const sources = this.makeSourcePicker();
     const country = this.makeSelectField("select_overlap_countries");
     const title = this.makeInput("source_title");
     const run = el(
@@ -191,6 +167,9 @@ export class MxSourceOverlapElement extends HTMLElement {
     };
 
     mode.wrapper.addEventListener("change", () => this.updateMode());
+    this.sourcePicker.addEventListener("mx-source-picker-change", () =>
+      this.clearValidationResult(),
+    );
     form.addEventListener("submit", (event) => {
       event.preventDefault();
       this.run();
@@ -243,6 +222,24 @@ export class MxSourceOverlapElement extends HTMLElement {
     return { wrapper, control };
   }
 
+  makeSourcePicker() {
+    const picker = /** @type {import("../picker/index.js").MxSourcePickerElement} */ (
+      this.ownerDocument.createElement("mx-source-picker")
+    );
+    picker.config = {
+      label: this.labels.select_overlap_layers,
+      multiple: true,
+      maxItems: 3,
+      reorderable: true,
+      acceptedTypes: ["vector"],
+      requiredCapabilities: ["geometry"],
+      accessMode: "readable",
+      language: this.language,
+    };
+    this.sourcePicker = picker;
+    return { wrapper: picker, control: picker };
+  }
+
   makeInput(labelKey) {
     const { el } = this.elements;
     const wrapper = el("label", { class: "form-group" });
@@ -262,7 +259,7 @@ export class MxSourceOverlapElement extends HTMLElement {
   }
 
   getSelectedSources() {
-    const value = this.sourceSelect?.value;
+    const value = this.sourcePicker?.value;
     if (Array.isArray(value)) return value;
     return value ? [value] : [];
   }
@@ -374,7 +371,7 @@ export class MxSourceOverlapElement extends HTMLElement {
     this.refs.modeArea.disabled = busy;
     this.refs.modeCreate.disabled = busy;
     this.refs.title.disabled = busy;
-    this.sourceSelect?.[busy ? "disable" : "enable"]();
+    if (this.sourcePicker) this.sourcePicker.disabled = busy;
     this.countrySelect?.[busy ? "disable" : "enable"]();
     this.refs.form.setAttribute("aria-busy", `${busy}`);
   }
