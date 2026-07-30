@@ -1,3 +1,19 @@
+  - [1.14.1-alpha.5](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.5) 
+
+    - feat(source): progressively load picker results
+    - feat: migrate source selection to source picker
+    - feat(source): add scalable source picker
+    - feat(search): expose public tile templates in index (#1115)
+    - docs(agents): codify reuse-first frontend work
+    - refactor(window): reuse scoped element creator
+    - refactor(el): support document-scoped creation
+    - fix(overlap): better default height
+    - feat: window caret icon for snap left/right buttons
+    - docs(api): clarify overlap workflow and types
+    - fix(api): scope overlap gid validation to source creation
+    - fix(source): repair legacy identities and modernize overlap tool
+
+
   - [1.14.1-alpha.4](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.4) 
 
     - fix(geometry-editor): support multipart geometries safely
