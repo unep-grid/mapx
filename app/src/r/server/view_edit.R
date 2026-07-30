@@ -275,36 +275,29 @@ observe({
             # vector tile specific
             #
             if (viewType == "vt") {
-              srcAvailable <- reactListReadSourcesVector()
               srcSet <- .get(viewData, c("data", "source", "layerInfo", "name"))
               srcSetMask <- .get(viewData, c("data", "source", "layerInfo", "maskName"))
 
-
-              srcAvailableMask <- srcAvailable[!srcAvailable %in% srcSet]
-              hasSource <- srcSet %in% srcAvailable
-
-              if (isNotEmpty(srcSet) && !hasSource) {
-                names(srcSet) <- mxGetTitleFromSourceID(
-                  id = srcSet,
-                  language = language
-                )
-
-                srcAvailable <- c(srcSet, srcAvailable)
-              }
+              sourcePickerOptions <- list(
+                multiple = FALSE,
+                maxItems = 1,
+                acceptedTypes = c("vector", "join"),
+                requiredCapabilities = c("geometry"),
+                accessMode = "readable",
+                viewId = viewData$id,
+                language = language
+              )
 
               uiType <- tagList(
                 #
                 # main layer
                 #
                 tagList(
-                  selectizeInput(
+                  mxSourcePickerInput(
                     inputId = "selectSourceLayerMain",
                     label = d("source_select_layer", language),
-                    choices = srcAvailable,
-                    selected = srcSet,
-                    options = list(
-                      sortField = "label"
-                    )
+                    value = srcSet,
+                    options = sourcePickerOptions
                   ),
                   selectizeInput(
                     inputId = "selectSourceLayerMainGeom",
@@ -344,14 +337,12 @@ observe({
                 conditionalPanel(
                   condition = "input.checkAddMaskLayer",
                   tagList(
-                    selectizeInput(
+                    mxSourcePickerInput(
                       inputId = "selectSourceLayerMask",
                       label = d("source_select_layer_mask", language),
-                      choices = srcAvailableMask,
-                      selected = srcSetMask,
-                      options = list(
-                        sortField = "label"
-                      )
+                      value = srcSetMask,
+                      options = sourcePickerOptions,
+                      excludeInputId = "selectSourceLayerMain"
                     ),
                     uiOutput("uiViewEditVtMask")
                   )
@@ -870,7 +861,7 @@ observe({
         isEmpty(layer),
         isEmpty(variable),
         isEmpty(geomType),
-        !layer %in% reactListReadSourcesVector()
+        !isTRUE(reactSourceMainAccessible())
       )
     }
 
@@ -1015,6 +1006,20 @@ observeEvent(input$btnViewSave, {
     # vector tiles
     #
     if (view[["type"]] == "vt") {
+      selectedSources <- c(input$selectSourceLayerMain)
+      if (isTRUE(input$checkAddMaskLayer)) {
+        selectedSources <- c(selectedSources, input$selectSourceLayerMask)
+      }
+      sourceSelectionValid <- mxApiValidateSourceSelection(
+        idProject = project,
+        idUser = userData$id,
+        idSources = selectedSources,
+        idView = idView,
+        token = reactUser$token
+      )
+      if (!sourceSelectionValid) {
+        stop("The selected source is no longer accessible")
+      }
       #
       # Get reactive data source summary
       # - uses selectSourceLayerMainVariable
@@ -1024,6 +1029,30 @@ observeEvent(input$btnViewSave, {
       additionalAttributes <- input$selectSourceLayerOtherVariables
       layerMain <- input$selectSourceLayerMain
       attribute <- input$selectSourceLayerMainVariable
+      geomType <- input$selectSourceLayerMainGeom
+      layerMask <- input$selectSourceLayerMask
+      useMask <- isTRUE(input$checkAddMaskLayer)
+
+      #
+      # Fail closed if the compatibility summary could not be built. The API
+      # is authoritative for access, but the remaining R code must still
+      # produce a complete and matching view definition.
+      #
+      sourceDataValid <- mxSourceSummaryIsValid(
+        sourceData = sourceData,
+        layer = layerMain,
+        attribute = attribute,
+        geomType = geomType
+      )
+      sourceMaskValid <- mxSourceMaskSummaryIsValid(
+        sourceDataMask = sourceDataMask,
+        layerMask = layerMask,
+        useMask = useMask
+      )
+
+      if (!sourceDataValid || !sourceMaskValid) {
+        stop("The selected source summary is unavailable or invalid")
+      }
 
       #
       # Last check
@@ -1298,40 +1327,6 @@ observe({
           lang = language
         )
       })
-    })
-  })
-})
-
-
-observe({
-  mxCatch("view_edit : update source input", {
-    out <- list()
-    layerMask <- NULL
-
-    layer <- input$selectSourceLayerMain
-    hasLayer <- isNotEmpty(layer)
-
-    isolate({
-      useMask <- isTRUE(input$checkAddMaskLayer)
-
-      if (!hasLayer || !useMask) {
-        return()
-      }
-      language <- reactData$language
-      layerMask <- input$selectSourceLayerMask
-      layers <- reactListReadSourcesVector()
-      layers <- layers[!layers %in% layer]
-
-      if (length(layers) == 0) {
-        return()
-      }
-
-      updateSelectInput(
-        session,
-        "selectSourceLayerMask",
-        choices = layers,
-        selected = layerMask
-      )
     })
   })
 })

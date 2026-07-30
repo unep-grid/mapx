@@ -51,6 +51,8 @@ import {
   ioSourceAttributesAlias,
   ioSourceRevise,
   ioSourceOverlap,
+  ioSourceSearch,
+  ioSourcePreviewGet,
 } from "#mapx/source";
 import {
   ioProjectNameValidate,
@@ -141,6 +143,8 @@ io.use((socket, next) => {
     use(ioEditSourceIdentityRepair),
   );
   socket.on("/client/source/get/list", use(ioSourceList));
+  socket.on("/client/source/search", use(ioSourceSearch));
+  socket.on("/client/source/preview/get", use(ioSourcePreviewGet));
   socket.on("/client/source/get/list/columns", use(ioSourceListColumns));
   socket.on("/client/source/get/services", use(ioSourceServices));
   socket.on("/client/source/get/metadata", use(ioSourceMetadata));
@@ -206,6 +210,7 @@ app.get("/get/source/summary/", source.mwGetSummary);
 app.get("/get/source/table/attribute/", source.mwGetAttributeTable);
 app.get("/get/source/validate/geom", source.mwGetGeomValidate);
 app.get("/get/sources/list/user", source.mwGetSourcesList);
+app.get("/get/sources/selection/validate", source.mwValidateSourceSelection);
 app.get("/get/ip", ip.mwGet);
 app.get("/get/search/key", mwGetSearchKey);
 app.get("/get/gemet/search", mwGemetSearchText);

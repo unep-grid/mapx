@@ -1,4 +1,43 @@
 #
+# Source access
+#
+# Authorization belongs to the API. These reactives deliberately do not use
+# reactListReadSourcesVector(), which is a legacy presentation list and does
+# not represent every API-authorized access path (notably editor ACLs).
+#
+reactSourceMainAccessible <- reactive({
+  layerName <- input$selectSourceLayerMain
+
+  if (isEmpty(layerName)) {
+    return(FALSE)
+  }
+
+  mxApiValidateSourceSelection(
+    idProject = reactData$project,
+    idUser = reactUser$data$id,
+    idSources = layerName,
+    idView = .get(reactData$viewDataEdited, c("id")),
+    token = reactUser$token
+  )
+})
+
+reactSourceMaskAccessible <- reactive({
+  layerName <- input$selectSourceLayerMask
+
+  if (isEmpty(layerName)) {
+    return(FALSE)
+  }
+
+  mxApiValidateSourceSelection(
+    idProject = reactData$project,
+    idUser = reactUser$data$id,
+    idSources = layerName,
+    idView = .get(reactData$viewDataEdited, c("id")),
+    token = reactUser$token
+  )
+})
+
+#
 # reactLayerMaskSummary
 #
 reactLayerMaskSummary <- reactive({
@@ -6,7 +45,7 @@ reactLayerMaskSummary <- reactive({
 
   useMask <- input$checkAddMaskLayer
   layerMaskName <- input$selectSourceLayerMask
-  isLayerOk <- isTRUE(layerMaskName %in% reactListReadSourcesVector())
+  isLayerOk <- isTRUE(reactSourceMaskAccessible())
 
   if (useMask && isLayerOk) {
     out$layerMaskName <- layerMaskName
@@ -34,7 +73,7 @@ reactLayerSummary <- reactive({
   }
 
   isVariableOk <- isTRUE(variableName %in% reactLayerVariables())
-  isLayerOk <- isTRUE(layerName %in% reactListReadSourcesVector())
+  isLayerOk <- isTRUE(reactSourceMainAccessible())
 
   if (!isLayerOk || !isVariableOk) {
     return(out)
@@ -63,7 +102,7 @@ reactLayerVariables <- reactive({
   if (!hasLayer) {
     return(out)
   }
-  isLayerOk <- isTRUE(layerName %in% reactListReadSourcesVector())
+  isLayerOk <- isTRUE(reactSourceMainAccessible())
 
   if (!isLayerOk) {
     return(out)

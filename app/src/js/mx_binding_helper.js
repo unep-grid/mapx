@@ -67,6 +67,7 @@ import { modalSourceJoin } from "./source/joins/instance.js";
 import { editTable } from "./source/edit/instance.js";
 import { uploadSource } from "./uploader/instance.js";
 import { geomTools } from "./source/geometry/instance.js";
+import { installSourcePickerShinyBridge } from "./source/picker/shiny_bridge.js";
 
 $(document).on("shiny:connected", mapxBindings);
 
@@ -74,6 +75,10 @@ $(document).on("shiny:connected", mapxBindings);
  * MapX client - Shiny bindings
  */
 function mapxBindings() {
+  installSourcePickerShinyBridge({
+    root: document.body,
+    shiny: window.Shiny,
+  });
   /**
    * Set init query parameters
    */

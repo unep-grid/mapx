@@ -48,6 +48,8 @@ reactListReadSources <- reactive({
 })
 
 reactListReadSourcesVector <- reactive({
+  # Legacy presentation list only. Source authorization for the modern picker
+  # must use the API-side selection validator.
   layers <- reactTableReadSources()
   layers <- layers[layers$type %in% c("vector", "join"), ]
 

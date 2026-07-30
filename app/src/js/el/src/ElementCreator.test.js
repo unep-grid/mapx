@@ -51,6 +51,14 @@ describe("ElementCreator", () => {
       expect(div.style.color).toBe("rgb(0, 0, 0)");
     });
 
+    it("should preserve an explicit empty form-control value", () => {
+      const option = el("option", { value: "" }, "All values");
+
+      expect(option.getAttribute("value")).toBe("");
+      expect(option.value).toBe("");
+      expect(option.innerText).toBe("All values");
+    });
+
     // Test for setting class as string
     it("should set class correctly", () => {
       const div = el("div", {

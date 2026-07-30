@@ -133,6 +133,14 @@ export class ElementCreator {
    * @param {string} tagName - The tag name of the element.
    */
   handleOption(elOut, key, value, svgMode, tagName) {
+    if (key === "value" && value === "") {
+      if (svgMode) {
+        elOut.setAttributeNS(null, key, value);
+      } else {
+        elOut.setAttribute(key, value);
+      }
+      return;
+    }
     if (isEmpty(value)) {
       return;
     }

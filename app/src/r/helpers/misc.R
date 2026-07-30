@@ -900,13 +900,7 @@ mxGetStackTrace <- function(
             formatC(st$num, width = width),
             ": ",
             mapply(paste0(st$call, st$loc), st$category, FUN = function(name, category) {
-              if (category == "pkg") {
-                crayon::silver(name)
-              } else if (category == "user") {
-                crayon::blue$bold(name)
-              } else {
-                crayon::white(name)
-              }
+              name
             }),
             "\n"
           )

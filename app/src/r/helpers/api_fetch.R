@@ -280,6 +280,25 @@ mxApiGetSourceTable <- function(
   return(data)
 }
 
+#' Validate a small vector source selection against API-side session roles.
+#' @export
+mxApiValidateSourceSelection <- function(
+  idProject,
+  idUser,
+  idSources,
+  idView = NULL,
+  token = NULL
+) {
+  result <- mxApiFetch("/get/sources/selection/validate", list(
+    idProject = idProject,
+    idUser = idUser,
+    idSources = idSources,
+    idView = idView,
+    token = token
+  ))
+  return(isTRUE(result$valid))
+}
+
 #' Get source summary.
 #' @export
 mxApiGetSourceSummary <- function(

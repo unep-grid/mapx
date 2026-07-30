@@ -12,7 +12,7 @@ observeEvent(input$styleEdit_init, {
   style <- .get(view, c("data", "style"))
   language <- reactData$language
   hasLayer <- isNotEmpty(.get(view, c("data", "source", "layerInfo", "name")))
-  hasSources <- isNotEmpty(reactListReadSourcesVector())
+  hasSources <- isTRUE(reactSourceMainAccessible())
   hasStyle <- isNotEmpty(style)
 
   mxCatch(title = "style edit init", {
