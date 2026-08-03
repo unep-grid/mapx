@@ -26,8 +26,8 @@ import { Search } from "./../search";
 import { downloadJSON } from "../download/index.js";
 import { ViewBase } from "../views_builder/view_base.js";
 import { ChaosTest } from "./chaos_test.js";
+import { withInitialProjection } from "./initial_projection.js";
 import { MapControlAttribution } from "./../map_controls";
-import { AttributionControl } from "maplibre-gl";
 import { NotifCenter } from "./../notif_center/";
 import { cleanDiacritic } from "./../string_util/";
 import { mirrorUrlCreate } from "./../mirror_util";
@@ -1158,14 +1158,13 @@ export async function initMapx(o) {
   /* map options */
   const mapOptions = {
     container: o.id, // container id
-    style: theme.getStyle(),
+    style: withInitialProjection(theme.getStyle(), mp.globe),
     transformRequest: theme.transformRequest,
     bounds: mp.bounds || null,
     maxBounds: mp.maxBounds || null,
     preserveDrawingBuffer: false,
     attributionControl: false,
     crossSourceCollisions: true,
-    projection: mp.globe ? { type: "globe" } : { type: "mercator" },
     zoom: mp.z || mp.zoom || 1,
     minZoom: mp.zmin || mp.zoomMin || settings.map.minZoom,
     maxZoom: mp.zmax || mp.zoomMax || settings.map.maxZoom,
@@ -1175,6 +1174,7 @@ export async function initMapx(o) {
     localIdeographFontFamily: "'Noto Sans', 'Noto Sans SC', sans-serif",
     aroundCenter: false,
   };
+
   /*
    * Create map object
    */
@@ -1331,14 +1331,13 @@ export async function initMapx(o) {
    */
   const enable3d = getQueryParameter("t3d")[0];
   const enableSat = getQueryParameter("sat")[0];
-  const enableGlobe = getQueryParameter("globe")[0];
   if (enable3d) {
     controls.get("btn_3d_terrain").action("enable");
   }
   if (enableSat) {
     controls.get("btn_theme_sat").action("enable");
   }
-  if (enableGlobe) {
+  if (mp.globe) {
     controls.get("btn_globe").action("enable");
   }
 
@@ -4515,7 +4514,6 @@ export async function resetViewStyle(o) {
  * Fly to a specified location and zoom level on a map.
  *
  * @param {object} opt - The options for the function.
- * @param {string} opt.id - The map ID.
  * @param {number} [opt.duration=2000] - Optional duration for the animation, in milliseconds. Defaults to 2000ms.
  * @param {object} opt.param - The parameters for the function.
  * @param {number} [opt.param.w=0] - West coordinate of the bounding box.
@@ -4531,8 +4529,8 @@ export async function resetViewStyle(o) {
  */
 export async function setMapPos(opt) {
   try {
-    const map = getMap(opt.id);
-    const p = opt.param;
+    const map = getMap();
+    const p = opt?.param || {};
     const hasThemeQuery = isNotEmpty(getQueryParameter("theme")[0]);
     if (p.useMaxBounds) {
       p.jump = true;
