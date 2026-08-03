@@ -1,3 +1,8 @@
+  - [1.14.0-fix.1](https://github.com/unep-grid/mapx/tree/1.14.0-fix.1)
+
+    - fix(map): restore gradient behind transparent canvas
+
+
   - [1.14.0](https://github.com/unep-grid/mapx/tree/1.14.0) 
 
 
