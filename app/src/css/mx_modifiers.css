@@ -130,6 +130,22 @@ input {
 .mx .maplibregl-canvas {
   outline: none;
 }
+
+.mx .maplibregl-map {
+  background-image: radial-gradient(
+    circle,
+    #8297a3,
+    #707b86,
+    #5c6169,
+    #48494c,
+    #323232
+  );
+}
+
+.mx .maplibregl-canvas {
+  background-color: transparent;
+}
+
 .mx .mx-modal-container,
 .mx .selectize-dropdown,
 .mx .maplibregl-popup-content {
