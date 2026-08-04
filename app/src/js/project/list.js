@@ -26,16 +26,20 @@ const UI_KEYS = [
   "project_list_my_projects",
   "project_list_all_roles",
   "project_list_all_themes",
+  "project_list_sort_default",
+  "project_list_sort_default_desc",
   "project_list_sort_updated_desc",
+  "project_list_sort_updated_desc_desc",
   "project_list_sort_updated_asc",
+  "project_list_sort_updated_asc_desc",
   "project_list_sort_name_asc",
   "project_list_sort_name_desc",
-  "project_list_sort_theme",
   "project_list_sort_views_desc",
   "project_list_sort_views_asc",
   "project_list_sort_collaborators_desc",
   "project_list_sort_collaborators_asc",
   "project_list_clear",
+  "project_list_clear_desc",
   "project_list_role",
   "project_list_views",
   "project_list_collaborators",
@@ -48,7 +52,7 @@ const UI_KEYS = [
   "project_favorite_add",
   "project_favorite_remove",
   "project_favorite_error",
-  "project_featured_by_mapx",
+  "project_featured",
   "project_featured_actions",
   "project_featured_add",
   "project_featured_remove",
@@ -67,16 +71,22 @@ const DEFAULT_STATE = {
   scope: "accessible",
   role: "any",
   themes: [],
-  sort: "updated_desc",
+  sort: "default",
   search: "",
 };
 
+const ROLE_INITIALS = {
+  admin: "A",
+  member: "M",
+  publisher: "P",
+};
+
 const SORT_OPTIONS = [
+  ["default", "project_list_sort_default"],
   ["updated_desc", "project_list_sort_updated_desc"],
   ["updated_asc", "project_list_sort_updated_asc"],
   ["name_asc", "project_list_sort_name_asc"],
   ["name_desc", "project_list_sort_name_desc"],
-  ["theme_asc", "project_list_sort_theme"],
   ["views_desc", "project_list_sort_views_desc"],
   ["views_asc", "project_list_sort_views_asc"],
   ["collaborators_desc", "project_list_sort_collaborators_desc"],
@@ -179,6 +189,10 @@ export class ProjectListElement extends HTMLElement {
       ...initial,
       themes: Array.isArray(initial.themes) ? initial.themes : [],
     };
+    if (settings.user.guest === true) {
+      this.state.scope = "accessible";
+      this.state.role = "any";
+    }
   }
 
   async init() {
@@ -304,6 +318,7 @@ export class ProjectListElement extends HTMLElement {
     const scopes = this.el("div", {
       class: "btn-group mx-project-browser-scopes",
     });
+    scopes.hidden = settings.user.guest === true;
     scopes.setAttribute("role", "group");
     scopes.setAttribute(
       "aria-label",
@@ -327,9 +342,15 @@ export class ProjectListElement extends HTMLElement {
       scopes.appendChild(button);
     }
 
-    const availableRoles = [...new Set(this.projects.map((p) => p.role))];
+    const availableRoles = [
+      ...new Set(
+        this.projects
+          .map((project) => project.role)
+          .filter((role) => role !== "public"),
+      ),
+    ];
     if (
-      ["admin", "publisher", "member", "public"].includes(this.state.role) &&
+      ["admin", "publisher", "member"].includes(this.state.role) &&
       !availableRoles.includes(this.state.role)
     ) {
       availableRoles.push(this.state.role);
@@ -339,14 +360,15 @@ export class ProjectListElement extends HTMLElement {
       "project_list_role",
       [
         ["any", "project_list_all_roles"],
-        ...["admin", "publisher", "member", "public"]
+        ...["admin", "publisher", "member"]
           .filter((role) => availableRoles.includes(role))
           .map((role) => [role, role]),
       ],
       this.state.role,
     );
     const roleWrap = this.wrapTool(this.roleSelect);
-    roleWrap.hidden = availableRoles.length <= 1;
+    roleWrap.hidden =
+      settings.user.guest === true || availableRoles.length <= 1;
 
     const availableThemes = [
       ...new Set(this.projects.flatMap((project) => project.themes)),
@@ -377,6 +399,7 @@ export class ProjectListElement extends HTMLElement {
       SORT_OPTIONS,
       this.state.sort,
     );
+    this.updateSortDescription();
     this.clearButton = this.el(
       "button",
       {
@@ -386,6 +409,7 @@ export class ProjectListElement extends HTMLElement {
       },
       this.label("project_list_clear"),
     );
+    this.clearButton.title = this.label("project_list_clear_desc");
     this.toolsPopover.append(
       scopes,
       roleWrap,
@@ -465,7 +489,9 @@ export class ProjectListElement extends HTMLElement {
 
   buildRow(project) {
     const row = this.el("div", {
-      class: "mx-project-browser-row",
+      class: `mx-project-browser-row${
+        project.role === "public" ? " mx-project-browser-row-public" : ""
+      }`,
       dataset: { projectId: project.id, action: "open" },
       tabindex: "0",
       role: "listitem",
@@ -515,8 +541,8 @@ export class ProjectListElement extends HTMLElement {
           "span",
           {
             class: "mx-project-browser-featured",
-            title: this.label("project_featured_by_mapx"),
-            "aria-label": this.label("project_featured_by_mapx"),
+            title: this.label("project_featured"),
+            "aria-label": this.label("project_featured"),
           },
           this.el("i", {
             class: "fa fa-bookmark",
@@ -603,29 +629,48 @@ export class ProjectListElement extends HTMLElement {
     }
     text.appendChild(meta);
 
-    const role = this.el(
-      "span",
-      {
-        class: `mx-project-role mx-project-role-${project.role}`,
-        title: this.label(project.role),
-        "aria-label": `${this.label("project_list_role")}: ${this.label(
-          project.role,
-        )}`,
-      },
-      this.label(project.role),
-    );
-    role.dataset.roleInitial = this.label(project.role)
-      .slice(0, 1)
-      .toUpperCase();
-
     const actions = this.el("span", { class: "mx-project-browser-actions" });
     const chevron = this.el("i", {
       class: "fa fa-chevron-right mx-project-browser-open",
       "aria-hidden": "true",
     });
     actions.appendChild(chevron);
-    row.append(avatar, text, role, actions);
+    row.append(avatar, text);
+    if (project.role !== "public") {
+      const roleLabel = this.label(project.role);
+      row.appendChild(
+        this.el(
+          "span",
+          {
+            class: `mx-project-role mx-project-role-${project.role}`,
+            title: roleLabel,
+            "aria-label": `${this.label("project_list_role")}: ${roleLabel}`,
+          },
+          this.el("i", {
+            class: "mx-icon mx-shield mx-project-role-shield",
+            "aria-hidden": "true",
+          }),
+          this.el(
+            "span",
+            { class: "mx-project-role-initial", "aria-hidden": "true" },
+            ROLE_INITIALS[project.role],
+          ),
+        ),
+      );
+    }
+    row.appendChild(actions);
     return row;
+  }
+
+  updateSortDescription() {
+    if (!this.sortSelect) return;
+    const descriptionKey = {
+      default: "project_list_sort_default_desc",
+      updated_desc: "project_list_sort_updated_desc_desc",
+      updated_asc: "project_list_sort_updated_asc_desc",
+    }[this.state.sort];
+    const description = descriptionKey ? this.label(descriptionKey) : "";
+    this.sortSelect.title = description;
   }
 
   buildStat(iconClasses, value, labelKey) {
@@ -712,7 +757,7 @@ export class ProjectListElement extends HTMLElement {
       this.el(
         "strong",
         { class: "mx-project-browser-curator-title" },
-        this.label("project_featured_by_mapx"),
+        this.label("project_featured"),
       ),
     );
     const toggle = this.el(
@@ -988,6 +1033,7 @@ export class ProjectListElement extends HTMLElement {
     } else {
       this.state[filter] = event.target.value;
     }
+    if (filter === "sort") this.updateSortDescription();
     this.resetResults();
   }
 
@@ -1011,6 +1057,7 @@ export class ProjectListElement extends HTMLElement {
         this.roleSelect.value = this.state.role;
         this.themeSelect.value = "";
         this.sortSelect.value = this.state.sort;
+        this.updateSortDescription();
         this.resetResults();
         return;
       case "favorite":

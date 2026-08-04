@@ -88,13 +88,48 @@ describe("mx-project-list", () => {
     expect(element.toolsPopover.hidden).toBe(false);
     expect(element.toolsButton.getAttribute("aria-expanded")).toBe("true");
 
-    element.roleSelect.value = "public";
+    element.roleSelect.value = "admin";
     element.roleSelect.dispatchEvent(new Event("change", { bubbles: true }));
     expect(element.selectedProjects.map((project) => project.id)).toEqual([
-      "MX-DDD44-EEE55-FFF66",
+      "MX-AAA11-BBB22-CCC33",
     ]);
     expect(element.toolsButton.classList).toContain(
       "mx-project-browser-tools-active",
+    );
+  });
+
+  it("keeps public access implicit and renders compact accessible role shields", async () => {
+    const element = await mount();
+    expect([...element.roleSelect.options].map((option) => option.value)).toEqual([
+      "any",
+      "admin",
+    ]);
+    const adminRole = element.rows.querySelector(
+      `[data-project-id="${projects[0].id}"] .mx-project-role`,
+    );
+    expect(adminRole.title).toBe("admin");
+    expect(adminRole.getAttribute("aria-label")).toBe(
+      "project_list_role: admin",
+    );
+    expect(adminRole.querySelector(".mx-icon.mx-shield")).not.toBeNull();
+    expect(adminRole.querySelector(".mx-project-role-initial").innerText).toBe(
+      "A",
+    );
+    expect(
+      element.rows.querySelector(
+        `[data-project-id="${projects[1].id}"] .mx-project-role`,
+      ),
+    ).toBeNull();
+  });
+
+  it("explains date sorting and reset behavior", async () => {
+    const element = await mount();
+    expect(element.sortSelect.title).toBe(
+      "project_list_sort_default_desc",
+    );
+    expect(element.clearButton.title).toBe("project_list_clear_desc");
+    expect([...element.sortSelect.options].map((option) => option.value)).not.toContain(
+      "theme_asc",
     );
   });
 
@@ -277,6 +312,12 @@ describe("mx-project-list", () => {
         `[data-project-id="${projects[1].id}"] .mx-project-browser-featured .fa-bookmark`,
       ),
     ).not.toBeNull();
+    expect(element.querySelector(".mx-project-browser-scopes").hidden).toBe(
+      true,
+    );
+    expect(element.roleSelect.closest(".mx-project-browser-tool").hidden).toBe(
+      true,
+    );
   });
 
   it("does not open a project when favorite or menu actions are used", async () => {

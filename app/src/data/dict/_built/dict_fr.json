@@ -8311,8 +8311,8 @@
   },
   {
     "id": "project_list_all_accessible",
-    "en": "All accessible",
-    "fr": "Tous accessibles"
+    "en": "All projects",
+    "fr": "Tous les projets"
   },
   {
     "id": "project_list_my_projects",
@@ -8330,14 +8330,34 @@
     "fr": "Toutes les thématiques"
   },
   {
+    "id": "project_list_sort_default",
+    "en": "Default order",
+    "fr": "Ordre par défaut"
+  },
+  {
+    "id": "project_list_sort_default_desc",
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date.",
+    "fr": "Affiche d’abord les favoris personnels, puis les projets mis en avant, suivis des autres projets classés par date de dernière modification."
+  },
+  {
     "id": "project_list_sort_updated_desc",
-    "en": "Recently updated",
-    "fr": "Modifiés récemment"
+    "en": "Last modified: newest first",
+    "fr": "Modification : plus récente d’abord"
+  },
+  {
+    "id": "project_list_sort_updated_desc_desc",
+    "en": "Sorts all projects by last modification date, newest first.",
+    "fr": "Trie tous les projets par date de dernière modification, du plus récent au plus ancien."
   },
   {
     "id": "project_list_sort_updated_asc",
-    "en": "Least recently updated",
-    "fr": "Modifiés anciennement"
+    "en": "Last modified: oldest first",
+    "fr": "Modification : plus ancienne d’abord"
+  },
+  {
+    "id": "project_list_sort_updated_asc_desc",
+    "en": "Sorts all projects by last modification date, oldest first.",
+    "fr": "Trie tous les projets par date de dernière modification, du plus ancien au plus récent."
   },
   {
     "id": "project_list_sort_name_asc",
@@ -8531,8 +8551,13 @@
   },
   {
     "id": "project_list_clear",
-    "en": "Clear",
-    "fr": "Effacer"
+    "en": "Reset all",
+    "fr": "Tout réinitialiser"
+  },
+  {
+    "id": "project_list_clear_desc",
+    "en": "Clears the search and restores the default project scope, filters and sorting.",
+    "fr": "Efface la recherche et rétablit le périmètre, les filtres et le tri par défaut."
   },
   {
     "id": "project_list_showing",
@@ -8570,9 +8595,9 @@
     "fr": "Impossible de mettre à jour ce favori. Veuillez réessayer."
   },
   {
-    "id": "project_featured_by_mapx",
-    "en": "Featured by MapX",
-    "fr": "Mis en avant par MapX"
+    "id": "project_featured",
+    "en": "Featured",
+    "fr": "Mis en avant"
   },
   {
     "id": "project_featured_actions",

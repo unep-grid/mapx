@@ -6649,7 +6649,7 @@
   },
   {
     "id": "project_list_all_accessible",
-    "en": "All accessible"
+    "en": "All projects"
   },
   {
     "id": "project_list_my_projects",
@@ -6664,12 +6664,28 @@
     "en": "All themes"
   },
   {
+    "id": "project_list_sort_default",
+    "en": "Default order"
+  },
+  {
+    "id": "project_list_sort_default_desc",
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date."
+  },
+  {
     "id": "project_list_sort_updated_desc",
-    "en": "Recently updated"
+    "en": "Last modified: newest first"
+  },
+  {
+    "id": "project_list_sort_updated_desc_desc",
+    "en": "Sorts all projects by last modification date, newest first."
   },
   {
     "id": "project_list_sort_updated_asc",
-    "en": "Least recently updated"
+    "en": "Last modified: oldest first"
+  },
+  {
+    "id": "project_list_sort_updated_asc_desc",
+    "en": "Sorts all projects by last modification date, oldest first."
   },
   {
     "id": "project_list_sort_name_asc",
@@ -6825,7 +6841,11 @@
   },
   {
     "id": "project_list_clear",
-    "en": "Clear"
+    "en": "Reset all"
+  },
+  {
+    "id": "project_list_clear_desc",
+    "en": "Clears the search and restores the default project scope, filters and sorting."
   },
   {
     "id": "project_list_showing",
@@ -6856,8 +6876,8 @@
     "en": "Could not update this favorite. Please try again."
   },
   {
-    "id": "project_featured_by_mapx",
-    "en": "Featured by MapX"
+    "id": "project_featured",
+    "en": "Featured"
   },
   {
     "id": "project_featured_actions",

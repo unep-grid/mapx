@@ -50,7 +50,7 @@ function state(overrides = {}) {
     scope: "accessible",
     role: "any",
     themes: [],
-    sort: "updated_desc",
+    sort: "default",
     search: "",
     ...overrides,
   };
@@ -76,16 +76,13 @@ describe("project list helpers", () => {
     ).toEqual([projects[0]]);
   });
 
-  it("sorts by date, name and first localized theme", () => {
+  it("sorts by date and name", () => {
     expect(selectProjects(projects, state({ sort: "updated_asc" }))[0].id).toBe(
       "MX-TWO",
     );
     expect(selectProjects(projects, state({ sort: "name_asc" }))[0].id).toBe(
       "MX-TWO",
     );
-    expect(
-      selectProjects(projects, state({ sort: "theme_asc" }), themeLabels)[0].id,
-    ).toBe("MX-ONE");
   });
 
   it("sorts by views and collaborators in both directions", () => {
@@ -103,7 +100,7 @@ describe("project list helpers", () => {
     ).toBe("MX-TWO");
   });
 
-  it("keeps favorites first, then featured projects, then selected sorting", () => {
+  it("uses favorites, featured rank and modification date for default sorting", () => {
     const ordered = [
       normalizeProject({
         id: "MX-AAA11-BBB22-CCC33",
@@ -150,11 +147,41 @@ describe("project list helpers", () => {
     ]);
   });
 
+  it("uses an explicit sort globally instead of pinning favorites and featured projects", () => {
+    const ordered = [
+      normalizeProject({
+        id: "MX-ZULU-FAVORITE",
+        title: "Zulu favorite",
+        is_favorite: true,
+      }),
+      normalizeProject({
+        id: "MX-BETA-FEATURED",
+        title: "Beta featured",
+        featured_rank: 1000,
+      }),
+      normalizeProject({
+        id: "MX-ALPHA-REGULAR",
+        title: "Alpha regular",
+      }),
+    ];
+
+    expect(
+      selectProjects(ordered, state({ sort: "name_asc" })).map(
+        (project) => project.title,
+      ),
+    ).toEqual(["Alpha regular", "Beta featured", "Zulu favorite"]);
+  });
+
   it("parses legacy URL filters without making access decisions", () => {
     expect(
       parseInitialProjectListFilters({ role: "publish", title: "Demo*" }),
     ).toEqual({ role: "publisher", scope: "mine", search: "Demo" });
     expect(parseInitialProjectListFilters({ role: "unknown" })).toEqual({
+      role: "any",
+      scope: "accessible",
+      search: "",
+    });
+    expect(parseInitialProjectListFilters({ role: "public" })).toEqual({
       role: "any",
       scope: "accessible",
       search: "",

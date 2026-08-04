@@ -142,6 +142,10 @@
   transition: background-color 100ms ease;
 }
 
+.mx-project-browser-row-public {
+  grid-template-columns: 46px minmax(220px, 1fr) minmax(72px, auto);
+}
+
 .mx-project-browser-row:hover,
 .mx-project-browser-row:focus-within,
 .mx-project-browser-row:focus {
@@ -262,29 +266,34 @@
   height: 30px;
   align-items: center;
   justify-content: center;
-  clip-path: polygon(50% 0, 92% 20%, 92% 75%, 50% 100%, 8% 75%, 8% 20%);
-  background: color-mix(
-    in srgb,
-    var(--mx_ui_input_accent) 20%,
-    var(--mx_ui_background)
-  );
-  color: var(--mx_ui_link);
-  font-size: 0;
+  color: var(--mx_ui_text);
 }
 
-.mx-project-role::before {
+.mx-project-role .mx-icon.mx-project-role-shield::before {
+  width: 1.5em;
+  height: 1.5em;
+  background-color: currentColor;
+}
+
+.mx-project-role-initial {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  padding-bottom: 6px;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
   font-size: 12px;
   font-weight: 600;
-  content: attr(data-role-initial);
+  line-height: 1;
 }
 
-.mx-project-role-admin,
+.mx-project-role-admin {
+  color: var(--mx_ui_message_danger);
+}
+
 .mx-project-role-publisher {
-  background: color-mix(
-    in srgb,
-    var(--mx_ui_input_accent) 24%,
-    var(--mx_ui_background)
-  );
+  color: var(--mx_ui_link);
 }
 
 .mx-project-browser-featured {
@@ -496,6 +505,10 @@
   .mx-project-browser-row {
     grid-template-columns: 40px minmax(170px, 1fr) 28px minmax(62px, auto);
     gap: 8px;
+  }
+
+  .mx-project-browser-row-public {
+    grid-template-columns: 40px minmax(170px, 1fr) minmax(62px, auto);
   }
 
   .mx-project-browser-stats {

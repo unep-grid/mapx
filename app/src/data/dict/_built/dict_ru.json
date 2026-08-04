@@ -8311,8 +8311,8 @@
   },
   {
     "id": "project_list_all_accessible",
-    "en": "All accessible",
-    "ru": "Все доступно"
+    "en": "All projects",
+    "ru": "Все проекты"
   },
   {
     "id": "project_list_my_projects",
@@ -8330,14 +8330,34 @@
     "ru": "Все темы"
   },
   {
+    "id": "project_list_sort_default",
+    "en": "Default order",
+    "ru": "Порядок по умолчанию"
+  },
+  {
+    "id": "project_list_sort_default_desc",
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date.",
+    "ru": "Сначала отображаются мои личные предпочтения, затем рекомендуемые проекты, а затем остальные проекты, отсортированные по дате последнего изменения."
+  },
+  {
     "id": "project_list_sort_updated_desc",
-    "en": "Recently updated",
-    "ru": "Недавно обновлено"
+    "en": "Last modified: newest first",
+    "ru": "Последнее изменение: сначала новые"
+  },
+  {
+    "id": "project_list_sort_updated_desc_desc",
+    "en": "Sorts all projects by last modification date, newest first.",
+    "ru": "Сортирует все проекты по дате последнего изменения, начиная с самых новых."
   },
   {
     "id": "project_list_sort_updated_asc",
-    "en": "Least recently updated",
-    "ru": "Последнее обновление"
+    "en": "Last modified: oldest first",
+    "ru": "Последние изменения: сначала самые старые"
+  },
+  {
+    "id": "project_list_sort_updated_asc_desc",
+    "en": "Sorts all projects by last modification date, oldest first.",
+    "ru": "Сортирует все проекты по дате последнего изменения, начиная с самых старых."
   },
   {
     "id": "project_list_sort_name_asc",
@@ -8531,8 +8551,13 @@
   },
   {
     "id": "project_list_clear",
-    "en": "Clear",
-    "ru": "Прозрачный"
+    "en": "Reset all",
+    "ru": "Сбросить все"
+  },
+  {
+    "id": "project_list_clear_desc",
+    "en": "Clears the search and restores the default project scope, filters and sorting.",
+    "ru": "Очищает область поиска и восстанавливает область поиска, фильтры и сортировку по умолчанию."
   },
   {
     "id": "project_list_showing",
@@ -8570,9 +8595,9 @@
     "ru": "Не удалось обновить избранное. Пожалуйста, попробуйте еще раз."
   },
   {
-    "id": "project_featured_by_mapx",
-    "en": "Featured by MapX",
-    "ru": "Представлено компанией MapX"
+    "id": "project_featured",
+    "en": "Featured",
+    "ru": "Рекомендуемые"
   },
   {
     "id": "project_featured_actions",

@@ -8311,8 +8311,8 @@
   },
   {
     "id": "project_list_all_accessible",
-    "en": "All accessible",
-    "ar": "جميعها متاحة"
+    "en": "All projects",
+    "ar": "جميع المشاريع"
   },
   {
     "id": "project_list_my_projects",
@@ -8330,14 +8330,34 @@
     "ar": "جميع السمات"
   },
   {
+    "id": "project_list_sort_default",
+    "en": "Default order",
+    "ar": "الترتيب الافتراضي"
+  },
+  {
+    "id": "project_list_sort_default_desc",
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date.",
+    "ar": "يعرض أولاً المشاريع المفضلة الشخصية، ثم المشاريع المميزة، متبوعة بمشاريع أخرى مرتبة حسب تاريخ آخر تعديل."
+  },
+  {
     "id": "project_list_sort_updated_desc",
-    "en": "Recently updated",
-    "ar": "تم التحديث مؤخراً"
+    "en": "Last modified: newest first",
+    "ar": "آخر تعديل: الأحدث أولاً"
+  },
+  {
+    "id": "project_list_sort_updated_desc_desc",
+    "en": "Sorts all projects by last modification date, newest first.",
+    "ar": "يقوم بترتيب جميع المشاريع حسب تاريخ آخر تعديل، من الأحدث إلى الأقدم."
   },
   {
     "id": "project_list_sort_updated_asc",
-    "en": "Least recently updated",
-    "ar": "آخر تحديث"
+    "en": "Last modified: oldest first",
+    "ar": "آخر تعديل: الأقدم أولاً"
+  },
+  {
+    "id": "project_list_sort_updated_asc_desc",
+    "en": "Sorts all projects by last modification date, oldest first.",
+    "ar": "يقوم بترتيب جميع المشاريع حسب تاريخ آخر تعديل، من الأقدم إلى الأقدم."
   },
   {
     "id": "project_list_sort_name_asc",
@@ -8531,8 +8551,13 @@
   },
   {
     "id": "project_list_clear",
-    "en": "Clear",
-    "ar": "واضح"
+    "en": "Reset all",
+    "ar": "إعادة ضبط الكل"
+  },
+  {
+    "id": "project_list_clear_desc",
+    "en": "Clears the search and restores the default project scope, filters and sorting.",
+    "ar": "يمسح البحث ويعيد نطاق المشروع الافتراضي، والفلاتر، والفرز."
   },
   {
     "id": "project_list_showing",
@@ -8570,9 +8595,9 @@
     "ar": "تعذر تحديث هذه المفضلة. يرجى المحاولة مرة أخرى."
   },
   {
-    "id": "project_featured_by_mapx",
-    "en": "Featured by MapX",
-    "ar": "تم عرضه بواسطة MapX"
+    "id": "project_featured",
+    "en": "Featured",
+    "ar": "مميز"
   },
   {
     "id": "project_featured_actions",

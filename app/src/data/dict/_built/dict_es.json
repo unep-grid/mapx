@@ -8311,8 +8311,8 @@
   },
   {
     "id": "project_list_all_accessible",
-    "en": "All accessible",
-    "es": "Todos accesibles"
+    "en": "All projects",
+    "es": "Todos los proyectos"
   },
   {
     "id": "project_list_my_projects",
@@ -8330,14 +8330,34 @@
     "es": "Todas las temáticas"
   },
   {
+    "id": "project_list_sort_default",
+    "en": "Default order",
+    "es": "Orden predeterminado"
+  },
+  {
+    "id": "project_list_sort_default_desc",
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date.",
+    "es": "Muestra primero los favoritos personales, luego los proyectos destacados y después los demás proyectos ordenados por fecha de última modificación."
+  },
+  {
     "id": "project_list_sort_updated_desc",
-    "en": "Recently updated",
-    "es": "Actualizados recientemente"
+    "en": "Last modified: newest first",
+    "es": "Última modificación: más reciente primero"
+  },
+  {
+    "id": "project_list_sort_updated_desc_desc",
+    "en": "Sorts all projects by last modification date, newest first.",
+    "es": "Ordena todos los proyectos por fecha de última modificación, del más reciente al más antiguo."
   },
   {
     "id": "project_list_sort_updated_asc",
-    "en": "Least recently updated",
-    "es": "Actualizados hace más tiempo"
+    "en": "Last modified: oldest first",
+    "es": "Última modificación: más antigua primero"
+  },
+  {
+    "id": "project_list_sort_updated_asc_desc",
+    "en": "Sorts all projects by last modification date, oldest first.",
+    "es": "Ordena todos los proyectos por fecha de última modificación, del más antiguo al más reciente."
   },
   {
     "id": "project_list_sort_name_asc",
@@ -8531,8 +8551,13 @@
   },
   {
     "id": "project_list_clear",
-    "en": "Clear",
-    "es": "Borrar"
+    "en": "Reset all",
+    "es": "Restablecer todo"
+  },
+  {
+    "id": "project_list_clear_desc",
+    "en": "Clears the search and restores the default project scope, filters and sorting.",
+    "es": "Borra la búsqueda y restablece el ámbito, los filtros y el orden predeterminados."
   },
   {
     "id": "project_list_showing",
@@ -8570,9 +8595,9 @@
     "es": "No se pudo actualizar este favorito. Inténtelo de nuevo."
   },
   {
-    "id": "project_featured_by_mapx",
-    "en": "Featured by MapX",
-    "es": "Destacado por MapX"
+    "id": "project_featured",
+    "en": "Featured",
+    "es": "Destacado"
   },
   {
     "id": "project_featured_actions",

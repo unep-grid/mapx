@@ -8311,8 +8311,8 @@
   },
   {
     "id": "project_list_all_accessible",
-    "en": "All accessible",
-    "bn": "সকলের প্রবেশগম্য"
+    "en": "All projects",
+    "bn": "সমস্ত প্রকল্প"
   },
   {
     "id": "project_list_my_projects",
@@ -8330,14 +8330,34 @@
     "bn": "সমস্ত থিম"
   },
   {
+    "id": "project_list_sort_default",
+    "en": "Default order",
+    "bn": "ডিফল্ট ক্রম"
+  },
+  {
+    "id": "project_list_sort_default_desc",
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date.",
+    "bn": "প্রথমে ব্যক্তিগত পছন্দেরগুলো, তারপর ফিচার্ড প্রজেক্টগুলো এবং সবশেষে সর্বশেষ পরিবর্তনের তারিখ অনুযায়ী অন্যান্য প্রজেক্টগুলো দেখানো হয়।"
+  },
+  {
     "id": "project_list_sort_updated_desc",
-    "en": "Recently updated",
-    "bn": "সম্প্রতি আপডেট করা হয়েছে"
+    "en": "Last modified: newest first",
+    "bn": "সর্বশেষ পরিবর্তিত: নতুনতম প্রথমে"
+  },
+  {
+    "id": "project_list_sort_updated_desc_desc",
+    "en": "Sorts all projects by last modification date, newest first.",
+    "bn": "সমস্ত প্রজেক্টকে সর্বশেষ পরিবর্তনের তারিখ অনুসারে সাজায়, নতুনগুলো প্রথমে।"
   },
   {
     "id": "project_list_sort_updated_asc",
-    "en": "Least recently updated",
-    "bn": "সর্বশেষ আপডেট করা হয়েছে"
+    "en": "Last modified: oldest first",
+    "bn": "সর্বশেষ পরিবর্তিত: পুরোনোটি প্রথমে"
+  },
+  {
+    "id": "project_list_sort_updated_asc_desc",
+    "en": "Sorts all projects by last modification date, oldest first.",
+    "bn": "সমস্ত প্রজেক্টকে সর্বশেষ পরিবর্তনের তারিখ অনুসারে সাজায়, পুরোনো থেকে নতুন।"
   },
   {
     "id": "project_list_sort_name_asc",
@@ -8531,8 +8551,13 @@
   },
   {
     "id": "project_list_clear",
-    "en": "Clear",
-    "bn": "পরিষ্কার"
+    "en": "Reset all",
+    "bn": "সব রিসেট করুন"
+  },
+  {
+    "id": "project_list_clear_desc",
+    "en": "Clears the search and restores the default project scope, filters and sorting.",
+    "bn": "অনুসন্ধান মুছে ফেলে এবং প্রকল্পের ডিফল্ট পরিধি, ফিল্টার ও সর্টিং পুনরুদ্ধার করে।"
   },
   {
     "id": "project_list_showing",
@@ -8570,9 +8595,9 @@
     "bn": "এই প্রিয় পোস্টটি আপডেট করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।"
   },
   {
-    "id": "project_featured_by_mapx",
-    "en": "Featured by MapX",
-    "bn": "MapX দ্বারা বৈশিষ্ট্যযুক্ত"
+    "id": "project_featured",
+    "en": "Featured",
+    "bn": "বৈশিষ্ট্যযুক্ত"
   },
   {
     "id": "project_featured_actions",

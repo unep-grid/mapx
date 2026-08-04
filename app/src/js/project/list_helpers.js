@@ -38,7 +38,7 @@ function compareText(a, b, direction = 1) {
 }
 
 export function parseInitialProjectListFilters({ role, title } = {}) {
-  const roles = ["admin", "publisher", "member", "public"];
+  const roles = ["admin", "publisher", "member"];
   const roleQuery = cleanProjectText(Array.isArray(role) ? role[0] : role);
   const matches = roleQuery
     ? roles.filter((candidate) => candidate.startsWith(roleQuery))
@@ -52,8 +52,7 @@ export function parseInitialProjectListFilters({ role, title } = {}) {
 
   return {
     role: parsedRole,
-    scope:
-      parsedRole === "public" || parsedRole === "any" ? "accessible" : "mine",
+    scope: parsedRole === "any" ? "accessible" : "mine",
     search: parsedTitle,
   };
 }
@@ -119,11 +118,6 @@ export function selectProjects(projects, state, themeLabels = {}) {
         return compareText(a.title, b.title);
       case "name_desc":
         return compareText(a.title, b.title, -1);
-      case "theme_asc": {
-        const themeA = themeLabels[a.themes[0]] || "\uffff";
-        const themeB = themeLabels[b.themes[0]] || "\uffff";
-        return compareText(themeA, themeB) || compareText(a.title, b.title);
-      }
       case "views_desc":
         return b.view_count - a.view_count || byTitle();
       case "views_asc":
@@ -137,7 +131,7 @@ export function selectProjects(projects, state, themeLabels = {}) {
     }
   };
 
-  return filtered.sort((a, b) => {
+  const defaultSort = (a, b) => {
     if (a.is_favorite !== b.is_favorite) {
       return a.is_favorite ? -1 : 1;
     }
@@ -153,7 +147,9 @@ export function selectProjects(projects, state, themeLabels = {}) {
       return a.featured_rank - b.featured_rank || compareText(a.title, b.title);
     }
     return selectedSort(a, b);
-  });
+  };
+
+  return filtered.sort(state.sort === "default" ? defaultSort : selectedSort);
 }
 
 export function normalizeProject(project, themeLabels = {}) {

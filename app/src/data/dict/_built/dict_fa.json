@@ -8311,8 +8311,8 @@
   },
   {
     "id": "project_list_all_accessible",
-    "en": "All accessible",
-    "fa": "همه قابل دسترسی"
+    "en": "All projects",
+    "fa": "همه پروژه‌ها"
   },
   {
     "id": "project_list_my_projects",
@@ -8330,14 +8330,34 @@
     "fa": "همه تم‌ها"
   },
   {
+    "id": "project_list_sort_default",
+    "en": "Default order",
+    "fa": "ترتیب پیش‌فرض"
+  },
+  {
+    "id": "project_list_sort_default_desc",
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date.",
+    "fa": "ابتدا موارد دلخواه شخصی، سپس پروژه‌های ویژه و در نهایت سایر پروژه‌ها را که بر اساس آخرین تاریخ اصلاح مرتب شده‌اند، نشان می‌دهد."
+  },
+  {
     "id": "project_list_sort_updated_desc",
-    "en": "Recently updated",
-    "fa": "اخیراً به‌روزرسانی شده است"
+    "en": "Last modified: newest first",
+    "fa": "آخرین تغییر: جدیدترین ابتدا"
+  },
+  {
+    "id": "project_list_sort_updated_desc_desc",
+    "en": "Sorts all projects by last modification date, newest first.",
+    "fa": "همه پروژه‌ها را بر اساس آخرین تاریخ اصلاح، به طوری که جدیدترین‌ها اول باشند، مرتب می‌کند."
   },
   {
     "id": "project_list_sort_updated_asc",
-    "en": "Least recently updated",
-    "fa": "اخیراً به روز نشده است"
+    "en": "Last modified: oldest first",
+    "fa": "آخرین تغییر: قدیمی‌ترین‌ها اول"
+  },
+  {
+    "id": "project_list_sort_updated_asc_desc",
+    "en": "Sorts all projects by last modification date, oldest first.",
+    "fa": "همه پروژه‌ها را بر اساس آخرین تاریخ اصلاح، به طوری که قدیمی‌ترین ابتدا باشد، مرتب می‌کند."
   },
   {
     "id": "project_list_sort_name_asc",
@@ -8531,8 +8551,13 @@
   },
   {
     "id": "project_list_clear",
-    "en": "Clear",
-    "fa": "پاک کردن"
+    "en": "Reset all",
+    "fa": "همه را بازنشانی کنید"
+  },
+  {
+    "id": "project_list_clear_desc",
+    "en": "Clears the search and restores the default project scope, filters and sorting.",
+    "fa": "جستجو را پاک می‌کند و محدوده، فیلترها و مرتب‌سازی پیش‌فرض پروژه را بازیابی می‌کند."
   },
   {
     "id": "project_list_showing",
@@ -8570,9 +8595,9 @@
     "fa": "به‌روزرسانی این مورد علاقه امکان‌پذیر نیست. لطفاً دوباره امتحان کنید."
   },
   {
-    "id": "project_featured_by_mapx",
-    "en": "Featured by MapX",
-    "fa": "ویژه توسط MapX"
+    "id": "project_featured",
+    "en": "Featured",
+    "fa": "ویژه"
   },
   {
     "id": "project_featured_actions",

@@ -8311,8 +8311,8 @@
   },
   {
     "id": "project_list_all_accessible",
-    "en": "All accessible",
-    "ps": "ټول د لاسرسي وړ"
+    "en": "All projects",
+    "ps": "ټولې پروژې"
   },
   {
     "id": "project_list_my_projects",
@@ -8330,14 +8330,34 @@
     "ps": "ټولې موضوعګانې"
   },
   {
+    "id": "project_list_sort_default",
+    "en": "Default order",
+    "ps": "ډیفالټ ترتیب"
+  },
+  {
+    "id": "project_list_sort_default_desc",
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date.",
+    "ps": "لومړی شخصي خوښې ښیي، بیا ځانګړي پروژې، او بیا نورې پروژې چې د وروستي تعدیل نیټې سره سم ترتیب شوي."
+  },
+  {
     "id": "project_list_sort_updated_desc",
-    "en": "Recently updated",
-    "ps": "په دې وروستیو کې تازه شوی"
+    "en": "Last modified: newest first",
+    "ps": "وروستی بدلون: لومړی نوی"
+  },
+  {
+    "id": "project_list_sort_updated_desc_desc",
+    "en": "Sorts all projects by last modification date, newest first.",
+    "ps": "ټولې پروژې د وروستي تعدیل نیټې له مخې ترتیبوي، لومړی نوی."
   },
   {
     "id": "project_list_sort_updated_asc",
-    "en": "Least recently updated",
-    "ps": "لږ تر لږه تازه شوي"
+    "en": "Last modified: oldest first",
+    "ps": "وروستی بدلون: لومړی زوړ"
+  },
+  {
+    "id": "project_list_sort_updated_asc_desc",
+    "en": "Sorts all projects by last modification date, oldest first.",
+    "ps": "ټولې پروژې د وروستي تعدیل نیټې له مخې ترتیبوي، لومړی زوړ."
   },
   {
     "id": "project_list_sort_name_asc",
@@ -8531,8 +8551,13 @@
   },
   {
     "id": "project_list_clear",
-    "en": "Clear",
-    "ps": "روښانه"
+    "en": "Reset all",
+    "ps": "ټول بیا تنظیم کړئ"
+  },
+  {
+    "id": "project_list_clear_desc",
+    "en": "Clears the search and restores the default project scope, filters and sorting.",
+    "ps": "لټون پاکوي او د پروژې ډیفالټ ساحه، فلټرونه او ترتیب کول بیرته راولي."
   },
   {
     "id": "project_list_showing",
@@ -8570,9 +8595,9 @@
     "ps": "دا خوښه تازه نشوه. مهرباني وکړئ بیا هڅه وکړئ."
   },
   {
-    "id": "project_featured_by_mapx",
-    "en": "Featured by MapX",
-    "ps": "د MapX لخوا ځانګړی شوی"
+    "id": "project_featured",
+    "en": "Featured",
+    "ps": "ځانګړی شوی"
   },
   {
     "id": "project_featured_actions",

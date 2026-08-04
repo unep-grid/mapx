@@ -8311,8 +8311,8 @@
   },
   {
     "id": "project_list_all_accessible",
-    "en": "All accessible",
-    "zh": "所有通道均可通行"
+    "en": "All projects",
+    "zh": "所有项目"
   },
   {
     "id": "project_list_my_projects",
@@ -8330,14 +8330,34 @@
     "zh": "所有主题"
   },
   {
+    "id": "project_list_sort_default",
+    "en": "Default order",
+    "zh": "默认顺序"
+  },
+  {
+    "id": "project_list_sort_default_desc",
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date.",
+    "zh": "首先显示个人收藏，然后显示精选项目，最后显示按最后修改日期排序的其他项目。"
+  },
+  {
     "id": "project_list_sort_updated_desc",
-    "en": "Recently updated",
-    "zh": "最近更新"
+    "en": "Last modified: newest first",
+    "zh": "最后修改时间：最新修改时间在前"
+  },
+  {
+    "id": "project_list_sort_updated_desc_desc",
+    "en": "Sorts all projects by last modification date, newest first.",
+    "zh": "按最后修改日期对所有项目进行排序，最新修改的排在最前面。"
   },
   {
     "id": "project_list_sort_updated_asc",
-    "en": "Least recently updated",
-    "zh": "最近更新"
+    "en": "Last modified: oldest first",
+    "zh": "最后修改时间：最早的在前"
+  },
+  {
+    "id": "project_list_sort_updated_asc_desc",
+    "en": "Sorts all projects by last modification date, oldest first.",
+    "zh": "按最后修改日期对所有项目进行排序，最早的在前。"
   },
   {
     "id": "project_list_sort_name_asc",
@@ -8531,8 +8551,13 @@
   },
   {
     "id": "project_list_clear",
-    "en": "Clear",
-    "zh": "清除"
+    "en": "Reset all",
+    "zh": "全部重置"
+  },
+  {
+    "id": "project_list_clear_desc",
+    "en": "Clears the search and restores the default project scope, filters and sorting.",
+    "zh": "清除搜索并恢复默认项目范围、筛选器和排序。"
   },
   {
     "id": "project_list_showing",
@@ -8570,9 +8595,9 @@
     "zh": "无法更新此收藏夹。请重试。"
   },
   {
-    "id": "project_featured_by_mapx",
-    "en": "Featured by MapX",
-    "zh": "MapX 精选"
+    "id": "project_featured",
+    "en": "Featured",
+    "zh": "精选"
   },
   {
     "id": "project_featured_actions",

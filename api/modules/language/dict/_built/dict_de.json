@@ -8311,8 +8311,8 @@
   },
   {
     "id": "project_list_all_accessible",
-    "en": "All accessible",
-    "de": "Alle zugänglich"
+    "en": "All projects",
+    "de": "Alle Projekte"
   },
   {
     "id": "project_list_my_projects",
@@ -8330,14 +8330,34 @@
     "de": "Alle Themen"
   },
   {
+    "id": "project_list_sort_default",
+    "en": "Default order",
+    "de": "Standardreihenfolge"
+  },
+  {
+    "id": "project_list_sort_default_desc",
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date.",
+    "de": "Zuerst werden die persönlichen Favoriten angezeigt, dann die vorgestellten Projekte und anschließend die übrigen Projekte, sortiert nach dem Datum der letzten Änderung."
+  },
+  {
     "id": "project_list_sort_updated_desc",
-    "en": "Recently updated",
-    "de": "Kürzlich aktualisiert"
+    "en": "Last modified: newest first",
+    "de": "Letzte Änderung: Neueste zuerst"
+  },
+  {
+    "id": "project_list_sort_updated_desc_desc",
+    "en": "Sorts all projects by last modification date, newest first.",
+    "de": "Sortiert alle Projekte nach dem Datum der letzten Änderung, das neueste zuerst."
   },
   {
     "id": "project_list_sort_updated_asc",
-    "en": "Least recently updated",
-    "de": "Zuletzt aktualisiert"
+    "en": "Last modified: oldest first",
+    "de": "Letzte Änderung: Älteste zuerst"
+  },
+  {
+    "id": "project_list_sort_updated_asc_desc",
+    "en": "Sorts all projects by last modification date, oldest first.",
+    "de": "Sortiert alle Projekte nach dem Datum der letzten Änderung, das älteste zuerst."
   },
   {
     "id": "project_list_sort_name_asc",
@@ -8531,8 +8551,13 @@
   },
   {
     "id": "project_list_clear",
-    "en": "Clear",
-    "de": "Klar"
+    "en": "Reset all",
+    "de": "Alles zurücksetzen"
+  },
+  {
+    "id": "project_list_clear_desc",
+    "en": "Clears the search and restores the default project scope, filters and sorting.",
+    "de": "Löscht die Suche und stellt den Standardprojektbereich, die Filter und die Sortierung wieder her."
   },
   {
     "id": "project_list_showing",
@@ -8570,9 +8595,9 @@
     "de": "Dieser Favorit konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
   },
   {
-    "id": "project_featured_by_mapx",
-    "en": "Featured by MapX",
-    "de": "Empfohlen von MapX"
+    "id": "project_featured",
+    "en": "Featured",
+    "de": "Empfohlen"
   },
   {
     "id": "project_featured_actions",
