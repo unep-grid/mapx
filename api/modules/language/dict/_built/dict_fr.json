@@ -8336,8 +8336,8 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date.",
-    "fr": "Affiche d’abord les favoris personnels, puis les projets mis en avant, suivis des autres projets classés par date de dernière modification."
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date. Other obsolete projects are shown last.",
+    "fr": "Affiche d’abord les favoris personnels, puis les projets mis en avant, suivis des autres projets classés par date de dernière modification. Les autres projets obsolètes sont affichés en dernier."
   },
   {
     "id": "project_list_sort_updated_desc",
@@ -8628,6 +8628,26 @@
     "id": "project_featured_error",
     "en": "Could not update featured status. Please try again.",
     "fr": "Impossible de mettre à jour la mise en avant. Veuillez réessayer."
+  },
+  {
+    "id": "project_legacy",
+    "en": "Obsolete project",
+    "fr": "Projet obsolète"
+  },
+  {
+    "id": "project_legacy_add",
+    "en": "Mark project as obsolete",
+    "fr": "Marquer le projet comme obsolète"
+  },
+  {
+    "id": "project_legacy_remove",
+    "en": "Remove obsolete status",
+    "fr": "Retirer le statut obsolète"
+  },
+  {
+    "id": "project_legacy_error",
+    "en": "Could not update this project status. Please try again.",
+    "fr": "Impossible de mettre à jour le statut de ce projet. Veuillez réessayer."
   },
   {
     "id": "project_roles_matrix_title",

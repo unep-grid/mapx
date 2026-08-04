@@ -6669,7 +6669,7 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date."
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date. Other obsolete projects are shown last."
   },
   {
     "id": "project_list_sort_updated_desc",
@@ -6902,6 +6902,22 @@
   {
     "id": "project_featured_error",
     "en": "Could not update featured status. Please try again."
+  },
+  {
+    "id": "project_legacy",
+    "en": "Obsolete project"
+  },
+  {
+    "id": "project_legacy_add",
+    "en": "Mark project as obsolete"
+  },
+  {
+    "id": "project_legacy_remove",
+    "en": "Remove obsolete status"
+  },
+  {
+    "id": "project_legacy_error",
+    "en": "Could not update this project status. Please try again."
   },
   {
     "id": "project_roles_matrix_title",

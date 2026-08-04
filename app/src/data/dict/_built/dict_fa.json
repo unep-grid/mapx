@@ -8336,8 +8336,8 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date.",
-    "fa": "ابتدا موارد دلخواه شخصی، سپس پروژه‌های ویژه و در نهایت سایر پروژه‌ها را که بر اساس آخرین تاریخ اصلاح مرتب شده‌اند، نشان می‌دهد."
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date. Other obsolete projects are shown last.",
+    "fa": "ابتدا موارد دلخواه شخصی، سپس پروژه‌های ویژه و در ادامه سایر پروژه‌ها بر اساس آخرین تاریخ اصلاح نمایش داده می‌شوند. سایر پروژه‌های منسوخ شده در آخر نمایش داده می‌شوند."
   },
   {
     "id": "project_list_sort_updated_desc",
@@ -8628,6 +8628,26 @@
     "id": "project_featured_error",
     "en": "Could not update featured status. Please try again.",
     "fa": "وضعیت ویژه به‌روزرسانی نشد. لطفاً دوباره امتحان کنید."
+  },
+  {
+    "id": "project_legacy",
+    "en": "Obsolete project",
+    "fa": "پروژه منسوخ شده"
+  },
+  {
+    "id": "project_legacy_add",
+    "en": "Mark project as obsolete",
+    "fa": "علامت‌گذاری پروژه به عنوان منسوخ"
+  },
+  {
+    "id": "project_legacy_remove",
+    "en": "Remove obsolete status",
+    "fa": "حذف وضعیت منسوخ"
+  },
+  {
+    "id": "project_legacy_error",
+    "en": "Could not update this project status. Please try again.",
+    "fa": "به‌روزرسانی وضعیت این پروژه امکان‌پذیر نیست. لطفاً دوباره امتحان کنید."
   },
   {
     "id": "project_roles_matrix_title",

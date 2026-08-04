@@ -8336,8 +8336,8 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date.",
-    "ar": "يعرض أولاً المشاريع المفضلة الشخصية، ثم المشاريع المميزة، متبوعة بمشاريع أخرى مرتبة حسب تاريخ آخر تعديل."
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date. Other obsolete projects are shown last.",
+    "ar": "يعرض أولاً المشاريع المفضلة الشخصية، ثم المشاريع المميزة، تليها المشاريع الأخرى مرتبة حسب تاريخ آخر تعديل. أما المشاريع القديمة فتُعرض في النهاية."
   },
   {
     "id": "project_list_sort_updated_desc",
@@ -8628,6 +8628,26 @@
     "id": "project_featured_error",
     "en": "Could not update featured status. Please try again.",
     "ar": "تعذر تحديث حالة العرض المميز. يرجى المحاولة مرة أخرى."
+  },
+  {
+    "id": "project_legacy",
+    "en": "Obsolete project",
+    "ar": "مشروع قديم"
+  },
+  {
+    "id": "project_legacy_add",
+    "en": "Mark project as obsolete",
+    "ar": "ضع علامة على المشروع باعتباره قديماً"
+  },
+  {
+    "id": "project_legacy_remove",
+    "en": "Remove obsolete status",
+    "ar": "إزالة الحالة القديمة"
+  },
+  {
+    "id": "project_legacy_error",
+    "en": "Could not update this project status. Please try again.",
+    "ar": "تعذر تحديث حالة هذا المشروع. يرجى المحاولة مرة أخرى."
   },
   {
     "id": "project_roles_matrix_title",

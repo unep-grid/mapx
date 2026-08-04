@@ -8336,8 +8336,8 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date.",
-    "de": "Zuerst werden die persönlichen Favoriten angezeigt, dann die vorgestellten Projekte und anschließend die übrigen Projekte, sortiert nach dem Datum der letzten Änderung."
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date. Other obsolete projects are shown last.",
+    "de": "Zuerst werden die persönlichen Favoriten angezeigt, dann die vorgestellten Projekte und anschließend weitere Projekte, sortiert nach dem Datum der letzten Änderung. Ältere Projekte werden zuletzt angezeigt."
   },
   {
     "id": "project_list_sort_updated_desc",
@@ -8628,6 +8628,26 @@
     "id": "project_featured_error",
     "en": "Could not update featured status. Please try again.",
     "de": "Der Status „Hervorgehoben“ konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
+  },
+  {
+    "id": "project_legacy",
+    "en": "Obsolete project",
+    "de": "Veraltetes Projekt"
+  },
+  {
+    "id": "project_legacy_add",
+    "en": "Mark project as obsolete",
+    "de": "Mark-Projekt als veraltet"
+  },
+  {
+    "id": "project_legacy_remove",
+    "en": "Remove obsolete status",
+    "de": "Veralteten Status entfernen"
+  },
+  {
+    "id": "project_legacy_error",
+    "en": "Could not update this project status. Please try again.",
+    "de": "Der Projektstatus konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
   },
   {
     "id": "project_roles_matrix_title",

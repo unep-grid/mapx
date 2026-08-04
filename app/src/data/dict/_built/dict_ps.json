@@ -8336,8 +8336,8 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date.",
-    "ps": "لومړی شخصي خوښې ښیي، بیا ځانګړي پروژې، او بیا نورې پروژې چې د وروستي تعدیل نیټې سره سم ترتیب شوي."
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date. Other obsolete projects are shown last.",
+    "ps": "لومړی شخصي خوښې ښیي، بیا ځانګړي پروژې، ورپسې نورې پروژې چې د وروستي تعدیل نیټې سره سم ترتیب شوي. نورې زړې پروژې په وروستي کې ښودل شوي."
   },
   {
     "id": "project_list_sort_updated_desc",
@@ -8628,6 +8628,26 @@
     "id": "project_featured_error",
     "en": "Could not update featured status. Please try again.",
     "ps": "د مشخص حالت تازه نشو. مهرباني وکړئ بیا هڅه وکړئ."
+  },
+  {
+    "id": "project_legacy",
+    "en": "Obsolete project",
+    "ps": "زوړ پروژه"
+  },
+  {
+    "id": "project_legacy_add",
+    "en": "Mark project as obsolete",
+    "ps": "پروژه د نه منلو وړ په توګه نښه کړئ"
+  },
+  {
+    "id": "project_legacy_remove",
+    "en": "Remove obsolete status",
+    "ps": "زوړ حالت لرې کړئ"
+  },
+  {
+    "id": "project_legacy_error",
+    "en": "Could not update this project status. Please try again.",
+    "ps": "د دې پروژې حالت تازه نشو. مهرباني وکړئ بیا هڅه وکړئ."
   },
   {
     "id": "project_roles_matrix_title",

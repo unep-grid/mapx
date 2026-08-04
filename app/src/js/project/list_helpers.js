@@ -146,6 +146,9 @@ export function selectProjects(projects, state, themeLabels = {}) {
     if (aFeatured && bFeatured) {
       return a.featured_rank - b.featured_rank || compareText(a.title, b.title);
     }
+    if (a.legacy !== b.legacy) {
+      return a.legacy ? 1 : -1;
+    }
     return selectedSort(a, b);
   };
 
@@ -171,6 +174,7 @@ export function normalizeProject(project, themeLabels = {}) {
         ? Number(project.featured_rank)
         : null,
     is_favorite: project.is_favorite === true,
+    legacy: project.legacy === true,
     modified_time: project.date_modified
       ? new Date(project.date_modified).getTime()
       : 0,

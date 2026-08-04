@@ -7,6 +7,7 @@ const MAX_LOGOS_PER_REQUEST = 20;
 
 const accessibleProjectsSql = templates.getAccessibleProjects;
 const favoriteSetSql = templates.setFavoriteProject;
+const legacySetSql = templates.setLegacyProject;
 const projectLogosSql = templates.getAccessibleProjectLogos;
 
 function getSessionUserId(socket) {
@@ -76,6 +77,7 @@ export async function ioProjectList(socket, data, cb) {
   try {
     data.projects = await getAccessibleProjects(socket, data.language);
     data.can_curate_featured = isRoot(socket);
+    data.can_curate_legacy = isRoot(socket);
     data.success = true;
   } catch (error) {
     data.error = error?.message || error;
@@ -185,6 +187,37 @@ export async function ioProjectFeaturedSet(socket, data, cb) {
   }
 }
 
+export async function setLegacyProject(socket, idProject, legacy) {
+  if (!isRoot(socket)) {
+    throw new Error("project_legacy_access_denied");
+  }
+  validateProjectId(idProject);
+  if (typeof legacy !== "boolean") {
+    throw new Error("project_legacy_value_invalid");
+  }
+  const result = await pgWrite.query(legacySetSql, [idProject, legacy]);
+  if (result.rowCount !== 1) {
+    throw new Error("project_not_found");
+  }
+  return result.rows[0].legacy === true;
+}
+
+export async function ioProjectLegacySet(socket, data, cb) {
+  data = data || {};
+  try {
+    data.legacy = await setLegacyProject(
+      socket,
+      data.id_project,
+      data.legacy,
+    );
+    data.success = true;
+  } catch (error) {
+    data.error = error?.message || error;
+  } finally {
+    cb(data);
+  }
+}
+
 export async function ioProjectLogosGet(socket, data, cb) {
   data = data || {};
   try {
@@ -199,6 +232,7 @@ export async function ioProjectLogosGet(socket, data, cb) {
 
 export const projectBrowserInternals = {
   favoriteSetSql,
+  legacySetSql,
   normalizeLanguage,
   normalizeProjectIds,
   validateFeaturedRank,

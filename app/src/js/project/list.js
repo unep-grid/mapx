@@ -59,6 +59,10 @@ const UI_KEYS = [
   "project_featured_rank",
   "project_featured_save_rank",
   "project_featured_error",
+  "project_legacy",
+  "project_legacy_add",
+  "project_legacy_remove",
+  "project_legacy_error",
   "btn_join_project",
   "admin",
   "publisher",
@@ -119,6 +123,7 @@ export class ProjectListElement extends HTMLElement {
     this.labels = {};
     this.themeLabels = {};
     this.canCurateFeatured = false;
+    this.canCurateLegacy = false;
     this.pendingProjects = new Set();
     this.curatorTriggers = new Map();
     this.curatorControls = [];
@@ -449,6 +454,7 @@ export class ProjectListElement extends HTMLElement {
         .map((project) => normalizeProject(project, this.themeLabels))
         .filter((project) => project.id !== settings.project.id);
       this.canCurateFeatured = response?.can_curate_featured === true;
+      this.canCurateLegacy = response?.can_curate_legacy === true;
       this.buildTools();
       this.results.setAttribute("aria-busy", "false");
       this.renderResults();
@@ -489,9 +495,7 @@ export class ProjectListElement extends HTMLElement {
 
   buildRow(project) {
     const row = this.el("div", {
-      class: `mx-project-browser-row${
-        project.role === "public" ? " mx-project-browser-row-public" : ""
-      }`,
+      class: "mx-project-browser-row",
       dataset: { projectId: project.id, action: "open" },
       tabindex: "0",
       role: "listitem",
@@ -513,6 +517,32 @@ export class ProjectListElement extends HTMLElement {
     this.avatarElements.set(project.id, avatar);
     if (this.logos.has(project.id)) {
       this.setLogo(avatar, this.logos.get(project.id), project.title);
+    }
+    const avatarWrap = this.el("span", {
+      class: "mx-project-browser-avatar-wrap",
+    });
+    avatarWrap.appendChild(avatar);
+    if (project.role !== "public") {
+      const roleLabel = this.label(project.role);
+      avatarWrap.appendChild(
+        this.el(
+          "span",
+          {
+            class: `mx-project-role mx-project-role-${project.role}`,
+            title: roleLabel,
+            "aria-label": `${this.label("project_list_role")}: ${roleLabel}`,
+          },
+          this.el("i", {
+            class: "mx-icon mx-shield mx-project-role-shield",
+            "aria-hidden": "true",
+          }),
+          this.el(
+            "span",
+            { class: "mx-project-role-initial", "aria-hidden": "true" },
+            ROLE_INITIALS[project.role],
+          ),
+        ),
+      );
     }
 
     const text = this.el("div", { class: "mx-project-browser-text" });
@@ -551,6 +581,39 @@ export class ProjectListElement extends HTMLElement {
         ),
       );
     }
+    if (this.canCurateLegacy) {
+      const legacyLabel = this.label(
+        project.legacy ? "project_legacy_remove" : "project_legacy_add",
+      );
+      const legacy = iconButton(
+        this.el,
+        "mx-project-browser-heading-action mx-project-browser-legacy",
+        project.legacy
+          ? "mx-icon mx-archive-box-closed"
+          : "mx-icon mx-archive-box",
+        legacyLabel,
+        "legacy",
+      );
+      legacy.dataset.projectId = project.id;
+      legacy.setAttribute("aria-pressed", String(project.legacy));
+      legacy.disabled = this.pendingProjects.has(project.id);
+      heading.appendChild(legacy);
+    } else if (project.legacy) {
+      heading.appendChild(
+        this.el(
+          "span",
+          {
+            class: "mx-project-browser-legacy",
+            title: this.label("project_legacy"),
+            "aria-label": this.label("project_legacy"),
+          },
+          this.el("i", {
+            class: "mx-icon mx-archive-box-closed",
+            "aria-hidden": "true",
+          }),
+        ),
+      );
+    }
     if (settings.user.guest !== true) {
       const favoriteLabel = this.label(
         project.is_favorite
@@ -584,17 +647,6 @@ export class ProjectListElement extends HTMLElement {
       join.dataset.projectId = project.id;
       heading.appendChild(join);
     }
-    text.appendChild(heading);
-    if (project.description) {
-      text.appendChild(
-        this.el(
-          "span",
-          { class: "mx-project-browser-description" },
-          project.description,
-        ),
-      );
-    }
-    const meta = this.el("span", { class: "mx-project-browser-meta" });
     const stats = this.el("span", { class: "mx-project-browser-stats" });
     stats.append(
       this.buildStat(
@@ -608,7 +660,18 @@ export class ProjectListElement extends HTMLElement {
         "project_list_collaborators",
       ),
     );
-    meta.appendChild(stats);
+    heading.appendChild(stats);
+    text.appendChild(heading);
+    if (project.description) {
+      text.appendChild(
+        this.el(
+          "span",
+          { class: "mx-project-browser-description" },
+          project.description,
+        ),
+      );
+    }
+    const meta = this.el("span", { class: "mx-project-browser-meta" });
     if (project.org_name) {
       meta.appendChild(
         this.el(
@@ -627,7 +690,7 @@ export class ProjectListElement extends HTMLElement {
         ),
       );
     }
-    text.appendChild(meta);
+    if (meta.childElementCount > 0) text.appendChild(meta);
 
     const actions = this.el("span", { class: "mx-project-browser-actions" });
     const chevron = this.el("i", {
@@ -635,30 +698,7 @@ export class ProjectListElement extends HTMLElement {
       "aria-hidden": "true",
     });
     actions.appendChild(chevron);
-    row.append(avatar, text);
-    if (project.role !== "public") {
-      const roleLabel = this.label(project.role);
-      row.appendChild(
-        this.el(
-          "span",
-          {
-            class: `mx-project-role mx-project-role-${project.role}`,
-            title: roleLabel,
-            "aria-label": `${this.label("project_list_role")}: ${roleLabel}`,
-          },
-          this.el("i", {
-            class: "mx-icon mx-shield mx-project-role-shield",
-            "aria-hidden": "true",
-          }),
-          this.el(
-            "span",
-            { class: "mx-project-role-initial", "aria-hidden": "true" },
-            ROLE_INITIALS[project.role],
-          ),
-        ),
-      );
-    }
-    row.appendChild(actions);
+    row.append(avatarWrap, text, actions);
     return row;
   }
 
@@ -943,6 +983,41 @@ export class ProjectListElement extends HTMLElement {
     }
   }
 
+  async setLegacy(projectId) {
+    const project = this.projects.find((item) => item.id === projectId);
+    if (
+      !project ||
+      !this.canCurateLegacy ||
+      this.pendingProjects.has(projectId)
+    ) {
+      return;
+    }
+    const previous = project.legacy;
+    project.legacy = !previous;
+    this.pendingProjects.add(projectId);
+    this.renderResults();
+    let errorKey = null;
+    try {
+      const response = await ws.emitAsync(
+        "/client/project/legacy/set",
+        { id_project: projectId, legacy: project.legacy },
+        30 * 1000,
+      );
+      if (response?.error || typeof response?.legacy !== "boolean") {
+        throw new Error(response?.error || "project_legacy_response_invalid");
+      }
+      project.legacy = response.legacy;
+    } catch (error) {
+      console.error("Project legacy error", error);
+      project.legacy = previous;
+      errorKey = "project_legacy_error";
+    } finally {
+      this.pendingProjects.delete(projectId);
+      this.renderResults();
+      if (errorKey) this.showError(errorKey);
+    }
+  }
+
   showError(key) {
     this.message.hidden = false;
     this.message.textContent = this.label(key);
@@ -1062,6 +1137,9 @@ export class ProjectListElement extends HTMLElement {
         return;
       case "favorite":
         await this.setFavorite(projectId);
+        return;
+      case "legacy":
+        await this.setLegacy(projectId);
         return;
       case "curator-menu":
         if (

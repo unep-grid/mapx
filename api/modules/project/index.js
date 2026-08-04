@@ -8,8 +8,10 @@ export {
   ioProjectLogosGet,
   ioProjectFavoriteSet,
   ioProjectFeaturedSet,
+  ioProjectLegacySet,
   getAccessibleProjects,
   getAccessibleProjectLogos,
   setFavoriteProject,
   setFeaturedProject,
+  setLegacyProject,
 } from "./browser.js";

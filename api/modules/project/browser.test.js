@@ -14,6 +14,7 @@ vi.mock("#mapx/template", () => ({
   templates: {
     getAccessibleProjectLogos: "SELECT project logos",
     getAccessibleProjects: "SELECT accessible projects",
+    setLegacyProject: "UPDATE legacy project",
     setFavoriteProject:
       "UPDATE favorite projects WITH jsonb_set_nested SELECT DISTINCT ON",
   },
@@ -29,6 +30,7 @@ import {
   ioProjectList,
   setFavoriteProject,
   setFeaturedProject,
+  setLegacyProject,
 } from "./browser.js";
 
 const projectId = "MX-T6R-PJF-2DF-3OI-LBF";
@@ -62,6 +64,7 @@ describe("project browser API", () => {
         {
           id: projectId,
           featured_rank: 1000,
+          legacy: false,
           is_favorite: true,
         },
       ],
@@ -69,6 +72,7 @@ describe("project browser API", () => {
     expect(await getAccessibleProjects(socket(), "fr")).toEqual([
       expect.objectContaining({
         featured_rank: 1000,
+        legacy: false,
         is_favorite: true,
       }),
     ]);
@@ -79,6 +83,7 @@ describe("project browser API", () => {
       ioProjectList(socket({ root: true }), {}, resolve),
     );
     expect(result.can_curate_featured).toBe(true);
+    expect(result.can_curate_legacy).toBe(true);
   });
 
   it("rejects guest favorites and never accepts a browser user id", async () => {
@@ -162,5 +167,36 @@ describe("project browser API", () => {
     await expect(
       setFeaturedProject(socket({ root: true }), projectId, true, 1.5),
     ).rejects.toThrow("project_featured_rank_invalid");
+  });
+
+  it("allows only root users to update the legacy flag", async () => {
+    await expect(
+      setLegacyProject(socket(), projectId, true),
+    ).rejects.toThrow("project_legacy_access_denied");
+    expect(writeQuery).not.toHaveBeenCalled();
+
+    writeQuery.mockResolvedValueOnce({
+      rowCount: 1,
+      rows: [{ legacy: true }],
+    });
+    await expect(
+      setLegacyProject(socket({ root: true }), projectId, true),
+    ).resolves.toBe(true);
+    expect(writeQuery).toHaveBeenCalledWith("UPDATE legacy project", [
+      projectId,
+      true,
+    ]);
+  });
+
+  it("validates legacy values and reports missing active projects", async () => {
+    await expect(
+      setLegacyProject(socket({ root: true }), projectId, "true"),
+    ).rejects.toThrow("project_legacy_value_invalid");
+    expect(writeQuery).not.toHaveBeenCalled();
+
+    writeQuery.mockResolvedValueOnce({ rowCount: 0, rows: [] });
+    await expect(
+      setLegacyProject(socket({ root: true }), projectId, false),
+    ).rejects.toThrow("project_not_found");
   });
 });

@@ -30,6 +30,7 @@ SELECT
   COALESCE(p.org_name, '') AS org_name,
   COALESCE(p.themes, '{}'::text[]) AS themes,
   p.featured_rank,
+  p.legacy,
   (f.id IS NOT NULL) AS is_favorite,
   CASE
     WHEN p.user_is_admin THEN 'admin'

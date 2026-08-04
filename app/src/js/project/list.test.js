@@ -40,6 +40,7 @@ const projects = [
     is_member: true,
     is_favorite: false,
     featured_rank: null,
+    legacy: false,
     view_count: 2,
     collaborator_count: 8,
     date_modified: "2026-06-01T00:00:00Z",
@@ -53,6 +54,7 @@ const projects = [
     is_member: false,
     is_favorite: false,
     featured_rank: 1000,
+    legacy: true,
     allow_join: true,
     view_count: 20,
     collaborator_count: 2,
@@ -115,6 +117,11 @@ describe("mx-project-list", () => {
     expect(adminRole.querySelector(".mx-project-role-initial").innerText).toBe(
       "A",
     );
+    expect(adminRole.parentElement).toBe(
+      element.rows.querySelector(
+        `[data-project-id="${projects[0].id}"] .mx-project-browser-avatar-wrap`,
+      ),
+    );
     expect(
       element.rows.querySelector(
         `[data-project-id="${projects[1].id}"] .mx-project-role`,
@@ -137,6 +144,7 @@ describe("mx-project-list", () => {
     const element = await mount({
       projects,
       can_curate_featured: true,
+      can_curate_legacy: true,
     });
     expect(
       element.rows.querySelectorAll("[data-action='favorite']"),
@@ -144,6 +152,24 @@ describe("mx-project-list", () => {
     expect(
       element.rows.querySelectorAll("[data-action='curator-menu']"),
     ).toHaveLength(2);
+    expect(
+      element.rows.querySelectorAll("[data-action='legacy']"),
+    ).toHaveLength(2);
+    expect(
+      element.rows.querySelector(
+        `[data-project-id="${projects[1].id}"] [data-action="legacy"]`,
+      ).getAttribute("aria-pressed"),
+    ).toBe("true");
+    expect(
+      element.rows.querySelector(
+        `[data-project-id="${projects[0].id}"] [data-action="legacy"] .mx-archive-box`,
+      ),
+    ).not.toBeNull();
+    expect(
+      element.rows.querySelector(
+        `[data-project-id="${projects[1].id}"] [data-action="legacy"] .mx-archive-box-closed`,
+      ),
+    ).not.toBeNull();
     expect(element.rows.querySelector(".mx-project-browser-menu-button"))
       .toBeNull();
     expect(
@@ -187,24 +213,31 @@ describe("mx-project-list", () => {
     const favoriteIndex = heading.findIndex((item) =>
       item.classList.contains("mx-project-browser-favorite"),
     );
+    const statsIndex = heading.findIndex((item) =>
+      item.classList.contains("mx-project-browser-stats"),
+    );
     expect(titleIndex).toBe(0);
     expect(featuredIndex).toBeGreaterThan(titleIndex);
     expect(featuredIndex).toBeLessThan(favoriteIndex);
+    expect(statsIndex).toBe(heading.length - 1);
+    expect(statsIndex).toBeGreaterThan(favoriteIndex);
   });
 
-  it("renders statistics in the content metadata footer", async () => {
+  it("renders statistics at the end of the title line", async () => {
     const element = await mount();
     const row = element.rows.querySelector(
       `[data-project-id="${projects[0].id}"]`,
     );
     const text = row.querySelector(".mx-project-browser-text");
+    const heading = text.querySelector(".mx-project-browser-heading");
     const meta = text.querySelector(".mx-project-browser-meta");
-    const stats = meta.querySelector(".mx-project-browser-stats");
+    const stats = heading.querySelector(".mx-project-browser-stats");
 
     expect(stats).not.toBeNull();
-    expect(stats.parentElement).toBe(meta);
+    expect(stats.parentElement).toBe(heading);
+    expect(heading.lastElementChild).toBe(stats);
     expect([...row.children]).not.toContain(stats);
-    expect(meta.firstElementChild).toBe(stats);
+    expect(meta.querySelector(".mx-project-browser-stats")).toBeNull();
   });
 
   it("keeps the compact Join action outside responsive-hidden statistics", async () => {
@@ -284,6 +317,11 @@ describe("mx-project-list", () => {
     expect(
       featuredRow.querySelector(
         ".mx-project-browser-featured:not([data-action]) .fa-bookmark",
+      ),
+    ).not.toBeNull();
+    expect(
+      featuredRow.querySelector(
+        ".mx-project-browser-legacy:not([data-action]) .mx-archive-box-closed",
       ),
     ).not.toBeNull();
     expect(
@@ -380,6 +418,48 @@ describe("mx-project-list", () => {
       element.projects.find((project) => project.id === id).is_favorite,
     ).toBe(false);
     expect(element.message.textContent).toBe("project_favorite_error");
+  });
+
+  it("lets root users toggle obsolete status and refreshes the indicator", async () => {
+    const element = await mount({
+      projects,
+      can_curate_featured: true,
+      can_curate_legacy: true,
+    });
+    emitAsync.mockResolvedValueOnce({ legacy: true });
+
+    await element.setLegacy(projects[0].id);
+
+    expect(emitAsync).toHaveBeenCalledWith(
+      "/client/project/legacy/set",
+      { id_project: projects[0].id, legacy: true },
+      expect.any(Number),
+    );
+    expect(
+      element.rows.querySelector(
+        `[data-project-id="${projects[0].id}"] [data-action="legacy"]`,
+      ).getAttribute("aria-pressed"),
+    ).toBe("true");
+    expect(
+      element.rows.querySelector(
+        `[data-project-id="${projects[0].id}"] [data-action="legacy"] .mx-archive-box-closed`,
+      ),
+    ).not.toBeNull();
+  });
+
+  it("rolls an optimistic obsolete status change back on API errors", async () => {
+    const element = await mount({
+      projects,
+      can_curate_legacy: true,
+    });
+    emitAsync.mockResolvedValueOnce({ error: "failed" });
+
+    await element.setLegacy(projects[0].id);
+
+    expect(
+      element.projects.find((project) => project.id === projects[0].id).legacy,
+    ).toBe(false);
+    expect(element.message.textContent).toBe("project_legacy_error");
   });
 
   it("restores focus when Escape closes a curator menu", async () => {

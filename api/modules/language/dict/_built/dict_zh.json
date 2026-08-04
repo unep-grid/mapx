@@ -8336,8 +8336,8 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date.",
-    "zh": "首先显示个人收藏，然后显示精选项目，最后显示按最后修改日期排序的其他项目。"
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date. Other obsolete projects are shown last.",
+    "zh": "首先显示个人收藏，然后是精选项目，接着是其他项目（按最后修改日期排序）。其他已过时的项目显示在最后。"
   },
   {
     "id": "project_list_sort_updated_desc",
@@ -8628,6 +8628,26 @@
     "id": "project_featured_error",
     "en": "Could not update featured status. Please try again.",
     "zh": "无法更新精选状态。请重试。"
+  },
+  {
+    "id": "project_legacy",
+    "en": "Obsolete project",
+    "zh": "过时的项目"
+  },
+  {
+    "id": "project_legacy_add",
+    "en": "Mark project as obsolete",
+    "zh": "将项目标记为已过时"
+  },
+  {
+    "id": "project_legacy_remove",
+    "en": "Remove obsolete status",
+    "zh": "移除过时状态"
+  },
+  {
+    "id": "project_legacy_error",
+    "en": "Could not update this project status. Please try again.",
+    "zh": "无法更新此项目状态。请重试。"
   },
   {
     "id": "project_roles_matrix_title",

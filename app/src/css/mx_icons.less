@@ -2,6 +2,8 @@
 
 // Shared base properties for all map-control icons
 .mx-icon.mx-north-arrow,
+.mx-icon.mx-archive-box,
+.mx-icon.mx-archive-box-closed,
 .mx-icon.mx-mountain,
 .mx-icon.mx-shield,
 .mx-icon.mx-view,
@@ -12,6 +14,12 @@
 }
 
 // Per-icon mask URLs
+.mx-archive-box:before {
+  .mx-icon-mask-url(url("../svg/icons/archive_box.svg"));
+}
+.mx-archive-box-closed:before {
+  .mx-icon-mask-url(url("../svg/icons/archive_box_closed.svg"));
+}
 .mx-north-arrow:before {
   .mx-icon-mask-url(url("../svg/icons/arrow-north.svg"));
 }

@@ -107,6 +107,7 @@ describe("project list helpers", () => {
         title: "Zulu favorite",
         is_favorite: true,
         featured_rank: 5,
+        legacy: true,
       }),
       normalizeProject({
         id: "MX-DDD44-EEE55-FFF66",
@@ -117,6 +118,7 @@ describe("project list helpers", () => {
         id: "MX-GGG77-HHH88-III99",
         title: "Zulu featured",
         featured_rank: 1000,
+        legacy: true,
       }),
       normalizeProject({
         id: "MX-JJJ11-KKK22-LLL33",
@@ -133,6 +135,12 @@ describe("project list helpers", () => {
         title: "Regular newer",
         date_modified: "2026-01-01T00:00:00Z",
       }),
+      normalizeProject({
+        id: "MX-SSS11-TTT22-UUU33",
+        title: "Obsolete newest",
+        legacy: true,
+        date_modified: "2030-01-01T00:00:00Z",
+      }),
     ];
 
     expect(
@@ -144,6 +152,7 @@ describe("project list helpers", () => {
       "Zulu featured",
       "Regular newer",
       "Regular older",
+      "Obsolete newest",
     ]);
   });
 
@@ -162,6 +171,7 @@ describe("project list helpers", () => {
       normalizeProject({
         id: "MX-ALPHA-REGULAR",
         title: "Alpha regular",
+        legacy: true,
       }),
     ];
 
@@ -210,6 +220,7 @@ describe("project list helpers", () => {
       themes: [],
       view_count: 0,
       collaborator_count: 0,
+      legacy: false,
     });
   });
 });
