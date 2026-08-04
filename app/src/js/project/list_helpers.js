@@ -72,8 +72,16 @@ const NATURAL_SORT_DIRECTION = {
   name: "asc",
   views: "desc",
   collaborators: "desc",
-  updated: "desc",
+  created: "desc",
 };
+
+function compareTime(a, b, direction) {
+  const aIsValid = Number.isFinite(a);
+  const bIsValid = Number.isFinite(b);
+  if (aIsValid !== bIsValid) return aIsValid ? -1 : 1;
+  if (!aIsValid) return 0;
+  return (a - b) * direction;
+}
 
 /**
  * Return the next two-state sort for a column. A newly selected column uses
@@ -112,8 +120,10 @@ export function selectProjects(projects, state, themeLabels = {}) {
   const selectedSort = (a, b) => {
     const byTitle = () => compareText(a.title, b.title);
     switch (state.sort) {
-      case "updated_asc":
-        return (a.modified_time || 0) - (b.modified_time || 0) || byTitle();
+      case "created_desc":
+        return compareTime(a.created_time, b.created_time, -1) || byTitle();
+      case "created_asc":
+        return compareTime(a.created_time, b.created_time, 1) || byTitle();
       case "name_asc":
         return compareText(a.title, b.title);
       case "name_desc":
@@ -127,7 +137,7 @@ export function selectProjects(projects, state, themeLabels = {}) {
       case "collaborators_asc":
         return a.collaborator_count - b.collaborator_count || byTitle();
       default:
-        return (b.modified_time || 0) - (a.modified_time || 0) || byTitle();
+        return byTitle();
     }
   };
 
@@ -149,7 +159,7 @@ export function selectProjects(projects, state, themeLabels = {}) {
     if (a.legacy !== b.legacy) {
       return a.legacy ? 1 : -1;
     }
-    return selectedSort(a, b);
+    return compareText(a.title, b.title);
   };
 
   return filtered.sort(state.sort === "default" ? defaultSort : selectedSort);
@@ -175,9 +185,9 @@ export function normalizeProject(project, themeLabels = {}) {
         : null,
     is_favorite: project.is_favorite === true,
     legacy: project.legacy === true,
-    modified_time: project.date_modified
-      ? new Date(project.date_modified).getTime()
-      : 0,
+    created_time: project.date_created
+      ? new Date(project.date_created).getTime()
+      : null,
     search_text: cleanProjectText(
       [project.title, project.description, project.org_name, themeText].join(
         " ",

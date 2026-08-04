@@ -8336,28 +8336,28 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date. Other obsolete projects are shown last.",
-    "fa": "ابتدا موارد دلخواه شخصی، سپس پروژه‌های ویژه و در ادامه سایر پروژه‌ها بر اساس آخرین تاریخ اصلاح نمایش داده می‌شوند. سایر پروژه‌های منسوخ شده در آخر نمایش داده می‌شوند."
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other obsolete projects are shown last.",
+    "fa": "ابتدا پروژه‌های مورد علاقه شخصی، سپس پروژه‌های ویژه و به دنبال آن سایر پروژه‌ها به ترتیب حروف الفبا نمایش داده می‌شوند. سایر پروژه‌های منسوخ شده در آخر نمایش داده می‌شوند."
   },
   {
-    "id": "project_list_sort_updated_desc",
-    "en": "Last modified: newest first",
-    "fa": "آخرین تغییر: جدیدترین ابتدا"
+    "id": "project_list_sort_created_desc",
+    "en": "Creation date: newest first",
+    "fa": "تاریخ ایجاد: جدیدترین‌ها اول"
   },
   {
-    "id": "project_list_sort_updated_desc_desc",
-    "en": "Sorts all projects by last modification date, newest first.",
-    "fa": "همه پروژه‌ها را بر اساس آخرین تاریخ اصلاح، به طوری که جدیدترین‌ها اول باشند، مرتب می‌کند."
+    "id": "project_list_sort_created_desc_desc",
+    "en": "Sorts all projects by creation date, newest first.",
+    "fa": "همه پروژه‌ها را بر اساس تاریخ ایجاد، جدیدترین‌ها اول، مرتب می‌کند."
   },
   {
-    "id": "project_list_sort_updated_asc",
-    "en": "Last modified: oldest first",
-    "fa": "آخرین تغییر: قدیمی‌ترین‌ها اول"
+    "id": "project_list_sort_created_asc",
+    "en": "Creation date: oldest first",
+    "fa": "تاریخ ایجاد: قدیمی‌ترین، اولین"
   },
   {
-    "id": "project_list_sort_updated_asc_desc",
-    "en": "Sorts all projects by last modification date, oldest first.",
-    "fa": "همه پروژه‌ها را بر اساس آخرین تاریخ اصلاح، به طوری که قدیمی‌ترین ابتدا باشد، مرتب می‌کند."
+    "id": "project_list_sort_created_asc_desc",
+    "en": "Sorts all projects by creation date, oldest first.",
+    "fa": "همه پروژه‌ها را بر اساس تاریخ ایجاد، قدیمی‌ترین در ابتدا، مرتب می‌کند."
   },
   {
     "id": "project_list_sort_name_asc",

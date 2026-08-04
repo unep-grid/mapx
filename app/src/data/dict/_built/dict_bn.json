@@ -8336,28 +8336,28 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date. Other obsolete projects are shown last.",
-    "bn": "প্রথমে ব্যক্তিগত পছন্দেরগুলো, তারপর ফিচার্ড প্রজেক্টগুলো এবং সবশেষে শেষ পরিবর্তনের তারিখ অনুযায়ী অন্যান্য প্রজেক্টগুলো দেখানো হয়। অন্যান্য অপ্রচলিত প্রজেক্টগুলো সবশেষে দেখানো হয়।"
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other obsolete projects are shown last.",
+    "bn": "প্রথমে ব্যক্তিগত পছন্দেরগুলো, তারপর ফিচার্ড প্রজেক্টগুলো এবং সবশেষে অন্যান্য প্রজেক্টগুলো বর্ণানুক্রমিকভাবে দেখানো হয়। অন্যান্য অপ্রচলিত প্রজেক্টগুলো সবশেষে দেখানো হয়।"
   },
   {
-    "id": "project_list_sort_updated_desc",
-    "en": "Last modified: newest first",
-    "bn": "সর্বশেষ পরিবর্তিত: নতুনতম প্রথমে"
+    "id": "project_list_sort_created_desc",
+    "en": "Creation date: newest first",
+    "bn": "তৈরির তারিখ: নতুনতম প্রথমে"
   },
   {
-    "id": "project_list_sort_updated_desc_desc",
-    "en": "Sorts all projects by last modification date, newest first.",
-    "bn": "সমস্ত প্রজেক্টকে সর্বশেষ পরিবর্তনের তারিখ অনুসারে সাজায়, নতুনগুলো প্রথমে।"
+    "id": "project_list_sort_created_desc_desc",
+    "en": "Sorts all projects by creation date, newest first.",
+    "bn": "সমস্ত প্রজেক্ট তৈরির তারিখ অনুসারে সাজায়, নতুনগুলো প্রথমে।"
   },
   {
-    "id": "project_list_sort_updated_asc",
-    "en": "Last modified: oldest first",
-    "bn": "সর্বশেষ পরিবর্তিত: পুরোনোটি প্রথমে"
+    "id": "project_list_sort_created_asc",
+    "en": "Creation date: oldest first",
+    "bn": "সৃষ্টির তারিখ: প্রাচীনতম থেকে প্রাচীনতম"
   },
   {
-    "id": "project_list_sort_updated_asc_desc",
-    "en": "Sorts all projects by last modification date, oldest first.",
-    "bn": "সমস্ত প্রজেক্টকে সর্বশেষ পরিবর্তনের তারিখ অনুসারে সাজায়, পুরোনো থেকে নতুন।"
+    "id": "project_list_sort_created_asc_desc",
+    "en": "Sorts all projects by creation date, oldest first.",
+    "bn": "সমস্ত প্রজেক্ট তৈরির তারিখ অনুসারে সাজায়, পুরোনোটি প্রথমে।"
   },
   {
     "id": "project_list_sort_name_asc",

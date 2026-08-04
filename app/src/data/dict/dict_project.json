@@ -1483,9 +1483,9 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date. Other obsolete projects are shown last.",
-    "fr": "Affiche d’abord les favoris personnels, puis les projets mis en avant, suivis des autres projets classés par date de dernière modification. Les autres projets obsolètes sont affichés en dernier.",
-    "es": "Muestra primero los favoritos personales, luego los proyectos destacados y después los demás proyectos ordenados por fecha de última modificación. Los demás proyectos obsoletos aparecen al final.",
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other obsolete projects are shown last.",
+    "fr": "Affiche d’abord les favoris personnels, puis les projets mis en avant, suivis des autres projets par ordre alphabétique. Les autres projets obsolètes sont affichés en dernier.",
+    "es": "Muestra primero los favoritos personales, luego los proyectos destacados y después los demás proyectos en orden alfabético. Los demás proyectos obsoletos aparecen al final.",
     "ru": "",
     "zh": "",
     "ar": "",
@@ -1495,10 +1495,10 @@
     "de": ""
   },
   {
-    "id": "project_list_sort_updated_desc",
-    "en": "Last modified: newest first",
-    "fr": "Modification : plus récente d’abord",
-    "es": "Última modificación: más reciente primero",
+    "id": "project_list_sort_created_desc",
+    "en": "Creation date: newest first",
+    "fr": "Date de création : plus récente d’abord",
+    "es": "Fecha de creación: más reciente primero",
     "ru": "",
     "zh": "",
     "ar": "",
@@ -1508,10 +1508,10 @@
     "de": ""
   },
   {
-    "id": "project_list_sort_updated_desc_desc",
-    "en": "Sorts all projects by last modification date, newest first.",
-    "fr": "Trie tous les projets par date de dernière modification, du plus récent au plus ancien.",
-    "es": "Ordena todos los proyectos por fecha de última modificación, del más reciente al más antiguo.",
+    "id": "project_list_sort_created_desc_desc",
+    "en": "Sorts all projects by creation date, newest first.",
+    "fr": "Trie tous les projets par date de création, du plus récent au plus ancien.",
+    "es": "Ordena todos los proyectos por fecha de creación, del más reciente al más antiguo.",
     "ru": "",
     "zh": "",
     "ar": "",
@@ -1521,10 +1521,10 @@
     "de": ""
   },
   {
-    "id": "project_list_sort_updated_asc",
-    "en": "Last modified: oldest first",
-    "fr": "Modification : plus ancienne d’abord",
-    "es": "Última modificación: más antigua primero",
+    "id": "project_list_sort_created_asc",
+    "en": "Creation date: oldest first",
+    "fr": "Date de création : plus ancienne d’abord",
+    "es": "Fecha de creación: más antigua primero",
     "ru": "",
     "zh": "",
     "ar": "",
@@ -1534,10 +1534,10 @@
     "de": ""
   },
   {
-    "id": "project_list_sort_updated_asc_desc",
-    "en": "Sorts all projects by last modification date, oldest first.",
-    "fr": "Trie tous les projets par date de dernière modification, du plus ancien au plus récent.",
-    "es": "Ordena todos los proyectos por fecha de última modificación, del más antiguo al más reciente.",
+    "id": "project_list_sort_created_asc_desc",
+    "en": "Sorts all projects by creation date, oldest first.",
+    "fr": "Trie tous les projets par date de création, du plus ancien au plus récent.",
+    "es": "Ordena todos los proyectos por fecha de creación, del más antiguo al más reciente.",
     "ru": "",
     "zh": "",
     "ar": "",

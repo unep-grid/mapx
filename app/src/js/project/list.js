@@ -28,10 +28,10 @@ const UI_KEYS = [
   "project_list_all_themes",
   "project_list_sort_default",
   "project_list_sort_default_desc",
-  "project_list_sort_updated_desc",
-  "project_list_sort_updated_desc_desc",
-  "project_list_sort_updated_asc",
-  "project_list_sort_updated_asc_desc",
+  "project_list_sort_created_desc",
+  "project_list_sort_created_desc_desc",
+  "project_list_sort_created_asc",
+  "project_list_sort_created_asc_desc",
   "project_list_sort_name_asc",
   "project_list_sort_name_desc",
   "project_list_sort_views_desc",
@@ -87,8 +87,8 @@ const ROLE_INITIALS = {
 
 const SORT_OPTIONS = [
   ["default", "project_list_sort_default"],
-  ["updated_desc", "project_list_sort_updated_desc"],
-  ["updated_asc", "project_list_sort_updated_asc"],
+  ["created_desc", "project_list_sort_created_desc"],
+  ["created_asc", "project_list_sort_created_asc"],
   ["name_asc", "project_list_sort_name_asc"],
   ["name_desc", "project_list_sort_name_desc"],
   ["views_desc", "project_list_sort_views_desc"],
@@ -400,7 +400,7 @@ export class ProjectListElement extends HTMLElement {
 
     this.sortSelect = this.buildSelect(
       "sort",
-      "project_list_sort_updated_desc",
+      "project_list_sort_created_desc",
       SORT_OPTIONS,
       this.state.sort,
     );
@@ -706,8 +706,8 @@ export class ProjectListElement extends HTMLElement {
     if (!this.sortSelect) return;
     const descriptionKey = {
       default: "project_list_sort_default_desc",
-      updated_desc: "project_list_sort_updated_desc_desc",
-      updated_asc: "project_list_sort_updated_asc_desc",
+      created_desc: "project_list_sort_created_desc_desc",
+      created_asc: "project_list_sort_created_asc_desc",
     }[this.state.sort];
     const description = descriptionKey ? this.label(descriptionKey) : "";
     this.sortSelect.title = description;

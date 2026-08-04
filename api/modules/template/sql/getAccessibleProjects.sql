@@ -42,6 +42,7 @@ SELECT
   p.public,
   p.allow_join,
   COALESCE(length(p.logo), 0) > 0 AS has_logo,
+  p.date_created,
   p.date_modified,
   COALESCE(v.view_count, 0) AS view_count,
   (
@@ -58,4 +59,4 @@ FROM accessible p
 LEFT JOIN view_counts v ON v.project = p.id
 LEFT JOIN favorites f ON f.id = p.id
 WHERE p.public OR p.user_is_admin OR p.user_is_publisher OR p.user_is_member
-ORDER BY p.date_modified DESC NULLS LAST, title ASC
+ORDER BY title ASC

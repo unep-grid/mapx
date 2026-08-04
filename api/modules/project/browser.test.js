@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { readFile } from "node:fs/promises";
 
 const { readQuery, writeQuery, connect } = vi.hoisted(() => ({
   readQuery: vi.fn(),
@@ -84,6 +85,15 @@ describe("project browser API", () => {
     );
     expect(result.can_curate_featured).toBe(true);
     expect(result.can_curate_legacy).toBe(true);
+  });
+
+  it("returns project creation dates for browser sorting", async () => {
+    const sql = await readFile(
+      new URL("../template/sql/getAccessibleProjects.sql", import.meta.url),
+      "utf8",
+    );
+    expect(sql).toContain("p.date_created");
+    expect(sql).not.toContain("ORDER BY p.date_modified");
   });
 
   it("rejects guest favorites and never accepts a browser user id", async () => {

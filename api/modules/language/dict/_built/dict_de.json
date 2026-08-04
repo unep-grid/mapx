@@ -8336,28 +8336,28 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date. Other obsolete projects are shown last.",
-    "de": "Zuerst werden die persönlichen Favoriten angezeigt, dann die vorgestellten Projekte und anschließend weitere Projekte, sortiert nach dem Datum der letzten Änderung. Ältere Projekte werden zuletzt angezeigt."
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other obsolete projects are shown last.",
+    "de": "Zuerst werden die persönlichen Favoriten angezeigt, dann die vorgestellten Projekte und anschließend weitere Projekte in alphabetischer Reihenfolge. Ältere Projekte werden zuletzt angezeigt."
   },
   {
-    "id": "project_list_sort_updated_desc",
-    "en": "Last modified: newest first",
-    "de": "Letzte Änderung: Neueste zuerst"
+    "id": "project_list_sort_created_desc",
+    "en": "Creation date: newest first",
+    "de": "Erstellungsdatum: neueste zuerst"
   },
   {
-    "id": "project_list_sort_updated_desc_desc",
-    "en": "Sorts all projects by last modification date, newest first.",
-    "de": "Sortiert alle Projekte nach dem Datum der letzten Änderung, das neueste zuerst."
+    "id": "project_list_sort_created_desc_desc",
+    "en": "Sorts all projects by creation date, newest first.",
+    "de": "Sortiert alle Projekte nach Erstellungsdatum, das neueste zuerst."
   },
   {
-    "id": "project_list_sort_updated_asc",
-    "en": "Last modified: oldest first",
-    "de": "Letzte Änderung: Älteste zuerst"
+    "id": "project_list_sort_created_asc",
+    "en": "Creation date: oldest first",
+    "de": "Erstellungsdatum: ältestes zuerst"
   },
   {
-    "id": "project_list_sort_updated_asc_desc",
-    "en": "Sorts all projects by last modification date, oldest first.",
-    "de": "Sortiert alle Projekte nach dem Datum der letzten Änderung, das älteste zuerst."
+    "id": "project_list_sort_created_asc_desc",
+    "en": "Sorts all projects by creation date, oldest first.",
+    "de": "Sortiert alle Projekte nach Erstellungsdatum, das älteste zuerst."
   },
   {
     "id": "project_list_sort_name_asc",

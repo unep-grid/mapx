@@ -43,7 +43,7 @@ const projects = [
     legacy: false,
     view_count: 2,
     collaborator_count: 8,
-    date_modified: "2026-06-01T00:00:00Z",
+    date_created: "2026-06-01T00:00:00Z",
   },
   {
     id: "MX-DDD44-EEE55-FFF66",
@@ -58,7 +58,7 @@ const projects = [
     allow_join: true,
     view_count: 20,
     collaborator_count: 2,
-    date_modified: "2026-01-01T00:00:00Z",
+    date_created: "2026-01-01T00:00:00Z",
   },
 ];
 
@@ -135,9 +135,25 @@ describe("mx-project-list", () => {
       "project_list_sort_default_desc",
     );
     expect(element.clearButton.title).toBe("project_list_clear_desc");
-    expect([...element.sortSelect.options].map((option) => option.value)).not.toContain(
-      "theme_asc",
-    );
+    expect([...element.sortSelect.options].map((option) => option.value)).toEqual([
+      "default",
+      "created_desc",
+      "created_asc",
+      "name_asc",
+      "name_desc",
+      "views_desc",
+      "views_asc",
+      "collaborators_desc",
+      "collaborators_asc",
+    ]);
+
+    element.sortSelect.value = "created_desc";
+    element.sortSelect.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(element.sortSelect.title).toBe("project_list_sort_created_desc_desc");
+
+    element.sortSelect.value = "created_asc";
+    element.sortSelect.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(element.sortSelect.title).toBe("project_list_sort_created_asc_desc");
   });
 
   it("renders authenticated and root-only controls from server metadata", async () => {

@@ -26,7 +26,8 @@ const projects = [
       is_member: true,
       view_count: 3,
       collaborator_count: 8,
-      date_modified: "2026-06-01T00:00:00Z",
+      date_created: "2026-06-01T00:00:00Z",
+      date_modified: "2020-01-01T00:00:00Z",
     },
     themeLabels,
   ),
@@ -39,7 +40,8 @@ const projects = [
       is_member: false,
       view_count: 20,
       collaborator_count: 2,
-      date_modified: "2026-01-01T00:00:00Z",
+      date_created: "2020-01-01T00:00:00Z",
+      date_modified: "2030-01-01T00:00:00Z",
     },
     themeLabels,
   ),
@@ -77,9 +79,12 @@ describe("project list helpers", () => {
   });
 
   it("sorts by date and name", () => {
-    expect(selectProjects(projects, state({ sort: "updated_asc" }))[0].id).toBe(
+    expect(selectProjects(projects, state({ sort: "created_asc" }))[0].id).toBe(
       "MX-TWO",
     );
+    expect(
+      selectProjects(projects, state({ sort: "created_desc" }))[0].id,
+    ).toBe("MX-ONE");
     expect(selectProjects(projects, state({ sort: "name_asc" }))[0].id).toBe(
       "MX-TWO",
     );
@@ -100,7 +105,7 @@ describe("project list helpers", () => {
     ).toBe("MX-TWO");
   });
 
-  it("uses favorites, featured rank and modification date for default sorting", () => {
+  it("uses favorites, featured rank, alphabetical order and obsolete status by default", () => {
     const ordered = [
       normalizeProject({
         id: "MX-AAA11-BBB22-CCC33",
@@ -127,19 +132,25 @@ describe("project list helpers", () => {
       }),
       normalizeProject({
         id: "MX-MMM44-NNN55-OOO66",
-        title: "Regular older",
-        date_modified: "2020-01-01T00:00:00Z",
+        title: "Zulu regular",
+        date_created: "2020-01-01T00:00:00Z",
       }),
       normalizeProject({
         id: "MX-PPP77-QQQ88-RRR99",
-        title: "Regular newer",
-        date_modified: "2026-01-01T00:00:00Z",
+        title: "Alpha regular",
+        date_created: "2026-01-01T00:00:00Z",
       }),
       normalizeProject({
         id: "MX-SSS11-TTT22-UUU33",
-        title: "Obsolete newest",
+        title: "Zulu obsolete",
         legacy: true,
-        date_modified: "2030-01-01T00:00:00Z",
+        date_created: "2030-01-01T00:00:00Z",
+      }),
+      normalizeProject({
+        id: "MX-VVV44-WWW55-XXX66",
+        title: "Alpha obsolete",
+        legacy: true,
+        date_created: "2021-01-01T00:00:00Z",
       }),
     ];
 
@@ -150,10 +161,33 @@ describe("project list helpers", () => {
       "Zulu favorite",
       "Alpha featured",
       "Zulu featured",
-      "Regular newer",
-      "Regular older",
-      "Obsolete newest",
+      "Alpha regular",
+      "Zulu regular",
+      "Alpha obsolete",
+      "Zulu obsolete",
     ]);
+  });
+
+  it("places projects with missing or invalid creation dates last", () => {
+    const dated = normalizeProject({
+      id: "MX-DATED",
+      title: "Dated",
+      date_created: "2026-01-01T00:00:00Z",
+    });
+    const missing = normalizeProject({ id: "MX-MISSING", title: "Missing" });
+    const invalid = normalizeProject({
+      id: "MX-INVALID",
+      title: "Invalid",
+      date_created: "not-a-date",
+    });
+
+    for (const sort of ["created_asc", "created_desc"]) {
+      expect(
+        selectProjects([missing, invalid, dated], state({ sort })).map(
+          (project) => project.id,
+        ),
+      ).toEqual(["MX-DATED", "MX-INVALID", "MX-MISSING"]);
+    }
   });
 
   it("uses an explicit sort globally instead of pinning favorites and featured projects", () => {
@@ -205,7 +239,9 @@ describe("project list helpers", () => {
   });
 
   it("uses a natural first direction then toggles the active column", () => {
-    expect(nextProjectSort("updated_desc", "name")).toBe("name_asc");
+    expect(nextProjectSort("created_desc", "name")).toBe("name_asc");
+    expect(nextProjectSort("name_asc", "created")).toBe("created_desc");
+    expect(nextProjectSort("created_desc", "created")).toBe("created_asc");
     expect(nextProjectSort("name_asc", "name")).toBe("name_desc");
     expect(nextProjectSort("name_desc", "views")).toBe("views_desc");
     expect(nextProjectSort("views_desc", "views")).toBe("views_asc");
@@ -221,6 +257,7 @@ describe("project list helpers", () => {
       view_count: 0,
       collaborator_count: 0,
       legacy: false,
+      created_time: null,
     });
   });
 });

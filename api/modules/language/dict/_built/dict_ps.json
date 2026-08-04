@@ -8336,28 +8336,28 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects ordered by last modification date. Other obsolete projects are shown last.",
-    "ps": "لومړی شخصي خوښې ښیي، بیا ځانګړي پروژې، ورپسې نورې پروژې چې د وروستي تعدیل نیټې سره سم ترتیب شوي. نورې زړې پروژې په وروستي کې ښودل شوي."
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other obsolete projects are shown last.",
+    "ps": "لومړی شخصي خوښې ښیي، بیا ځانګړي پروژې، ورپسې نورې پروژې د الفبا په ترتیب سره. نورې زړې پروژې په وروستي کې ښودل شوي دي."
   },
   {
-    "id": "project_list_sort_updated_desc",
-    "en": "Last modified: newest first",
-    "ps": "وروستی بدلون: لومړی نوی"
+    "id": "project_list_sort_created_desc",
+    "en": "Creation date: newest first",
+    "ps": "د جوړولو نیټه: لومړی نوی"
   },
   {
-    "id": "project_list_sort_updated_desc_desc",
-    "en": "Sorts all projects by last modification date, newest first.",
-    "ps": "ټولې پروژې د وروستي تعدیل نیټې له مخې ترتیبوي، لومړی نوی."
+    "id": "project_list_sort_created_desc_desc",
+    "en": "Sorts all projects by creation date, newest first.",
+    "ps": "ټولې پروژې د جوړولو نیټې له مخې ترتیبوي، لومړی نوې."
   },
   {
-    "id": "project_list_sort_updated_asc",
-    "en": "Last modified: oldest first",
-    "ps": "وروستی بدلون: لومړی زوړ"
+    "id": "project_list_sort_created_asc",
+    "en": "Creation date: oldest first",
+    "ps": "د جوړولو نیټه: تر ټولو زوړ لومړی"
   },
   {
-    "id": "project_list_sort_updated_asc_desc",
-    "en": "Sorts all projects by last modification date, oldest first.",
-    "ps": "ټولې پروژې د وروستي تعدیل نیټې له مخې ترتیبوي، لومړی زوړ."
+    "id": "project_list_sort_created_asc_desc",
+    "en": "Sorts all projects by creation date, oldest first.",
+    "ps": "ټولې پروژې د جوړولو نیټې له مخې ترتیبوي، لومړی زوړ."
   },
   {
     "id": "project_list_sort_name_asc",
