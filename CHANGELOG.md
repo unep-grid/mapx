@@ -1,3 +1,15 @@
+  - [1.14.1-alpha.6](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.6) 
+
+    - fix(project-browser): hide project scopes for guests
+    - fix(project-browser): sort projects by creation date
+    - feat(project-browser): add obsolete project status
+    - fix(project-browser): simplify filters and sorting
+    - chore: update submodule
+    - fix: globe mode support from sharing tool
+    - fix: globe mode support from sharing tool
+    - fix(map): restore gradient behind transparent canvas
+
+
   - [1.14.1-alpha.5](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.5) 
 
     - feat(source): progressively load picker results
