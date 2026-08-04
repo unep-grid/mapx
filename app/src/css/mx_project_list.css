@@ -86,7 +86,8 @@
 }
 
 .mx-project-browser-tools-popover[hidden],
-.mx-project-browser-curator-popover[hidden] {
+.mx-project-browser-curator-popover[hidden],
+.mx-project-browser-scopes[hidden] {
   display: none;
 }
 
