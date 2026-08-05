@@ -7,6 +7,7 @@
  * - "surface-wind" (vector, particles)
  * - "wave-stokes-drift" (vector, particles)
  * - "phytoplankton-chlorophyll" (scalar, depth)
+ * - "sea-surface-temperature-anomaly" (scalar, fixed color range)
  */
 function handler() {
   const { moduleLoad, getViewLegend } = mx.helpers;

@@ -226,6 +226,37 @@
     color: var(--mx_ui_text_faded);
   }
 
+  .arco--color_domain_row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+
+    label {
+      width: auto;
+    }
+  }
+
+  .arco--color_domain_controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+  }
+
+  .arco--color_domain_input {
+    min-width: 0;
+    font-variant-numeric: tabular-nums;
+
+    &[aria-invalid="true"] {
+      border-color: var(--mx_ui_message_danger);
+    }
+  }
+
+  .arco--color_domain_separator {
+    color: var(--mx_ui_text_faded);
+  }
+
   .arco--palette_dropdown {
     position: relative;
     flex: 1;

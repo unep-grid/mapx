@@ -6,6 +6,11 @@ import { maplibregl, settings as mxSettings } from "../../mx";
 import { moduleLoad } from "../../modules_loader_async";
 import { setClickHandler, debounce } from "../../mx_helper_misc";
 import { ArcoChart } from "./chart.js";
+import {
+  ArcoColorDomainControl,
+  isColorDomainEligible,
+  resolveInitialColorDomain,
+} from "./color_domain_control.js";
 import { createPaletteDropdown } from "./palette_dropdown.js";
 import { formatVerticalAxisLabel, orderVerticalValues } from "./vertical.js";
 import "../../search/style_flatpickr.less";
@@ -48,6 +53,7 @@ export class ArcoMapLegend {
       this._meta = meta;
       this._setLoading(false);
       this.renderLegend();
+      this._syncColorDomainControl();
     };
     this._on_error = (error) => {
       this._setLoading(false);
@@ -126,6 +132,7 @@ export class ArcoMapLegend {
     this._z?.off("error", this._on_error);
     this._z?.destroy();
     this._chart?.destroy();
+    this._colorDomainControl?.destroy();
     this._paletteDropdown?.destroy();
     this._marker?.remove();
     this._marker = null;
@@ -448,11 +455,17 @@ export class ArcoMapLegend {
    * Settings
    */
   updateSettings(settings) {
-    this._syncSettings(settings);
     this._z.updateSettings(settings);
-    const legendChanged = "palette" in settings || "logScale" in settings;
+    this._syncSettings(settings);
+    const legendChanged =
+      "palette" in settings ||
+      "logScale" in settings ||
+      "colorDomain" in settings;
     if (legendChanged) {
       this.renderLegend();
+    }
+    if ("colorDomain" in settings) {
+      this._syncColorDomainControl();
     }
   }
 
@@ -821,13 +834,15 @@ export class ArcoMapLegend {
     const particles = defaults.particles || {};
     const settings = this._opt.settings || {};
     const isVector = this.isVector();
-    const renderMode = settings.renderMode ?? defaults.renderMode ?? "particles";
+    const renderMode =
+      settings.renderMode ?? defaults.renderMode ?? "particles";
 
     this._settings = {
       palette: settings.palette ?? defaults.palette,
       opacity: settings.opacity ?? raster.opacity ?? 1,
       vibrance: settings.vibrance ?? raster.vibrance ?? 0,
       logScale: settings.logScale ?? raster.logScale ?? false,
+      colorDomain: resolveInitialColorDomain(settings, raster),
       particleDensity: settings.particleDensity ?? particles.density ?? 0.01,
       speed: settings.speed ?? particles.speed ?? 1,
       fade: settings.fade ?? particles.fade ?? 0.7,
@@ -867,6 +882,22 @@ export class ArcoMapLegend {
         },
       }),
     ];
+
+    this._colorDomainControl?.destroy();
+    this._colorDomainControl = null;
+    if (
+      isColorDomainEligible({
+        kind: this._layer_def.kind,
+        backend: this._z.getBackend(),
+      })
+    ) {
+      this._colorDomainControl = new ArcoColorDomainControl({
+        document: this._opt.elInputs.ownerDocument,
+        onChange: (colorDomain) => this.updateSettings({ colorDomain }),
+      });
+      this._syncColorDomainControl();
+      rows.push(this._colorDomainControl.elRoot);
+    }
 
     if (isVector) {
       rows.push(
@@ -918,6 +949,22 @@ export class ArcoMapLegend {
 
     this._elSettings = el("div", { class: "arco--settings" }, rows);
     return this._elSettings;
+  }
+
+  _syncColorDomainControl() {
+    if (!this._colorDomainControl || !this._settings) {
+      return;
+    }
+    const min = this._meta?.min;
+    const max = this._meta?.max;
+    const frameDomain =
+      Number.isFinite(min) && Number.isFinite(max) && min <= max
+        ? [min, max]
+        : null;
+    this._colorDomainControl.sync({
+      colorDomain: this._settings.colorDomain,
+      frameDomain,
+    });
   }
 
   _buildPaletteRow(defaults) {
