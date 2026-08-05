@@ -2,6 +2,7 @@ import { Zartigl } from "@fxi/zartigl";
 import { catalog, getCatalogLayer, formatVertical } from "@fxi/zartigl/catalog";
 import flatpickr from "flatpickr";
 import { el } from "../../el_mapx";
+import { ElementCreator } from "../../el/src/index.js";
 import { maplibregl, settings as mxSettings } from "../../mx";
 import { moduleLoad } from "../../modules_loader_async";
 import { setClickHandler, debounce } from "../../mx_helper_misc";
@@ -48,6 +49,7 @@ export class ArcoMapLegend {
     this._chart_mode = "time";
     this._point = null;
     this._id_query = 0;
+    this._status = null;
     this._on_loading = () => this._setLoading(true);
     this._on_loaded = (meta) => {
       this._meta = meta;
@@ -58,6 +60,10 @@ export class ArcoMapLegend {
     this._on_error = (error) => {
       this._setLoading(false);
       console.warn("ArcoMapLegend:", error);
+    };
+    this._on_status = (status) => {
+      this._status = status;
+      this._renderStatus();
     };
     this._on_pick = this._handlePickClick.bind(this);
     this._update_chart_debounced = debounce(() => this.updateChart(), 350);
@@ -97,6 +103,7 @@ export class ArcoMapLegend {
     this._z.on("loading", this._on_loading);
     this._z.on("loaded", this._on_loaded);
     this._z.on("error", this._on_error);
+    this._z.on("status", this._on_status);
 
     await this._z.setLayer(this._opt.layer);
 
@@ -130,6 +137,7 @@ export class ArcoMapLegend {
     this._z?.off("loading", this._on_loading);
     this._z?.off("loaded", this._on_loaded);
     this._z?.off("error", this._on_error);
+    this._z?.off("status", this._on_status);
     this._z?.destroy();
     this._chart?.destroy();
     this._colorDomainControl?.destroy();
@@ -487,37 +495,42 @@ export class ArcoMapLegend {
       return;
     }
     const legend = this._z.getLegend();
-    elLegend.innerHTML = "";
+    const { el } = new ElementCreator({ document: elLegend.ownerDocument });
+    let content = null;
 
-    if (legend.type === "image") {
-      elLegend.appendChild(
-        el("img", { src: legend.url, alt: this._layer_def.label }),
-      );
+    if (legend.type === "image" && legend.url) {
+      content = el("img", {
+        src: legend.url,
+        alt: this._layer_def.label,
+      });
+    } else if (legend.type === "gradient") {
+      const palette = this._z
+        .getPalettes()
+        .find((candidate) => candidate.id === legend.palette);
+      const colors = palette?.colors;
+      if (!colors?.length) {
+        return;
+      }
+      const elBar = el("div", {
+        class: "arco--legend_bar",
+        style: {
+          background: `linear-gradient(to right, ${colors.join(", ")})`,
+        },
+      });
+      const format = (value) =>
+        Number.isFinite(value) ? Number(value).toPrecision(3) : "";
+      const elMeta = el("div", { class: "arco--legend_meta" }, [
+        el("span", format(legend.min)),
+        el("span", legend.unit || ""),
+        el("span", format(legend.max)),
+      ]);
+      content = el("div", { class: "arco--legend" }, [elBar, elMeta]);
+    }
+
+    if (!content) {
       return;
     }
-    if (legend.type !== "gradient") {
-      return;
-    }
-    const palette = this._z
-      .getPalettes()
-      .find((candidate) => candidate.id === legend.palette);
-    const colors = palette?.colors || [];
-    const elBar = el("div", {
-      class: "arco--legend_bar",
-      style: {
-        background: `linear-gradient(to right, ${colors.join(", ")})`,
-      },
-    });
-    const format = (value) =>
-      isFinite(value) ? Number(value).toPrecision(3) : "";
-    const elMeta = el("div", { class: "arco--legend_meta" }, [
-      el("span", format(legend.min)),
-      el("span", legend.unit || ""),
-      el("span", format(legend.max)),
-    ]);
-    elLegend.appendChild(
-      el("div", { class: "arco--legend" }, [elBar, elMeta]),
-    );
+    elLegend.replaceChildren(content);
   }
 
   /**
@@ -545,10 +558,19 @@ export class ArcoMapLegend {
       el("span", this._opt.title),
     ]);
     const elSubtitle = el(
-      "div",
+      "span",
       { class: "arco--subtitle" },
       this._opt.subtitle || this._layer_def.label,
     );
+    this.elStatusText = el("span", {
+      class: "arco--status",
+      "aria-live": "polite",
+    });
+    const elSubtitleLine = el("div", { class: "arco--subtitle_line" }, [
+      elSubtitle,
+      this.elStatusText,
+    ]);
+    this._renderStatus();
     const elButtonSettings = el(
       "button",
       {
@@ -559,9 +581,38 @@ export class ArcoMapLegend {
       el("i", { class: ["fa", "fa-gear"] }),
     );
     return el("div", { class: "arco--header" }, [
-      el("div", [elTitle, elSubtitle]),
+      el("div", [elTitle, elSubtitleLine]),
       elButtonSettings,
     ]);
+  }
+
+  _renderStatus() {
+    if (!this.elStatusText || !this._status) {
+      return;
+    }
+    const status = this._status;
+    let text = status.phase;
+    let detail = "";
+    switch (status.phase) {
+      case "metadata":
+        text = "fetching metadata";
+        break;
+      case "fetching":
+        text = `fetching ${status.completed}/${status.total}`;
+        break;
+      case "blocked":
+        detail = status.message || "";
+        break;
+      case "error":
+        detail = status.error?.message || "";
+        break;
+    }
+    this.elStatusText.textContent = ` -- ${text}`;
+    if (detail) {
+      this.elStatusText.title = detail;
+    } else {
+      this.elStatusText.removeAttribute("title");
+    }
   }
 
   isVector() {
