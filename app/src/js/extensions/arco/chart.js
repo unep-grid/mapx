@@ -132,6 +132,7 @@ export class ArcoChart {
         left: "center",
         top: "middle",
         textStyle: {
+          color: getUiColor("--mx_ui_text_faded", "#777"),
           fontSize: 12,
           fontWeight: "normal",
         },
@@ -158,8 +159,12 @@ export class ArcoChart {
 }
 
 function getAccentColor() {
-  const accent = getComputedStyle(document.body)
-    .getPropertyValue("--mx_ui_link")
+  return getUiColor("--mx_ui_link", "#12b0f8");
+}
+
+function getUiColor(property, fallback) {
+  const color = getComputedStyle(document.body)
+    .getPropertyValue(property)
     .trim();
-  return accent || "#12b0f8";
+  return color || fallback;
 }
