@@ -7136,6 +7136,34 @@
     "en": "Close the legends panel"
   },
   {
+    "id": "schema_story_lock_handling",
+    "en": "Map lock"
+  },
+  {
+    "id": "schema_story_lock_handling_desc",
+    "en": "Set whether the map can be panned/clicked while this step is active, or stays locked to the story content."
+  },
+  {
+    "id": "schema_story_lock_handling_root_desc",
+    "en": "Set whether the map can be panned/clicked globally. Steps config will be ignored, if applicable."
+  },
+  {
+    "id": "schema_story_lock_default",
+    "en": "Use the general setting"
+  },
+  {
+    "id": "schema_story_lock_root_default",
+    "en": "Use the setting defined in each steps"
+  },
+  {
+    "id": "schema_story_lock_locked",
+    "en": "Lock the map"
+  },
+  {
+    "id": "schema_story_lock_unlocked",
+    "en": "Unlock the map"
+  },
+  {
     "id": "schema_story_pos_get",
     "en": "Update using current map parameters"
   },

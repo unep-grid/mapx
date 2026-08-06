@@ -1,6 +1,7 @@
 import "./style.less";
+import "./navigation/index.js";
 import { getLabelFromObjectPath } from "./../language";
-import { el } from "./../el/src/index.js";
+import { ElementCreator, el } from "./../el/src/index.js";
 import { errorHandler } from "./../error_handler/index.js";
 import { modal } from "./../mx_helper_modal.js";
 import { settings as settingsMapx } from "./../settings";
@@ -148,7 +149,6 @@ function initClickListener() {
       if (state.ct_editor) {
         return;
       }
-      controls.panel.open();
       storyMapShakeLock();
       new FlashItem("lock");
     },
@@ -156,12 +156,26 @@ function initClickListener() {
   });
 
   /**
-   * When click, scroll to step
+   * Navigation bar events : step navigation, lock toggle, quit
    */
   listeners.addListener({
-    target: state.elBullets,
-    type: "click",
-    callback: bulletScrollTo,
+    target: state.elStoryNav,
+    type: "mx-story-nav-goto",
+    callback: (e) => storyGoTo(e.detail.to),
+    group: "story_map",
+  });
+
+  listeners.addListener({
+    target: state.elStoryNav,
+    type: "mx-story-nav-lock-toggle",
+    callback: () => storyMapLock("toggle"),
+    group: "story_map",
+  });
+
+  listeners.addListener({
+    target: state.elStoryNav,
+    type: "mx-story-nav-quit",
+    callback: storyClose,
     group: "story_map",
   });
 }
@@ -202,7 +216,7 @@ function initMouseMoveListener() {
   let idFrameHideShow;
   const elBody = document.body;
   const elCtrls = elBody.querySelectorAll(`
-      .mx-story-step-bullets,
+      .mx-story-nav__group,
       .maplibregl-ctrl-bottom-left,
       .maplibregl-ctrl-bottom-right,
       .maplibregl-ctrl-top-right,
@@ -349,8 +363,7 @@ async function storyUiClear() {
   if (state._init_ui) {
     state.elStory.remove();
     state.elStoryContainer.remove();
-    state.elBullets.remove();
-    state.elBulletsContainer.remove();
+    state.elStoryNav.remove();
     state._init_ui = false;
   }
 }
@@ -674,32 +687,15 @@ async function initControls() {
   state.ctrlLock = controls.get(s.ctrl_btn_lock);
 }
 
-/*
- * Set position
- */
-async function bulletScrollTo(e) {
-  try {
-    const step = e.target.dataset.step;
-    if (step) {
-      e.stopPropagation();
-      await storyGoTo(step);
-    }
-  } catch (e) {
-    console.warn(e);
-  }
-}
-
 /**
  * Set step config : dimention, number, bullets
  */
 function setStepConfig() {
   const state = getState();
   const sd = state.scrollData;
-  const elBullets = state.elBullets;
   const elSteps = state.elStory.querySelectorAll(".mx-story-step");
 
   state.stepsConfig = [];
-  elBullets.innerHTML = "";
   let s = 0;
   for (const elStep of elSteps) {
     s++;
@@ -713,6 +709,7 @@ function setStepConfig() {
     config.elStep = elStep;
     config.elSlides = elStep.querySelectorAll(".mx-story-slide");
     config.slidesConfig = [];
+    config.name = stepName;
 
     /*
      * Save step dimensions
@@ -722,29 +719,6 @@ function setStepConfig() {
     config.startUnscaled = config.start * (1 / state.scaleWrapper);
     config.height = rect.height;
     config.width = rect.width;
-
-    /*
-     * Bullets init
-     */
-    const elBullet = el(
-      "div",
-      {
-        class: ["mx-story-step-bullet", "shadow", "mx-pointer", "hint--top"],
-        "aria-label": stepName ? stepName : `Step ${s}`,
-        dataset: {
-          to: config.startUnscaled,
-          step: s - 1,
-        },
-      },
-      `${s}`,
-    );
-
-    elBullets.appendChild(elBullet);
-    config.elBullet = elBullet;
-
-    if (s === 1) {
-      elBullet.classList.add("mx-story-step-active");
-    }
 
     /*
      * Evaluate slides and save in config
@@ -765,6 +739,15 @@ function setStepConfig() {
 
     state.stepsConfig.push(config);
   }
+
+  /**
+   * Navigation bar : steps list + quit button visibility
+   */
+  state.elStoryNav?.configure({
+    steps: state.stepsConfig.map((c) => ({ name: c.name })),
+    activeIndex: state.stepActive || 0,
+    showQuit: !(state.autoStart || state.update),
+  });
 
   /**
    * Set initial scroll position
@@ -839,25 +822,7 @@ async function storyUpdateSlides() {
 
 async function updateBullets() {
   const state = getState();
-  const s = state.stepActive;
-  const elBullets = state.elBullets;
-  const nStep = state.stepsConfig.length;
-  let b = 0;
-  for (const c of state.stepsConfig) {
-    const elBullet = c.elBullet;
-    if (b++ <= s) {
-      elBullet.classList.add("mx-story-step-active");
-    } else {
-      elBullet.classList.remove("mx-story-step-active");
-    }
-  }
-  /**
-   * Update bullet container center
-   */
-  const bContWidth = elBullets.getBoundingClientRect().width;
-  const bItemWidth = bContWidth / nStep;
-  const dist = bContWidth / 2 - (s + 1) * bItemWidth;
-  elBullets.style[cssTransform] = `translateX(${dist}px)`;
+  state.elStoryNav?.setActiveIndex(state.stepActive);
 }
 
 /*
@@ -1067,8 +1032,7 @@ export function storyMapShakeLock() {
   const isLocked = storyMapLock("test");
 
   if (isLocked) {
-    //state.ctrlLock.shake("look_at_me");
-    state.ctrlLock.shake("look_at_me");
+    state.elStoryNav?.shakeLock();
   }
 }
 
@@ -1125,6 +1089,7 @@ export async function storyMapLock(cmd) {
         new FlashItem("lock");
       }
     }
+    state.elStoryNav?.setLocked(!toUnlock);
   } catch (e) {
     console.warn(e);
   }
@@ -1521,18 +1486,13 @@ async function buildMain() {
 async function buildBullets() {
   const state = getState();
   /**
-   * Bullets
+   * Navigation bar : quit, lock, step bullets, first/prev/next/last, grid
    */
-  state.elBullets = el("div", { class: ["mx-story-step-bullets", "noselect"] });
-  state.elBulletsContainer = el(
-    "div",
-    {
-      class: ["mx-story-step-bullets-container", "noselect"],
-    },
-    state.elBullets,
-  );
-
-  state.elMapControls.appendChild(state.elBulletsContainer);
+  const { el: createElement } = new ElementCreator({
+    document: state.elMapControls.ownerDocument,
+  });
+  state.elStoryNav = createElement("mx-story-navigation");
+  state.elMapControls.appendChild(state.elStoryNav);
 }
 
 /**
@@ -1641,9 +1601,10 @@ export async function storyPlayStep(stepNum) {
     map.stop();
     events.fire("story_step");
     /**
-     * Always lock at each step
+     * Lock behaviour : root setting, overridable per step
      */
-    storyMapLock("lock");
+    const lockBehaviour = resolveLockBehaviour(settings, step);
+    storyMapLock(lockBehaviour === "unlocked" ? "unlock" : "lock");
 
     /**
      * retrieve step information
@@ -1775,6 +1736,27 @@ async function viewsLegendsOrderUpdate(opt) {
       elLegend.style.order = pos++;
     }
   }
+}
+
+/**
+ * Resolve lock behaviour : root setting wins unless "default",
+ * else step setting wins unless "default", else fall back to the
+ * historical unconditional lock.
+ * @param {Object} settings Story root settings (story._settings)
+ * @param {Object} step Active step config
+ * @return {String} "locked" or "unlocked"
+ */
+function resolveLockBehaviour(settings, step) {
+  const lDefault = "default";
+  const lRoot = path(settings, "lock_behaviour", null);
+  const lStep = path(step, "lock_behaviour", null);
+  if (lRoot && lRoot !== lDefault) {
+    return lRoot;
+  }
+  if (lStep && lStep !== lDefault) {
+    return lStep;
+  }
+  return "locked";
 }
 
 async function updatePanelBehaviour(settings, step) {

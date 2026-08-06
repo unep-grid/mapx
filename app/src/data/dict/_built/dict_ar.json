@@ -8920,6 +8920,41 @@
     "ar": "أغلق لوحة وسائل الإيضاح"
   },
   {
+    "id": "schema_story_lock_handling",
+    "en": "Map lock",
+    "ar": "قفل الخريطة"
+  },
+  {
+    "id": "schema_story_lock_handling_desc",
+    "en": "Set whether the map can be panned/clicked while this step is active, or stays locked to the story content.",
+    "ar": "حدد ما إذا كان من الممكن تحريك/النقر على الخريطة أثناء تفعيل هذه الخطوة، أو ما إذا كانت ستبقى مرتبطة بمحتوى القصة."
+  },
+  {
+    "id": "schema_story_lock_handling_root_desc",
+    "en": "Set whether the map can be panned/clicked globally. Steps config will be ignored, if applicable.",
+    "ar": "حدد ما إذا كان بالإمكان تحريك/النقر على الخريطة بشكل عام. سيتم تجاهل إعدادات الخطوات، إن وجدت."
+  },
+  {
+    "id": "schema_story_lock_default",
+    "en": "Use the general setting",
+    "ar": "استخدم الإعدادات العامة"
+  },
+  {
+    "id": "schema_story_lock_root_default",
+    "en": "Use the setting defined in each steps",
+    "ar": "استخدم الإعدادات المحددة في كل خطوة"
+  },
+  {
+    "id": "schema_story_lock_locked",
+    "en": "Lock the map",
+    "ar": "قم بقفل الخريطة"
+  },
+  {
+    "id": "schema_story_lock_unlocked",
+    "en": "Unlock the map",
+    "ar": "افتح الخريطة"
+  },
+  {
     "id": "schema_story_pos_get",
     "en": "Update using current map parameters",
     "ar": "التحديث باستخدام معلمات الخريطة الحالية "

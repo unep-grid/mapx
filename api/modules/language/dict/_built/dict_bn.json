@@ -8920,6 +8920,41 @@
     "bn": "কিংবদন্তি প্যানেল বন্ধ করুন"
   },
   {
+    "id": "schema_story_lock_handling",
+    "en": "Map lock",
+    "bn": "মানচিত্র লক"
+  },
+  {
+    "id": "schema_story_lock_handling_desc",
+    "en": "Set whether the map can be panned/clicked while this step is active, or stays locked to the story content.",
+    "bn": "এই ধাপটি সক্রিয় থাকাকালীন মানচিত্রটি প্যান বা ক্লিক করা যাবে, নাকি তা গল্পের বিষয়বস্তুতে আবদ্ধ থাকবে, তা নির্ধারণ করুন।"
+  },
+  {
+    "id": "schema_story_lock_handling_root_desc",
+    "en": "Set whether the map can be panned/clicked globally. Steps config will be ignored, if applicable.",
+    "bn": "ম্যাপটি বিশ্বব্যাপী প্যান বা ক্লিক করা যাবে কিনা তা সেট করুন। প্রযোজ্য হলে, স্টেপস কনফিগারেশন উপেক্ষা করা হবে।"
+  },
+  {
+    "id": "schema_story_lock_default",
+    "en": "Use the general setting",
+    "bn": "সাধারণ সেটিং ব্যবহার করুন"
+  },
+  {
+    "id": "schema_story_lock_root_default",
+    "en": "Use the setting defined in each steps",
+    "bn": "প্রতিটি ধাপে নির্ধারিত সেটিং ব্যবহার করুন"
+  },
+  {
+    "id": "schema_story_lock_locked",
+    "en": "Lock the map",
+    "bn": "মানচিত্রটি লক করুন"
+  },
+  {
+    "id": "schema_story_lock_unlocked",
+    "en": "Unlock the map",
+    "bn": "মানচিত্রটি আনলক করুন"
+  },
+  {
     "id": "schema_story_pos_get",
     "en": "Update using current map parameters",
     "bn": "বর্তমান মানচিত্রের পরামিতিগুলি ব্যবহার করে আপডেট করুন "

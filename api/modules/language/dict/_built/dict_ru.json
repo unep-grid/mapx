@@ -8920,6 +8920,41 @@
     "ru": "Закройте панель легенд"
   },
   {
+    "id": "schema_story_lock_handling",
+    "en": "Map lock",
+    "ru": "блокировка карты"
+  },
+  {
+    "id": "schema_story_lock_handling_desc",
+    "en": "Set whether the map can be panned/clicked while this step is active, or stays locked to the story content.",
+    "ru": "Укажите, можно ли перемещать/нажимать на карту во время выполнения этого шага, или же она останется заблокированной для отображения содержимого сюжета."
+  },
+  {
+    "id": "schema_story_lock_handling_root_desc",
+    "en": "Set whether the map can be panned/clicked globally. Steps config will be ignored, if applicable.",
+    "ru": "Укажите, можно ли перемещать/нажимать на карту глобально. Настройки шагов будут игнорироваться, если таковые имеются."
+  },
+  {
+    "id": "schema_story_lock_default",
+    "en": "Use the general setting",
+    "ru": "Используйте общие настройки"
+  },
+  {
+    "id": "schema_story_lock_root_default",
+    "en": "Use the setting defined in each steps",
+    "ru": "Используйте настройки, определенные на каждом этапе."
+  },
+  {
+    "id": "schema_story_lock_locked",
+    "en": "Lock the map",
+    "ru": "Заблокировать карту"
+  },
+  {
+    "id": "schema_story_lock_unlocked",
+    "en": "Unlock the map",
+    "ru": "Разблокировать карту"
+  },
+  {
     "id": "schema_story_pos_get",
     "en": "Update using current map parameters",
     "ru": "Обновить с использованием текущих параметров карты "

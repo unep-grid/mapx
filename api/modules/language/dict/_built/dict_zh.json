@@ -8920,6 +8920,41 @@
     "zh": "关闭图例面板"
   },
   {
+    "id": "schema_story_lock_handling",
+    "en": "Map lock",
+    "zh": "地图锁定"
+  },
+  {
+    "id": "schema_story_lock_handling_desc",
+    "en": "Set whether the map can be panned/clicked while this step is active, or stays locked to the story content.",
+    "zh": "设置在此步骤激活时是否可以平移/点击地图，或者保持锁定到故事内容。"
+  },
+  {
+    "id": "schema_story_lock_handling_root_desc",
+    "en": "Set whether the map can be panned/clicked globally. Steps config will be ignored, if applicable.",
+    "zh": "设置地图是否可以全局平移/点击。如果适用，步骤配置将被忽略。"
+  },
+  {
+    "id": "schema_story_lock_default",
+    "en": "Use the general setting",
+    "zh": "使用通用设置"
+  },
+  {
+    "id": "schema_story_lock_root_default",
+    "en": "Use the setting defined in each steps",
+    "zh": "使用每个步骤中定义的设置"
+  },
+  {
+    "id": "schema_story_lock_locked",
+    "en": "Lock the map",
+    "zh": "锁定地图"
+  },
+  {
+    "id": "schema_story_lock_unlocked",
+    "en": "Unlock the map",
+    "zh": "解锁地图"
+  },
+  {
     "id": "schema_story_pos_get",
     "en": "Update using current map parameters",
     "zh": "使用当前地图参数更新"

@@ -171,6 +171,35 @@ mxSchemaViewStory <- function(view, language) {
     tt("schema_story_legends_panel_root_default"),
     settingsLegendsPanelRoot$options$enum_titles
   )
+
+  #
+  # Setting map lock behaviour
+  # -> used in root and in steps
+  # -> "default" at step level means "inherit root"
+  # -> "default" at root level means "fall back to app default (locked)"
+  #
+  settingsLockBehaviour <- list(
+    type = "string",
+    title = tt("schema_story_lock_handling"),
+    description = tt("schema_story_lock_handling_desc"),
+    enum = list(
+      "default", # -> inherit root / app default
+      "locked", # -> force locked
+      "unlocked" # -> force unlocked
+    ),
+    default = "default",
+    options = list(
+      enum_titles = list(
+        tt("schema_story_lock_default"),
+        tt("schema_story_lock_locked"),
+        tt("schema_story_lock_unlocked")
+      )
+    )
+  )
+  settingsLockBehaviourRoot <- settingsLockBehaviour
+  settingsLockBehaviourRoot$description <- tt("schema_story_lock_handling_root_desc")
+  settingsLockBehaviourRoot$options$enum_titles[[1]] <- tt("schema_story_lock_root_default")
+
   #
   # Multiple associated view object
   #
@@ -640,7 +669,8 @@ mxSchemaViewStory <- function(view, language) {
       animation = stepMapAnimation,
       autoplay = stepAutoplay,
       dashboards_panel_behaviour = settingsDashboardsPanel,
-      legends_panel_behaviour = settingsLegendsPanel
+      legends_panel_behaviour = settingsLegendsPanel,
+      lock_behaviour = settingsLockBehaviour
     )
   )
 
@@ -664,6 +694,7 @@ mxSchemaViewStory <- function(view, language) {
           class_wrapper = settingsPageClass,
           dashboards_panel_behaviour = settingsDashboardsPanelRoot,
           legends_panel_behaviour = settingsLegendsPanelRoot,
+          lock_behaviour = settingsLockBehaviourRoot,
           opacity_auto_timeout = settingsOpacityTimeout
         )
       ),

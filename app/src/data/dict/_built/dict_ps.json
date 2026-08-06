@@ -8920,6 +8920,41 @@
     "ps": "د لیجنډ پینل بند کړئ"
   },
   {
+    "id": "schema_story_lock_handling",
+    "en": "Map lock",
+    "ps": "د نقشې قلف"
+  },
+  {
+    "id": "schema_story_lock_handling_desc",
+    "en": "Set whether the map can be panned/clicked while this step is active, or stays locked to the story content.",
+    "ps": "دا تنظیم کړئ چې ایا نقشه د دې مرحلې فعالولو پرمهال پین/کلک کیدی شي، یا د کیسې مینځپانګې پورې تړلې پاتې کیږي."
+  },
+  {
+    "id": "schema_story_lock_handling_root_desc",
+    "en": "Set whether the map can be panned/clicked globally. Steps config will be ignored, if applicable.",
+    "ps": "دا تنظیم کړئ چې ایا نقشه په نړیواله کچه پین/کلک کیدی شي. د ګامونو ترتیب به له پامه غورځول شي، که چیرې پلي شي."
+  },
+  {
+    "id": "schema_story_lock_default",
+    "en": "Use the general setting",
+    "ps": "د عمومي ترتیب څخه کار واخلئ"
+  },
+  {
+    "id": "schema_story_lock_root_default",
+    "en": "Use the setting defined in each steps",
+    "ps": "په هر ګام کې تعریف شوي ترتیب وکاروئ"
+  },
+  {
+    "id": "schema_story_lock_locked",
+    "en": "Lock the map",
+    "ps": "نقشه بنده کړئ"
+  },
+  {
+    "id": "schema_story_lock_unlocked",
+    "en": "Unlock the map",
+    "ps": "نقشه خلاصه کړئ"
+  },
+  {
     "id": "schema_story_pos_get",
     "en": "Update using current map parameters",
     "ps": "د اوسنۍ نقشې پارامترونه آپډیټ کړئ"

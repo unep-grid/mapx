@@ -131,6 +131,7 @@ input {
   outline: none;
 }
 
+body.mx,
 .mx .maplibregl-map {
   background-image: radial-gradient(
     circle,
@@ -347,9 +348,16 @@ span.mx-badge-role {
 
 .mx .mx-story-step-bullet.mx-story-step-active,
 .mx .mx-story-step-bullet:hover,
+.mx .mx-story-step-bullet:hover,
 .mx .mx-story-btn-legend.active {
   background: var(--mx_ui_text);
   color: var(--mx_ui_background);
+}
+
+.mx .mx-story-step-bullet.mx-story-step-active > i,
+.mx .mx-story-step-bullet:hover > i,
+.mx .mx-story-btn-legend.active > i {
+  color: inherit;
 }
 
 .mx .mx-story-legend {

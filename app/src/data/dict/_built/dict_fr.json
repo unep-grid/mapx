@@ -8920,6 +8920,41 @@
     "fr": "Fermer le panneau des légendes"
   },
   {
+    "id": "schema_story_lock_handling",
+    "en": "Map lock",
+    "fr": "Verrouillage de la carte"
+  },
+  {
+    "id": "schema_story_lock_handling_desc",
+    "en": "Set whether the map can be panned/clicked while this step is active, or stays locked to the story content.",
+    "fr": "Indiquez si la carte peut être déplacée/cliquée pendant que cette étape est active, ou si elle reste verrouillée sur le contenu de l'histoire."
+  },
+  {
+    "id": "schema_story_lock_handling_root_desc",
+    "en": "Set whether the map can be panned/clicked globally. Steps config will be ignored, if applicable.",
+    "fr": "Indiquez si la carte peut être déplacée/cliquée globalement. La configuration des étapes sera ignorée, le cas échéant."
+  },
+  {
+    "id": "schema_story_lock_default",
+    "en": "Use the general setting",
+    "fr": "Utilisez les paramètres généraux"
+  },
+  {
+    "id": "schema_story_lock_root_default",
+    "en": "Use the setting defined in each steps",
+    "fr": "Utilisez le paramètre défini dans chaque étape"
+  },
+  {
+    "id": "schema_story_lock_locked",
+    "en": "Lock the map",
+    "fr": "Verrouiller la carte"
+  },
+  {
+    "id": "schema_story_lock_unlocked",
+    "en": "Unlock the map",
+    "fr": "Déverrouiller la carte"
+  },
+  {
     "id": "schema_story_pos_get",
     "en": "Update using current map parameters",
     "fr": "Mettre à jour avec les paramètres actuels de la carte"

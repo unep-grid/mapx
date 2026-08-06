@@ -8920,6 +8920,41 @@
     "es": "Cerrar el panel de leyendas"
   },
   {
+    "id": "schema_story_lock_handling",
+    "en": "Map lock",
+    "es": "Bloqueo de mapa"
+  },
+  {
+    "id": "schema_story_lock_handling_desc",
+    "en": "Set whether the map can be panned/clicked while this step is active, or stays locked to the story content.",
+    "es": "Configura si el mapa se puede desplazar o seleccionar haciendo clic mientras este paso está activo, o si permanece bloqueado al contenido de la historia."
+  },
+  {
+    "id": "schema_story_lock_handling_root_desc",
+    "en": "Set whether the map can be panned/clicked globally. Steps config will be ignored, if applicable.",
+    "es": "Configura si el mapa se puede desplazar o seleccionar haciendo clic en él globalmente. La configuración de pasos se ignorará, si corresponde."
+  },
+  {
+    "id": "schema_story_lock_default",
+    "en": "Use the general setting",
+    "es": "Utilice la configuración general"
+  },
+  {
+    "id": "schema_story_lock_root_default",
+    "en": "Use the setting defined in each steps",
+    "es": "Utilice la configuración definida en cada paso."
+  },
+  {
+    "id": "schema_story_lock_locked",
+    "en": "Lock the map",
+    "es": "Bloquear el mapa"
+  },
+  {
+    "id": "schema_story_lock_unlocked",
+    "en": "Unlock the map",
+    "es": "Desbloquea el mapa"
+  },
+  {
     "id": "schema_story_pos_get",
     "en": "Update using current map parameters",
     "es": "Actualizar con los parámetros actuales del mapa"

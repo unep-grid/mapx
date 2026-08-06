@@ -5,8 +5,8 @@ const settings = {
     'btn_overlap_spotlight',
     'btn_map_composer'
   ],
-  ctrl_btn_enable: ['btn_story_close', 'btn_story_unlock_map'],
-  ctrl_btn_enable_update_mode: ['btn_story_unlock_map'],
+  ctrl_btn_enable: [],
+  ctrl_btn_enable_update_mode: [],
   ctrl_btn_lock: 'btn_story_unlock_map',
   ctrl_btn_close: 'btn_story_close',
   ctrl_btn_3d_terrain: 'btn_3d_terrain',

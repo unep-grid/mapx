@@ -8920,6 +8920,41 @@
     "de": "Schließen Sie das Legendenfenster"
   },
   {
+    "id": "schema_story_lock_handling",
+    "en": "Map lock",
+    "de": "Kartensperre"
+  },
+  {
+    "id": "schema_story_lock_handling_desc",
+    "en": "Set whether the map can be panned/clicked while this step is active, or stays locked to the story content.",
+    "de": "Legen Sie fest, ob die Karte während dieses Schritts verschoben/angeklickt werden kann oder ob sie auf den Story-Inhalt fixiert bleibt."
+  },
+  {
+    "id": "schema_story_lock_handling_root_desc",
+    "en": "Set whether the map can be panned/clicked globally. Steps config will be ignored, if applicable.",
+    "de": "Legen Sie fest, ob die Karte global verschoben/angeklickt werden kann. Die Schrittkonfiguration wird gegebenenfalls ignoriert."
+  },
+  {
+    "id": "schema_story_lock_default",
+    "en": "Use the general setting",
+    "de": "Verwenden Sie die allgemeine Einstellung"
+  },
+  {
+    "id": "schema_story_lock_root_default",
+    "en": "Use the setting defined in each steps",
+    "de": "Verwenden Sie die in den einzelnen Schritten definierten Einstellungen."
+  },
+  {
+    "id": "schema_story_lock_locked",
+    "en": "Lock the map",
+    "de": "Karte sperren"
+  },
+  {
+    "id": "schema_story_lock_unlocked",
+    "en": "Unlock the map",
+    "de": "Karte freischalten"
+  },
+  {
     "id": "schema_story_pos_get",
     "en": "Update using current map parameters",
     "de": "Aktualisieren Sie mit den aktuellen Kartenparametern "

@@ -8920,6 +8920,41 @@
     "fa": "پانل افسانه ها را ببندید"
   },
   {
+    "id": "schema_story_lock_handling",
+    "en": "Map lock",
+    "fa": "قفل نقشه"
+  },
+  {
+    "id": "schema_story_lock_handling_desc",
+    "en": "Set whether the map can be panned/clicked while this step is active, or stays locked to the story content.",
+    "fa": "تنظیم کنید که آیا در حین فعال بودن این مرحله، نقشه قابل پیمایش/کلیک باشد یا به محتوای داستان قفل بماند."
+  },
+  {
+    "id": "schema_story_lock_handling_root_desc",
+    "en": "Set whether the map can be panned/clicked globally. Steps config will be ignored, if applicable.",
+    "fa": "تنظیم کنید که آیا نقشه می‌تواند به صورت سراسری پیمایش/کلیک شود یا خیر. در صورت لزوم، پیکربندی مراحل نادیده گرفته خواهد شد."
+  },
+  {
+    "id": "schema_story_lock_default",
+    "en": "Use the general setting",
+    "fa": "از تنظیمات عمومی استفاده کنید"
+  },
+  {
+    "id": "schema_story_lock_root_default",
+    "en": "Use the setting defined in each steps",
+    "fa": "از تنظیمات تعریف شده در هر مرحله استفاده کنید"
+  },
+  {
+    "id": "schema_story_lock_locked",
+    "en": "Lock the map",
+    "fa": "قفل کردن نقشه"
+  },
+  {
+    "id": "schema_story_lock_unlocked",
+    "en": "Unlock the map",
+    "fa": "نقشه را باز کنید"
+  },
+  {
     "id": "schema_story_pos_get",
     "en": "Update using current map parameters",
     "fa": "تجدید با استفاده از پارامتر های موجود"
