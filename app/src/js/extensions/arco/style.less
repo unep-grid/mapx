@@ -108,13 +108,21 @@
   }
 
   /**
-  * Time row : fixed button group, slider takes the remaining space
+  * Time row : date and compact transport controls above a full-width slider
   */
+  .arco--time_header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 10px;
+
+    > .arco--readout {
+      flex: 1;
+      min-width: 220px;
+    }
+  }
+
   .arco--time_controls {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) max-content;
-    align-items: center;
-    gap: 15px;
     margin-top: 10px;
   }
 
@@ -125,7 +133,26 @@
 
   .arco--player_buttons {
     display: flex;
-    gap: 2px;
+    justify-content: center;
+    gap: 5px;
+    margin-left: auto;
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border-radius: 6px;
+    }
+
+    .btn.arco--playback_rate {
+      width: auto;
+      min-width: 38px;
+      padding: 0 6px;
+      font-variant-numeric: tabular-nums;
+    }
   }
 
   .arco--btn_icon {

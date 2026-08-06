@@ -36,6 +36,8 @@ const defaultOptions = {
   depth: null,
 };
 
+const playbackRates = [1, 2, 5, 10];
+
 /**
  * ARCO map legend : animated Zarr ocean data (zartigl) with time/depth
  * navigation and point series chart.
@@ -50,6 +52,7 @@ export class ArcoMapLegend {
     this._point = null;
     this._id_query = 0;
     this._status = null;
+    this._playbackRate = playbackRates[0];
     this._on_loading = () => this._setLoading(true);
     this._on_loaded = (meta) => {
       this._meta = meta;
@@ -274,23 +277,57 @@ export class ArcoMapLegend {
     if (stop) {
       this.stop();
     }
-    const next = this._time + this._timeStep();
-    this.setTime(next > this._time_meta.max ? this._time_meta.min : next);
+    this.setTime(this._timeAtOffset(1, { wrap: true }));
   }
 
   stepPrevious(stop) {
     if (stop) {
       this.stop();
     }
-    const previous = this._time - this._timeStep();
-    this.setTime(
-      previous < this._time_meta.min ? this._time_meta.max : previous,
-    );
+    this.setTime(this._timeAtOffset(-1, { wrap: true }));
   }
 
   toggleLoop() {
     this._opt.loop = !this._opt.loop;
     this.elButtonLoop?.classList.toggle("active", this._opt.loop);
+  }
+
+  _cyclePlaybackRate() {
+    const index = playbackRates.indexOf(this._playbackRate);
+    this._playbackRate = playbackRates[(index + 1) % playbackRates.length];
+    this._syncPlaybackRateButton();
+  }
+
+  _syncPlaybackRateButton() {
+    if (!this.elButtonRate) {
+      return;
+    }
+    const label = `${this._playbackRate}×`;
+    this.elButtonRate.textContent = label;
+    this.elButtonRate.title = `Playback rate: ${label}`;
+  }
+
+  _timeAtOffset(offset, { wrap }) {
+    const values = this._time_meta.values || [];
+    if (values.length) {
+      const currentIndex = nearestIndex(values, this._time);
+      const targetIndex = currentIndex + offset;
+      if (!wrap && (targetIndex < 0 || targetIndex >= values.length)) {
+        return null;
+      }
+      const wrappedIndex =
+        ((targetIndex % values.length) + values.length) % values.length;
+      return values[wrappedIndex];
+    }
+
+    const target = this._time + this._timeStep() * offset;
+    if (target > this._time_meta.max) {
+      return wrap ? this._time_meta.min : null;
+    }
+    if (target < this._time_meta.min) {
+      return wrap ? this._time_meta.max : null;
+    }
+    return target;
   }
 
   _tick() {
@@ -301,13 +338,17 @@ export class ArcoMapLegend {
       }
       // backpressure : do not advance while chunks are loading
       if (!this._loading) {
-        const next = this._time + this._timeStep();
-        const ended = next > this._time_meta.max;
-        if (ended && !this._opt.loop) {
+        const next = this._timeAtOffset(this._playbackRate, {
+          wrap: this._opt.loop,
+        });
+        if (next === null) {
+          if (this._time !== this._time_meta.max) {
+            this.setTime(this._time_meta.max);
+          }
           this.stop();
           return;
         }
-        this.setTime(ended ? this._time_meta.min : next);
+        this.setTime(next);
       }
       this._tick();
     }, this._opt.playbackInterval);
@@ -653,6 +694,22 @@ export class ArcoMapLegend {
       this.setTime(Number(values[0]), { fromSlider: true });
     });
 
+    const elButtons = this._buildPlayerButtons(playback);
+
+    return el("div", { class: "arco--time_row" }, [
+      el("div", { class: "arco--time_header" }, [
+        el("div", { class: "arco--readout" }, [
+          el("label", "Date & time"),
+          this.elTimeReadout,
+          this.elTimeInput,
+        ]),
+        elButtons,
+      ]),
+      el("div", { class: "arco--time_controls" }, this.elTimeSlider),
+    ]);
+  }
+
+  _buildPlayerButtons(playback) {
     const elButtonPrevious = el(
       "button",
       {
@@ -691,9 +748,18 @@ export class ArcoMapLegend {
         },
         el("i", { class: ["fa", "fa-repeat"] }),
       );
+      this.elButtonRate = el(
+        "button",
+        {
+          class: ["btn", "btn-default", "arco--playback_rate"],
+          on: { click: () => this._cyclePlaybackRate() },
+        },
+        `${this._playbackRate}×`,
+      );
+      this._syncPlaybackRateButton();
     }
 
-    const elButtons = el("div", { class: "arco--player_buttons" }, [
+    return el("div", { class: "arco--player_buttons" }, [
       elButtonPrevious,
       this.elButtonPlay,
       playback
@@ -709,18 +775,7 @@ export class ArcoMapLegend {
         : null,
       elButtonNext,
       this.elButtonLoop,
-    ]);
-
-    return el("div", { class: "arco--time_row" }, [
-      el("div", { class: "arco--readout" }, [
-        el("label", "Date & time"),
-        this.elTimeReadout,
-        this.elTimeInput,
-      ]),
-      el("div", { class: "arco--time_controls" }, [
-        this.elTimeSlider,
-        elButtons,
-      ]),
+      this.elButtonRate,
     ]);
   }
 
