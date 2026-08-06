@@ -1707,7 +1707,22 @@ export async function isUploadFileSizeValid(file, opt) {
 const scrollToBreaks = {
   idTimeout: 0,
   idFrame: 0,
+  resolve: null,
 };
+
+/**
+ * Cancel the currently active smooth scroll, if any.
+ */
+export function cancelScrollFromTo() {
+  clearTimeout(scrollToBreaks.idTimeout);
+  cancelFrame(scrollToBreaks.idFrame);
+  scrollToBreaks.idTimeout = 0;
+  scrollToBreaks.idFrame = 0;
+  const resolve = scrollToBreaks.resolve;
+  scrollToBreaks.resolve = null;
+  resolve?.(true);
+}
+
 export function scrollFromTo(opt) {
   opt = Object.assign({}, opt);
 
@@ -1726,21 +1741,20 @@ export function scrollFromTo(opt) {
   }
 
   return new Promise((resolve) => {
-    /*
-     * Cancel previous timeout
-     */
-
-    clearTimeout(scrollToBreaks.idTimeout);
+    cancelScrollFromTo();
 
     if (stop && stop()) {
       return resolve(true);
     }
 
-    /*
-     * Cancel previous frame request
-     */
+    scrollToBreaks.resolve = resolve;
 
-    cancelFrame(scrollToBreaks.idFrame);
+    const finish = () => {
+      if (scrollToBreaks.resolve === resolve) {
+        scrollToBreaks.resolve = null;
+      }
+      resolve(true);
+    };
 
     scrollToBreaks.idTimeout = setTimeout(() => {
       if (axis === "y") {
@@ -1750,7 +1764,7 @@ export function scrollFromTo(opt) {
         bodyDim = document.body.clientWidth || 800;
       }
       if (!diff || diff === 0) {
-        resolve(true);
+        finish();
       } else if (opt.jump === true || Math.abs(diff) > bodyDim * 11) {
         // instant scroll
         if (axis === "y") {
@@ -1760,7 +1774,7 @@ export function scrollFromTo(opt) {
           opt.el.scrollLeft = opt.to;
         }
 
-        resolve(true);
+        finish();
       } else {
         duration = opt.during || 1000;
 
@@ -1785,7 +1799,7 @@ export function scrollFromTo(opt) {
           if (time < duration && !(stop && stop())) {
             scrollToBreaks.idFrame = onNextFrame(step);
           } else {
-            resolve(true);
+            finish();
           }
         }
       }

@@ -19,6 +19,7 @@ import {
   path,
   easingFun,
   scrollFromTo,
+  cancelScrollFromTo,
   cssTransform,
   debounce,
   isFirefox,
@@ -161,7 +162,7 @@ function initClickListener() {
   listeners.addListener({
     target: state.elStoryNav,
     type: "mx-story-nav-goto",
-    callback: (e) => storyGoTo(e.detail.to),
+    callback: (e) => requestStoryGoTo(e.detail.to),
     group: "story_map",
   });
 
@@ -376,6 +377,7 @@ export async function storyClose() {
   if (isEmpty(state) || !state.enable) {
     return;
   }
+  interruptStoryActivity();
   state.enable = false;
   events.fire("story_close");
   removeAllListeners();
@@ -384,6 +386,7 @@ export async function storyClose() {
   }
   await waitTimeoutAsync(100);
   await storyStop();
+  await Promise.allSettled([...(state.storyOperations || [])]);
   await storyUiClear();
   await storyMapLock("lock");
   new FlashItem("sign-out");
@@ -815,7 +818,15 @@ async function storyUpdateSlides() {
     }
 
     if (toActivate) {
-      await storyPlayStep(s);
+      if (state.storyStepPending === null || state.storyStepPending !== s) {
+        state.storyStepPending = s;
+        storyPlayStep(s).finally(() => {
+          if (state.storyStepPending === s) {
+            state.storyStepPending = null;
+          }
+        }).catch(() => {});
+        break;
+      }
     }
   }
 }
@@ -833,6 +844,47 @@ const keyState = {
   keys: [],
   idTimeout: 0,
 };
+
+function getStoryOperationToken(state) {
+  return state.storyOperationToken || 0;
+}
+
+function isStoryOperationCurrent(state, token) {
+  return state.enable && getStoryOperationToken(state) === token;
+}
+
+function trackStoryOperation(state, operation) {
+  if (!state.storyOperations) {
+    state.storyOperations = new Set();
+  }
+  state.storyOperations.add(operation);
+  operation
+    .finally(() => state.storyOperations?.delete(operation))
+    .catch(() => {});
+  return operation;
+}
+
+function interruptStoryActivity({ clearNumeric = true, stopAutoplay = true } = {}) {
+  const state = getState();
+  state.storyOperationToken = getStoryOperationToken(state) + 1;
+  state.storyStepPending = null;
+  cancelScrollFromTo();
+  state.map?.stop(false);
+  if (stopAutoplay) {
+    state.autoplay = false;
+  }
+  if (clearNumeric) {
+    clearTimeout(keyState.idTimeout);
+    keyState.idTimeout = 0;
+    keyState.keys.length = 0;
+  }
+  return state.storyOperationToken;
+}
+
+function requestStoryGoTo(to, useTimeout) {
+  const operationToken = interruptStoryActivity();
+  return storyGoTo(to, useTimeout, null, operationToken);
+}
 
 async function storyHandleKeyDown(event) {
   const state = getState();
@@ -855,15 +907,16 @@ async function storyHandleKeyDown(event) {
   if (isNum) {
     /*
      * Combo : 1 ... 2 -> 12
-     */
+    */
     prevent();
+    interruptStoryActivity({ clearNumeric: false });
     clearTimeout(keyState.idTimeout);
     keyState.keys.push(event.key);
     keyState.idTimeout = setTimeout(async () => {
       try {
         const sNum = keyState.keys.join("") * 1;
         keyState.keys.length = 0;
-        await storyGoTo(sNum - 1);
+        requestStoryGoTo(sNum - 1);
       } catch (e) {
         console.warn(e);
       }
@@ -889,14 +942,12 @@ async function storyHandleKeyDown(event) {
     case "ArrowDown":
     case "ArrowRight":
       prevent();
-      await storyAutoPlay("stop");
-      await storyGoTo("next");
+      requestStoryGoTo("next");
       break;
     case "ArrowUp":
     case "ArrowLeft":
       prevent();
-      await storyAutoPlay("stop");
-      await storyGoTo("previous");
+      requestStoryGoTo("previous");
       break;
     default:
       return;
@@ -908,8 +959,16 @@ async function storyHandleKeyDown(event) {
   }
 }
 
-export async function storyGoTo(to, useTimeout, funStop) {
+export async function storyGoTo(
+  to,
+  useTimeout,
+  funStop,
+  operationToken = null,
+) {
   const state = getState();
+  if (operationToken === null) {
+    operationToken = interruptStoryActivity();
+  }
   const story = getStory();
   const steps = story.steps;
   const stepsDim = state.stepsConfig;
@@ -960,7 +1019,9 @@ export async function storyGoTo(to, useTimeout, funStop) {
   state.storyGoToDone = false;
 
   const promScroll = scrollFromTo({
-    emergencyStop: funStop,
+    emergencyStop: () =>
+      !isStoryOperationCurrent(state, operationToken) ||
+      (funStop instanceof Function && funStop()),
     timeout: timeout,
     el: elStory,
     from: start,
@@ -972,7 +1033,9 @@ export async function storyGoTo(to, useTimeout, funStop) {
 
   await maxWait(promScroll, duration + timeout);
 
-  state.storyGoToDone = true;
+  if (isStoryOperationCurrent(state, operationToken)) {
+    state.storyGoToDone = true;
+  }
 
   return {
     step: destStep,
@@ -994,12 +1057,18 @@ function maxWait(prom, duration) {
   ]);
 }
 
-export async function storyAutoPlay(cmd) {
+export async function storyAutoPlay(cmd, operationToken = null) {
   const state = getState();
   const enabled = state.autoplay || false;
   const playStart = cmd === "start" && !enabled;
   const playStop = (cmd === "stop" && enabled) || (cmd === "start" && enabled);
   const playNext = cmd === "next" && enabled;
+
+  if (playStart) {
+    operationToken = interruptStoryActivity({ stopAutoplay: false });
+  } else if (playNext && operationToken === null) {
+    operationToken = interruptStoryActivity({ stopAutoplay: false });
+  }
 
   const stopControl = function () {
     return state.autoplay === false;
@@ -1008,18 +1077,19 @@ export async function storyAutoPlay(cmd) {
   if (playStart) {
     new FlashItem("play");
     state.autoplay = true;
-    storyAutoPlay("next");
+    storyAutoPlay("next", operationToken);
   }
 
   if (playStop) {
+    interruptStoryActivity();
     state.autoplay = false;
     new FlashItem("stop");
   }
 
   if (playNext) {
-    await storyGoTo("next", true, stopControl);
-    if (state.autoplay) {
-      storyAutoPlay("next");
+    await storyGoTo("next", true, stopControl, operationToken);
+    if (state.autoplay && isStoryOperationCurrent(state, operationToken)) {
+      storyAutoPlay("next", operationToken);
     }
   }
   return state.autoplay;
@@ -1579,10 +1649,19 @@ export function storySetTransform(o) {
   return tt.join(" ");
 }
 
-export async function storyPlayStep(stepNum) {
+export function storyPlayStep(stepNum) {
+  const state = getState();
+  const operationToken = getStoryOperationToken(state);
+  return trackStoryOperation(
+    state,
+    storyPlayStepImpl(stepNum, operationToken),
+  );
+}
+
+async function storyPlayStepImpl(stepNum, operationToken) {
   try {
     const state = getState();
-    if (!state.enable) {
+    if (!isStoryOperationCurrent(state, operationToken)) {
       return;
     }
 
@@ -1596,6 +1675,9 @@ export async function storyPlayStep(stepNum) {
     }
     const step = steps[stepNum] || {};
     if (isEmpty(step)) {
+      return;
+    }
+    if (!isStoryOperationCurrent(state, operationToken)) {
       return;
     }
     map.stop();
@@ -1616,6 +1698,9 @@ export async function storyPlayStep(stepNum) {
     emitStoryRead(stepNum, steps.length);
 
     await updateBullets();
+    if (!isStoryOperationCurrent(state, operationToken)) {
+      return;
+    }
 
     const pos = step.position;
     const anim = Object.assign(
@@ -1683,6 +1768,9 @@ export async function storyPlayStep(stepNum) {
      */
     let i = 0;
     for (const v of vToAdd) {
+      if (!isStoryOperationCurrent(state, operationToken)) {
+        return;
+      }
       const vPrevious = vStep[i++ - 1] || settingsMapx.layerBefore;
       await viewRender({
         idView: v,
@@ -1691,16 +1779,29 @@ export async function storyPlayStep(stepNum) {
         before: vPrevious,
         elLegendContainer,
       });
+      if (!isStoryOperationCurrent(state, operationToken)) {
+        return;
+      }
     }
 
     /**
      * Remove views not used
      */
     for (const v of vToRemove) {
+      if (!isStoryOperationCurrent(state, operationToken)) {
+        return;
+      }
       await viewClear({
         idView: v,
         elLegendContainer,
       });
+      if (!isStoryOperationCurrent(state, operationToken)) {
+        return;
+      }
+    }
+
+    if (!isStoryOperationCurrent(state, operationToken)) {
+      return;
     }
 
     viewsLayersOrderUpdate({
@@ -1713,7 +1814,11 @@ export async function storyPlayStep(stepNum) {
       order: vStep,
     });
 
-    await updatePanelBehaviour(settings, step);
+    if (!isStoryOperationCurrent(state, operationToken)) {
+      return;
+    }
+
+    await updatePanelBehaviour(settings, step, operationToken);
   } catch (e) {
     console.warn(e);
   }
@@ -1759,9 +1864,9 @@ function resolveLockBehaviour(settings, step) {
   return "locked";
 }
 
-async function updatePanelBehaviour(settings, step) {
+async function updatePanelBehaviour(settings, step, operationToken) {
   const state = getState();
-  if (!state.enable) {
+  if (!isStoryOperationCurrent(state, operationToken)) {
     return;
   }
 
@@ -1794,7 +1899,13 @@ async function updatePanelBehaviour(settings, step) {
      * Add widgets if any
      */
     for (const v of idViews) {
+      if (!isStoryOperationCurrent(state, operationToken)) {
+        return;
+      }
       await dashboard.addWidgetsToView(v);
+      if (!isStoryOperationCurrent(state, operationToken)) {
+        return;
+      }
     }
 
     /**
@@ -1802,9 +1913,11 @@ async function updatePanelBehaviour(settings, step) {
      */
     switch (dBehaviour) {
       case "open":
+        if (!isStoryOperationCurrent(state, operationToken)) return;
         await dashboard.exec("show");
         break;
       case "closed":
+        if (!isStoryOperationCurrent(state, operationToken)) return;
         await dashboard.exec("hide");
         break;
       default:
@@ -1818,8 +1931,10 @@ async function updatePanelBehaviour(settings, step) {
             continue;
           }
           if (config.panel_init_close) {
+            if (!isStoryOperationCurrent(state, operationToken)) return;
             await dashboard.exec("hide");
           } else {
+            if (!isStoryOperationCurrent(state, operationToken)) return;
             await dashboard.exec("show");
           }
           break;
