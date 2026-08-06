@@ -8,6 +8,7 @@ import { isDateString } from "../../is_test";
 import { makeId } from "../../mx_helper_misc";
 import { layersOrderAuto } from "../../map_helpers";
 import { settings } from "../../settings";
+import { createVisibilityGate } from "../../app_visibility/index.js";
 import "./style.less";
 
 const defaultOptions = {
@@ -45,11 +46,19 @@ export class BaseTimeMapLegend {
     this._layers = new Array();
     this._id_anim = new Set();
     this._on_render = this._opt.onRender.bind(this);
+    this._visibility = createVisibilityGate(
+      this._opt.map?.getContainer?.() ?? null,
+    );
+    this._visible = this._visibility.isVisible();
+    this._unsubscribeVisibility = this._visibility.subscribe((visible) => {
+      this._setVisible(visible);
+    });
   }
 
   async init() {
     await this.updateCapabilities();
     this.reset();
+    this._initialized = true;
     window._tm = this;
   }
 
@@ -68,6 +77,8 @@ export class BaseTimeMapLegend {
     this._destroyed = true;
     this.stop();
     this.clearAll();
+    this._unsubscribeVisibility?.();
+    this._visibility?.destroy();
   }
 
   isDestroyed() {
@@ -75,11 +86,16 @@ export class BaseTimeMapLegend {
   }
 
   update(skipTransition) {
-    this.updateMapSource(skipTransition);
+    if (this._visible) {
+      this.updateMapSource(skipTransition);
+    }
     this.updateLegend();
   }
 
   render() {
+    if (!this._playing || !this._visible || this.isDestroyed()) {
+      return;
+    }
     this.next();
     this.onRender();
     const id_anim_play = setTimeout(() => {
@@ -95,7 +111,9 @@ export class BaseTimeMapLegend {
     this.stop();
     this._playing = true;
     this.elButtonPlay?.classList.add("playing");
-    this.render();
+    if (this._visible) {
+      this.render();
+    }
   }
 
   stop() {
@@ -108,6 +126,26 @@ export class BaseTimeMapLegend {
     for (const id of this._id_anim) {
       clearTimeout(id);
       this._id_anim.delete(id);
+    }
+  }
+
+  _setVisible(visible) {
+    if (visible === this._visible || this.isDestroyed()) {
+      return;
+    }
+    this._visible = visible;
+    if (!this._initialized) {
+      return;
+    }
+    if (!visible) {
+      this.stopAnim();
+      this.clearAll();
+      return;
+    }
+    this.updateMapSource(true);
+    if (this._playing) {
+      const id = setTimeout(() => this.render(), this._opt.transitionDuration);
+      this._id_anim.add(id);
     }
   }
 
@@ -201,6 +239,9 @@ export class BaseTimeMapLegend {
   }
 
   updateMapSource(skipTransition) {
+    if (!this._visible || this.isDestroyed()) {
+      return;
+    }
     const selectedDate = this.getTimeISOstring();
     const selectedElevation = this?.elElevationInput?.value;
     const selectedStyle = this.elStyleInput.value;

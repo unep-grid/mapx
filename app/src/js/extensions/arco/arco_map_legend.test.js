@@ -31,7 +31,11 @@ function createPlaybackArco({ values, loop = true }) {
     values,
   };
   arco._time = values[0];
-  arco._z = { setTime: vi.fn() };
+  arco._z = {
+    setTime: vi.fn(),
+    suspend: vi.fn(),
+    resume: vi.fn(),
+  };
   arco._updateTimeReadout = vi.fn();
   arco._updateValueReadout = vi.fn();
   return arco;
@@ -239,6 +243,36 @@ describe("ArcoMapLegend playback controls", () => {
     expect(arco.getTime()).toBe(10);
     expect(arco._z.setTime).not.toHaveBeenCalled();
     arco.stop();
+  });
+
+  it("suspends playback while hidden and resumes without catching up", async () => {
+    vi.useFakeTimers();
+    const arco = createPlaybackArco({ values: [10, 20, 50] });
+
+    arco.play();
+    arco._setVisible(false);
+    await vi.advanceTimersByTimeAsync(2400);
+    expect(arco.getTime()).toBe(10);
+    expect(arco._z.suspend).toHaveBeenCalledOnce();
+
+    arco._setVisible(true);
+    expect(arco._z.resume).toHaveBeenCalledOnce();
+    await vi.advanceTimersByTimeAsync(800);
+    expect(arco.getTime()).toBe(20);
+    arco.stop();
+  });
+
+  it("does not resume after an explicit stop while hidden", async () => {
+    vi.useFakeTimers();
+    const arco = createPlaybackArco({ values: [10, 20, 50] });
+
+    arco.play();
+    arco._setVisible(false);
+    arco.stop();
+    arco._setVisible(true);
+    await vi.advanceTimersByTimeAsync(800);
+
+    expect(arco.getTime()).toBe(10);
   });
 
   it("wraps skipped playback when looping and stops otherwise", async () => {

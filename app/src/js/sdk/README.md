@@ -82,6 +82,41 @@ mapx.once("ready", async () => {
 });
 ```
 
+### Visibility for direct iframe embeds
+
+The SDK automatically pauses visibility-sensitive playback when its iframe is
+outside the parent viewport. A direct iframe integration can provide the same
+signal with `postMessage`:
+
+```javascript
+const iframe = document.getElementById("mapx-frame");
+const targetOrigin = new URL(iframe.src).origin;
+let iframeVisible = true;
+
+function sendVisibility() {
+  iframe.contentWindow?.postMessage(
+    {
+      type: "mapx-host-visibility",
+      visible: !document.hidden && iframeVisible,
+    },
+    targetOrigin,
+  );
+}
+
+const observer = new IntersectionObserver(([entry]) => {
+  iframeVisible = entry.isIntersecting;
+  sendVisibility();
+});
+
+observer.observe(iframe);
+document.addEventListener("visibilitychange", sendVisibility);
+iframe.addEventListener("load", sendVisibility);
+```
+
+MapX also observes its own document visibility. The parent signal is needed
+because a cross-origin child cannot detect that its iframe is outside the
+parent document's viewport.
+
 
 ### Search Parameters `params`
 
@@ -3291,4 +3326,3 @@ Checks if a panel is hidden.
 * * *
 
 &copy; 2019-present unepgrid.ch
-

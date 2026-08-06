@@ -1,6 +1,10 @@
 import { Events } from "./events.js";
 import settings from "./settings.json";
-import { MessageFrameCom, RequestFrameCom } from "./messages.js";
+import {
+  MessageFrameCom,
+  RequestFrameCom,
+} from "./messages.js";
+import { HOST_VISIBILITY_MESSAGE_TYPE } from "./host_visibility.js";
 import { parse, stringify, patchObject, isObject } from "./helpers.js";
 import { version } from "../package.json";
 
@@ -86,6 +90,7 @@ class FrameManager extends Events {
     fm._reqId = 0;
 
     fm._build();
+    fm._initVisibility();
     fm.setUrl();
     fm.setParams();
     fm.setParam("sdkToken", fm._sdkToken);
@@ -126,6 +131,7 @@ class FrameManager extends Events {
       idRequest: "destroy",
     });
     fm._post(destroyWorker);
+    fm._destroyVisibility();
     fm._removeListener();
     fm._iframe.remove();
     fm._init_done = false;
@@ -152,6 +158,55 @@ class FrameManager extends Events {
       fm.opt.container = document.querySelector(fm.opt.container);
     }
     fm.opt.container.appendChild(fm._iframe);
+  }
+
+  /**
+   * Observe the iframe in the embedding page. The child document cannot infer
+   * that a cross-origin iframe is outside its parent's viewport.
+   * @private
+   */
+  _initVisibility() {
+    const fm = this;
+    const canObserveIframe = typeof IntersectionObserver === "function";
+    fm._iframeVisible = !canObserveIframe;
+    fm._onVisibilityChange = () => fm._postHostVisibility();
+    fm._onIframeLoad = () => fm._postHostVisibility();
+    document.addEventListener("visibilitychange", fm._onVisibilityChange);
+    fm._iframe.addEventListener("load", fm._onIframeLoad);
+    if (canObserveIframe) {
+      fm._visibilityObserver = new IntersectionObserver((entries) => {
+        const entry = entries.find(
+          (candidate) => candidate.target === fm._iframe,
+        );
+        if (!entry) {
+          return;
+        }
+        fm._iframeVisible = entry.isIntersecting && entry.intersectionRatio > 0;
+        fm._postHostVisibility();
+      });
+      fm._visibilityObserver.observe(fm._iframe);
+    }
+  }
+
+  /** @private */
+  _destroyVisibility() {
+    const fm = this;
+    fm._visibilityObserver?.disconnect();
+    document.removeEventListener("visibilitychange", fm._onVisibilityChange);
+    fm._iframe.removeEventListener("load", fm._onIframeLoad);
+  }
+
+  /** @private */
+  _postHostVisibility() {
+    const fm = this;
+    fm._iframe.contentWindow?.postMessage(
+      stringify({
+        type: HOST_VISIBILITY_MESSAGE_TYPE,
+        visible: !document.hidden && fm._iframeVisible,
+        sdkToken: fm._sdkToken,
+      }),
+      "*",
+    );
   }
 
   /**
@@ -383,6 +438,9 @@ class FrameManager extends Events {
        */
       if (message.type === "state") {
         fm.fire(message.state);
+        if (message.state === "ready") {
+          fm._postHostVisibility();
+        }
         if (message.version !== fm.version) {
           fm._message({
             level: "error",

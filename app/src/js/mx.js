@@ -16,6 +16,7 @@ import { ControlsPanel } from "./panel_controls/index.js";
 import { SpotlightManager } from "./pixop/spotlight_manager.js";
 import { MapxDraw } from "./draw/index.js";
 import "./privacy/index.js";
+import "./app_visibility/index.js";
 
 const panels = new ButtonPanelManager();
 const version = settings.version;

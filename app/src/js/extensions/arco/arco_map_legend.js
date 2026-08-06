@@ -14,6 +14,7 @@ import {
 } from "./color_domain_control.js";
 import { createPaletteDropdown } from "./palette_dropdown.js";
 import { formatVerticalAxisLabel, orderVerticalValues } from "./vertical.js";
+import { createVisibilityGate } from "../../app_visibility/index.js";
 import "../../search/style_flatpickr.less";
 import "../shared/style.less";
 import "./style.less";
@@ -53,6 +54,13 @@ export class ArcoMapLegend {
     this._id_query = 0;
     this._status = null;
     this._playbackRate = playbackRates[0];
+    this._visibility = createVisibilityGate(
+      this._opt.map?.getContainer?.() ?? null,
+    );
+    this._visible = this._visibility.isVisible();
+    this._unsubscribeVisibility = this._visibility.subscribe((visible) => {
+      this._setVisible(visible);
+    });
     this._on_loading = () => this._setLoading(true);
     this._on_loaded = (meta) => {
       this._meta = meta;
@@ -108,6 +116,10 @@ export class ArcoMapLegend {
     this._z.on("error", this._on_error);
     this._z.on("status", this._on_status);
 
+    if (!this._visible) {
+      this._z.suspend();
+    }
+
     await this._z.setLayer(this._opt.layer);
 
     this._time_meta = this._z.getTimeMeta();
@@ -136,6 +148,8 @@ export class ArcoMapLegend {
     }
     this._destroyed = true;
     this.stop();
+    this._unsubscribeVisibility?.();
+    this._visibility?.destroy();
     this.disablePick();
     this._z?.off("loading", this._on_loading);
     this._z?.off("loaded", this._on_loaded);
@@ -264,7 +278,9 @@ export class ArcoMapLegend {
     }
     this._playing = true;
     this.elButtonPlay?.classList.add("playing");
-    this._tick();
+    if (this._visible) {
+      this._tick();
+    }
   }
 
   stop() {
@@ -332,8 +348,11 @@ export class ArcoMapLegend {
 
   _tick() {
     clearTimeout(this._id_timer);
+    if (!this._visible) {
+      return;
+    }
     this._id_timer = setTimeout(() => {
-      if (this.isDestroyed() || !this._playing) {
+      if (this.isDestroyed() || !this._playing || !this._visible) {
         return;
       }
       // backpressure : do not advance while chunks are loading
@@ -352,6 +371,22 @@ export class ArcoMapLegend {
       }
       this._tick();
     }, this._opt.playbackInterval);
+  }
+
+  _setVisible(visible) {
+    if (visible === this._visible || this.isDestroyed()) {
+      return;
+    }
+    this._visible = visible;
+    if (!visible) {
+      clearTimeout(this._id_timer);
+      this._z?.suspend();
+      return;
+    }
+    this._z?.resume();
+    if (this._playing) {
+      this._tick();
+    }
   }
 
   _setLoading(loading) {
