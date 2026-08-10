@@ -34,6 +34,7 @@ export class MxStoryNavigationElement extends HTMLElement {
     this._locked = true;
     this._showQuit = true;
     this._gridOpen = false;
+    this._aspectRatio = 1;
   }
 
   connectedCallback() {
@@ -117,10 +118,11 @@ export class MxStoryNavigationElement extends HTMLElement {
 
   /**
    * @param {Object} config
-   * @param {Array<{name?: string}>} [config.steps]
+   * @param {Array<{name?: string, text?: string, coverImageSrc?: string}>} [config.steps]
    * @param {number} [config.activeIndex]
    * @param {boolean} [config.locked]
    * @param {boolean} [config.showQuit]
+   * @param {number} [config.aspectRatio]
    */
   configure(config = {}) {
     if (!this._built) this.build();
@@ -129,6 +131,9 @@ export class MxStoryNavigationElement extends HTMLElement {
       this._activeIndex = config.activeIndex;
     if (config.locked !== undefined) this._locked = config.locked;
     if (config.showQuit !== undefined) this._showQuit = config.showQuit;
+    if (Number.isFinite(config.aspectRatio) && config.aspectRatio > 0) {
+      this._aspectRatio = config.aspectRatio;
+    }
     this.render();
   }
 
@@ -193,13 +198,17 @@ export class MxStoryNavigationElement extends HTMLElement {
     this.renderLock();
 
     this.refs.bullets.replaceChildren(
-      ...this.getVisibleIndices().map((i) => this.makeStepTile(i)),
+      ...this.getVisibleIndices().map((i) => this.makeStepBullet(i)),
     );
 
     this.refs.gridPanel.classList.toggle("mx-display-none", !this._gridOpen);
     if (this._gridOpen) {
+      this.refs.gridPanel.style.setProperty(
+        "--mx-story-preview-ratio",
+        String(this._aspectRatio),
+      );
       this.refs.gridPanel.replaceChildren(
-        ...this._steps.map((_, i) => this.makeStepTile(i)),
+        ...this._steps.map((_, i) => this.makeStepCard(i)),
       );
     }
   }
@@ -207,8 +216,12 @@ export class MxStoryNavigationElement extends HTMLElement {
   renderLock() {
     if (!this._built) return;
     const icon = this.refs.lock.querySelector(".fa");
-    const activeKey = this._locked ? "lock-toggle-locked" : "lock-toggle-unlocked";
-    const inactiveKey = this._locked ? "lock-toggle-unlocked" : "lock-toggle-locked";
+    const activeKey = this._locked
+      ? "lock-toggle-locked"
+      : "lock-toggle-unlocked";
+    const inactiveKey = this._locked
+      ? "lock-toggle-unlocked"
+      : "lock-toggle-locked";
     icon.classList.remove(...ICONS[inactiveKey]);
     icon.classList.add(...ICONS[activeKey]);
     this.refs.lock.setAttribute(
@@ -218,7 +231,7 @@ export class MxStoryNavigationElement extends HTMLElement {
   }
 
   /** @param {number} index */
-  makeStepTile(index) {
+  makeStepBullet(index) {
     const { el } = this.elementCreator;
     const step = this._steps[index] || {};
     const label = step.name || `Step ${index + 1}`;
@@ -235,6 +248,65 @@ export class MxStoryNavigationElement extends HTMLElement {
     );
     tile.classList.toggle("mx-story-step-active", isActive);
     return tile;
+  }
+
+  /** @param {number} index */
+  makeStepCard(index) {
+    const { el } = this.elementCreator;
+    const step = this._steps[index] || {};
+    const name = step.name?.trim() || "";
+    const text = step.text?.trim() || "";
+    const description = name || text;
+    const accessibleDescription = description
+      ? `: ${description.slice(0, 260)}`
+      : "";
+    const indexLabel = el("strong", {
+      class: "mx-story-nav__card-index",
+    });
+    indexLabel.textContent = `${index + 1} – `;
+    const label = el("div", { class: "mx-story-nav__card-label" }, indexLabel);
+
+    if (name) {
+      label.appendChild(el("strong", name));
+    }
+    if (text) {
+      label.appendChild(el("p", text));
+    }
+
+    const cover = step.coverImageSrc
+      ? el("img", {
+          class: "mx-story-nav__card-cover",
+          src: step.coverImageSrc,
+          alt: "",
+          loading: "lazy",
+          "aria-hidden": "true",
+        })
+      : null;
+    const card = el(
+      "button",
+      {
+        type: "button",
+        class: ["mx-story-nav__card", "mx-pointer", "shadow"],
+        "aria-label": `Go to step ${index + 1}${accessibleDescription}`,
+        dataset: { step: index },
+      },
+      cover,
+      el("span", { class: "mx-story-nav__card-text" }, label),
+    );
+    card.classList.toggle("mx-story-step-active", index === this._activeIndex);
+    card.classList.toggle(
+      "mx-story-nav__card--with-cover",
+      Boolean(step.coverImageSrc),
+    );
+    cover?.addEventListener(
+      "error",
+      () => {
+        cover.remove();
+        card.classList.remove("mx-story-nav__card--with-cover");
+      },
+      { once: true },
+    );
+    return card;
   }
 
   /** @param {MouseEvent} event */

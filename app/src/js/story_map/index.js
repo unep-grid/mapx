@@ -1,5 +1,6 @@
 import "./style.less";
 import "./navigation/index.js";
+import { getStepPreviewData } from "./navigation/preview.js";
 import { getLabelFromObjectPath } from "./../language";
 import { ElementCreator, el } from "./../el/src/index.js";
 import { errorHandler } from "./../error_handler/index.js";
@@ -747,7 +748,11 @@ function setStepConfig() {
    * Navigation bar : steps list + quit button visibility
    */
   state.elStoryNav?.configure({
-    steps: state.stepsConfig.map((c) => ({ name: c.name })),
+    steps: state.stepsConfig.map((c) =>
+      getStepPreviewData({ elStep: c.elStep, name: c.name }),
+    ),
+    aspectRatio:
+      state.stepsConfig[0]?.width / state.stepsConfig[0]?.height || 1,
     activeIndex: state.stepActive || 0,
     showQuit: !(state.autoStart || state.update),
   });
