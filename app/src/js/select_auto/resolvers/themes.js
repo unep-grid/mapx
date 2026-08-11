@@ -45,6 +45,46 @@ function formatDate(dateString) {
   }
 }
 
+/**
+ * Render a theme label together with its unique identifier.
+ *
+ * Theme labels are intentionally not unique, so the identifier remains visible
+ * in both dropdown options and the selected item. When no distinct label is
+ * available, the identifier is rendered only once as the primary text.
+ *
+ * @param {Object} data - Theme data
+ * @param {(value: string) => string} escape - Tom Select escape helper
+ * @returns {HTMLElement} Theme identity element
+ */
+function renderThemeIdentity(data, escape) {
+  const id = String(data.id ?? "");
+  const label = String(data.label?.en ?? "").trim();
+  const hasDistinctLabel = label && label !== id;
+
+  return el(
+    "span",
+    { class: "mx-theme--selector-identity" },
+    el(
+      "span",
+      {
+        class: "mx-theme--selector-label",
+        title: hasDistinctLabel ? label : id,
+      },
+      escape(hasDistinctLabel ? label : id),
+    ),
+    hasDistinctLabel
+      ? el(
+          "span",
+          {
+            class: "mx-theme--selector-id",
+            title: id,
+          },
+          escape(id),
+        )
+      : null,
+  );
+}
+
 export const config = {
   valueField: "id",
   searchField: ["label", "description", "id"],
@@ -85,17 +125,7 @@ export const config = {
             class: [...storageIconClasses, "fa-sm"],
             style: { minWidth: "16px" },
           }),
-          el(
-            "span",
-            {
-              style: {
-                fontWeight: "bold",
-                flex: 1,
-                fontSize: "14px",
-              },
-            },
-            escape(data.label?.en || data.id),
-          ),
+          renderThemeIdentity(data, escape),
           el("i", {
             class: [...themeModeIconClasses, "fa-xs"],
             style: {
@@ -180,7 +210,6 @@ export const config = {
           class: [...storageIconClasses, "fa-sm"],
           style: { minWidth: "16px" },
         }),
-        el("span", { style: { flex: 1 } }, escape(data.label?.en || data.id)),
         el("i", {
           class: [...themeModeIconClasses, "fa-xs"],
           style: {
@@ -188,6 +217,7 @@ export const config = {
             minWidth: "12px",
           },
         }),
+        renderThemeIdentity(data, escape),
       );
     },
   },

@@ -181,3 +181,31 @@
 .mx-theme--storage-icon {
   margin-left: 10px;
 }
+
+// Theme options are rendered in a Tom Select dropdown attached to <body>, so
+// these selectors must not be scoped below the Theme Manager window.
+.mx-theme--selector-identity {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  gap: 0.5em;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.mx-theme--selector-label,
+.mx-theme--selector-id {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mx-theme--selector-label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.mx-theme--selector-id {
+  color: var(--mx_ui_text_faded);
+  font-size: 0.78em;
+}
