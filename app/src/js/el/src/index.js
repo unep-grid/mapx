@@ -36,6 +36,7 @@ export class ElementCreator {
     this.NSSvg = "http://www.w3.org/2000/svg";
     this.el = this.el.bind(this);
     this.svg = this.svg.bind(this);
+    this.sanitize = this.sanitize.bind(this);
     this.el.parent = this;
     this.svg.parent = this;
   }

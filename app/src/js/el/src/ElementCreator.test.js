@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { ElementCreator, el, svg } from "./index.js";
+import { ElementCreator, el, sanitize, svg } from "./index.js";
 import { waitTimeoutAsync } from "../../animation_frame/index.js";
 
 const settings = {
@@ -10,7 +10,17 @@ describe("ElementCreator", () => {
   // Test the constructor and basic function creation
   it("should create a function", () => {
     expect(el).toBeInstanceOf(Function);
+    expect(sanitize).toBeInstanceOf(Function);
     expect(svg).toBeInstanceOf(Function);
+  });
+
+  it("should expose a bound sanitizer", () => {
+    const result = sanitize(
+      '<strong>Safe</strong><img src="x" onerror="alert(1)">',
+    );
+
+    expect(result).toContain("<strong>Safe</strong>");
+    expect(result).not.toContain("onerror");
   });
 
   describe("el method", () => {

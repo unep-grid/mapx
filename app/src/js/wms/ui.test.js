@@ -120,4 +120,24 @@ describe("wmsBuildQueryUi", () => {
       { text: "Custom WMS", value: "https://example.com/wms" },
     ]);
   });
+
+  it("sanitizes layer abstracts when rendering fetched options", async () => {
+    await wmsBuildQueryUi(createFixture());
+    const layerSelect = tomSelectMock.instances.find(
+      ({ config }) => config.render?.option,
+    );
+
+    const output = layerSelect.config.render.option(
+      {
+        name: "test:layer",
+        title: "Test layer",
+        abstract: '<img src="x" onerror="alert(1)">',
+      },
+      (value) => value,
+    );
+
+    expect(output).toContain(
+      '<li class="text-muted small mx-text-truncate-2-lines"><img src="x"></li>',
+    );
+  });
 });
