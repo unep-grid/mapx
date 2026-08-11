@@ -29,7 +29,7 @@ describe("ElementCreator", () => {
 
       expect(div.ownerDocument).toBe(otherDocument);
       expect(icon.ownerDocument).toBe(otherDocument);
-      expect(div.innerText).toBe("Document scoped");
+      expect(div.textContent).toBe("Document scoped");
     });
 
     it("should reject an invalid document", () => {
@@ -56,7 +56,7 @@ describe("ElementCreator", () => {
 
       expect(option.getAttribute("value")).toBe("");
       expect(option.value).toBe("");
-      expect(option.innerText).toBe("All values");
+      expect(option.textContent).toBe("All values");
     });
 
     // Test for setting class as string
@@ -146,7 +146,7 @@ describe("ElementCreator", () => {
     it("should not affect regular text content inc. special chars", () => {
       const textContent = "Hello World & Special chars: < > &";
       const div = el("div", textContent);
-      expect(div.innerText).toBe(textContent);
+      expect(div.textContent).toBe(textContent);
     });
   });
 
@@ -158,14 +158,14 @@ describe("ElementCreator", () => {
 
     it("should set text content correctly", () => {
       const div = el("div", "Hello World");
-      expect(div.innerText).toBe("Hello World");
+      expect(div.textContent).toBe("Hello World");
     });
 
     it("should handle async text content", async () => {
       const promiseContent = Promise.resolve("Async Content");
       const elOut = el("div", promiseContent);
       await waitTimeoutAsync(settings.timeout);
-      expect(elOut.innerText).toBe("Async Content");
+      expect(elOut.textContent).toBe("Async Content");
     });
 
     it("should handle async element content", async () => {
@@ -174,6 +174,67 @@ describe("ElementCreator", () => {
       const elOut = el("div", promiseContent);
       await waitTimeoutAsync(settings.timeout);
       expect(elOut.contains(elTest)).toBe(true);
+    });
+
+    it("should preserve sibling order around delayed async content", async () => {
+      let resolveContent;
+      const promiseContent = new Promise((resolve) => {
+        resolveContent = resolve;
+      });
+      const icon = el("i", { class: "icon" });
+      const elOut = el("div", "Before", promiseContent, icon);
+
+      resolveContent("Translated");
+      await waitTimeoutAsync(settings.timeout);
+
+      expect(elOut.textContent).toBe("BeforeTranslated");
+      expect(elOut.lastElementChild).toBe(icon);
+      expect(elOut.contains(icon)).toBe(true);
+    });
+
+    it("should preserve form controls beside delayed async labels", async () => {
+      let resolveLabel;
+      const labelText = new Promise((resolve) => {
+        resolveLabel = resolve;
+      });
+      const input = el("input", { type: "radio", checked: true });
+      const label = el("label", input, labelText);
+
+      resolveLabel("Session, temporary");
+      await waitTimeoutAsync(settings.timeout);
+
+      expect(label.contains(input)).toBe(true);
+      expect(input.checked).toBe(true);
+      expect(label.textContent).toBe("Session, temporary");
+    });
+
+    it("should preserve siblings when delayed HTML is sanitized", async () => {
+      const icon = el("i", { class: "icon" });
+      const elOut = el(
+        "div",
+        Promise.resolve('<strong>Safe</strong><script>alert("x")</script>'),
+        icon,
+      );
+      await waitTimeoutAsync(settings.timeout);
+
+      expect(elOut.querySelector("strong").textContent).toBe("Safe");
+      expect(elOut.querySelector("script")).toBeNull();
+      expect(elOut.lastElementChild).toBe(icon);
+    });
+
+    it("should remove failed async placeholders without changing siblings", async () => {
+      const warning = vi.spyOn(console, "warn").mockImplementation(() => {});
+      const icon = el("i", { class: "icon" });
+      const elOut = el("div", Promise.reject(new Error("failed")), icon);
+      await waitTimeoutAsync(settings.timeout);
+
+      expect(elOut.childNodes).toHaveLength(1);
+      expect(elOut.firstElementChild).toBe(icon);
+      expect(warning).toHaveBeenCalledWith(
+        "ElementCreator",
+        expect.any(Error),
+      );
+      warning.mockRestore();
     });
 
     it("should set innerHTML correctly", () => {

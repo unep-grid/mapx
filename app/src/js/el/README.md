@@ -42,8 +42,17 @@ const button = el('button', { on: ['click', () => alert('Clicked!')] });
 
 ### Asynchronous Content
 ```javascript
-const asyncDiv = el('div', fetchSomeData().then(data => data.text()));
+const asyncDiv = el(
+  'div',
+  'Status: ',
+  fetchSomeData().then(data => data.text()),
+  el('i', { class: 'fa fa-check' }),
+);
 ```
+
+Async children reserve their declared position while loading. Resolving or
+rejecting one child does not replace neighboring text, controls, icons, or
+other DOM nodes.
 
 ## License
 This project is licensed under the MIT license.

@@ -103,12 +103,76 @@ export class ElementCreator {
    * @returns {Promise<HTMLElement|SVGElement>} The element with content set.
    */
   async processAsync(tagName, elOut, svgMode, promise) {
+    const typeValue = tagName === "input" || tagName === "textarea";
+    const placeholder = typeValue
+      ? null
+      : this.document.createComment("async-content");
+
+    if (placeholder) {
+      elOut.appendChild(placeholder);
+    }
+
     try {
       const value = await promise;
-      return this.processOptions(tagName, elOut, svgMode, [value]);
+      if (typeValue) {
+        this.processOptions(tagName, elOut, svgMode, [value]);
+        return elOut;
+      }
+
+      if (isObject(value)) {
+        this.processObjectOptions(tagName, elOut, svgMode, value);
+        placeholder.remove();
+        return elOut;
+      }
+
+      const nodes = await this.createAsyncContentNodes(value, svgMode);
+      placeholder.replaceWith(...nodes);
+      return elOut;
     } catch (e) {
+      placeholder?.remove();
       console.warn("ElementCreator", e);
+      return elOut;
     }
+  }
+
+  /**
+   * Convert asynchronously resolved content to nodes without replacing sibling
+   * content already owned by the target element.
+   * @param {any} value Resolved child content
+   * @param {boolean} svgMode Whether the target is an SVG element
+   * @returns {Promise<Node[]>} Ordered nodes for the resolved content
+   */
+  async createAsyncContentNodes(value, svgMode) {
+    if (isPromise(value)) {
+      return this.createAsyncContentNodes(await value, svgMode);
+    }
+
+    if (isArray(value)) {
+      const groups = await Promise.all(
+        value.map((item) => this.createAsyncContentNodes(item, svgMode)),
+      );
+      return groups.flat();
+    }
+
+    if (value && typeof value === "object" && value.nodeType) {
+      return [value];
+    }
+
+    if (isObject(value)) {
+      return [];
+    }
+
+    if (isHTML(value) && !svgMode) {
+      const template = this.document.createElement("template");
+      template.innerHTML = this.sanitize(value);
+      return Array.from(template.content.childNodes);
+    }
+
+    if (isString(value) || isNumeric(value)) {
+      return [this.document.createTextNode(value.toString())];
+    }
+
+    return [];
   }
 
   /**
@@ -245,16 +309,20 @@ export class ElementCreator {
       /**
        * HTML - Sanitized with DOMPurify
        */
-      elOut.innerHTML = this.sanitize(content);
+      const template = this.document.createElement("template");
+      template.innerHTML = this.sanitize(content);
+      elOut.appendChild(template.content);
     } else if (typeString) {
       /**
        * String
        */
       const str = content.toString();
-      if (svgMode) {
-        elOut.textContent = str;
-      } else {
-        elOut.innerText = str;
+      elOut.appendChild(this.document.createTextNode(str));
+      const ElementConstructor = this.document.defaultView?.HTMLElement;
+      const supportsInnerText =
+        ElementConstructor && "innerText" in ElementConstructor.prototype;
+      if (!svgMode && !supportsInnerText) {
+        elOut.innerText = elOut.textContent;
       }
     }
     return elOut;
