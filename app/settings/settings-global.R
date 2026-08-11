@@ -247,12 +247,6 @@ config[["ui"]] <- list(
 
 
 #
-# wms sources
-#
-configWms <- fromJSON("./src/js/settings/wms.json", simplifyDataFrame = FALSE)
-config[["wms"]] <- configWms
-
-#
 # Set default variable names
 #
 config[["variables"]] <- list()

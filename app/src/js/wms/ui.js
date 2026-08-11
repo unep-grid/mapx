@@ -6,11 +6,25 @@ import { el, elSpanTranslate } from "./../el_mapx/index.js";
 import { wmsGetLayers, urlTile, urlLegend } from "./index.js";
 import { errorFormater } from "../error_handler/index.js";
 import { sanitize } from "../el/src/index.js";
+import { settings } from "../settings/index.js";
 
+/**
+ * Build the WMS query configurator.
+ *
+ * @param {Object} opt Configurator options.
+ * @param {Array<{label: string, value: string}>} [opt.services=settings.wms]
+ *   Service presets; defaults to the frontend settings.
+ * @returns {Promise<void>}
+ */
 export async function wmsBuildQueryUi(opt) {
   opt = Object.assign(
     {},
-    { useMirror: false, useCache: false, timestamp: null },
+    {
+      useMirror: false,
+      useCache: false,
+      timestamp: null,
+      services: settings.wms,
+    },
     opt,
   );
 

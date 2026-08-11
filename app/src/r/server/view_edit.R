@@ -461,7 +461,6 @@ observe({
               mxWmsBuildQueryUi(list(
                 timestamp = .get(viewData, c("date_modified")),
                 useCache = FALSE,
-                services = .get(config, c("wms")),
                 selectorParent = "#wmsGenerator",
                 selectorTileInput = "#textRasterTileUrl",
                 selectorLegendInput = "#textRasterTileLegend",

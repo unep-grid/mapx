@@ -26,16 +26,14 @@ export {
 };
 
 /**
- * Build the WMS helper component
+ * Fetch and parse a WMS capabilities document.
  *
- * @param {Object} opt Options
- * @param {Sting} opt.selectorParent Id of the parent where to insert the component
- * @param {Array} opt.services Array of default services
- * @param {Sting} opt.selectorTileInput Id of the tile input
- * @param {Sting} opt.selectorLegendInput Id of the legend input
- *
- *
- *TODO: event delegation, destroy method
+ * @param {string} baseUrl WMS service URL without query parameters.
+ * @param {Object} [opt] Request options.
+ * @param {boolean} [opt.useCache=settings.useCache] Whether to use cached data.
+ * @param {boolean} [opt.useMirror=false] Whether to fetch through the mirror.
+ * @param {Object|null} [opt.searchParams=null] Additional query parameters.
+ * @returns {Promise<Object>} Parsed WMS capability data.
  */
 async function wmsGetCapabilities(baseUrl, opt) {
   opt = Object.assign(
