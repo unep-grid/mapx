@@ -89,11 +89,19 @@ export class ThemeModal extends EventSimple {
           type: "button",
           on: { click: action },
         },
-        tm._el("i", {
-          class: ["fa", `fa-${icon}`],
-          "aria-hidden": "true",
-        }),
-        tm._el("span", { class: "mx-theme--action-label" }, label),
+        tm._el(
+          "div",
+          { class: "btn-icon" },
+          tm._el("span", { class: "mx-theme--action-label" }, label),
+          tm._el(
+            "div",
+            { class: "btn-icon-wrapper" },
+            tm._el("i", {
+              class: ["fa", `fa-${icon}`],
+              "aria-hidden": "true",
+            }),
+          ),
+        ),
       );
       label
         .then((text) => {
@@ -112,14 +120,24 @@ export class ThemeModal extends EventSimple {
       tm._el_button_save,
       tm._el_button_delete,
     ];
+    const windowTitle = await getDictItem("mx_theme_manager_title");
+    const elModalButtonGroup = tm._el(
+      "div",
+      {
+        class: "btn-group",
+        role: "group",
+        "aria-label": windowTitle,
+      },
+      elModalButtons,
+    );
 
     tm._modal = tm._windowManager.open({
       key: "theme-manager",
       replace: true,
       modal: false,
       content: tm._el_content,
-      title: await getDictItem("mx_theme_manager_title"),
-      footerEnd: elModalButtons,
+      title: windowTitle,
+      footerStart: elModalButtonGroup,
       draggable: true,
       resizable: true,
       collapsible: true,

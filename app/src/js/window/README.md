@@ -26,6 +26,19 @@ Window instances expose `show`, `hide`, `close`, `setTitle`, `collapse`,
 `expand`, `snap` and `restore`. Lifecycle and geometry changes emit bubbling
 `mx-window-*` DOM events.
 
+Pass a single Bootstrap `.btn-group` node to `footerStart` for a connected tool
+toolbar. Pass independent decision buttons to `footerEnd`, as the dialog helpers
+do.
+
+```js
+const actionGroup = manager.el(
+  "div",
+  { class: "btn-group", role: "group", "aria-label": "Example actions" },
+  [closeButton, importButton, exportButton],
+);
+manager.open({ content, footerStart: actionGroup });
+```
+
 Set `modal: false` for persistent tools that must allow interaction with the
 map or application behind them. Non-modal windows do not create an
 `mx-window-backdrop` and do not trap focus. Decision dialogs should remain

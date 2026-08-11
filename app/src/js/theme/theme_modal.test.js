@@ -76,9 +76,38 @@ describe("ThemeModal window migration", () => {
     });
     expect(windowElement.backdrop).toBeNull();
     expect(manager.layer.querySelector(".mx-window-backdrop")).toBeNull();
-    expect(windowElement.refs.footerEnd.querySelectorAll("button")).toHaveLength(
-      6,
+    const buttonGroup = windowElement.refs.footerStart.querySelector(
+      ":scope > .btn-group",
     );
+    const buttons = Array.from(buttonGroup.children);
+    expect(buttonGroup.getAttribute("role")).toBe("group");
+    expect(buttonGroup.getAttribute("aria-label")).toBe(
+      "mx_theme_manager_title",
+    );
+    expect(buttons).toHaveLength(6);
+    expect(buttons.every((button) => button.matches("button.btn"))).toBe(true);
+    expect(windowElement.refs.footerEnd.children).toHaveLength(0);
+    expect(
+      buttons.map((button) =>
+        button.querySelector(".btn-icon-wrapper > i").classList.item(1),
+      ),
+    ).toEqual([
+      "fa-times",
+      "fa-cloud-upload",
+      "fa-cloud-download",
+      "fa-files-o",
+      "fa-save",
+      "fa-trash",
+    ]);
+    expect(
+      buttons.every(
+        (button) =>
+          button.querySelector(".btn-icon").firstElementChild.matches("span") &&
+          button.querySelector(".btn-icon").lastElementChild.matches(
+            ".btn-icon-wrapper",
+          ),
+      ),
+    ).toBe(true);
     modal.close();
     expect(manager.windows.has("theme-manager")).toBe(false);
     expect(onClose).toHaveBeenCalledOnce();
