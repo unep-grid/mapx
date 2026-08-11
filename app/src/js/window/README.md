@@ -26,6 +26,46 @@ Window instances expose `show`, `hide`, `close`, `setTitle`, `collapse`,
 `expand`, `snap` and `restore`. Lifecycle and geometry changes emit bubbling
 `mx-window-*` DOM events.
 
+Set `modal: false` for persistent tools that must allow interaction with the
+map or application behind them. Non-modal windows do not create an
+`mx-window-backdrop` and do not trap focus. Decision dialogs should remain
+modal so their backdrop blocks unrelated interaction until they resolve.
+
+## Promise-based dialogs
+
+Use `openConfirmDialog` and `openChoiceDialog` for short modal decisions. Both
+helpers require an existing manager so their DOM, focus handling and nested
+windows remain scoped to the consumer's application root. Closing with Cancel,
+the header button, Escape, replacement or the manager resolves to the configured
+cancel value.
+
+```js
+const manager = getMapxWindowManager(appRoot);
+const accepted = await openConfirmDialog({
+  manager,
+  title: "Publish theme?",
+  content: manager.el("p", "This change is visible to the project."),
+  confirmLabel: "Yes",
+  cancelLabel: "No",
+});
+
+const storage = await openChoiceDialog({
+  manager,
+  title: "Storage",
+  options: [
+    { value: "session", label: "Session", checked: true },
+    { value: "local", label: "This browser" },
+  ],
+});
+```
+
+`openConfirmDialog` returns `true` by default. Use `getValue` to return custom
+data, `cancelValue` to distinguish cancellation, and `onReady` to receive the
+window and its buttons for validation. `windowConfig` can override geometry or
+enable resizing for larger content such as editors. `openChoiceDialog` accepts
+text or DOM labels, disabled/default options, and returns a selected string or
+`null`.
+
 ## Legacy capability mapping
 
 | Legacy modal concern        | New window API                          |

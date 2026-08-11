@@ -89,6 +89,7 @@ mx-window.mx-window--centered {
 .mx-window__content {
   width: 100%;
   height: 100%;
+  overflow-y: auto;
 }
 
 .mx-window__footer {
@@ -123,6 +124,37 @@ mx-window.mx-window--centered {
   border-right: 2px solid var(--mx_ui_text_faded);
   border-bottom: 2px solid var(--mx_ui_text_faded);
   content: "";
+}
+
+.mx-window-dialog__content {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.mx-window-choice__content {
+  display: grid;
+  gap: 12px;
+}
+
+.mx-window-choice {
+  display: grid;
+  gap: 8px;
+}
+
+.mx-window-choice__label {
+  display: flex;
+  padding: 8px;
+  margin: 0;
+  border: 1px solid var(--mx_ui_border);
+  border-radius: 4px;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.mx-window-choice__label:hover {
+  background: var(--mx_ui_background_accent);
 }
 
 mx-window.mx-window--collapsed {

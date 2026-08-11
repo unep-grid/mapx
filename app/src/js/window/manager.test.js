@@ -46,6 +46,18 @@ describe("MxWindowManager", () => {
     expect(second.isConnected).toBe(false);
   });
 
+  it("keeps the application interactive for non-modal windows", () => {
+    const element = manager.open({
+      key: "interactive",
+      modal: false,
+      content: "Tools",
+    });
+
+    expect(element.backdrop).toBeNull();
+    expect(manager.layer.querySelector(".mx-window-backdrop")).toBeNull();
+    expect(element.getAttribute("aria-modal")).toBe("false");
+  });
+
   it("supports collapse, expand, snap and restore states", () => {
     const element = manager.open({ key: "states", content: "Content" });
     element.collapse();
