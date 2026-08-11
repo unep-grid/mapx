@@ -10446,13 +10446,28 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{theme}} as default theme ?",
-    "de": "Satz {{theme}} als Standarddesign?"
+    "en": "Set “{{theme}}” as the default theme?",
+    "de": "Satz \" {{theme}} \" als Standarddesign?\""
   },
   {
     "id": "mx_theme_delete_button",
     "en": "Delete",
     "de": "Löschen"
+  },
+  {
+    "id": "mx_theme_delete_database_confirm",
+    "en": "Delete theme “{{theme}}” from the database?",
+    "de": "Design löschen {{theme}} „aus der Datenbank?“"
+  },
+  {
+    "id": "mx_theme_delete_local_confirm",
+    "en": "Delete theme “{{theme}}” from this browser?",
+    "de": "Design löschen {{theme}} „von diesem Browser?“"
+  },
+  {
+    "id": "mx_theme_delete_session_confirm",
+    "en": "Delete session theme “{{theme}}”?",
+    "de": "Sitzungsthema löschen {{theme}} “?"
   },
   {
     "id": "mx_theme_remote_empty",

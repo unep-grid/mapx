@@ -10446,13 +10446,28 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{theme}} as default theme ?",
-    "ar": "تعيين {{theme}} كموضوع افتراضي ؟"
+    "en": "Set “{{theme}}” as the default theme?",
+    "ar": "تعيين \" {{theme}} \"كموضوع افتراضي؟\""
   },
   {
     "id": "mx_theme_delete_button",
     "en": "Delete",
     "ar": "يمسح"
+  },
+  {
+    "id": "mx_theme_delete_database_confirm",
+    "en": "Delete theme “{{theme}}” from the database?",
+    "ar": "حذف القالب \" {{theme}} \"من قاعدة البيانات؟\""
+  },
+  {
+    "id": "mx_theme_delete_local_confirm",
+    "en": "Delete theme “{{theme}}” from this browser?",
+    "ar": "حذف القالب \" {{theme}} \"من هذا المتصفح؟\""
+  },
+  {
+    "id": "mx_theme_delete_session_confirm",
+    "en": "Delete session theme “{{theme}}”?",
+    "ar": "حذف سمة الجلسة \" {{theme}} \"؟"
   },
   {
     "id": "mx_theme_remote_empty",

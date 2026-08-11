@@ -10446,13 +10446,28 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{theme}} as default theme ?",
-    "zh": "放 {{theme}}作为默认主题？"
+    "en": "Set “{{theme}}” as the default theme?",
+    "zh": "放 ” {{theme}}设置为默认主题？"
   },
   {
     "id": "mx_theme_delete_button",
     "en": "Delete",
     "zh": "删除"
+  },
+  {
+    "id": "mx_theme_delete_database_confirm",
+    "en": "Delete theme “{{theme}}” from the database?",
+    "zh": "删除主题“ {{theme}} “从数据库中？”"
+  },
+  {
+    "id": "mx_theme_delete_local_confirm",
+    "en": "Delete theme “{{theme}}” from this browser?",
+    "zh": "删除主题“ {{theme}} “从此浏览器？”"
+  },
+  {
+    "id": "mx_theme_delete_session_confirm",
+    "en": "Delete session theme “{{theme}}”?",
+    "zh": "删除会话主题 {{theme}}“？”"
   },
   {
     "id": "mx_theme_remote_empty",

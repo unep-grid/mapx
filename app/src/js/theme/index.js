@@ -18,10 +18,14 @@ import {
   itemFlashCancel,
   itemFlashSave,
   itemFlashWarning,
+  parseTemplate,
 } from "../mx_helper_misc";
-import { modalConfirm } from "../mx_helper_modal";
+import {
+  getMapxWindowManager,
+  openConfirmDialog,
+} from "../window/index.js";
 import { settings } from "../settings";
-import { getLanguageCurrent } from "../language";
+import { getDictItem, getLanguageCurrent } from "../language";
 import {
   getBuiltInTheme,
   getForIntegration as getThemeForIntegration,
@@ -81,6 +85,7 @@ class Theme extends EventSimple {
     const t = this;
     bindAll(t);
     t._opt = Object.assign({}, global, opt);
+    t._root = opt?.root || null;
     t._mapxStyle = null;
 
     t._btns = {
@@ -102,6 +107,66 @@ class Theme extends EventSimple {
 
   get transformRequest() {
     return this._mapxStyle?.transformRequest;
+  }
+
+  getWindowManager() {
+    const root = this._root || document.body;
+    return getMapxWindowManager(root);
+  }
+
+  getThemeDisplayName(theme) {
+    const language = getLanguageCurrent();
+    return theme?.label?.[language] || theme?.label?.en || theme?.id || "";
+  }
+
+  async confirmSetAsProjectDefault(theme) {
+    const manager = this.getWindowManager();
+    const themeName = this.getThemeDisplayName(theme);
+    const title = await getDictItem("mx_theme_update_project");
+
+    return (
+      (await openConfirmDialog({
+        manager,
+        key: "theme-set-project-default",
+        title,
+        content: manager.el(
+          "p",
+          getDictItem("mx_theme_update_project_desc").then((description) =>
+            parseTemplate(description, { theme: themeName }),
+          ),
+        ),
+        confirmLabel: getDictItem("yes"),
+        cancelLabel: getDictItem("no"),
+      })) === true
+    );
+  }
+
+  async confirmDeleteTheme(theme, storage) {
+    const manager = this.getWindowManager();
+    const descriptionKey = {
+      db: "mx_theme_delete_database_confirm",
+      local: "mx_theme_delete_local_confirm",
+      session: "mx_theme_delete_session_confirm",
+    }[storage];
+    const title = await getDictItem("mx_theme_delete_button");
+
+    return (
+      (await openConfirmDialog({
+        manager,
+        key: `theme-delete-${storage}`,
+        title,
+        content: manager.el(
+          "p",
+          getDictItem(descriptionKey).then((description) =>
+            parseTemplate(description, {
+              theme: this.getThemeDisplayName(theme),
+            }),
+          ),
+        ),
+        confirmLabel: getDictItem("btn_delete"),
+        cancelLabel: getDictItem("btn_cancel"),
+      })) === true
+    );
   }
 
   log(x) {
@@ -213,15 +278,7 @@ class Theme extends EventSimple {
       const notDefault = settings.project.theme != theme.id;
       let setAsProjectDefault = false;
       if (notDefault) {
-        const confirmed = await modalConfirm({
-          title: tt("mx_theme_update_project"),
-          content: tt("mx_theme_update_project_desc", {
-            data: { idTheme: theme.id },
-          }),
-          confirm: tt("btn_confirm"),
-          cancel: tt("btn_cancel"),
-        });
-        setAsProjectDefault = !!confirmed;
+        setAsProjectDefault = await t.confirmSetAsProjectDefault(theme);
       }
 
       const { theme: themeDb } = await t._s.save({
@@ -805,12 +862,7 @@ class Theme extends EventSimple {
     try {
       const t = this;
 
-      const confirmed = await modalConfirm({
-        title: tt("mx_theme_delete_button"),
-        content: `Are you sure you want to delete theme "${theme.id}" from the database?`,
-        confirm: tt("btn_delete"),
-        cancel: tt("btn_cancel"),
-      });
+      const confirmed = await t.confirmDeleteTheme(theme, "db");
 
       if (!confirmed) {
         itemFlashCancel();
@@ -848,12 +900,7 @@ class Theme extends EventSimple {
     try {
       const t = this;
 
-      const confirmed = await modalConfirm({
-        title: tt("mx_theme_delete_button"),
-        content: `Are you sure you want to delete theme "${theme.id}" from local storage?`,
-        confirm: tt("btn_delete"),
-        cancel: tt("btn_cancel"),
-      });
+      const confirmed = await t.confirmDeleteTheme(theme, "local");
 
       if (!confirmed) {
         itemFlashCancel();
@@ -892,12 +939,7 @@ class Theme extends EventSimple {
     try {
       const t = this;
 
-      const confirmed = await modalConfirm({
-        title: tt("mx_theme_delete_button"),
-        content: `Are you sure you want to delete session theme "${theme.id}"?`,
-        confirm: tt("btn_delete"),
-        cancel: tt("btn_cancel"),
-      });
+      const confirmed = await t.confirmDeleteTheme(theme, "session");
 
       if (!confirmed) {
         itemFlashCancel();
@@ -1425,6 +1467,7 @@ class Theme extends EventSimple {
     }
     t._themeModal = new ThemeModal({
       theme: t,
+      windowManager: t.getWindowManager(),
       onClose: () => {
         t.off("list_updated", updateList);
         t.off("theme_changed", updateSelected);

@@ -10446,13 +10446,28 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{theme}} as default theme ?",
-    "fa": "تنظیم {{theme}} به عنوان تم پیش‌فرض؟"
+    "en": "Set “{{theme}}” as the default theme?",
+    "fa": "تنظیم « {{theme}} به عنوان قالب پیش‌فرض؟"
   },
   {
     "id": "mx_theme_delete_button",
     "en": "Delete",
     "fa": "حذف"
+  },
+  {
+    "id": "mx_theme_delete_database_confirm",
+    "en": "Delete theme “{{theme}}” from the database?",
+    "fa": "حذف قالب « {{theme}} از پایگاه داده؟"
+  },
+  {
+    "id": "mx_theme_delete_local_confirm",
+    "en": "Delete theme “{{theme}}” from this browser?",
+    "fa": "حذف قالب « {{theme}} از این مرورگر؟"
+  },
+  {
+    "id": "mx_theme_delete_session_confirm",
+    "en": "Delete session theme “{{theme}}”?",
+    "fa": "حذف قالب جلسه \" {{theme}} «؟"
   },
   {
     "id": "mx_theme_remote_empty",

@@ -27158,16 +27158,16 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{theme}} as default theme ?",
-    "fr": "Ensemble {{theme}} comme thème par défaut ?",
-    "es": "Colocar {{theme}} ¿como tema predeterminado?",
-    "ru": "Набор {{theme}} как тема по умолчанию?",
-    "zh": "放 {{theme}}作为默认主题？",
-    "ar": "تعيين {{theme}} كموضوع افتراضي ؟",
-    "fa": "تنظیم {{theme}} به عنوان تم پیش‌فرض؟",
-    "ps": "ټاکل شوی {{theme}} د ډیفالټ موضوع په توګه؟",
-    "bn": "সেট {{theme}} ডিফল্ট থিম হিসেবে?",
-    "de": "Satz {{theme}} als Standarddesign?"
+    "en": "Set “{{theme}}” as the default theme?",
+    "fr": "Ensemble \" {{theme}} « comme thème par défaut ? »",
+    "es": "Colocar \" {{theme}} ” ¿como tema predeterminado?",
+    "ru": "Набор \" {{theme}} «В качестве темы по умолчанию?»",
+    "zh": "放 ” {{theme}}设置为默认主题？",
+    "ar": "تعيين \" {{theme}} \"كموضوع افتراضي؟\"",
+    "fa": "تنظیم « {{theme}} به عنوان قالب پیش‌فرض؟",
+    "ps": "تنظیم کړئ \" {{theme}} \"د ډیفالټ موضوع په توګه؟\"",
+    "bn": "সেট করুন “ {{theme}} ডিফল্ট থিম হিসেবে?",
+    "de": "Satz \" {{theme}} \" als Standarddesign?\""
   },
   {
     "id": "mx_theme_delete_button",
@@ -27181,6 +27181,45 @@
     "ps": "ړنګول",
     "bn": "মুছে ফেলুন",
     "de": "Löschen"
+  },
+  {
+    "id": "mx_theme_delete_database_confirm",
+    "en": "Delete theme “{{theme}}” from the database?",
+    "fr": "Supprimer le thème « {{theme}} « de la base de données ? »",
+    "es": "Eliminar tema “ {{theme}} ¿De la base de datos?",
+    "ru": "Удалить тему {{theme}} «Из базы данных?»",
+    "zh": "删除主题“ {{theme}} “从数据库中？”",
+    "ar": "حذف القالب \" {{theme}} \"من قاعدة البيانات؟\"",
+    "fa": "حذف قالب « {{theme}} از پایگاه داده؟",
+    "ps": "موضوع ړنګ کړئ \" {{theme}} \"له ډیټابیس څخه؟\"",
+    "bn": "থিম মুছুন “ {{theme}} ডাটাবেস থেকে?",
+    "de": "Design löschen {{theme}} „aus der Datenbank?“"
+  },
+  {
+    "id": "mx_theme_delete_local_confirm",
+    "en": "Delete theme “{{theme}}” from this browser?",
+    "fr": "Supprimer le thème « {{theme}} « depuis ce navigateur ? »",
+    "es": "Eliminar tema “ {{theme}} ” ¿desde este navegador?",
+    "ru": "Удалить тему {{theme}} «из этого браузера?»",
+    "zh": "删除主题“ {{theme}} “从此浏览器？”",
+    "ar": "حذف القالب \" {{theme}} \"من هذا المتصفح؟\"",
+    "fa": "حذف قالب « {{theme}} از این مرورگر؟",
+    "ps": "موضوع ړنګ کړئ \" {{theme}} \"له دې براوزر څخه؟\"",
+    "bn": "থিম মুছুন “ {{theme}} এই ব্রাউজার থেকে?",
+    "de": "Design löschen {{theme}} „von diesem Browser?“"
+  },
+  {
+    "id": "mx_theme_delete_session_confirm",
+    "en": "Delete session theme “{{theme}}”?",
+    "fr": "Supprimer le thème de la session « {{theme}} « ? »",
+    "es": "Eliminar tema de sesión “ {{theme}} ”?",
+    "ru": "Удалить тему сессии {{theme}} ?»",
+    "zh": "删除会话主题 {{theme}}“？”",
+    "ar": "حذف سمة الجلسة \" {{theme}} \"؟",
+    "fa": "حذف قالب جلسه \" {{theme}} «؟",
+    "ps": "د غونډې موضوع ړنګ کړئ \" {{theme}} \"؟\"",
+    "bn": "সেশন থিম মুছুন {{theme}} ”?",
+    "de": "Sitzungsthema löschen {{theme}} “?"
   },
   {
     "id": "mx_theme_remote_empty",

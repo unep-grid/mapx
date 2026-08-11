@@ -8357,11 +8357,23 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{theme}} as default theme ?"
+    "en": "Set “{{theme}}” as the default theme?"
   },
   {
     "id": "mx_theme_delete_button",
     "en": "Delete"
+  },
+  {
+    "id": "mx_theme_delete_database_confirm",
+    "en": "Delete theme “{{theme}}” from the database?"
+  },
+  {
+    "id": "mx_theme_delete_local_confirm",
+    "en": "Delete theme “{{theme}}” from this browser?"
+  },
+  {
+    "id": "mx_theme_delete_session_confirm",
+    "en": "Delete session theme “{{theme}}”?"
   },
   {
     "id": "mx_theme_remote_empty",

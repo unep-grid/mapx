@@ -1,7 +1,5 @@
-import { modal, modalConfirm } from "../mx_helper_modal.js";
-import { modalRadio } from "../modal_radio/index.js";
 import { EventSimple } from "../event_simple/index.js";
-import { el, elButtonFa, elSelect, tt } from "../el_mapx";
+import { elSelect, tt } from "../el_mapx";
 import { bindAll } from "../bind_class_methods/index.js";
 import {
   isElement,
@@ -25,6 +23,7 @@ import { jedInit } from "../json_editor"; // Import jedInit
 import { settings } from "../mx.js";
 import { SelectAuto } from "../select_auto";
 import { getDictItem } from "../language/index.js";
+import { openChoiceDialog, openConfirmDialog } from "../window/index.js";
 import "../color_swatches/color-swatches.js";
 import { listFontFamilies, listFonts } from "@unep-grid/mapx-style";
 
@@ -48,10 +47,16 @@ export class ThemeModal extends EventSimple {
     bindAll(this);
     const tm = this;
 
-    const { theme, onClose } = opt;
+    const { theme, windowManager, onClose } = opt;
+
+    if (!windowManager || typeof windowManager.open !== "function") {
+      throw new TypeError("ThemeModal requires an MxWindowManager");
+    }
 
     // theme manager instance
     tm._theme = theme;
+    tm._windowManager = windowManager;
+    tm._el = windowManager.el;
     tm._on_close = onClose;
   }
 
@@ -63,41 +68,41 @@ export class ThemeModal extends EventSimple {
     const tm = this;
 
     // Modal content container
-    tm._el_content = el("div", { class: "mx-theme--manager-modal" }); // Add modal class
+    tm._el_content = tm._el("div", { class: "mx-theme--manager-modal" });
 
     // Modal buttons
-    tm._el_button_close = elButtonFa("btn_close", {
-      icon: "times",
-      action: tm.close,
-    });
+    const buttonDefinitions = [
+      ["close", "btn_close", "times", tm.close],
+      ["import", "mx_theme_import_button", "cloud-upload", tm.importTheme],
+      ["export", "mx_theme_export_button", "cloud-download", tm.exportTheme],
+      ["create", "mx_theme_create_button", "files-o", tm.createTheme],
+      ["save", "mx_theme_save_button", "save", tm.saveTheme],
+      ["delete", "mx_theme_delete_button", "trash", tm.deleteTheme],
+    ];
 
-    // Action buttons
-    tm._el_button_import = elButtonFa("mx_theme_import_button", {
-      icon: "cloud-upload",
-      action: tm.importTheme,
-      title: tt("mx_theme_import_button"),
-    });
-    tm._el_button_export = elButtonFa("mx_theme_export_button", {
-      icon: "cloud-download",
-      action: tm.exportTheme,
-      title: tt("mx_theme_export_button"),
-    });
-    tm._el_button_create = elButtonFa("mx_theme_create_button", {
-      icon: "files-o",
-      action: tm.createTheme,
-      title: tt("mx_theme_create_button"),
-    });
-    tm._el_button_save = elButtonFa("mx_theme_save_button", {
-      icon: "save",
-      action: tm.saveTheme,
-      title: tt("mx_theme_save_button"),
-    });
-
-    tm._el_button_delete = elButtonFa("mx_theme_delete_button", {
-      icon: "trash",
-      action: tm.deleteTheme,
-      title: tt("mx_theme_delete_button"),
-    });
+    for (const [name, key, icon, action] of buttonDefinitions) {
+      const label = getDictItem(key);
+      const button = tm._el(
+        "button",
+        {
+          class: ["btn", "btn-default"],
+          type: "button",
+          on: { click: action },
+        },
+        tm._el("i", {
+          class: ["fa", `fa-${icon}`],
+          "aria-hidden": "true",
+        }),
+        tm._el("span", { class: "mx-theme--action-label" }, label),
+      );
+      label
+        .then((text) => {
+          button.title = text;
+          button.setAttribute("aria-label", text);
+        })
+        .catch(console.error);
+      tm[`_el_button_${name}`] = button;
+    }
 
     const elModalButtons = [
       tm._el_button_close,
@@ -108,25 +113,24 @@ export class ThemeModal extends EventSimple {
       tm._el_button_delete,
     ];
 
-    // Create modal
-    tm._modal = modal({
-      id: "theme_manager",
+    tm._modal = tm._windowManager.open({
+      key: "theme-manager",
+      replace: true,
+      modal: false,
       content: tm._el_content,
-      title: tt("mx_theme_manager_title"),
-      buttons: elModalButtons,
-      addSelectize: false,
-      noShinyBinding: true,
-      removeCloseButton: true,
-      addBackground: false,
-      onClose: tm.close,
-      style: {
-        position: "absolute",
-        width: "80%",
-        height: "100%",
+      title: await getDictItem("mx_theme_manager_title"),
+      footerEnd: elModalButtons,
+      draggable: true,
+      resizable: true,
+      collapsible: true,
+      snappable: true,
+      closeable: true,
+      geometry: {
+        width: "80vw",
+        height: "calc(100vh - 32px)",
+        maxHeight: "calc(100vh - 32px)",
       },
-      styleContent: {
-        padding: "0px",
-      },
+      onClose: tm.cleanup,
     });
 
     await tm.buildContent();
@@ -227,6 +231,7 @@ export class ThemeModal extends EventSimple {
 
   async buildContent() {
     const tm = this;
+    const el = tm._el;
 
     tm._el_theme_select_container = el("div", {
       class: "mx-theme--manager-modal-header",
@@ -297,6 +302,7 @@ export class ThemeModal extends EventSimple {
 
   async buildProperties() {
     const tm = this;
+    const el = tm._el;
     const theme = tm._theme.theme();
 
     tm._el_properties_container.replaceChildren();
@@ -359,6 +365,7 @@ export class ThemeModal extends EventSimple {
    */
   async showMetadataEditorModal(operation, theme = {}) {
     const tm = this;
+    const el = tm._el;
 
     // Create container for JSON Editor
     const elMetadataEditor = el("div", {
@@ -425,45 +432,55 @@ export class ThemeModal extends EventSimple {
     let title, confirmText;
     switch (operation) {
       case "create":
-        title = tt("mx_theme_create_button");
-        confirmText = tt("btn_create");
+        title = await getDictItem("mx_theme_create_button");
+        confirmText = getDictItem("btn_create");
         break;
       case "save":
-        title = tt("mx_theme_save_button");
-        confirmText = tt("btn_save");
+        title = await getDictItem("mx_theme_save_button");
+        confirmText = getDictItem("btn_save");
         break;
       case "export":
-        title = tt("mx_theme_export_button");
-        confirmText = tt("btn_export");
+        title = await getDictItem("mx_theme_export_button");
+        confirmText = getDictItem("btn_export");
         break;
       case "import":
-        title = tt("mx_theme_import_button");
-        confirmText = tt("btn_import");
+        title = await getDictItem("mx_theme_import_button");
+        confirmText = getDictItem("btn_import");
         break;
       default:
-        title = tt("mx_theme_edit_metadata");
-        confirmText = tt("btn_ok");
+        title = await getDictItem("mx_theme_edit_metadata");
+        confirmText = getDictItem("btn_ok");
     }
     // Show modal with JSON Editor
-    const data = await modalConfirm({
-      title: title,
+    const data = await openConfirmDialog({
+      manager: tm._windowManager,
+      key: `theme-metadata-${operation}`,
+      title,
       content: elContainer,
-      confirm: confirmText,
-      cancel: tt("btn_cancel"),
-      addBackground: true,
-      cbData: () => {
+      confirmLabel: confirmText,
+      cancelLabel: getDictItem("btn_cancel"),
+      cancelValue: null,
+      getValue: () => {
         return Object.assign({}, editor.getValue());
       },
-      cbValidate: (elBtnConfirm) => {
+      onReady: ({ confirmButton }) => {
         editor.on("change", () => {
           const errors = editor.validate();
           updateErrors(errors);
           if (isNotEmpty(errors)) {
-            elBtnConfirm.setAttribute("disabled", "disabled");
+            confirmButton.setAttribute("disabled", "disabled");
           } else {
-            elBtnConfirm.removeAttribute("disabled");
+            confirmButton.removeAttribute("disabled");
           }
         });
+      },
+      windowConfig: {
+        alwaysOnTop: true,
+        resizable: true,
+        geometry: {
+          width: "min(720px, calc(100vw - 32px))",
+          height: "min(720px, calc(100vh - 32px))",
+        },
       },
     });
 
@@ -510,6 +527,7 @@ export class ThemeModal extends EventSimple {
   }
 
   buildErrors(errors) {
+    const el = this._el;
     return el(
       "ul",
       {
@@ -532,6 +550,8 @@ export class ThemeModal extends EventSimple {
    * Show storage location selector modal
    */
   async showStorageLocationModal() {
+    const tm = this;
+    const el = tm._el;
     const hasPublisherRole = settings.user.roles?.publisher === true;
 
     const options = [
@@ -539,7 +559,7 @@ export class ThemeModal extends EventSimple {
         value: "session",
         checked: true,
         label: el("div", { class: "mx-theme--storage-option" }, [
-          tt("mx_theme_save_session"),
+          getDictItem("mx_theme_save_session"),
           el("span", {
             class: ["fa", "fa-clock-o", "mx-theme--storage-icon"],
           }),
@@ -548,7 +568,7 @@ export class ThemeModal extends EventSimple {
       {
         value: "local",
         label: el("div", { class: "mx-theme--storage-option" }, [
-          tt("mx_theme_save_local"),
+          getDictItem("mx_theme_save_local"),
           el("span", { class: ["fa", "fa-hdd-o", "mx-theme--storage-icon"] }),
         ]),
       },
@@ -558,7 +578,7 @@ export class ThemeModal extends EventSimple {
       options.push({
         value: "db",
         label: el("div", { class: "mx-theme--storage-option" }, [
-          tt("mx_theme_save_db"),
+          getDictItem("mx_theme_save_db"),
           el("span", {
             class: ["fa", "fa-database", "mx-theme--storage-icon"],
           }),
@@ -566,12 +586,13 @@ export class ThemeModal extends EventSimple {
       });
     }
 
-
-    const storageChoice = await modalRadio({
-      title: tt(`mx_theme_storage_title`),
-      description: tt("mx_theme_storage_description"),
-      confirm: tt("btn_next"),
-      cancel: tt("btn_cancel"),
+    const storageChoice = await openChoiceDialog({
+      manager: tm._windowManager,
+      key: "theme-storage-location",
+      title: await getDictItem("mx_theme_storage_title"),
+      description: getDictItem("mx_theme_storage_description"),
+      confirmLabel: getDictItem("btn_next"),
+      cancelLabel: getDictItem("btn_cancel"),
       options: options,
       defaultValue: "session",
     });
@@ -589,7 +610,8 @@ export class ThemeModal extends EventSimple {
         const tm = this;
         const colors = tm._theme.colors();
         const elInputsContainer = tm._el_inputs_container;
-        const elFrag = new DocumentFragment();
+        const elFrag =
+          tm._windowManager.root.ownerDocument.createDocumentFragment();
         if (!isElement(elInputsContainer)) {
           return resolve(false);
         }
@@ -614,6 +636,7 @@ export class ThemeModal extends EventSimple {
 
   buildInputGroup(cid) {
     const tm = this;
+    const el = tm._el;
     const colors = tm._theme.colors();
     const inputType = ["checkbox", "color", "range"];
     const conf = colors[cid];
@@ -845,7 +868,7 @@ export class ThemeModal extends EventSimple {
   async deleteTheme() {
     const tm = this;
     const currentTheme = tm._theme.theme();
-    if (tm.isProjectTheme(currentTheme)) {
+    if (tm.isProjectTheme(currentTheme.id)) {
       return;
     }
     await tm._theme.deleteTheme(currentTheme);
@@ -895,12 +918,12 @@ export class ThemeModal extends EventSimple {
       themeUpsert,
     );
 
-    const notDefault = settings.project.theme !== metadata.id;
-
     if (!metadata) {
       itemFlashCancel();
       return;
     }
+
+    const notDefault = settings.project.theme !== metadata.id;
 
     let storageLocation = theme._storage;
 
@@ -915,14 +938,9 @@ export class ThemeModal extends EventSimple {
     let setAsProjectDefault = false;
     if (create && storageLocation === "db") {
       if (notDefault) {
-        setAsProjectDefault = await modalConfirm({
-          title: tt("mx_theme_update_project"),
-          content: tt("mx_theme_update_project_desc", {
-            data: { theme: metadata?.label?.en || metadata.id },
-          }),
-          confirm: tt("btn_confirm"),
-          cancel: tt("btn_cancel"),
-        });
+        setAsProjectDefault = await tm._theme.confirmSetAsProjectDefault(
+          metadata,
+        );
       }
     }
 
@@ -1025,11 +1043,12 @@ export class ThemeModal extends EventSimple {
   /**
    * Close modal and cleanup resources
    */
-  close() {
+  cleanup() {
     const tm = this;
     if (tm._closed) {
       return;
     }
+    tm._closed = true;
     // Destroy EventSimple instance
     tm.destroy();
 
@@ -1070,8 +1089,10 @@ export class ThemeModal extends EventSimple {
       tm._on_close();
     }
 
-    tm._closed = true;
-    tm._modal.close();
     tm.fire("closed");
+  }
+
+  close() {
+    this._modal?.close("theme-manager");
   }
 }

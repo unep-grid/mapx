@@ -1,5 +1,24 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+const windowMocks = vi.hoisted(() => {
+  const manager = {
+    el: vi.fn((tag, ...options) => {
+      const element = document.createElement(tag);
+      for (const option of options) {
+        if (typeof option === "string") element.append(option);
+        if (option instanceof Promise) {
+          option.then((value) => element.append(String(value)));
+        }
+      }
+      return element;
+    }),
+  };
+  return {
+    manager,
+    openConfirmDialog: vi.fn(async () => true),
+  };
+});
+
 vi.mock("maplibre-gl", () => {
   return {
     default: {
@@ -64,18 +83,37 @@ vi.mock("../mx_helper_misc", () => {
     itemFlashCancel: vi.fn(),
     itemFlashSave: vi.fn(),
     itemFlashWarning: vi.fn(),
+    parseTemplate: vi.fn((template, data) =>
+      template.replace("{{theme}}", data.theme),
+    ),
   };
 });
 
-vi.mock("../mx_helper_modal", () => {
+vi.mock("../window/index.js", () => {
   return {
-    modalConfirm: vi.fn(async () => true),
+    getMapxWindowManager: vi.fn(() => windowMocks.manager),
+    openConfirmDialog: windowMocks.openConfirmDialog,
   };
 });
 
 vi.mock("../language", () => {
+  const translations = {
+    mx_theme_update_project: "Set theme as default",
+    mx_theme_update_project_desc: "Set “{{theme}}” as the default theme?",
+    mx_theme_delete_button: "Delete",
+    mx_theme_delete_database_confirm:
+      "Delete theme “{{theme}}” from the database?",
+    mx_theme_delete_local_confirm:
+      "Delete theme “{{theme}}” from this browser?",
+    mx_theme_delete_session_confirm: "Delete session theme “{{theme}}”?",
+    yes: "Yes",
+    no: "No",
+    btn_delete: "Delete",
+    btn_cancel: "Cancel",
+  };
   return {
     getLanguageCurrent: vi.fn(() => "en"),
+    getDictItem: vi.fn(async (key) => translations[key] || key),
   };
 });
 
@@ -140,8 +178,6 @@ vi.mock("@unep-grid/mapx-style", async () => {
   const actual = await vi.importActual("@unep-grid/mapx-style");
 
   class FakeMapxStyle {
-    static constructorOptions = [];
-
     constructor(options = {}) {
       FakeMapxStyle.constructorOptions.push(options);
       this.transformRequest = vi.fn();
@@ -167,6 +203,7 @@ vi.mock("@unep-grid/mapx-style", async () => {
       this.resolveSpriteName = vi.fn((id) => id);
     }
   }
+  FakeMapxStyle.constructorOptions = [];
 
   return {
     ...actual,
@@ -220,6 +257,7 @@ async function loadThemeModule() {
 describe("Theme regressions", () => {
   beforeEach(() => {
     vi.resetModules();
+    windowMocks.openConfirmDialog.mockReset().mockResolvedValue(true);
     history.replaceState(null, "", "/");
   });
 
@@ -354,5 +392,87 @@ describe("Theme regressions", () => {
 
     const options = MapxStyle.constructorOptions.at(-1);
     expect(options.sourceOverrides).toBeUndefined();
+  });
+
+  it("uses translated Yes/No labels and the localized theme label for the default prompt", async () => {
+    const { Theme } = await loadThemeModule();
+    const theme = new Theme({ id: "classic_dark", root: document.body });
+
+    await expect(
+      theme.confirmSetAsProjectDefault({
+        id: "ocean_dark",
+        label: { en: "Ocean dark" },
+      }),
+    ).resolves.toBe(true);
+
+    const options = windowMocks.openConfirmDialog.mock.calls.at(-1)[0];
+    expect(options.title).toBe("Set theme as default");
+    await vi.waitFor(() => {
+      expect(options.content.textContent).toBe(
+        "Set “Ocean dark” as the default theme?",
+      );
+    });
+    await expect(options.confirmLabel).resolves.toBe("Yes");
+    await expect(options.cancelLabel).resolves.toBe("No");
+
+    windowMocks.openConfirmDialog.mockResolvedValueOnce(false);
+    await expect(
+      theme.confirmSetAsProjectDefault({ id: "fallback_id" }),
+    ).resolves.toBe(false);
+  });
+
+  it("forwards the default-theme decision to persistence", async () => {
+    const { Theme, settings } = await loadThemeModule();
+    settings.project = { id: "project-1", theme: "classic_dark" };
+    const theme = new Theme({ id: "classic_dark", root: document.body });
+    const themeToSave = {
+      id: "ocean_dark",
+      label: { en: "Ocean dark" },
+      colors: {},
+    };
+    theme.stopIfInvalidColors = vi.fn(async () => {});
+    theme._s = {
+      save: vi.fn(async ({ theme: savedTheme }) => ({ theme: savedTheme })),
+    };
+    theme.register = vi.fn(async () => {});
+    theme.set = vi.fn(async () => {});
+    theme.fire = vi.fn();
+
+    windowMocks.openConfirmDialog.mockResolvedValueOnce(false);
+    await theme.upsert(themeToSave);
+    expect(theme._s.save).toHaveBeenLastCalledWith({
+      theme: themeToSave,
+      setAsProjectDefault: false,
+    });
+    expect(settings.project.theme).toBe("classic_dark");
+
+    windowMocks.openConfirmDialog.mockResolvedValueOnce(true);
+    await theme.upsert(themeToSave);
+    expect(theme._s.save).toHaveBeenLastCalledWith({
+      theme: themeToSave,
+      setAsProjectDefault: true,
+    });
+    expect(settings.project.theme).toBe("ocean_dark");
+  });
+
+  it.each([
+    ["db", "Delete theme “Ocean dark” from the database?"],
+    ["local", "Delete theme “Ocean dark” from this browser?"],
+    ["session", "Delete session theme “Ocean dark”?"],
+  ])("uses the translated %s delete prompt", async (storage, expected) => {
+    const { Theme } = await loadThemeModule();
+    const theme = new Theme({ id: "classic_dark", root: document.body });
+
+    await theme.confirmDeleteTheme(
+      { id: "ocean_dark", label: { en: "Ocean dark" } },
+      storage,
+    );
+
+    const options = windowMocks.openConfirmDialog.mock.calls.at(-1)[0];
+    await vi.waitFor(() => {
+      expect(options.content.textContent).toBe(expected);
+    });
+    await expect(options.confirmLabel).resolves.toBe("Delete");
+    await expect(options.cancelLabel).resolves.toBe("Cancel");
   });
 });

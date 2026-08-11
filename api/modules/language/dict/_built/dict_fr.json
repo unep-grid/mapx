@@ -10446,13 +10446,28 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{theme}} as default theme ?",
-    "fr": "Ensemble {{theme}} comme thème par défaut ?"
+    "en": "Set “{{theme}}” as the default theme?",
+    "fr": "Ensemble \" {{theme}} « comme thème par défaut ? »"
   },
   {
     "id": "mx_theme_delete_button",
     "en": "Delete",
     "fr": "Supprimer"
+  },
+  {
+    "id": "mx_theme_delete_database_confirm",
+    "en": "Delete theme “{{theme}}” from the database?",
+    "fr": "Supprimer le thème « {{theme}} « de la base de données ? »"
+  },
+  {
+    "id": "mx_theme_delete_local_confirm",
+    "en": "Delete theme “{{theme}}” from this browser?",
+    "fr": "Supprimer le thème « {{theme}} « depuis ce navigateur ? »"
+  },
+  {
+    "id": "mx_theme_delete_session_confirm",
+    "en": "Delete session theme “{{theme}}”?",
+    "fr": "Supprimer le thème de la session « {{theme}} « ? »"
   },
   {
     "id": "mx_theme_remote_empty",

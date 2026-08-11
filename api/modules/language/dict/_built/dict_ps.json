@@ -10446,13 +10446,28 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{theme}} as default theme ?",
-    "ps": "ټاکل شوی {{theme}} د ډیفالټ موضوع په توګه؟"
+    "en": "Set “{{theme}}” as the default theme?",
+    "ps": "تنظیم کړئ \" {{theme}} \"د ډیفالټ موضوع په توګه؟\""
   },
   {
     "id": "mx_theme_delete_button",
     "en": "Delete",
     "ps": "ړنګول"
+  },
+  {
+    "id": "mx_theme_delete_database_confirm",
+    "en": "Delete theme “{{theme}}” from the database?",
+    "ps": "موضوع ړنګ کړئ \" {{theme}} \"له ډیټابیس څخه؟\""
+  },
+  {
+    "id": "mx_theme_delete_local_confirm",
+    "en": "Delete theme “{{theme}}” from this browser?",
+    "ps": "موضوع ړنګ کړئ \" {{theme}} \"له دې براوزر څخه؟\""
+  },
+  {
+    "id": "mx_theme_delete_session_confirm",
+    "en": "Delete session theme “{{theme}}”?",
+    "ps": "د غونډې موضوع ړنګ کړئ \" {{theme}} \"؟\""
   },
   {
     "id": "mx_theme_remote_empty",

@@ -10446,13 +10446,28 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{theme}} as default theme ?",
-    "bn": "সেট {{theme}} ডিফল্ট থিম হিসেবে?"
+    "en": "Set “{{theme}}” as the default theme?",
+    "bn": "সেট করুন “ {{theme}} ডিফল্ট থিম হিসেবে?"
   },
   {
     "id": "mx_theme_delete_button",
     "en": "Delete",
     "bn": "মুছে ফেলুন"
+  },
+  {
+    "id": "mx_theme_delete_database_confirm",
+    "en": "Delete theme “{{theme}}” from the database?",
+    "bn": "থিম মুছুন “ {{theme}} ডাটাবেস থেকে?"
+  },
+  {
+    "id": "mx_theme_delete_local_confirm",
+    "en": "Delete theme “{{theme}}” from this browser?",
+    "bn": "থিম মুছুন “ {{theme}} এই ব্রাউজার থেকে?"
+  },
+  {
+    "id": "mx_theme_delete_session_confirm",
+    "en": "Delete session theme “{{theme}}”?",
+    "bn": "সেশন থিম মুছুন {{theme}} ”?"
   },
   {
     "id": "mx_theme_remote_empty",

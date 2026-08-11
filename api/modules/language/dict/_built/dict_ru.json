@@ -10446,13 +10446,28 @@
   },
   {
     "id": "mx_theme_update_project_desc",
-    "en": "Set {{theme}} as default theme ?",
-    "ru": "Набор {{theme}} как тема по умолчанию?"
+    "en": "Set “{{theme}}” as the default theme?",
+    "ru": "Набор \" {{theme}} «В качестве темы по умолчанию?»"
   },
   {
     "id": "mx_theme_delete_button",
     "en": "Delete",
     "ru": "Удалить"
+  },
+  {
+    "id": "mx_theme_delete_database_confirm",
+    "en": "Delete theme “{{theme}}” from the database?",
+    "ru": "Удалить тему {{theme}} «Из базы данных?»"
+  },
+  {
+    "id": "mx_theme_delete_local_confirm",
+    "en": "Delete theme “{{theme}}” from this browser?",
+    "ru": "Удалить тему {{theme}} «из этого браузера?»"
+  },
+  {
+    "id": "mx_theme_delete_session_confirm",
+    "en": "Delete session theme “{{theme}}”?",
+    "ru": "Удалить тему сессии {{theme}} ?»"
   },
   {
     "id": "mx_theme_remote_empty",
