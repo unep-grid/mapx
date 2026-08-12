@@ -10,8 +10,67 @@ import {
   isBboxMeta,
   isBbox,
 } from "@fxi/mx_valid";
-import { getSourceMetadata } from "#mapx/source";
-import { createSourceRevision } from "#mapx/source";
+import {
+  createSourceRevision,
+  getSourceEditPermission,
+  getSourceMetadata,
+} from "#mapx/source";
+
+/**
+ * Resolve whether the current session may open the legacy metadata editor for
+ * the source owned by a vector-tile view in the current project.
+ */
+export async function getViewSourceMetadataEditAccess(
+  socket,
+  config,
+  client = pgRead,
+) {
+  const session = socket?.session;
+  const idView = config?.idView;
+  if (
+    !session?.user_authenticated ||
+    !session.project_id ||
+    !Number.isInteger(Number(session.user_id)) ||
+    !isViewId(idView)
+  ) {
+    return { allowed: false };
+  }
+
+  const result = await client.query(
+    `SELECT type, project, data #>> '{source,layerInfo,name}' AS id_source
+     FROM mx_views_latest
+     WHERE id = $1`,
+    [idView],
+  );
+  const view = result.rows[0];
+  const idSource = view?.id_source;
+  if (
+    view?.type !== "vt" ||
+    view.project !== session.project_id ||
+    !isSourceId(idSource)
+  ) {
+    return { allowed: false };
+  }
+
+  const permission = await getSourceEditPermission({
+    client,
+    idSource,
+    idUser: session.user_id,
+    idProject: session.project_id,
+    // Match the legacy editor's editable-source list exactly.
+    allowRoot: false,
+  });
+  return permission.allowed ? { allowed: true, idSource } : { allowed: false };
+}
+
+export async function ioViewSourceMetadataEditAccess(socket, config, cb) {
+  try {
+    cb(await getViewSourceMetadataEditAccess(socket, config));
+  } catch (error) {
+    console.error("Source metadata edit access check failed", error);
+    cb({ allowed: false });
+  }
+}
 
 export async function ioSetViewSourceMetaBbox(socket, config, cb) {
   try {

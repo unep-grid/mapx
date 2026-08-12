@@ -1,9 +1,10 @@
 import express from "express";
 import { isArray, isObject, isSourceId } from "@fxi/mx_valid";
 import { pgWrite } from "#mapx/db";
-import { getUserRoles, validateTokenHandler } from "#mapx/authentication";
+import { validateTokenHandler } from "#mapx/authentication";
 import { removeSource } from "#mapx/db_utils";
 import { createSourceRevision } from "./revision.js";
+import { getSourceEditPermission } from "./permissions.js";
 
 class SourceRevisionError extends Error {
   constructor(message, status = 400) {
@@ -12,31 +13,16 @@ class SourceRevisionError extends Error {
   }
 }
 
-function asArray(value) {
-  return Array.isArray(value) ? value : [];
-}
-
 async function assertUserCanEditSource(client, idSource, idUser) {
-  const sourceResult = await client.query(
-    `SELECT editor, editors, project
-     FROM mx_sources_latest
-     WHERE id = $1`,
-    [idSource],
-  );
-  const source = sourceResult.rows[0];
+  const permission = await getSourceEditPermission({
+    client,
+    idSource,
+    idUser,
+  });
+  const { source, roles, allowed } = permission;
   if (!source) {
     throw new SourceRevisionError(`Source not registered: ${idSource}`, 404);
   }
-
-  const roles = await getUserRoles(idUser, source.project, client);
-  const groups = asArray(roles.group);
-  const editors = asArray(source.editors);
-  const allowed =
-    roles.publisher === true &&
-    (roles.root === true ||
-      source.editor === Number(idUser) ||
-      editors.includes(String(idUser)) ||
-      editors.some((editor) => groups.includes(editor)));
 
   if (!allowed) {
     throw new SourceRevisionError("Source edit not allowed", 403);

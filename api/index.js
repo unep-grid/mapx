@@ -37,6 +37,7 @@ import {
   ioViewMetaGet,
   ioViewStatsGet,
   ioSetViewSourceMetaBbox,
+  ioViewSourceMetadataEditAccess,
 } from "#mapx/view";
 import {
   ioDownloadSource,
@@ -154,6 +155,10 @@ io.use((socket, next) => {
   socket.on("/client/source/overlap/run", use(ioSourceOverlap));
   socket.on("/client/view/pin", use(ioViewPin));
   socket.on("/client/view/source/get/metadata", use(ioViewSourceMetaGet));
+  socket.on(
+    "/client/view/source/metadata/edit/access",
+    use(ioViewSourceMetadataEditAccess),
+  );
   socket.on("/client/view/get/metadata", use(ioViewMetaGet));
   socket.on("/client/view/get/stats", use(ioViewStatsGet));
   socket.on("/client/view/update/extent", use(ioSetViewSourceMetaBbox));

@@ -12,3 +12,4 @@ export * from "./revision.js";
 export * from "./update.js";
 export * from "./browser.js";
 export * from "./preview.js";
+export * from "./permissions.js";

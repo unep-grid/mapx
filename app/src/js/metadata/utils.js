@@ -31,6 +31,7 @@ import {
 import { getArrayDistinct } from "../array_stat/index.js";
 import { viewOgcDoc } from "../geoserver/index.js";
 import PostalAddress from "i18n-postal-address";
+import { createSourceMetadataEditShortcut } from "../source/metadata/edit_shortcut.js";
 
 /**
  * Get source metadata
@@ -124,11 +125,36 @@ export async function getViewSourceMetadata(view) {
 }
 
 /**
+ * Get server-authoritative access to the source metadata editor for a view.
+ * @param {string} idView
+ * @returns {Promise<{allowed: boolean, idSource?: string}>}
+ */
+export async function getViewSourceMetadataEditAccess(idView) {
+  if (!isViewId(idView)) return { allowed: false };
+  try {
+    const access = await ws.emitAsync(
+      "/client/view/source/metadata/edit/access",
+      { idView },
+      settings.maxTimeFetchQuick,
+    );
+    return access?.allowed === true && isSourceId(access.idSource)
+      ? access
+      : { allowed: false };
+  } catch (error) {
+    console.warn("Could not check source metadata edit access", error);
+    return { allowed: false };
+  }
+}
+
+/**
  * Display metadata in a modal panel
  * @param {String} id Identifier of the view or source
  * @param {String} type Type of the entity ("view" or "source")
+ * @param {{
+ *   onEditSourceMetadata?: (idSource: string) => boolean|void|Promise<boolean|void>
+ * }} [options] Optional application integrations
  */
-export async function entityToMetaModal(id, type) {
+export async function entityToMetaModal(id, type, options = {}) {
   let entity, titleLangKey, fetchMetaToUi;
 
   switch (type) {
@@ -157,13 +183,27 @@ export async function entityToMetaModal(id, type) {
   const elWaitItem = elWait("Please wait...");
   const elContent = el("div", elWaitItem);
   const elTitleModal = elSpanTranslate(titleLangKey);
+  let editAccessPromise = null;
+  let editShortcut = null;
+  let elModal = null;
+
+  if (type === "view" && typeof options.onEditSourceMetadata === "function") {
+    editShortcut = createSourceMetadataEditShortcut({
+      root: elContent,
+      label: await getDictItem("source_edit_metadata"),
+      onEdit: options.onEditSourceMetadata,
+      onOpened: () => elModal?.close(),
+    });
+    editAccessPromise = getViewSourceMetadataEditAccess(id);
+  }
 
   /*
    * Display modal now, append later
    */
-  const elModal = modal({
+  elModal = modal({
     title: elTitleModal,
     content: elContent,
+    buttonsAlt: editShortcut ? [editShortcut.button] : [],
     addBackground: true,
     style: {
       // to fit the table content without too much wrapping
@@ -176,6 +216,13 @@ export async function entityToMetaModal(id, type) {
    */
   await fetchMetaToUi(id, elContent);
   elWaitItem.remove();
+
+  if (editAccessPromise) {
+    const access = await editAccessPromise;
+    if (access.allowed) {
+      editShortcut.reveal(access.idSource);
+    }
+  }
 
   /**
    * Add Menu
@@ -194,10 +241,13 @@ export async function entityToMetaModal(id, type) {
 
 /**
  * Display view metadata in a modal panel
- * @param {Object|String} view View or view id
+ * @param {Object|String} idView View or view id
+ * @param {{
+ *   onEditSourceMetadata?: (idSource: string) => boolean|void|Promise<boolean|void>
+ * }} [options] Optional application integrations
  */
-export async function viewToMetaModal(idView) {
-  return entityToMetaModal(idView, "view");
+export async function viewToMetaModal(idView, options = {}) {
+  return entityToMetaModal(idView, "view", options);
 }
 
 /**

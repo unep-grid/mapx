@@ -37,6 +37,7 @@ import { ws, data, theme } from "./../mx.js";
 import { settings } from "./../settings";
 import { viewsListAddSingle } from "../views_list_manager";
 import { LegendVt } from "../legend_vt/legend_vt.js";
+import { openSourceMetadataEditorForShiny } from "../source/metadata/shiny_bridge.js";
 const idMap = settings?.map?.id;
 
 /**
@@ -450,7 +451,10 @@ export async function btn_opt_attribute_table(dataset) {
  */
 export async function btn_opt_meta(dataset) {
   const idView = dataset.view_action_target;
-  await viewToMetaModal(idView);
+  await viewToMetaModal(idView, {
+    onEditSourceMetadata: (idSource) =>
+      openSourceMetadataEditorForShiny({ idSource }),
+  });
 }
 
 /**
