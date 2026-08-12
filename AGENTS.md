@@ -32,6 +32,14 @@ architectural precedent for new work.
 - The server session is the source of truth for identity and access. Never trust
   roles, project access, or authorization decisions supplied by the browser or
   forwarded from R.
+- Treat `socket.session` as the trusted context for identity, the current
+  project, and ordinary Socket.IO role checks. Session roles are a
+  connection-time snapshot; refresh them centrally from server state before a
+  sensitive decision when current roles are required, and keep `socket.data`
+  synchronized with any refreshed authorization state.
+- For durable mutations or authorization shared across HTTP and Socket.IO,
+  resolve current roles and resource ACLs server-side, preferably with the same
+  database client and transaction as the write.
 - Use explicit ESM imports and exports. Do not expose new mutable state or APIs
   through `window`, `globalThis`, or other application globals.
 - Reuse established modern boundaries and helpers before creating alternatives,
