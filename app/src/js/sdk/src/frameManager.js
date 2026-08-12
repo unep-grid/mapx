@@ -6,6 +6,7 @@ import {
 } from "./messages.js";
 import { HOST_VISIBILITY_MESSAGE_TYPE } from "./host_visibility.js";
 import { parse, stringify, patchObject, isObject } from "./helpers.js";
+import { MapxSdkError } from "./sdk_error.js";
 import { version } from "../package.json";
 
 /**
@@ -45,6 +46,8 @@ class FrameManager extends Events {
    * @param {String} opt.url.host Host of the worker (ex. dev.mapx.localhost)
    * @param {Object} opt.style Style css object
    * @param {Element} opt.container Element that will hold the worker iframe
+   * @param {Number} opt.maxSimultaneousRequest Maximum concurrent requests
+   * @param {Number} opt.requestTimeoutMs Request timeout in milliseconds
    */
   constructor(opt) {
     super();
@@ -131,6 +134,10 @@ class FrameManager extends Events {
       idRequest: "destroy",
     });
     fm._post(destroyWorker);
+    fm._rejectAllRequests({
+      code: "manager_destroyed",
+      message: "MapX SDK manager was destroyed",
+    });
     fm._destroyVisibility();
     fm._removeListener();
     fm._iframe.remove();
@@ -429,8 +436,16 @@ class FrameManager extends Events {
        */
       if (message.type === "response" && isFinite(message.idRequest)) {
         const req = fm._getAndRemoveRequestById(message.idRequest);
-        if (message.success) {
+        if (message.success && req.onResponse) {
           req.onResponse(message.value);
+        } else if (!message.success && req.onError) {
+          req.onError(
+            new MapxSdkError({
+              ...message.error,
+              idRequest: message.idRequest,
+              idResolver: message.error?.idResolver || req.idResolver,
+            }),
+          );
         }
       }
       /**
@@ -501,7 +516,8 @@ class FrameManager extends Events {
    * Ask / request method to the worker
    * @param {String} Id of the request/resolver
    * @param {String} data Optional data to send to the resolver
-   * @return {Promise} Promise that resolve to the resolver result
+   * @return {Promise} Promise that resolves to the resolver result
+   * @throws {MapxSdkError} If the request fails, times out, or is refused
    */
   ask(idResolver, data) {
     const fm = this;
@@ -513,10 +529,23 @@ class FrameManager extends Events {
         idResolver: idResolver,
         value: data,
       });
+
+      if (fm._destroyed) {
+        reject(
+          new MapxSdkError({
+            code: "manager_destroyed",
+            message: "MapX SDK manager was destroyed",
+            idRequest: req.idRequest,
+            idResolver: req.idResolver,
+          }),
+        );
+        return;
+      }
+
       /**
-       * Reject if to many request
+       * Reject if too many requests are already pending.
        */
-      if (nR > mR) {
+      if (nR >= mR) {
         fm._message({
           level: "warning",
           key: "warn_to_much_request",
@@ -525,13 +554,39 @@ class FrameManager extends Events {
             mR: mR,
           },
         });
-        reject(`too_many_request ${nR}. Max= ${mR}`);
+        reject(
+          new MapxSdkError({
+            code: "too_many_requests",
+            message: `Too many SDK requests (${nR}/${mR})`,
+            idRequest: req.idRequest,
+            idResolver: req.idResolver,
+          }),
+        );
+        return;
       }
+
       req.onResponse = (res) => {
         resolve(res);
       };
-      fm._post(req);
+      req.onError = reject;
       fm._req.push(req);
+
+      const timeoutMs = Number(fm.opt.requestTimeoutMs);
+      if (Number.isFinite(timeoutMs) && timeoutMs > 0) {
+        req.timeout = setTimeout(() => {
+          const pending = fm._getAndRemoveRequestById(req.idRequest);
+          pending.onError?.(
+            new MapxSdkError({
+              code: "request_timeout",
+              message: `MapX SDK request timed out after ${timeoutMs} ms`,
+              idRequest: req.idRequest,
+              idResolver: req.idResolver,
+            }),
+          );
+        }, timeoutMs);
+      }
+
+      fm._post(req);
     }).finally(() => {
       fm._message({
         level: "log",
@@ -554,12 +609,33 @@ class FrameManager extends Events {
       const r = fm._req[pos];
       if (r && r.idRequest === id) {
         fm._req.splice(pos, 1);
+        clearTimeout(r.timeout);
         n = 0;
         return r;
       }
       n--;
     }
     return {};
+  }
+
+  /**
+   * Reject and remove every pending request.
+   * @param {Object} error Shared error details
+   * @private
+   */
+  _rejectAllRequests(error) {
+    const fm = this;
+    const requests = fm._req.splice(0);
+    for (const req of requests) {
+      clearTimeout(req.timeout);
+      req.onError?.(
+        new MapxSdkError({
+          ...error,
+          idRequest: req.idRequest,
+          idResolver: req.idResolver,
+        }),
+      );
+    }
   }
 
   /**

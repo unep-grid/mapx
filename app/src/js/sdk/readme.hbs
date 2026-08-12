@@ -63,6 +63,8 @@ const mapx = new Manager({
   url: "https://app.mapx.org:443",
   // mode static ( recommended )
   static : true,
+  // Reject requests that receive no response after two minutes
+  requestTimeoutMs: 120000,
   // additional search parameters
   params: {
     theme: "color_light",
@@ -163,6 +165,21 @@ await mapx.ask('view_add', {idView: 'MX-ML9PZ-PZ1SI-WVV85'});
 
 ```
 
+`ask()` rejects with a `MapxSdkError` if the resolver fails, the request times
+out, the concurrent request limit is reached, or the manager is destroyed.
+The error exposes stable fields that can be handled without parsing its text:
+
+```javascript
+try {
+  await mapx.ask("unknown_resolver");
+} catch (error) {
+  console.error(error.code, error.idResolver, error.message);
+}
+```
+
+The default request timeout is 120 seconds. Set `requestTimeoutMs` on the
+manager to another positive duration, or to `0` to disable request timeouts.
+
 
 ### `on(event, callback)` `once(event, callback)` `off(event, callback)`
 
@@ -259,6 +276,22 @@ mapx.on("message", (message) => {
 ## Commands Documentation
 
 {{>main}}
+
+## SDK development tests
+
+Run the deterministic SDK tests from the `app` directory:
+
+```console
+npm run test:sdk
+```
+
+These Vitest tests exercise the manager/worker protocol and resolver boundaries
+without starting MapX or MapLibre. The historical interactive harness remains
+available for exploratory checks:
+
+```console
+npm run test:sdk:manual
+```
 
 * * *
 

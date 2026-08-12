@@ -1,6 +1,6 @@
 import {FrameManager} from './frameManager.js';
 import {FrameWorker} from './frameWorker.js';
-import * as settings from './settings.json';
+import {MapxSdkError} from './sdk_error.js';
 
 /**
  * Class to wrap frame manager with custom options
@@ -12,7 +12,6 @@ class Manager extends FrameManager {
    */
   constructor(opt) {
     super(opt);
-    this.opt = Object.assign({}, settings, opt);
   }
 }
 
@@ -29,4 +28,4 @@ class Worker extends FrameWorker {
   }
 }
 
-export {Manager, Worker};
+export {Manager, Worker, MapxSdkError};

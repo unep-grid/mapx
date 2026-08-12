@@ -34,5 +34,6 @@
     "maxHeight": "100%",
     "maxWidth": "100%"
   },
-  "maxSimultaneousRequest": 10
+  "maxSimultaneousRequest": 10,
+  "requestTimeoutMs": 120000
 }

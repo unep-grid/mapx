@@ -79,7 +79,8 @@ class ResponseFrameCom extends MessageBase {
       {
         idRequest: null,
         value: [],
-        success: true
+        success: true,
+        error: null
       },
       opt,
       {

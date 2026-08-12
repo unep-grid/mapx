@@ -16,6 +16,16 @@ const settingsWorker = {
   events: null,
 };
 
+function getErrorDetail(error) {
+  if (error instanceof Error) {
+    return {
+      name: error.name,
+      message: error.message,
+    };
+  }
+  return error || null;
+}
+
 /**
  * Class to create a worker / listener inside an application
  * @extends Events
@@ -213,12 +223,33 @@ class FrameWorker extends Events {
         success: true,
       });
     } catch (e) {
+      const errorMessage =
+        e instanceof MessageFrameCom
+          ? e
+          : new MessageFrameCom({
+              level: "error",
+              key: "err_resolver_failed",
+              vars: {
+                idRequest: idRequest,
+                idResolver: idResolver,
+                msg: isObject(e) ? e.message : e,
+              },
+              data: e,
+            });
+
       /**
        * In case of error, return success false
        */
       fw.postResponse({
         idRequest: idRequest,
         success: false,
+        error: {
+          code: errorMessage.key || "sdk_request_failed",
+          message: errorMessage.text || "MapX SDK request failed",
+          idRequest: idRequest,
+          idResolver: idResolver,
+          detail: getErrorDetail(errorMessage.data),
+        },
       });
 
       /**
@@ -228,20 +259,7 @@ class FrameWorker extends Events {
       if (e instanceof MessageFrameCom) {
         fw._post(e);
       } else {
-        /**
-         * If it's not handled, we build one here
-         */
-        const m = isObject(e) ? e.message : e;
-        fw.postMessage({
-          level: "error",
-          key: "err_resolver_failed",
-          vars: {
-            idRequest: idRequest,
-            idResolver: idResolver,
-            msg: m,
-          },
-          data: e,
-        });
+        fw._post(errorMessage);
       }
     }
   }
