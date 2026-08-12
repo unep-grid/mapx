@@ -345,6 +345,10 @@ async function handlerUpdateGeom({
 function addExtentPostScript(postScripts, id_table, idUser) {
   postScripts.set(`${id_table}_update_extent`, async () => {
     try {
+      const hasGeom = await columnExists(cols.geom, id_table);
+      if (!hasGeom) {
+        return;
+      }
       await updateLayerExtentMeta(id_table, idUser);
     } catch (e) {
       console.warn("Unable to update layer extent", e.message);
