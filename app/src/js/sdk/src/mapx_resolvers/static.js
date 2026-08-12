@@ -27,6 +27,8 @@ import {
   viewsLayersOrderUpdate,
   viewAddAuto,
   setHighlightedCountries,
+  zoomToViewId,
+  zoomToViewIdVisible,
 } from "../../../map_helpers/index.js";
 
 import {
@@ -656,6 +658,31 @@ export class MapxResolversStatic extends MapxResolversPanels {
    */
   get_views_with_visible_layer() {
     return getViewsLayersVisibles(true);
+  }
+
+  /**
+   * Zoom to the features of a view currently rendered on the map.
+   * Falls back to the full view extent when no rendered feature is found.
+   * @param {Object} opt Options
+   * @param {String} opt.idView View id
+   * @return {Promise<Boolean>} Done
+   * @example
+   * await mapx.ask("zoom_to_view_rendered_features", { idView: "MX-ABC" });
+   */
+  zoom_to_view_rendered_features(opt) {
+    return zoomToViewIdVisible(opt);
+  }
+
+  /**
+   * Zoom to the full extent of a view.
+   * @param {Object} opt Options
+   * @param {String} opt.idView View id
+   * @return {Promise<Boolean>} Done
+   * @example
+   * await mapx.ask("zoom_to_view_extent", { idView: "MX-ABC" });
+   */
+  zoom_to_view_extent(opt) {
+    return zoomToViewId(opt);
   }
 
   /**

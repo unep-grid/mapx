@@ -361,6 +361,8 @@ MapX resolvers available in app only
     * [.set_views_layer_order(opt)](#MapxResolversStatic+set_views_layer_order) ⇒ <code>Boolean</code>
     * [.get_views_layer_order()](#MapxResolversStatic+get_views_layer_order) ⇒ <code>Array</code>
     * [.get_views_with_visible_layer()](#MapxResolversStatic+get_views_with_visible_layer) ⇒ <code>Array</code>
+    * [.zoom_to_view_rendered_features(opt)](#MapxResolversStatic+zoom_to_view_rendered_features) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+    * [.zoom_to_view_extent(opt)](#MapxResolversStatic+zoom_to_view_extent) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.set_view_layer_filter_text(opt)](#MapxResolversStatic+set_view_layer_filter_text) ⇒ <code>void</code>
     * [.get_view_layer_filter_text(opt)](#MapxResolversStatic+get_view_layer_filter_text) ⇒ <code>array</code>
     * [.set_view_layer_filter_numeric(opt)](#MapxResolversStatic+set_view_layer_filter_numeric) ⇒ <code>void</code>
@@ -1295,6 +1297,41 @@ Get list views with visible layers (alias)
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
 **Returns**: <code>Array</code> - Array of views  
+<a name="MapxResolversStatic+zoom_to_view_rendered_features"></a>
+
+#### mapxResolversApp.zoom\_to\_view\_rendered\_features(opt) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+Zoom to the features of a view currently rendered on the map.
+Falls back to the full view extent when no rendered feature is found.
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)
+**Returns**: <code>Promise.&lt;Boolean&gt;</code> - Done
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>String</code> | View id |
+
+**Example**
+```js
+await mapx.ask("zoom_to_view_rendered_features", { idView: "MX-ABC" });
+```
+<a name="MapxResolversStatic+zoom_to_view_extent"></a>
+
+#### mapxResolversApp.zoom\_to\_view\_extent(opt) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+Zoom to the full extent of a view.
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)
+**Returns**: <code>Promise.&lt;Boolean&gt;</code> - Done
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>String</code> | View id |
+
+**Example**
+```js
+await mapx.ask("zoom_to_view_extent", { idView: "MX-ABC" });
+```
 <a name="MapxResolversStatic+set_view_layer_filter_text"></a>
 
 #### mapxResolversApp.set\_view\_layer\_filter\_text(opt) ⇒ <code>void</code>
@@ -2079,6 +2116,8 @@ MapX resolvers available in static and app
     * [.set_views_layer_order(opt)](#MapxResolversStatic+set_views_layer_order) ⇒ <code>Boolean</code>
     * [.get_views_layer_order()](#MapxResolversStatic+get_views_layer_order) ⇒ <code>Array</code>
     * [.get_views_with_visible_layer()](#MapxResolversStatic+get_views_with_visible_layer) ⇒ <code>Array</code>
+    * [.zoom_to_view_rendered_features(opt)](#MapxResolversStatic+zoom_to_view_rendered_features) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+    * [.zoom_to_view_extent(opt)](#MapxResolversStatic+zoom_to_view_extent) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.set_view_layer_filter_text(opt)](#MapxResolversStatic+set_view_layer_filter_text) ⇒ <code>void</code>
     * [.get_view_layer_filter_text(opt)](#MapxResolversStatic+get_view_layer_filter_text) ⇒ <code>array</code>
     * [.set_view_layer_filter_numeric(opt)](#MapxResolversStatic+set_view_layer_filter_numeric) ⇒ <code>void</code>
@@ -2613,6 +2652,41 @@ Get list views with visible layers (alias)
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>Array</code> - Array of views  
+<a name="MapxResolversStatic+zoom_to_view_rendered_features"></a>
+
+#### mapxResolversStatic.zoom\_to\_view\_rendered\_features(opt) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+Zoom to the features of a view currently rendered on the map.
+Falls back to the full view extent when no rendered feature is found.
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)
+**Returns**: <code>Promise.&lt;Boolean&gt;</code> - Done
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>String</code> | View id |
+
+**Example**
+```js
+await mapx.ask("zoom_to_view_rendered_features", { idView: "MX-ABC" });
+```
+<a name="MapxResolversStatic+zoom_to_view_extent"></a>
+
+#### mapxResolversStatic.zoom\_to\_view\_extent(opt) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+Zoom to the full extent of a view.
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)
+**Returns**: <code>Promise.&lt;Boolean&gt;</code> - Done
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>String</code> | View id |
+
+**Example**
+```js
+await mapx.ask("zoom_to_view_extent", { idView: "MX-ABC" });
+```
 <a name="MapxResolversStatic+set_view_layer_filter_text"></a>
 
 #### mapxResolversStatic.set\_view\_layer\_filter\_text(opt) ⇒ <code>void</code>
