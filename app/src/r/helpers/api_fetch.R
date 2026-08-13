@@ -182,6 +182,56 @@ mxApiReviseSource <- function(method, idSource, changes, idUser, token) {
   result
 }
 
+#' Create a metadata-only external source through the authenticated API.
+mxApiCreateExternalMetadata <- function(
+  idProject,
+  idUser,
+  token,
+  metadata = list()
+) {
+  route <- .get(config, c("api", "routes", "postExternalMetadataCreate"))
+  result <- mxApiPost(
+    route = route,
+    listParam = list(
+      idProject = idProject,
+      idUser = idUser,
+      token = token,
+      metadata = metadata
+    ),
+    shutdownOnError = FALSE
+  )
+  status <- .get(result, "status", 0)
+  if (status < 200 || status >= 300 || !isTRUE(result$ok)) {
+    stop(.get(result, "message", "External metadata creation failed"))
+  }
+  result$source
+}
+
+#' Validate an optional external metadata selection through the API.
+mxApiValidateExternalMetadataSelection <- function(
+  idProject,
+  idUser,
+  idSource = NULL,
+  idView = NULL,
+  token = NULL
+) {
+  if (isEmpty(idSource)) {
+    return(TRUE)
+  }
+  route <- .get(
+    config,
+    c("api", "routes", "getExternalMetadataSelectionValidate")
+  )
+  result <- mxApiFetch(route, list(
+    idProject = idProject,
+    idUser = idUser,
+    idSource = idSource,
+    idView = idView,
+    token = token
+  ))
+  isTRUE(result$valid)
+}
+
 
 #' Get all public views.
 # @note : probably better to use mxApiGetViews with includeAllPublic

@@ -1,13 +1,14 @@
 WITH
   view_metadata AS (
-    -- Get meta for 'cc' and 'rt'
+    -- Get metadata-only catalog entries for 'cc' and 'rt'.
     SELECT
-      data #> '{source,meta}' AS meta
-    FROM
-      mx_views_latest
+      coalesce(s.data #> '{meta}', '{}'::jsonb) AS meta
+    FROM mx_views_latest v
+    LEFT JOIN mx_sources_latest s
+      ON s.id = v.data #>> '{source,metadataId}' AND s.type = 'external'
     WHERE
-    type IN ('cc', 'rt')
-    AND id = '{{idView}}'
+    v.type IN ('cc', 'rt')
+    AND v.id = '{{idView}}'
     UNION ALL
     -- Get meta for 'vt'
     SELECT

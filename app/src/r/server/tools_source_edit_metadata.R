@@ -10,6 +10,44 @@ observeEvent(input$btnEditSourceMetadata, {
   })
 })
 
+observeEvent(input$btnAddExternalMetadataEntry, {
+  userRole <- getUserRole()
+  if (!isTRUE(userRole$publisher)) return()
+  language <- reactData$language
+  mxModal(
+    id = "addExternalMetadataEntry",
+    title = d("source_meta_data", language),
+    content = textInput(
+      "textExternalMetadataTitle",
+      d("textual_desc_title", language),
+      value = ""
+    ),
+    buttons = list(actionButton(
+      "btnAddExternalMetadataEntryConfirm",
+      d("create", language)
+    )),
+    textCloseButton = d("btn_cancel", language)
+  )
+})
+
+observeEvent(input$btnAddExternalMetadataEntryConfirm, {
+  mxCatch(title = "Add external metadata entry", {
+    userRole <- getUserRole()
+    title <- trimws(input$textExternalMetadataTitle)
+    if (!isTRUE(userRole$publisher) || isEmpty(title)) return()
+    source <- mxApiCreateExternalMetadata(
+      idProject = reactData$project,
+      idUser = reactUser$data$id,
+      token = reactUser$token,
+      metadata = list(text = list(title = list(en = title)))
+    )
+    idSource <- .get(source, "id")
+    mxModal(id = "addExternalMetadataEntry", close = TRUE)
+    reactData$updateSourceLayerList <- runif(1)
+    reactData$triggerSourceMetadata <- mxSourceMetadataEditRequest(idSource)
+  })
+})
+
 
 observeEvent(input$selectSourceLayerForMeta, {
   data <- input$selectSourceLayerForMeta
@@ -71,8 +109,13 @@ observeEvent(reactData$triggerSourceMetadata, {
     #
     meta <- mxDbGetSourceMeta(layer)
     hasJoin <- isNotEmpty(meta$join)
+    sourceType <- .get(mxDbGetQuery(sprintf(
+      "SELECT type FROM mx_sources_latest WHERE id = '%s'",
+      layer
+    )), "type")
+    isExternal <- identical(sourceType, "external")
 
-    if (isEmpty(.get(meta, c("spatial", "bbox"), list()))) {
+    if (!isExternal && isEmpty(.get(meta, c("spatial", "bbox"), list()))) {
       #
       # This is also performed if the user request a zoom to all features
       # client side and not valid bbox  is found, we updated that
@@ -93,15 +136,19 @@ observeEvent(reactData$triggerSourceMetadata, {
     #
     # Clean and/or update attribute
     #
-    attributesNames <- mxDbGetTableColumnsNames(layer,
-      notIn = c(
-        "gid",
-        "geom",
-        "mx_t0",
-        "mx_t1",
-        "_mx_valid"
+    attributesNames <- if (isExternal) {
+      character(0)
+    } else {
+      mxDbGetTableColumnsNames(layer,
+        notIn = c(
+          "gid",
+          "geom",
+          "mx_t0",
+          "mx_t1",
+          "_mx_valid"
+        )
       )
-    )
+    }
     attributesOld <- names(.get(meta, c("text", "attributes")))
     attributesRemoved <- attributesOld[!attributesOld %in% attributesNames]
 
@@ -116,8 +163,8 @@ observeEvent(reactData$triggerSourceMetadata, {
     schema <- mxSchemaSourceMeta(
       language = language,
       attributesNames = attributesNames,
-      noAttributes = hasJoin,
-      idSource = layer
+      noAttributes = hasJoin || isExternal,
+      idSource = if (isExternal) NULL else layer
     )
 
     sourceTimeLastModified <- mxDbGetSourceLastDateModified(layer)
@@ -244,6 +291,7 @@ observeEvent(input$jedSourceMetadata_values, {
           "editSourceMetadata_txt",
           "Saved at " + format(Sys.time(), "%H:%M")
         )
+        mxSourcePickerRefresh(idSource)
         reactData$updateSourceLayerList <- runif(1)
         views <- mxDbGetViewsTableBySourceId(idSource, language = language)
         mglUpdateViewsBadges(list(views = as.list(views$view_id)))

@@ -8,6 +8,7 @@ import { sendMailAuto } from "#mapx/mail";
 import { handleErrorText } from "#mapx/error";
 import { settings } from "#root/settings";
 import { randomString } from "#mapx/helpers";
+import { newIdSource } from "../source/id.js";
 import { t } from "#mapx/language";
 const { email_admin } = settings.contact;
 import {
@@ -501,9 +502,6 @@ export async function fileToPostgres(config) {
   });
 }
 
-export function newIdSource() {
-  return randomString("mx", 5, 5, true, false);
-}
 function newIdView() {
   return randomString("MX", 3, 5, false, true, "-");
 }

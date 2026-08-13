@@ -18,6 +18,7 @@ const DEFAULT_CONFIG = {
   language: "en",
   label: "Source",
   validateSelection: null,
+  actions: [],
 };
 const PAGE_SIZE = 50;
 const LOAD_MORE_THRESHOLD = 100;
@@ -30,11 +31,62 @@ let pickerCounter = 0;
  * @property {string} title
  * @property {string} type
  * @property {string[]} [geometry_types]
+ * @property {string} [access]
+ */
+
+/**
+ * @typedef {Object} SourcePickerAction
+ * @property {string} id
+ * @property {string} label
+ * @property {string} [icon]
+ * @property {boolean} [requiresSelection]
+ * @property {boolean} [requiresEmptySelection]
+ * @property {"editable"} [requiredAccess]
  */
 
 function arrayValue(value) {
   if (Array.isArray(value)) return value.filter(Boolean).map(String);
   return value ? [String(value)] : [];
+}
+
+function hasOwn(object, property) {
+  return Object.prototype.hasOwnProperty.call(object, property);
+}
+
+function normalizeActions(value) {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter(
+      (action) =>
+        action &&
+        typeof action === "object" &&
+        typeof action.id === "string" &&
+        action.id,
+    )
+    .map((action) => ({
+      id: action.id,
+      label: String(action.label || action.id),
+      icon: String(action.icon || "fa fa-circle-o"),
+      requiresSelection: action.requiresSelection === true,
+      requiresEmptySelection: action.requiresEmptySelection === true,
+      requiredAccess:
+        action.requiredAccess === "editable" ? "editable" : undefined,
+    }));
+}
+
+function sourceTypeLabel(type) {
+  return (
+    {
+      vector: "Vector",
+      join: "Join",
+      tabular: "Table",
+      raster: "Raster",
+      image: "Image",
+      pmtiles: "PMTiles",
+      document: "Document",
+      external: "External",
+    }[type] || type
+  );
 }
 
 function sourceIconClass(type) {
@@ -47,6 +99,7 @@ function sourceIconClass(type) {
       image: "fa fa-picture-o",
       pmtiles: "fa fa-map-o",
       document: "fa fa-file-text-o",
+      external: "fa fa-book",
     }[type] || "fa fa-database"
   );
 }
@@ -130,11 +183,30 @@ export class MxSourcePickerElement extends HTMLElement {
 
   set config(value) {
     const config = value && typeof value === "object" ? value : {};
+    const acceptedTypes = arrayValue(
+      hasOwn(config, "acceptedTypes")
+        ? config.acceptedTypes
+        : DEFAULT_CONFIG.acceptedTypes,
+    );
     this._config = {
       ...DEFAULT_CONFIG,
       ...config,
       value: arrayValue(config.value),
       excludeIds: arrayValue(config.excludeIds),
+      acceptedTypes: acceptedTypes.length
+        ? acceptedTypes
+        : [...DEFAULT_CONFIG.acceptedTypes],
+      requiredCapabilities: arrayValue(
+        hasOwn(config, "requiredCapabilities")
+          ? config.requiredCapabilities
+          : DEFAULT_CONFIG.requiredCapabilities,
+      ),
+      geometryTypes: arrayValue(
+        hasOwn(config, "geometryTypes")
+          ? config.geometryTypes
+          : DEFAULT_CONFIG.geometryTypes,
+      ),
+      actions: normalizeActions(config.actions),
     };
     this._config.maxItems = this._config.multiple
       ? Math.max(1, Number(this._config.maxItems) || 1)
@@ -334,6 +406,9 @@ export class MxSourcePickerElement extends HTMLElement {
         title,
       ),
     );
+    const configuredActions = this.config.actions.map((action) =>
+      this.buildFieldAction(action, values),
+    );
     const endAction = el(
       "button",
       {
@@ -349,7 +424,7 @@ export class MxSourcePickerElement extends HTMLElement {
         "aria-hidden": "true",
       }),
     );
-    control.append(open, endAction);
+    control.append(open, ...configuredActions, endAction);
     group.append(label, control);
     if (this.config.multiple && this.config.reorderable && hasSelection) {
       const list = el("ol", {
@@ -412,11 +487,58 @@ export class MxSourcePickerElement extends HTMLElement {
     );
   }
 
+  /**
+   * @param {SourcePickerAction} action
+   * @param {SourceBrowserItem[]} selectedItems
+   */
+  buildFieldAction(action, selectedItems) {
+    const hasSelection = selectedItems.length > 0;
+    const hasRequiredAccess =
+      !action.requiredAccess ||
+      selectedItems.every((item) => item.access === action.requiredAccess);
+    return this.elements.el(
+      "button",
+      {
+        type: "button",
+        class: "btn btn-default mx-source-picker__end-action",
+        dataset: { action: "picker-action", actionId: action.id },
+        "aria-label": action.label,
+        title: action.label,
+        disabled:
+          this.disabled ||
+          this.validating ||
+          (action.requiresSelection && !hasSelection) ||
+          (action.requiresEmptySelection && hasSelection) ||
+          !hasRequiredAccess,
+      },
+      this.elements.el("i", {
+        class: action.icon,
+        "aria-hidden": "true",
+      }),
+    );
+  }
+
   onFieldClick(event) {
     if (this.disabled || this.validating) return;
     const actionElement = event.target.closest("[data-action]");
     const action = actionElement?.dataset.action;
     if (action === "open") this.open();
+    if (action === "picker-action") {
+      const configuredAction = this.config.actions.find(
+        (candidate) => candidate.id === actionElement.dataset.actionId,
+      );
+      if (!configuredAction || actionElement.disabled) return;
+      this.dispatchEvent(
+        new CustomEvent("mx-source-picker-action", {
+          bubbles: true,
+          detail: {
+            action: configuredAction.id,
+            value: this.value,
+            items: [...this.selectedItems.values()],
+          },
+        }),
+      );
+    }
     if (action === "remove") {
       this.selectedItems.clear();
       this.commit();
@@ -537,9 +659,19 @@ export class MxSourcePickerElement extends HTMLElement {
       "aria-label": "Source filters",
     });
     filters.hidden = true;
+    const sourceType = el("select", {
+      class: "form-control",
+      "aria-label": "Filter by source type",
+    });
+    sourceType.append(
+      el("option", { value: "" }, "All source types"),
+      ...this.config.acceptedTypes.map((type) =>
+        el("option", { value: type }, sourceTypeLabel(type)),
+      ),
+    );
     const geometry = el("select", {
       class: "form-control",
-      "aria-label": "Filter by geometry type",
+      "aria-label": "Filter by vector geometry type",
     });
     geometry.append(
       el("option", { value: "" }, "All geometries"),
@@ -582,8 +714,11 @@ export class MxSourcePickerElement extends HTMLElement {
       wrapper.append(el("span", {}, label), control);
       return wrapper;
     };
+    filters.append(wrapFilter("Type", sourceType));
+    if (this.config.acceptedTypes.includes("vector")) {
+      filters.append(wrapFilter("Vector geometry", geometry));
+    }
     filters.append(
-      wrapFilter("Geometry", geometry),
       wrapFilter("Metadata tag", tag),
       wrapFilter("Sort by", sort),
       clearFilters,
@@ -640,6 +775,7 @@ export class MxSourcePickerElement extends HTMLElement {
       search,
       filtersButton,
       filters,
+      sourceType,
       geometry,
       tag,
       sort,
@@ -657,8 +793,15 @@ export class MxSourcePickerElement extends HTMLElement {
     search.addEventListener("keydown", (event) =>
       this.onSearchKeydown(event),
     );
-    for (const control of [geometry, tag, sort]) {
+    for (const control of [sourceType, geometry, tag, sort]) {
       control.addEventListener("change", () => {
+        if (
+          control === sourceType &&
+          sourceType.value &&
+          sourceType.value !== "vector"
+        ) {
+          geometry.value = "";
+        }
         this.updateFilterState();
         this.loadResults();
       });
@@ -710,11 +853,16 @@ export class MxSourcePickerElement extends HTMLElement {
         "/client/source/search",
         {
           query: refs.search.value,
-          acceptedTypes: this.config.acceptedTypes,
+          acceptedTypes: refs.sourceType.value
+            ? [refs.sourceType.value]
+            : this.config.acceptedTypes,
           requiredCapabilities: this.config.requiredCapabilities,
-          geometryTypes: refs.geometry.value
-            ? [refs.geometry.value]
-            : this.config.geometryTypes,
+          geometryTypes:
+            refs.sourceType.value && refs.sourceType.value !== "vector"
+              ? []
+              : refs.geometry.value
+                ? [refs.geometry.value]
+                : this.config.geometryTypes,
           tags: refs.tag.value ? [refs.tag.value] : [],
           access: this.config.accessMode === "editable" ? ["editable"] : [],
           sort: refs.sort.value,
@@ -856,11 +1004,12 @@ export class MxSourcePickerElement extends HTMLElement {
       typeof force === "boolean" ? force : this.refs.filters.hidden === true;
     this.refs.filters.hidden = !open;
     this.refs.filtersButton.setAttribute("aria-expanded", String(open));
-    if (open) this.refs.geometry.focus();
+    if (open) this.refs.sourceType.focus();
     else if (force === false) this.refs.filtersButton.focus();
   }
 
   clearFilters() {
+    this.refs.sourceType.value = "";
     this.refs.geometry.value = "";
     this.refs.tag.value = "";
     this.refs.sort.value = "relevance";
@@ -872,6 +1021,7 @@ export class MxSourcePickerElement extends HTMLElement {
   updateFilterState() {
     if (!this.refs?.filtersButton) return;
     const active =
+      Boolean(this.refs.sourceType.value) ||
       Boolean(this.refs.geometry.value) ||
       Boolean(this.refs.tag.value) ||
       this.refs.sort.value !== "relevance";
@@ -893,6 +1043,7 @@ export class MxSourcePickerElement extends HTMLElement {
     for (const control of [
       this.refs.search,
       this.refs.filtersButton,
+      this.refs.sourceType,
       this.refs.geometry,
       this.refs.tag,
       this.refs.sort,
@@ -1283,6 +1434,7 @@ export class MxSourcePickerElement extends HTMLElement {
  *     value: string | string[],
  *     items: SourceBrowserItem[]
  *   }) => Promise<{valid: boolean, message?: string}>
+ *   actions?: SourcePickerAction[]
  * }} options
  * @returns {Promise<{value: string | string[], items: SourceBrowserItem[]} | null>}
  */

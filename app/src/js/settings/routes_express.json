@@ -19,6 +19,8 @@
   "uploadImage": "/upload/image/",
   "uploadVector": "/upload/vector/",
   "postSourceRevise": "/source/revise",
+  "postExternalMetadataCreate": "/source/external/create",
+  "getExternalMetadataSelectionValidate": "/get/source/external/selection/validate",
   "postEmail": "/send/mail",
   "collectLogs": "/collect/logs/",
   "s3": "/s3"

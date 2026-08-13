@@ -40,3 +40,29 @@ test_that("mxSourcePickerInput rejects invalid interface values", {
     fixed = TRUE
   )
 })
+
+test_that("source metadata edit requests are distinct", {
+  set.seed(1)
+  first <- mxSourceMetadataEditRequest("mx_extern_a_b_c_d_e")
+  second <- mxSourceMetadataEditRequest("mx_extern_a_b_c_d_e")
+
+  expect_equal(first$idSource, "mx_extern_a_b_c_d_e")
+  expect_equal(second$idSource, first$idSource)
+  expect_false(identical(second$update, first$update))
+})
+
+test_that("source picker refresh sends a targeted presentation update", {
+  messages <- list()
+  session <- list(
+    sendCustomMessage = function(type, message) {
+      messages[[type]] <<- message
+    }
+  )
+
+  mxSourcePickerRefresh("mx_extern_a_b_c_d_e", session = session)
+
+  expect_equal(
+    messages[["mx-source-picker-refresh"]],
+    list(idSource = "mx_extern_a_b_c_d_e")
+  )
+})

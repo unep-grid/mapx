@@ -218,6 +218,10 @@ app.get("/get/source/table/attribute/", source.mwGetAttributeTable);
 app.get("/get/source/validate/geom", source.mwGetGeomValidate);
 app.get("/get/sources/list/user", source.mwGetSourcesList);
 app.get("/get/sources/selection/validate", source.mwValidateSourceSelection);
+app.get(
+  "/get/source/external/selection/validate",
+  source.mwValidateExternalMetadataSelection,
+);
 app.get("/get/ip", ip.mwGet);
 app.get("/get/search/key", mwGetSearchKey);
 app.get("/get/gemet/search", mwGemetSearchText);
@@ -236,6 +240,7 @@ app.get("/ogc_meta/collections/:collectionId/items/:id", ogcMeta.mwItem);
 app.post("/upload/image/", upload.mwImage);
 app.post("/upload/vector/", upload.mwVector);
 app.post("/source/revise", source.mwSourceRevise);
+app.post("/source/external/create", source.mwCreateExternalMetadataSource);
 app.post("/send/mail/", mwSendMail);
 
 server.listen(port);

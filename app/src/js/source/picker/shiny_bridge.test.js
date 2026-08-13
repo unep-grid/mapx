@@ -88,7 +88,7 @@ describe("source picker Shiny bridge", () => {
     await new Promise((resolve) => queueMicrotask(resolve));
     const picker = root.querySelector("mx-source-picker");
     expect(picker.config).toMatchObject({
-      acceptedTypes: ["vector", "tabular", "join"],
+      acceptedTypes: ["vector", "tabular", "join", "external"],
       requiredCapabilities: [],
       accessMode: "editable",
       language: "fr",
@@ -113,6 +113,108 @@ describe("source picker Shiny bridge", () => {
     expect(shiny.setInputValue).toHaveBeenCalledWith(
       "selectSourceLayerForManage",
       { idSource: "mx_vector_a_b_c_d_e", update: 1234 },
+      { priority: "event" },
+    );
+  });
+
+  it("applies server-side picker updates and forwards the new value", async () => {
+    root = document.createElement("div");
+    const picker = new MxSourcePickerElement();
+    picker.dataset.shinyInput = "viewExternalMetadataId";
+    picker.config = {
+      acceptedTypes: ["external"],
+      requiredCapabilities: [],
+    };
+    root.append(picker);
+    document.body.append(root);
+    await new Promise((resolve) => queueMicrotask(resolve));
+    vi.spyOn(picker, "hydrateSelectedItems").mockResolvedValue();
+    const handlers = new Map();
+    const shiny = {
+      setInputValue: vi.fn(),
+      addCustomMessageHandler: vi.fn((name, handler) =>
+        handlers.set(name, handler),
+      ),
+    };
+    installSourcePickerShinyBridge({ root, shiny });
+
+    handlers.get("mx-source-picker-update")({
+      inputId: "viewExternalMetadataId",
+      value: "mx_extern_a_b_c_d_e",
+    });
+
+    expect(picker.value).toBe("mx_extern_a_b_c_d_e");
+    expect(shiny.setInputValue).toHaveBeenCalledWith(
+      "viewExternalMetadataId",
+      "mx_extern_a_b_c_d_e",
+      { priority: "event" },
+    );
+  });
+
+  it("rehydrates only pickers displaying a revised source", async () => {
+    root = document.createElement("div");
+    const matching = new MxSourcePickerElement();
+    matching.dataset.shinyInput = "viewExternalMetadataId";
+    matching.config = {
+      value: ["mx_extern_a_b_c_d_e"],
+      acceptedTypes: ["external"],
+      requiredCapabilities: [],
+    };
+    const other = new MxSourcePickerElement();
+    other.dataset.shinyInput = "otherSourceId";
+    other.config = {
+      value: ["mx_extern_f_g_h_i_j"],
+      acceptedTypes: ["external"],
+      requiredCapabilities: [],
+    };
+    root.append(matching, other);
+    document.body.append(root);
+    await new Promise((resolve) => queueMicrotask(resolve));
+    const matchingHydration = vi
+      .spyOn(matching, "hydrateSelectedItems")
+      .mockResolvedValue();
+    const otherHydration = vi
+      .spyOn(other, "hydrateSelectedItems")
+      .mockResolvedValue();
+    const handlers = new Map();
+    const shiny = {
+      setInputValue: vi.fn(),
+      addCustomMessageHandler: vi.fn((name, handler) =>
+        handlers.set(name, handler),
+      ),
+    };
+    installSourcePickerShinyBridge({ root, shiny });
+
+    handlers.get("mx-source-picker-refresh")({
+      idSource: "mx_extern_a_b_c_d_e",
+    });
+
+    expect(matchingHydration).toHaveBeenCalledOnce();
+    expect(otherHydration).not.toHaveBeenCalled();
+    expect(shiny.setInputValue).not.toHaveBeenCalled();
+  });
+
+  it("forwards generic picker actions to their legacy Shiny input", async () => {
+    root = document.createElement("div");
+    const picker = new MxSourcePickerElement();
+    picker.dataset.shinyInput = "viewExternalMetadataId";
+    picker.config = {
+      acceptedTypes: ["external"],
+      requiredCapabilities: [],
+      actions: [{ id: "btnAddExternalMetadata", label: "Create" }],
+    };
+    root.append(picker);
+    document.body.append(root);
+    await new Promise((resolve) => queueMicrotask(resolve));
+    const shiny = { setInputValue: vi.fn() };
+    vi.spyOn(Date, "now").mockReturnValue(4321);
+    installSourcePickerShinyBridge({ root, shiny });
+
+    picker.querySelector("[data-action-id='btnAddExternalMetadata']").click();
+
+    expect(shiny.setInputValue).toHaveBeenCalledWith(
+      "btnAddExternalMetadata",
+      { value: null, update: 4321 },
       { priority: "event" },
     );
   });

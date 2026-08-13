@@ -307,7 +307,11 @@ export async function downloadViewGeoJSON(opt) {
  * @return {Array} array of download url items [{<label>,<url>,<is_download_link>}]
  */
 export function getDownloadUrlItemsFromViewMeta(view) {
-  const urlItems = path(view, "data.source.meta.origin.source.urls", []);
+  const urlItems = path(
+    view,
+    "_meta.origin.source.urls",
+    path(view, "data.source.meta.origin.source.urls", []),
+  );
 
   if (urlItems.length === 0) {
     /**

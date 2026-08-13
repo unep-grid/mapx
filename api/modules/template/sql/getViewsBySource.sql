@@ -2,7 +2,5 @@ SELECT
   *
 FROM
   mx_views_latest
-WHERE
- type = 'vt'
-AND data #>> '{source,layerInfo,name}' = $1
-
+WHERE data #>> '{source,layerInfo,name}' = $1
+   OR data #>> '{source,metadataId}' = $1

@@ -56,3 +56,27 @@ mxSourcePickerInput <- function(
 
   htmltools::tag("mx-source-picker", attributes)
 }
+
+#' Update a source picker through its scoped Shiny compatibility bridge.
+mxSourcePickerUpdate <- function(inputId, value = NULL, session = getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    "mx-source-picker-update",
+    list(inputId = inputId, value = value)
+  )
+}
+
+#' Refresh the displayed data for a source selected in any mounted picker.
+#'
+#' This does not change picker values or emit a Shiny input. It is used after a
+#' source revision changes presentation data such as its metadata title.
+mxSourcePickerRefresh <- function(idSource, session = getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    "mx-source-picker-refresh",
+    list(idSource = idSource)
+  )
+}
+
+#' Build a distinct request to open the source metadata editor.
+mxSourceMetadataEditRequest <- function(idSource) {
+  list(idSource = idSource, update = runif(1))
+}

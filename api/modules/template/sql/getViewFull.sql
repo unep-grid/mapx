@@ -9,6 +9,15 @@ SELECT
   v.project,
   v.readers,
   v.editors,
+  CASE WHEN v.type IN ('rt', 'cc') THEN coalesce(
+    (
+      SELECT s.data #> '{meta}'
+      FROM mx_sources_latest s
+      WHERE s.id = v.data #>> '{source,metadataId}'
+        AND s.type = 'external'
+    ),
+    '{}'::jsonb
+  ) END AS _meta,
   /**
    * alias title
    */
@@ -37,4 +46,3 @@ FROM
   LEFT JOIN mx_projects p ON p.id = v.project
 WHERE
   v.id = $1
-

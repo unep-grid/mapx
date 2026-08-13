@@ -91,6 +91,8 @@ observeEvent(reactData$triggerSourceManage, {
     #
     if (src$type %in% list("vector")) {
       sourceEditServices <- c("mx_download", "gs_ws_b", "mx_postgis_tiler")
+    } else if (src$type %in% list("external")) {
+      sourceEditServices <- character(0)
     } else {
       sourceEditServices <- c("mx_download")
     }

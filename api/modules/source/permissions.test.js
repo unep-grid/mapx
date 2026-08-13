@@ -75,4 +75,19 @@ describe("source edit permission", () => {
       check({ editor: 8, editors: [], project: "MX-CURRENT" }),
     ).resolves.toEqual(expect.objectContaining({ allowed: true }));
   });
+
+  it("uses trusted server-session roles when the caller supplies them", async () => {
+    const roles = {
+      publisher: true,
+      root: false,
+      group: ["publishers"],
+    };
+    await expect(
+      check(
+        { editor: 8, editors: ["publishers"], project: "MX-CURRENT" },
+        { roles },
+      ),
+    ).resolves.toEqual(expect.objectContaining({ allowed: true, roles }));
+    expect(mocks.getUserRoles).not.toHaveBeenCalled();
+  });
 });

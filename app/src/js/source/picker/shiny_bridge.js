@@ -24,6 +24,24 @@ export function installSourcePickerShinyBridge({ root, shiny }) {
     return;
   }
   installedRoots.add(root);
+  shiny.addCustomMessageHandler?.("mx-source-picker-update", (message) => {
+    const picker = [...root.querySelectorAll("mx-source-picker")].find(
+      (candidate) => candidate.dataset.shinyInput === message?.inputId,
+    );
+    if (!picker) return;
+    picker.value = message?.value ?? null;
+    picker.commit();
+    picker.hydrateSelectedItems();
+  });
+  shiny.addCustomMessageHandler?.("mx-source-picker-refresh", (message) => {
+    const idSource = message?.idSource;
+    if (typeof idSource !== "string" || !idSource) return;
+    for (const picker of root.querySelectorAll("mx-source-picker")) {
+      if (arrayValue(picker.value).includes(idSource)) {
+        picker.hydrateSelectedItems();
+      }
+    }
+  });
   root.addEventListener("mx-source-picker-change", (event) => {
     const picker = event.target;
     const inputId = picker?.dataset?.shinyInput;
@@ -44,6 +62,19 @@ export function installSourcePickerShinyBridge({ root, shiny }) {
       if (dependent.dataset.excludeSourceInput === inputId) {
         dependent.setExcludedIds(arrayValue(event.detail.value));
       }
+    }
+  });
+  root.addEventListener("mx-source-picker-action", (event) => {
+    const action = event.detail?.action;
+    if (!action || !event.target?.dataset?.shinyInput) return;
+    const payload = {
+      value: event.detail.value ?? null,
+      update: Date.now(),
+    };
+    if (shiny.setInputValue) {
+      shiny.setInputValue(action, payload, { priority: "event" });
+    } else {
+      shiny.onInputChange(action, payload);
     }
   });
 }
@@ -68,7 +99,9 @@ export async function pickSourceForShiny({
   const result = await pickSources({
     root,
     multiple: false,
-    acceptedTypes: ["vector", "tabular", "join"],
+    acceptedTypes: Array.isArray(request.acceptedTypes)
+      ? request.acceptedTypes
+      : ["vector", "tabular", "join", "external"],
     requiredCapabilities: [],
     accessMode: "editable",
     language,

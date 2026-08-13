@@ -32,7 +32,16 @@ views_subset AS NOT MATERIALIZED (
   pid,
   project,
   readers,
-  editors
+  editors,
+  CASE WHEN v.type IN ('rt', 'cc') THEN coalesce(
+    (
+      SELECT s.data #> '{meta}'
+      FROM mx_sources_latest s
+      WHERE s.id = v.data #>> '{source,metadataId}'
+        AND s.type = 'external'
+    ),
+    '{}'::jsonb
+  ) END AS _meta
   FROM mx_views_latest v
   WHERE 
   (

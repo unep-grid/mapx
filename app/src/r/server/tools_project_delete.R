@@ -478,7 +478,10 @@ observeEvent(input$btnDeleteProjectConfirm, {
           )
           sourceType <- dbGetQuery(con, querySourceType)$type
 
-          if (sourceType == "join") {
+          if (sourceType == "external") {
+            # Metadata-only catalog entries have no PostgreSQL relation.
+            invisible(NULL)
+          } else if (sourceType == "join") {
             #
             # Delete postgres views
             #

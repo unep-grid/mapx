@@ -1206,11 +1206,6 @@ mxDbGetSourceMeta <- function(layer) {
     mxDebugMsg("mxGetMeta requested, but no layer table available")
     return()
   }
-  if (!mxDbExistsTable(layer)) {
-    mxDebugMsg("mxGetMeta requested, but no layer available")
-    return()
-  }
-
   query <- sprintf(
     "SELECT
       data #> '{meta}' as \"meta\",

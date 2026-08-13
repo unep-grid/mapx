@@ -9,6 +9,12 @@ views_with_layer as (
   AND
   data #>> '{source,layerInfo,name}' = $1
 ),
+views_with_external_metadata as (
+  SELECT 'external_metadata' as type, id, project, data #> '{title,en}' as title
+  FROM mx_views_latest
+  WHERE type IN ('rt', 'cc')
+  AND data #>> '{source,metadataId}' = $1
+),
 views_with_dashboard as (
   SELECT 'dashboard' as type, id, project, data #> '{title,en}' as title
   FROM mx_views_latest
@@ -42,6 +48,8 @@ views_with_custom_style as (
 views_all  as (
   SELECT * FROM views_with_layer
   UNION
+  SELECT * FROM views_with_external_metadata
+  UNION
   SELECT * FROM views_with_dashboard
   UNION
   SELECT * FROM views_with_custom_code
@@ -60,5 +68,4 @@ views_project as (
   v.project = p.id
 )
 SELECT * from views_project;
-
 

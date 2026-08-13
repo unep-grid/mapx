@@ -13,6 +13,7 @@ function asArray(value) {
  * @param {number|string} options.idUser Authenticated user identifier
  * @param {string|null} [options.idProject] Required source project
  * @param {boolean} [options.allowRoot] Whether root bypasses the source ACL
+ * @param {Object|null} [options.roles] Server-session roles, when available
  * @returns {Promise<{allowed: boolean, roles: Object, source: Object|null}>}
  */
 export async function getSourceEditPermission({
@@ -21,9 +22,10 @@ export async function getSourceEditPermission({
   idUser,
   idProject = null,
   allowRoot = true,
+  roles: sessionRoles = null,
 }) {
   const sourceResult = await client.query(
-    `SELECT editor, editors, project
+    `SELECT editor, editors, project, type, data
      FROM mx_sources_latest
      WHERE id = $1`,
     [idSource],
@@ -33,7 +35,8 @@ export async function getSourceEditPermission({
     return { allowed: false, roles: {}, source };
   }
 
-  const roles = await getUserRoles(idUser, source.project, client);
+  const roles =
+    sessionRoles || (await getUserRoles(idUser, source.project, client));
   const groups = asArray(roles.group);
   const editors = asArray(source.editors);
   const matchesAcl =

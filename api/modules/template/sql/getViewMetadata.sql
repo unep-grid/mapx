@@ -11,11 +11,14 @@ WITH
   ),
   v_source_id AS (
     SELECT
-      data #>> '{source,layerInfo,name}' as id_source
+      CASE
+        WHEN type = 'vt' THEN data #>> '{source,layerInfo,name}'
+        WHEN type IN ('rt', 'cc') THEN data #>> '{source,metadataId}'
+      END as id_source
     FROM
       v_latest
     WHERE
-      type = 'vt'
+      type IN ('vt', 'rt', 'cc')
   ),
   v_services AS (
     SELECT

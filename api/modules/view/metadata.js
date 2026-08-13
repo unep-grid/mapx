@@ -16,9 +16,47 @@ import {
   getSourceMetadata,
 } from "#mapx/source";
 
+async function getSessionViewSource(session, idView, client) {
+  if (
+    !session?.user_authenticated ||
+    !session.project_id ||
+    !Number.isInteger(Number(session.user_id)) ||
+    !isViewId(idView)
+  ) {
+    return null;
+  }
+
+  const result = await client.query(
+    `SELECT v.type, v.project,
+            CASE
+              WHEN v.type = 'vt' THEN v.data #>> '{source,layerInfo,name}'
+              WHEN v.type IN ('rt', 'cc') THEN v.data #>> '{source,metadataId}'
+            END AS id_source,
+            s.type AS source_type
+     FROM mx_views_latest v
+     LEFT JOIN mx_sources_latest s ON s.id = CASE
+       WHEN v.type = 'vt' THEN v.data #>> '{source,layerInfo,name}'
+       WHEN v.type IN ('rt', 'cc') THEN v.data #>> '{source,metadataId}'
+     END
+     WHERE v.id = $1`,
+    [idView],
+  );
+  const view = result.rows[0];
+  const idSource = view?.id_source;
+  if (
+    !["vt", "rt", "cc"].includes(view?.type) ||
+    view.project !== session.project_id ||
+    !isSourceId(idSource) ||
+    (["rt", "cc"].includes(view.type) && view.source_type !== "external")
+  ) {
+    return null;
+  }
+  return { idSource, type: view.type };
+}
+
 /**
  * Resolve whether the current session may open the legacy metadata editor for
- * the source owned by a vector-tile view in the current project.
+ * the source or external metadata entry linked by a view in the current project.
  */
 export async function getViewSourceMetadataEditAccess(
   socket,
@@ -27,30 +65,9 @@ export async function getViewSourceMetadataEditAccess(
 ) {
   const session = socket?.session;
   const idView = config?.idView;
-  if (
-    !session?.user_authenticated ||
-    !session.project_id ||
-    !Number.isInteger(Number(session.user_id)) ||
-    !isViewId(idView)
-  ) {
-    return { allowed: false };
-  }
-
-  const result = await client.query(
-    `SELECT type, project, data #>> '{source,layerInfo,name}' AS id_source
-     FROM mx_views_latest
-     WHERE id = $1`,
-    [idView],
-  );
-  const view = result.rows[0];
-  const idSource = view?.id_source;
-  if (
-    view?.type !== "vt" ||
-    view.project !== session.project_id ||
-    !isSourceId(idSource)
-  ) {
-    return { allowed: false };
-  }
+  const reference = await getSessionViewSource(session, idView, client);
+  if (!reference) return { allowed: false };
+  const { idSource } = reference;
 
   const permission = await getSourceEditPermission({
     client,
@@ -59,6 +76,7 @@ export async function getViewSourceMetadataEditAccess(
     idProject: session.project_id,
     // Match the legacy editor's editable-source list exactly.
     allowRoot: false,
+    roles: session.user_roles,
   });
   return permission.allowed ? { allowed: true, idSource } : { allowed: false };
 }
@@ -79,20 +97,15 @@ export async function ioSetViewSourceMetaBbox(socket, config, cb) {
     if (!session) {
       throw new Error("Missing session");
     }
-    const { idView, type, extent, overwrite = false } = config;
-
-    if (overwrite && !session.user_roles.publisher) {
-      throw new Error("Not allowed");
-    }
+    const { idView, extent, overwrite = false } = config;
 
     const res = await setViewSourceMetaBbox(
       idView,
-      type,
       extent,
       overwrite,
-      session.user_id,
+      session,
     );
-    cb(res);
+    return cb(res);
   } catch (e) {
     socket.notifyInfoError({
       idGroup: config.id_request,
@@ -232,8 +245,13 @@ async function getViewSourceMetadata(idView) {
       case "rt":
       case "cc":
         {
-          const metaCc = await getViewSourceMetadataRtCc(idView);
-          out.push(metaCc);
+          const idSource = view?.data?.source?.metadataId;
+          if (isSourceId(idSource)) {
+            const metaExternal = await getSourceMetadata({ id: idSource });
+            out.push(...metaExternal);
+          } else {
+            out.push({});
+          }
         }
         break;
       case "vt":
@@ -251,16 +269,6 @@ async function getViewSourceMetadata(idView) {
     console.error("Error getting view source metadata: ", err.message);
     throw err;
   }
-}
-
-async function getViewSourceMetadataRtCc(idView) {
-  const resCc = await pgRead.query(templates.getViewSourceMetadataRtCc, [
-    idView,
-  ]);
-  if (resCc.rowCount === 0) {
-    throw new Error("Rt Cc metadata: view not found");
-  }
-  return resCc.rows[0].meta;
 }
 
 async function getViewSourceMetadataVt(view) {
@@ -308,23 +316,21 @@ export async function getViewSourceMetadataExtent(idView) {
  */
 export async function setViewSourceMetaBbox(
   idView,
-  type,
   bbox,
   overwrite = false,
-  idUser,
+  session,
   client = null,
 ) {
   if (!isViewId(idView)) {
     throw new Error("Invalid view");
   }
-  /**
-   * If overwrite not allowed and meta bbox exists stop
-   */
-  if (!overwrite) {
-    const bboxCurrent = await getViewSourceMetadataExtent(idView);
-    if (isBboxMeta(bboxCurrent)) {
-      throw new Error("Can't update meta bbox if one already set and valid");
-    }
+  if (
+    !session?.user_authenticated ||
+    !session.project_id ||
+    !Number.isInteger(Number(session.user_id)) ||
+    !session.user_roles?.publisher
+  ) {
+    throw new Error("Not allowed");
   }
 
   /**
@@ -352,71 +358,52 @@ export async function setViewSourceMetaBbox(
     };
   }
 
-  const bboxJson = JSON.stringify(bbox);
-  if (type === "vt") {
-    const view = await getView(idView);
-    const sourceId = view?.data?.source?.layerInfo?.name;
-    return createSourceRevision({
-      idSource: sourceId,
-      idUser,
-      client,
-      mutate(revision) {
-        revision.data ||= {};
-        revision.data.meta ||= {};
-        revision.data.meta.spatial ||= {};
-        revision.data.meta.spatial.bbox = JSON.parse(bboxJson);
+  const ownsClient = !client;
+  const pgClient = client || (await pgWrite.connect());
+  try {
+    if (ownsClient) await pgClient.query("BEGIN");
+    const reference = await getSessionViewSource(session, idView, pgClient);
+    if (!reference) {
+      throw new Error("View has no editable metadata source");
+    }
+    const { idSource } = reference;
+
+    await pgClient.query(
+      "SELECT pg_advisory_xact_lock(hashtextextended($1::text, 0))",
+      [idSource],
+    );
+    const permission = await getSourceEditPermission({
+      client: pgClient,
+      idSource,
+      idUser: session.user_id,
+      idProject: session.project_id,
+      roles: session.user_roles,
+    });
+    if (!permission.allowed) {
+      throw new Error("Source edit not allowed");
+    }
+    if (!overwrite && isBboxMeta(permission.source?.data?.meta?.spatial?.bbox)) {
+      throw new Error("Can't update meta bbox if one already set and valid");
+    }
+
+    const bboxJson = JSON.stringify(bbox);
+    const revision = await createSourceRevision({
+      idSource,
+      idUser: session.user_id,
+      client: pgClient,
+      mutate(sourceRevision) {
+        sourceRevision.data ||= {};
+        sourceRevision.data.meta ||= {};
+        sourceRevision.data.meta.spatial ||= {};
+        sourceRevision.data.meta.spatial.bbox = JSON.parse(bboxJson);
       },
     });
-  } else if (type === "cc" || type === "rt") {
-    // Update view metadata directly for cc/rt views
-    const query = `
-      WITH latest_view AS (
-        SELECT id, pid
-        FROM mx_views
-        WHERE id = $2
-        ORDER BY date_modified DESC
-        LIMIT 1
-      )
-      UPDATE mx_views v
-      SET data = jsonb_set(
-        data,
-        '{source,meta,spatial,bbox}',
-        $1::jsonb,
-        true
-      )
-      FROM latest_view lv
-      WHERE v.id = lv.id AND v.pid = lv.pid
-      RETURNING v.id, v.pid;
-    `;
-    const params = [bboxJson, idView];
-
-    const ownsClient = !client;
-    const pgClient = client || (await pgWrite.connect());
-    try {
-      if (ownsClient) {
-        await pgClient.query("BEGIN");
-      }
-      const result = await pgClient.query(query, params);
-      if (result.rowCount !== 1) {
-        throw new Error(
-          `Expected to update exactly 1 row, but updated ${result.rowCount} rows instead`,
-        );
-      }
-      if (ownsClient) {
-        await pgClient.query("COMMIT");
-      }
-      return result.rows[0];
-    } catch (error) {
-      if (ownsClient) {
-        await pgClient.query("ROLLBACK");
-      }
-      throw error;
-    } finally {
-      if (ownsClient) {
-        pgClient.release();
-      }
-    }
-  } else {
-    throw new Error(`Unsupported view type: ${type}`);
+    if (ownsClient) await pgClient.query("COMMIT");
+    return revision;
+  } catch (error) {
+    if (ownsClient) await pgClient.query("ROLLBACK");
+    throw error;
+  } finally {
+    if (ownsClient) pgClient.release();
   }
 }

@@ -98,6 +98,8 @@ mxDbGetViewsTableBySourceIdNoDep <- function(
   v.data #>> '{source,layerInfo,name}' = '%2$s'
   OR
   v.data#>>'{source,layerInfo,maskName}'= '%2$s'
+  OR
+  v.data#>>'{source,metadataId}'= '%2$s'
 ",
     language, idSource
   )

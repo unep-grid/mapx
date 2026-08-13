@@ -395,6 +395,50 @@ describe("MxSourcePickerElement", () => {
     ).toBe("Réseau routier");
   });
 
+  it("normalizes scalar and null R options and keeps an external selection searchable", async () => {
+    picker.config = {
+      value: "mx_extern_a_b_c_d_e",
+      acceptedTypes: "external",
+      requiredCapabilities: null,
+      geometryTypes: null,
+      viewId: "MX-AAAAA-BBBBB-CCCCC-DDDDD-EEEEE",
+    };
+    picker.value = picker.config.value;
+    mocks.emitAsync.mockResolvedValue({
+      success: true,
+      total: 1,
+      facets: { tags: [] },
+      items: [
+        {
+          id: "mx_extern_a_b_c_d_e",
+          title: "Demo WMS test",
+          type: "external",
+          access: "editable",
+        },
+      ],
+    });
+
+    expect(picker.config.acceptedTypes).toEqual(["external"]);
+    expect(picker.config.requiredCapabilities).toEqual([]);
+    expect(picker.config.geometryTypes).toEqual([]);
+    picker.pendingSelectedItems = new Map(picker.selectedItems);
+    picker.buildBrowser();
+    await picker.loadResults();
+
+    expect(mocks.emitAsync).toHaveBeenLastCalledWith(
+      "/client/source/search",
+      expect.objectContaining({ acceptedTypes: ["external"] }),
+      15000,
+    );
+    expect(picker.refs.results.children).toHaveLength(1);
+    expect(picker.refs.results.firstElementChild.classList).toContain(
+      "is-selected",
+    );
+    expect(
+      picker.querySelector(".mx-source-picker__selected-title").innerText,
+    ).toBe("Demo WMS test");
+  });
+
   it("does not let stale initial hydration overwrite a newer selection", async () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
     let resolveHydration;
@@ -721,6 +765,125 @@ describe("MxSourcePickerElement", () => {
     expect(picker.refs.geometry.value).toBe("");
     expect(picker.refs.sort.value).toBe("relevance");
     expect(picker.refs.filters.hidden).toBe(true);
+  });
+
+  it("filters configured source types and exposes vector geometry contextually", async () => {
+    picker.config = {
+      acceptedTypes: ["vector", "tabular", "external"],
+      requiredCapabilities: [],
+    };
+    picker.pendingSelectedItems = new Map();
+    picker.buildBrowser();
+
+    expect(
+      [...picker.refs.sourceType.options].map((option) => option.innerText),
+    ).toEqual(["All source types", "Vector", "Table", "External"]);
+    expect(picker.refs.geometry.closest("label").textContent).toContain(
+      "Vector geometry",
+    );
+
+    picker.refs.sourceType.value = "external";
+    picker.refs.geometry.value = "line";
+    await picker.loadResults();
+    expect(mocks.emitAsync).toHaveBeenLastCalledWith(
+      "/client/source/search",
+      expect.objectContaining({
+        acceptedTypes: ["external"],
+        geometryTypes: [],
+      }),
+      15000,
+    );
+
+    picker.refs.clearFilters.click();
+    expect(picker.refs.sourceType.value).toBe("");
+
+    picker.config = { acceptedTypes: ["external"], requiredCapabilities: [] };
+    picker.buildBrowser();
+    expect(picker.refs.geometry.isConnected).toBe(false);
+  });
+
+  it("emits configured field actions and enforces their selection access", () => {
+    picker.config = {
+      acceptedTypes: ["external"],
+      requiredCapabilities: [],
+      actions: [
+        {
+          id: "createSource",
+          label: "Create",
+          icon: "fa fa-plus",
+          requiresEmptySelection: true,
+        },
+        {
+          id: "editSource",
+          label: "Edit",
+          icon: "fa fa-pencil",
+          requiresSelection: true,
+          requiredAccess: "editable",
+        },
+      ],
+    };
+    picker.selectedItems = new Map([
+      [
+        "mx_extern_a_b_c_d_e",
+        {
+          id: "mx_extern_a_b_c_d_e",
+          title: "Demo WMS test",
+          type: "external",
+          access: "editable",
+        },
+      ],
+    ]);
+    picker.renderField();
+    const listener = vi.fn();
+    picker.addEventListener("mx-source-picker-action", listener);
+
+    const createAction = picker.querySelector(
+      "[data-action-id='createSource']",
+    );
+    expect(createAction.disabled).toBe(true);
+    createAction.click();
+    expect(listener).not.toHaveBeenCalled();
+
+    picker.querySelector("[data-action-id='editSource']").click();
+
+    expect(listener).toHaveBeenCalledWith(
+      expect.objectContaining({
+        detail: expect.objectContaining({
+          action: "editSource",
+          value: "mx_extern_a_b_c_d_e",
+        }),
+      }),
+    );
+
+    picker.selectedItems.clear();
+    picker.renderField();
+    expect(picker.querySelector("[data-action-id='createSource']").disabled).toBe(
+      false,
+    );
+    expect(picker.querySelector("[data-action-id='editSource']").disabled).toBe(
+      true,
+    );
+
+    picker.querySelector("[data-action-id='createSource']").click();
+    expect(listener).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        detail: expect.objectContaining({
+          action: "createSource",
+          value: null,
+        }),
+      }),
+    );
+
+    picker.selectedItems.set("mx_extern_a_b_c_d_e", {
+      id: "mx_extern_a_b_c_d_e",
+      title: "Demo WMS test",
+      type: "external",
+      access: "readable",
+    });
+    picker.renderField();
+    expect(picker.querySelector("[data-action-id='editSource']").disabled).toBe(
+      true,
+    );
   });
 
   it("enforces maxItems for multiple pending selections", () => {

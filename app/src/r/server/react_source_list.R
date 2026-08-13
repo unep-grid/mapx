@@ -86,7 +86,7 @@ reactTableEditSources <- reactive({
       idUser = idUser,
       language = language,
       idSources = NULL,
-      types = c("join", "vector", "tabular"),
+      types = c("join", "vector", "tabular", "external"),
       editable = TRUE,
       readable = FALSE,
       add_global = FALSE,

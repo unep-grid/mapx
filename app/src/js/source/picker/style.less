@@ -14,12 +14,11 @@ mx-source-picker {
   }
 
   .mx-source-picker__control {
-    display: grid;
+    display: flex;
     overflow: hidden;
     border: 1px solid var(--mx_ui_border);
     border-radius: 4px;
     background: var(--mx_ui_background_contrast);
-    grid-template-columns: minmax(0, 1fr) 52px;
 
     &:focus-within {
       border-color: var(--mx_ui_input_accent);
@@ -29,6 +28,7 @@ mx-source-picker {
   .mx-source-picker__value {
     display: flex;
     min-width: 0;
+    flex: 1 1 auto;
     height: 46px;
     padding: 6px 12px;
     border: 0;
@@ -50,6 +50,8 @@ mx-source-picker {
   }
 
   .mx-source-picker__end-action {
+    width: 52px;
+    flex: 0 0 52px;
     height: 46px;
     border-width: 0 0 0 1px;
     border-color: var(--mx_ui_border);

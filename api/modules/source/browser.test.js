@@ -70,6 +70,14 @@ describe("source browser filtering", () => {
     expect(request.selectedIds).toEqual([]);
   });
 
+  it("accepts metadata-only external catalog entries", () => {
+    const request = sourceBrowserInternals.normalizeRequest({
+      acceptedTypes: ["external"],
+      requiredCapabilities: [],
+    });
+    expect(request.types).toEqual(["external"]);
+  });
+
   it("forces exact-selection hydration to its first page without facets", () => {
     const request = sourceBrowserInternals.normalizeRequest({
       selectedIds: ["mx_vector_f_g_h_i_j"],

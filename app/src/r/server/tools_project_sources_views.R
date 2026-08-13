@@ -62,6 +62,11 @@ observe({
           label = mxLabel("btn_add_source", language, "upload"),
           inputId = "btnUploadSourceApi",
           class = "btn btn-default"
+        ),
+        actionButton(
+          label = mxLabel("source_meta_data", language, "book"),
+          inputId = "btnAddExternalMetadataEntry",
+          class = "btn btn-default"
         )
       )
 

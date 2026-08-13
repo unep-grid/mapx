@@ -19,6 +19,7 @@ import {
   createSourceRevision,
   setSourceDataRevision,
 } from "../source/revision.js";
+import { getSourceRelationKind } from "../source/relation.js";
 export * from "./metadata.js";
 
 /**
@@ -656,11 +657,13 @@ async function removeSource(idSource, idUser, client = null) {
       text: `DELETE FROM mx_sources WHERE id = $1::text`,
       values: [idSource],
     };
-    const resourceType = source.type === "join" ? "VIEW" : "TABLE";
-    const sqlDrop = { text: `DROP ${resourceType} IF EXISTS ${idSource}` };
-    await pgClient.query(sqlDrop);
+    const resourceType = getSourceRelationKind(source.type);
+    if (resourceType) {
+      await pgClient.query(`DROP ${resourceType} IF EXISTS ${idSource}`);
+    }
     await pgClient.query(sqlDelete);
-    const sourceExists = await tableExists(idSource, "public", pgClient);
+    const sourceExists =
+      resourceType && (await tableExists(idSource, "public", pgClient));
     if (sourceExists) {
       throw new Error(`Source ${idSource} not removed`);
     }

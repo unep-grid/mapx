@@ -16,6 +16,7 @@ const ALLOWED_TYPES = new Set([
   "image",
   "pmtiles",
   "document",
+  "external",
 ]);
 const ALLOWED_SORTS = new Set([
   "relevance",
@@ -50,7 +51,8 @@ WITH view_sources AS (
   FROM mx_views_latest v
   CROSS JOIN LATERAL unnest(ARRAY[
     v.data #>> '{source,layerInfo,name}',
-    v.data #>> '{source,layerInfo,maskName}'
+    v.data #>> '{source,layerInfo,maskName}',
+    v.data #>> '{source,metadataId}'
   ]) AS referenced(id_source)
   WHERE v.id = $6
     AND v.project = $1
@@ -66,13 +68,15 @@ revisions AS (
   GROUP BY id
 ),
 view_counts AS (
-  SELECT
-    data #>> '{source,layerInfo,name}' AS id_source,
+  SELECT referenced.id_source,
     count(*)::integer AS view_count
-  FROM mx_views_latest
-  WHERE project = $1
-    AND type = 'vt'
-  GROUP BY data #>> '{source,layerInfo,name}'
+  FROM mx_views_latest v
+  CROSS JOIN LATERAL unnest(ARRAY[
+    v.data #>> '{source,layerInfo,name}',
+    v.data #>> '{source,metadataId}'
+  ]) AS referenced(id_source)
+  WHERE v.project = $1 AND referenced.id_source IS NOT NULL
+  GROUP BY referenced.id_source
 ),
 accessible AS (
 SELECT
@@ -479,7 +483,8 @@ export async function sourceIsAccessible(
            FROM mx_views_latest v
            CROSS JOIN LATERAL unnest(ARRAY[
              v.data #>> '{source,layerInfo,name}',
-             v.data #>> '{source,layerInfo,maskName}'
+             v.data #>> '{source,layerInfo,maskName}',
+             v.data #>> '{source,metadataId}'
            ]) AS referenced(id_source)
            WHERE v.id = $5
              AND v.project = $2

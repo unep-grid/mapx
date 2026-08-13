@@ -90,6 +90,7 @@ mxUploader <- function(
 #' @export
 mxShowSelectSourceEdit <- function(
   id = NULL,
+  acceptedTypes = c("vector", "tabular", "join", "external"),
   update = runif(1),
   session = shiny:::getDefaultReactiveDomain()
 ) {
@@ -97,7 +98,8 @@ mxShowSelectSourceEdit <- function(
     type = "mxShowSelectSourceEdit",
     list(
       update = update,
-      id = id
+      id = id,
+      acceptedTypes = acceptedTypes
     )
   )
 }

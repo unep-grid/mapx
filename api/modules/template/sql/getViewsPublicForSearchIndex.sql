@@ -218,9 +218,14 @@ WITH
   tmp_views_meta_non_vt AS (
     SELECT
       v.id AS id_view,
-      coalesce(v.data #> '{source, meta}', '{}'::jsonb) AS meta
-    FROM
-      views_public v
+      CASE
+        WHEN v.type IN ('rt', 'cc')
+          THEN coalesce(s.data #> '{meta}', '{}'::jsonb)
+        ELSE coalesce(v.data #> '{source, meta}', '{}'::jsonb)
+      END AS meta
+    FROM views_public v
+    LEFT JOIN mx_sources_latest s
+      ON s.id = v.data #>> '{source,metadataId}' AND s.type = 'external'
     WHERE
       v.type != 'vt'
   ),
