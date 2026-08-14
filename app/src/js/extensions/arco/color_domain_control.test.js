@@ -6,13 +6,20 @@ import {
 } from "./color_domain_control.js";
 
 describe("ARCO color-domain helpers", () => {
-  it("only enables runtime domains for scalar Zarr layers", () => {
+  it("enables runtime domains for dynamically styled scalar layers", () => {
     expect(isColorDomainEligible({ kind: "scalar", backend: "zarr" })).toBe(
       true,
     );
     expect(isColorDomainEligible({ kind: "scalar", backend: "wmts" })).toBe(
       false,
     );
+    expect(
+      isColorDomainEligible({
+        kind: "scalar",
+        backend: "geovideo",
+        dynamicStyle: true,
+      }),
+    ).toBe(true);
     expect(isColorDomainEligible({ kind: "vector", backend: "zarr" })).toBe(
       false,
     );

@@ -45,12 +45,13 @@ for scalars), so capabilities parsing, tile URL construction and raster
 cross-fade do not apply. It follows the same conventions (options object,
 `init()`/`destroy()`, `example.js` widget handler).
 
-Features : time slider + playback (play/stop/step/loop), vertical depth
-slider snapped to dataset levels, time-series / depth-profile chart at a
+Features : allowed time windows, cadence-aware date inputs, time slider and
+playback (including native GeoVideo play/stop/rate/loop), vertical depth slider
+snapped to dataset levels, time-series / depth-profile chart at a
 point picked on the map (uses the `arco` click mode to suppress the
 default MapX popup), gradient legend, settings panel (palette previews,
 opacity, particle density, speed, fade, vector render mode, log scale, and exact
-min/max color ranges with automatic frame ranges for scalar Zarr layers).
+min/max color ranges for dynamically styled scalar Zarr and GeoVideo layers).
 
 ```javascript
 const { ArcoMapLegend } = await moduleLoad("extension", "arco_time_map_legend");
@@ -58,7 +59,10 @@ const { ArcoMapLegend } = await moduleLoad("extension", "arco_time_map_legend");
 const arco = new ArcoMapLegend({
   idView: widget.opt.view.id,
   map: widget.opt.map,
-  layer: "ocean-current-velocity", // catalog id, see @fxi/zartigl/catalog
+  layer: "sea-surface-temperature-anomaly",
+  backend: "geovideo",
+  timeRange: { trailing: "P1M" },
+  geoVideo: { autoplay: false, loop: true, playbackRate: 1 },
   elLegend: elLegend,
   elInputs: widget.elContent,
 });

@@ -147,15 +147,15 @@ describe("ArcoMapLegend status text", () => {
   });
 
   it.each([
-    [{ phase: "metadata" }, " -- fetching metadata"],
+    [{ phase: "metadata" }, " · fetching metadata"],
     [
       { phase: "fetching", completed: 2, total: 12, time: 0 },
-      " -- fetching 2/12",
+      " · fetching 2/12",
     ],
-    [{ phase: "rendering", time: 0 }, " -- rendering"],
-    [{ phase: "ready", time: 0 }, " -- ready"],
-    [{ phase: "blocked", time: 0, message: "Not published" }, " -- blocked"],
-    [{ phase: "error", error: new Error("Failed") }, " -- error"],
+    [{ phase: "rendering", time: 0 }, " · rendering"],
+    [{ phase: "ready", time: 0 }, " · ready"],
+    [{ phase: "blocked", time: 0, message: "Not published" }, " · blocked"],
+    [{ phase: "error", error: new Error("Failed") }, " · error"],
   ])("renders the current %s status", (status, expected) => {
     arco._on_status(status);
 
@@ -169,7 +169,7 @@ describe("ArcoMapLegend status text", () => {
 
     arco._renderStatus();
 
-    expect(arco.elStatusText.textContent).toBe(" -- rendering");
+    expect(arco.elStatusText.textContent).toBe(" · rendering");
   });
 
   it("uses the title only for blocked and error details", () => {
@@ -190,6 +190,16 @@ describe("ArcoMapLegend status text", () => {
 });
 
 describe("ArcoMapLegend playback controls", () => {
+  it("prefers nested GeoVideo settings over the legacy loop option", () => {
+    const arco = new ArcoMapLegend({
+      loop: false,
+      geoVideo: { loop: true, playbackRate: 5 },
+    });
+
+    expect(arco._opt.loop).toBe(true);
+    expect(arco._playbackRate).toBe(5);
+  });
+
   afterEach(() => {
     vi.useRealTimers();
   });
@@ -275,6 +285,24 @@ describe("ArcoMapLegend playback controls", () => {
     expect(arco.getTime()).toBe(10);
   });
 
+  it("resumes native GeoVideo playback instead of the Zarr timer", () => {
+    const arco = new ArcoMapLegend({});
+    arco._visible = false;
+    arco._playing = true;
+    arco._z = {
+      getBackend: vi.fn(() => "geovideo"),
+      resume: vi.fn(),
+      play: vi.fn(() => Promise.resolve()),
+    };
+    arco._tick = vi.fn();
+
+    arco._setVisible(true);
+
+    expect(arco._z.resume).toHaveBeenCalledOnce();
+    expect(arco._z.play).toHaveBeenCalledOnce();
+    expect(arco._tick).not.toHaveBeenCalled();
+  });
+
   it("wraps skipped playback when looping and stops otherwise", async () => {
     vi.useFakeTimers();
     const looping = createPlaybackArco({ values: [10, 20, 50] });
@@ -323,5 +351,175 @@ describe("ArcoMapLegend playback controls", () => {
     const vectorButtons = vector._buildPlayerButtons(!vector.isVector());
     expect(vectorButtons.querySelectorAll("button")).toHaveLength(2);
     expect(vectorButtons.querySelector(".arco--playback_rate")).toBeNull();
+  });
+
+  it("uses native GeoVideo playback and forwards rate and loop changes", async () => {
+    const arco = new ArcoMapLegend({ loop: true });
+    arco._z = {
+      getBackend: vi.fn(() => "geovideo"),
+      play: vi.fn(() => Promise.resolve()),
+      pause: vi.fn(),
+      setLoop: vi.fn(),
+      setPlaybackRate: vi.fn(),
+    };
+
+    arco.play();
+    await Promise.resolve();
+    expect(arco._z.play).toHaveBeenCalledOnce();
+
+    arco._cyclePlaybackRate();
+    expect(arco._z.setPlaybackRate).toHaveBeenCalledWith(2);
+
+    arco.toggleLoop();
+    expect(arco._z.setLoop).toHaveBeenCalledWith(false);
+
+    arco.stop();
+    expect(arco._z.pause).toHaveBeenCalledOnce();
+  });
+
+  it("preserves native playback state received before controls are built", () => {
+    const arco = new ArcoMapLegend({
+      geoVideo: { autoplay: true, loop: true, playbackRate: 2 },
+    });
+    arco._z = { getBackend: vi.fn(() => "geovideo") };
+
+    arco._on_playback_change(true);
+    arco._buildPlayerButtons(true);
+
+    expect(arco.elButtonPlay.classList.contains("playing")).toBe(true);
+    expect(arco.elButtonLoop.classList.contains("active")).toBe(true);
+    expect(arco.elButtonRate.textContent).toBe("2×");
+  });
+
+  it("reapplies generated GeoVideo playback options after initialization", () => {
+    const arco = new ArcoMapLegend({
+      geoVideo: { autoplay: true, loop: false, playbackRate: 5 },
+    });
+    arco._z = {
+      getBackend: vi.fn(() => "geovideo"),
+      setLoop: vi.fn(),
+      setPlaybackRate: vi.fn(),
+      play: vi.fn(() => Promise.resolve()),
+    };
+
+    arco._syncGeoVideoPlaybackOptions();
+
+    expect(arco._z.setLoop).toHaveBeenCalledWith(false);
+    expect(arco._z.setPlaybackRate).toHaveBeenCalledWith(5);
+    expect(arco._z.play).toHaveBeenCalledOnce();
+    expect(arco._playing).toBe(true);
+  });
+
+  it("clears optimistic playback state when native autoplay is rejected", async () => {
+    const error = new Error("autoplay rejected");
+    const arco = new ArcoMapLegend({});
+    arco._z = {
+      getBackend: vi.fn(() => "geovideo"),
+      play: vi.fn(() => Promise.reject(error)),
+    };
+    arco._on_error = vi.fn();
+    arco._buildPlayerButtons(true);
+
+    arco.play();
+    await vi.waitFor(() => expect(arco._playing).toBe(false));
+
+    expect(arco.elButtonPlay.classList.contains("playing")).toBe(false);
+    expect(arco._on_error).toHaveBeenCalledWith(error);
+  });
+});
+
+describe("ArcoMapLegend cadence-aware time input", () => {
+  it.each([
+    ["year", [Date.UTC(2024, 0, 1), Date.UTC(2025, 0, 1)], "SELECT", null],
+    ["month", [Date.UTC(2025, 0, 1), Date.UTC(2025, 1, 1)], "INPUT", "month"],
+    ["day", [Date.UTC(2025, 0, 1), Date.UTC(2025, 0, 2)], "INPUT", "date"],
+    ["hour", [Date.UTC(2025, 0, 1), Date.UTC(2025, 0, 1, 6)], "INPUT", "datetime-local"],
+  ])("renders a native %s control", (granularity, values, tagName, type) => {
+    const arco = new ArcoMapLegend({});
+    arco._time_meta = {
+      min: values[0],
+      max: values[values.length - 1],
+      size: values.length,
+      values,
+      step: values[1] - values[0],
+      granularity,
+    };
+
+    const input = arco._buildDateInput();
+
+    expect(input.tagName).toBe(tagName);
+    if (type) expect(input.type).toBe(type);
+  });
+
+  it("snaps a native date selection to an available timestamp", () => {
+    const values = [Date.UTC(2025, 0, 1), Date.UTC(2025, 0, 3)];
+    const arco = new ArcoMapLegend({});
+    arco._time_meta = {
+      min: values[0], max: values[1], size: 2, values,
+      step: undefined, granularity: "day",
+    };
+    arco.setTime = vi.fn();
+    const input = arco._buildDateInput();
+
+    input.value = "2025-01-02";
+    input.dispatchEvent(new Event("change"));
+
+    expect(arco.setTime).toHaveBeenCalledWith(values[0]);
+  });
+
+  it("keeps a monthly selection within the selected calendar month", () => {
+    const values = [Date.UTC(2025, 0, 28), Date.UTC(2025, 1, 28)];
+    const arco = new ArcoMapLegend({});
+    arco._time_meta = {
+      min: values[0], max: values[1], size: 2, values,
+      step: undefined, granularity: "month",
+    };
+    arco.setTime = vi.fn();
+    const input = arco._buildDateInput();
+
+    input.value = "2025-02";
+    input.dispatchEvent(new Event("change"));
+
+    expect(arco.setTime).toHaveBeenCalledWith(values[1]);
+  });
+
+  it("disables date navigation for a single timestamp", () => {
+    const time = Date.UTC(2025, 0, 1);
+    const arco = new ArcoMapLegend({});
+    arco._time_meta = {
+      min: time, max: time, size: 1, values: [time], granularity: "day",
+    };
+
+    expect(arco._buildDateInput().disabled).toBe(true);
+    const buttons = arco._buildPlayerButtons(true, {
+      navigationEnabled: false,
+      transportEnabled: false,
+    });
+    expect([...buttons.querySelectorAll("button")].every((button) => button.disabled)).toBe(true);
+  });
+
+  it("keeps video transport enabled for a single-frame snapshot loop", () => {
+    const time = Date.UTC(2025, 0, 1);
+    const arco = new ArcoMapLegend({});
+    arco._layer_def = { kind: "scalar" };
+    arco._time = time;
+    arco._time_meta = {
+      min: time,
+      max: time,
+      size: 1,
+      values: [time],
+      granularity: "second",
+      timelineKind: "snapshot-loop",
+    };
+
+    const row = arco._buildTimeRow();
+    const byTitle = (title) => row.querySelector(`button[title="${title}"]`);
+
+    expect(byTitle("Previous").disabled).toBe(true);
+    expect(byTitle("Next").disabled).toBe(true);
+    expect(byTitle("Play").disabled).toBe(false);
+    expect(byTitle("Stop").disabled).toBe(false);
+    expect(byTitle("Loop").disabled).toBe(false);
+    expect(row.querySelector(".arco--playback_rate").disabled).toBe(false);
   });
 });

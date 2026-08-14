@@ -80,7 +80,10 @@
   }
 
   .arco--readout_cursor {
-    align-items: flex-end;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 5px;
 
     .arco--readout_value {
       color: var(--mx_ui_link);
@@ -98,27 +101,33 @@
   }
 
   .arco--date_input {
-    position: absolute;
-    width: 0;
-    height: 0;
-    padding: 0;
-    border: none;
-    opacity: 0;
-    pointer-events: none;
+    width: 100%;
+    min-width: 0;
+    height: 30px;
+    margin-top: 4px;
+    margin-bottom: 0;
+    padding: 4px 8px;
+    color: var(--mx_ui_text);
+    background: var(--mx_ui_background);
+    border-color: var(--mx_ui_border);
   }
 
   /**
   * Time row : date and compact transport controls above a full-width slider
   */
+  .arco--time_row {
+    min-width: 0;
+    container-type: inline-size;
+  }
+
   .arco--time_header {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: flex-end;
     gap: 10px;
 
     > .arco--readout {
-      flex: 1;
-      min-width: 220px;
+      min-width: 0;
     }
   }
 
@@ -129,10 +138,15 @@
   .arco--time_slider {
     min-width: 0;
     margin: 0 10px 20px 10px;
+
+    &.disabled {
+      display: none;
+    }
   }
 
   .arco--player_buttons {
     display: flex;
+    flex-wrap: nowrap;
     justify-content: center;
     gap: 5px;
     margin-left: auto;
@@ -142,7 +156,7 @@
       align-items: center;
       justify-content: center;
       width: 28px;
-      height: 28px;
+      height: 30px;
       padding: 0;
       border-radius: 6px;
     }
@@ -423,12 +437,31 @@
     font-size: 0.75em;
   }
 
+  .arco--time_slider .noUi-value-horizontal:first-of-type {
+    transform: translateX(0);
+  }
+
+  .arco--time_slider .noUi-value-horizontal:last-of-type {
+    transform: translateX(-100%);
+  }
+
   .noUi-marker {
     background: var(--mx_ui_border);
   }
 
   .noUi-pips-vertical {
     padding-left: 15px;
+  }
+}
+
+@container (max-width: 390px) {
+  .arco_extension .arco--time_header {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .arco_extension .arco--player_buttons {
+    justify-content: flex-start;
+    margin-left: 0;
   }
 }
 

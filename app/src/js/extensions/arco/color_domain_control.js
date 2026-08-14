@@ -6,11 +6,11 @@ import { ElementCreator } from "../../el/src/index.js";
 /**
  * Return whether zartigl can apply a runtime scalar color domain.
  *
- * @param {{kind?: string, backend?: string}} options
+ * @param {{kind?: string, backend?: string, dynamicStyle?: boolean}} options
  * @returns {boolean}
  */
-export function isColorDomainEligible({ kind, backend }) {
-  return kind === "scalar" && backend === "zarr";
+export function isColorDomainEligible({ kind, backend, dynamicStyle }) {
+  return kind === "scalar" && (dynamicStyle ?? backend === "zarr");
 }
 
 /**

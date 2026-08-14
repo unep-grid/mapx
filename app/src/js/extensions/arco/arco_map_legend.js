@@ -1,6 +1,5 @@
-import { Zartigl } from "@fxi/zartigl";
+import { Zartigl, resolveTimeInputSelection } from "@fxi/zartigl";
 import { catalog, getCatalogLayer, formatVertical } from "@fxi/zartigl/catalog";
-import flatpickr from "flatpickr";
 import { el } from "../../el_mapx";
 import { ElementCreator } from "../../el/src/index.js";
 import { maplibregl, settings as mxSettings } from "../../mx";
@@ -15,7 +14,6 @@ import {
 import { createPaletteDropdown } from "./palette_dropdown.js";
 import { formatVerticalAxisLabel, orderVerticalValues } from "./vertical.js";
 import { createVisibilityGate } from "../../app_visibility/index.js";
-import "../../search/style_flatpickr.less";
 import "../shared/style.less";
 import "./style.less";
 
@@ -30,10 +28,12 @@ const defaultOptions = {
   subtitle: null,
   playbackInterval: 800,
   loop: true,
+  geoVideo: null,
   maxPoints: 200,
   maxDepths: 50,
   settings: null,
   time: null,
+  timeRange: null,
   depth: null,
 };
 
@@ -49,11 +49,15 @@ const playbackRates = [1, 2, 5, 10];
 export class ArcoMapLegend {
   constructor(options) {
     this._opt = { ...defaultOptions, ...options };
+    if (this._opt.geoVideo?.loop != null) {
+      this._opt.loop = this._opt.geoVideo.loop;
+    }
     this._chart_mode = "time";
     this._point = null;
     this._id_query = 0;
     this._status = null;
-    this._playbackRate = playbackRates[0];
+    this._playing = false;
+    this._playbackRate = this._opt.geoVideo?.playbackRate ?? playbackRates[0];
     this._visibility = createVisibilityGate(
       this._opt.map?.getContainer?.() ?? null,
     );
@@ -75,6 +79,23 @@ export class ArcoMapLegend {
     this._on_status = (status) => {
       this._status = status;
       this._renderStatus();
+    };
+    this._on_time_change = (time) => {
+      if (this._z?.getBackend() !== "geovideo") {
+        return;
+      }
+      const now = performance.now();
+      if (now - (this._lastVideoUiUpdate || 0) < 200) {
+        return;
+      }
+      this._lastVideoUiUpdate = now;
+      this.setTime(time, { fromBackend: true });
+    };
+    this._on_playback_change = (playing) => {
+      if (this._z?.getBackend() !== "geovideo") {
+        return;
+      }
+      this._setPlaying(playing);
     };
     this._on_pick = this._handlePickClick.bind(this);
     this._update_chart_debounced = debounce(() => this.updateChart(), 350);
@@ -102,6 +123,12 @@ export class ArcoMapLegend {
       catalog: catalog,
       backend: this._opt.backend,
       settings: this._opt.settings || undefined,
+      timeRange: this._opt.timeRange || undefined,
+      geoVideo: {
+        autoplay: this._opt.geoVideo?.autoplay ?? false,
+        loop: this._opt.loop,
+        playbackRate: this._playbackRate,
+      },
       before: mxSettings.layerBefore,
       metadata: {
         idView,
@@ -115,6 +142,8 @@ export class ArcoMapLegend {
     this._z.on("loaded", this._on_loaded);
     this._z.on("error", this._on_error);
     this._z.on("status", this._on_status);
+    this._z.on("timeChange", this._on_time_change);
+    this._z.on("playbackChange", this._on_playback_change);
 
     if (!this._visible) {
       this._z.suspend();
@@ -139,6 +168,7 @@ export class ArcoMapLegend {
     this.renderLegend();
     this.setDepth(this._depth);
     this.setTime(this._time);
+    this._syncGeoVideoPlaybackOptions();
     window._arco = this;
   }
 
@@ -155,13 +185,14 @@ export class ArcoMapLegend {
     this._z?.off("loaded", this._on_loaded);
     this._z?.off("error", this._on_error);
     this._z?.off("status", this._on_status);
+    this._z?.off("timeChange", this._on_time_change);
+    this._z?.off("playbackChange", this._on_playback_change);
     this._z?.destroy();
     this._chart?.destroy();
     this._colorDomainControl?.destroy();
     this._paletteDropdown?.destroy();
     this._marker?.remove();
     this._marker = null;
-    this._fp?.destroy();
     this.elTimeSlider?.noUiSlider?.destroy();
     this.elDepthSlider?.noUiSlider?.destroy();
     if (this._opt.elInputs) {
@@ -185,13 +216,16 @@ export class ArcoMapLegend {
   setTime(ms, opt = {}) {
     const { min, max } = this._time_meta;
     const time = Math.max(min, Math.min(max, ms));
-    this._time = time;
-    this._z.setTime(time);
-    if (!opt.fromSlider) {
-      this.elTimeSlider?.noUiSlider?.set(time);
+    if (!opt.fromBackend) {
+      this._z.setTime(time);
     }
-    this._updateTimeReadout(time);
-    this._chart?.setCursor(time);
+    this._time = this._z.getTimeMeta?.().current ?? time;
+    if (!opt.fromSlider) {
+      const index = nearestIndex(this._time_meta.values, this._time);
+      this.elTimeSlider?.noUiSlider?.set(index);
+    }
+    this._updateTimeReadout(this._time);
+    this._chart?.setCursor(this._time);
     this._updateValueReadout();
     const refreshProfile =
       this._chart_mode === "depth" && this._point && !this._playing;
@@ -276,17 +310,22 @@ export class ArcoMapLegend {
     if (this._playing) {
       return;
     }
-    this._playing = true;
-    this.elButtonPlay?.classList.add("playing");
+    this._setPlaying(true);
+    if (this._z.getBackend?.() === "geovideo") {
+      this._playGeoVideo();
+      return;
+    }
     if (this._visible) {
       this._tick();
     }
   }
 
   stop() {
-    this._playing = false;
-    this.elButtonPlay?.classList.remove("playing");
+    this._setPlaying(false);
     clearTimeout(this._id_timer);
+    if (this._z?.getBackend?.() === "geovideo") {
+      this._z.pause?.();
+    }
   }
 
   stepNext(stop) {
@@ -305,12 +344,14 @@ export class ArcoMapLegend {
 
   toggleLoop() {
     this._opt.loop = !this._opt.loop;
-    this.elButtonLoop?.classList.toggle("active", this._opt.loop);
+    this._syncPlaybackControls();
+    this._z?.setLoop?.(this._opt.loop);
   }
 
   _cyclePlaybackRate() {
     const index = playbackRates.indexOf(this._playbackRate);
     this._playbackRate = playbackRates[(index + 1) % playbackRates.length];
+    this._z?.setPlaybackRate?.(this._playbackRate);
     this._syncPlaybackRateButton();
   }
 
@@ -321,6 +362,35 @@ export class ArcoMapLegend {
     const label = `${this._playbackRate}×`;
     this.elButtonRate.textContent = label;
     this.elButtonRate.title = `Playback rate: ${label}`;
+  }
+
+  _setPlaying(playing) {
+    this._playing = playing;
+    this._syncPlaybackControls();
+  }
+
+  _syncPlaybackControls() {
+    this.elButtonPlay?.classList.toggle("playing", this._playing);
+    this.elButtonLoop?.classList.toggle("active", this._opt.loop);
+    this._syncPlaybackRateButton();
+  }
+
+  _syncGeoVideoPlaybackOptions() {
+    if (this._z.getBackend?.() !== "geovideo") {
+      return;
+    }
+    this._z.setLoop?.(this._opt.loop);
+    this._z.setPlaybackRate?.(this._playbackRate);
+    if (this._opt.geoVideo?.autoplay === true && !this._playing) {
+      this.play();
+    }
+  }
+
+  _playGeoVideo() {
+    void this._z.play?.().catch((error) => {
+      this._setPlaying(false);
+      this._on_error(error);
+    });
   }
 
   _timeAtOffset(offset, { wrap }) {
@@ -385,7 +455,11 @@ export class ArcoMapLegend {
     }
     this._z?.resume();
     if (this._playing) {
-      this._tick();
+      if (this._z?.getBackend?.() === "geovideo") {
+        this._playGeoVideo();
+      } else {
+        this._tick();
+      }
     }
   }
 
@@ -683,7 +757,7 @@ export class ArcoMapLegend {
         detail = status.error?.message || "";
         break;
     }
-    this.elStatusText.textContent = ` -- ${text}`;
+    this.elStatusText.textContent = ` · ${text}`;
     if (detail) {
       this.elStatusText.title = detail;
     } else {
@@ -696,46 +770,58 @@ export class ArcoMapLegend {
   }
 
   _buildTimeRow() {
-    const { min, max } = this._time_meta;
+    const { values } = this._time_meta;
     // continuous playback only for scalar layers : vector layers
     // reload the velocity field at each step, no frame cache
     const playback = !this.isVector();
 
-    this.elTimeReadout = el("span", {
-      class: ["arco--readout_value", "arco--clickable"],
-      title: "Pick a date",
-      on: { click: () => this._openDatePicker() },
-    });
-    this._buildDatePicker();
+    this.elTimeInput = this._buildDateInput();
     this.elTimeSlider = el("div", { class: "arco--time_slider" });
-    this._noUiSlider.create(this.elTimeSlider, {
-      range: { min, max },
-      start: this._time,
-      step: this._timeStep(),
-      connect: [true, false],
-      behaviour: "drag",
-      pips: {
-        mode: "count",
-        values: 4,
-        density: 100,
-        format: { to: (ms) => formatYear(ms) },
-      },
-    });
-    this.elTimeSlider.noUiSlider.on("update", (values) => {
-      this._updateTimeReadout(Number(values[0]));
-    });
-    this.elTimeSlider.noUiSlider.on("change", (values) => {
-      this.stop();
-      this.setTime(Number(values[0]), { fromSlider: true });
-    });
+    if (values.length > 1) {
+      this._noUiSlider.create(this.elTimeSlider, {
+        range: { min: 0, max: values.length - 1 },
+        start: nearestIndex(values, this._time),
+        step: 1,
+        connect: [true, false],
+        behaviour: "drag",
+        pips: {
+          mode: "count",
+          values: Math.min(4, values.length),
+          density: 100,
+          stepped: true,
+          format: {
+            to: (index) => formatTimeTick(
+              values[Math.round(index)],
+              this._time_meta.granularity,
+            ),
+          },
+        },
+      });
+      this.elTimeSlider.noUiSlider.on("update", (sliderValues) => {
+        this._updateTimeReadout(values[Math.round(Number(sliderValues[0]))]);
+      });
+      this.elTimeSlider.noUiSlider.on("change", (sliderValues) => {
+        this.stop();
+        this.setTime(values[Math.round(Number(sliderValues[0]))], {
+          fromSlider: true,
+        });
+      });
+    } else {
+      this.elTimeSlider.classList.add("disabled");
+    }
 
-    const elButtons = this._buildPlayerButtons(playback);
+    const navigationEnabled = values.length > 1;
+    const transportEnabled = navigationEnabled ||
+      this._time_meta.timelineKind === "snapshot-loop";
+    const elButtons = this._buildPlayerButtons(playback, {
+      navigationEnabled,
+      transportEnabled,
+    });
 
     return el("div", { class: "arco--time_row" }, [
       el("div", { class: "arco--time_header" }, [
         el("div", { class: "arco--readout" }, [
-          el("label", "Date & time"),
-          this.elTimeReadout,
+          el("label", timeInputLabel(this._time_meta.granularity)),
           this.elTimeInput,
         ]),
         elButtons,
@@ -744,11 +830,15 @@ export class ArcoMapLegend {
     ]);
   }
 
-  _buildPlayerButtons(playback) {
+  _buildPlayerButtons(
+    playback,
+    { navigationEnabled = true, transportEnabled = navigationEnabled } = {},
+  ) {
     const elButtonPrevious = el(
       "button",
       {
         class: ["btn", "btn-default"],
+        disabled: navigationEnabled ? null : true,
         title: "Previous",
         on: { click: () => this.stepPrevious(true) },
       },
@@ -758,6 +848,7 @@ export class ArcoMapLegend {
       "button",
       {
         class: ["btn", "btn-default"],
+        disabled: navigationEnabled ? null : true,
         title: "Next",
         on: { click: () => this.stepNext(true) },
       },
@@ -768,7 +859,12 @@ export class ArcoMapLegend {
       this.elButtonPlay = el(
         "button",
         {
-          class: ["btn", "btn-default"],
+          class: [
+            "btn",
+            "btn-default",
+            this._playing ? "playing" : null,
+          ],
+          disabled: transportEnabled ? null : true,
           title: "Play",
           on: { click: () => this.play() },
         },
@@ -778,6 +874,7 @@ export class ArcoMapLegend {
         "button",
         {
           class: ["btn", "btn-default", this._opt.loop ? "active" : null],
+          disabled: transportEnabled ? null : true,
           title: "Loop",
           on: { click: () => this.toggleLoop() },
         },
@@ -787,11 +884,12 @@ export class ArcoMapLegend {
         "button",
         {
           class: ["btn", "btn-default", "arco--playback_rate"],
+          disabled: transportEnabled ? null : true,
           on: { click: () => this._cyclePlaybackRate() },
         },
         `${this._playbackRate}×`,
       );
-      this._syncPlaybackRateButton();
+      this._syncPlaybackControls();
     }
 
     return el("div", { class: "arco--player_buttons" }, [
@@ -802,6 +900,7 @@ export class ArcoMapLegend {
             "button",
             {
               class: ["btn", "btn-default"],
+              disabled: transportEnabled ? null : true,
               title: "Stop",
               on: { click: () => this.stop() },
             },
@@ -814,45 +913,46 @@ export class ArcoMapLegend {
     ]);
   }
 
-  /**
-   * Datetime picker anchored to the readout. flatpickr works in local
-   * time : picker wall-clock values are mapped 1:1 to UTC.
-   */
-  _buildDatePicker() {
-    const { min, max } = this._time_meta;
-    this.elTimeInput = el("input", {
-      type: "text",
-      class: "arco--date_input",
-      tabindex: "-1",
+  _buildDateInput() {
+    const { granularity, min, max, values } = this._time_meta;
+    const onChange = (event) => {
+      const time = resolveTimeInputSelection(
+        values,
+        event.target.value,
+        granularity,
+      );
+      if (time === undefined) return;
+      this.stop();
+      this.setTime(time);
+    };
+    if (granularity === "year") {
+      const years = [...new Set(values.map((time) => new Date(time).getUTCFullYear()))];
+      return el(
+        "select",
+        {
+          class: ["form-control", "arco--date_input"],
+          "aria-label": "Year",
+          disabled: values.length > 1 ? null : true,
+          on: { change: onChange },
+        },
+        years.map((year) => el("option", { value: year }, String(year))),
+      );
+    }
+    const type = granularity === "month"
+      ? "month"
+      : granularity === "day"
+        ? "date"
+        : "datetime-local";
+    return el("input", {
+      type,
+      class: ["form-control", "arco--date_input"],
+      min: timeInputValue(min, granularity),
+      max: timeInputValue(max, granularity),
+      step: timeInputStep(this._time_meta),
+      disabled: values.length > 1 ? null : true,
+      "aria-label": timeInputLabel(granularity),
+      on: { change: onChange },
     });
-    this._fp = flatpickr(this.elTimeInput, {
-      enableTime: true,
-      time_24hr: true,
-      minuteIncrement: 60,
-      minDate: msToPickerDate(min),
-      maxDate: msToPickerDate(max),
-      positionElement: this.elTimeReadout,
-      onChange: (dates) => {
-        const date = dates[0];
-        if (!date) {
-          return;
-        }
-        this.stop();
-        this.setTime(this._snapTime(pickerDateToMs(date)));
-      },
-    });
-  }
-
-  _openDatePicker() {
-    this._fp?.setDate(msToPickerDate(this._time), false);
-    this._fp?.open();
-  }
-
-  _snapTime(ms) {
-    const { min, max } = this._time_meta;
-    const step = this._timeStep();
-    const snapped = min + Math.round((ms - min) / step) * step;
-    return Math.max(min, Math.min(max, snapped));
   }
 
   _buildBody() {
@@ -975,6 +1075,7 @@ export class ArcoMapLegend {
     const particles = defaults.particles || {};
     const settings = this._opt.settings || {};
     const isVector = this.isVector();
+    const dynamicStyle = this._z.supportsDynamicStyle();
     const renderMode =
       settings.renderMode ?? defaults.renderMode ?? "particles";
 
@@ -991,7 +1092,7 @@ export class ArcoMapLegend {
     };
 
     const rows = [
-      this._buildPaletteRow(defaults),
+      dynamicStyle ? this._buildPaletteRow(defaults) : null,
       this._buildRangeRow({
         label: "Opacity",
         min: 0,
@@ -1003,7 +1104,7 @@ export class ArcoMapLegend {
           this.updateSettings({ opacity: value });
         },
       }),
-      this._buildRangeRow({
+      dynamicStyle ? this._buildRangeRow({
         label: "Vibrance",
         min: -1,
         max: 1,
@@ -1013,23 +1114,25 @@ export class ArcoMapLegend {
           this._settings.vibrance = value;
           this.updateSettings({ vibrance: value });
         },
-      }),
-      this._buildCheckboxRow({
+      }) : null,
+      dynamicStyle ? this._buildCheckboxRow({
         label: "Log scale",
         get: () => this._settings.logScale,
         set: (value) => {
           this._settings.logScale = value;
           this.updateSettings({ logScale: value });
         },
-      }),
+      }) : null,
     ];
 
     this._colorDomainControl?.destroy();
     this._colorDomainControl = null;
     if (
+      dynamicStyle &&
       isColorDomainEligible({
         kind: this._layer_def.kind,
         backend: this._z.getBackend(),
+        dynamicStyle,
       })
     ) {
       this._colorDomainControl = new ArcoColorDomainControl({
@@ -1088,7 +1191,11 @@ export class ArcoMapLegend {
       );
     }
 
-    this._elSettings = el("div", { class: "arco--settings" }, rows);
+    this._elSettings = el(
+      "div",
+      { class: "arco--settings" },
+      rows.filter(Boolean),
+    );
     return this._elSettings;
   }
 
@@ -1198,7 +1305,16 @@ export class ArcoMapLegend {
 
   _updateTimeReadout(ms) {
     if (this.elTimeReadout) {
-      this.elTimeReadout.innerText = formatDateTime(ms);
+      this.elTimeReadout.innerText = formatDateTime(
+        ms,
+        this._time_meta.granularity,
+      );
+    }
+    if (this.elTimeInput) {
+      this.elTimeInput.value = timeInputValue(
+        ms,
+        this._time_meta.granularity,
+      );
     }
   }
 
@@ -1212,33 +1328,38 @@ export class ArcoMapLegend {
   }
 }
 
-function formatDateTime(ms) {
+function formatDateTime(ms, granularity = "minute") {
   const iso = new Date(ms).toISOString();
+  if (granularity === "year") return iso.slice(0, 4);
+  if (granularity === "month") return iso.slice(0, 7);
+  if (granularity === "day") return iso.slice(0, 10);
+  if (granularity === "second") {
+    return `${iso.slice(0, 10)} ${iso.slice(11, 19)} UTC`;
+  }
   return `${iso.slice(0, 10)} ${iso.slice(11, 16)} UTC`;
 }
 
-/**
- * Local Date whose wall-clock parts equal the UTC parts of ms
- */
-function msToPickerDate(ms) {
-  const date = new Date(ms);
-  return new Date(
-    date.getUTCFullYear(),
-    date.getUTCMonth(),
-    date.getUTCDate(),
-    date.getUTCHours(),
-    date.getUTCMinutes(),
-  );
+function timeInputLabel(granularity) {
+  if (granularity === "year") return "Year";
+  if (granularity === "month") return "Month";
+  if (granularity === "day") return "Date";
+  return "Date & time";
 }
 
-function pickerDateToMs(date) {
-  return Date.UTC(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
-    date.getHours(),
-    date.getMinutes(),
-  );
+function timeInputValue(ms, granularity) {
+  const iso = new Date(ms).toISOString();
+  if (granularity === "year") return iso.slice(0, 4);
+  if (granularity === "month") return iso.slice(0, 7);
+  if (granularity === "day") return iso.slice(0, 10);
+  return iso.slice(0, granularity === "second" ? 19 : 16);
+}
+
+function timeInputStep(meta) {
+  if (meta.granularity === "second") return Math.max(1, (meta.step || 1000) / 1000);
+  if (meta.granularity === "minute" || meta.granularity === "hour") {
+    return Math.max(60, (meta.step || 60000) / 1000);
+  }
+  return 1;
 }
 
 function timeToMs(time) {
@@ -1273,8 +1394,12 @@ function countDecimals(step) {
   return pos === -1 ? 0 : text.length - pos - 1;
 }
 
-function formatYear(ms) {
-  return new Date(ms).toISOString().slice(0, 4);
+function formatTimeTick(ms, granularity) {
+  const iso = new Date(ms).toISOString();
+  if (granularity === "year") return iso.slice(0, 4);
+  if (granularity === "month") return iso.slice(0, 7);
+  if (granularity === "day") return iso.slice(0, 10);
+  return `${iso.slice(5, 10)} ${iso.slice(11, 16)}`;
 }
 
 function toMapxLayerId(id) {

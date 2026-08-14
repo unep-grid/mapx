@@ -24,7 +24,10 @@ function handler() {
       widget._arco = new ArcoMapLegend({
         idView: widget.opt.view.id,
         map: widget.opt.map,
-        layer: "ocean-current-velocity",
+        layer: "sea-surface-temperature-anomaly",
+        backend: "geovideo",
+        timeRange: { trailing: "P1M" },
+        geoVideo: { autoplay: false, loop: true, playbackRate: 1 },
         elLegend: elLegend,
         elInputs: widget.elContent,
       });
