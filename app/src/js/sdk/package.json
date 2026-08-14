@@ -29,7 +29,7 @@
     "examples-lint": "eslint examples/",
     "build": "microbundle --external none -o dist",
     "prod": "npm run build && npm run jsdoc &&  npm publish",
-    "jsdoc": "jsdoc2md --heading-depth 3 -t ./readme.hbs ./src/mapx_resolvers/*.js > README.md",
+    "jsdoc": "jsdoc2md --heading-depth 3 -t ./readme.hbs ./src/mapx_resolvers/*.js > README.md && sed -i.bak -E 's/[[:space:]]+$//' README.md && rm -f README.md.bak",
     "paper": "sh ./paper.sh"
   },
   "repository": {
