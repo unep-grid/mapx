@@ -1,3 +1,34 @@
+  - [1.14.1-alpha.7](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.7) 
+
+    - fix: sdk readme
+    - chore: update Zartigl submodule
+    - chore: update Zartigl submodule
+    - feat(arco): improve GeoVideo playback controls
+    - chore: update submodule
+    - feat(metadata): normalize external view sources
+    - test(sdk): add deterministic protocol coverage
+    - feat(sdk): expose view zoom resolvers
+    - fix(edit_table): skip tabular extent updates
+    - docs(agents): clarify socket authorization contract
+    - feat(metadata): add source editor shortcut
+    - fix(ui): bind shared sanitizer export
+    - fix(wms): refresh service presets
+    - fix(theme): restore grouped manager actions
+    - refactor(theme): migrate manager to window system
+    - feat(window): add promise-based dialogs
+    - feat(theme): disambiguate theme labels with IDs
+    - fix(el): preserve siblings around async content
+    - chore: update submodule
+    - feat(story-map): add rich navigation previews
+    - fix(story_map): better management of state
+    - feat: story map new navigation bar and lock settings management in schema
+    - feat: set a system to assess if mapx is visible and suspends playbacks, incl SDK
+    - feat: arco extension playback speed
+    - fix: align arco chart message color
+    - fix: restore arco legend and show load status
+    - feat: arco extension display numeric input range
+
+
   - [1.14.1-alpha.6](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.6) 
 
     - fix(project-browser): hide project scopes for guests
