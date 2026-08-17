@@ -7965,24 +7965,54 @@
     "de": "Analysieren, bitte warten ... "
   },
   {
+    "id": "project_delete_action",
+    "en": "Delete project",
+    "de": "Projekt löschen"
+  },
+  {
+    "id": "project_delete_commit_question",
+    "en": "Project \"{{title}}\" deleted, {{count}} items removed. Commit?",
+    "de": "Projekt \" {{title}} \"gelöscht, {{count}} Elemente entfernt. Speichern?"
+  },
+  {
+    "id": "project_delete_error",
+    "en": "Could not delete this project. Please try again.",
+    "de": "Dieses Projekt konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
+  },
+  {
+    "id": "project_delete_rolled_back",
+    "en": "Deletion cancelled. Nothing was changed.",
+    "de": "Löschung abgebrochen. Es wurden keine Änderungen vorgenommen."
+  },
+  {
+    "id": "btn_stop",
+    "en": "Stop",
+    "de": "Stoppen"
+  },
+  {
+    "id": "btn_commit",
+    "en": "Commit",
+    "de": "Begehen"
+  },
+  {
     "id": "project_delete_table_views",
-    "en": "Table of views to delete",
-    "de": "Tabelle der zu löschenden Ansichten"
+    "en": "Views to delete",
+    "de": "Zu löschende Ansichten"
   },
   {
     "id": "project_delete_table_sources",
-    "en": "Table of sources to delete",
-    "de": "Tabelle der zu löschenden Quellen"
+    "en": "Sources to delete",
+    "de": "Zu löschende Quellen"
   },
   {
     "id": "project_delete_table_views_dep",
-    "en": "Table of dependent views to delete",
-    "de": "Tabelle der zu löschenden abhängigen Ansichten"
+    "en": "Views to delete in other projects",
+    "de": "Ansichten, die in anderen Projekten gelöscht werden sollen"
   },
   {
     "id": "project_delete_table_sources_dep",
-    "en": "Table of dependent sources to delete",
-    "de": "Tabelle der zu löschenden abhängigen Quellen"
+    "en": "Sources to delete in other projects",
+    "de": "Zu löschende Quellen in anderen Projekten"
   },
   {
     "id": "project_delete_title",
@@ -8296,8 +8326,8 @@
   },
   {
     "id": "project_delete_table_themes",
-    "en": "Table of themes to delete",
-    "de": "Tabelle der zu löschenden Themen"
+    "en": "Themes to delete",
+    "de": "Zu löschende Designs"
   },
   {
     "id": "project_themes",

@@ -7965,24 +7965,54 @@
     "zh": "分析中，请稍候..."
   },
   {
+    "id": "project_delete_action",
+    "en": "Delete project",
+    "zh": "删除项目"
+  },
+  {
+    "id": "project_delete_commit_question",
+    "en": "Project \"{{title}}\" deleted, {{count}} items removed. Commit?",
+    "zh": "项目 ” {{title}}已删除 {{count}}项目已移除。是否提交？"
+  },
+  {
+    "id": "project_delete_error",
+    "en": "Could not delete this project. Please try again.",
+    "zh": "无法删除此项目。请重试。"
+  },
+  {
+    "id": "project_delete_rolled_back",
+    "en": "Deletion cancelled. Nothing was changed.",
+    "zh": "删除操作已取消。没有任何更改。"
+  },
+  {
+    "id": "btn_stop",
+    "en": "Stop",
+    "zh": "停止"
+  },
+  {
+    "id": "btn_commit",
+    "en": "Commit",
+    "zh": "犯罪"
+  },
+  {
     "id": "project_delete_table_views",
-    "en": "Table of views to delete",
-    "zh": "要删除的视图表"
+    "en": "Views to delete",
+    "zh": "要删除的视图"
   },
   {
     "id": "project_delete_table_sources",
-    "en": "Table of sources to delete",
-    "zh": "要删除的源表"
+    "en": "Sources to delete",
+    "zh": "要删除的来源"
   },
   {
     "id": "project_delete_table_views_dep",
-    "en": "Table of dependent views to delete",
-    "zh": "要删除的从属视图表"
+    "en": "Views to delete in other projects",
+    "zh": "在其他项目中删除视图"
   },
   {
     "id": "project_delete_table_sources_dep",
-    "en": "Table of dependent sources to delete",
-    "zh": "要删除的依赖源表"
+    "en": "Sources to delete in other projects",
+    "zh": "其他项目中需要删除的资源"
   },
   {
     "id": "project_delete_title",
@@ -8296,8 +8326,8 @@
   },
   {
     "id": "project_delete_table_themes",
-    "en": "Table of themes to delete",
-    "zh": "要删除的主题表"
+    "en": "Themes to delete",
+    "zh": "要删除的主题"
   },
   {
     "id": "project_themes",

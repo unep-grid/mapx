@@ -200,6 +200,79 @@ describe("mx-project-list", () => {
     ).not.toBeNull();
   });
 
+  it("only shows the delete action for legacy projects, and only for curators", async () => {
+    const withCurator = await mount({
+      projects,
+      can_curate_legacy: true,
+    });
+    expect(
+      withCurator.rows.querySelector(
+        `[data-project-id="${projects[0].id}"] [data-action="delete"]`,
+      ),
+    ).toBeNull();
+    expect(
+      withCurator.rows.querySelector(
+        `[data-project-id="${projects[1].id}"] [data-action="delete"]`,
+      ),
+    ).not.toBeNull();
+
+    document.body.replaceChildren();
+    const withoutCurator = await mount({
+      projects,
+      can_curate_legacy: false,
+    });
+    expect(
+      withoutCurator.rows.querySelector("[data-action='delete']"),
+    ).toBeNull();
+  });
+
+  it("delegates delete clicks and drops the row once deletion succeeds", async () => {
+    const onDeleteRequested = vi.fn().mockResolvedValue(true);
+    emitAsync.mockResolvedValueOnce({
+      projects,
+      can_curate_legacy: true,
+    });
+    const element = new ProjectListElement();
+    element.configure({ language: "en", onDeleteRequested });
+    document.body.appendChild(element);
+    await vi.waitFor(() => expect(element.projects).toHaveLength(2));
+
+    const button = element.rows.querySelector(
+      `[data-project-id="${projects[1].id}"] [data-action="delete"]`,
+    );
+    button.click();
+    await vi.waitFor(() => expect(onDeleteRequested).toHaveBeenCalled());
+
+    expect(onDeleteRequested).toHaveBeenCalledWith(
+      projects[1].id,
+      projects[1].title,
+    );
+    await vi.waitFor(() =>
+      expect(
+        element.projects.some((project) => project.id === projects[1].id),
+      ).toBe(false),
+    );
+  });
+
+  it("keeps the row when the delete flow is cancelled or fails", async () => {
+    const onDeleteRequested = vi.fn().mockResolvedValue(false);
+    const element = await mount({
+      projects,
+      can_curate_legacy: true,
+    });
+    element.options.onDeleteRequested = onDeleteRequested;
+
+    const button = element.rows.querySelector(
+      `[data-project-id="${projects[1].id}"] [data-action="delete"]`,
+    );
+    button.click();
+    await vi.waitFor(() => expect(onDeleteRequested).toHaveBeenCalled());
+
+    expect(
+      element.projects.some((project) => project.id === projects[1].id),
+    ).toBe(true);
+  });
+
   it("renders statistic icons and orders title, featured, then favorite", async () => {
     const element = await mount({
       projects,

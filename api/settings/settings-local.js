@@ -178,6 +178,7 @@ const settings = Object.assign({}, settings_global, {
     },
   },
   project: {
+    default: env.MAPX_PROJECT_DEFAULT,
     name: {
       min: 3,
       max: 50,

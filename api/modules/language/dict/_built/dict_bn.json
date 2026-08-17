@@ -7965,24 +7965,54 @@
     "bn": "বিশ্লেষণ করা হচ্ছে, দয়া করে অপেক্ষা করুন ... "
   },
   {
+    "id": "project_delete_action",
+    "en": "Delete project",
+    "bn": "প্রকল্পটি মুছে ফেলুন"
+  },
+  {
+    "id": "project_delete_commit_question",
+    "en": "Project \"{{title}}\" deleted, {{count}} items removed. Commit?",
+    "bn": "প্রকল্প \" {{title}} মুছে ফেলা হয়েছে, {{count}} আইটেমগুলো সরানো হয়েছে। কমিট করবেন?"
+  },
+  {
+    "id": "project_delete_error",
+    "en": "Could not delete this project. Please try again.",
+    "bn": "এই প্রজেক্টটি মুছে ফেলা সম্ভব হয়নি। অনুগ্রহ করে আবার চেষ্টা করুন।"
+  },
+  {
+    "id": "project_delete_rolled_back",
+    "en": "Deletion cancelled. Nothing was changed.",
+    "bn": "মুছে ফেলার প্রক্রিয়া বাতিল করা হয়েছে। কোনো পরিবর্তন করা হয়নি।"
+  },
+  {
+    "id": "btn_stop",
+    "en": "Stop",
+    "bn": "থামুন"
+  },
+  {
+    "id": "btn_commit",
+    "en": "Commit",
+    "bn": "প্রতিশ্রুতি"
+  },
+  {
     "id": "project_delete_table_views",
-    "en": "Table of views to delete",
-    "bn": "মুছে ফেলার জন্য দর্শনের সারণী"
+    "en": "Views to delete",
+    "bn": "মুছে ফেলার জন্য মতামত"
   },
   {
     "id": "project_delete_table_sources",
-    "en": "Table of sources to delete",
-    "bn": "মুছে ফেলার জন্য উৎসের সারণী"
+    "en": "Sources to delete",
+    "bn": "মুছে ফেলার উৎস"
   },
   {
     "id": "project_delete_table_views_dep",
-    "en": "Table of dependent views to delete",
-    "bn": "মুছে ফেলার জন্য নির্ভরশীল দর্শনের সারণী"
+    "en": "Views to delete in other projects",
+    "bn": "অন্যান্য প্রকল্পে মুছে ফেলার জন্য ভিউ"
   },
   {
     "id": "project_delete_table_sources_dep",
-    "en": "Table of dependent sources to delete",
-    "bn": "মুছে ফেলার জন্য নির্ভরশীল উত্সের সারণী"
+    "en": "Sources to delete in other projects",
+    "bn": "অন্যান্য প্রকল্পে মুছে ফেলার জন্য উৎসসমূহ"
   },
   {
     "id": "project_delete_title",
@@ -8296,8 +8326,8 @@
   },
   {
     "id": "project_delete_table_themes",
-    "en": "Table of themes to delete",
-    "bn": "মুছে ফেলার জন্য থিমগুলির তালিকা"
+    "en": "Themes to delete",
+    "bn": "মুছে ফেলার জন্য থিম"
   },
   {
     "id": "project_themes",

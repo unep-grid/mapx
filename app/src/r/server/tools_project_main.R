@@ -7,9 +7,6 @@ observe({
   isAdmin <- isTRUE(userRole$admin)
   isPublisher <- isTRUE(userRole$publisher)
   isProjectCreator <- isTRUE(userRole$project_creator)
-  isProjectDefault <- isTRUE(
-    reactData$project == .get(config, c("project", "default"))
-  )
   isGuest <- isGuestUser()
 
   if (isGuest) {
@@ -29,13 +26,6 @@ observe({
       "btn_show_add_project",
       "btn_show_add_project_disabled"
     )
-    labelBtnDelete <- ifelse(
-      isProjectDefault,
-      "btn_show_project_delete_disabled",
-      "btn_show_project_delete"
-    )
-
-
     btns <- tagList(
       btns,
       actionButton(
@@ -73,11 +63,6 @@ observe({
           label = mxLabel("btn_show_project_config", language, "cog"),
           inputId = "btnShowProjectConfig",
           class = "btn btn-default",
-        ),
-        actionButton(
-          label = mxLabel(labelBtnDelete, language, "trash-o"),
-          inputId = "btnShowProjectDelete",
-          class = "btn btn-default " + ifelse(isProjectDefault, "disabled", ""),
         ),
         actionButton(
           label = mxLabel("btn_show_project_views_states", language, "sitemap fa-rotate-270"),

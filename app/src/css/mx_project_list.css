@@ -604,3 +604,31 @@
     max-width: 100%;
   }
 }
+
+.mx-project-delete-confirm label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--mx_ui_text);
+}
+
+.mx-project-delete-summary {
+  margin: 0;
+  padding-left: 1.2em;
+  color: var(--mx_ui_text);
+}
+
+.mx-project-delete-summary li {
+  padding: 2px 0;
+}
+
+.mx-project-delete-progress-label {
+  padding: 24px 0;
+  text-align: center;
+  font-size: 1.1em;
+  color: var(--mx_ui_text_faded);
+}
+
+.mx-project-delete-notice {
+  color: var(--mx_ui_text);
+}

@@ -145,6 +145,79 @@ export function openConfirmDialog(options) {
 }
 
 /**
+ * Open a promise-based notice dialog with one close action.
+ *
+ * @param {Object} options
+ * @param {import("./manager.js").MxWindowManager} options.manager
+ * @param {string} [options.key]
+ * @param {string} [options.title]
+ * @param {Node | string | Promise<string>} [options.content]
+ * @param {Node | string | Promise<string>} [options.closeLabel]
+ * @param {Partial<import("./manager.js").MxWindowConfig>} [options.windowConfig]
+ * @returns {Promise<void>}
+ */
+export function openNoticeDialog({
+  manager,
+  key,
+  title = "",
+  content = "",
+  closeLabel = "Close",
+  windowConfig = {},
+}) {
+  if (!manager || typeof manager.open !== "function") {
+    throw new TypeError("openNoticeDialog requires an MxWindowManager");
+  }
+
+  const createElement = manager.el;
+  const contentElement = createElement(
+    "div",
+    { class: "mx-window-dialog__content" },
+    content,
+  );
+
+  return new Promise((resolve) => {
+    let settled = false;
+    let dialogWindow = null;
+    const settle = () => {
+      if (settled) return;
+      settled = true;
+      resolve();
+    };
+    const closeButton = createElement(
+      "button",
+      {
+        class: ["btn", "btn-default"],
+        type: "button",
+        on: {
+          click: () => {
+            settle();
+            dialogWindow?.close("close");
+          },
+        },
+      },
+      closeLabel,
+    );
+
+    dialogWindow = manager.open({
+      key,
+      modal: true,
+      closeable: true,
+      collapsible: false,
+      resizable: false,
+      snappable: false,
+      ...windowConfig,
+      title,
+      content: contentElement,
+      footerEnd: [closeButton],
+      onClose: (reason) => {
+        settle();
+        windowConfig.onClose?.(reason);
+      },
+    });
+  });
+}
+
+/**
  * @typedef {Object} ChoiceDialogOption
  * @property {string} value
  * @property {Node | string | Promise<string>} label

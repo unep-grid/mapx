@@ -7965,24 +7965,54 @@
     "es": "Analizando, por favor espere..."
   },
   {
+    "id": "project_delete_action",
+    "en": "Delete project",
+    "es": "Eliminar proyecto"
+  },
+  {
+    "id": "project_delete_commit_question",
+    "en": "Project \"{{title}}\" deleted, {{count}} items removed. Commit?",
+    "es": "Proyecto \"{{title}}\" eliminado, {{count}} elementos eliminados. ¿Confirmar?"
+  },
+  {
+    "id": "project_delete_error",
+    "en": "Could not delete this project. Please try again.",
+    "es": "No se pudo eliminar este proyecto. Inténtelo de nuevo."
+  },
+  {
+    "id": "project_delete_rolled_back",
+    "en": "Deletion cancelled. Nothing was changed.",
+    "es": "Eliminación cancelada. No se realizó ningún cambio."
+  },
+  {
+    "id": "btn_stop",
+    "en": "Stop",
+    "es": "Detener"
+  },
+  {
+    "id": "btn_commit",
+    "en": "Commit",
+    "es": "Confirmar"
+  },
+  {
     "id": "project_delete_table_views",
-    "en": "Table of views to delete",
-    "es": "Tabla de vistas para eliminar"
+    "en": "Views to delete",
+    "es": "Vistas a eliminar"
   },
   {
     "id": "project_delete_table_sources",
-    "en": "Table of sources to delete",
-    "es": "Tabla de fuentes para eliminar"
+    "en": "Sources to delete",
+    "es": "Fuentes a eliminar"
   },
   {
     "id": "project_delete_table_views_dep",
-    "en": "Table of dependent views to delete",
-    "es": "Tabla de vistas dependientes para eliminar"
+    "en": "Views to delete in other projects",
+    "es": "Vistas a eliminar en otros proyectos"
   },
   {
     "id": "project_delete_table_sources_dep",
-    "en": "Table of dependent sources to delete",
-    "es": "Tabla de fuentes dependientes para eliminar"
+    "en": "Sources to delete in other projects",
+    "es": "Fuentes a eliminar en otros proyectos"
   },
   {
     "id": "project_delete_title",
@@ -8296,8 +8326,8 @@
   },
   {
     "id": "project_delete_table_themes",
-    "en": "Table of themes to delete",
-    "es": "Tabla de temas a eliminar"
+    "en": "Themes to delete",
+    "es": "Temas a eliminar"
   },
   {
     "id": "project_themes",

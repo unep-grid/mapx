@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { openChoiceDialog, openConfirmDialog } from "./dialog.js";
+import {
+  openChoiceDialog,
+  openConfirmDialog,
+  openNoticeDialog,
+} from "./dialog.js";
 import { MxWindowManager } from "./manager.js";
 
 describe("window dialogs", () => {
@@ -44,6 +48,50 @@ describe("window dialogs", () => {
       .click();
     await expect(data).resolves.toEqual({ id: "theme" });
   });
+
+  it("opens a padded notice with one close action", async () => {
+    const notice = openNoticeDialog({
+      manager,
+      key: "notice",
+      title: "Notice",
+      content: "Nothing changed.",
+      closeLabel: "Close",
+    });
+    const dialog = manager.windows.get("notice");
+
+    expect(dialog.refs.content.firstElementChild.className).toBe(
+      "mx-window-dialog__content",
+    );
+    expect(dialog.refs.footerEnd.querySelectorAll("button")).toHaveLength(1);
+    expect(dialog.refs.footerEnd.textContent).toBe("Close");
+
+    dialog.refs.footerEnd.querySelector("button").click();
+    await expect(notice).resolves.toBeUndefined();
+    expect(manager.windows.has("notice")).toBe(false);
+  });
+
+  it.each(["header close", "Escape", "manager close"])(
+    "resolves a notice when closed by %s",
+    async (action) => {
+      const notice = openNoticeDialog({
+        manager,
+        key: `notice-${action}`,
+      });
+      const dialog = manager.windows.get(`notice-${action}`);
+
+      if (action === "header close") {
+        dialog.refs.close.click();
+      } else if (action === "Escape") {
+        dialog.dispatchEvent(
+          new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
+        );
+      } else {
+        manager.close(dialog, "test");
+      }
+
+      await expect(notice).resolves.toBeUndefined();
+    },
+  );
 
   it.each([
     ["cancel button", (dialog) => dialog.refs.footerEnd.lastElementChild.click()],

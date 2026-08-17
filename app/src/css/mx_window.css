@@ -106,6 +106,10 @@ mx-window.mx-window--centered {
   text-align: center;
 }
 
+.mx-window__action[hidden] {
+  display: none;
+}
+
 .mx-window__resize-handle {
   position: absolute;
   right: 0;

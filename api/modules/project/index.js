@@ -15,3 +15,9 @@ export {
   setFeaturedProject,
   setLegacyProject,
 } from "./browser.js";
+export { ioProjectDeleteAnalyze } from "./delete/analyze.js";
+export {
+  ioProjectDeleteStart,
+  ioProjectDeleteStop,
+  ioProjectDeleteCommit,
+} from "./delete/session.js";

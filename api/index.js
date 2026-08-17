@@ -65,6 +65,10 @@ import {
   ioProjectFeaturedSet,
   ioProjectLegacySet,
   ioProjectLogosGet,
+  ioProjectDeleteAnalyze,
+  ioProjectDeleteStart,
+  ioProjectDeleteStop,
+  ioProjectDeleteCommit,
 } from "#mapx/project";
 import { ioKeywordsSearch } from "#mapx/keywords";
 import {
@@ -171,6 +175,10 @@ io.use((socket, next) => {
   socket.on("/client/project/favorite/set", use(ioProjectFavoriteSet));
   socket.on("/client/project/featured/set", use(ioProjectFeaturedSet));
   socket.on("/client/project/legacy/set", use(ioProjectLegacySet));
+  socket.on("/client/project/delete/analyze", use(ioProjectDeleteAnalyze));
+  socket.on("/client/project/delete/start", use(ioProjectDeleteStart));
+  socket.on("/client/project/delete/stop", use(ioProjectDeleteStop));
+  socket.on("/client/project/delete/commit", use(ioProjectDeleteCommit));
   socket.on("/client/issue/report", use(ioIssueReport));
   socket.on(
     "/client/source/get/attributes/alias",

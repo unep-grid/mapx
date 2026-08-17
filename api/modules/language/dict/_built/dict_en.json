@@ -6372,20 +6372,44 @@
     "en": "Analysing, please wait..."
   },
   {
+    "id": "project_delete_action",
+    "en": "Delete project"
+  },
+  {
+    "id": "project_delete_commit_question",
+    "en": "Project \"{{title}}\" deleted, {{count}} items removed. Commit?"
+  },
+  {
+    "id": "project_delete_error",
+    "en": "Could not delete this project. Please try again."
+  },
+  {
+    "id": "project_delete_rolled_back",
+    "en": "Deletion cancelled. Nothing was changed."
+  },
+  {
+    "id": "btn_stop",
+    "en": "Stop"
+  },
+  {
+    "id": "btn_commit",
+    "en": "Commit"
+  },
+  {
     "id": "project_delete_table_views",
-    "en": "Table of views to delete"
+    "en": "Views to delete"
   },
   {
     "id": "project_delete_table_sources",
-    "en": "Table of sources to delete"
+    "en": "Sources to delete"
   },
   {
     "id": "project_delete_table_views_dep",
-    "en": "Table of dependent views to delete"
+    "en": "Views to delete in other projects"
   },
   {
     "id": "project_delete_table_sources_dep",
-    "en": "Table of dependent sources to delete"
+    "en": "Sources to delete in other projects"
   },
   {
     "id": "project_delete_title",
@@ -6637,7 +6661,7 @@
   },
   {
     "id": "project_delete_table_themes",
-    "en": "Table of themes to delete"
+    "en": "Themes to delete"
   },
   {
     "id": "project_themes",

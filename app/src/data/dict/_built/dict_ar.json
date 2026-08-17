@@ -7965,24 +7965,54 @@
     "ar": "جاري التحليل ، يرجى الانتظار ... "
   },
   {
+    "id": "project_delete_action",
+    "en": "Delete project",
+    "ar": "حذف المشروع"
+  },
+  {
+    "id": "project_delete_commit_question",
+    "en": "Project \"{{title}}\" deleted, {{count}} items removed. Commit?",
+    "ar": "مشروع \" {{title}} تم الحذف {{count}} تمت إزالة العناصر. هل تريد تأكيد الحفظ؟"
+  },
+  {
+    "id": "project_delete_error",
+    "en": "Could not delete this project. Please try again.",
+    "ar": "تعذر حذف هذا المشروع. يرجى المحاولة مرة أخرى."
+  },
+  {
+    "id": "project_delete_rolled_back",
+    "en": "Deletion cancelled. Nothing was changed.",
+    "ar": "تم إلغاء الحذف. لم يتم تغيير أي شيء."
+  },
+  {
+    "id": "btn_stop",
+    "en": "Stop",
+    "ar": "قف"
+  },
+  {
+    "id": "btn_commit",
+    "en": "Commit",
+    "ar": "يقترف"
+  },
+  {
     "id": "project_delete_table_views",
-    "en": "Table of views to delete",
-    "ar": "جدول طرق العرض المراد حذفها"
+    "en": "Views to delete",
+    "ar": "طرق العرض المراد حذفها"
   },
   {
     "id": "project_delete_table_sources",
-    "en": "Table of sources to delete",
-    "ar": "جدول المصادر المراد حذفها"
+    "en": "Sources to delete",
+    "ar": "مصادر للحذف"
   },
   {
     "id": "project_delete_table_views_dep",
-    "en": "Table of dependent views to delete",
-    "ar": "جدول طرق العرض التابعة المطلوب حذفها"
+    "en": "Views to delete in other projects",
+    "ar": "طرق العرض المراد حذفها في مشاريع أخرى"
   },
   {
     "id": "project_delete_table_sources_dep",
-    "en": "Table of dependent sources to delete",
-    "ar": "جدول المصادر التابعة المراد حذفها"
+    "en": "Sources to delete in other projects",
+    "ar": "مصادر يجب حذفها في مشاريع أخرى"
   },
   {
     "id": "project_delete_title",
@@ -8296,8 +8326,8 @@
   },
   {
     "id": "project_delete_table_themes",
-    "en": "Table of themes to delete",
-    "ar": "جدول المواضيع المراد حذفها"
+    "en": "Themes to delete",
+    "ar": "القوالب التي يجب حذفها"
   },
   {
     "id": "project_themes",

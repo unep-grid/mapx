@@ -24,6 +24,9 @@ vi.mock("#mapx/authentication", () => ({
   isRoot: (socket) =>
     socket?.session?.user_authenticated === true &&
     socket?.session?.user_roles?.root === true,
+  isProjectCreator: (socket) =>
+    socket?.session?.user_authenticated === true &&
+    socket?.session?.user_roles?.project_creator === true,
 }));
 
 import {
@@ -40,6 +43,7 @@ function socket({
   authenticated = true,
   guest = false,
   root = false,
+  project_creator = false,
   id = 7,
 } = {}) {
   return {
@@ -47,7 +51,7 @@ function socket({
       user_authenticated: authenticated,
       user_is_guest: guest,
       user_id: id,
-      user_roles: { root },
+      user_roles: { root, project_creator },
     },
   };
 }
@@ -85,6 +89,13 @@ describe("project browser API", () => {
     );
     expect(result.can_curate_featured).toBe(true);
     expect(result.can_curate_legacy).toBe(true);
+
+    readQuery.mockResolvedValueOnce({ rows: [] });
+    const resultCreator = await new Promise((resolve) =>
+      ioProjectList(socket({ project_creator: true }), {}, resolve),
+    );
+    expect(resultCreator.can_curate_featured).toBe(false);
+    expect(resultCreator.can_curate_legacy).toBe(true);
   });
 
   it("returns project creation dates for browser sorting", async () => {
@@ -179,7 +190,7 @@ describe("project browser API", () => {
     ).rejects.toThrow("project_featured_rank_invalid");
   });
 
-  it("allows only root users to update the legacy flag", async () => {
+  it("allows only root or project-creator users to update the legacy flag", async () => {
     await expect(
       setLegacyProject(socket(), projectId, true),
     ).rejects.toThrow("project_legacy_access_denied");
@@ -196,6 +207,14 @@ describe("project browser API", () => {
       projectId,
       true,
     ]);
+
+    writeQuery.mockResolvedValueOnce({
+      rowCount: 1,
+      rows: [{ legacy: true }],
+    });
+    await expect(
+      setLegacyProject(socket({ project_creator: true }), projectId, true),
+    ).resolves.toBe(true);
   });
 
   it("validates legacy values and reports missing active projects", async () => {

@@ -7965,24 +7965,54 @@
     "fr": "Analyse, veuillez patienter..."
   },
   {
+    "id": "project_delete_action",
+    "en": "Delete project",
+    "fr": "Supprimer le projet"
+  },
+  {
+    "id": "project_delete_commit_question",
+    "en": "Project \"{{title}}\" deleted, {{count}} items removed. Commit?",
+    "fr": "Projet « {{title}} » supprimé, {{count}} éléments retirés. Valider ?"
+  },
+  {
+    "id": "project_delete_error",
+    "en": "Could not delete this project. Please try again.",
+    "fr": "Impossible de supprimer ce projet. Veuillez réessayer."
+  },
+  {
+    "id": "project_delete_rolled_back",
+    "en": "Deletion cancelled. Nothing was changed.",
+    "fr": "Suppression annulée. Rien n'a été modifié."
+  },
+  {
+    "id": "btn_stop",
+    "en": "Stop",
+    "fr": "Arrêter"
+  },
+  {
+    "id": "btn_commit",
+    "en": "Commit",
+    "fr": "Valider"
+  },
+  {
     "id": "project_delete_table_views",
-    "en": "Table of views to delete",
-    "fr": "Table des vues à supprimer"
+    "en": "Views to delete",
+    "fr": "Vues à supprimer"
   },
   {
     "id": "project_delete_table_sources",
-    "en": "Table of sources to delete",
-    "fr": "Table des sources à supprimer"
+    "en": "Sources to delete",
+    "fr": "Sources à supprimer"
   },
   {
     "id": "project_delete_table_views_dep",
-    "en": "Table of dependent views to delete",
-    "fr": "Table des vues dépendantes à supprimer"
+    "en": "Views to delete in other projects",
+    "fr": "Vues à supprimer dans d'autres projets"
   },
   {
     "id": "project_delete_table_sources_dep",
-    "en": "Table of dependent sources to delete",
-    "fr": "Table des sources dépendantes à supprimer"
+    "en": "Sources to delete in other projects",
+    "fr": "Sources à supprimer dans d'autres projets"
   },
   {
     "id": "project_delete_title",
@@ -8296,8 +8326,8 @@
   },
   {
     "id": "project_delete_table_themes",
-    "en": "Table of themes to delete",
-    "fr": "Tableau des thèmes à supprimer"
+    "en": "Themes to delete",
+    "fr": "Thèmes à supprimer"
   },
   {
     "id": "project_themes",

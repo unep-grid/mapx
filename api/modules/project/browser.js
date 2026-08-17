@@ -1,5 +1,5 @@
 import { isProjectId } from "@fxi/mx_valid";
-import { isRoot } from "#mapx/authentication";
+import { isRoot, isProjectCreator } from "#mapx/authentication";
 import { pgRead, pgWrite } from "#mapx/db";
 import { templates } from "#mapx/template";
 
@@ -77,7 +77,7 @@ export async function ioProjectList(socket, data, cb) {
   try {
     data.projects = await getAccessibleProjects(socket, data.language);
     data.can_curate_featured = isRoot(socket);
-    data.can_curate_legacy = isRoot(socket);
+    data.can_curate_legacy = isProjectCreator(socket) || isRoot(socket);
     data.success = true;
   } catch (error) {
     data.error = error?.message || error;
@@ -188,7 +188,7 @@ export async function ioProjectFeaturedSet(socket, data, cb) {
 }
 
 export async function setLegacyProject(socket, idProject, legacy) {
-  if (!isRoot(socket)) {
+  if (!isProjectCreator(socket) && !isRoot(socket)) {
     throw new Error("project_legacy_access_denied");
   }
   validateProjectId(idProject);

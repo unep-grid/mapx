@@ -7965,24 +7965,54 @@
     "fa": "با تجزیه و تحلیل ، لطفا صبر کنید ... "
   },
   {
+    "id": "project_delete_action",
+    "en": "Delete project",
+    "fa": "حذف پروژه"
+  },
+  {
+    "id": "project_delete_commit_question",
+    "en": "Project \"{{title}}\" deleted, {{count}} items removed. Commit?",
+    "fa": "پروژه \" {{title}} «حذف شد، {{count}} موارد حذف شدند. کامیت؟"
+  },
+  {
+    "id": "project_delete_error",
+    "en": "Could not delete this project. Please try again.",
+    "fa": "نتوانستم این پروژه را حذف کنم. لطفاً دوباره امتحان کنید."
+  },
+  {
+    "id": "project_delete_rolled_back",
+    "en": "Deletion cancelled. Nothing was changed.",
+    "fa": "حذف لغو شد. هیچ چیز تغییر نکرد."
+  },
+  {
+    "id": "btn_stop",
+    "en": "Stop",
+    "fa": "توقف"
+  },
+  {
+    "id": "btn_commit",
+    "en": "Commit",
+    "fa": "متعهد شدن"
+  },
+  {
     "id": "project_delete_table_views",
-    "en": "Table of views to delete",
-    "fa": "جدول نماها برای حذف"
+    "en": "Views to delete",
+    "fa": "نماهایی که باید حذف شوند"
   },
   {
     "id": "project_delete_table_sources",
-    "en": "Table of sources to delete",
-    "fa": "جدول منابع برای حذف"
+    "en": "Sources to delete",
+    "fa": "منابعی که باید حذف شوند"
   },
   {
     "id": "project_delete_table_views_dep",
-    "en": "Table of dependent views to delete",
-    "fa": "جدول نماهای وابسته برای حذف"
+    "en": "Views to delete in other projects",
+    "fa": "نماهایی برای حذف در پروژه‌های دیگر"
   },
   {
     "id": "project_delete_table_sources_dep",
-    "en": "Table of dependent sources to delete",
-    "fa": "جدول منابع وابسته برای حذف"
+    "en": "Sources to delete in other projects",
+    "fa": "منابعی که باید در پروژه‌های دیگر حذف شوند"
   },
   {
     "id": "project_delete_title",
@@ -8296,8 +8326,8 @@
   },
   {
     "id": "project_delete_table_themes",
-    "en": "Table of themes to delete",
-    "fa": "جدول تم‌هایی که باید حذف شوند"
+    "en": "Themes to delete",
+    "fa": "تم‌هایی که باید حذف شوند"
   },
   {
     "id": "project_themes",

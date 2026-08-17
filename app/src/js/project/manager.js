@@ -10,6 +10,8 @@ import { getQueryParameterInit } from "../url_utils/url_utils.js";
 import { parseInitialProjectListFilters } from "./list_helpers.js";
 import { RoleMatrix } from "./roles_matrix.js";
 import { getMapxWindowManager } from "../window/index.js";
+import { openConfirmDialog, openNoticeDialog } from "../window/dialog.js";
+import { ProjectDeleteChannel } from "./delete_channel.js";
 
 const options = {
   roles: ["root", "project_creator"],
@@ -164,8 +166,284 @@ export class ProjectManager {
     }
   }
 
-  async delete() {}
-  async remove() {}
+  /**
+   * Delete a project : type-the-name confirmation, then an analyze
+   * summary of what will be removed, then a live-progress delete
+   * session ending in a final "commit ?" gate before anything is
+   * durably committed.
+   * @param {String} idProject Project to delete ( never the user's
+   *   own currently active project ; the server enforces this too )
+   * @param {String} [projectTitle] Display title, from the list row
+   * @return {Promise<boolean>} true if the project was deleted
+   */
+  async delete(idProject, projectTitle) {
+    const pm = this;
+    try {
+      await pm.testAuth();
+      if (!idProject) {
+        return false;
+      }
+      const title = projectTitle || idProject;
+      const modalTitle = `${await getDictItem("project_delete_title")} "${title}"`;
+      const windowManager = getMapxWindowManager();
+      const key = "project-delete";
+
+      const typedName = await pm.promptDeleteConfirmName({
+        windowManager,
+        key,
+        modalTitle,
+        title,
+      });
+      if (!typedName) {
+        return false;
+      }
+
+      const analysis = await ProjectDeleteChannel.analyze(
+        idProject,
+        settings.language,
+      );
+      if (analysis?.error) {
+        await pm.showDeleteNotice({
+          windowManager,
+          key,
+          title: modalTitle,
+          message: analysis.error,
+        });
+        return false;
+      }
+
+      const proceed = await pm.showDeleteAnalysis({
+        windowManager,
+        key,
+        modalTitle,
+        analysis,
+      });
+      if (!proceed) {
+        return false;
+      }
+
+      return await pm.runDeleteSession({
+        idProject,
+        title,
+        modalTitle,
+        windowManager,
+        key,
+      });
+    } catch (e) {
+      console.warn(e.message || e);
+      return false;
+    }
+  }
+
+  /**
+   * Type-the-project-name destructive-action confirmation, in an
+   * <mx-window> rather than the legacy modal system.
+   */
+  async promptDeleteConfirmName({ windowManager, key, modalTitle, title }) {
+    const createElement = windowManager.el;
+    const input = createElement("input", {
+      class: "form-control",
+      type: "text",
+      autocomplete: "off",
+    });
+    const content = createElement(
+      "div",
+      { class: "mx-project-delete-confirm" },
+      createElement("label", tt("project_delete_confirm_title"), input),
+    );
+
+    const typedName = await openConfirmDialog({
+      manager: windowManager,
+      key,
+      title: modalTitle,
+      content,
+      confirmLabel: tt("btn_confirm"),
+      cancelLabel: tt("btn_cancel"),
+      getValue: () => input.value,
+      onReady: ({ confirmButton }) => {
+        const update = () => {
+          const valid =
+            input.value.trim().toLowerCase() === title.trim().toLowerCase();
+          confirmButton.disabled = !valid;
+        };
+        input.addEventListener("input", update);
+        update();
+        input.focus();
+      },
+    });
+    return typedName || null;
+  }
+
+  /**
+   * Single-action notice window ( success / cancelled / error ),
+   * replacing the legacy modalDialog for this flow.
+   */
+  showDeleteNotice({ windowManager, key, title, message }) {
+    const content = windowManager.el(
+      "div",
+      { class: "mx-project-delete-notice" },
+      message,
+    );
+    return openNoticeDialog({
+      manager: windowManager,
+      key,
+      title,
+      content,
+      closeLabel: tt("btn_close"),
+      windowConfig: {
+        geometry: {
+          width: "min(520px, calc(100vw - 32px))",
+          height: "auto",
+          minHeight: 0,
+        },
+      },
+    });
+  }
+
+  /**
+   * Summary of views/sources/themes about to be removed, including
+   * cross-project dependents of this project's global sources.
+   */
+  async showDeleteAnalysis({ windowManager, key, modalTitle, analysis }) {
+    const createElement = windowManager.el;
+    const rows = [
+      [analysis.views?.length || 0, "project_delete_table_views"],
+      [analysis.sources?.length || 0, "project_delete_table_sources"],
+      [analysis.themes?.length || 0, "project_delete_table_themes"],
+      [analysis.viewsDependent?.length || 0, "project_delete_table_views_dep"],
+      [
+        analysis.sourcesDependent?.length || 0,
+        "project_delete_table_sources_dep",
+      ],
+    ];
+    const labels = await Promise.all(rows.map(([, key]) => getDictItem(key)));
+    const summaryList = createElement(
+      "ul",
+      { class: "mx-project-delete-summary" },
+      ...rows.map(([count], index) =>
+        createElement("li", `${labels[index]}: ${count}`),
+      ),
+    );
+
+    return openConfirmDialog({
+      manager: windowManager,
+      key,
+      title: modalTitle,
+      content: summaryList,
+      confirmLabel: tt("btn_confirm"),
+      cancelLabel: tt("btn_cancel"),
+    });
+  }
+
+  /**
+   * Live-progress delete session : start, stream progress, handle the
+   * final commit gate, and report the terminal outcome.
+   */
+  runDeleteSession({ idProject, title, modalTitle, windowManager, key }) {
+    const pm = this;
+    const createElement = windowManager.el;
+
+    return new Promise((resolve) => {
+      let settled = false;
+      let channel = null;
+
+      const finish = (value) => {
+        if (settled) {
+          return;
+        }
+        settled = true;
+        resolve(value);
+      };
+
+      const closeWithNotice = async (contentKey, message) => {
+        const text = message || (await getDictItem(contentKey));
+        await pm.showDeleteNotice({
+          windowManager,
+          key,
+          title: modalTitle,
+          message: text,
+        });
+      };
+
+      const progressLabel = createElement("div", {
+        class: "mx-project-delete-progress-label",
+      });
+      const stopButton = createElement(
+        "button",
+        {
+          class: ["btn", "btn-default"],
+          type: "button",
+          on: { click: () => channel?.stop() },
+        },
+        tt("btn_stop"),
+      );
+
+      windowManager.open({
+        key,
+        modal: true,
+        closeable: false,
+        collapsible: false,
+        resizable: false,
+        snappable: false,
+        title: modalTitle,
+        content: progressLabel,
+        footerEnd: [stopButton],
+        geometry: {
+          width: "min(520px, calc(100vw - 32px))",
+          height: "auto",
+          minHeight: 0,
+        },
+      });
+
+      channel = new ProjectDeleteChannel({
+        onProgress: async (message) => {
+          if (message.step === "source") {
+            progressLabel.textContent = `${message.index}/${message.total}`;
+            return;
+          }
+          if (message.step === "awaiting_commit") {
+            const question = await getDictItem("project_delete_commit_question");
+            const text = question
+              .replace("{{title}}", message.project_title || title)
+              .replace("{{count}}", String(message.removed?.total ?? ""));
+            const confirmed = await openConfirmDialog({
+              manager: windowManager,
+              key,
+              title: modalTitle,
+              content: text,
+              confirmLabel: tt("btn_commit"),
+              cancelLabel: tt("btn_stop"),
+            });
+            if (confirmed) {
+              await channel.commit();
+            } else {
+              await channel.stop();
+            }
+            return;
+          }
+          progressLabel.textContent = await getDictItem("project_delete_analyze");
+        },
+        onDone: async () => {
+          await closeWithNotice("project_deleted");
+          finish(true);
+        },
+        onRolledBack: async () => {
+          await closeWithNotice("project_delete_rolled_back");
+          finish(false);
+        },
+        onError: async (message) => {
+          await closeWithNotice("project_delete_error", message?.message);
+          finish(false);
+        },
+      });
+
+      channel.start(idProject).catch(async (error) => {
+        console.error(error);
+        await closeWithNotice("project_delete_error", error.message);
+        finish(false);
+      });
+    });
+  }
   // Shiny.addCustomMessageHandler requires a handler whose Function.length is 1.
   // Keep this parameter required syntactically and normalize it inside.
   async list(request) {
@@ -195,6 +473,8 @@ export class ProjectManager {
           projectListWindow?.close("project-requested");
         }
       },
+      onDeleteRequested: (idProject, projectTitle) =>
+        pm.delete(idProject, projectTitle),
     });
 
     const buttons = [];

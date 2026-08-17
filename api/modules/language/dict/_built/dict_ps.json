@@ -7965,24 +7965,54 @@
     "ps": "شننه ، مهرباني وکړئ انتظار وکړئ ... "
   },
   {
+    "id": "project_delete_action",
+    "en": "Delete project",
+    "ps": "پروژه ړنګ کړئ"
+  },
+  {
+    "id": "project_delete_commit_question",
+    "en": "Project \"{{title}}\" deleted, {{count}} items removed. Commit?",
+    "ps": "پروژه \" {{title}} \" ړنګ شوی، {{count}} توکي لرې شوي دي. ژمن یاست؟"
+  },
+  {
+    "id": "project_delete_error",
+    "en": "Could not delete this project. Please try again.",
+    "ps": "دا پروژه ړنګه نشوه. مهرباني وکړئ بیا هڅه وکړئ."
+  },
+  {
+    "id": "project_delete_rolled_back",
+    "en": "Deletion cancelled. Nothing was changed.",
+    "ps": "ړنګول لغوه شول. هیڅ شی بدل نه شو."
+  },
+  {
+    "id": "btn_stop",
+    "en": "Stop",
+    "ps": "ودروئ"
+  },
+  {
+    "id": "btn_commit",
+    "en": "Commit",
+    "ps": "ژمن شئ"
+  },
+  {
     "id": "project_delete_table_views",
-    "en": "Table of views to delete",
-    "ps": "د ړنګولو لپاره د لیدونو جدول"
+    "en": "Views to delete",
+    "ps": "د حذف کولو لپاره لیدونه"
   },
   {
     "id": "project_delete_table_sources",
-    "en": "Table of sources to delete",
-    "ps": "د ړنګولو لپاره د سرچینو جدول"
+    "en": "Sources to delete",
+    "ps": "د حذف کولو لپاره سرچینې"
   },
   {
     "id": "project_delete_table_views_dep",
-    "en": "Table of dependent views to delete",
-    "ps": "د ړنګولو لپاره د انحصاري لیدونو جدول"
+    "en": "Views to delete in other projects",
+    "ps": "په نورو پروژو کې د حذف کولو لپاره لیدونه"
   },
   {
     "id": "project_delete_table_sources_dep",
-    "en": "Table of dependent sources to delete",
-    "ps": "د ړنګولو لپاره د انحصاري سرچینو جدول"
+    "en": "Sources to delete in other projects",
+    "ps": "په نورو پروژو کې د حذف کولو لپاره سرچینې"
   },
   {
     "id": "project_delete_title",
@@ -8296,8 +8326,8 @@
   },
   {
     "id": "project_delete_table_themes",
-    "en": "Table of themes to delete",
-    "ps": "د حذف کولو لپاره د موضوعاتو جدول"
+    "en": "Themes to delete",
+    "ps": "د حذف کولو لپاره موضوعات"
   },
   {
     "id": "project_themes",

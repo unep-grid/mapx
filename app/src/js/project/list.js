@@ -63,6 +63,7 @@ const UI_KEYS = [
   "project_legacy_add",
   "project_legacy_remove",
   "project_legacy_error",
+  "project_delete_action",
   "btn_join_project",
   "admin",
   "publisher",
@@ -185,6 +186,7 @@ export class ProjectListElement extends HTMLElement {
    * @param {Object} [options.initialFilters]
    * @param {(projectId: string) => void} [options.onProjectRequested]
    * @param {(projectId: string) => void} [options.onProjectLoaded]
+   * @param {(projectId: string, projectTitle: string) => Promise<boolean>} [options.onDeleteRequested]
    */
   configure(options = {}) {
     this.options = options;
@@ -613,6 +615,19 @@ export class ProjectListElement extends HTMLElement {
           }),
         ),
       );
+    }
+    if (this.canCurateLegacy && project.legacy) {
+      const deleteLabel = this.label("project_delete_action");
+      const deleteButton = iconButton(
+        this.el,
+        "mx-project-browser-heading-action mx-project-browser-delete",
+        "fa fa-trash",
+        deleteLabel,
+        "delete",
+      );
+      deleteButton.dataset.projectId = project.id;
+      deleteButton.disabled = this.pendingProjects.has(project.id);
+      heading.appendChild(deleteButton);
     }
     if (settings.user.guest !== true) {
       const favoriteLabel = this.label(
@@ -1141,6 +1156,18 @@ export class ProjectListElement extends HTMLElement {
       case "legacy":
         await this.setLegacy(projectId);
         return;
+      case "delete": {
+        const project = this.projects.find((item) => item.id === projectId);
+        const deleted = await this.options?.onDeleteRequested?.(
+          projectId,
+          project?.title,
+        );
+        if (deleted === true) {
+          this.projects = this.projects.filter((item) => item.id !== projectId);
+          this.renderResults();
+        }
+        return;
+      }
       case "curator-menu":
         if (
           !this.curatorPopover.hidden &&

@@ -154,7 +154,6 @@ server <- function(input, output, session) {
           "tools_project_config.R",
           "tools_project_external_views.R",
           "tools_project_sources_views.R",
-          "tools_project_delete.R",
           "tools_project_join.R",
           "tools_project_invite.R",
           "tools_source_new.R",

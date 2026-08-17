@@ -7965,24 +7965,54 @@
     "ru": "Анализируем, подождите ... "
   },
   {
+    "id": "project_delete_action",
+    "en": "Delete project",
+    "ru": "Удалить проект"
+  },
+  {
+    "id": "project_delete_commit_question",
+    "en": "Project \"{{title}}\" deleted, {{count}} items removed. Commit?",
+    "ru": "Проект \" {{title}} удалено, {{count}} Элементы удалены. Подтверждаю?"
+  },
+  {
+    "id": "project_delete_error",
+    "en": "Could not delete this project. Please try again.",
+    "ru": "Не удалось удалить этот проект. Пожалуйста, попробуйте еще раз."
+  },
+  {
+    "id": "project_delete_rolled_back",
+    "en": "Deletion cancelled. Nothing was changed.",
+    "ru": "Удаление отменено. Ничего не изменилось."
+  },
+  {
+    "id": "btn_stop",
+    "en": "Stop",
+    "ru": "Останавливаться"
+  },
+  {
+    "id": "btn_commit",
+    "en": "Commit",
+    "ru": "Совершить"
+  },
+  {
     "id": "project_delete_table_views",
-    "en": "Table of views to delete",
-    "ru": "Таблица представлений для удаления"
+    "en": "Views to delete",
+    "ru": "Мнения, которые нужно удалить"
   },
   {
     "id": "project_delete_table_sources",
-    "en": "Table of sources to delete",
-    "ru": "Таблица источников для удаления"
+    "en": "Sources to delete",
+    "ru": "Источники для удаления"
   },
   {
     "id": "project_delete_table_views_dep",
-    "en": "Table of dependent views to delete",
-    "ru": "Таблица зависимых представлений для удаления"
+    "en": "Views to delete in other projects",
+    "ru": "Представления, которые необходимо удалить в других проектах."
   },
   {
     "id": "project_delete_table_sources_dep",
-    "en": "Table of dependent sources to delete",
-    "ru": "Таблица зависимых источников для удаления"
+    "en": "Sources to delete in other projects",
+    "ru": "Источники, которые следует удалить в других проектах."
   },
   {
     "id": "project_delete_title",
@@ -8296,8 +8326,8 @@
   },
   {
     "id": "project_delete_table_themes",
-    "en": "Table of themes to delete",
-    "ru": "Таблица тем для удаления"
+    "en": "Themes to delete",
+    "ru": "Темы для удаления"
   },
   {
     "id": "project_themes",
