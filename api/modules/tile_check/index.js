@@ -3,6 +3,9 @@ import { buildTestUrl } from "./substitute.js";
 import { checkUrl } from "./fetch_check.js";
 import { saveCheckResult } from "./store.js";
 
+export { buildTestUrl } from "./substitute.js";
+export { checkUrl } from "./fetch_check.js";
+
 const CONCURRENCY = 10;
 
 /**

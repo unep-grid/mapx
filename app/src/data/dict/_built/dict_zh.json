@@ -8865,6 +8865,41 @@
     "zh": "破碎的"
   },
   {
+    "id": "project_tiles_url_editor_title",
+    "en": "Edit tile URL",
+    "zh": "编辑图块 URL"
+  },
+  {
+    "id": "project_tiles_url_editor_label",
+    "en": "URL of tiles endpoint",
+    "zh": "瓦片端点的 URL"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_test",
+    "en": "Test",
+    "zh": "测试"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_save",
+    "en": "Save",
+    "zh": "节省"
+  },
+  {
+    "id": "project_tiles_url_editor_testing",
+    "en": "Testing…",
+    "zh": "测试……"
+  },
+  {
+    "id": "project_tiles_url_editor_saving",
+    "en": "Saving…",
+    "zh": "保存…"
+  },
+  {
+    "id": "project_tiles_url_editor_save_error",
+    "en": "Error saving",
+    "zh": "保存错误"
+  },
+  {
     "id": "project_added_to_group",
     "en": "added to: {{group}} \n",
     "zh": "添加到： {{group}}\n"

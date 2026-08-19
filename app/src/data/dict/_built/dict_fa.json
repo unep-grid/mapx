@@ -8865,6 +8865,41 @@
     "fa": "شکسته"
   },
   {
+    "id": "project_tiles_url_editor_title",
+    "en": "Edit tile URL",
+    "fa": "ویرایش آدرس اینترنتی کاشی"
+  },
+  {
+    "id": "project_tiles_url_editor_label",
+    "en": "URL of tiles endpoint",
+    "fa": "آدرس اینترنتی (URL) نقطه پایانی کاشی‌ها"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_test",
+    "en": "Test",
+    "fa": "تست"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_save",
+    "en": "Save",
+    "fa": "ذخیره"
+  },
+  {
+    "id": "project_tiles_url_editor_testing",
+    "en": "Testing…",
+    "fa": "آزمایش…"
+  },
+  {
+    "id": "project_tiles_url_editor_saving",
+    "en": "Saving…",
+    "fa": "در حال ذخیره…"
+  },
+  {
+    "id": "project_tiles_url_editor_save_error",
+    "en": "Error saving",
+    "fa": "خطا در ذخیره سازی"
+  },
+  {
     "id": "project_added_to_group",
     "en": "added to: {{group}} \n",
     "fa": "اضافه شده به: {{group}}\n"

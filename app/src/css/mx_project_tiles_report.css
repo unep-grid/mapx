@@ -1,0 +1,16 @@
+.tiles-report-container {
+  overflow-x: auto;
+}
+
+.tiles-report-tools {
+  width: 42px;
+  white-space: nowrap;
+}
+
+.tiles-report-edit {
+  margin: 0;
+}
+
+.tiles-url-editor-result {
+  margin: 0;
+}

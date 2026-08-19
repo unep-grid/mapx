@@ -8865,6 +8865,41 @@
     "fr": "Cassé"
   },
   {
+    "id": "project_tiles_url_editor_title",
+    "en": "Edit tile URL",
+    "fr": "Modifier l'URL de la tuile"
+  },
+  {
+    "id": "project_tiles_url_editor_label",
+    "en": "URL of tiles endpoint",
+    "fr": "URL du point de terminaison des tuiles"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_test",
+    "en": "Test",
+    "fr": "Test"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_save",
+    "en": "Save",
+    "fr": "Sauvegarder"
+  },
+  {
+    "id": "project_tiles_url_editor_testing",
+    "en": "Testing…",
+    "fr": "Essai…"
+  },
+  {
+    "id": "project_tiles_url_editor_saving",
+    "en": "Saving…",
+    "fr": "Économie…"
+  },
+  {
+    "id": "project_tiles_url_editor_save_error",
+    "en": "Error saving",
+    "fr": "Sauvegarde des erreurs"
+  },
+  {
     "id": "project_added_to_group",
     "en": "added to: {{group}} \n",
     "fr": "ajouté a: {{group}} \n"

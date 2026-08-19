@@ -6,6 +6,8 @@ export { ioProjectRolesGet, ioProjectRolesUpdate } from "./roles_matrix.js";
 export {
   ioProjectTilesCheckGet,
   ioProjectTilesCheckRun,
+  ioViewTilesUrlTest,
+  ioViewTilesUrlSave,
 } from "./tiles_check.js";
 export {
   ioProjectList,

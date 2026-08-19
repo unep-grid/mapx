@@ -6,6 +6,7 @@ import { bindAll } from "../bind_class_methods";
 import { tt } from "../el_mapx";
 import { isEmpty } from "../is_test/index.js";
 import { TilesCheckChannel } from "./tiles_check_channel.js";
+import { TilesUrlEditor } from "./tiles_url_editor.js";
 
 const WINDOW_KEY = "project-tiles-report";
 
@@ -141,6 +142,11 @@ export class TilesReport {
       ),
       el("th", tt("project_tiles_report_col_checked_at")),
       el("th", tt("project_tiles_report_col_detail")),
+      el("th", {
+        class: ["text-center", "tiles-report-tools"],
+        scope: "col",
+        "aria-label": tt("project_tiles_url_editor_title"),
+      }),
     ]);
 
     const elRows = tr.rows.map((row) => {
@@ -157,12 +163,25 @@ export class TilesReport {
       );
       detailCell.textContent = row.detail || "";
 
+      const editButton = el(
+        "button",
+        {
+          class: ["btn-circle", "btn-circle-small", "tiles-report-edit"],
+          type: "button",
+          title: tt("project_tiles_url_editor_title"),
+          "aria-label": tt("project_tiles_url_editor_title"),
+          on: { click: () => tr.handleEdit(row) },
+        },
+        el("i", { class: ["fa", "fa-pencil"], "aria-hidden": "true" }),
+      );
+
       return el("tr", { dataset: { idView: row.id_view } }, [
         el("td", row.title || row.id_view),
         el("td", row.editor_email || ""),
         statusCell,
         checkedCell,
         detailCell,
+        el("td", { class: ["text-center", "tiles-report-tools"] }, editButton),
       ]);
     });
 
@@ -303,6 +322,24 @@ export class TilesReport {
       tr.setStatus(e.message);
       tr.finishRun();
     }
+  }
+
+  handleEdit(row) {
+    const tr = this;
+    if (!tr._urlEditor) {
+      tr._urlEditor = new TilesUrlEditor();
+    }
+    tr._urlEditor.show({
+      idView: row.id_view,
+      tileUrl: row.tile_url,
+      onSaved: (freshRow, savedUrl) => {
+        if (!freshRow) {
+          return;
+        }
+        row.tile_url = savedUrl;
+        tr.setRowDone(freshRow.id_view, freshRow);
+      },
+    });
   }
 
   finishRun() {

@@ -7092,6 +7092,34 @@
     "en": "Broken"
   },
   {
+    "id": "project_tiles_url_editor_title",
+    "en": "Edit tile URL"
+  },
+  {
+    "id": "project_tiles_url_editor_label",
+    "en": "URL of tiles endpoint"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_test",
+    "en": "Test"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_save",
+    "en": "Save"
+  },
+  {
+    "id": "project_tiles_url_editor_testing",
+    "en": "Testing…"
+  },
+  {
+    "id": "project_tiles_url_editor_saving",
+    "en": "Saving…"
+  },
+  {
+    "id": "project_tiles_url_editor_save_error",
+    "en": "Error saving"
+  },
+  {
     "id": "project_added_to_group",
     "en": "added to: {{group}} \n"
   },

@@ -8865,6 +8865,41 @@
     "bn": "ভাঙা"
   },
   {
+    "id": "project_tiles_url_editor_title",
+    "en": "Edit tile URL",
+    "bn": "টাইল ইউআরএল সম্পাদনা করুন"
+  },
+  {
+    "id": "project_tiles_url_editor_label",
+    "en": "URL of tiles endpoint",
+    "bn": "টাইলস এন্ডপয়েন্টের URL"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_test",
+    "en": "Test",
+    "bn": "পরীক্ষা"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_save",
+    "en": "Save",
+    "bn": "সংরক্ষণ করুন"
+  },
+  {
+    "id": "project_tiles_url_editor_testing",
+    "en": "Testing…",
+    "bn": "পরীক্ষা চলছে…"
+  },
+  {
+    "id": "project_tiles_url_editor_saving",
+    "en": "Saving…",
+    "bn": "সঞ্চয়…"
+  },
+  {
+    "id": "project_tiles_url_editor_save_error",
+    "en": "Error saving",
+    "bn": "সংরক্ষণ করতে ত্রুটি হয়েছে"
+  },
+  {
     "id": "project_added_to_group",
     "en": "added to: {{group}} \n",
     "bn": "যোগ করা হয়েছে: {{group}}\n"

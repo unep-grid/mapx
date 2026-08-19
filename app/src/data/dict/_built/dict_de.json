@@ -8865,6 +8865,41 @@
     "de": "Gebrochen"
   },
   {
+    "id": "project_tiles_url_editor_title",
+    "en": "Edit tile URL",
+    "de": "URL der bearbeiteten Kachel bearbeiten"
+  },
+  {
+    "id": "project_tiles_url_editor_label",
+    "en": "URL of tiles endpoint",
+    "de": "URL des Tiles-Endpunkts"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_test",
+    "en": "Test",
+    "de": "Prüfen"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_save",
+    "en": "Save",
+    "de": "Speichern"
+  },
+  {
+    "id": "project_tiles_url_editor_testing",
+    "en": "Testing…",
+    "de": "Testen…"
+  },
+  {
+    "id": "project_tiles_url_editor_saving",
+    "en": "Saving…",
+    "de": "Speichern…"
+  },
+  {
+    "id": "project_tiles_url_editor_save_error",
+    "en": "Error saving",
+    "de": "Fehler beim Speichern"
+  },
+  {
     "id": "project_added_to_group",
     "en": "added to: {{group}} \n",
     "de": "hinzugefügt zu: {{group}}\n"

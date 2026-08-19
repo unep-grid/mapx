@@ -8865,6 +8865,41 @@
     "ar": "مكسور"
   },
   {
+    "id": "project_tiles_url_editor_title",
+    "en": "Edit tile URL",
+    "ar": "تعديل عنوان URL الخاص بالبلاطة"
+  },
+  {
+    "id": "project_tiles_url_editor_label",
+    "en": "URL of tiles endpoint",
+    "ar": "عنوان URL لنقطة نهاية البلاطات"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_test",
+    "en": "Test",
+    "ar": "امتحان"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_save",
+    "en": "Save",
+    "ar": "يحفظ"
+  },
+  {
+    "id": "project_tiles_url_editor_testing",
+    "en": "Testing…",
+    "ar": "جارٍ الاختبار…"
+  },
+  {
+    "id": "project_tiles_url_editor_saving",
+    "en": "Saving…",
+    "ar": "توفير…"
+  },
+  {
+    "id": "project_tiles_url_editor_save_error",
+    "en": "Error saving",
+    "ar": "حدث خطأ في الحفظ"
+  },
+  {
     "id": "project_added_to_group",
     "en": "added to: {{group}} \n",
     "ar": "تمت الإضافة إلى: {{group}}\n"

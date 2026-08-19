@@ -62,6 +62,8 @@ import {
   ioProjectRolesUpdate,
   ioProjectTilesCheckGet,
   ioProjectTilesCheckRun,
+  ioViewTilesUrlTest,
+  ioViewTilesUrlSave,
   ioProjectList,
   ioProjectFavoriteSet,
   ioProjectFeaturedSet,
@@ -174,6 +176,8 @@ io.use((socket, next) => {
   socket.on("/client/project/roles/update", use(ioProjectRolesUpdate));
   socket.on("/client/project/tiles_check/get", use(ioProjectTilesCheckGet));
   socket.on("/client/project/tiles_check/run", use(ioProjectTilesCheckRun));
+  socket.on("/client/view/tiles/test", use(ioViewTilesUrlTest));
+  socket.on("/client/view/tiles/save", use(ioViewTilesUrlSave));
   socket.on("/client/project/list", use(ioProjectList));
   socket.on("/client/project/logos/get", use(ioProjectLogosGet));
   socket.on("/client/project/favorite/set", use(ioProjectFavoriteSet));

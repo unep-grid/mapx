@@ -8865,6 +8865,41 @@
     "ru": "Сломанный"
   },
   {
+    "id": "project_tiles_url_editor_title",
+    "en": "Edit tile URL",
+    "ru": "Изменить URL-адрес плитки"
+  },
+  {
+    "id": "project_tiles_url_editor_label",
+    "en": "URL of tiles endpoint",
+    "ru": "URL конечной точки плиток"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_test",
+    "en": "Test",
+    "ru": "Тест"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_save",
+    "en": "Save",
+    "ru": "Сохранять"
+  },
+  {
+    "id": "project_tiles_url_editor_testing",
+    "en": "Testing…",
+    "ru": "Тестирование…"
+  },
+  {
+    "id": "project_tiles_url_editor_saving",
+    "en": "Saving…",
+    "ru": "Сохранение…"
+  },
+  {
+    "id": "project_tiles_url_editor_save_error",
+    "en": "Error saving",
+    "ru": "Ошибка сохранения"
+  },
+  {
     "id": "project_added_to_group",
     "en": "added to: {{group}} \n",
     "ru": "добавлено в: {{group}}\n"

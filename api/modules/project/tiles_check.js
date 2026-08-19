@@ -1,6 +1,13 @@
+import { isViewId, isString } from "@fxi/mx_valid";
 import { isAdmin } from "#mapx/authentication";
 import { pgRead } from "#mapx/db";
-import { getCheckableViews, runChecks } from "#mapx/tile_check";
+import {
+  getCheckableViews,
+  runChecks,
+  buildTestUrl,
+  checkUrl,
+} from "#mapx/tile_check";
+import { setViewTilesUrl } from "#mapx/view";
 
 /**
  * Tile check "run now" protocol events.
@@ -34,6 +41,7 @@ export async function ioProjectTilesCheckGet(socket, data, cb) {
       SELECT
         v.id AS id_view,
         v.data #>> '{title,en}' AS title,
+        v.data #>> '{source,tiles,0}' AS tile_url,
         u.email AS editor_email,
         c.checked_at,
         c.valid,
@@ -124,6 +132,63 @@ export async function ioProjectTilesCheckRun(socket, data, cb) {
 
     data.success = true;
     data.total = views.length;
+  } catch (e) {
+    data.error = e?.message || e;
+  } finally {
+    cb(data);
+  }
+}
+
+/**
+ * Test an (unsaved) tile URL template, for the tiles report's quick-edit
+ * window. Same substitute+fetch path as the stored-view check, just without
+ * reading/writing mx_views_tiles_check.
+ */
+export async function ioViewTilesUrlTest(socket, data, cb) {
+  try {
+    const isUserAllowed = isAdmin(socket);
+    if (!isUserAllowed) {
+      throw new Error("project_tiles_check_access_denied");
+    }
+    const testUrl = buildTestUrl(data.url);
+    data.result = testUrl
+      ? await checkUrl(testUrl)
+      : { valid: false, detail: "no_tile_template", tested_url: null };
+    data.success = true;
+  } catch (e) {
+    data.error = e?.message || e;
+  } finally {
+    cb(data);
+  }
+}
+
+/**
+ * Save a view's tile URL template from the tiles report's quick-edit
+ * window, then immediately re-check it so mx_views_tiles_check (and the
+ * report row) reflects the new URL without waiting for a full "Run".
+ */
+export async function ioViewTilesUrlSave(socket, data, cb) {
+  try {
+    const isUserAllowed = isAdmin(socket);
+    if (!isUserAllowed) {
+      throw new Error("project_tiles_check_access_denied");
+    }
+    const idProject = socket.session.project_id;
+    if (!idProject) {
+      throw new Error("project_id_required");
+    }
+    const { idView, url } = data;
+    if (!isViewId(idView) || !isString(url)) {
+      throw new Error("invalid_params");
+    }
+
+    await setViewTilesUrl(idView, url, idProject);
+
+    const [row] = await runChecks([
+      { id: idView, project: idProject, tile_url: url },
+    ]);
+    data.row = row;
+    data.success = true;
   } catch (e) {
     data.error = e?.message || e;
   } finally {

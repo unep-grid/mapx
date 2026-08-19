@@ -8865,6 +8865,41 @@
     "es": "Roto"
   },
   {
+    "id": "project_tiles_url_editor_title",
+    "en": "Edit tile URL",
+    "es": "Editar URL del mosaico"
+  },
+  {
+    "id": "project_tiles_url_editor_label",
+    "en": "URL of tiles endpoint",
+    "es": "URL del punto final de los mosaicos"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_test",
+    "en": "Test",
+    "es": "Prueba"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_save",
+    "en": "Save",
+    "es": "Ahorrar"
+  },
+  {
+    "id": "project_tiles_url_editor_testing",
+    "en": "Testing…",
+    "es": "Pruebas…"
+  },
+  {
+    "id": "project_tiles_url_editor_saving",
+    "en": "Saving…",
+    "es": "Ahorro…"
+  },
+  {
+    "id": "project_tiles_url_editor_save_error",
+    "en": "Error saving",
+    "es": "Error al guardar"
+  },
+  {
     "id": "project_added_to_group",
     "en": "added to: {{group}} \n",
     "es": "añadido a: {{group}}\n"

@@ -8865,6 +8865,41 @@
     "ps": "مات شوی"
   },
   {
+    "id": "project_tiles_url_editor_title",
+    "en": "Edit tile URL",
+    "ps": "د ټایل URL سم کړئ"
+  },
+  {
+    "id": "project_tiles_url_editor_label",
+    "en": "URL of tiles endpoint",
+    "ps": "د ټایلونو د پای ټکي URL"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_test",
+    "en": "Test",
+    "ps": "ازموینه"
+  },
+  {
+    "id": "project_tiles_url_editor_btn_save",
+    "en": "Save",
+    "ps": "خوندي کړئ"
+  },
+  {
+    "id": "project_tiles_url_editor_testing",
+    "en": "Testing…",
+    "ps": "ازموینه…"
+  },
+  {
+    "id": "project_tiles_url_editor_saving",
+    "en": "Saving…",
+    "ps": "خوندي کول…"
+  },
+  {
+    "id": "project_tiles_url_editor_save_error",
+    "en": "Error saving",
+    "ps": "د خوندي کولو تېروتنه"
+  },
+  {
     "id": "project_added_to_group",
     "en": "added to: {{group}} \n",
     "ps": "اضافه شوی: {{group}}\n"
