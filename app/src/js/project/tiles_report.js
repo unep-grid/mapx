@@ -6,7 +6,7 @@ import { bindAll } from "../bind_class_methods";
 import { tt } from "../el_mapx";
 import { isEmpty } from "../is_test/index.js";
 import { TilesCheckChannel } from "./tiles_check_channel.js";
-import { TilesUrlEditor } from "./tiles_url_editor.js";
+import { RasterUrlConfigurator } from "./raster_url_configurator.js";
 
 const WINDOW_KEY = "project-tiles-report";
 
@@ -137,53 +137,77 @@ export class TilesReport {
     const elHeaderRow = el("tr", [
       el("th", tt("project_tiles_report_col_title")),
       el("th", tt("project_tiles_report_col_editor")),
-      el(
-        "th",
-        { class: "text-center" },
-        tt("project_tiles_report_col_status"),
-      ),
+      el("th", { class: "text-center" }, tt("project_tiles_report_col_tiles")),
+      el("th", { class: "text-center" }, tt("project_tiles_report_col_legend")),
+      el("th", { class: "text-center" }, tt("project_tiles_report_col_status")),
       el("th", tt("project_tiles_report_col_checked_at")),
       el("th", tt("project_tiles_report_col_detail")),
       el("th", {
         class: ["text-center", "tiles-report-tools"],
         scope: "col",
-        "aria-label": tt("project_tiles_url_editor_title"),
+        "aria-label": "Raster URL tools",
       }),
     ]);
 
     const elRows = tr.rows.map((row) => {
+      const tileStatusCell = el("td", { class: "text-center" });
+      const legendStatusCell = el("td", { class: "text-center" });
+      legendStatusCell.dataset.configured = row.legend_url ? "true" : "false";
       const statusCell = el("td", { class: "text-center" });
       const checkedCell = el("td");
       const detailCell = el("td");
-      tr.rowRefs.set(row.id_view, { statusCell, checkedCell, detailCell });
+      tr.rowRefs.set(row.id_view, {
+        tileStatusCell,
+        legendStatusCell,
+        statusCell,
+        checkedCell,
+        detailCell,
+      });
 
-      tr.setRowStatus(row.id_view, tr.statusLabel(row));
+      tr.setRowStatus(row.id_view, tr.statusLabel(row, "tile"), "tile");
+      tr.setRowStatus(row.id_view, tr.statusLabel(row, "legend"), "legend");
+      tr.setRowStatus(row.id_view, tr.statusLabel(row, "overall"), "overall");
       checkedCell.replaceChildren(
         row.checked_at
           ? new Date(row.checked_at).toLocaleString()
           : tt("project_tiles_report_never"),
       );
-      detailCell.textContent = row.detail || "";
+      detailCell.textContent = tr.detailLabel(row);
 
       const editButton = el(
         "button",
         {
           class: ["btn-circle", "btn-circle-small", "tiles-report-edit"],
           type: "button",
-          title: tt("project_tiles_url_editor_title"),
-          "aria-label": tt("project_tiles_url_editor_title"),
+          title: "Configure raster URLs",
+          "aria-label": "Configure raster URLs",
           on: { click: () => tr.handleEdit(row) },
         },
         el("i", { class: ["fa", "fa-pencil"], "aria-hidden": "true" }),
+      );
+      const checkButton = el(
+        "button",
+        {
+          class: ["btn-circle", "btn-circle-small", "tiles-report-check"],
+          type: "button",
+          title: "Check now",
+          "aria-label": "Check now",
+          on: { click: () => tr.handleCheck(row) },
+        },
+        el("i", { class: ["fa", "fa-heartbeat"], "aria-hidden": "true" }),
       );
 
       return el("tr", { dataset: { idView: row.id_view } }, [
         el("td", row.title || row.id_view),
         el("td", row.editor_email || ""),
+        tileStatusCell,
+        legendStatusCell,
         statusCell,
         checkedCell,
         detailCell,
-        el("td", { class: ["text-center", "tiles-report-tools"] }, editButton),
+        el("td", { class: ["text-center", "tiles-report-tools"] },
+          el("span", { class: "tiles-report-actions" }, [editButton, checkButton]),
+        ),
       ]);
     });
 
@@ -197,11 +221,19 @@ export class TilesReport {
     );
   }
 
-  statusLabel(row) {
+  statusLabel(row, resource = "overall") {
+    if (resource === "legend" && !row.legend_url && row.legend_configured !== true) {
+      return this.statusConfig("not_configured");
+    }
     if (isEmpty(row.checked_at)) {
       return this.statusConfig("unchecked");
     }
-    if (row.valid) {
+    const valid = resource === "tile"
+      ? (row.tile_valid ?? row.valid)
+      : resource === "legend"
+        ? row.legend_valid
+        : row.valid;
+    if (valid === true) {
       return this.statusConfig("valid");
     }
     return this.statusConfig("invalid");
@@ -213,6 +245,11 @@ export class TilesReport {
         translationKey: "project_tiles_report_status_unchecked",
         className: "default",
         icon: ["fa", "fa-circle-o"],
+      },
+      not_configured: {
+        translationKey: "project_tiles_report_status_not_configured",
+        className: "default",
+        icon: ["fa", "fa-minus"],
       },
       pending: {
         translationKey: "project_tiles_report_status_pending",
@@ -243,14 +280,21 @@ export class TilesReport {
     return { state, ...configs[state] };
   }
 
-  setRowStatus(idView, status) {
+  setRowStatus(idView, status, resource = "overall") {
     const tr = this;
     const refs = tr.rowRefs.get(idView);
     if (!refs) {
       return;
     }
-    tr.rowStates.set(idView, status.state);
-    refs.statusCell.replaceChildren(
+    const state = tr.rowStates.get(idView) || {};
+    state[resource] = status.state;
+    tr.rowStates.set(idView, state);
+    const cell = resource === "tile"
+      ? refs.tileStatusCell
+      : resource === "legend"
+        ? refs.legendStatusCell
+        : refs.statusCell;
+    cell.replaceChildren(
       tr.el(
         "span",
         {
@@ -267,7 +311,13 @@ export class TilesReport {
 
   setRowChecking(idView) {
     const tr = this;
-    tr.setRowStatus(idView, tr.statusConfig("checking"));
+    const refs = tr.rowRefs.get(idView);
+    if (!refs) return;
+    tr.setRowStatus(idView, tr.statusConfig("checking"), "tile");
+    tr.setRowStatus(idView, tr.statusConfig("checking"), "overall");
+    if (refs.legendStatusCell.dataset.configured !== "false") {
+      tr.setRowStatus(idView, tr.statusConfig("checking"), "legend");
+    }
   }
 
   setRowDone(idView, message) {
@@ -276,30 +326,43 @@ export class TilesReport {
     if (!refs) {
       return;
     }
-    tr.setRowStatus(
-      idView,
-      tr.statusLabel({ checked_at: Date.now(), valid: message.valid }),
-    );
+    const row = { ...message, checked_at: Date.now() };
+    tr.setRowStatus(idView, tr.statusLabel(row, "tile"), "tile");
+    tr.setRowStatus(idView, tr.statusLabel(row, "legend"), "legend");
+    tr.setRowStatus(idView, tr.statusLabel(row, "overall"), "overall");
     refs.checkedCell.textContent = new Date().toLocaleString();
-    refs.detailCell.textContent = message.detail || "";
+    refs.detailCell.textContent = tr.detailLabel(message);
   }
 
   resetRowsPending() {
     const tr = this;
-    const pending = tr.statusConfig("pending");
-    for (const idView of tr.rowRefs.keys()) {
-      tr.setRowStatus(idView, pending);
+    for (const [idView, refs] of tr.rowRefs) {
+      tr.setRowStatus(idView, tr.statusConfig("pending"), "tile");
+      tr.setRowStatus(idView, tr.statusConfig("pending"), "overall");
+      if (refs.legendStatusCell.dataset.configured !== "false") {
+        tr.setRowStatus(idView, tr.statusConfig("pending"), "legend");
+      }
     }
   }
 
   setRowsIncomplete() {
     const tr = this;
     const incomplete = tr.statusConfig("incomplete");
-    for (const [idView, state] of tr.rowStates) {
-      if (state === "pending" || state === "checking") {
-        tr.setRowStatus(idView, incomplete);
+    for (const [idView, states] of tr.rowStates) {
+      for (const resource of ["tile", "legend", "overall"]) {
+        if (states[resource] === "pending" || states[resource] === "checking") {
+          tr.setRowStatus(idView, incomplete, resource);
+        }
       }
     }
+  }
+
+  detailLabel(row) {
+    const details = [
+      row.tile_detail && `tiles:${row.tile_detail}`,
+      row.legend_configured && row.legend_detail && `legend:${row.legend_detail}`,
+    ].filter(Boolean);
+    return details.join(", ") || row.detail || "";
   }
 
   setProgress(done, total) {
@@ -376,19 +439,47 @@ export class TilesReport {
   handleEdit(row) {
     const tr = this;
     if (!tr._urlEditor) {
-      tr._urlEditor = new TilesUrlEditor();
+      tr._urlEditor = new RasterUrlConfigurator();
     }
     tr._urlEditor.show({
       idView: row.id_view,
-      tileUrl: row.tile_url,
-      onSaved: (freshRow, savedUrl) => {
+      onSaved: (freshRow, config) => {
         if (!freshRow) {
           return;
         }
-        row.tile_url = savedUrl;
+        Object.assign(row, freshRow, {
+          tile_url: config.tiles,
+          legend_url: config.legend,
+        });
+        tr.rowRefs.get(row.id_view).legendStatusCell.dataset.configured =
+          config.legend ? "true" : "false";
         tr.setRowDone(freshRow.id_view, freshRow);
       },
     });
+  }
+
+  async handleCheck(row) {
+    const tr = this;
+    if (tr.rowStates.get(row.id_view)?.overall === "checking") return;
+    tr.setRowStatus(row.id_view, tr.statusConfig("pending"), "tile");
+    tr.setRowStatus(row.id_view, tr.statusConfig("pending"), "overall");
+    if (row.legend_url) {
+      tr.setRowStatus(row.id_view, tr.statusConfig("pending"), "legend");
+    }
+    tr.setRowChecking(row.id_view);
+    try {
+      const data = await ws.emitAsync(
+        "/client/project/tiles_check/run_one",
+        { idView: row.id_view },
+        30 * 1000,
+      );
+      if (data.error) throw new Error(data.error);
+      Object.assign(row, data.row);
+      tr.setRowDone(row.id_view, data.row);
+    } catch (error) {
+      tr.setRowsIncomplete();
+      tr.setStatus(error.message || String(error));
+    }
   }
 
   finishRun() {

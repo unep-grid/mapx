@@ -8825,6 +8825,16 @@
     "bn": "অবস্থা"
   },
   {
+    "id": "project_tiles_report_col_tiles",
+    "en": "Tiles",
+    "bn": "টাইলস"
+  },
+  {
+    "id": "project_tiles_report_col_legend",
+    "en": "Legend",
+    "bn": "কিংবদন্তি"
+  },
+  {
     "id": "project_tiles_report_col_checked_at",
     "en": "Last checked",
     "bn": "সর্বশেষ পরীক্ষা করা হয়েছে"
@@ -8843,6 +8853,11 @@
     "id": "project_tiles_report_status_unchecked",
     "en": "Unchecked",
     "bn": "অনিয়ন্ত্রিত"
+  },
+  {
+    "id": "project_tiles_report_status_not_configured",
+    "en": "Not configured",
+    "bn": "কনফিগার করা হয়নি"
   },
   {
     "id": "project_tiles_report_status_pending",
@@ -8876,13 +8891,18 @@
   },
   {
     "id": "project_tiles_url_editor_title",
-    "en": "Edit tile URL",
-    "bn": "টাইল ইউআরএল সম্পাদনা করুন"
+    "en": "Configure raster URLs",
+    "bn": "রাস্টার ইউআরএল কনফিগার করুন"
   },
   {
     "id": "project_tiles_url_editor_label",
     "en": "URL of tiles endpoint",
     "bn": "টাইলস এন্ডপয়েন্টের URL"
+  },
+  {
+    "id": "project_tiles_report_btn_check",
+    "en": "Check now",
+    "bn": "এখন যাচাই করুন"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

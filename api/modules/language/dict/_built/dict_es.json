@@ -8825,6 +8825,16 @@
     "es": "Estado"
   },
   {
+    "id": "project_tiles_report_col_tiles",
+    "en": "Tiles",
+    "es": "Azulejos"
+  },
+  {
+    "id": "project_tiles_report_col_legend",
+    "en": "Legend",
+    "es": "Leyenda"
+  },
+  {
     "id": "project_tiles_report_col_checked_at",
     "en": "Last checked",
     "es": "Última comprobación"
@@ -8843,6 +8853,11 @@
     "id": "project_tiles_report_status_unchecked",
     "en": "Unchecked",
     "es": "Desenfrenado"
+  },
+  {
+    "id": "project_tiles_report_status_not_configured",
+    "en": "Not configured",
+    "es": "No configurado"
   },
   {
     "id": "project_tiles_report_status_pending",
@@ -8876,13 +8891,18 @@
   },
   {
     "id": "project_tiles_url_editor_title",
-    "en": "Edit tile URL",
-    "es": "Editar URL del mosaico"
+    "en": "Configure raster URLs",
+    "es": "Configurar URL de ráster"
   },
   {
     "id": "project_tiles_url_editor_label",
     "en": "URL of tiles endpoint",
     "es": "URL del punto final de los mosaicos"
+  },
+  {
+    "id": "project_tiles_report_btn_check",
+    "en": "Check now",
+    "es": "Compruébalo ahora"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

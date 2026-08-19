@@ -8825,6 +8825,16 @@
     "fa": "وضعیت"
   },
   {
+    "id": "project_tiles_report_col_tiles",
+    "en": "Tiles",
+    "fa": "کاشی‌ها"
+  },
+  {
+    "id": "project_tiles_report_col_legend",
+    "en": "Legend",
+    "fa": "افسانه"
+  },
+  {
     "id": "project_tiles_report_col_checked_at",
     "en": "Last checked",
     "fa": "آخرین بررسی"
@@ -8843,6 +8853,11 @@
     "id": "project_tiles_report_status_unchecked",
     "en": "Unchecked",
     "fa": "بررسی نشده"
+  },
+  {
+    "id": "project_tiles_report_status_not_configured",
+    "en": "Not configured",
+    "fa": "پیکربندی نشده"
   },
   {
     "id": "project_tiles_report_status_pending",
@@ -8876,13 +8891,18 @@
   },
   {
     "id": "project_tiles_url_editor_title",
-    "en": "Edit tile URL",
-    "fa": "ویرایش آدرس اینترنتی کاشی"
+    "en": "Configure raster URLs",
+    "fa": "پیکربندی آدرس‌های اینترنتی رستری"
   },
   {
     "id": "project_tiles_url_editor_label",
     "en": "URL of tiles endpoint",
     "fa": "آدرس اینترنتی (URL) نقطه پایانی کاشی‌ها"
+  },
+  {
+    "id": "project_tiles_report_btn_check",
+    "en": "Check now",
+    "fa": "الان بررسی کنید"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

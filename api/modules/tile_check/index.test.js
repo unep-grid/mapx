@@ -15,7 +15,7 @@ vi.mock("#mapx/db", () => ({
 // fetch_check.ssrf.test.js.
 vi.mock("node-fetch", () => ({ default: mocks.fetch }));
 
-import { runChecks, checkAllTiles } from "./index.js";
+import { runChecks, checkAllTiles, checkRasterUrls } from "./index.js";
 
 // Uint8Array.from(...) allocates its own exactly-sized ArrayBuffer, unlike
 // Buffer.from(...) which may return a view into a larger pooled buffer.
@@ -79,6 +79,27 @@ describe("runChecks", () => {
       { id: "MX-AAAAA-AAAAA-AAAAA", project: "P1", tile_url: "https://a/{z}/{x}/{y}.png" },
     ];
     await expect(runChecks(views)).resolves.toHaveLength(1);
+  });
+
+  it("checks the configured legend alongside the tile URL", async () => {
+    const result = await checkRasterUrls({
+      tile_url: "https://a/{z}/{x}/{y}.png",
+      legend_url: "https://a/legend.svg",
+    });
+    expect(result.valid).toBe(true);
+    expect(result.tile_valid).toBe(true);
+    expect(result.legend_valid).toBe(true);
+    expect(mocks.fetch).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not fail a view when the legend is not configured", async () => {
+    const result = await checkRasterUrls({
+      tile_url: "https://a/{z}/{x}/{y}.png",
+    });
+    expect(result.valid).toBe(true);
+    expect(result.legend_configured).toBe(false);
+    expect(result.legend_valid).toBeNull();
+    expect(mocks.fetch).toHaveBeenCalledTimes(1);
   });
 });
 

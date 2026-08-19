@@ -8825,6 +8825,16 @@
     "fr": "Statut"
   },
   {
+    "id": "project_tiles_report_col_tiles",
+    "en": "Tiles",
+    "fr": "Carrelage"
+  },
+  {
+    "id": "project_tiles_report_col_legend",
+    "en": "Legend",
+    "fr": "Légende"
+  },
+  {
     "id": "project_tiles_report_col_checked_at",
     "en": "Last checked",
     "fr": "Dernière vérification"
@@ -8843,6 +8853,11 @@
     "id": "project_tiles_report_status_unchecked",
     "en": "Unchecked",
     "fr": "Non vérifié"
+  },
+  {
+    "id": "project_tiles_report_status_not_configured",
+    "en": "Not configured",
+    "fr": "Non configuré"
   },
   {
     "id": "project_tiles_report_status_pending",
@@ -8876,13 +8891,18 @@
   },
   {
     "id": "project_tiles_url_editor_title",
-    "en": "Edit tile URL",
-    "fr": "Modifier l'URL de la tuile"
+    "en": "Configure raster URLs",
+    "fr": "Configurer les URL raster"
   },
   {
     "id": "project_tiles_url_editor_label",
     "en": "URL of tiles endpoint",
     "fr": "URL du point de terminaison des tuiles"
+  },
+  {
+    "id": "project_tiles_report_btn_check",
+    "en": "Check now",
+    "fr": "Vérifiez maintenant"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

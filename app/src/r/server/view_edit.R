@@ -353,48 +353,10 @@ observe({
             # raster tile specific
             #
             if (viewType == "rt") {
-              url <- .get(viewData, c("data", "source", "tiles"))
-              legend <- .get(viewData, c("data", "source", "legend"))
-              urlMetadata <- .get(viewData, c("data", "source", "urlMetadata"))
-              urlDownload <- .get(viewData, c("data", "source", "urlDownload"))
-
-              if (isEmpty(url)) url <- list()
-              url <- unlist(url[1])
-
               uiType <- tagList(
-                selectizeInput(
-                  inputId = "selectRasterTileSize",
-                  label = mxDictTranslateTagDesc("source_raster_tile_size", language),
-                  selected = .get(viewData, c("data", "source", "tileSize")),
-                  choices = c(256, 512)
-                ),
-                checkboxInput(
-                  inputId = "checkRasterTileUseMirror",
-                  label = mxDictTranslateTagDesc("tool_mirror_enable", language),
-                  value = .get(viewData, c("data", "source", "useMirror"))
-                ),
-                checkboxInput(
-                  inputId = "checkShowWmsGenerator",
-                  label = mxDictTranslateTagDesc("wms_display_tool", language)
-                ),
-                conditionalPanel(
-                  condition = "input.checkShowWmsGenerator == true",
-                  tags$div(
-                    class = "well",
-                    tags$h3(mxDictTranslateTag("wms_display_tool_title", language)),
-                    tags$hr(),
-                    tags$div(id = "wmsGenerator")
-                  )
-                ),
-                textAreaInput(
-                  inputId = "textRasterTileUrl",
-                  label = d("source_raster_tile_url", language),
-                  value = url
-                ),
-                textAreaInput(
-                  inputId = "textRasterTileLegend",
-                  label = d("source_raster_tile_legend", language),
-                  value = legend
+                tags$div(
+                  class = "raster-url-tools",
+                  `data-raster-url-view` = viewData$id
                 ),
                 jedOutput("viewRasterLegendTitles")
               )
@@ -478,19 +440,7 @@ observe({
             )
 
             if (viewType == "rt") {
-              #
-              # Build wms generator
-              #
-              mxWmsBuildQueryUi(list(
-                timestamp = .get(viewData, c("date_modified")),
-                useCache = FALSE,
-                selectorParent = "#wmsGenerator",
-                selectorTileInput = "#textRasterTileUrl",
-                selectorLegendInput = "#textRasterTileLegend",
-                selectorUseMirror = "#checkRasterTileUseMirror",
-                selectorTileSizeInput = "#selectRasterTileSize"
-                # selectorMetaInput = '#textRasterTileUrlMetadata'
-              ))
+              mxRasterUrlTools(.get(viewData, c("id")))
             }
           },
           "btn_opt_edit_custom_code" = {
@@ -768,6 +718,18 @@ observeEvent(input$btnEditViewExternalMetadata, {
 #
 # View removal
 #
+observeEvent(input$viewRasterConfigSaved, {
+  idView <- .get(input$viewRasterConfigSaved, "idView")
+  idCurrent <- .get(reactData$viewDataEdited, "id")
+  if (isEmpty(idView) || idView != idCurrent) return()
+  viewFresh <- mxDbGetView(idView)[[1]]
+  if (!isEmpty(viewFresh)) {
+    reactData$viewDataEdited[[c("data", "source")]] <-
+      viewFresh[[c("data", "source")]]
+    reactData$viewDataEdited[["date_modified"]] <- viewFresh[["date_modified"]]
+  }
+})
+
 observeEvent(input$btnViewDeleteConfirm, {
   idView <- .get(reactData$viewDataEdited, c("id"))
   email <- reactUser$data$email
@@ -1051,17 +1013,8 @@ observeEvent(input$btnViewSave, {
     # raster tiles
     #
     if (view[["type"]] == "rt") {
-      #
-      # Update view  NOTE: write a function like in vt type
-      #
-      view[[c("data", "source")]] <- list(
-        type = "raster",
-        tiles = rep(input$textRasterTileUrl, 2),
-        legend = input$textRasterTileLegend,
-        tileSize = as.integer(input$selectRasterTileSize),
-        useMirror = input$checkRasterTileUseMirror
-      )
-
+      # Raster URLs are saved immediately by the client/API configurator.
+      # Keep the source object intact while saving the remaining view draft.
       view[[c("data", "source", "legendTitles")]] <- input$viewRasterLegendTitles_values$data
     }
 

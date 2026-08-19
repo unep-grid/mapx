@@ -22945,6 +22945,32 @@
     "de": "Status"
   },
   {
+    "id": "project_tiles_report_col_tiles",
+    "en": "Tiles",
+    "fr": "Carrelage",
+    "es": "Azulejos",
+    "ru": "Плитка",
+    "zh": "瓷砖",
+    "ar": "البلاط",
+    "fa": "کاشی‌ها",
+    "ps": "ټایلونه",
+    "bn": "টাইলস",
+    "de": "Fliesen"
+  },
+  {
+    "id": "project_tiles_report_col_legend",
+    "en": "Legend",
+    "fr": "Légende",
+    "es": "Leyenda",
+    "ru": "Легенда",
+    "zh": "传奇",
+    "ar": "أسطورة",
+    "fa": "افسانه",
+    "ps": "افسانه",
+    "bn": "কিংবদন্তি",
+    "de": "Legende"
+  },
+  {
     "id": "project_tiles_report_col_checked_at",
     "en": "Last checked",
     "fr": "Dernière vérification",
@@ -22995,6 +23021,19 @@
     "ps": "نه چک شوی",
     "bn": "অনিয়ন্ত্রিত",
     "de": "Ungeprüft"
+  },
+  {
+    "id": "project_tiles_report_status_not_configured",
+    "en": "Not configured",
+    "fr": "Non configuré",
+    "es": "No configurado",
+    "ru": "Не настроено",
+    "zh": "未配置",
+    "ar": "غير مهيأ",
+    "fa": "پیکربندی نشده",
+    "ps": "نه دی تنظیم شوی",
+    "bn": "কনফিগার করা হয়নি",
+    "de": "Nicht konfiguriert"
   },
   {
     "id": "project_tiles_report_status_pending",
@@ -23076,16 +23115,16 @@
   },
   {
     "id": "project_tiles_url_editor_title",
-    "en": "Edit tile URL",
-    "fr": "Modifier l'URL de la tuile",
-    "es": "Editar URL del mosaico",
-    "ru": "Изменить URL-адрес плитки",
-    "zh": "编辑图块 URL",
-    "ar": "تعديل عنوان URL الخاص بالبلاطة",
-    "fa": "ویرایش آدرس اینترنتی کاشی",
-    "ps": "د ټایل URL سم کړئ",
-    "bn": "টাইল ইউআরএল সম্পাদনা করুন",
-    "de": "URL der bearbeiteten Kachel bearbeiten"
+    "en": "Configure raster URLs",
+    "fr": "Configurer les URL raster",
+    "es": "Configurar URL de ráster",
+    "ru": "Настройка URL-адресов растровых изображений",
+    "zh": "配置栅格 URL",
+    "ar": "قم بتكوين عناوين URL للصور النقطية",
+    "fa": "پیکربندی آدرس‌های اینترنتی رستری",
+    "ps": "د راسټر URLs تنظیم کړئ",
+    "bn": "রাস্টার ইউআরএল কনফিগার করুন",
+    "de": "Raster-URLs konfigurieren"
   },
   {
     "id": "project_tiles_url_editor_label",
@@ -23099,6 +23138,19 @@
     "ps": "د ټایلونو د پای ټکي URL",
     "bn": "টাইলস এন্ডপয়েন্টের URL",
     "de": "URL des Tiles-Endpunkts"
+  },
+  {
+    "id": "project_tiles_report_btn_check",
+    "en": "Check now",
+    "fr": "Vérifiez maintenant",
+    "es": "Compruébalo ahora",
+    "ru": "Проверьте сейчас",
+    "zh": "立即查看",
+    "ar": "تحقق الآن",
+    "fa": "الان بررسی کنید",
+    "ps": "اوس وګورئ",
+    "bn": "এখন যাচাই করুন",
+    "de": "Jetzt prüfen"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

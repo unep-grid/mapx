@@ -63,6 +63,20 @@ mxProjectTilesReport <- function(
   )
 }
 
+#' Mount raster URL health/actions for a raster view editor.
+#'
+#' The browser/API tool owns raster URL configuration and persistence. Shiny
+#' only provides the host element and receives a lightweight refresh event.
+mxRasterUrlTools <- function(
+  idView,
+  session = shiny:::getDefaultReactiveDomain()
+) {
+  session$sendCustomMessage(
+    type = "mx-raster-url-tools",
+    list(idView = idView)
+  )
+}
+
 
 
 #' Edit source request

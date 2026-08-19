@@ -31,10 +31,24 @@ const IMAGE_SIGNATURES = [
   { type: "image/gif", bytes: [0x47, 0x49, 0x46, 0x38] },
 ];
 
+const SVG_DISALLOWED = /<!doctype\b|<script\b|\bon[a-z][\w-]*\s*=|(?:href|src)\s*=\s*["']\s*(?:https?:|javascript:|data:|file:|\/\/)|url\s*\(\s*["']?(?:https?:|javascript:|data:|file:|\/\/)/i;
+
 export function matchesImageSignature(buffer) {
   return IMAGE_SIGNATURES.some((sig) =>
     sig.bytes.every((byte, i) => buffer[i] === byte),
   );
+}
+
+/**
+ * SVG is deliberately checked as text: it must be an image/svg+xml response,
+ * contain an SVG root, and not include executable or external references.
+ */
+export function matchesSafeSvg(buffer, contentType) {
+  if (!/image\/svg\+xml/i.test(contentType || "")) {
+    return false;
+  }
+  const text = buffer.toString("utf8", 0, MAX_RESPONSE_BYTES);
+  return /<svg(?:\s|>)/i.test(text) && !SVG_DISALLOWED.test(text);
 }
 
 /** @returns {URL | null} the parsed URL if it's http(s), null otherwise */
@@ -116,7 +130,7 @@ export async function checkUrl(url, opt = {}) {
     }
     const buffer = Buffer.concat(chunks);
 
-    if (!matchesImageSignature(buffer)) {
+    if (!matchesImageSignature(buffer) && !matchesSafeSvg(buffer, content_type)) {
       const detail =
         content_type && /xml|text/.test(content_type)
           ? "service_exception"

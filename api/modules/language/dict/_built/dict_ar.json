@@ -8825,6 +8825,16 @@
     "ar": "حالة"
   },
   {
+    "id": "project_tiles_report_col_tiles",
+    "en": "Tiles",
+    "ar": "البلاط"
+  },
+  {
+    "id": "project_tiles_report_col_legend",
+    "en": "Legend",
+    "ar": "أسطورة"
+  },
+  {
     "id": "project_tiles_report_col_checked_at",
     "en": "Last checked",
     "ar": "آخر فحص"
@@ -8843,6 +8853,11 @@
     "id": "project_tiles_report_status_unchecked",
     "en": "Unchecked",
     "ar": "غير مدقق"
+  },
+  {
+    "id": "project_tiles_report_status_not_configured",
+    "en": "Not configured",
+    "ar": "غير مهيأ"
   },
   {
     "id": "project_tiles_report_status_pending",
@@ -8876,13 +8891,18 @@
   },
   {
     "id": "project_tiles_url_editor_title",
-    "en": "Edit tile URL",
-    "ar": "تعديل عنوان URL الخاص بالبلاطة"
+    "en": "Configure raster URLs",
+    "ar": "قم بتكوين عناوين URL للصور النقطية"
   },
   {
     "id": "project_tiles_url_editor_label",
     "en": "URL of tiles endpoint",
     "ar": "عنوان URL لنقطة نهاية البلاطات"
+  },
+  {
+    "id": "project_tiles_report_btn_check",
+    "en": "Check now",
+    "ar": "تحقق الآن"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

@@ -8825,6 +8825,16 @@
     "ps": "وضعیت"
   },
   {
+    "id": "project_tiles_report_col_tiles",
+    "en": "Tiles",
+    "ps": "ټایلونه"
+  },
+  {
+    "id": "project_tiles_report_col_legend",
+    "en": "Legend",
+    "ps": "افسانه"
+  },
+  {
     "id": "project_tiles_report_col_checked_at",
     "en": "Last checked",
     "ps": "وروستی ځل چک شوی"
@@ -8843,6 +8853,11 @@
     "id": "project_tiles_report_status_unchecked",
     "en": "Unchecked",
     "ps": "نه چک شوی"
+  },
+  {
+    "id": "project_tiles_report_status_not_configured",
+    "en": "Not configured",
+    "ps": "نه دی تنظیم شوی"
   },
   {
     "id": "project_tiles_report_status_pending",
@@ -8876,13 +8891,18 @@
   },
   {
     "id": "project_tiles_url_editor_title",
-    "en": "Edit tile URL",
-    "ps": "د ټایل URL سم کړئ"
+    "en": "Configure raster URLs",
+    "ps": "د راسټر URLs تنظیم کړئ"
   },
   {
     "id": "project_tiles_url_editor_label",
     "en": "URL of tiles endpoint",
     "ps": "د ټایلونو د پای ټکي URL"
+  },
+  {
+    "id": "project_tiles_report_btn_check",
+    "en": "Check now",
+    "ps": "اوس وګورئ"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

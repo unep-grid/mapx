@@ -9,6 +9,50 @@ export { checkUrl } from "./fetch_check.js";
 const CONCURRENCY = 10;
 
 /**
+ * Check the configured tile and legend resources for one raster view.
+ * @param {{tile_url?: string, legend_url?: string, bounds?: unknown}} view
+ * @returns {Promise<Object>}
+ */
+export async function checkRasterUrls(view) {
+  const bounds = Array.isArray(view.bounds) ? view.bounds : null;
+  const tileUrl = buildTestUrl(view.tile_url, { bounds });
+  const legendConfigured =
+    typeof view.legend_url === "string" && view.legend_url.length > 0;
+  const [tileResult, legendResult] = await Promise.all([
+    tileUrl
+      ? checkUrl(tileUrl)
+      : { valid: false, detail: "no_tile_template", tested_url: null },
+    legendConfigured
+      ? checkUrl(view.legend_url)
+      : { valid: null, detail: "not_configured", tested_url: null },
+  ]);
+  const valid = tileResult.valid === true &&
+    (!legendConfigured || legendResult.valid === true);
+  const detail = [
+    !tileResult.valid && `tiles:${tileResult.detail || "invalid"}`,
+    legendConfigured && !legendResult.valid &&
+      `legend:${legendResult.detail || "invalid"}`,
+  ].filter(Boolean).join(", ") || null;
+
+  return {
+    valid,
+    detail,
+    tested_url: tileResult.tested_url,
+    tile_valid: tileResult.valid,
+    tile_http_status: tileResult.http_status,
+    tile_content_type: tileResult.content_type,
+    tile_detail: tileResult.detail,
+    tile_tested_url: tileResult.tested_url,
+    legend_configured: legendConfigured,
+    legend_valid: legendResult.valid,
+    legend_http_status: legendResult.http_status,
+    legend_content_type: legendResult.content_type,
+    legend_detail: legendResult.detail,
+    legend_tested_url: legendResult.tested_url,
+  };
+}
+
+/**
  * 'rt' views with at least one tile URL template, optionally scoped to a
  * project. Reuses mx_views_latest (CTE-based latest-pid perf pattern).
  */
@@ -24,6 +68,7 @@ export async function getCheckableViews(idProject) {
       id,
       project,
       data #>> '{source,tiles,0}' AS tile_url,
+      data #>> '{source,legend}' AS legend_url,
       data #> '{source,bounds}' AS bounds
     FROM mx_views_latest
     WHERE ${where}
@@ -46,12 +91,7 @@ async function checkView(view, opt = {}) {
 
   let row;
   try {
-    const bounds = Array.isArray(view.bounds) ? view.bounds : null;
-    const testUrl = buildTestUrl(view.tile_url, { bounds });
-
-    const result = testUrl
-      ? await checkUrl(testUrl)
-      : { valid: false, detail: "no_tile_template", tested_url: null };
+    const result = await checkRasterUrls(view);
 
     row = {
       id_view: view.id,
@@ -67,6 +107,13 @@ async function checkView(view, opt = {}) {
       valid: false,
       detail: "check_failed",
       tested_url: null,
+      tile_valid: false,
+      tile_detail: "check_failed",
+      tile_tested_url: null,
+      legend_configured: Boolean(view.legend_url),
+      legend_valid: view.legend_url ? false : null,
+      legend_detail: view.legend_url ? "check_failed" : "not_configured",
+      legend_tested_url: null,
     };
   }
   opt.onDone?.(row);

@@ -54,8 +54,8 @@ vi.mock("../is_test/index.js", () => ({
   isEmpty: vi.fn((value) => value === null || value === undefined || value === ""),
 }));
 vi.mock("./tiles_check_channel.js", () => ({ TilesCheckChannel: vi.fn() }));
-vi.mock("./tiles_url_editor.js", () => ({
-  TilesUrlEditor: vi.fn(function TilesUrlEditor() {
+vi.mock("./raster_url_configurator.js", () => ({
+  RasterUrlConfigurator: vi.fn(function RasterUrlConfigurator() {
     const editor = { show: vi.fn() };
     editorInstances.push(editor);
     return editor;
@@ -90,16 +90,14 @@ describe("TilesReport edit action", () => {
     expect(titleCell.textContent).toBe("Broken imagery");
     expect(titleCell.querySelector("button")).toBeNull();
     expect(editButton).not.toBeNull();
-    expect(editButton.getAttribute("aria-label")).toBe(
-      "project_tiles_url_editor_title",
-    );
+    expect(editButton.getAttribute("aria-label")).toBe("Configure raster URLs");
+    expect(row.querySelector(".tiles-report-check .fa-heartbeat")).not.toBeNull();
 
     editButton.click();
 
     expect(editorInstances[0].show).toHaveBeenCalledWith(
       expect.objectContaining({
         idView: "MX-AAAAA-BBBBB-CCCCC",
-        tileUrl: "https://tiles.example/{z}/{x}/{y}.png",
       }),
     );
   });

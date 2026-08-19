@@ -8825,6 +8825,16 @@
     "ru": "Статус"
   },
   {
+    "id": "project_tiles_report_col_tiles",
+    "en": "Tiles",
+    "ru": "Плитка"
+  },
+  {
+    "id": "project_tiles_report_col_legend",
+    "en": "Legend",
+    "ru": "Легенда"
+  },
+  {
     "id": "project_tiles_report_col_checked_at",
     "en": "Last checked",
     "ru": "Последняя проверка"
@@ -8843,6 +8853,11 @@
     "id": "project_tiles_report_status_unchecked",
     "en": "Unchecked",
     "ru": "Неконтролируемый"
+  },
+  {
+    "id": "project_tiles_report_status_not_configured",
+    "en": "Not configured",
+    "ru": "Не настроено"
   },
   {
     "id": "project_tiles_report_status_pending",
@@ -8876,13 +8891,18 @@
   },
   {
     "id": "project_tiles_url_editor_title",
-    "en": "Edit tile URL",
-    "ru": "Изменить URL-адрес плитки"
+    "en": "Configure raster URLs",
+    "ru": "Настройка URL-адресов растровых изображений"
   },
   {
     "id": "project_tiles_url_editor_label",
     "en": "URL of tiles endpoint",
     "ru": "URL конечной точки плиток"
+  },
+  {
+    "id": "project_tiles_report_btn_check",
+    "en": "Check now",
+    "ru": "Проверьте сейчас"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

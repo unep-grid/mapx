@@ -44,7 +44,6 @@ import {
   setQueryParametersInit,
   setQueryParametersUpdate,
 } from "./url_utils/url_utils.js";
-import { wmsBuildQueryUi } from "./wms/ui.js";
 import { project, settings } from "./mx.js";
 import { updateViewsBadges } from "./badges/index.js";
 import {
@@ -70,6 +69,7 @@ import {
   installSourcePickerShinyBridge,
   pickSourceForShiny,
 } from "./source/picker/shiny_bridge.js";
+import { installRasterUrlShinyBridge } from "./project/raster_url_shiny_bridge.js";
 
 $(document).on("shiny:connected", mapxBindings);
 
@@ -83,6 +83,7 @@ function mapxBindings() {
     root,
     shiny,
   });
+  installRasterUrlShinyBridge({ root, shiny });
   /**
    * Set init query parameters
    */
@@ -110,7 +111,6 @@ function mapxBindings() {
   bind("mxSetQueryParametersUpdate", setQueryParametersUpdate);
   bind("mxUpdateText", updateText);
   bind("mxEpsgBuildSearchBox", epsgBuildSearchBox);
-  bind("mxWmsBuildQueryUi", wmsBuildQueryUi);
   bind("mxJsDebugMsg", jsDebugMsg);
   bind("mxButtonToggle", buttonToggle);
   bind("mxJsonToObj", jsonToObj);

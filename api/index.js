@@ -62,8 +62,12 @@ import {
   ioProjectRolesUpdate,
   ioProjectTilesCheckGet,
   ioProjectTilesCheckRun,
+  ioProjectTilesCheckRunOne,
   ioViewTilesUrlTest,
   ioViewTilesUrlSave,
+  ioViewRasterConfigGet,
+  ioViewRasterConfigTest,
+  ioViewRasterConfigSave,
   ioProjectList,
   ioProjectFavoriteSet,
   ioProjectFeaturedSet,
@@ -176,8 +180,12 @@ io.use((socket, next) => {
   socket.on("/client/project/roles/update", use(ioProjectRolesUpdate));
   socket.on("/client/project/tiles_check/get", use(ioProjectTilesCheckGet));
   socket.on("/client/project/tiles_check/run", use(ioProjectTilesCheckRun));
+  socket.on("/client/project/tiles_check/run_one", use(ioProjectTilesCheckRunOne));
   socket.on("/client/view/tiles/test", use(ioViewTilesUrlTest));
   socket.on("/client/view/tiles/save", use(ioViewTilesUrlSave));
+  socket.on("/client/view/raster/config/get", use(ioViewRasterConfigGet));
+  socket.on("/client/view/raster/config/test", use(ioViewRasterConfigTest));
+  socket.on("/client/view/raster/config/save", use(ioViewRasterConfigSave));
   socket.on("/client/project/list", use(ioProjectList));
   socket.on("/client/project/logos/get", use(ioProjectLogosGet));
   socket.on("/client/project/favorite/set", use(ioProjectFavoriteSet));

@@ -364,6 +364,32 @@
     "de": ""
   },
   {
+    "id": "project_tiles_report_col_tiles",
+    "en": "Tiles",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "project_tiles_report_col_legend",
+    "en": "Legend",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "project_tiles_report_col_checked_at",
     "en": "Last checked",
     "fr": "",
@@ -405,6 +431,19 @@
   {
     "id": "project_tiles_report_status_unchecked",
     "en": "Unchecked",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "project_tiles_report_status_not_configured",
+    "en": "Not configured",
     "fr": "",
     "es": "",
     "ru": "",
@@ -495,7 +534,7 @@
   },
   {
     "id": "project_tiles_url_editor_title",
-    "en": "Edit tile URL",
+    "en": "Configure raster URLs",
     "fr": "",
     "es": "",
     "ru": "",
@@ -509,6 +548,19 @@
   {
     "id": "project_tiles_url_editor_label",
     "en": "URL of tiles endpoint",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "project_tiles_report_btn_check",
+    "en": "Check now",
     "fr": "",
     "es": "",
     "ru": "",

@@ -6,5 +6,6 @@ export * from "./getViewsPublic.js";
 export * from "./getViewsGeoserver.js";
 export * from "./setViewStyleAlt.js";
 export * from "./setViewTilesUrl.js";
+export * from "./setViewRasterConfig.js";
 export * from "./getViewsByProject.js";
 export * from "./source_data.js";

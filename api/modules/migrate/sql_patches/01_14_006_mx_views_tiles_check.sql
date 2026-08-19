@@ -1,6 +1,6 @@
 /*
  * Health-check results for external raster tile/WMS URLs referenced by
- * 'rt' views (data.source.tiles). Plain upsert table, NOT versioned like
+ * 'rt' views (data.source.tiles and data.source.legend). Plain upsert table, NOT versioned like
  * mx_views: results are recomputed periodically, no history is kept.
  */
 CREATE TABLE IF NOT EXISTS mx_views_tiles_check (
@@ -8,10 +8,22 @@ CREATE TABLE IF NOT EXISTS mx_views_tiles_check (
   id_project character varying(22),
   checked_at timestamp with time zone NOT NULL DEFAULT now(),
   valid boolean NOT NULL,
-  http_status integer,
-  content_type text,
   detail text,
   tested_url text,
+  tile_valid boolean NOT NULL,
+  tile_http_status integer,
+  tile_content_type text,
+  tile_detail text,
+  tile_tested_url text,
+  legend_configured boolean NOT NULL,
+  legend_valid boolean,
+  legend_http_status integer,
+  legend_content_type text,
+  legend_detail text,
+  legend_tested_url text,
+  -- Kept as aliases for existing consumers of the original tile-only shape.
+  http_status integer,
+  content_type text,
   notified_at timestamp with time zone
 );
 

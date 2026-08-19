@@ -8825,6 +8825,16 @@
     "zh": "地位"
   },
   {
+    "id": "project_tiles_report_col_tiles",
+    "en": "Tiles",
+    "zh": "瓷砖"
+  },
+  {
+    "id": "project_tiles_report_col_legend",
+    "en": "Legend",
+    "zh": "传奇"
+  },
+  {
     "id": "project_tiles_report_col_checked_at",
     "en": "Last checked",
     "zh": "上次检查时间"
@@ -8843,6 +8853,11 @@
     "id": "project_tiles_report_status_unchecked",
     "en": "Unchecked",
     "zh": "未检查"
+  },
+  {
+    "id": "project_tiles_report_status_not_configured",
+    "en": "Not configured",
+    "zh": "未配置"
   },
   {
     "id": "project_tiles_report_status_pending",
@@ -8876,13 +8891,18 @@
   },
   {
     "id": "project_tiles_url_editor_title",
-    "en": "Edit tile URL",
-    "zh": "编辑图块 URL"
+    "en": "Configure raster URLs",
+    "zh": "配置栅格 URL"
   },
   {
     "id": "project_tiles_url_editor_label",
     "en": "URL of tiles endpoint",
     "zh": "瓦片端点的 URL"
+  },
+  {
+    "id": "project_tiles_report_btn_check",
+    "en": "Check now",
+    "zh": "立即查看"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

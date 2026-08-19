@@ -8825,6 +8825,16 @@
     "de": "Status"
   },
   {
+    "id": "project_tiles_report_col_tiles",
+    "en": "Tiles",
+    "de": "Fliesen"
+  },
+  {
+    "id": "project_tiles_report_col_legend",
+    "en": "Legend",
+    "de": "Legende"
+  },
+  {
     "id": "project_tiles_report_col_checked_at",
     "en": "Last checked",
     "de": "Zuletzt geprüft"
@@ -8843,6 +8853,11 @@
     "id": "project_tiles_report_status_unchecked",
     "en": "Unchecked",
     "de": "Ungeprüft"
+  },
+  {
+    "id": "project_tiles_report_status_not_configured",
+    "en": "Not configured",
+    "de": "Nicht konfiguriert"
   },
   {
     "id": "project_tiles_report_status_pending",
@@ -8876,13 +8891,18 @@
   },
   {
     "id": "project_tiles_url_editor_title",
-    "en": "Edit tile URL",
-    "de": "URL der bearbeiteten Kachel bearbeiten"
+    "en": "Configure raster URLs",
+    "de": "Raster-URLs konfigurieren"
   },
   {
     "id": "project_tiles_url_editor_label",
     "en": "URL of tiles endpoint",
     "de": "URL des Tiles-Endpunkts"
+  },
+  {
+    "id": "project_tiles_report_btn_check",
+    "en": "Check now",
+    "de": "Jetzt prüfen"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

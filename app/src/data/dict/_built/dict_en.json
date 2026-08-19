@@ -7060,6 +7060,14 @@
     "en": "Status"
   },
   {
+    "id": "project_tiles_report_col_tiles",
+    "en": "Tiles"
+  },
+  {
+    "id": "project_tiles_report_col_legend",
+    "en": "Legend"
+  },
+  {
     "id": "project_tiles_report_col_checked_at",
     "en": "Last checked"
   },
@@ -7074,6 +7082,10 @@
   {
     "id": "project_tiles_report_status_unchecked",
     "en": "Unchecked"
+  },
+  {
+    "id": "project_tiles_report_status_not_configured",
+    "en": "Not configured"
   },
   {
     "id": "project_tiles_report_status_pending",
@@ -7101,11 +7113,15 @@
   },
   {
     "id": "project_tiles_url_editor_title",
-    "en": "Edit tile URL"
+    "en": "Configure raster URLs"
   },
   {
     "id": "project_tiles_url_editor_label",
     "en": "URL of tiles endpoint"
+  },
+  {
+    "id": "project_tiles_report_btn_check",
+    "en": "Check now"
   },
   {
     "id": "project_tiles_url_editor_btn_test",
