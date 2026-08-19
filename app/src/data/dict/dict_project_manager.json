@@ -404,7 +404,20 @@
   },
   {
     "id": "project_tiles_report_status_unchecked",
-    "en": "Not checked yet",
+    "en": "Unchecked",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "project_tiles_report_status_pending",
+    "en": "Pending",
     "fr": "",
     "es": "",
     "ru": "",
@@ -457,6 +470,19 @@
   {
     "id": "project_tiles_report_status_invalid",
     "en": "Broken",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "project_tiles_report_status_incomplete",
+    "en": "Not completed",
     "fr": "",
     "es": "",
     "ru": "",

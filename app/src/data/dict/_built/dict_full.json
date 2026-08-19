@@ -22985,16 +22985,29 @@
   },
   {
     "id": "project_tiles_report_status_unchecked",
-    "en": "Not checked yet",
-    "fr": "Pas encore vérifié",
-    "es": "Aún no se ha comprobado",
-    "ru": "Ещё не проверено",
-    "zh": "尚未核实",
-    "ar": "لم يتم التحقق بعد",
-    "fa": "هنوز بررسی نشده",
-    "ps": "لا تر اوسه نه دی چک شوی",
-    "bn": "এখনো যাচাই করা হয়নি",
-    "de": "Noch nicht geprüft"
+    "en": "Unchecked",
+    "fr": "Non vérifié",
+    "es": "Desenfrenado",
+    "ru": "Неконтролируемый",
+    "zh": "未检查",
+    "ar": "غير مدقق",
+    "fa": "بررسی نشده",
+    "ps": "نه چک شوی",
+    "bn": "অনিয়ন্ত্রিত",
+    "de": "Ungeprüft"
+  },
+  {
+    "id": "project_tiles_report_status_pending",
+    "en": "Pending",
+    "fr": "En attente",
+    "es": "Pendiente",
+    "ru": "В ожидании",
+    "zh": "待办的",
+    "ar": "قيد الانتظار",
+    "fa": "در حال بررسی",
+    "ps": "په تمه",
+    "bn": "বিচারাধীন",
+    "de": "Ausstehend"
   },
   {
     "id": "project_tiles_report_status_checking",
@@ -23047,6 +23060,19 @@
     "ps": "مات شوی",
     "bn": "ভাঙা",
     "de": "Gebrochen"
+  },
+  {
+    "id": "project_tiles_report_status_incomplete",
+    "en": "Not completed",
+    "fr": "Non terminé",
+    "es": "No completado",
+    "ru": "Не завершено",
+    "zh": "未完成",
+    "ar": "لم يكتمل",
+    "fa": "تکمیل نشده",
+    "ps": "بشپړ شوی نه دی",
+    "bn": "সম্পূর্ণ হয়নি",
+    "de": "Nicht abgeschlossen"
   },
   {
     "id": "project_tiles_url_editor_title",

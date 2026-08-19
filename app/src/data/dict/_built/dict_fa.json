@@ -8841,8 +8841,13 @@
   },
   {
     "id": "project_tiles_report_status_unchecked",
-    "en": "Not checked yet",
-    "fa": "هنوز بررسی نشده"
+    "en": "Unchecked",
+    "fa": "بررسی نشده"
+  },
+  {
+    "id": "project_tiles_report_status_pending",
+    "en": "Pending",
+    "fa": "در حال بررسی"
   },
   {
     "id": "project_tiles_report_status_checking",
@@ -8863,6 +8868,11 @@
     "id": "project_tiles_report_status_invalid",
     "en": "Broken",
     "fa": "شکسته"
+  },
+  {
+    "id": "project_tiles_report_status_incomplete",
+    "en": "Not completed",
+    "fa": "تکمیل نشده"
   },
   {
     "id": "project_tiles_url_editor_title",

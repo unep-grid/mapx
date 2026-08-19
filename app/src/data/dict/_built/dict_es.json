@@ -8841,8 +8841,13 @@
   },
   {
     "id": "project_tiles_report_status_unchecked",
-    "en": "Not checked yet",
-    "es": "Aún no se ha comprobado"
+    "en": "Unchecked",
+    "es": "Desenfrenado"
+  },
+  {
+    "id": "project_tiles_report_status_pending",
+    "en": "Pending",
+    "es": "Pendiente"
   },
   {
     "id": "project_tiles_report_status_checking",
@@ -8863,6 +8868,11 @@
     "id": "project_tiles_report_status_invalid",
     "en": "Broken",
     "es": "Roto"
+  },
+  {
+    "id": "project_tiles_report_status_incomplete",
+    "en": "Not completed",
+    "es": "No completado"
   },
   {
     "id": "project_tiles_url_editor_title",

@@ -8841,8 +8841,13 @@
   },
   {
     "id": "project_tiles_report_status_unchecked",
-    "en": "Not checked yet",
-    "bn": "এখনো যাচাই করা হয়নি"
+    "en": "Unchecked",
+    "bn": "অনিয়ন্ত্রিত"
+  },
+  {
+    "id": "project_tiles_report_status_pending",
+    "en": "Pending",
+    "bn": "বিচারাধীন"
   },
   {
     "id": "project_tiles_report_status_checking",
@@ -8863,6 +8868,11 @@
     "id": "project_tiles_report_status_invalid",
     "en": "Broken",
     "bn": "ভাঙা"
+  },
+  {
+    "id": "project_tiles_report_status_incomplete",
+    "en": "Not completed",
+    "bn": "সম্পূর্ণ হয়নি"
   },
   {
     "id": "project_tiles_url_editor_title",

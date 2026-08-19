@@ -31,6 +31,7 @@ export class TilesReport {
     tr.channel = null;
     tr.refs = {};
     tr.rowRefs = new Map();
+    tr.rowStates = new Map();
     tr.windowManager = getMapxWindowManager();
     tr.el = tr.windowManager.el;
     bindAll(tr);
@@ -65,6 +66,7 @@ export class TilesReport {
 
     tr.refs = {};
     tr.rowRefs = new Map();
+    tr.rowStates = new Map();
 
     tr.refs.progressLabel = el("span", { class: "tiles-report-progress" });
     const titleContent = [
@@ -197,40 +199,75 @@ export class TilesReport {
 
   statusLabel(row) {
     if (isEmpty(row.checked_at)) {
-      return {
-        label: tt("project_tiles_report_status_unchecked"),
-        className: "default",
-      };
+      return this.statusConfig("unchecked");
     }
     if (row.valid) {
-      return {
-        label: tt("project_tiles_report_status_valid"),
-        className: "success",
-      };
+      return this.statusConfig("valid");
     }
-    return {
-      label: tt("project_tiles_report_status_invalid"),
-      className: "danger",
-    };
+    return this.statusConfig("invalid");
   }
 
-  setRowStatus(idView, { label, className }) {
+  statusConfig(state) {
+    const configs = {
+      unchecked: {
+        translationKey: "project_tiles_report_status_unchecked",
+        className: "default",
+        icon: ["fa", "fa-circle-o"],
+      },
+      pending: {
+        translationKey: "project_tiles_report_status_pending",
+        className: "default",
+        icon: ["fa", "fa-clock-o"],
+      },
+      checking: {
+        translationKey: "project_tiles_report_status_checking",
+        className: "info",
+        icon: ["fa", "fa-spinner", "fa-spin"],
+      },
+      valid: {
+        translationKey: "project_tiles_report_status_valid",
+        className: "success",
+        icon: ["fa", "fa-check"],
+      },
+      invalid: {
+        translationKey: "project_tiles_report_status_invalid",
+        className: "danger",
+        icon: ["fa", "fa-exclamation-triangle"],
+      },
+      incomplete: {
+        translationKey: "project_tiles_report_status_incomplete",
+        className: "warning",
+        icon: ["fa", "fa-warning"],
+      },
+    };
+    return { state, ...configs[state] };
+  }
+
+  setRowStatus(idView, status) {
     const tr = this;
     const refs = tr.rowRefs.get(idView);
     if (!refs) {
       return;
     }
+    tr.rowStates.set(idView, status.state);
     refs.statusCell.replaceChildren(
-      tr.el("span", { class: `label label-${className}` }, label),
+      tr.el(
+        "span",
+        {
+          class: ["label", `label-${status.className}`, "tiles-report-status"],
+        },
+        [
+          tr.el("i", { class: status.icon, "aria-hidden": "true" }),
+          " ",
+          tt(status.translationKey),
+        ],
+      ),
     );
   }
 
   setRowChecking(idView) {
     const tr = this;
-    tr.setRowStatus(idView, {
-      label: tt("project_tiles_report_status_checking"),
-      className: "default",
-    });
+    tr.setRowStatus(idView, tr.statusConfig("checking"));
   }
 
   setRowDone(idView, message) {
@@ -249,9 +286,19 @@ export class TilesReport {
 
   resetRowsPending() {
     const tr = this;
-    const pending = tr.statusLabel({ checked_at: null });
+    const pending = tr.statusConfig("pending");
     for (const idView of tr.rowRefs.keys()) {
       tr.setRowStatus(idView, pending);
+    }
+  }
+
+  setRowsIncomplete() {
+    const tr = this;
+    const incomplete = tr.statusConfig("incomplete");
+    for (const [idView, state] of tr.rowStates) {
+      if (state === "pending" || state === "checking") {
+        tr.setRowStatus(idView, incomplete);
+      }
     }
   }
 
@@ -310,6 +357,7 @@ export class TilesReport {
       },
       onError: (message) => {
         tr.setStatus(message?.message);
+        tr.setRowsIncomplete();
         tr.finishRun();
       },
     });
@@ -320,6 +368,7 @@ export class TilesReport {
     } catch (e) {
       console.error("Tiles report run error:", e);
       tr.setStatus(e.message);
+      tr.setRowsIncomplete();
       tr.finishRun();
     }
   }

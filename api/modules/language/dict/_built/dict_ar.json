@@ -8841,8 +8841,13 @@
   },
   {
     "id": "project_tiles_report_status_unchecked",
-    "en": "Not checked yet",
-    "ar": "لم يتم التحقق بعد"
+    "en": "Unchecked",
+    "ar": "غير مدقق"
+  },
+  {
+    "id": "project_tiles_report_status_pending",
+    "en": "Pending",
+    "ar": "قيد الانتظار"
   },
   {
     "id": "project_tiles_report_status_checking",
@@ -8863,6 +8868,11 @@
     "id": "project_tiles_report_status_invalid",
     "en": "Broken",
     "ar": "مكسور"
+  },
+  {
+    "id": "project_tiles_report_status_incomplete",
+    "en": "Not completed",
+    "ar": "لم يكتمل"
   },
   {
     "id": "project_tiles_url_editor_title",

@@ -103,4 +103,36 @@ describe("TilesReport edit action", () => {
       }),
     );
   });
+
+  it("shows a visible lifecycle for pending, checking, completed, and incomplete rows", () => {
+    const report = new TilesReport({});
+    report.rows = [
+      { id_view: "MX-AAAAA-BBBBB-CCCCC", title: "First" },
+      { id_view: "MX-DDDDD-EEEEE-FFFFF", title: "Second" },
+    ];
+    report.buildTable();
+
+    report.resetRowsPending();
+    expect(report.rowRefs.get("MX-AAAAA-BBBBB-CCCCC").statusCell.textContent).toContain(
+      "project_tiles_report_status_pending",
+    );
+
+    report.setRowChecking("MX-DDDDD-EEEEE-FFFFF");
+    expect(report.rowRefs.get("MX-DDDDD-EEEEE-FFFFF").statusCell.textContent).toContain(
+      "project_tiles_report_status_checking",
+    );
+
+    report.setRowDone("MX-AAAAA-BBBBB-CCCCC", { valid: true });
+    expect(report.rowRefs.get("MX-AAAAA-BBBBB-CCCCC").statusCell.textContent).toContain(
+      "project_tiles_report_status_valid",
+    );
+
+    report.setRowsIncomplete();
+    expect(report.rowRefs.get("MX-DDDDD-EEEEE-FFFFF").statusCell.textContent).toContain(
+      "project_tiles_report_status_incomplete",
+    );
+    expect(report.rowRefs.get("MX-AAAAA-BBBBB-CCCCC").statusCell.textContent).toContain(
+      "project_tiles_report_status_valid",
+    );
+  });
 });

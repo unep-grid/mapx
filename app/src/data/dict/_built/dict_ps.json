@@ -8841,8 +8841,13 @@
   },
   {
     "id": "project_tiles_report_status_unchecked",
-    "en": "Not checked yet",
-    "ps": "لا تر اوسه نه دی چک شوی"
+    "en": "Unchecked",
+    "ps": "نه چک شوی"
+  },
+  {
+    "id": "project_tiles_report_status_pending",
+    "en": "Pending",
+    "ps": "په تمه"
   },
   {
     "id": "project_tiles_report_status_checking",
@@ -8863,6 +8868,11 @@
     "id": "project_tiles_report_status_invalid",
     "en": "Broken",
     "ps": "مات شوی"
+  },
+  {
+    "id": "project_tiles_report_status_incomplete",
+    "en": "Not completed",
+    "ps": "بشپړ شوی نه دی"
   },
   {
     "id": "project_tiles_url_editor_title",

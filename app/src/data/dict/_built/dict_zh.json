@@ -8841,8 +8841,13 @@
   },
   {
     "id": "project_tiles_report_status_unchecked",
-    "en": "Not checked yet",
-    "zh": "尚未核实"
+    "en": "Unchecked",
+    "zh": "未检查"
+  },
+  {
+    "id": "project_tiles_report_status_pending",
+    "en": "Pending",
+    "zh": "待办的"
   },
   {
     "id": "project_tiles_report_status_checking",
@@ -8863,6 +8868,11 @@
     "id": "project_tiles_report_status_invalid",
     "en": "Broken",
     "zh": "破碎的"
+  },
+  {
+    "id": "project_tiles_report_status_incomplete",
+    "en": "Not completed",
+    "zh": "未完成"
   },
   {
     "id": "project_tiles_url_editor_title",
