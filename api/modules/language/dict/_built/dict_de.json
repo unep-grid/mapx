@@ -3670,6 +3670,11 @@
     "de": "Rollen definieren "
   },
   {
+    "id": "btn_show_tiles_report",
+    "en": "Tile links report",
+    "de": "Bericht über Kachelverknüpfungen"
+  },
+  {
     "id": "btn_sort_date",
     "en": "Date",
     "de": "Datum "
@@ -8783,6 +8788,81 @@
     "id": "project_roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{changesSummary}}<p>Have a nice day !</p>",
     "de": "<p>Hallo,</p><p> Die Rollen in Ihrem Projekt haben sich geändert <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> .</p><p> Hier ist die Liste der Änderungen:</p> {{changesSummary}}<p> Einen schönen Tag noch !</p>"
+  },
+  {
+    "id": "project_tiles_report_title",
+    "en": "Tile links report",
+    "de": "Bericht über Kachelverknüpfungen"
+  },
+  {
+    "id": "project_tiles_report_btn_run",
+    "en": "Run check now",
+    "de": "Jetzt prüfen"
+  },
+  {
+    "id": "project_tiles_report_running",
+    "en": "Running…",
+    "de": "Läuft…"
+  },
+  {
+    "id": "project_tiles_report_no_views",
+    "en": "No raster tile views found in this project",
+    "de": "In diesem Projekt wurden keine Rasterkachelansichten gefunden."
+  },
+  {
+    "id": "project_tiles_report_col_title",
+    "en": "View",
+    "de": "Sicht"
+  },
+  {
+    "id": "project_tiles_report_col_editor",
+    "en": "Editor",
+    "de": "Editor"
+  },
+  {
+    "id": "project_tiles_report_col_status",
+    "en": "Status",
+    "de": "Status"
+  },
+  {
+    "id": "project_tiles_report_col_checked_at",
+    "en": "Last checked",
+    "de": "Zuletzt geprüft"
+  },
+  {
+    "id": "project_tiles_report_col_detail",
+    "en": "Detail",
+    "de": "Detail"
+  },
+  {
+    "id": "project_tiles_report_never",
+    "en": "Never",
+    "de": "Niemals"
+  },
+  {
+    "id": "project_tiles_report_status_unchecked",
+    "en": "Not checked yet",
+    "de": "Noch nicht geprüft"
+  },
+  {
+    "id": "project_tiles_report_status_checking",
+    "en": "Checking…",
+    "de": "Überprüfung…"
+  },
+  {
+    "id": "project_tiles_report_run_error",
+    "en": "Error running check",
+    "de": "Fehler beim Ausführen der Prüfung"
+  },
+  {
+    "id": "project_tiles_report_status_valid",
+    "en": "OK",
+    "de": "OK"
+  },
+  {
+    "id": "project_tiles_report_status_invalid",
+    "en": "Broken",
+    "de": "Gebrochen"
   },
   {
     "id": "project_added_to_group",

@@ -3670,6 +3670,11 @@
     "zh": "定义角色"
   },
   {
+    "id": "btn_show_tiles_report",
+    "en": "Tile links report",
+    "zh": "瓷砖链接报告"
+  },
+  {
     "id": "btn_sort_date",
     "en": "Date",
     "zh": "日期"
@@ -8783,6 +8788,81 @@
     "id": "project_roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{changesSummary}}<p>Have a nice day !</p>",
     "zh": "<p>你好，</p><p>您的项目中的角色已发生变化<a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> 。</p><p>以下是变更列表：</p> {{changesSummary}}<p>祝你今天过得愉快 ！</p>"
+  },
+  {
+    "id": "project_tiles_report_title",
+    "en": "Tile links report",
+    "zh": "瓷砖链接报告"
+  },
+  {
+    "id": "project_tiles_report_btn_run",
+    "en": "Run check now",
+    "zh": "立即运行检查"
+  },
+  {
+    "id": "project_tiles_report_running",
+    "en": "Running…",
+    "zh": "跑步…"
+  },
+  {
+    "id": "project_tiles_report_no_views",
+    "en": "No raster tile views found in this project",
+    "zh": "此项目中未找到栅格瓦片视图"
+  },
+  {
+    "id": "project_tiles_report_col_title",
+    "en": "View",
+    "zh": "看法"
+  },
+  {
+    "id": "project_tiles_report_col_editor",
+    "en": "Editor",
+    "zh": "编辑"
+  },
+  {
+    "id": "project_tiles_report_col_status",
+    "en": "Status",
+    "zh": "地位"
+  },
+  {
+    "id": "project_tiles_report_col_checked_at",
+    "en": "Last checked",
+    "zh": "上次检查时间"
+  },
+  {
+    "id": "project_tiles_report_col_detail",
+    "en": "Detail",
+    "zh": "细节"
+  },
+  {
+    "id": "project_tiles_report_never",
+    "en": "Never",
+    "zh": "绝不"
+  },
+  {
+    "id": "project_tiles_report_status_unchecked",
+    "en": "Not checked yet",
+    "zh": "尚未核实"
+  },
+  {
+    "id": "project_tiles_report_status_checking",
+    "en": "Checking…",
+    "zh": "检查…"
+  },
+  {
+    "id": "project_tiles_report_run_error",
+    "en": "Error running check",
+    "zh": "检查运行错误"
+  },
+  {
+    "id": "project_tiles_report_status_valid",
+    "en": "OK",
+    "zh": "好的"
+  },
+  {
+    "id": "project_tiles_report_status_invalid",
+    "en": "Broken",
+    "zh": "破碎的"
   },
   {
     "id": "project_added_to_group",

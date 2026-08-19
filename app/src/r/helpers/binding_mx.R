@@ -48,6 +48,21 @@ mxProjectManageRoles <- function(
   )
 }
 
+#' Show the project tile links report
+#'
+#' @param session Shiny session object.
+#' @export
+mxProjectTilesReport <- function(
+  session = shiny:::getDefaultReactiveDomain()
+) {
+  session$sendCustomMessage(
+    type = "mxProjectTilesReport",
+    list(
+      update = runif(1)
+    )
+  )
+}
+
 
 
 #' Edit source request

@@ -3670,6 +3670,11 @@
     "fa": "نقش ها را تعریف کنید "
   },
   {
+    "id": "btn_show_tiles_report",
+    "en": "Tile links report",
+    "fa": "گزارش پیوندهای کاشی"
+  },
+  {
     "id": "btn_sort_date",
     "en": "Date",
     "fa": "تاریخ "
@@ -8783,6 +8788,81 @@
     "id": "project_roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{changesSummary}}<p>Have a nice day !</p>",
     "fa": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> نقش‌ها در پروژه شما تغییر کرده‌اند <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> .</p><p style=\";text-align:right;direction:rtl\"> لیست تغییرات به شرح زیر است:</p> {{changesSummary}}<p style=\";text-align:right;direction:rtl\"> روز خوبی داشته باشید!</p>"
+  },
+  {
+    "id": "project_tiles_report_title",
+    "en": "Tile links report",
+    "fa": "گزارش پیوندهای کاشی"
+  },
+  {
+    "id": "project_tiles_report_btn_run",
+    "en": "Run check now",
+    "fa": "اکنون بررسی را اجرا کنید"
+  },
+  {
+    "id": "project_tiles_report_running",
+    "en": "Running…",
+    "fa": "دویدن…"
+  },
+  {
+    "id": "project_tiles_report_no_views",
+    "en": "No raster tile views found in this project",
+    "fa": "هیچ نمای کاشی شطرنجی در این پروژه یافت نشد"
+  },
+  {
+    "id": "project_tiles_report_col_title",
+    "en": "View",
+    "fa": "مشاهده"
+  },
+  {
+    "id": "project_tiles_report_col_editor",
+    "en": "Editor",
+    "fa": "ویرایشگر"
+  },
+  {
+    "id": "project_tiles_report_col_status",
+    "en": "Status",
+    "fa": "وضعیت"
+  },
+  {
+    "id": "project_tiles_report_col_checked_at",
+    "en": "Last checked",
+    "fa": "آخرین بررسی"
+  },
+  {
+    "id": "project_tiles_report_col_detail",
+    "en": "Detail",
+    "fa": "جزئیات"
+  },
+  {
+    "id": "project_tiles_report_never",
+    "en": "Never",
+    "fa": "هرگز"
+  },
+  {
+    "id": "project_tiles_report_status_unchecked",
+    "en": "Not checked yet",
+    "fa": "هنوز بررسی نشده"
+  },
+  {
+    "id": "project_tiles_report_status_checking",
+    "en": "Checking…",
+    "fa": "در حال بررسی…"
+  },
+  {
+    "id": "project_tiles_report_run_error",
+    "en": "Error running check",
+    "fa": "خطا در اجرای بررسی"
+  },
+  {
+    "id": "project_tiles_report_status_valid",
+    "en": "OK",
+    "fa": "باشه"
+  },
+  {
+    "id": "project_tiles_report_status_invalid",
+    "en": "Broken",
+    "fa": "شکسته"
   },
   {
     "id": "project_added_to_group",

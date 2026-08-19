@@ -4,6 +4,7 @@ import { updateIndexes } from "#mapx/search";
 import { updateOgcMetaCatalog } from "#mapx/ogc_meta";
 import { updateGeoIpTable } from "#mapx/ip";
 import { updateGeoserver } from "#mapx/geoserver";
+import { checkAllTiles } from "#mapx/tile_check";
 import { clearDownload } from "#mapx/helpers";
 import { once, onceInterval } from "#mapx/helpers";
 import { sendMailAuto } from "#mapx/mail";
@@ -24,6 +25,11 @@ const updateOgcMetaCatalogRoutine = () => updateOgcMetaCatalog();
 const updateGeoIpTableRoutine = () => updateGeoIpTable();
 const updateGeoserverRoutine = () => updateGeoserver();
 const clearDownloadRoutine = () => clearDownload();
+/**
+ * Writes results to mx_views_tiles_check only. No notification is sent
+ * yet: that's a deferred follow-up (see plan).
+ */
+const tileCheckRoutine = () => checkAllTiles();
 /**
  * Config
  */
@@ -100,6 +106,7 @@ async function startRoutines() {
   onceInterval([updateOgcMetaCatalogRoutine], optHourly);
   onceInterval([updateGeoIpTableRoutine], optWeekly);
   onceInterval([updateGeoserverRoutine, clearDownloadRoutine], optDaily);
+  onceInterval([tileCheckRoutine], optDaily);
 }
 
 startRoutines().catch((error) => {

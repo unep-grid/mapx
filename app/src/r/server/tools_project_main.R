@@ -55,6 +55,11 @@ observe({
           class = "btn btn-default",
         ),
         actionButton(
+          label = mxLabel("btn_show_tiles_report", language, "heartbeat"),
+          inputId = "btnShowTilesReport",
+          class = "btn btn-default",
+        ),
+        actionButton(
           label = mxLabel("btn_show_invite_member", language, "user-plus"),
           inputId = "btnShowInviteMember",
           class = "btn btn-default",

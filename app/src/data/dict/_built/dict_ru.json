@@ -3670,6 +3670,11 @@
     "ru": "Определить роли "
   },
   {
+    "id": "btn_show_tiles_report",
+    "en": "Tile links report",
+    "ru": "Отчет о связях между плитками"
+  },
+  {
     "id": "btn_sort_date",
     "en": "Date",
     "ru": "Дата "
@@ -8783,6 +8788,81 @@
     "id": "project_roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{changesSummary}}<p>Have a nice day !</p>",
     "ru": "<p>Привет,</p><p> Роли в вашем проекте изменились <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> .</p><p> Вот список изменений:</p> {{changesSummary}}<p> Хорошего дня !</p>"
+  },
+  {
+    "id": "project_tiles_report_title",
+    "en": "Tile links report",
+    "ru": "Отчет о связях между плитками"
+  },
+  {
+    "id": "project_tiles_report_btn_run",
+    "en": "Run check now",
+    "ru": "Запустите проверку сейчас"
+  },
+  {
+    "id": "project_tiles_report_running",
+    "en": "Running…",
+    "ru": "Бег…"
+  },
+  {
+    "id": "project_tiles_report_no_views",
+    "en": "No raster tile views found in this project",
+    "ru": "В этом проекте не найдено растровых тайловых изображений."
+  },
+  {
+    "id": "project_tiles_report_col_title",
+    "en": "View",
+    "ru": "Вид"
+  },
+  {
+    "id": "project_tiles_report_col_editor",
+    "en": "Editor",
+    "ru": "Редактор"
+  },
+  {
+    "id": "project_tiles_report_col_status",
+    "en": "Status",
+    "ru": "Статус"
+  },
+  {
+    "id": "project_tiles_report_col_checked_at",
+    "en": "Last checked",
+    "ru": "Последняя проверка"
+  },
+  {
+    "id": "project_tiles_report_col_detail",
+    "en": "Detail",
+    "ru": "Деталь"
+  },
+  {
+    "id": "project_tiles_report_never",
+    "en": "Never",
+    "ru": "Никогда"
+  },
+  {
+    "id": "project_tiles_report_status_unchecked",
+    "en": "Not checked yet",
+    "ru": "Ещё не проверено"
+  },
+  {
+    "id": "project_tiles_report_status_checking",
+    "en": "Checking…",
+    "ru": "Проверка…"
+  },
+  {
+    "id": "project_tiles_report_run_error",
+    "en": "Error running check",
+    "ru": "Ошибка при выполнении проверки"
+  },
+  {
+    "id": "project_tiles_report_status_valid",
+    "en": "OK",
+    "ru": "ХОРОШО"
+  },
+  {
+    "id": "project_tiles_report_status_invalid",
+    "en": "Broken",
+    "ru": "Сломанный"
   },
   {
     "id": "project_added_to_group",

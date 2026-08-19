@@ -130,6 +130,7 @@ function mapxBindings() {
   bind("mxUploader", uploadSource);
   bind("mxProjectAdd", project.create);
   bind("mxProjectManageRoles", project.showRoleMatrix);
+  bind("mxProjectTilesReport", project.showTilesReport);
   /**
    * Mapx map and view related binding
    */

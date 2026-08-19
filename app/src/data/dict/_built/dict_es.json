@@ -3670,6 +3670,11 @@
     "es": "Definir los roles"
   },
   {
+    "id": "btn_show_tiles_report",
+    "en": "Tile links report",
+    "es": "Informe de enlaces de mosaicos"
+  },
+  {
     "id": "btn_sort_date",
     "en": "Date",
     "es": "Fecha"
@@ -8783,6 +8788,81 @@
     "id": "project_roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{changesSummary}}<p>Have a nice day !</p>",
     "es": "<p>Hola,</p><p> Los roles han cambiado en tu proyecto <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> .</p><p> Aquí está la lista de cambios:</p> {{changesSummary}}<p> Que tenga un lindo día !</p>"
+  },
+  {
+    "id": "project_tiles_report_title",
+    "en": "Tile links report",
+    "es": "Informe de enlaces de mosaicos"
+  },
+  {
+    "id": "project_tiles_report_btn_run",
+    "en": "Run check now",
+    "es": "Ejecutar comprobación ahora"
+  },
+  {
+    "id": "project_tiles_report_running",
+    "en": "Running…",
+    "es": "Correr…"
+  },
+  {
+    "id": "project_tiles_report_no_views",
+    "en": "No raster tile views found in this project",
+    "es": "No se encontraron vistas de mosaicos rasterizados en este proyecto."
+  },
+  {
+    "id": "project_tiles_report_col_title",
+    "en": "View",
+    "es": "Vista"
+  },
+  {
+    "id": "project_tiles_report_col_editor",
+    "en": "Editor",
+    "es": "Editor"
+  },
+  {
+    "id": "project_tiles_report_col_status",
+    "en": "Status",
+    "es": "Estado"
+  },
+  {
+    "id": "project_tiles_report_col_checked_at",
+    "en": "Last checked",
+    "es": "Última comprobación"
+  },
+  {
+    "id": "project_tiles_report_col_detail",
+    "en": "Detail",
+    "es": "Detalle"
+  },
+  {
+    "id": "project_tiles_report_never",
+    "en": "Never",
+    "es": "Nunca"
+  },
+  {
+    "id": "project_tiles_report_status_unchecked",
+    "en": "Not checked yet",
+    "es": "Aún no se ha comprobado"
+  },
+  {
+    "id": "project_tiles_report_status_checking",
+    "en": "Checking…",
+    "es": "De cheques…"
+  },
+  {
+    "id": "project_tiles_report_run_error",
+    "en": "Error running check",
+    "es": "Error al ejecutar la comprobación"
+  },
+  {
+    "id": "project_tiles_report_status_valid",
+    "en": "OK",
+    "es": "DE ACUERDO"
+  },
+  {
+    "id": "project_tiles_report_status_invalid",
+    "en": "Broken",
+    "es": "Roto"
   },
   {
     "id": "project_added_to_group",

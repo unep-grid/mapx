@@ -102,6 +102,7 @@ export class MxWindowElement extends HTMLElement {
   /** @param {import("./manager.js").MxWindowConfig} config */
   configure(config) {
     if (!this._built) this.build();
+    const { el } = this.elementCreator;
     this.config = config;
     this.dataset.windowKey = config.key || "";
     const titleId = `mx-window-title-${String(config.key || "window").replace(
@@ -112,7 +113,7 @@ export class MxWindowElement extends HTMLElement {
     this.setAttribute("role", "dialog");
     this.setAttribute("aria-modal", String(config.modal !== false));
     this.setAttribute("aria-labelledby", titleId);
-    this.refs.title.textContent = config.title || "";
+    this.refs.title.appendChild(el('span',config.title));
     this.refs.header.hidden = config.header === false;
     this.refs.close.hidden = config.closeable === false;
     this.refs.collapse.hidden = config.collapsible === false;

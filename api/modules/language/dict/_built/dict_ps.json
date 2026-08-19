@@ -3670,6 +3670,11 @@
     "ps": "نقشونه وټاکئ "
   },
   {
+    "id": "btn_show_tiles_report",
+    "en": "Tile links report",
+    "ps": "د ټایل لینکونو راپور"
+  },
+  {
     "id": "btn_sort_date",
     "en": "Date",
     "ps": "نیټه "
@@ -8783,6 +8788,81 @@
     "id": "project_roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{changesSummary}}<p>Have a nice day !</p>",
     "ps": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> ستاسو په پروژه کې رولونه بدل شوي دي <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> .</p><p style=\";text-align:right;direction:rtl\"> دلته د بدلونونو لیست دی:</p> {{changesSummary}}<p style=\";text-align:right;direction:rtl\"> ښه ورځ ولرئ !</p>"
+  },
+  {
+    "id": "project_tiles_report_title",
+    "en": "Tile links report",
+    "ps": "د ټایل لینکونو راپور"
+  },
+  {
+    "id": "project_tiles_report_btn_run",
+    "en": "Run check now",
+    "ps": "اوس چیک چل کړئ"
+  },
+  {
+    "id": "project_tiles_report_running",
+    "en": "Running…",
+    "ps": "چلول…"
+  },
+  {
+    "id": "project_tiles_report_no_views",
+    "en": "No raster tile views found in this project",
+    "ps": "په دې پروژه کې د راسټر ټایل لیدونه ونه موندل شول"
+  },
+  {
+    "id": "project_tiles_report_col_title",
+    "en": "View",
+    "ps": "لید"
+  },
+  {
+    "id": "project_tiles_report_col_editor",
+    "en": "Editor",
+    "ps": "مدیر"
+  },
+  {
+    "id": "project_tiles_report_col_status",
+    "en": "Status",
+    "ps": "وضعیت"
+  },
+  {
+    "id": "project_tiles_report_col_checked_at",
+    "en": "Last checked",
+    "ps": "وروستی ځل چک شوی"
+  },
+  {
+    "id": "project_tiles_report_col_detail",
+    "en": "Detail",
+    "ps": "تفصیل"
+  },
+  {
+    "id": "project_tiles_report_never",
+    "en": "Never",
+    "ps": "هیڅکله نه"
+  },
+  {
+    "id": "project_tiles_report_status_unchecked",
+    "en": "Not checked yet",
+    "ps": "لا تر اوسه نه دی چک شوی"
+  },
+  {
+    "id": "project_tiles_report_status_checking",
+    "en": "Checking…",
+    "ps": "چک کول…"
+  },
+  {
+    "id": "project_tiles_report_run_error",
+    "en": "Error running check",
+    "ps": "د چک چلولو کې تېروتنه"
+  },
+  {
+    "id": "project_tiles_report_status_valid",
+    "en": "OK",
+    "ps": "سمه ده"
+  },
+  {
+    "id": "project_tiles_report_status_invalid",
+    "en": "Broken",
+    "ps": "مات شوی"
   },
   {
     "id": "project_added_to_group",

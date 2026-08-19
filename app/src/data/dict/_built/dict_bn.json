@@ -3670,6 +3670,11 @@
     "bn": "ভূমিকা নির্ধারণ করুন "
   },
   {
+    "id": "btn_show_tiles_report",
+    "en": "Tile links report",
+    "bn": "টাইল লিঙ্ক রিপোর্ট"
+  },
+  {
     "id": "btn_sort_date",
     "en": "Date",
     "bn": "তারিখ "
@@ -8783,6 +8788,81 @@
     "id": "project_roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{changesSummary}}<p>Have a nice day !</p>",
     "bn": "<p>হ্যালো,</p><p> আপনার প্রকল্পে ভূমিকা পরিবর্তন হয়েছে। <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\"> {{projectName}}</a> .</p><p> এখানে পরিবর্তনগুলির তালিকা রয়েছে:</p> {{changesSummary}}<p> আপনার দিনটি শুভ হোক!</p>"
+  },
+  {
+    "id": "project_tiles_report_title",
+    "en": "Tile links report",
+    "bn": "টাইল লিঙ্ক রিপোর্ট"
+  },
+  {
+    "id": "project_tiles_report_btn_run",
+    "en": "Run check now",
+    "bn": "এখনই যাচাই করুন"
+  },
+  {
+    "id": "project_tiles_report_running",
+    "en": "Running…",
+    "bn": "দৌড়াচ্ছি…"
+  },
+  {
+    "id": "project_tiles_report_no_views",
+    "en": "No raster tile views found in this project",
+    "bn": "এই প্রকল্পে কোনো রাস্টার টাইল ভিউ খুঁজে পাওয়া যায়নি।"
+  },
+  {
+    "id": "project_tiles_report_col_title",
+    "en": "View",
+    "bn": "দেখুন"
+  },
+  {
+    "id": "project_tiles_report_col_editor",
+    "en": "Editor",
+    "bn": "সম্পাদক"
+  },
+  {
+    "id": "project_tiles_report_col_status",
+    "en": "Status",
+    "bn": "অবস্থা"
+  },
+  {
+    "id": "project_tiles_report_col_checked_at",
+    "en": "Last checked",
+    "bn": "সর্বশেষ পরীক্ষা করা হয়েছে"
+  },
+  {
+    "id": "project_tiles_report_col_detail",
+    "en": "Detail",
+    "bn": "বিস্তারিত"
+  },
+  {
+    "id": "project_tiles_report_never",
+    "en": "Never",
+    "bn": "কখনো না"
+  },
+  {
+    "id": "project_tiles_report_status_unchecked",
+    "en": "Not checked yet",
+    "bn": "এখনো যাচাই করা হয়নি"
+  },
+  {
+    "id": "project_tiles_report_status_checking",
+    "en": "Checking…",
+    "bn": "যাচাই করা হচ্ছে…"
+  },
+  {
+    "id": "project_tiles_report_run_error",
+    "en": "Error running check",
+    "bn": "চেক চালাতে ত্রুটি হয়েছে"
+  },
+  {
+    "id": "project_tiles_report_status_valid",
+    "en": "OK",
+    "bn": "ঠিক আছে"
+  },
+  {
+    "id": "project_tiles_report_status_invalid",
+    "en": "Broken",
+    "bn": "ভাঙা"
   },
   {
     "id": "project_added_to_group",

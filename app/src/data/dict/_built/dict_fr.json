@@ -3670,6 +3670,11 @@
     "fr": "Définir les rôles"
   },
   {
+    "id": "btn_show_tiles_report",
+    "en": "Tile links report",
+    "fr": "Rapport sur les liens de tuiles"
+  },
+  {
     "id": "btn_sort_date",
     "en": "Date",
     "fr": "Date"
@@ -8783,6 +8788,81 @@
     "id": "project_roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{changesSummary}}<p>Have a nice day !</p>",
     "fr": "<p>Bonjour,</p><p>Les roles du projet <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a> ont changés.</p> <p> Voici la liste des changements:</p>{{changesSummary}}<p>Bonne journée !</p> "
+  },
+  {
+    "id": "project_tiles_report_title",
+    "en": "Tile links report",
+    "fr": "Rapport sur les liens de tuiles"
+  },
+  {
+    "id": "project_tiles_report_btn_run",
+    "en": "Run check now",
+    "fr": "Effectuez une vérification maintenant"
+  },
+  {
+    "id": "project_tiles_report_running",
+    "en": "Running…",
+    "fr": "En cours d'exécution…"
+  },
+  {
+    "id": "project_tiles_report_no_views",
+    "en": "No raster tile views found in this project",
+    "fr": "Aucune vue de tuile raster n'a été trouvée dans ce projet."
+  },
+  {
+    "id": "project_tiles_report_col_title",
+    "en": "View",
+    "fr": "Voir"
+  },
+  {
+    "id": "project_tiles_report_col_editor",
+    "en": "Editor",
+    "fr": "Éditeur"
+  },
+  {
+    "id": "project_tiles_report_col_status",
+    "en": "Status",
+    "fr": "Statut"
+  },
+  {
+    "id": "project_tiles_report_col_checked_at",
+    "en": "Last checked",
+    "fr": "Dernière vérification"
+  },
+  {
+    "id": "project_tiles_report_col_detail",
+    "en": "Detail",
+    "fr": "Détail"
+  },
+  {
+    "id": "project_tiles_report_never",
+    "en": "Never",
+    "fr": "Jamais"
+  },
+  {
+    "id": "project_tiles_report_status_unchecked",
+    "en": "Not checked yet",
+    "fr": "Pas encore vérifié"
+  },
+  {
+    "id": "project_tiles_report_status_checking",
+    "en": "Checking…",
+    "fr": "Vérification…"
+  },
+  {
+    "id": "project_tiles_report_run_error",
+    "en": "Error running check",
+    "fr": "Erreur lors de la vérification"
+  },
+  {
+    "id": "project_tiles_report_status_valid",
+    "en": "OK",
+    "fr": "D'ACCORD"
+  },
+  {
+    "id": "project_tiles_report_status_invalid",
+    "en": "Broken",
+    "fr": "Cassé"
   },
   {
     "id": "project_added_to_group",

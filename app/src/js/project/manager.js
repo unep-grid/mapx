@@ -9,6 +9,7 @@ import { getDictItem } from "./../language";
 import { getQueryParameterInit } from "../url_utils/url_utils.js";
 import { parseInitialProjectListFilters } from "./list_helpers.js";
 import { RoleMatrix } from "./roles_matrix.js";
+import { TilesReport } from "./tiles_report.js";
 import { getMapxWindowManager } from "../window/index.js";
 import { openConfirmDialog, openNoticeDialog } from "../window/dialog.js";
 import { ProjectDeleteChannel } from "./delete_channel.js";
@@ -163,6 +164,27 @@ export class ProjectManager {
     } catch (e) {
       console.error("Role matrix error:", e);
       // Could show error modal here if needed
+    }
+  }
+
+  /**
+   * Show tile links report modal for current project
+   * Only available to admin users
+   * -requires one argument for shiny binding
+   */
+  async showTilesReport(_) {
+    const pm = this;
+
+    try {
+      const isAdmin = settings.user.roles?.admin;
+      if (!isAdmin) {
+        throw new Error("project_tiles_check_access_denied");
+      }
+
+      const tilesReport = new TilesReport(pm);
+      await tilesReport.show();
+    } catch (e) {
+      console.error("Tiles report error:", e);
     }
   }
 

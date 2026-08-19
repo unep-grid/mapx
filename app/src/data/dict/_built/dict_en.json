@@ -2936,6 +2936,10 @@
     "en": "Define roles"
   },
   {
+    "id": "btn_show_tiles_report",
+    "en": "Tile links report"
+  },
+  {
     "id": "btn_sort_date",
     "en": "Date"
   },
@@ -7026,6 +7030,66 @@
   {
     "id": "project_roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project <a href=\"{{projectUrl}}\" style=\"color: #007bff; text-decoration: none;\">{{projectName}}</a>.</p> <p> Here is the list of changes:</p>{{changesSummary}}<p>Have a nice day !</p>"
+  },
+  {
+    "id": "project_tiles_report_title",
+    "en": "Tile links report"
+  },
+  {
+    "id": "project_tiles_report_btn_run",
+    "en": "Run check now"
+  },
+  {
+    "id": "project_tiles_report_running",
+    "en": "Running…"
+  },
+  {
+    "id": "project_tiles_report_no_views",
+    "en": "No raster tile views found in this project"
+  },
+  {
+    "id": "project_tiles_report_col_title",
+    "en": "View"
+  },
+  {
+    "id": "project_tiles_report_col_editor",
+    "en": "Editor"
+  },
+  {
+    "id": "project_tiles_report_col_status",
+    "en": "Status"
+  },
+  {
+    "id": "project_tiles_report_col_checked_at",
+    "en": "Last checked"
+  },
+  {
+    "id": "project_tiles_report_col_detail",
+    "en": "Detail"
+  },
+  {
+    "id": "project_tiles_report_never",
+    "en": "Never"
+  },
+  {
+    "id": "project_tiles_report_status_unchecked",
+    "en": "Not checked yet"
+  },
+  {
+    "id": "project_tiles_report_status_checking",
+    "en": "Checking…"
+  },
+  {
+    "id": "project_tiles_report_run_error",
+    "en": "Error running check"
+  },
+  {
+    "id": "project_tiles_report_status_valid",
+    "en": "OK"
+  },
+  {
+    "id": "project_tiles_report_status_invalid",
+    "en": "Broken"
   },
   {
     "id": "project_added_to_group",

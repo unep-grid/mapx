@@ -4,6 +4,10 @@ export { ioProjectNameValidate } from "./validate.js";
 export { ioProjectCreate } from "./create.js";
 export { ioProjectRolesGet, ioProjectRolesUpdate } from "./roles_matrix.js";
 export {
+  ioProjectTilesCheckGet,
+  ioProjectTilesCheckRun,
+} from "./tiles_check.js";
+export {
   ioProjectList,
   ioProjectLogosGet,
   ioProjectFavoriteSet,
