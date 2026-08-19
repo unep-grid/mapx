@@ -5,6 +5,7 @@ import {
 } from "request-filtering-agent";
 
 const DEFAULT_TIMEOUT_MS = 15 * 1000;
+const MAX_RESPONSE_BYTES = 5 * 1024 * 1024;
 
 /**
  * data.source.tiles URLs are set by view editors, not admins, and are
@@ -36,12 +37,13 @@ export function matchesImageSignature(buffer) {
   );
 }
 
-function isHttpUrl(value) {
+/** @returns {URL | null} the parsed URL if it's http(s), null otherwise */
+function parseHttpUrl(value) {
   try {
     const url = new URL(value);
-    return ["http:", "https:"].includes(url.protocol);
+    return ["http:", "https:"].includes(url.protocol) ? url : null;
   } catch {
-    return false;
+    return null;
   }
 }
 
@@ -57,7 +59,8 @@ function isHttpUrl(value) {
 export async function checkUrl(url, opt = {}) {
   const timeoutMs = opt.timeoutMs || DEFAULT_TIMEOUT_MS;
 
-  if (!isHttpUrl(url)) {
+  const parsedUrl = parseHttpUrl(url);
+  if (!parsedUrl) {
     return { valid: false, detail: "invalid_url", tested_url: url };
   }
 
@@ -67,7 +70,7 @@ export async function checkUrl(url, opt = {}) {
   try {
     const res = await fetch(url, {
       signal: controller.signal,
-      agent: url.startsWith("https:") ? httpsAgent : httpAgent,
+      agent: parsedUrl.protocol === "https:" ? httpsAgent : httpAgent,
       headers: { accept: "image/*" },
     });
 
@@ -84,7 +87,34 @@ export async function checkUrl(url, opt = {}) {
       };
     }
 
-    const buffer = Buffer.from(await res.arrayBuffer());
+    const contentLength = Number(res.headers.get("content-length"));
+    if (contentLength > MAX_RESPONSE_BYTES) {
+      return {
+        valid: false,
+        http_status,
+        content_type,
+        detail: "response_too_large",
+        tested_url: url,
+      };
+    }
+
+    const chunks = [];
+    let totalBytes = 0;
+    for await (const chunk of res.body) {
+      totalBytes += chunk.length;
+      if (totalBytes > MAX_RESPONSE_BYTES) {
+        controller.abort();
+        return {
+          valid: false,
+          http_status,
+          content_type,
+          detail: "response_too_large",
+          tested_url: url,
+        };
+      }
+      chunks.push(chunk);
+    }
+    const buffer = Buffer.concat(chunks);
 
     if (!matchesImageSignature(buffer)) {
       const detail =

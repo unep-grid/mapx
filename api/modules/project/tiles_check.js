@@ -80,9 +80,15 @@ export async function ioProjectTilesCheckRun(socket, data, cb) {
     if (runningProjects.has(idProject)) {
       throw new Error("project_tiles_check_already_running");
     }
-
-    const views = await getCheckableViews(idProject);
     runningProjects.add(idProject);
+
+    let views;
+    try {
+      views = await getCheckableViews(idProject);
+    } catch (e) {
+      runningProjects.delete(idProject);
+      throw e;
+    }
 
     runChecks(views, {
       onStart: (view) => {

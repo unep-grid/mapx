@@ -27,8 +27,12 @@ function fakeResponse() {
   return {
     ok: true,
     status: 200,
-    headers: { get: () => "image/png" },
-    arrayBuffer: async () => PNG_BUFFER,
+    headers: { get: (name) => (name === "content-type" ? "image/png" : null) },
+    body: {
+      [Symbol.asyncIterator]: async function* () {
+        yield Buffer.from(PNG_BUFFER);
+      },
+    },
   };
 }
 

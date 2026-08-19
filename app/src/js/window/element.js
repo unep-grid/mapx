@@ -113,7 +113,7 @@ export class MxWindowElement extends HTMLElement {
     this.setAttribute("role", "dialog");
     this.setAttribute("aria-modal", String(config.modal !== false));
     this.setAttribute("aria-labelledby", titleId);
-    this.refs.title.appendChild(el('span',config.title));
+    this.setNodes(this.refs.title, config.title);
     this.refs.header.hidden = config.header === false;
     this.refs.close.hidden = config.closeable === false;
     this.refs.collapse.hidden = config.collapsible === false;

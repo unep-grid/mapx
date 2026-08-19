@@ -110,7 +110,13 @@ export class TilesReport {
         width: "min(900px, calc(100vw - 32px))",
         height: "min(600px, calc(100vh - 64px))",
       },
+      onClose: () => tr.channel?.destroy(),
     });
+
+    if (tr.running) {
+      tr.refs.btnRun.disabled = true;
+      tr.refs.btnRun.replaceChildren(tt("project_tiles_report_running"));
+    }
   }
 
   buildTable() {

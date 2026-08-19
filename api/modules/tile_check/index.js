@@ -39,21 +39,33 @@ export async function getCheckableViews(idProject) {
  *   result is stored.
  */
 async function checkView(view, opt = {}) {
-  const bounds = Array.isArray(view.bounds) ? view.bounds : null;
-  const testUrl = buildTestUrl(view.tile_url, { bounds });
-
   opt.onStart?.(view);
 
-  const result = testUrl
-    ? await checkUrl(testUrl)
-    : { valid: false, detail: "no_tile_template", tested_url: null };
+  let row;
+  try {
+    const bounds = Array.isArray(view.bounds) ? view.bounds : null;
+    const testUrl = buildTestUrl(view.tile_url, { bounds });
 
-  const row = {
-    id_view: view.id,
-    id_project: view.project,
-    ...result,
-  };
-  await saveCheckResult(row);
+    const result = testUrl
+      ? await checkUrl(testUrl)
+      : { valid: false, detail: "no_tile_template", tested_url: null };
+
+    row = {
+      id_view: view.id,
+      id_project: view.project,
+      ...result,
+    };
+    await saveCheckResult(row);
+  } catch (e) {
+    console.error(`Tile check failed for view ${view.id}:`, e);
+    row = {
+      id_view: view.id,
+      id_project: view.project,
+      valid: false,
+      detail: "check_failed",
+      tested_url: null,
+    };
+  }
   opt.onDone?.(row);
   return row;
 }

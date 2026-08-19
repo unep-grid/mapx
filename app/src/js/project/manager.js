@@ -181,8 +181,12 @@ export class ProjectManager {
         throw new Error("project_tiles_check_access_denied");
       }
 
-      const tilesReport = new TilesReport(pm);
-      await tilesReport.show();
+      if (pm._tilesReport?.window?.isConnected) {
+        await pm._tilesReport.show();
+        return;
+      }
+      pm._tilesReport = new TilesReport(pm);
+      await pm._tilesReport.show();
     } catch (e) {
       console.error("Tiles report error:", e);
     }
