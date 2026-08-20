@@ -6092,6 +6092,10 @@
     "en": "This can solve issues related to a missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite"
   },
   {
+    "id": "tool_mirror_enable_desc_short",
+    "en": "Use alternate base URLs when requesting external resources."
+  },
+  {
     "id": "tool_mirror_toolbox_btn",
     "en": "URL Mirror helper"
   },
@@ -7101,7 +7105,7 @@
   },
   {
     "id": "project_tiles_report_status_valid",
-    "en": "OK"
+    "en": "Valid"
   },
   {
     "id": "project_tiles_report_status_invalid",
@@ -7142,6 +7146,66 @@
   {
     "id": "project_tiles_url_editor_save_error",
     "en": "Error saving"
+  },
+  {
+    "id": "raster_url_summary_title",
+    "en": "Raster tile links"
+  },
+  {
+    "id": "raster_url_action_configure",
+    "en": "Configure"
+  },
+  {
+    "id": "raster_url_preview_open",
+    "en": "Open raster URL configuration"
+  },
+  {
+    "id": "raster_url_settings_title",
+    "en": "Raster tile settings"
+  },
+  {
+    "id": "raster_url_settings_description",
+    "en": "Configure the tile endpoint, legend image, and request options."
+  },
+  {
+    "id": "raster_url_wms_select_layer",
+    "en": "Load a service to select a layer"
+  },
+  {
+    "id": "raster_url_wms_load_layers",
+    "en": "Load layers"
+  },
+  {
+    "id": "raster_url_wms_generate",
+    "en": "Generate URLs"
+  },
+  {
+    "id": "raster_url_wms_generate_help",
+    "en": "Fills the tile endpoint and legend fields above without saving."
+  },
+  {
+    "id": "raster_url_wms_service_required",
+    "en": "Enter a WMS service URL first."
+  },
+  {
+    "id": "raster_url_wms_loading_layers",
+    "en": "Loading WMS layers…"
+  },
+  {
+    "id": "raster_url_wms_layers_loaded",
+    "en": "WMS layers loaded"
+  },
+  {
+    "id": "raster_url_wms_no_layers",
+    "en": "No compatible WMS layers were found."
+  },
+  {
+    "id": "raster_url_wms_layer_required",
+    "en": "Load and select a WMS layer first."
+  },
+  {
+    "id": "raster_url_wms_generated",
+    "en": "Tile and legend URLs generated. Review or test them before saving."
   },
   {
     "id": "project_added_to_group",
@@ -8869,7 +8933,7 @@
   },
   {
     "id": "wms_display_tool_desc",
-    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends"
+    "en": "Generate tile and legend URLs from a WMS service."
   },
   {
     "id": "wms_select_layer",

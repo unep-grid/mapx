@@ -7615,6 +7615,11 @@
     "bn": "এটি একটি অনুপস্থিত TLS শংসাপত্র (যেমন প্রোটোকল 'https:' এর পরিবর্তে 'http:') বা ভুল কনফিগার করা CORS শিরোনাম সম্পর্কিত সমস্যাগুলি সমাধান করতে পারে। TLS শংসাপত্র পুরানো বা অবৈধ হলে এটি কাজ করবে না। প্রয়োজনে প্রদানকারীর সাথে যোগাযোগ করুন। নোট করুন যে এই পরিষেবাটি ব্যবহারকারীদের আইপি ব্যবহার করে একটি হারের সীমা নির্ধারণ করবে"
   },
   {
+    "id": "tool_mirror_enable_desc_short",
+    "en": "Use alternate base URLs when requesting external resources.",
+    "bn": "বাহ্যিক রিসোর্স অনুরোধ করার সময় বিকল্প বেস ইউআরএল ব্যবহার করুন।"
+  },
+  {
     "id": "tool_mirror_toolbox_btn",
     "en": "URL Mirror helper",
     "bn": "URL মিরর সহায়ক"
@@ -8876,8 +8881,8 @@
   },
   {
     "id": "project_tiles_report_status_valid",
-    "en": "OK",
-    "bn": "ঠিক আছে"
+    "en": "Valid",
+    "bn": "বৈধ"
   },
   {
     "id": "project_tiles_report_status_invalid",
@@ -8928,6 +8933,81 @@
     "id": "project_tiles_url_editor_save_error",
     "en": "Error saving",
     "bn": "সংরক্ষণ করতে ত্রুটি হয়েছে"
+  },
+  {
+    "id": "raster_url_summary_title",
+    "en": "Raster tile links",
+    "bn": "রাস্টার টাইল লিঙ্ক"
+  },
+  {
+    "id": "raster_url_action_configure",
+    "en": "Configure",
+    "bn": "কনফিগার করুন"
+  },
+  {
+    "id": "raster_url_preview_open",
+    "en": "Open raster URL configuration",
+    "bn": "খোলা রাস্টার ইউআরএল কনফিগারেশন"
+  },
+  {
+    "id": "raster_url_settings_title",
+    "en": "Raster tile settings",
+    "bn": "রাস্টার টাইল সেটিংস"
+  },
+  {
+    "id": "raster_url_settings_description",
+    "en": "Configure the tile endpoint, legend image, and request options.",
+    "bn": "টাইল এন্ডপয়েন্ট, লিজেন্ড ইমেজ এবং রিকোয়েস্ট অপশনগুলো কনফিগার করুন।"
+  },
+  {
+    "id": "raster_url_wms_select_layer",
+    "en": "Load a service to select a layer",
+    "bn": "একটি লেয়ার নির্বাচন করতে একটি পরিষেবা লোড করুন"
+  },
+  {
+    "id": "raster_url_wms_load_layers",
+    "en": "Load layers",
+    "bn": "স্তর লোড করুন"
+  },
+  {
+    "id": "raster_url_wms_generate",
+    "en": "Generate URLs",
+    "bn": "ইউআরএল তৈরি করুন"
+  },
+  {
+    "id": "raster_url_wms_generate_help",
+    "en": "Fills the tile endpoint and legend fields above without saving.",
+    "bn": "সংরক্ষণ না করেই উপরের টাইল এন্ডপয়েন্ট এবং লিজেন্ড ফিল্ডগুলি পূরণ করে।"
+  },
+  {
+    "id": "raster_url_wms_service_required",
+    "en": "Enter a WMS service URL first.",
+    "bn": "প্রথমে একটি WMS পরিষেবা URL প্রবেশ করান।"
+  },
+  {
+    "id": "raster_url_wms_loading_layers",
+    "en": "Loading WMS layers…",
+    "bn": "WMS লেয়ারগুলো লোড হচ্ছে…"
+  },
+  {
+    "id": "raster_url_wms_layers_loaded",
+    "en": "WMS layers loaded",
+    "bn": "WMS স্তরগুলি লোড করা হয়েছে"
+  },
+  {
+    "id": "raster_url_wms_no_layers",
+    "en": "No compatible WMS layers were found.",
+    "bn": "কোনো সামঞ্জস্যপূর্ণ WMS লেয়ার খুঁজে পাওয়া যায়নি।"
+  },
+  {
+    "id": "raster_url_wms_layer_required",
+    "en": "Load and select a WMS layer first.",
+    "bn": "প্রথমে একটি WMS লেয়ার লোড ও নির্বাচন করুন।"
+  },
+  {
+    "id": "raster_url_wms_generated",
+    "en": "Tile and legend URLs generated. Review or test them before saving.",
+    "bn": "টাইল এবং লেজেন্ড ইউআরএল তৈরি হয়েছে। সংরক্ষণ করার আগে এগুলো পর্যালোচনা বা পরীক্ষা করে নিন।"
   },
   {
     "id": "project_added_to_group",
@@ -11086,8 +11166,8 @@
   },
   {
     "id": "wms_display_tool_desc",
-    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
-    "bn": "WMS হোস্ট বেছে নেওয়ার টুল এবং টাইলস এবং কিংবদন্তির জন্য স্বয়ংক্রিয়ভাবে URL তৈরি করে"
+    "en": "Generate tile and legend URLs from a WMS service.",
+    "bn": "একটি WMS পরিষেবা থেকে টাইল এবং লিজেন্ড URL তৈরি করুন।"
   },
   {
     "id": "wms_select_layer",

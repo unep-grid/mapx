@@ -40,7 +40,7 @@
   },
   {
     "id": "wms_display_tool_desc",
-    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
+    "en": "Generate tile and legend URLs from a WMS service.",
     "fr": "",
     "es": "",
     "ru": "",

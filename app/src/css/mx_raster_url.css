@@ -1,0 +1,235 @@
+.raster-url-summary {
+  min-width: 0;
+  padding: 14px;
+  margin: 0 0 18px;
+  border: 1px solid var(--mx_ui_border);
+  border-radius: 6px;
+}
+
+.raster-url-summary__title {
+  width: auto;
+  padding: 0 6px;
+  margin: 0 0 8px;
+  border: 0;
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.raster-url-summary__group {
+  margin-bottom: 12px;
+}
+
+.raster-url-summary__field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.raster-url-summary__preview.form-control {
+  min-width: 0;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.raster-url-summary__preview.form-control:focus {
+  border-color: var(--mx_ui_input_accent);
+  outline: 2px solid color-mix(in srgb, var(--mx_ui_input_accent) 35%, transparent);
+  outline-offset: 1px;
+}
+
+.raster-url-summary__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.raster-url-summary__feedback {
+  min-height: 0;
+  margin: 8px 0 0;
+}
+
+.raster-url-status {
+  display: inline-block;
+  min-width: max-content;
+  white-space: nowrap;
+}
+
+.raster-url-section {
+  overflow: visible;
+  border: 1px solid var(--mx_ui_border);
+  border-radius: 6px;
+}
+
+.raster-url-section__header {
+  border-radius: 6px 6px 0 0;
+}
+
+.raster-url-section__header {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--mx_ui_border);
+  background: var(--mx_ui_background_accent);
+}
+
+.raster-url-section__header > .fa {
+  margin-top: 2px;
+  font-size: 1.2em;
+  text-align: center;
+}
+
+.raster-url-section__title {
+  margin: 0;
+  font-size: 1.05em;
+  font-weight: 600;
+}
+
+.raster-url-section__header .help-block {
+  margin: 3px 0 0;
+}
+
+.raster-url-section__body {
+  padding: 16px;
+}
+
+.raster-url-configurator__field-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.raster-url-configurator__field-label .control-label {
+  margin: 0;
+}
+
+.raster-url-configurator__options {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(260px, 2fr);
+  align-items: end;
+  gap: 24px;
+}
+
+.raster-url-configurator__options .form-group {
+  margin-bottom: 0;
+}
+
+.raster-url-configurator__mirror {
+  display: grid;
+  gap: 6px;
+  padding-bottom: 7px;
+}
+
+.raster-url-configurator__mirror .checkbox-inline {
+  padding-top: 0;
+}
+
+.raster-url-wms-steps {
+  display: grid;
+  gap: 12px;
+}
+
+.raster-url-wms-step {
+  display: grid;
+  grid-template-columns: 28px minmax(150px, 190px) minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+
+.raster-url-wms-step .control-label {
+  margin: 0;
+}
+
+.raster-url-wms-step__number {
+  display: inline-grid;
+  width: 24px;
+  height: 24px;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 50%;
+  background: var(--mx_ui_link);
+  place-items: center;
+}
+
+.raster-url-wms-steps__action {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-left: 228px;
+}
+
+.raster-url-wms-steps__action .help-block {
+  margin: 0;
+}
+
+.raster-url-layer-option {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.raster-url-layer-option__title,
+.raster-url-layer-option__id,
+.raster-url-layer-option__abstract {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.raster-url-layer-option__abstract {
+  display: -webkit-box;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.raster-url-configurator__feedback {
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .raster-url-configurator__options,
+  .raster-url-wms-step {
+    grid-template-columns: 1fr;
+  }
+
+  .raster-url-wms-step {
+    position: relative;
+    padding-left: 36px;
+    gap: 5px;
+  }
+
+  .raster-url-wms-step__number {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .raster-url-wms-steps__action {
+    align-items: stretch;
+    flex-direction: column;
+    padding-left: 36px;
+  }
+}
+
+@media (max-width: 520px) {
+  .raster-url-summary__field {
+    grid-template-columns: 1fr;
+  }
+
+  .raster-url-summary__actions {
+    justify-content: stretch;
+  }
+
+  .raster-url-summary__actions .btn {
+    flex: 1;
+  }
+}

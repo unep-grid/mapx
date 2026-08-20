@@ -7615,6 +7615,11 @@
     "ps": "دا کولی شي د ورک شوي TLS سند پورې اړوند مسلې حل کړي (د مثال پروتوکول 'http:' د 'https:' پرځای) یا غلط ترتیب شوي CORS سرلیکونه. دا به کار ونکړي که د TLS سند زوړ یا غلط وي. که اړتیا وي د چمتو کونکي سره اړیکه ونیسئ. په یاد ولرئ چې دا خدمت به د کاروونکو IP کاروي ترڅو د نرخ محدودیت تنظیم کړي"
   },
   {
+    "id": "tool_mirror_enable_desc_short",
+    "en": "Use alternate base URLs when requesting external resources.",
+    "ps": "د بهرنیو سرچینو غوښتنه کولو پر مهال بدیل اساس URLونه وکاروئ."
+  },
+  {
     "id": "tool_mirror_toolbox_btn",
     "en": "URL Mirror helper",
     "ps": "د URL عکس مرسته کوونکی"
@@ -8876,8 +8881,8 @@
   },
   {
     "id": "project_tiles_report_status_valid",
-    "en": "OK",
-    "ps": "سمه ده"
+    "en": "Valid",
+    "ps": "معتبر"
   },
   {
     "id": "project_tiles_report_status_invalid",
@@ -8928,6 +8933,81 @@
     "id": "project_tiles_url_editor_save_error",
     "en": "Error saving",
     "ps": "د خوندي کولو تېروتنه"
+  },
+  {
+    "id": "raster_url_summary_title",
+    "en": "Raster tile links",
+    "ps": "د راسټر ټایل لینکونه"
+  },
+  {
+    "id": "raster_url_action_configure",
+    "en": "Configure",
+    "ps": "ترتیبول"
+  },
+  {
+    "id": "raster_url_preview_open",
+    "en": "Open raster URL configuration",
+    "ps": "د راسټر URL ترتیب خلاص کړئ"
+  },
+  {
+    "id": "raster_url_settings_title",
+    "en": "Raster tile settings",
+    "ps": "د راسټر ټایل ترتیبات"
+  },
+  {
+    "id": "raster_url_settings_description",
+    "en": "Configure the tile endpoint, legend image, and request options.",
+    "ps": "د ټایل پای ټکی، د افسانې انځور، او د غوښتنې اختیارونه تنظیم کړئ."
+  },
+  {
+    "id": "raster_url_wms_select_layer",
+    "en": "Load a service to select a layer",
+    "ps": "د طبقې غوره کولو لپاره یو خدمت پورته کړئ"
+  },
+  {
+    "id": "raster_url_wms_load_layers",
+    "en": "Load layers",
+    "ps": "پرتونه پورته کړئ"
+  },
+  {
+    "id": "raster_url_wms_generate",
+    "en": "Generate URLs",
+    "ps": "URLونه جوړ کړئ"
+  },
+  {
+    "id": "raster_url_wms_generate_help",
+    "en": "Fills the tile endpoint and legend fields above without saving.",
+    "ps": "پورته د ټایل پای ټکی او لیجنډ ساحې پرته له خوندي کولو ډکوي."
+  },
+  {
+    "id": "raster_url_wms_service_required",
+    "en": "Enter a WMS service URL first.",
+    "ps": "لومړی د WMS خدماتو URL دننه کړئ."
+  },
+  {
+    "id": "raster_url_wms_loading_layers",
+    "en": "Loading WMS layers…",
+    "ps": "د WMS پرتونه پورته کیږي…"
+  },
+  {
+    "id": "raster_url_wms_layers_loaded",
+    "en": "WMS layers loaded",
+    "ps": "د WMS پرتونه پورته شوي"
+  },
+  {
+    "id": "raster_url_wms_no_layers",
+    "en": "No compatible WMS layers were found.",
+    "ps": "د WMS کوم مطابقت لرونکی طبقه ونه موندل شوه."
+  },
+  {
+    "id": "raster_url_wms_layer_required",
+    "en": "Load and select a WMS layer first.",
+    "ps": "لومړی د WMS طبقه پورته کړئ او غوره کړئ."
+  },
+  {
+    "id": "raster_url_wms_generated",
+    "en": "Tile and legend URLs generated. Review or test them before saving.",
+    "ps": "د ټایل او لیجنډ URLونه تولید شوي. د خوندي کولو دمخه یې بیاکتنه یا ازموینه وکړئ."
   },
   {
     "id": "project_added_to_group",
@@ -11086,8 +11166,8 @@
   },
   {
     "id": "wms_display_tool_desc",
-    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
-    "ps": "د WMS کوربه غوره کولو لپاره وسیله او د ټایلونو او افسانو لپاره په اوتومات ډول URL جوړ کړئ"
+    "en": "Generate tile and legend URLs from a WMS service.",
+    "ps": "د WMS خدمت څخه د ټایل او لیجنډ URLونه تولید کړئ."
   },
   {
     "id": "wms_select_layer",

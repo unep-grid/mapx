@@ -7615,6 +7615,11 @@
     "fr": "Cela peut résoudre les problèmes liés à un certificat TLS manquant (par exemple, le protocole « http : » au lieu de « https : ») ou des en-têtes CORS mal configurés. Cela ne fonctionnera pas si le certificat TLS est obsolète ou invalide. Contactez le fournisseur si nécessaire. Notez que ce service utilisera l'adresse IP des utilisateurs pour définir une limite de débit"
   },
   {
+    "id": "tool_mirror_enable_desc_short",
+    "en": "Use alternate base URLs when requesting external resources.",
+    "fr": "Utilisez des URL de base alternatives lors de la requête de ressources externes."
+  },
+  {
     "id": "tool_mirror_toolbox_btn",
     "en": "URL Mirror helper",
     "fr": "Assistant de miroir d'URL"
@@ -8876,8 +8881,8 @@
   },
   {
     "id": "project_tiles_report_status_valid",
-    "en": "OK",
-    "fr": "D'ACCORD"
+    "en": "Valid",
+    "fr": "Valide"
   },
   {
     "id": "project_tiles_report_status_invalid",
@@ -8928,6 +8933,81 @@
     "id": "project_tiles_url_editor_save_error",
     "en": "Error saving",
     "fr": "Sauvegarde des erreurs"
+  },
+  {
+    "id": "raster_url_summary_title",
+    "en": "Raster tile links",
+    "fr": "Liens vers des tuiles raster"
+  },
+  {
+    "id": "raster_url_action_configure",
+    "en": "Configure",
+    "fr": "Configure"
+  },
+  {
+    "id": "raster_url_preview_open",
+    "en": "Open raster URL configuration",
+    "fr": "Configuration de l'URL raster ouverte"
+  },
+  {
+    "id": "raster_url_settings_title",
+    "en": "Raster tile settings",
+    "fr": "paramètres des tuiles raster"
+  },
+  {
+    "id": "raster_url_settings_description",
+    "en": "Configure the tile endpoint, legend image, and request options.",
+    "fr": "Configurez le point de terminaison de la tuile, l'image de la légende et les options de requête."
+  },
+  {
+    "id": "raster_url_wms_select_layer",
+    "en": "Load a service to select a layer",
+    "fr": "Charger un service pour sélectionner une couche"
+  },
+  {
+    "id": "raster_url_wms_load_layers",
+    "en": "Load layers",
+    "fr": "Charger les couches"
+  },
+  {
+    "id": "raster_url_wms_generate",
+    "en": "Generate URLs",
+    "fr": "Générer des URL"
+  },
+  {
+    "id": "raster_url_wms_generate_help",
+    "en": "Fills the tile endpoint and legend fields above without saving.",
+    "fr": "Remplit les champs de point d'extrémité de la tuile et de légende ci-dessus sans enregistrer."
+  },
+  {
+    "id": "raster_url_wms_service_required",
+    "en": "Enter a WMS service URL first.",
+    "fr": "Saisissez d'abord l'URL d'un service WMS."
+  },
+  {
+    "id": "raster_url_wms_loading_layers",
+    "en": "Loading WMS layers…",
+    "fr": "Chargement des couches WMS…"
+  },
+  {
+    "id": "raster_url_wms_layers_loaded",
+    "en": "WMS layers loaded",
+    "fr": "Couches WMS chargées"
+  },
+  {
+    "id": "raster_url_wms_no_layers",
+    "en": "No compatible WMS layers were found.",
+    "fr": "Aucune couche WMS compatible n'a été trouvée."
+  },
+  {
+    "id": "raster_url_wms_layer_required",
+    "en": "Load and select a WMS layer first.",
+    "fr": "Chargez et sélectionnez d'abord une couche WMS."
+  },
+  {
+    "id": "raster_url_wms_generated",
+    "en": "Tile and legend URLs generated. Review or test them before saving.",
+    "fr": "Les URL des vignettes et des légendes ont été générées. Veuillez les vérifier ou les tester avant de les enregistrer."
   },
   {
     "id": "project_added_to_group",
@@ -11086,8 +11166,8 @@
   },
   {
     "id": "wms_display_tool_desc",
-    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
-    "fr": "Outil pour choisir les hôtes WMS et créer automatiquement l'URL pour les tuiles et les légendes"
+    "en": "Generate tile and legend URLs from a WMS service.",
+    "fr": "Générez les URL des vignettes et des légendes à partir d'un service WMS."
   },
   {
     "id": "wms_select_layer",

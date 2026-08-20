@@ -60,6 +60,7 @@ vi.mock("./../language", () => ({
   getDictItem: vi.fn(async (key) => key),
 }));
 vi.mock("../url_utils/url_utils.js", () => ({
+  getQueryParameter: vi.fn(() => []),
   getQueryParameterInit: vi.fn(() => []),
 }));
 vi.mock("./roles_matrix.js", () => ({ RoleMatrix: vi.fn() }));

@@ -8,29 +8,14 @@
   white-space: nowrap;
 }
 
-.tiles-report-actions,
-.raster-url-tools__row,
-.raster-url-tools__actions {
+.tiles-report-actions {
   display: inline-flex;
   align-items: center;
-}
-
-.tiles-report-actions {
   gap: 4px;
 }
 
-.tiles-report-actions .btn-circle,
-.raster-url-tools__actions .btn-circle {
+.tiles-report-actions .btn-circle {
   margin: 0;
-}
-
-.raster-url-tools__row {
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.raster-url-tools__actions {
-  gap: 4px;
 }
 
 .tiles-report-status {
@@ -39,18 +24,6 @@
 
 .tiles-report-status .fa {
   margin-right: 3px;
-}
-
-.tiles-url-editor-result {
-  margin: 0;
-}
-
-.raster-url-health-label {
-  white-space: nowrap;
-}
-
-.raster-url-wms-generator {
-  margin-bottom: 12px;
 }
 
 .tiles-report-container > table > thead > tr > th {

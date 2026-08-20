@@ -26,6 +26,19 @@
     "de": ""
   },
   {
+    "id": "tool_mirror_enable_desc_short",
+    "en": "Use alternate base URLs when requesting external resources.",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "tool_mirror_toolbox_btn",
     "en": "URL Mirror helper",
     "fr": "Assistant de miroir d'URL",

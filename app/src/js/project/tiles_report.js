@@ -7,6 +7,7 @@ import { tt } from "../el_mapx";
 import { isEmpty } from "../is_test/index.js";
 import { TilesCheckChannel } from "./tiles_check_channel.js";
 import { RasterUrlConfigurator } from "./raster_url_configurator.js";
+import { rasterStatusConfig, rasterStatusLabel } from "./raster_url_health.js";
 
 const WINDOW_KEY = "project-tiles-report";
 
@@ -223,61 +224,16 @@ export class TilesReport {
 
   statusLabel(row, resource = "overall") {
     if (resource === "legend" && !row.legend_url && row.legend_configured !== true) {
-      return this.statusConfig("not_configured");
+      return rasterStatusConfig("not_configured");
     }
-    if (isEmpty(row.checked_at)) {
-      return this.statusConfig("unchecked");
-    }
-    const valid = resource === "tile"
-      ? (row.tile_valid ?? row.valid)
-      : resource === "legend"
-        ? row.legend_valid
-        : row.valid;
-    if (valid === true) {
-      return this.statusConfig("valid");
-    }
-    return this.statusConfig("invalid");
+    if (isEmpty(row.checked_at)) return rasterStatusConfig("unchecked");
+    return rasterStatusLabel(row, resource, {
+      configured: resource !== "legend" || Boolean(row.legend_url || row.legend_configured),
+    });
   }
 
   statusConfig(state) {
-    const configs = {
-      unchecked: {
-        translationKey: "project_tiles_report_status_unchecked",
-        className: "default",
-        icon: ["fa", "fa-circle-o"],
-      },
-      not_configured: {
-        translationKey: "project_tiles_report_status_not_configured",
-        className: "default",
-        icon: ["fa", "fa-minus"],
-      },
-      pending: {
-        translationKey: "project_tiles_report_status_pending",
-        className: "default",
-        icon: ["fa", "fa-clock-o"],
-      },
-      checking: {
-        translationKey: "project_tiles_report_status_checking",
-        className: "info",
-        icon: ["fa", "fa-spinner", "fa-spin"],
-      },
-      valid: {
-        translationKey: "project_tiles_report_status_valid",
-        className: "success",
-        icon: ["fa", "fa-check"],
-      },
-      invalid: {
-        translationKey: "project_tiles_report_status_invalid",
-        className: "danger",
-        icon: ["fa", "fa-exclamation-triangle"],
-      },
-      incomplete: {
-        translationKey: "project_tiles_report_status_incomplete",
-        className: "warning",
-        icon: ["fa", "fa-warning"],
-      },
-    };
-    return { state, ...configs[state] };
+    return rasterStatusConfig(state);
   }
 
   setRowStatus(idView, status, resource = "overall") {
@@ -439,7 +395,7 @@ export class TilesReport {
   handleEdit(row) {
     const tr = this;
     if (!tr._urlEditor) {
-      tr._urlEditor = new RasterUrlConfigurator();
+      tr._urlEditor = new RasterUrlConfigurator({ root: tr.windowManager.root });
     }
     tr._urlEditor.show({
       idView: row.id_view,
