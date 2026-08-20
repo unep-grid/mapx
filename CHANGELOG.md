@@ -1,3 +1,10 @@
+  - [1.14.1-alpha.9](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.9) 
+
+    - fix(api): validate raster URLs within view bounds
+    - fix: improve raster tiles rt-view edit workflow
+    - docs(migration): initial draft
+
+
   - [1.14.1-alpha.8](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.8) 
 
     - fix: refine raster tile report and WMS workflow
