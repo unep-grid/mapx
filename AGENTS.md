@@ -63,6 +63,12 @@ architectural precedent for new work.
   listeners, observers, focus behavior, and cleanup explicit.
 - Add JSDoc types or TypeScript for new modules and public interfaces. Pass DOM
   nodes or typed data across boundaries; do not add arbitrary HTML-string APIs.
+- Put all user-visible interface text in `app/src/data/dict`, with manually
+  reviewed English and French values. Build translated UI with `tt()` or the
+  helpers in `app/src/js/language/index.js`, including `data-lang_key` metadata
+  for translated attributes, so an open interface updates when the language
+  changes without reloading the application. Let the dictionary runner fill
+  missing values for the other supported languages.
 - Protect performance: avoid redundant rendering, duplicate listeners, hidden
   polling, unnecessary network calls, and dependencies that duplicate existing
   capabilities.
