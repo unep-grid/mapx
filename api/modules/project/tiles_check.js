@@ -332,16 +332,19 @@ export async function ioViewRasterConfigTest(socket, data, cb) {
       throw new Error("project_tiles_check_access_denied");
     }
     const idProject = socket.session.project_id;
-    const { rowCount } = await pgRead.query(
-      `SELECT 1 FROM mx_views_latest
+    const { rows } = await pgRead.query(
+      `SELECT data #> '{source,bounds}' AS bounds
+       FROM mx_views_latest
        WHERE id = $1 AND project = $2 AND type = 'rt'`,
       [data.idView, idProject],
     );
-    if (!rowCount) throw new Error("view_not_found");
+    const view = rows[0];
+    if (!view) throw new Error("view_not_found");
     const config = normalizeRasterConfig(data);
     const result = await checkRasterUrls({
       tile_url: config.tiles,
       legend_url: config.legend || "",
+      bounds: view.bounds,
     });
     data.result = result;
     data.success = true;

@@ -166,13 +166,13 @@ describe("ioViewTilesUrlSave", () => {
 });
 
 describe("raster URL configuration", () => {
-  it("tests tile and legend URLs for a publisher without writing", async () => {
+  it("tests a regional tile URL using the view's stored bounds", async () => {
     const data = {
       idView: "MX-AAAAA-AAAAA-AAAAA",
       tiles: "https://a/{z}/{x}/{y}.png",
       legend: "https://a/legend.png",
     };
-    mocks.query.mockResolvedValueOnce({ rowCount: 1, rows: [] });
+    mocks.query.mockResolvedValueOnce({ rows: [{ bounds: [10, 40, 20, 50] }] });
     await new Promise((resolve) =>
       ioViewRasterConfigTest(
         fakeSocket({ user_roles: { publisher: true } }),
@@ -184,6 +184,39 @@ describe("raster URL configuration", () => {
     expect(data.result.tile_valid).toBe(true);
     expect(data.result.legend_valid).toBe(true);
     expect(mocks.query).toHaveBeenCalledTimes(1);
+    expect(mocks.query).toHaveBeenCalledWith(
+      expect.stringMatching(/data #> '\{source,bounds\}' AS bounds/),
+      [data.idView, "P1"],
+    );
+    expect(mocks.fetch).toHaveBeenNthCalledWith(
+      1,
+      "https://a/4/8/5.png",
+      expect.any(Object),
+    );
+  });
+
+  it("uses the default test tile when the view has no bounds", async () => {
+    const data = {
+      idView: "MX-AAAAA-AAAAA-AAAAA",
+      tiles: "https://a/{z}/{x}/{y}.png",
+      legend: "",
+    };
+    mocks.query.mockResolvedValueOnce({ rows: [{ bounds: null }] });
+
+    await new Promise((resolve) =>
+      ioViewRasterConfigTest(
+        fakeSocket({ user_roles: { publisher: true } }),
+        data,
+        resolve,
+      ),
+    );
+
+    expect(data.success).toBe(true);
+    expect(data.result.tile_tested_url).toBe("https://a/1/1/0.png");
+    expect(mocks.fetch).toHaveBeenCalledWith(
+      "https://a/1/1/0.png",
+      expect.any(Object),
+    );
   });
 
   it("saves the complete raster config and rechecks it", async () => {
