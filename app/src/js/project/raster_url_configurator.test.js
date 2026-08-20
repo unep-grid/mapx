@@ -120,7 +120,7 @@ describe("RasterUrlConfigurator", () => {
 
   it("renders current values and marks edited URLs as unchecked", async () => {
     const editor = new RasterUrlConfigurator({ root: document.body });
-    await editor.show({ idView: "MX-AAAAA-BBBBB-CCCCC", config });
+    await editor.show({ idView: "MX-AAAAA-BBBBB-CCCCC", mode: "persist", config });
 
     expect(editor.refs.tiles.value).toBe(config.tiles);
     expect(editor.refs.legend.value).toBe(config.legend);
@@ -144,7 +144,7 @@ describe("RasterUrlConfigurator", () => {
       },
     ]);
     const editor = new RasterUrlConfigurator({ root: document.body });
-    await editor.show({ idView: "MX-AAAAA-BBBBB-CCCCC", config });
+    await editor.show({ idView: "MX-AAAAA-BBBBB-CCCCC", mode: "persist", config });
 
     await editor.getLayers();
     expect(wmsGetLayers).toHaveBeenCalledWith(
@@ -196,7 +196,7 @@ describe("RasterUrlConfigurator", () => {
 
   it("keeps the WMS reload action icon-only and accessibly labelled", async () => {
     const editor = new RasterUrlConfigurator({ root: document.body });
-    await editor.show({ idView: "MX-AAAAA-BBBBB-CCCCC", config });
+    await editor.show({ idView: "MX-AAAAA-BBBBB-CCCCC", mode: "persist", config });
     await Promise.resolve();
 
     expect(editor.refs.btnLoad.querySelector(".fa-refresh")).not.toBeNull();
@@ -212,9 +212,14 @@ describe("RasterUrlConfigurator", () => {
   });
 
   it("tests without saving, then saves through the existing API contract", async () => {
-    const onSaved = vi.fn();
+    const onApplied = vi.fn();
     const editor = new RasterUrlConfigurator({ root: document.body });
-    await editor.show({ idView: "MX-AAAAA-BBBBB-CCCCC", config, onSaved });
+    await editor.show({
+      idView: "MX-AAAAA-BBBBB-CCCCC",
+      mode: "persist",
+      config,
+      onApplied,
+    });
     ws.emitAsync.mockResolvedValueOnce({
       result: {
         valid: false,
@@ -245,13 +250,14 @@ describe("RasterUrlConfigurator", () => {
       }),
       30000,
     );
-    expect(onSaved).toHaveBeenCalledWith(row, expect.objectContaining({ tiles: config.tiles }));
+    expect(onApplied).toHaveBeenCalledWith(row, expect.objectContaining({ tiles: config.tiles }));
     expect(editor.window.close).toHaveBeenCalledWith("saved");
     expect(editor.working).toBe(false);
 
     wmsGetLayers.mockResolvedValueOnce([]);
     await editor.show({
       idView: "MX-DDDDD-EEEEE-FFFFF",
+      mode: "persist",
       config,
     });
     await editor.getLayers();
@@ -275,8 +281,14 @@ describe("RasterUrlConfigurator", () => {
       }));
     const editor = new RasterUrlConfigurator({ root: document.body });
 
-    const firstShow = editor.show({ idView: "MX-AAAAA-BBBBB-CCCCC" });
-    const secondShow = editor.show({ idView: "MX-DDDDD-EEEEE-FFFFF" });
+    const firstShow = editor.show({
+      idView: "MX-AAAAA-BBBBB-CCCCC",
+      mode: "persist",
+    });
+    const secondShow = editor.show({
+      idView: "MX-DDDDD-EEEEE-FFFFF",
+      mode: "persist",
+    });
     resolveSecond({ config: { ...config, tiles: "second-view-tiles" } });
     await secondShow;
     resolveFirst({ config: { ...config, tiles: "first-view-tiles" } });
@@ -300,8 +312,9 @@ describe("RasterUrlConfigurator", () => {
     const editor = new RasterUrlConfigurator({ root: document.body });
     await editor.show({
       idView: "MX-AAAAA-BBBBB-CCCCC",
+      mode: "persist",
       config,
-      onSaved: firstSaved,
+      onApplied: firstSaved,
     });
     ws.emitAsync.mockImplementationOnce(() => new Promise((resolve) => {
       resolveSave = resolve;
@@ -310,8 +323,9 @@ describe("RasterUrlConfigurator", () => {
     const pendingSave = editor.handleSave();
     await editor.show({
       idView: "MX-DDDDD-EEEEE-FFFFF",
+      mode: "persist",
       config: { ...config, tiles: "second-view-tiles" },
-      onSaved: secondSaved,
+      onApplied: secondSaved,
     });
     const currentWindow = editor.window;
     resolveSave({ row: { id_view: "MX-AAAAA-BBBBB-CCCCC", valid: true } });
@@ -322,5 +336,53 @@ describe("RasterUrlConfigurator", () => {
     expect(currentWindow.close).not.toHaveBeenCalled();
     expect(editor.refs.tiles.value).toBe("second-view-tiles");
     expect(editor.working).toBe(false);
+  });
+
+  it("validates draft values before applying them without saving", async () => {
+    const onApplied = vi.fn();
+    const editor = new RasterUrlConfigurator({ root: document.body });
+    await editor.show({
+      idView: "MX-AAAAA-BBBBB-CCCCC",
+      mode: "draft",
+      config,
+      onApplied,
+    });
+    expect(editor.refs.btnSave.textContent).toBe("btn_update");
+
+    ws.emitAsync.mockResolvedValueOnce({
+      result: {
+        valid: false,
+        tile_valid: false,
+        legend_configured: true,
+        legend_valid: true,
+      },
+    });
+    await editor.handleSave();
+
+    expect(ws.emitAsync).toHaveBeenLastCalledWith(
+      "/client/view/raster/config/test",
+      expect.objectContaining({ idView: "MX-AAAAA-BBBBB-CCCCC" }),
+      30000,
+    );
+    expect(onApplied).not.toHaveBeenCalled();
+    expect(editor.window.close).not.toHaveBeenCalled();
+
+    const valid = {
+      valid: true,
+      tile_valid: true,
+      legend_configured: true,
+      legend_valid: true,
+    };
+    ws.emitAsync.mockResolvedValueOnce({ result: valid });
+    await editor.handleSave();
+
+    expect(onApplied).toHaveBeenCalledWith(
+      valid,
+      expect.objectContaining({ tileSize: 256, useMirror: true }),
+    );
+    expect(editor.window.close).toHaveBeenCalledWith("applied");
+    expect(ws.emitAsync.mock.calls.some(([event]) =>
+      event === "/client/view/raster/config/save"
+    )).toBe(false);
   });
 });

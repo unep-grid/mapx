@@ -540,7 +540,8 @@ export class TilesReport {
     }
     tr._urlEditor.show({
       idView: row.id_view,
-      onSaved: (freshRow, config) => {
+      mode: "persist",
+      onApplied: (freshRow, config) => {
         if (!freshRow) {
           return;
         }

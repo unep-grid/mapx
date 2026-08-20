@@ -1,221 +1,87 @@
 // @ts-check
-import { ElementCreator } from "../el/src/index.js";
 import { RasterUrlConfigurator } from "./raster_url_configurator.js";
-import { rasterStatusConfig, rasterStatusLabel } from "./raster_url_health.js";
-import { ws } from "../mx.js";
-import { tt } from "../el_mapx/index.js";
 
 const installedRoots = new WeakSet();
 
-/** Mount the browser-owned raster URL summary in the legacy Shiny editor. */
-export function installRasterUrlShinyBridge({ root, shiny }) {
-  if (!root || !shiny?.addCustomMessageHandler || installedRoots.has(root)) return;
+/**
+ * Connect the legacy raster-view form to the browser-owned configurator.
+ * Shiny keeps owning the native inputs and receives their normal DOM events.
+ *
+ * @param {{root: HTMLElement}} options
+ */
+export function installRasterUrlShinyBridge({ root }) {
+  if (!root?.ownerDocument || installedRoots.has(root)) return;
   installedRoots.add(root);
-  shiny.addCustomMessageHandler("mx-raster-url-tools", ({ idView }) => {
-    const host = [...root.querySelectorAll("[data-raster-url-view]")].find(
-      (element) => element.dataset.rasterUrlView === idView,
+  const configurator = new RasterUrlConfigurator({ root });
+
+  root.addEventListener("click", (event) => {
+    const ElementClass = root.ownerDocument.defaultView?.Element;
+    if (!ElementClass || !(event.target instanceof ElementClass)) return;
+    const button = event.target.closest("[data-raster-url-configure]");
+    if (!button || !root.contains(button)) return;
+    const editor = /** @type {HTMLElement|null} */ (
+      button.closest("[data-raster-url-editor]")
     );
-    if (host) mountRasterTools({ host, idView, root, shiny });
+    if (!editor) return;
+    openEditor({ configurator, editor }).catch(console.error);
   });
 }
 
-function mountRasterTools({ host, idView, root, shiny }) {
-  const el = new ElementCreator({ document: root.ownerDocument }).el;
-  const configurator = new RasterUrlConfigurator({ root });
-  let currentConfig = null;
-  let busy = false;
-
-  const createPreview = (resource) => el("button", {
-    class: ["form-control", "raster-url-summary__preview"],
-    type: "button",
-    dataset: { resource },
+/**
+ * @param {{configurator: RasterUrlConfigurator, editor: HTMLElement}} options
+ */
+async function openEditor({ configurator, editor }) {
+  const refs = formRefs(editor);
+  if (!refs || !editor.dataset.rasterUrlView) return;
+  await configurator.show({
+    idView: editor.dataset.rasterUrlView,
+    mode: "draft",
+    config: {
+      tiles: refs.tiles.value,
+      legend: refs.legend.value,
+      tileSize: Number(refs.tileSize.value) || 512,
+      useMirror: refs.useMirror.checked,
+    },
+    onApplied: (_health, config) => {
+      setInputValue(refs.tiles, config.tiles);
+      setInputValue(refs.legend, config.legend);
+      setInputValue(refs.tileSize, String(config.tileSize));
+      setInputValue(refs.useMirror, Boolean(config.useMirror));
+    },
   });
-  const refs = {
-    tilesPreview: createPreview("tiles"),
-    legendPreview: createPreview("legend"),
-    tilesStatus: el("span"),
-    legendStatus: el("span"),
-    feedback: el("div", {
-      class: ["help-block", "raster-url-summary__feedback"],
-      "aria-live": "polite",
-    }),
-  };
+}
 
-  refs.configure = el("button", {
-    class: ["btn", "btn-default", "btn-sm"],
-    type: "button",
-    on: { click: openConfigurator },
-  }, [
-    el("i", { class: ["fa", "fa-pencil"], "aria-hidden": "true" }),
-    " ",
-    tt("raster_url_action_configure"),
-  ]);
-  refs.check = el("button", {
-    class: ["btn", "btn-default", "btn-sm"],
-    type: "button",
-    on: { click: checkNow },
-  }, [
-    el("i", { class: ["fa", "fa-heartbeat"], "aria-hidden": "true" }),
-    " ",
-    tt("project_tiles_report_btn_check"),
-  ]);
-  refs.tilesPreview.addEventListener("click", openConfigurator);
-  refs.legendPreview.addEventListener("click", openConfigurator);
+/** @param {HTMLElement} editor */
+function formRefs(editor) {
+  const tiles = /** @type {HTMLTextAreaElement|null} */ (
+    editor.querySelector("#textRasterTileUrl")
+  );
+  const legend = /** @type {HTMLTextAreaElement|null} */ (
+    editor.querySelector("#textRasterTileLegend")
+  );
+  const tileSize = /** @type {HTMLSelectElement|null} */ (
+    editor.querySelector("#selectRasterTileSize")
+  );
+  const useMirror = /** @type {HTMLInputElement|null} */ (
+    editor.querySelector("#checkRasterTileUseMirror")
+  );
+  if (!tiles || !legend || !tileSize || !useMirror) return null;
+  return { tiles, legend, tileSize, useMirror };
+}
 
-  function resourceRow(label, preview, status, id) {
-    preview.id = id;
-    return el("div", { class: ["form-group", "raster-url-summary__group"] }, [
-      el("label", { class: "control-label", for: id }, label),
-      el("div", { class: "raster-url-summary__field" }, [preview, status]),
-    ]);
+/**
+ * @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input
+ * @param {string|boolean} value
+ */
+function setInputValue(input, value) {
+  const InputClass = input.ownerDocument.defaultView?.HTMLInputElement;
+  if (InputClass && input instanceof InputClass && input.type === "checkbox") {
+    input.checked = Boolean(value);
+  } else {
+    input.value = String(value);
   }
-
-  function renderStatus(target, status) {
-    target.className = `label label-${status.className} raster-url-status`;
-    target.dataset.state = status.state;
-    target.replaceChildren(
-      el("i", { class: status.icon, "aria-hidden": "true" }),
-      " ",
-      tt(status.translationKey),
-    );
+  const EventClass = input.ownerDocument.defaultView?.Event;
+  if (EventClass) {
+    input.dispatchEvent(new EventClass("change", { bubbles: true }));
   }
-
-  function renderPreview(target, value) {
-    if (value) {
-      target.textContent = value;
-      target.title = value;
-      return;
-    }
-    target.replaceChildren(tt("project_tiles_report_status_not_configured"));
-    target.removeAttribute("title");
-  }
-
-  function renderConfig(config) {
-    currentConfig = config;
-    const health = config?.health;
-    renderPreview(refs.tilesPreview, config?.tiles);
-    renderPreview(refs.legendPreview, config?.legend);
-    renderStatus(refs.tilesStatus, rasterStatusLabel(health, "tile", {
-      configured: Boolean(config?.tiles),
-    }));
-    renderStatus(refs.legendStatus, rasterStatusLabel(health, "legend", {
-      configured: Boolean(config?.legend),
-    }));
-  }
-
-  function setBusy(value) {
-    busy = value;
-    refs.configure.disabled = value || !currentConfig;
-    refs.check.disabled = value || !currentConfig;
-    refs.tilesPreview.disabled = value || !currentConfig;
-    refs.legendPreview.disabled = value || !currentConfig;
-  }
-
-  function notifyShiny() {
-    shiny.setInputValue?.(
-      "viewRasterConfigSaved",
-      { idView, update: Date.now() },
-      { priority: "event" },
-    );
-  }
-
-  function showError(error) {
-    refs.feedback.className = "help-block text-danger raster-url-summary__feedback";
-    refs.feedback.textContent = error?.message || String(error);
-  }
-
-  async function refresh() {
-    setBusy(true);
-    refs.feedback.replaceChildren();
-    try {
-      const data = await ws.emitAsync(
-        "/client/view/raster/config/get",
-        { idView },
-        15 * 1000,
-      );
-      if (data.error) throw new Error(data.error);
-      renderConfig(data.config);
-    } catch (error) {
-      showError(error);
-      renderStatus(refs.tilesStatus, rasterStatusConfig("incomplete"));
-      renderStatus(refs.legendStatus, rasterStatusConfig("incomplete"));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function openConfigurator() {
-    if (busy || !currentConfig) return;
-    try {
-      await configurator.show({
-        idView,
-        config: currentConfig,
-        onSaved: (row, config) => {
-          renderConfig({ ...config, health: row });
-          refs.feedback.replaceChildren();
-          notifyShiny();
-        },
-      });
-    } catch (error) {
-      showError(error);
-    }
-  }
-
-  async function checkNow() {
-    if (busy || !currentConfig) return;
-    setBusy(true);
-    refs.feedback.replaceChildren();
-    renderStatus(refs.tilesStatus, rasterStatusConfig("checking"));
-    if (currentConfig.legend) {
-      renderStatus(refs.legendStatus, rasterStatusConfig("checking"));
-    }
-    try {
-      const data = await ws.emitAsync(
-        "/client/project/tiles_check/run_one",
-        { idView },
-        30 * 1000,
-      );
-      if (data.error) throw new Error(data.error);
-      renderConfig({ ...currentConfig, health: data.row });
-      notifyShiny();
-    } catch (error) {
-      showError(error);
-      renderStatus(refs.tilesStatus, rasterStatusConfig("incomplete"));
-      renderStatus(
-        refs.legendStatus,
-        currentConfig.legend
-          ? rasterStatusConfig("incomplete")
-          : rasterStatusConfig("not_configured"),
-      );
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  host.replaceChildren(el("fieldset", { class: "raster-url-summary" }, [
-    el(
-      "legend",
-      { class: ["control-label", "raster-url-summary__title"] },
-      tt("raster_url_summary_title"),
-    ),
-    resourceRow(
-      tt("source_raster_tile_url"),
-      refs.tilesPreview,
-      refs.tilesStatus,
-      `mx-raster-tiles-${idView}`,
-    ),
-    resourceRow(
-      tt("source_raster_tile_legend"),
-      refs.legendPreview,
-      refs.legendStatus,
-      `mx-raster-legend-${idView}`,
-    ),
-    el("div", { class: "raster-url-summary__actions" }, [
-      refs.configure,
-      refs.check,
-    ]),
-    refs.feedback,
-  ]));
-  setBusy(true);
-  refresh();
 }

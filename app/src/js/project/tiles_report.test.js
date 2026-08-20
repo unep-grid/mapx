@@ -121,8 +121,26 @@ describe("TilesReport edit action", () => {
     expect(editorInstances[0].show).toHaveBeenCalledWith(
       expect.objectContaining({
         idView: "MX-AAAAA-BBBBB-CCCCC",
+        mode: "persist",
       }),
     );
+
+    const { onApplied } = editorInstances[0].show.mock.calls[0][0];
+    onApplied(
+      {
+        id_view: "MX-AAAAA-BBBBB-CCCCC",
+        valid: true,
+        tile_valid: true,
+        legend_configured: true,
+        legend_valid: true,
+      },
+      {
+        tiles: "https://new.test/{z}/{x}/{y}.png",
+        legend: "https://new.test/legend.png",
+      },
+    );
+    expect(report.rows[0].tile_url).toContain("new.test");
+    expect(report.rows[0].legend_url).toContain("new.test");
   });
 
   it("translates structured and legacy diagnostic codes", () => {

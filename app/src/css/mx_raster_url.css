@@ -16,41 +16,10 @@
   line-height: inherit;
 }
 
-.raster-url-summary__group {
-  margin-bottom: 12px;
-}
-
-.raster-url-summary__field {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 8px;
-}
-
-.raster-url-summary__preview.form-control {
-  min-width: 0;
-  overflow: hidden;
-  text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.raster-url-summary__preview.form-control:focus {
-  border-color: var(--mx_ui_input_accent);
-  outline: 2px solid color-mix(in srgb, var(--mx_ui_input_accent) 35%, transparent);
-  outline-offset: 1px;
-}
-
 .raster-url-summary__actions {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-}
-
-.raster-url-summary__feedback {
-  min-height: 0;
-  margin: 8px 0 0;
 }
 
 .raster-url-status {
@@ -221,10 +190,6 @@
 }
 
 @media (max-width: 520px) {
-  .raster-url-summary__field {
-    grid-template-columns: 1fr;
-  }
-
   .raster-url-summary__actions {
     justify-content: stretch;
   }

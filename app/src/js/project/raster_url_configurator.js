@@ -30,13 +30,24 @@ export class RasterUrlConfigurator {
     bindAll(rc);
   }
 
-  /** @param {{idView: string, config?: object, onSaved?: Function}} options */
-  async show({ idView, config, onSaved }) {
+  /**
+   * @param {{
+   *   idView: string,
+   *   mode: "draft" | "persist",
+   *   config?: object,
+   *   onApplied?: Function
+   * }} options
+   */
+  async show({ idView, mode, config, onApplied }) {
     const rc = this;
+    if (mode !== "draft" && mode !== "persist") {
+      throw new TypeError("RasterUrlConfigurator requires a valid mode");
+    }
     const sessionId = ++rc.sessionId;
     rc.working = false;
     rc.idView = idView;
-    rc.onSaved = onSaved;
+    rc.mode = mode;
+    rc.onApplied = onApplied;
     const nextConfig = config || (await rc.fetchConfig(idView));
     if (!rc.isSessionCurrent(sessionId)) return;
     rc.config = nextConfig;
@@ -152,7 +163,11 @@ export class RasterUrlConfigurator {
       class: ["btn", "btn-primary"],
       type: "button",
       on: { click: rc.handleSave },
-    }, tt("project_tiles_url_editor_btn_save"));
+    }, tt(
+      rc.mode === "draft"
+        ? "btn_update"
+        : "project_tiles_url_editor_btn_save",
+    ));
     rc.refs.btnCancel = el("button", {
       class: ["btn", "btn-default"],
       type: "button",
@@ -375,6 +390,16 @@ export class RasterUrlConfigurator {
     rc.updateGenerateButton();
   }
 
+  async testConfig(config = this.getConfig()) {
+    const data = await ws.emitAsync(
+      "/client/view/raster/config/test",
+      { idView: this.idView, ...config },
+      30 * 1000,
+    );
+    if (data.error) throw new Error(data.error);
+    return data.result || {};
+  }
+
   async handleTest() {
     const rc = this;
     if (rc.working) return;
@@ -386,14 +411,8 @@ export class RasterUrlConfigurator {
       rc.renderStatus(rc.refs.legendStatus, rasterStatusConfig("checking"));
     }
     try {
-      const data = await ws.emitAsync(
-        "/client/view/raster/config/test",
-        { idView: rc.idView, ...rc.getConfig() },
-        30 * 1000,
-      );
-      if (data.error) throw new Error(data.error);
+      const result = await rc.testConfig();
       if (!rc.isSessionCurrent(sessionId)) return;
-      const result = data.result || {};
       rc.renderHealth(result);
       rc.setFeedback("info", rc.healthSummary(result));
     } catch (error) {
@@ -413,21 +432,41 @@ export class RasterUrlConfigurator {
     if (rc.working) return;
     const sessionId = rc.sessionId;
     const window = rc.window;
-    const onSaved = rc.onSaved;
+    const onApplied = rc.onApplied;
     rc.setWorking(true);
-    rc.setFeedback("info", tt("project_tiles_url_editor_saving"));
+    rc.setFeedback(
+      "info",
+      tt(
+        rc.mode === "draft"
+          ? "project_tiles_url_editor_testing"
+          : "project_tiles_url_editor_saving",
+      ),
+    );
     try {
       const config = rc.getConfig();
-      const data = await ws.emitAsync(
-        "/client/view/raster/config/save",
-        { idView: rc.idView, config },
-        30 * 1000,
-      );
-      if (data.error) throw new Error(data.error);
-      onSaved?.(data.row, config);
+      let result;
+      if (rc.mode === "draft") {
+        result = await rc.testConfig(config);
+        if (!rc.isSessionCurrent(sessionId)) return;
+        rc.renderHealth(result);
+        if (result.valid !== true) {
+          rc.setFeedback("info", rc.healthSummary(result));
+          rc.setWorking(false);
+          return;
+        }
+      } else {
+        const data = await ws.emitAsync(
+          "/client/view/raster/config/save",
+          { idView: rc.idView, config },
+          30 * 1000,
+        );
+        if (data.error) throw new Error(data.error);
+        result = data.row;
+      }
+      onApplied?.(result, config);
       if (!rc.isSessionCurrent(sessionId) || rc.window !== window) return;
       rc.setWorking(false);
-      window?.close("saved");
+      window?.close(rc.mode === "draft" ? "applied" : "saved");
     } catch (error) {
       if (!rc.isSessionCurrent(sessionId)) return;
       rc.setFeedback("danger", error?.message || String(error));

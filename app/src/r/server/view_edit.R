@@ -353,10 +353,79 @@ observe({
             # raster tile specific
             #
             if (viewType == "rt") {
+              sourceRaster <- .get(viewData, c("data", "source"), list())
+              urlTiles <- .get(sourceRaster, "tiles", list())
+              urlTiles <- if (isEmpty(urlTiles)) {
+                ""
+              } else {
+                as.character(urlTiles[[1]])
+              }
+              urlLegend <- .get(sourceRaster, "legend", "")
+              tileSize <- .get(sourceRaster, "tileSize", 512)
+              if (!tileSize %in% c(256, 512)) tileSize <- 512
+
               uiType <- tagList(
-                tags$div(
-                  class = "raster-url-tools",
-                  `data-raster-url-view` = viewData$id
+                tags$fieldset(
+                  class = "raster-url-summary",
+                  `data-raster-url-editor` = "true",
+                  `data-raster-url-view` = viewData$id,
+                  tags$legend(
+                    class = "raster-url-summary__title control-label",
+                    d("raster_url_summary_title", language)
+                  ),
+                  tags$div(
+                    class = "form-group shiny-input-container",
+                    tags$label(
+                      class = "control-label",
+                      `for` = "textRasterTileUrl",
+                      d("source_raster_tile_url", language)
+                    ),
+                    tags$textarea(
+                      id = "textRasterTileUrl",
+                      class = "shiny-input-textarea form-control",
+                      rows = 2,
+                      readonly = "readonly",
+                      urlTiles
+                    )
+                  ),
+                  tags$div(
+                    class = "form-group shiny-input-container",
+                    tags$label(
+                      class = "control-label",
+                      `for` = "textRasterTileLegend",
+                      d("source_raster_tile_legend", language)
+                    ),
+                    tags$textarea(
+                      id = "textRasterTileLegend",
+                      class = "shiny-input-textarea form-control",
+                      rows = 2,
+                      readonly = "readonly",
+                      urlLegend
+                    )
+                  ),
+                  selectInput(
+                    inputId = "selectRasterTileSize",
+                    label = d("source_raster_tile_size", language),
+                    selected = tileSize,
+                    choices = c(256, 512),
+                    selectize = FALSE
+                  ),
+                  checkboxInput(
+                    inputId = "checkRasterTileUseMirror",
+                    label = d("tool_mirror_enable", language),
+                    value = isTRUE(.get(sourceRaster, "useMirror", FALSE))
+                  ),
+                  tags$div(
+                    class = "raster-url-summary__actions",
+                    tags$button(
+                      type = "button",
+                      class = "btn btn-default btn-sm",
+                      `data-raster-url-configure` = "true",
+                      tags$i(class = "fa fa-pencil", `aria-hidden` = "true"),
+                      " ",
+                      d("raster_url_action_configure", language)
+                    )
+                  )
                 ),
                 jedOutput("viewRasterLegendTitles")
               )
@@ -438,10 +507,6 @@ observe({
               textCloseButton = d("btn_close", language),
               addBtnMove = TRUE
             )
-
-            if (viewType == "rt") {
-              mxRasterUrlTools(.get(viewData, c("id")))
-            }
           },
           "btn_opt_edit_custom_code" = {
             if (!viewIsEditable) {
@@ -718,18 +783,6 @@ observeEvent(input$btnEditViewExternalMetadata, {
 #
 # View removal
 #
-observeEvent(input$viewRasterConfigSaved, {
-  idView <- .get(input$viewRasterConfigSaved, "idView")
-  idCurrent <- .get(reactData$viewDataEdited, "id")
-  if (isEmpty(idView) || idView != idCurrent) return()
-  viewFresh <- mxDbGetView(idView)[[1]]
-  if (!isEmpty(viewFresh)) {
-    reactData$viewDataEdited[[c("data", "source")]] <-
-      viewFresh[[c("data", "source")]]
-    reactData$viewDataEdited[["date_modified"]] <- viewFresh[["date_modified"]]
-  }
-})
-
 observeEvent(input$btnViewDeleteConfirm, {
   idView <- .get(reactData$viewDataEdited, c("id"))
   email <- reactUser$data$email
@@ -1013,9 +1066,15 @@ observeEvent(input$btnViewSave, {
     # raster tiles
     #
     if (view[["type"]] == "rt") {
-      # Raster URLs are saved immediately by the client/API configurator.
-      # Keep the source object intact while saving the remaining view draft.
-      view[[c("data", "source", "legendTitles")]] <- input$viewRasterLegendTitles_values$data
+      sourceRaster <- .get(view, c("data", "source"), list())
+      if (!is.list(sourceRaster)) sourceRaster <- list()
+      sourceRaster$type <- "raster"
+      sourceRaster$tiles <- rep(input$textRasterTileUrl, 2)
+      sourceRaster$legend <- input$textRasterTileLegend
+      sourceRaster$tileSize <- as.integer(input$selectRasterTileSize)
+      sourceRaster$useMirror <- isTRUE(input$checkRasterTileUseMirror)
+      sourceRaster$legendTitles <- input$viewRasterLegendTitles_values$data
+      view[["data"]][["source"]] <- sourceRaster
     }
 
     #

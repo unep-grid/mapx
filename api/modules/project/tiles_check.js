@@ -360,18 +360,9 @@ export async function ioViewRasterConfigSave(socket, data, cb) {
     }
     const idProject = socket.session.project_id;
     const config = normalizeRasterConfig(data.config);
-    const view = await getRasterView(idProject, data.idView);
-    if (!view) {
-      throw new Error("view_not_found");
-    }
-    await setViewRasterConfig(data.idView, config, idProject);
-    const [row] = await runChecks([
-      {
-        ...view,
-        tile_url: config.tiles,
-        legend_url: isString(config.legend) ? config.legend : "",
-      },
-    ]);
+    const view = await setViewRasterConfig(data.idView, config, idProject);
+    if (!view) throw new Error("view_not_found");
+    const [row] = await runChecks([view]);
     data.row = row;
     data.success = true;
   } catch (e) {

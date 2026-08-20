@@ -83,7 +83,7 @@ function mapxBindings() {
     root,
     shiny,
   });
-  installRasterUrlShinyBridge({ root, shiny });
+  installRasterUrlShinyBridge({ root });
   /**
    * Set init query parameters
    */

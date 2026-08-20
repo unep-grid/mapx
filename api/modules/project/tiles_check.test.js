@@ -65,6 +65,13 @@ beforeEach(() => {
   vi.clearAllMocks();
   mocks.query.mockResolvedValue({ rows: [] });
   mocks.fetch.mockResolvedValue(fakeResponse());
+  mocks.setViewRasterConfig.mockImplementation(async (id, config, project) => ({
+    id,
+    project,
+    tile_url: config.tiles,
+    legend_url: config.legend || null,
+    bounds: null,
+  }));
 });
 
 describe("ioViewTilesUrlTest", () => {
@@ -180,15 +187,6 @@ describe("raster URL configuration", () => {
   });
 
   it("saves the complete raster config and rechecks it", async () => {
-    mocks.query.mockResolvedValueOnce({
-      rows: [{
-        id: "MX-AAAAA-AAAAA-AAAAA",
-        project: "P1",
-        tile_url: "https://old/{z}/{x}/{y}.png",
-        legend_url: "https://old/legend.png",
-        bounds: null,
-      }],
-    });
     const data = {
       idView: "MX-AAAAA-AAAAA-AAAAA",
       config: {
@@ -212,6 +210,56 @@ describe("raster URL configuration", () => {
       "P1",
     );
     expect(data.row.valid).toBe(true);
+  });
+
+  it("rechecks the persisted values returned by the write", async () => {
+    mocks.setViewRasterConfig.mockResolvedValueOnce({
+      id: "MX-AAAAA-AAAAA-AAAAA",
+      project: "P1",
+      tile_url: "https://stored.test/{z}/{x}/{y}.png",
+      legend_url: "https://stored.test/legend.png",
+      bounds: null,
+    });
+    const data = {
+      idView: "MX-AAAAA-AAAAA-AAAAA",
+      config: {
+        tiles: "https://submitted.test/{z}/{x}/{y}.png",
+        legend: "https://submitted.test/legend.png",
+      },
+    };
+
+    await new Promise((resolve) =>
+      ioViewRasterConfigSave(
+        fakeSocket({ user_roles: { publisher: true } }),
+        data,
+        resolve,
+      ),
+    );
+
+    expect(data.success).toBe(true);
+    const fetchedUrls = mocks.fetch.mock.calls.map(([url]) => String(url));
+    expect(fetchedUrls).toHaveLength(2);
+    expect(fetchedUrls.every((url) => url.startsWith("https://stored.test/")))
+      .toBe(true);
+  });
+
+  it("rejects a save when no matching view was persisted", async () => {
+    mocks.setViewRasterConfig.mockResolvedValueOnce(null);
+    const data = {
+      idView: "MX-AAAAA-AAAAA-AAAAA",
+      config: { tiles: "https://a/{z}/{x}/{y}.png", legend: "" },
+    };
+
+    await new Promise((resolve) =>
+      ioViewRasterConfigSave(
+        fakeSocket({ user_roles: { publisher: true } }),
+        data,
+        resolve,
+      ),
+    );
+
+    expect(data.error).toBe("view_not_found");
+    expect(mocks.fetch).not.toHaveBeenCalled();
   });
 
   it("rejects unsupported raster options before writing", async () => {
