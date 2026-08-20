@@ -24,6 +24,7 @@ export class RasterUrlConfigurator {
     rc.windowManager = getMapxWindowManager(root);
     rc.el = rc.windowManager.el;
     rc.working = false;
+    rc.sessionId = 0;
     rc.layerRequestId = 0;
     rc.layerSelect = null;
     bindAll(rc);
@@ -32,24 +33,29 @@ export class RasterUrlConfigurator {
   /** @param {{idView: string, config?: object, onSaved?: Function}} options */
   async show({ idView, config, onSaved }) {
     const rc = this;
+    const sessionId = ++rc.sessionId;
+    rc.working = false;
     rc.idView = idView;
     rc.onSaved = onSaved;
-    rc.config = config || (await rc.fetchConfig());
-    rc.buildWindow();
+    const nextConfig = config || (await rc.fetchConfig(idView));
+    if (!rc.isSessionCurrent(sessionId)) return;
+    rc.config = nextConfig;
+    rc.buildWindow(sessionId);
   }
 
-  async fetchConfig() {
+  async fetchConfig(idView = this.idView) {
     const data = await ws.emitAsync(
       "/client/view/raster/config/get",
-      { idView: this.idView },
+      { idView },
       15 * 1000,
     );
     if (data.error) throw new Error(data.error);
     return data.config;
   }
 
-  buildWindow() {
+  buildWindow(sessionId = this.sessionId) {
     const rc = this;
+    rc.working = false;
     rc.destroyLayerSelect();
     const el = rc.el;
     const config = rc.config || {};
@@ -170,10 +176,21 @@ export class RasterUrlConfigurator {
         height: "min(780px, calc(100vh - 32px))",
         minHeight: 480,
       },
-      onClose: rc.destroyLayerSelect,
+      onClose: () => rc.closeSession(sessionId),
     });
     rc.renderHealth(config.health);
-    rc.updateGenerateButton();
+    rc.setWorking(false);
+  }
+
+  isSessionCurrent(sessionId) {
+    return sessionId === this.sessionId;
+  }
+
+  closeSession(sessionId) {
+    if (!this.isSessionCurrent(sessionId)) return;
+    this.sessionId += 1;
+    this.working = false;
+    this.destroyLayerSelect();
   }
 
   buildWmsControls() {
@@ -361,6 +378,7 @@ export class RasterUrlConfigurator {
   async handleTest() {
     const rc = this;
     if (rc.working) return;
+    const sessionId = rc.sessionId;
     rc.setWorking(true);
     rc.setFeedback("info", tt("project_tiles_url_editor_testing"));
     rc.renderStatus(rc.refs.tilesStatus, rasterStatusConfig("checking"));
@@ -374,23 +392,28 @@ export class RasterUrlConfigurator {
         30 * 1000,
       );
       if (data.error) throw new Error(data.error);
+      if (!rc.isSessionCurrent(sessionId)) return;
       const result = data.result || {};
       rc.renderHealth(result);
       rc.setFeedback("info", rc.healthSummary(result));
     } catch (error) {
+      if (!rc.isSessionCurrent(sessionId)) return;
       rc.setFeedback("danger", error?.message || String(error));
       rc.renderStatus(rc.refs.tilesStatus, rasterStatusConfig("incomplete"));
       if (rc.refs.legend.value.trim()) {
         rc.renderStatus(rc.refs.legendStatus, rasterStatusConfig("incomplete"));
       }
     } finally {
-      rc.setWorking(false);
+      if (rc.isSessionCurrent(sessionId)) rc.setWorking(false);
     }
   }
 
   async handleSave() {
     const rc = this;
     if (rc.working) return;
+    const sessionId = rc.sessionId;
+    const window = rc.window;
+    const onSaved = rc.onSaved;
     rc.setWorking(true);
     rc.setFeedback("info", tt("project_tiles_url_editor_saving"));
     try {
@@ -401,9 +424,12 @@ export class RasterUrlConfigurator {
         30 * 1000,
       );
       if (data.error) throw new Error(data.error);
-      rc.onSaved?.(data.row, config);
-      rc.window?.close("saved");
+      onSaved?.(data.row, config);
+      if (!rc.isSessionCurrent(sessionId) || rc.window !== window) return;
+      rc.setWorking(false);
+      window?.close("saved");
     } catch (error) {
+      if (!rc.isSessionCurrent(sessionId)) return;
       rc.setFeedback("danger", error?.message || String(error));
       rc.setWorking(false);
     }
@@ -463,10 +489,12 @@ export class RasterUrlConfigurator {
   }
 
   setAccessibleLabel(target, key) {
+    target.dataset.lang_key = key;
+    target.dataset.lang_type = "tooltip";
+    target.classList.add("hint--left");
     getDictItem(key)
       .then((label) => {
         target.setAttribute("aria-label", label);
-        target.title = label;
       })
       .catch(console.error);
   }
@@ -514,7 +542,8 @@ export class RasterUrlConfigurator {
   async getLayers() {
     const rc = this;
     const url = rc.refs.service.value.trim();
-    if (!url || rc.working) {
+    if (rc.working) return;
+    if (!url) {
       rc.setFeedback("warning", tt("raster_url_wms_service_required"));
       return;
     }

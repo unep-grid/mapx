@@ -8796,22 +8796,22 @@
   },
   {
     "id": "project_tiles_report_title",
-    "en": "Tile links report",
-    "de": "Bericht über Kachelverknüpfungen"
+    "en": "Raster tile links report",
+    "de": "Bericht über Rasterkachelverknüpfungen"
   },
   {
     "id": "project_tiles_report_btn_run",
-    "en": "Run check now",
-    "de": "Jetzt prüfen"
+    "en": "Check all now",
+    "de": "Jetzt alles prüfen"
   },
   {
     "id": "project_tiles_report_running",
-    "en": "Running…",
-    "de": "Läuft…"
+    "en": "Checking…",
+    "de": "Überprüfung…"
   },
   {
     "id": "project_tiles_report_no_views",
-    "en": "No raster tile views found in this project",
+    "en": "No raster tile views were found in this project.",
     "de": "In diesem Projekt wurden keine Rasterkachelansichten gefunden."
   },
   {
@@ -8846,8 +8846,13 @@
   },
   {
     "id": "project_tiles_report_col_detail",
-    "en": "Detail",
-    "de": "Detail"
+    "en": "Details",
+    "de": "Details"
+  },
+  {
+    "id": "project_tiles_report_col_actions",
+    "en": "Actions",
+    "de": "Aktionen"
   },
   {
     "id": "project_tiles_report_never",
@@ -8876,8 +8881,8 @@
   },
   {
     "id": "project_tiles_report_run_error",
-    "en": "Error running check",
-    "de": "Fehler beim Ausführen der Prüfung"
+    "en": "Check failed",
+    "de": "Überprüfung fehlgeschlagen"
   },
   {
     "id": "project_tiles_report_status_valid",
@@ -8886,13 +8891,13 @@
   },
   {
     "id": "project_tiles_report_status_invalid",
-    "en": "Broken",
-    "de": "Gebrochen"
+    "en": "Invalid",
+    "de": "Ungültig"
   },
   {
     "id": "project_tiles_report_status_incomplete",
-    "en": "Not completed",
-    "de": "Nicht abgeschlossen"
+    "en": "Incomplete check",
+    "de": "Unvollständige Prüfung"
   },
   {
     "id": "project_tiles_url_editor_title",
@@ -8906,8 +8911,63 @@
   },
   {
     "id": "project_tiles_report_btn_check",
-    "en": "Check now",
-    "de": "Jetzt prüfen"
+    "en": "Check again",
+    "de": "Prüfen Sie erneut"
+  },
+  {
+    "id": "project_tiles_report_detail_no_tile_template",
+    "en": "No tile URL is configured",
+    "de": "Es ist keine Kachel-URL konfiguriert."
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_url",
+    "en": "Invalid URL",
+    "de": "Ungültige URL"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error",
+    "en": "HTTP error",
+    "de": "HTTP-Fehler"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error_status",
+    "en": "HTTP error ({{status}})",
+    "de": "HTTP-Fehler ( {{status}} )"
+  },
+  {
+    "id": "project_tiles_report_detail_response_too_large",
+    "en": "Response is too large",
+    "de": "Die Antwort ist zu groß"
+  },
+  {
+    "id": "project_tiles_report_detail_service_exception",
+    "en": "The service returned an exception",
+    "de": "Der Dienst hat eine Ausnahme zurückgegeben."
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_image_signature",
+    "en": "The response is not a valid image",
+    "de": "Die Antwort ist kein gültiges Bild."
+  },
+  {
+    "id": "project_tiles_report_detail_timeout",
+    "en": "Request timed out",
+    "de": "Zeitüberschreitung der Anfrage"
+  },
+  {
+    "id": "project_tiles_report_detail_blocked_private_address",
+    "en": "Private network address was blocked",
+    "de": "Die private Netzwerkadresse wurde blockiert."
+  },
+  {
+    "id": "project_tiles_report_detail_fetch_error",
+    "en": "Request failed",
+    "de": "Anfrage fehlgeschlagen"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid",
+    "en": "Invalid response",
+    "de": "Ungültige Antwort"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

@@ -8796,23 +8796,23 @@
   },
   {
     "id": "project_tiles_report_title",
-    "en": "Tile links report",
-    "ru": "Отчет о связях между плитками"
+    "en": "Raster tile links report",
+    "ru": "Отчет о связях растровых тайлов"
   },
   {
     "id": "project_tiles_report_btn_run",
-    "en": "Run check now",
-    "ru": "Запустите проверку сейчас"
+    "en": "Check all now",
+    "ru": "Проверить все сейчас"
   },
   {
     "id": "project_tiles_report_running",
-    "en": "Running…",
-    "ru": "Бег…"
+    "en": "Checking…",
+    "ru": "Проверка…"
   },
   {
     "id": "project_tiles_report_no_views",
-    "en": "No raster tile views found in this project",
-    "ru": "В этом проекте не найдено растровых тайловых изображений."
+    "en": "No raster tile views were found in this project.",
+    "ru": "В этом проекте не было обнаружено растровых изображений."
   },
   {
     "id": "project_tiles_report_col_title",
@@ -8846,8 +8846,13 @@
   },
   {
     "id": "project_tiles_report_col_detail",
-    "en": "Detail",
-    "ru": "Деталь"
+    "en": "Details",
+    "ru": "Подробности"
+  },
+  {
+    "id": "project_tiles_report_col_actions",
+    "en": "Actions",
+    "ru": "Действия"
   },
   {
     "id": "project_tiles_report_never",
@@ -8876,8 +8881,8 @@
   },
   {
     "id": "project_tiles_report_run_error",
-    "en": "Error running check",
-    "ru": "Ошибка при выполнении проверки"
+    "en": "Check failed",
+    "ru": "Проверка не пройдена."
   },
   {
     "id": "project_tiles_report_status_valid",
@@ -8886,13 +8891,13 @@
   },
   {
     "id": "project_tiles_report_status_invalid",
-    "en": "Broken",
-    "ru": "Сломанный"
+    "en": "Invalid",
+    "ru": "Неверный"
   },
   {
     "id": "project_tiles_report_status_incomplete",
-    "en": "Not completed",
-    "ru": "Не завершено"
+    "en": "Incomplete check",
+    "ru": "Неполная проверка"
   },
   {
     "id": "project_tiles_url_editor_title",
@@ -8906,8 +8911,63 @@
   },
   {
     "id": "project_tiles_report_btn_check",
-    "en": "Check now",
-    "ru": "Проверьте сейчас"
+    "en": "Check again",
+    "ru": "Проверьте еще раз."
+  },
+  {
+    "id": "project_tiles_report_detail_no_tile_template",
+    "en": "No tile URL is configured",
+    "ru": "URL-адрес плитки не настроен"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_url",
+    "en": "Invalid URL",
+    "ru": "Неверный URL"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error",
+    "en": "HTTP error",
+    "ru": "HTTP-ошибка"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error_status",
+    "en": "HTTP error ({{status}})",
+    "ru": "HTTP-ошибка ( {{status}} )"
+  },
+  {
+    "id": "project_tiles_report_detail_response_too_large",
+    "en": "Response is too large",
+    "ru": "Ответ слишком велик"
+  },
+  {
+    "id": "project_tiles_report_detail_service_exception",
+    "en": "The service returned an exception",
+    "ru": "Сервис вернул исключение."
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_image_signature",
+    "en": "The response is not a valid image",
+    "ru": "Ответ не является допустимым изображением."
+  },
+  {
+    "id": "project_tiles_report_detail_timeout",
+    "en": "Request timed out",
+    "ru": "Запрос истек по времени."
+  },
+  {
+    "id": "project_tiles_report_detail_blocked_private_address",
+    "en": "Private network address was blocked",
+    "ru": "Адрес частной сети был заблокирован."
+  },
+  {
+    "id": "project_tiles_report_detail_fetch_error",
+    "en": "Request failed",
+    "ru": "Запрос не выполнен"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid",
+    "en": "Invalid response",
+    "ru": "Неверный ответ"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

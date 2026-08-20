@@ -185,8 +185,13 @@ describe("RasterUrlConfigurator", () => {
     expect(editor.refs.tilesStatus.dataset.state).toBe("unchecked");
     expect(editor.refs.feedback.classList.contains("alert-success")).toBe(true);
 
-    windowManager.open.mock.calls.at(-1)[0].onClose();
+    await editor.getLayers();
+    expect(wmsGetLayers).toHaveBeenCalledTimes(2);
+    expect(tomSelectInstances).toHaveLength(2);
     expect(tomSelectInstances[0].destroy).toHaveBeenCalled();
+
+    windowManager.open.mock.calls.at(-1)[0].onClose();
+    expect(tomSelectInstances[1].destroy).toHaveBeenCalled();
   });
 
   it("keeps the WMS reload action icon-only and accessibly labelled", async () => {
@@ -199,7 +204,11 @@ describe("RasterUrlConfigurator", () => {
     expect(editor.refs.btnLoad.getAttribute("aria-label")).toBe(
       "raster_url_wms_load_layers",
     );
-    expect(editor.refs.btnLoad.title).toBe("raster_url_wms_load_layers");
+    expect(editor.refs.btnLoad.dataset.lang_key).toBe(
+      "raster_url_wms_load_layers",
+    );
+    expect(editor.refs.btnLoad.dataset.lang_type).toBe("tooltip");
+    expect(editor.refs.btnLoad.hasAttribute("title")).toBe(false);
   });
 
   it("tests without saving, then saves through the existing API contract", async () => {
@@ -238,5 +247,80 @@ describe("RasterUrlConfigurator", () => {
     );
     expect(onSaved).toHaveBeenCalledWith(row, expect.objectContaining({ tiles: config.tiles }));
     expect(editor.window.close).toHaveBeenCalledWith("saved");
+    expect(editor.working).toBe(false);
+
+    wmsGetLayers.mockResolvedValueOnce([]);
+    await editor.show({
+      idView: "MX-DDDDD-EEEEE-FFFFF",
+      config,
+    });
+    await editor.getLayers();
+
+    expect(wmsGetLayers).toHaveBeenLastCalledWith(
+      "https://example.test/wms",
+      expect.any(Object),
+    );
+    expect(editor.refs.feedback.textContent).toBe("raster_url_wms_no_layers");
+  });
+
+  it("ignores an obsolete configuration response from an earlier show", async () => {
+    let resolveFirst;
+    let resolveSecond;
+    ws.emitAsync
+      .mockImplementationOnce(() => new Promise((resolve) => {
+        resolveFirst = resolve;
+      }))
+      .mockImplementationOnce(() => new Promise((resolve) => {
+        resolveSecond = resolve;
+      }));
+    const editor = new RasterUrlConfigurator({ root: document.body });
+
+    const firstShow = editor.show({ idView: "MX-AAAAA-BBBBB-CCCCC" });
+    const secondShow = editor.show({ idView: "MX-DDDDD-EEEEE-FFFFF" });
+    resolveSecond({ config: { ...config, tiles: "second-view-tiles" } });
+    await secondShow;
+    resolveFirst({ config: { ...config, tiles: "first-view-tiles" } });
+    await firstShow;
+
+    expect(ws.emitAsync.mock.calls[0][1]).toEqual({
+      idView: "MX-AAAAA-BBBBB-CCCCC",
+    });
+    expect(ws.emitAsync.mock.calls[1][1]).toEqual({
+      idView: "MX-DDDDD-EEEEE-FFFFF",
+    });
+    expect(windowManager.open).toHaveBeenCalledTimes(1);
+    expect(editor.idView).toBe("MX-DDDDD-EEEEE-FFFFF");
+    expect(editor.refs.tiles.value).toBe("second-view-tiles");
+  });
+
+  it("does not let an obsolete save close a newer session", async () => {
+    let resolveSave;
+    const firstSaved = vi.fn();
+    const secondSaved = vi.fn();
+    const editor = new RasterUrlConfigurator({ root: document.body });
+    await editor.show({
+      idView: "MX-AAAAA-BBBBB-CCCCC",
+      config,
+      onSaved: firstSaved,
+    });
+    ws.emitAsync.mockImplementationOnce(() => new Promise((resolve) => {
+      resolveSave = resolve;
+    }));
+
+    const pendingSave = editor.handleSave();
+    await editor.show({
+      idView: "MX-DDDDD-EEEEE-FFFFF",
+      config: { ...config, tiles: "second-view-tiles" },
+      onSaved: secondSaved,
+    });
+    const currentWindow = editor.window;
+    resolveSave({ row: { id_view: "MX-AAAAA-BBBBB-CCCCC", valid: true } });
+    await pendingSave;
+
+    expect(firstSaved).toHaveBeenCalledOnce();
+    expect(secondSaved).not.toHaveBeenCalled();
+    expect(currentWindow.close).not.toHaveBeenCalled();
+    expect(editor.refs.tiles.value).toBe("second-view-tiles");
+    expect(editor.working).toBe(false);
   });
 });

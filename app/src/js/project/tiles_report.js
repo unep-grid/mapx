@@ -5,11 +5,36 @@ import { settings } from "../settings";
 import { bindAll } from "../bind_class_methods";
 import { tt } from "../el_mapx";
 import { isEmpty } from "../is_test/index.js";
+import { getDictItem } from "../language/index.js";
 import { TilesCheckChannel } from "./tiles_check_channel.js";
 import { RasterUrlConfigurator } from "./raster_url_configurator.js";
 import { rasterStatusConfig, rasterStatusLabel } from "./raster_url_health.js";
 
 const WINDOW_KEY = "project-tiles-report";
+const DETAIL_TRANSLATION_KEYS = new Map([
+  ["no_tile_template", "project_tiles_report_detail_no_tile_template"],
+  ["not_configured", "project_tiles_report_status_not_configured"],
+  ["invalid_url", "project_tiles_report_detail_invalid_url"],
+  ["http_error", "project_tiles_report_detail_http_error"],
+  ["response_too_large", "project_tiles_report_detail_response_too_large"],
+  ["service_exception", "project_tiles_report_detail_service_exception"],
+  [
+    "invalid_image_signature",
+    "project_tiles_report_detail_invalid_image_signature",
+  ],
+  ["timeout", "project_tiles_report_detail_timeout"],
+  [
+    "blocked_private_address",
+    "project_tiles_report_detail_blocked_private_address",
+  ],
+  ["fetch_error", "project_tiles_report_detail_fetch_error"],
+  ["invalid", "project_tiles_report_detail_invalid"],
+]);
+
+const DETAIL_RESOURCE_KEYS = {
+  tiles: "project_tiles_report_col_tiles",
+  legend: "project_tiles_report_col_legend",
+};
 
 /**
  * Project tile-link health report
@@ -116,6 +141,7 @@ export class TilesReport {
       },
       onClose: () => tr.channel?.destroy(),
     });
+    tr.window.classList.add("tiles-report-window");
 
     if (tr.running) {
       tr.refs.btnRun.disabled = true;
@@ -136,18 +162,49 @@ export class TilesReport {
     }
 
     const elHeaderRow = el("tr", [
-      el("th", tt("project_tiles_report_col_title")),
-      el("th", tt("project_tiles_report_col_editor")),
-      el("th", { class: "text-center" }, tt("project_tiles_report_col_tiles")),
-      el("th", { class: "text-center" }, tt("project_tiles_report_col_legend")),
-      el("th", { class: "text-center" }, tt("project_tiles_report_col_status")),
-      el("th", tt("project_tiles_report_col_checked_at")),
-      el("th", tt("project_tiles_report_col_detail")),
-      el("th", {
-        class: ["text-center", "tiles-report-tools"],
-        scope: "col",
-        "aria-label": "Raster URL tools",
-      }),
+      el(
+        "th",
+        {
+          class: ["text-center", "tiles-report-tools"],
+          scope: "col",
+        },
+        tt("project_tiles_report_col_actions"),
+      ),
+      el(
+        "th",
+        { class: "tiles-report-title", scope: "col" },
+        tt("project_tiles_report_col_title"),
+      ),
+      el(
+        "th",
+        { class: "tiles-report-editor", scope: "col" },
+        tt("project_tiles_report_col_editor"),
+      ),
+      el(
+        "th",
+        { class: "text-center", scope: "col" },
+        tt("project_tiles_report_col_tiles"),
+      ),
+      el(
+        "th",
+        { class: "text-center", scope: "col" },
+        tt("project_tiles_report_col_legend"),
+      ),
+      el(
+        "th",
+        { class: "text-center", scope: "col" },
+        tt("project_tiles_report_col_status"),
+      ),
+      el(
+        "th",
+        { class: "tiles-report-checked", scope: "col" },
+        tt("project_tiles_report_col_checked_at"),
+      ),
+      el(
+        "th",
+        { class: "tiles-report-detail", scope: "col" },
+        tt("project_tiles_report_col_detail"),
+      ),
     ]);
 
     const elRows = tr.rows.map((row) => {
@@ -155,8 +212,8 @@ export class TilesReport {
       const legendStatusCell = el("td", { class: "text-center" });
       legendStatusCell.dataset.configured = row.legend_url ? "true" : "false";
       const statusCell = el("td", { class: "text-center" });
-      const checkedCell = el("td");
-      const detailCell = el("td");
+      const checkedCell = el("td", { class: "tiles-report-checked" });
+      const detailCell = el("td", { class: "tiles-report-detail" });
       tr.rowRefs.set(row.id_view, {
         tileStatusCell,
         legendStatusCell,
@@ -173,15 +230,22 @@ export class TilesReport {
           ? new Date(row.checked_at).toLocaleString()
           : tt("project_tiles_report_never"),
       );
-      detailCell.textContent = tr.detailLabel(row);
+      detailCell.replaceChildren(...tr.detailNodes(row));
 
       const editButton = el(
         "button",
         {
-          class: ["btn-circle", "btn-circle-small", "tiles-report-edit"],
+          class: [
+            "btn-circle",
+            "btn-circle-small",
+            "hint--right",
+            "tiles-report-edit",
+          ],
           type: "button",
-          title: "Configure raster URLs",
-          "aria-label": "Configure raster URLs",
+          dataset: {
+            lang_key: "project_tiles_url_editor_title",
+            lang_type: "tooltip",
+          },
           on: { click: () => tr.handleEdit(row) },
         },
         el("i", { class: ["fa", "fa-pencil"], "aria-hidden": "true" }),
@@ -189,33 +253,55 @@ export class TilesReport {
       const checkButton = el(
         "button",
         {
-          class: ["btn-circle", "btn-circle-small", "tiles-report-check"],
+          class: [
+            "btn-circle",
+            "btn-circle-small",
+            "hint--right",
+            "tiles-report-check",
+          ],
           type: "button",
-          title: "Check now",
-          "aria-label": "Check now",
+          dataset: {
+            lang_key: "project_tiles_report_btn_check",
+            lang_type: "tooltip",
+          },
           on: { click: () => tr.handleCheck(row) },
         },
         el("i", { class: ["fa", "fa-heartbeat"], "aria-hidden": "true" }),
       );
+      getDictItem("project_tiles_url_editor_title")
+        .then((label) => editButton.setAttribute("aria-label", label))
+        .catch(console.error);
+      getDictItem("project_tiles_report_btn_check")
+        .then((label) => checkButton.setAttribute("aria-label", label))
+        .catch(console.error);
 
       return el("tr", { dataset: { idView: row.id_view } }, [
-        el("td", row.title || row.id_view),
-        el("td", row.editor_email || ""),
+        el(
+          "td",
+          { class: ["text-center", "tiles-report-tools"] },
+          el("span", { class: "tiles-report-actions" }, [
+            editButton,
+            checkButton,
+          ]),
+        ),
+        el(
+          "th",
+          { class: "tiles-report-title", scope: "row" },
+          row.title || row.id_view,
+        ),
+        el("td", { class: "tiles-report-editor" }, row.editor_email || ""),
         tileStatusCell,
         legendStatusCell,
         statusCell,
         checkedCell,
         detailCell,
-        el("td", { class: ["text-center", "tiles-report-tools"] },
-          el("span", { class: "tiles-report-actions" }, [editButton, checkButton]),
-        ),
       ]);
     });
 
     return el(
       "div",
       { class: "tiles-report-container" },
-      el("table", { class: ["table", "table-striped"] }, [
+      el("table", { class: ["table", "tiles-report-table"] }, [
         el("thead", elHeaderRow),
         el("tbody", elRows),
       ]),
@@ -254,7 +340,11 @@ export class TilesReport {
       tr.el(
         "span",
         {
-          class: ["label", `label-${status.className}`, "tiles-report-status"],
+          class: [
+            "label",
+            `label-${status.className}`,
+            "tiles-report-status-label",
+          ],
         },
         [
           tr.el("i", { class: status.icon, "aria-hidden": "true" }),
@@ -287,7 +377,7 @@ export class TilesReport {
     tr.setRowStatus(idView, tr.statusLabel(row, "legend"), "legend");
     tr.setRowStatus(idView, tr.statusLabel(row, "overall"), "overall");
     refs.checkedCell.textContent = new Date().toLocaleString();
-    refs.detailCell.textContent = tr.detailLabel(message);
+    refs.detailCell.replaceChildren(...tr.detailNodes(message));
   }
 
   resetRowsPending() {
@@ -313,12 +403,63 @@ export class TilesReport {
     }
   }
 
-  detailLabel(row) {
+  detailItems(row) {
     const details = [
-      row.tile_detail && `tiles:${row.tile_detail}`,
-      row.legend_configured && row.legend_detail && `legend:${row.legend_detail}`,
+      row.tile_detail && {
+        resource: "tiles",
+        code: row.tile_detail,
+        httpStatus: row.tile_http_status,
+      },
+      row.legend_configured && row.legend_detail && {
+        resource: "legend",
+        code: row.legend_detail,
+        httpStatus: row.legend_http_status,
+      },
     ].filter(Boolean);
-    return details.join(", ") || row.detail || "";
+
+    if (details.length || !row.detail) {
+      return details;
+    }
+
+    return String(row.detail)
+      .split(/\s*,\s*/)
+      .filter(Boolean)
+      .map((detail) => {
+        const match = detail.match(/^(tiles|legend):(.+)$/);
+        return match
+          ? { resource: match[1], code: match[2].trim() }
+          : { resource: null, code: detail.trim() };
+      });
+  }
+
+  detailNodes(row) {
+    const tr = this;
+    const nodes = [];
+    for (const [index, detail] of tr.detailItems(row).entries()) {
+      if (index > 0) nodes.push(", ");
+      if (detail.resource) {
+        nodes.push(tt(DETAIL_RESOURCE_KEYS[detail.resource]), ": ");
+      }
+
+      const translationKey = DETAIL_TRANSLATION_KEYS.get(detail.code);
+      if (!translationKey) {
+        nodes.push(
+          tr.el("code", { class: "tiles-report-detail-code" }, detail.code),
+        );
+        continue;
+      }
+
+      if (detail.code === "http_error" && detail.httpStatus) {
+        nodes.push(
+          tt("project_tiles_report_detail_http_error_status", {
+            data: { status: detail.httpStatus },
+          }),
+        );
+      } else {
+        nodes.push(tt(translationKey));
+      }
+    }
+    return nodes;
   }
 
   setProgress(done, total) {

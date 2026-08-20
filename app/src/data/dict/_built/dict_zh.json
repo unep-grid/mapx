@@ -8796,23 +8796,23 @@
   },
   {
     "id": "project_tiles_report_title",
-    "en": "Tile links report",
-    "zh": "瓷砖链接报告"
+    "en": "Raster tile links report",
+    "zh": "栅格瓦片链接报告"
   },
   {
     "id": "project_tiles_report_btn_run",
-    "en": "Run check now",
-    "zh": "立即运行检查"
+    "en": "Check all now",
+    "zh": "立即查看全部"
   },
   {
     "id": "project_tiles_report_running",
-    "en": "Running…",
-    "zh": "跑步…"
+    "en": "Checking…",
+    "zh": "检查…"
   },
   {
     "id": "project_tiles_report_no_views",
-    "en": "No raster tile views found in this project",
-    "zh": "此项目中未找到栅格瓦片视图"
+    "en": "No raster tile views were found in this project.",
+    "zh": "本项目中未找到栅格瓦片视图。"
   },
   {
     "id": "project_tiles_report_col_title",
@@ -8846,8 +8846,13 @@
   },
   {
     "id": "project_tiles_report_col_detail",
-    "en": "Detail",
+    "en": "Details",
     "zh": "细节"
+  },
+  {
+    "id": "project_tiles_report_col_actions",
+    "en": "Actions",
+    "zh": "行动"
   },
   {
     "id": "project_tiles_report_never",
@@ -8876,8 +8881,8 @@
   },
   {
     "id": "project_tiles_report_run_error",
-    "en": "Error running check",
-    "zh": "检查运行错误"
+    "en": "Check failed",
+    "zh": "检查失败"
   },
   {
     "id": "project_tiles_report_status_valid",
@@ -8886,13 +8891,13 @@
   },
   {
     "id": "project_tiles_report_status_invalid",
-    "en": "Broken",
-    "zh": "破碎的"
+    "en": "Invalid",
+    "zh": "无效的"
   },
   {
     "id": "project_tiles_report_status_incomplete",
-    "en": "Not completed",
-    "zh": "未完成"
+    "en": "Incomplete check",
+    "zh": "检查不完整"
   },
   {
     "id": "project_tiles_url_editor_title",
@@ -8906,8 +8911,63 @@
   },
   {
     "id": "project_tiles_report_btn_check",
-    "en": "Check now",
-    "zh": "立即查看"
+    "en": "Check again",
+    "zh": "再次检查"
+  },
+  {
+    "id": "project_tiles_report_detail_no_tile_template",
+    "en": "No tile URL is configured",
+    "zh": "未配置图块 URL。"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_url",
+    "en": "Invalid URL",
+    "zh": "无效的URL"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error",
+    "en": "HTTP error",
+    "zh": "HTTP 错误"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error_status",
+    "en": "HTTP error ({{status}})",
+    "zh": "HTTP 错误（ {{status}} ）"
+  },
+  {
+    "id": "project_tiles_report_detail_response_too_large",
+    "en": "Response is too large",
+    "zh": "响应过大"
+  },
+  {
+    "id": "project_tiles_report_detail_service_exception",
+    "en": "The service returned an exception",
+    "zh": "服务返回了一个异常"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_image_signature",
+    "en": "The response is not a valid image",
+    "zh": "回复不是有效图像。"
+  },
+  {
+    "id": "project_tiles_report_detail_timeout",
+    "en": "Request timed out",
+    "zh": "请求超时"
+  },
+  {
+    "id": "project_tiles_report_detail_blocked_private_address",
+    "en": "Private network address was blocked",
+    "zh": "私有网络地址已被屏蔽"
+  },
+  {
+    "id": "project_tiles_report_detail_fetch_error",
+    "en": "Request failed",
+    "zh": "请求失败"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid",
+    "en": "Invalid response",
+    "zh": "无效响应"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

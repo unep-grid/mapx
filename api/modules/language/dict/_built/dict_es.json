@@ -8796,22 +8796,22 @@
   },
   {
     "id": "project_tiles_report_title",
-    "en": "Tile links report",
-    "es": "Informe de enlaces de mosaicos"
+    "en": "Raster tile links report",
+    "es": "Informe de enlaces de teselas ráster"
   },
   {
     "id": "project_tiles_report_btn_run",
-    "en": "Run check now",
-    "es": "Ejecutar comprobación ahora"
+    "en": "Check all now",
+    "es": "Revisar todo ahora"
   },
   {
     "id": "project_tiles_report_running",
-    "en": "Running…",
-    "es": "Correr…"
+    "en": "Checking…",
+    "es": "De cheques…"
   },
   {
     "id": "project_tiles_report_no_views",
-    "en": "No raster tile views found in this project",
+    "en": "No raster tile views were found in this project.",
     "es": "No se encontraron vistas de mosaicos rasterizados en este proyecto."
   },
   {
@@ -8846,8 +8846,13 @@
   },
   {
     "id": "project_tiles_report_col_detail",
-    "en": "Detail",
-    "es": "Detalle"
+    "en": "Details",
+    "es": "Detalles"
+  },
+  {
+    "id": "project_tiles_report_col_actions",
+    "en": "Actions",
+    "es": "Comportamiento"
   },
   {
     "id": "project_tiles_report_never",
@@ -8876,8 +8881,8 @@
   },
   {
     "id": "project_tiles_report_run_error",
-    "en": "Error running check",
-    "es": "Error al ejecutar la comprobación"
+    "en": "Check failed",
+    "es": "Falló la comprobación"
   },
   {
     "id": "project_tiles_report_status_valid",
@@ -8886,13 +8891,13 @@
   },
   {
     "id": "project_tiles_report_status_invalid",
-    "en": "Broken",
-    "es": "Roto"
+    "en": "Invalid",
+    "es": "Inválido"
   },
   {
     "id": "project_tiles_report_status_incomplete",
-    "en": "Not completed",
-    "es": "No completado"
+    "en": "Incomplete check",
+    "es": "Verificación incompleta"
   },
   {
     "id": "project_tiles_url_editor_title",
@@ -8906,8 +8911,63 @@
   },
   {
     "id": "project_tiles_report_btn_check",
-    "en": "Check now",
-    "es": "Compruébalo ahora"
+    "en": "Check again",
+    "es": "Comprueba de nuevo"
+  },
+  {
+    "id": "project_tiles_report_detail_no_tile_template",
+    "en": "No tile URL is configured",
+    "es": "No se ha configurado ninguna URL de mosaico."
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_url",
+    "en": "Invalid URL",
+    "es": "URL no válida"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error",
+    "en": "HTTP error",
+    "es": "error HTTP"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error_status",
+    "en": "HTTP error ({{status}})",
+    "es": "Error HTTP ( {{status}} )"
+  },
+  {
+    "id": "project_tiles_report_detail_response_too_large",
+    "en": "Response is too large",
+    "es": "La respuesta es demasiado grande"
+  },
+  {
+    "id": "project_tiles_report_detail_service_exception",
+    "en": "The service returned an exception",
+    "es": "El servicio devolvió una excepción."
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_image_signature",
+    "en": "The response is not a valid image",
+    "es": "La respuesta no es una imagen válida."
+  },
+  {
+    "id": "project_tiles_report_detail_timeout",
+    "en": "Request timed out",
+    "es": "La solicitud ha caducado."
+  },
+  {
+    "id": "project_tiles_report_detail_blocked_private_address",
+    "en": "Private network address was blocked",
+    "es": "La dirección de red privada fue bloqueada."
+  },
+  {
+    "id": "project_tiles_report_detail_fetch_error",
+    "en": "Request failed",
+    "es": "La solicitud falló."
+  },
+  {
+    "id": "project_tiles_report_detail_invalid",
+    "en": "Invalid response",
+    "es": "Respuesta no válida"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

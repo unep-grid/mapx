@@ -15,7 +15,7 @@
   {
     "id": "wms_display_tool_title",
     "en": "WMS configurator",
-    "fr": "",
+    "fr": "Configurateur WMS",
     "es": "",
     "ru": "",
     "zh": "",
@@ -28,7 +28,7 @@
   {
     "id": "wms_display_tool",
     "en": "Display WMS configurator",
-    "fr": "",
+    "fr": "Afficher le configurateur WMS",
     "es": "",
     "ru": "",
     "zh": "",
@@ -41,7 +41,7 @@
   {
     "id": "wms_display_tool_desc",
     "en": "Generate tile and legend URLs from a WMS service.",
-    "fr": "",
+    "fr": "Générez les URL des tuiles et de la légende à partir d’un service WMS.",
     "es": "",
     "ru": "",
     "zh": "",
@@ -54,7 +54,7 @@
   {
     "id": "wms_select_layer",
     "en": "Select layer",
-    "fr": "Séléctionner la couche",
+    "fr": "Sélectionnez une couche",
     "es": "Seleccionar capa",
     "ru": "",
     "zh": "选择图层",

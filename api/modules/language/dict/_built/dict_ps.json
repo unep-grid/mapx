@@ -8796,23 +8796,23 @@
   },
   {
     "id": "project_tiles_report_title",
-    "en": "Tile links report",
-    "ps": "د ټایل لینکونو راپور"
+    "en": "Raster tile links report",
+    "ps": "د راسټر ټایل لینکونو راپور"
   },
   {
     "id": "project_tiles_report_btn_run",
-    "en": "Run check now",
-    "ps": "اوس چیک چل کړئ"
+    "en": "Check all now",
+    "ps": "اوس ټول وګورئ"
   },
   {
     "id": "project_tiles_report_running",
-    "en": "Running…",
-    "ps": "چلول…"
+    "en": "Checking…",
+    "ps": "چک کول…"
   },
   {
     "id": "project_tiles_report_no_views",
-    "en": "No raster tile views found in this project",
-    "ps": "په دې پروژه کې د راسټر ټایل لیدونه ونه موندل شول"
+    "en": "No raster tile views were found in this project.",
+    "ps": "په دې پروژه کې د راسټر ټایل لیدونه ونه موندل شول."
   },
   {
     "id": "project_tiles_report_col_title",
@@ -8846,8 +8846,13 @@
   },
   {
     "id": "project_tiles_report_col_detail",
-    "en": "Detail",
-    "ps": "تفصیل"
+    "en": "Details",
+    "ps": "جزیات"
+  },
+  {
+    "id": "project_tiles_report_col_actions",
+    "en": "Actions",
+    "ps": "کړنې"
   },
   {
     "id": "project_tiles_report_never",
@@ -8876,8 +8881,8 @@
   },
   {
     "id": "project_tiles_report_run_error",
-    "en": "Error running check",
-    "ps": "د چک چلولو کې تېروتنه"
+    "en": "Check failed",
+    "ps": "چک ناکام شو"
   },
   {
     "id": "project_tiles_report_status_valid",
@@ -8886,13 +8891,13 @@
   },
   {
     "id": "project_tiles_report_status_invalid",
-    "en": "Broken",
-    "ps": "مات شوی"
+    "en": "Invalid",
+    "ps": "ناباوره"
   },
   {
     "id": "project_tiles_report_status_incomplete",
-    "en": "Not completed",
-    "ps": "بشپړ شوی نه دی"
+    "en": "Incomplete check",
+    "ps": "نامکمل چک"
   },
   {
     "id": "project_tiles_url_editor_title",
@@ -8906,8 +8911,63 @@
   },
   {
     "id": "project_tiles_report_btn_check",
-    "en": "Check now",
-    "ps": "اوس وګورئ"
+    "en": "Check again",
+    "ps": "بیا وګورئ"
+  },
+  {
+    "id": "project_tiles_report_detail_no_tile_template",
+    "en": "No tile URL is configured",
+    "ps": "د ټایل URL نه دی تنظیم شوی"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_url",
+    "en": "Invalid URL",
+    "ps": "ناسم URL"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error",
+    "en": "HTTP error",
+    "ps": "د HTTP تېروتنه"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error_status",
+    "en": "HTTP error ({{status}})",
+    "ps": "د HTTP تېروتنه ( {{status}} )"
+  },
+  {
+    "id": "project_tiles_report_detail_response_too_large",
+    "en": "Response is too large",
+    "ps": "ځواب ډېر لوی دی"
+  },
+  {
+    "id": "project_tiles_report_detail_service_exception",
+    "en": "The service returned an exception",
+    "ps": "خدمت یو استثنا بیرته راوړه"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_image_signature",
+    "en": "The response is not a valid image",
+    "ps": "ځواب یو باوري انځور نه دی"
+  },
+  {
+    "id": "project_tiles_report_detail_timeout",
+    "en": "Request timed out",
+    "ps": "د غوښتنې وخت پای ته ورسېد"
+  },
+  {
+    "id": "project_tiles_report_detail_blocked_private_address",
+    "en": "Private network address was blocked",
+    "ps": "د شخصي شبکې پته بنده شوې وه"
+  },
+  {
+    "id": "project_tiles_report_detail_fetch_error",
+    "en": "Request failed",
+    "ps": "غوښتنه ناکامه شوه"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid",
+    "en": "Invalid response",
+    "ps": "ناسم ځواب"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

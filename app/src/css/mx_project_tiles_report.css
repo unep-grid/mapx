@@ -1,34 +1,166 @@
+.tiles-report-window .mx-window__content {
+  overflow: hidden;
+}
+
 .tiles-report-container {
-  overflow-x: auto;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+  border: 1px solid var(--mx_ui_border);
+  border-radius: 6px;
+  background: var(--mx_ui_background);
+  box-shadow: var(--mx_ui_box_shadow_inset);
+  overscroll-behavior: contain;
+}
+
+.mx .tiles-report-table {
+  min-width: 960px;
+  margin: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.mx .tiles-report-table > thead > tr > th,
+.mx .tiles-report-table > tbody > tr > th,
+.mx .tiles-report-table > tbody > tr > td {
+  padding: 11px 12px;
+  border-width: 0 0 1px;
+  vertical-align: middle;
+}
+
+.mx .tiles-report-table > thead > tr > th {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  height: 46px;
+  background: var(--mx_ui_background_faded);
+  box-shadow: 0 1px 0 var(--mx_ui_border);
+  font-size: 0.9em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.mx .tiles-report-table > tbody > tr > th,
+.mx .tiles-report-table > tbody > tr > td {
+  background: var(--mx_ui_background);
+  transition: background-color 100ms ease;
+}
+
+.mx .tiles-report-table > tbody > tr:nth-child(odd) > th,
+.mx .tiles-report-table > tbody > tr:nth-child(odd) > td {
+  background: var(--mx_ui_background_accent);
+}
+
+.mx .tiles-report-table > tbody > tr:hover > th,
+.mx .tiles-report-table > tbody > tr:hover > td,
+.mx .tiles-report-table > tbody > tr:focus-within > th,
+.mx .tiles-report-table > tbody > tr:focus-within > td {
+  background: var(--mx_ui_background_contrast);
 }
 
 .tiles-report-tools {
-  width: 74px;
-  min-width: 74px;
+  position: sticky;
+  z-index: 1;
+  left: 0;
+  width: 82px;
+  min-width: 82px;
   white-space: nowrap;
+  box-shadow: 1px 0 0 var(--mx_ui_border);
+}
+
+.mx .tiles-report-table > thead .tiles-report-tools {
+  z-index: 3;
+  box-shadow: 1px 1px 0 var(--mx_ui_border);
 }
 
 .tiles-report-actions {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .tiles-report-actions .btn-circle {
   margin: 0;
+  border: 1px solid transparent;
+  color: var(--mx_ui_text_faded);
+  background: transparent;
+  box-shadow: none;
 }
 
-.tiles-report-status {
+.tiles-report-actions .btn-circle:hover,
+.tiles-report-actions .btn-circle:focus {
+  border-color: var(--mx_ui_border);
+  color: var(--mx_ui_text);
+  background: var(--mx_ui_background);
+  box-shadow: var(--mx_ui_box_shadow);
+}
+
+.tiles-report-title {
+  min-width: 190px;
+}
+
+.mx .tiles-report-table > tbody > tr > .tiles-report-title {
+  font-weight: 600;
+}
+
+.tiles-report-editor {
+  min-width: 210px;
+  color: var(--mx_ui_text_faded);
+  font-size: 0.92em;
+}
+
+.tiles-report-checked {
+  min-width: 150px;
+  color: var(--mx_ui_text_faded);
+  font-size: 0.92em;
+}
+
+.tiles-report-detail {
+  min-width: 250px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.tiles-report-detail-code {
+  padding: 1px 4px;
+  border-radius: 3px;
+  color: inherit;
+  background: var(--mx_ui_background_faded);
+  font-size: 0.9em;
+}
+
+.tiles-report-status-label {
+  display: inline-flex;
+  padding: 5px 8px;
+  border-radius: 10px;
+  align-items: center;
+  font-weight: 500;
   white-space: nowrap;
 }
 
-.tiles-report-status .fa {
-  margin-right: 3px;
+.tiles-report-status-label .fa {
+  margin-right: 2px;
 }
 
-.tiles-report-container > table > thead > tr > th {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  background-color: var(--mx_ui_background);
+.tiles-report-status {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .mx .tiles-report-table {
+    min-width: 900px;
+    font-size: 0.94em;
+  }
+
+  .mx .tiles-report-table > thead > tr > th,
+  .mx .tiles-report-table > tbody > tr > th,
+  .mx .tiles-report-table > tbody > tr > td {
+    padding: 8px 9px;
+  }
+
+  .tiles-report-tools {
+    width: 74px;
+    min-width: 74px;
+  }
 }

@@ -8796,23 +8796,23 @@
   },
   {
     "id": "project_tiles_report_title",
-    "en": "Tile links report",
-    "ar": "تقرير روابط البلاط"
+    "en": "Raster tile links report",
+    "ar": "تقرير روابط بلاطات الصور النقطية"
   },
   {
     "id": "project_tiles_report_btn_run",
-    "en": "Run check now",
-    "ar": "قم بإجراء الفحص الآن"
+    "en": "Check all now",
+    "ar": "تحقق من الكل الآن"
   },
   {
     "id": "project_tiles_report_running",
-    "en": "Running…",
-    "ar": "جري…"
+    "en": "Checking…",
+    "ar": "جارٍ التحقق…"
   },
   {
     "id": "project_tiles_report_no_views",
-    "en": "No raster tile views found in this project",
-    "ar": "لم يتم العثور على أي عروض لبلاطات الصور النقطية في هذا المشروع"
+    "en": "No raster tile views were found in this project.",
+    "ar": "لم يتم العثور على أي عروض لبلاطات الصور النقطية في هذا المشروع."
   },
   {
     "id": "project_tiles_report_col_title",
@@ -8846,8 +8846,13 @@
   },
   {
     "id": "project_tiles_report_col_detail",
-    "en": "Detail",
-    "ar": "التفاصيل"
+    "en": "Details",
+    "ar": "تفاصيل"
+  },
+  {
+    "id": "project_tiles_report_col_actions",
+    "en": "Actions",
+    "ar": "الإجراءات"
   },
   {
     "id": "project_tiles_report_never",
@@ -8876,8 +8881,8 @@
   },
   {
     "id": "project_tiles_report_run_error",
-    "en": "Error running check",
-    "ar": "حدث خطأ أثناء إجراء الفحص"
+    "en": "Check failed",
+    "ar": "فشل الفحص"
   },
   {
     "id": "project_tiles_report_status_valid",
@@ -8886,13 +8891,13 @@
   },
   {
     "id": "project_tiles_report_status_invalid",
-    "en": "Broken",
-    "ar": "مكسور"
+    "en": "Invalid",
+    "ar": "غير صالح"
   },
   {
     "id": "project_tiles_report_status_incomplete",
-    "en": "Not completed",
-    "ar": "لم يكتمل"
+    "en": "Incomplete check",
+    "ar": "فحص غير مكتمل"
   },
   {
     "id": "project_tiles_url_editor_title",
@@ -8906,8 +8911,63 @@
   },
   {
     "id": "project_tiles_report_btn_check",
-    "en": "Check now",
-    "ar": "تحقق الآن"
+    "en": "Check again",
+    "ar": "تحقق مرة أخرى"
+  },
+  {
+    "id": "project_tiles_report_detail_no_tile_template",
+    "en": "No tile URL is configured",
+    "ar": "لم يتم تكوين عنوان URL للبلاطة"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_url",
+    "en": "Invalid URL",
+    "ar": "عنوان URL غير صالح"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error",
+    "en": "HTTP error",
+    "ar": "خطأ HTTP"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error_status",
+    "en": "HTTP error ({{status}})",
+    "ar": "خطأ HTTP ( {{status}} )"
+  },
+  {
+    "id": "project_tiles_report_detail_response_too_large",
+    "en": "Response is too large",
+    "ar": "الاستجابة كبيرة جدًا"
+  },
+  {
+    "id": "project_tiles_report_detail_service_exception",
+    "en": "The service returned an exception",
+    "ar": "أعادت الخدمة استثناءً"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_image_signature",
+    "en": "The response is not a valid image",
+    "ar": "الاستجابة ليست صورة صالحة"
+  },
+  {
+    "id": "project_tiles_report_detail_timeout",
+    "en": "Request timed out",
+    "ar": "انتهت مهلة الطلب"
+  },
+  {
+    "id": "project_tiles_report_detail_blocked_private_address",
+    "en": "Private network address was blocked",
+    "ar": "تم حظر عنوان الشبكة الخاصة"
+  },
+  {
+    "id": "project_tiles_report_detail_fetch_error",
+    "en": "Request failed",
+    "ar": "فشل الطلب"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid",
+    "en": "Invalid response",
+    "ar": "إجابة غير صالحة"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

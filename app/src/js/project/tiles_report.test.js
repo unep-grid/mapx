@@ -49,7 +49,19 @@ vi.mock("../window/index.js", () => ({
 }));
 vi.mock("../mx.js", () => ({ ws: { emitAsync: vi.fn() } }));
 vi.mock("../settings", () => ({ settings: { project: { id: "P1" } } }));
-vi.mock("../el_mapx", () => ({ tt: vi.fn((key) => key) }));
+vi.mock("../el_mapx", () => ({
+  tt: vi.fn((key, options) => {
+    const node = document.createElement("span");
+    node.dataset.lang_key = key;
+    node.dataset.lang_type = "text";
+    if (options?.data) node.dataset.lang_data = JSON.stringify(options.data);
+    node.textContent = key;
+    return node;
+  }),
+}));
+vi.mock("../language/index.js", () => ({
+  getDictItem: vi.fn((key) => Promise.resolve(key)),
+}));
 vi.mock("../is_test/index.js", () => ({
   isEmpty: vi.fn((value) => value === null || value === undefined || value === ""),
 }));
@@ -71,7 +83,7 @@ describe("TilesReport edit action", () => {
     document.body.replaceChildren();
   });
 
-  it("keeps titles non-interactive and opens the URL editor from the tools column", () => {
+  it("puts translated actions first and opens the URL editor", async () => {
     const report = new TilesReport({});
     report.rows = [
       {
@@ -84,14 +96,25 @@ describe("TilesReport edit action", () => {
 
     const table = report.buildTable();
     const row = table.querySelector("tbody tr");
-    const titleCell = row.children[0];
+    const toolsCell = row.children[0];
+    const titleCell = row.children[1];
     const editButton = row.querySelector(".tiles-report-edit");
 
+    expect(toolsCell.classList.contains("tiles-report-tools")).toBe(true);
     expect(titleCell.textContent).toBe("Broken imagery");
     expect(titleCell.querySelector("button")).toBeNull();
     expect(editButton).not.toBeNull();
-    expect(editButton.getAttribute("aria-label")).toBe("Configure raster URLs");
+    expect(editButton.dataset.lang_key).toBe("project_tiles_url_editor_title");
+    expect(editButton.dataset.lang_type).toBe("tooltip");
+    await vi.waitFor(() => {
+      expect(editButton.getAttribute("aria-label")).toBe(
+        "project_tiles_url_editor_title",
+      );
+    });
     expect(row.querySelector(".tiles-report-check .fa-heartbeat")).not.toBeNull();
+    expect(
+      row.querySelector(".tiles-report-check").dataset.lang_key,
+    ).toBe("project_tiles_report_btn_check");
 
     editButton.click();
 
@@ -100,6 +123,69 @@ describe("TilesReport edit action", () => {
         idView: "MX-AAAAA-BBBBB-CCCCC",
       }),
     );
+  });
+
+  it("translates structured and legacy diagnostic codes", () => {
+    const report = new TilesReport({});
+    report.rows = [
+      {
+        id_view: "MX-AAAAA-BBBBB-CCCCC",
+        title: "Structured",
+        checked_at: Date.now(),
+        tile_detail: "http_error",
+        tile_http_status: 503,
+        legend_configured: true,
+        legend_detail: "timeout",
+      },
+      {
+        id_view: "MX-DDDDD-EEEEE-FFFFF",
+        title: "Legacy",
+        checked_at: Date.now(),
+        detail: "tiles:no_tile_template, legend:service_exception",
+      },
+    ];
+
+    const table = report.buildTable();
+    const detailCells = table.querySelectorAll(".tiles-report-detail");
+    const structured = detailCells[1];
+    const legacy = detailCells[2];
+
+    expect(structured.textContent).toContain("project_tiles_report_col_tiles");
+    expect(structured.textContent).toContain(
+      "project_tiles_report_detail_http_error_status",
+    );
+    expect(
+      structured.querySelector(
+        '[data-lang_key="project_tiles_report_detail_http_error_status"]',
+      ).dataset.lang_data,
+    ).toBe('{"status":503}');
+    expect(structured.textContent).toContain(
+      "project_tiles_report_detail_timeout",
+    );
+    expect(legacy.textContent).toContain(
+      "project_tiles_report_detail_no_tile_template",
+    );
+    expect(legacy.textContent).toContain(
+      "project_tiles_report_detail_service_exception",
+    );
+  });
+
+  it("keeps unknown diagnostic codes visible and safe", () => {
+    const report = new TilesReport({});
+    report.rows = [
+      {
+        id_view: "MX-AAAAA-BBBBB-CCCCC",
+        title: "Future response",
+        checked_at: Date.now(),
+        tile_detail: "future_error_code",
+      },
+    ];
+
+    const table = report.buildTable();
+    const code = table.querySelector("tbody .tiles-report-detail-code");
+
+    expect(code.textContent).toBe("future_error_code");
+    expect(code.tagName).toBe("CODE");
   });
 
   it("shows a visible lifecycle for pending, checking, completed, and incomplete rows", () => {
@@ -125,12 +211,25 @@ describe("TilesReport edit action", () => {
       "project_tiles_report_status_valid",
     );
 
+    report.setRowDone("MX-AAAAA-BBBBB-CCCCC", {
+      valid: false,
+      tile_valid: false,
+      tile_detail: "service_exception",
+    });
+    expect(
+      report.rowRefs
+        .get("MX-AAAAA-BBBBB-CCCCC")
+        .detailCell.querySelector(
+          '[data-lang_key="project_tiles_report_detail_service_exception"]',
+        ),
+    ).not.toBeNull();
+
     report.setRowsIncomplete();
     expect(report.rowRefs.get("MX-DDDDD-EEEEE-FFFFF").statusCell.textContent).toContain(
       "project_tiles_report_status_incomplete",
     );
     expect(report.rowRefs.get("MX-AAAAA-BBBBB-CCCCC").statusCell.textContent).toContain(
-      "project_tiles_report_status_valid",
+      "project_tiles_report_status_invalid",
     );
   });
 });

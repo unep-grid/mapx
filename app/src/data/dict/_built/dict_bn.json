@@ -8796,22 +8796,22 @@
   },
   {
     "id": "project_tiles_report_title",
-    "en": "Tile links report",
-    "bn": "টাইল লিঙ্ক রিপোর্ট"
+    "en": "Raster tile links report",
+    "bn": "রাস্টার টাইল লিঙ্ক রিপোর্ট"
   },
   {
     "id": "project_tiles_report_btn_run",
-    "en": "Run check now",
-    "bn": "এখনই যাচাই করুন"
+    "en": "Check all now",
+    "bn": "এখন সব পরীক্ষা করুন"
   },
   {
     "id": "project_tiles_report_running",
-    "en": "Running…",
-    "bn": "দৌড়াচ্ছি…"
+    "en": "Checking…",
+    "bn": "যাচাই করা হচ্ছে…"
   },
   {
     "id": "project_tiles_report_no_views",
-    "en": "No raster tile views found in this project",
+    "en": "No raster tile views were found in this project.",
     "bn": "এই প্রকল্পে কোনো রাস্টার টাইল ভিউ খুঁজে পাওয়া যায়নি।"
   },
   {
@@ -8846,8 +8846,13 @@
   },
   {
     "id": "project_tiles_report_col_detail",
-    "en": "Detail",
+    "en": "Details",
     "bn": "বিস্তারিত"
+  },
+  {
+    "id": "project_tiles_report_col_actions",
+    "en": "Actions",
+    "bn": "কর্ম"
   },
   {
     "id": "project_tiles_report_never",
@@ -8876,8 +8881,8 @@
   },
   {
     "id": "project_tiles_report_run_error",
-    "en": "Error running check",
-    "bn": "চেক চালাতে ত্রুটি হয়েছে"
+    "en": "Check failed",
+    "bn": "যাচাই ব্যর্থ হয়েছে"
   },
   {
     "id": "project_tiles_report_status_valid",
@@ -8886,13 +8891,13 @@
   },
   {
     "id": "project_tiles_report_status_invalid",
-    "en": "Broken",
-    "bn": "ভাঙা"
+    "en": "Invalid",
+    "bn": "অবৈধ"
   },
   {
     "id": "project_tiles_report_status_incomplete",
-    "en": "Not completed",
-    "bn": "সম্পূর্ণ হয়নি"
+    "en": "Incomplete check",
+    "bn": "অসম্পূর্ণ চেক"
   },
   {
     "id": "project_tiles_url_editor_title",
@@ -8906,8 +8911,63 @@
   },
   {
     "id": "project_tiles_report_btn_check",
-    "en": "Check now",
-    "bn": "এখন যাচাই করুন"
+    "en": "Check again",
+    "bn": "আবার পরীক্ষা করুন"
+  },
+  {
+    "id": "project_tiles_report_detail_no_tile_template",
+    "en": "No tile URL is configured",
+    "bn": "কোন টাইল ইউআরএল কনফিগার করা নেই"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_url",
+    "en": "Invalid URL",
+    "bn": "অবৈধ ইউআরএল"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error",
+    "en": "HTTP error",
+    "bn": "HTTP ত্রুটি"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error_status",
+    "en": "HTTP error ({{status}})",
+    "bn": "HTTP ত্রুটি ( {{status}} )"
+  },
+  {
+    "id": "project_tiles_report_detail_response_too_large",
+    "en": "Response is too large",
+    "bn": "প্রতিক্রিয়াটি খুব বড়"
+  },
+  {
+    "id": "project_tiles_report_detail_service_exception",
+    "en": "The service returned an exception",
+    "bn": "পরিষেবাটি একটি ব্যতিক্রম ফেরত দিয়েছে"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_image_signature",
+    "en": "The response is not a valid image",
+    "bn": "প্রতিক্রিয়াটি একটি বৈধ ছবি নয়।"
+  },
+  {
+    "id": "project_tiles_report_detail_timeout",
+    "en": "Request timed out",
+    "bn": "অনুরোধের সময়সীমা শেষ হয়ে গেছে"
+  },
+  {
+    "id": "project_tiles_report_detail_blocked_private_address",
+    "en": "Private network address was blocked",
+    "bn": "ব্যক্তিগত নেটওয়ার্ক ঠিকানা ব্লক করা হয়েছিল"
+  },
+  {
+    "id": "project_tiles_report_detail_fetch_error",
+    "en": "Request failed",
+    "bn": "অনুরোধ ব্যর্থ হয়েছে"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid",
+    "en": "Invalid response",
+    "bn": "অবৈধ প্রতিক্রিয়া"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

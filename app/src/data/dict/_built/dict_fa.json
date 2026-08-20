@@ -8796,23 +8796,23 @@
   },
   {
     "id": "project_tiles_report_title",
-    "en": "Tile links report",
-    "fa": "گزارش پیوندهای کاشی"
+    "en": "Raster tile links report",
+    "fa": "گزارش پیوندهای کاشی شطرنجی"
   },
   {
     "id": "project_tiles_report_btn_run",
-    "en": "Run check now",
-    "fa": "اکنون بررسی را اجرا کنید"
+    "en": "Check all now",
+    "fa": "الان همه رو چک کن"
   },
   {
     "id": "project_tiles_report_running",
-    "en": "Running…",
-    "fa": "دویدن…"
+    "en": "Checking…",
+    "fa": "در حال بررسی…"
   },
   {
     "id": "project_tiles_report_no_views",
-    "en": "No raster tile views found in this project",
-    "fa": "هیچ نمای کاشی شطرنجی در این پروژه یافت نشد"
+    "en": "No raster tile views were found in this project.",
+    "fa": "هیچ نمای کاشی شطرنجی در این پروژه یافت نشد."
   },
   {
     "id": "project_tiles_report_col_title",
@@ -8846,8 +8846,13 @@
   },
   {
     "id": "project_tiles_report_col_detail",
-    "en": "Detail",
+    "en": "Details",
     "fa": "جزئیات"
+  },
+  {
+    "id": "project_tiles_report_col_actions",
+    "en": "Actions",
+    "fa": "اقدامات"
   },
   {
     "id": "project_tiles_report_never",
@@ -8876,8 +8881,8 @@
   },
   {
     "id": "project_tiles_report_run_error",
-    "en": "Error running check",
-    "fa": "خطا در اجرای بررسی"
+    "en": "Check failed",
+    "fa": "بررسی ناموفق بود"
   },
   {
     "id": "project_tiles_report_status_valid",
@@ -8886,13 +8891,13 @@
   },
   {
     "id": "project_tiles_report_status_invalid",
-    "en": "Broken",
-    "fa": "شکسته"
+    "en": "Invalid",
+    "fa": "نامعتبر"
   },
   {
     "id": "project_tiles_report_status_incomplete",
-    "en": "Not completed",
-    "fa": "تکمیل نشده"
+    "en": "Incomplete check",
+    "fa": "چک ناقص"
   },
   {
     "id": "project_tiles_url_editor_title",
@@ -8906,8 +8911,63 @@
   },
   {
     "id": "project_tiles_report_btn_check",
-    "en": "Check now",
-    "fa": "الان بررسی کنید"
+    "en": "Check again",
+    "fa": "دوباره بررسی کنید"
+  },
+  {
+    "id": "project_tiles_report_detail_no_tile_template",
+    "en": "No tile URL is configured",
+    "fa": "هیچ نشانی اینترنتی کاشی پیکربندی نشده است"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_url",
+    "en": "Invalid URL",
+    "fa": "آدرس اینترنتی نامعتبر"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error",
+    "en": "HTTP error",
+    "fa": "خطای HTTP"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error_status",
+    "en": "HTTP error ({{status}})",
+    "fa": "خطای HTTP ( {{status}} )"
+  },
+  {
+    "id": "project_tiles_report_detail_response_too_large",
+    "en": "Response is too large",
+    "fa": "پاسخ خیلی بزرگ است"
+  },
+  {
+    "id": "project_tiles_report_detail_service_exception",
+    "en": "The service returned an exception",
+    "fa": "سرویس یک استثنا را برگرداند."
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_image_signature",
+    "en": "The response is not a valid image",
+    "fa": "پاسخ، تصویر معتبری نیست"
+  },
+  {
+    "id": "project_tiles_report_detail_timeout",
+    "en": "Request timed out",
+    "fa": "مهلت درخواست تمام شد"
+  },
+  {
+    "id": "project_tiles_report_detail_blocked_private_address",
+    "en": "Private network address was blocked",
+    "fa": "آدرس شبکه خصوصی مسدود شد"
+  },
+  {
+    "id": "project_tiles_report_detail_fetch_error",
+    "en": "Request failed",
+    "fa": "درخواست ناموفق بود"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid",
+    "en": "Invalid response",
+    "fa": "پاسخ نامعتبر"
   },
   {
     "id": "project_tiles_url_editor_btn_test",

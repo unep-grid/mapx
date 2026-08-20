@@ -7037,19 +7037,19 @@
   },
   {
     "id": "project_tiles_report_title",
-    "en": "Tile links report"
+    "en": "Raster tile links report"
   },
   {
     "id": "project_tiles_report_btn_run",
-    "en": "Run check now"
+    "en": "Check all now"
   },
   {
     "id": "project_tiles_report_running",
-    "en": "Running…"
+    "en": "Checking…"
   },
   {
     "id": "project_tiles_report_no_views",
-    "en": "No raster tile views found in this project"
+    "en": "No raster tile views were found in this project."
   },
   {
     "id": "project_tiles_report_col_title",
@@ -7077,7 +7077,11 @@
   },
   {
     "id": "project_tiles_report_col_detail",
-    "en": "Detail"
+    "en": "Details"
+  },
+  {
+    "id": "project_tiles_report_col_actions",
+    "en": "Actions"
   },
   {
     "id": "project_tiles_report_never",
@@ -7101,7 +7105,7 @@
   },
   {
     "id": "project_tiles_report_run_error",
-    "en": "Error running check"
+    "en": "Check failed"
   },
   {
     "id": "project_tiles_report_status_valid",
@@ -7109,11 +7113,11 @@
   },
   {
     "id": "project_tiles_report_status_invalid",
-    "en": "Broken"
+    "en": "Invalid"
   },
   {
     "id": "project_tiles_report_status_incomplete",
-    "en": "Not completed"
+    "en": "Incomplete check"
   },
   {
     "id": "project_tiles_url_editor_title",
@@ -7125,7 +7129,51 @@
   },
   {
     "id": "project_tiles_report_btn_check",
-    "en": "Check now"
+    "en": "Check again"
+  },
+  {
+    "id": "project_tiles_report_detail_no_tile_template",
+    "en": "No tile URL is configured"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_url",
+    "en": "Invalid URL"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error",
+    "en": "HTTP error"
+  },
+  {
+    "id": "project_tiles_report_detail_http_error_status",
+    "en": "HTTP error ({{status}})"
+  },
+  {
+    "id": "project_tiles_report_detail_response_too_large",
+    "en": "Response is too large"
+  },
+  {
+    "id": "project_tiles_report_detail_service_exception",
+    "en": "The service returned an exception"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid_image_signature",
+    "en": "The response is not a valid image"
+  },
+  {
+    "id": "project_tiles_report_detail_timeout",
+    "en": "Request timed out"
+  },
+  {
+    "id": "project_tiles_report_detail_blocked_private_address",
+    "en": "Private network address was blocked"
+  },
+  {
+    "id": "project_tiles_report_detail_fetch_error",
+    "en": "Request failed"
+  },
+  {
+    "id": "project_tiles_report_detail_invalid",
+    "en": "Invalid response"
   },
   {
     "id": "project_tiles_url_editor_btn_test",
