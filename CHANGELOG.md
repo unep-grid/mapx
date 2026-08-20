@@ -1,3 +1,18 @@
+  - [1.14.1-alpha.8](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.8) 
+
+    - fix: refine raster tile report and WMS workflow
+    - docs: add language spec in AGENTS.md
+    - feat: better modularisation for #1116 new module outside R
+    - feat: moved tile/legend url +wmw to dedicated module outside R
+    - feat: better status indicator in tile link tst report
+    - fix: quick rt url editor in raster tile issue table
+    - fix: address code-review findings on rt tile check routine (#1116)
+    - chore: update submodule
+    - feat: added a routine to validate rt tiles #1116
+    - chore: update submodule
+    - feat(project): move project deletion to API (#980)
+
+
   - [1.14.1-alpha.7](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.7) 
 
     - fix: sdk readme
