@@ -12,6 +12,7 @@ import {
   isUrlHttps,
   isViewId,
   isView,
+  isViewWms,
   isEqual,
   isBbox,
   isEmail,
@@ -153,6 +154,39 @@ describe('MapX Specific Validation', () => {
       expect(isView(validView)).toBe(true)
       expect(isView({})).toBe(false)
       expect(isView({ id: 'invalid' })).toBe(false)
+    })
+  })
+
+  describe('isViewWms', () => {
+    const view = {
+      id: 'MX-12345-12345-12345',
+      project: 'MX-ABC-DEF-GHI-JKL-MNO',
+      type: 'rt',
+      data: { source: { metadataId: 'mx_extern_a_b_c_d_e' } }
+    }
+
+    it('returns false for an RT metadata source without tiles', () => {
+      expect(isViewWms(view)).toBe(false)
+      expect(
+        isViewWms({
+          ...view,
+          data: { source: { ...view.data.source, tiles: [] } }
+        })
+      ).toBe(false)
+    })
+
+    it('recognizes an RT view with WMS tiles', () => {
+      expect(
+        isViewWms({
+          ...view,
+          data: {
+            source: {
+              ...view.data.source,
+              tiles: ['https://example.com/wms?service=WMS']
+            }
+          }
+        })
+      ).toBe(true)
     })
   })
 })

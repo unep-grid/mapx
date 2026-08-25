@@ -432,49 +432,6 @@ observe({
             }
 
             #
-            # Link metadata-only catalog entries for raster/custom views.
-            #
-            if (viewType %in% c("rt", "cc")) {
-              externalMetadataId <- .get(
-                viewData,
-                c("data", "source", "metadataId")
-              )
-              uiType <- tagList(
-                uiType,
-                mxSourcePickerInput(
-                  inputId = "viewExternalMetadataId",
-                  label = d("source_meta_data", language),
-                  value = externalMetadataId,
-                  options = list(
-                    multiple = FALSE,
-                    maxItems = 1,
-                    acceptedTypes = c("external"),
-                    requiredCapabilities = c(),
-                    accessMode = "readable",
-                    viewId = viewData$id,
-                    language = language,
-                    actions = list(
-                      list(
-                        id = "btnAddExternalMetadata",
-                        label = d("btn_add_source", language),
-                        icon = "fa fa-plus",
-                        requiresEmptySelection = TRUE
-                      ),
-                      list(
-                        id = "btnEditViewExternalMetadata",
-                        label = d("btn_edit_source_metadata", language),
-                        icon = "fa fa-pencil",
-                        requiresSelection = TRUE,
-                        requiredAccess = "editable"
-                      )
-                    )
-                  )
-                )
-              )
-            }
-
-
-            #
             # ui title/ desc and type specific ui
             #
             uiOut <- tagList(
@@ -753,66 +710,32 @@ observeEvent(input$viewRasterLegendTitles_init, {
 
 
 
-observeEvent(input$btnAddExternalMetadata, {
-  mxCatch("Create external metadata", {
-    view <- reactData$viewDataEdited
-    language <- reactData$language
-    title <- .get(input, c("viewTitleSchema_values", "data"), list())
-    abstract <- .get(input, c("viewAbstractSchema_values", "data"), list())
-    if (isEmpty(title)) title <- .get(view, c("data", "title"), list())
-    if (isEmpty(abstract)) abstract <- .get(view, c("data", "abstract"), list())
-    source <- mxApiCreateExternalMetadata(
-      idProject = reactData$project,
-      idUser = reactUser$data$id,
-      token = reactUser$token,
-      metadata = list(text = list(title = title, abstract = abstract))
-    )
-    idSource <- .get(source, "id")
-    mxSourcePickerUpdate("viewExternalMetadataId", idSource)
-    reactData$triggerSourceMetadata <- mxSourceMetadataEditRequest(idSource)
-    reactData$updateSourceLayerList <- runif(1)
-  })
-})
-
-observeEvent(input$btnEditViewExternalMetadata, {
-  idSource <- input$viewExternalMetadataId
-  if (isEmpty(idSource) || !idSource %in% reactListEditSources()) return()
-  reactData$triggerSourceMetadata <- mxSourceMetadataEditRequest(idSource)
-})
-
 #
 # View removal
 #
 observeEvent(input$btnViewDeleteConfirm, {
-  idView <- .get(reactData$viewDataEdited, c("id"))
-  email <- reactUser$data$email
+  mxCatch("Delete view", {
+    idView <- .get(reactData$viewDataEdited, c("id"))
+    if (isEmpty(idView)) {
+      stop("View to delete not found")
+    }
+    result <- mxApiDeleteView(
+      idProject = reactData$project,
+      idUser = reactUser$data$id,
+      token = reactUser$token,
+      idView = idView
+    )
 
-  if (isEmpty(idView)) mxDebugMsg("View to delete not found")
-
-  #
-  # Remove all views rows
-  #
-  mxDbGetQuery(sprintf(
-    "
-      DELETE FROM %1$s
-      WHERE id='%2$s'",
-    .get(config, c("pg", "tables", "views")),
-    idView
-  ))
-
-  #
-  # Remove client view
-  #
-  mglRemoveView(idView)
-
-  reactData$updateViewList <- runif(1)
-  #
-  # Close modal window
-  #
-  mxModal(
-    id = "modalViewEdit",
-    close = TRUE
-  )
+    mglRemoveView(idView)
+    reactData$updateViewList <- runif(1)
+    if (isNotEmpty(result$idSourceDeleted)) {
+      reactData$updateSourceLayerList <- runif(1)
+    }
+    mxModal(
+      id = "modalViewEdit",
+      close = TRUE
+    )
+  })
 })
 
 
@@ -1078,10 +1001,13 @@ observeEvent(input$btnViewSave, {
     }
 
     #
-    # Optional external metadata link for rt and cc.
+    # Required external metadata link for rt and cc.
     #
     if (view[["type"]] %in% c("rt", "cc")) {
-      metadataId <- input$viewExternalMetadataId
+      metadataId <- .get(view, c("data", "source", "metadataId"))
+      if (isEmpty(metadataId)) {
+        stop("The view has no external metadata entry")
+      }
       selectionValid <- mxApiValidateExternalMetadataSelection(
         idProject = project,
         idUser = userData$id,
@@ -1093,16 +1019,8 @@ observeEvent(input$btnViewSave, {
         stop("The selected external metadata entry is no longer accessible")
       }
       view <- .set(view, c("data", "source", "meta"), NULL)
-      view <- .set(
-        view,
-        c("data", "source", "metadataId"),
-        if (isEmpty(metadataId)) NULL else metadataId
-      )
-      view[["_meta"]] <- if (isEmpty(metadataId)) {
-        list()
-      } else {
-        mxDbGetSourceMeta(metadataId)
-      }
+      view <- .set(view, c("data", "source", "metadataId"), metadataId)
+      view[["_meta"]] <- mxDbGetSourceMeta(metadataId)
     }
 
 

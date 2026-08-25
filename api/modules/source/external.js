@@ -1,4 +1,3 @@
-import express from "express";
 import { pgRead, pgWrite } from "#mapx/db";
 import {
   getUserRoles,
@@ -122,17 +121,6 @@ export async function validateExternalMetadataSelection(
   };
 }
 
-async function createHandler(req, res) {
-  try {
-    res.json(await createExternalMetadataSource(req.body || {}));
-  } catch (error) {
-    res.status(error.status || 500).json({
-      ok: false,
-      message: error.message || "External metadata creation failed",
-    });
-  }
-}
-
 async function selectionHandler(req, res) {
   try {
     const result = await validateExternalMetadataSelection(req.query || {});
@@ -141,13 +129,6 @@ async function selectionHandler(req, res) {
     res.status(400).json({ valid: false, message: error.message });
   }
 }
-
-export const mwCreateExternalMetadataSource = [
-  express.json({ limit: "2mb" }),
-  validateTokenHandler,
-  validateRoleHandlerFor("publisher"),
-  createHandler,
-];
 
 export const mwValidateExternalMetadataSelection = [
   validateTokenHandler,

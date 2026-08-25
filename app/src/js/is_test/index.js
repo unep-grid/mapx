@@ -251,7 +251,7 @@ export function isArrayOfViews(arr) {
  * @return {Boolean} valid
  */
 export function isViewWms(view) {
-  return isViewRt(view) && isUrlValidWms(view?.data?.source?.tiles[0]);
+  return isViewRt(view) && isUrlValidWms(view?.data?.source?.tiles?.[0]);
 }
 // jshint ignore:end
 

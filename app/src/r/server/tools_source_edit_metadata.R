@@ -10,45 +10,6 @@ observeEvent(input$btnEditSourceMetadata, {
   })
 })
 
-observeEvent(input$btnAddExternalMetadataEntry, {
-  userRole <- getUserRole()
-  if (!isTRUE(userRole$publisher)) return()
-  language <- reactData$language
-  mxModal(
-    id = "addExternalMetadataEntry",
-    title = d("source_meta_data", language),
-    content = textInput(
-      "textExternalMetadataTitle",
-      d("textual_desc_title", language),
-      value = ""
-    ),
-    buttons = list(actionButton(
-      "btnAddExternalMetadataEntryConfirm",
-      d("create", language)
-    )),
-    textCloseButton = d("btn_cancel", language)
-  )
-})
-
-observeEvent(input$btnAddExternalMetadataEntryConfirm, {
-  mxCatch(title = "Add external metadata entry", {
-    userRole <- getUserRole()
-    title <- trimws(input$textExternalMetadataTitle)
-    if (!isTRUE(userRole$publisher) || isEmpty(title)) return()
-    source <- mxApiCreateExternalMetadata(
-      idProject = reactData$project,
-      idUser = reactUser$data$id,
-      token = reactUser$token,
-      metadata = list(text = list(title = list(en = title)))
-    )
-    idSource <- .get(source, "id")
-    mxModal(id = "addExternalMetadataEntry", close = TRUE)
-    reactData$updateSourceLayerList <- runif(1)
-    reactData$triggerSourceMetadata <- mxSourceMetadataEditRequest(idSource)
-  })
-})
-
-
 observeEvent(input$selectSourceLayerForMeta, {
   data <- input$selectSourceLayerForMeta
   if (isEmpty(data$idSource)) {

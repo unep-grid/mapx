@@ -147,41 +147,35 @@ observeEvent(input$btnAddViewConfirm, {
   if (!isPublisher) {
     return()
   }
-
-
-
-  #
-  # view data skeleton
-  #
-  data <- list(
-    title = list(),
-    abstract = list()
-  )
-
-  #
-  # Set values data text
-  #
-  data[[c("title", language)]] <- title
-  # data[[c("collections")]] <- as.list(collections)
-
-  #
-  # Row to add in db
-  #
-  newView <- list(
-    id = idView,
-    project = project,
-    editor = userData$id,
-    date_modified = Sys.time(),
-    readers = list(),
-    editors = list(),
-    data = data,
-    type = viewType
-  )
-
-  mxDbAddRow(
-    data = newView,
-    table = .get(config, c("pg", "tables", "views"))
-  )
+  if (viewType %in% c("rt", "cc")) {
+    newView <- mxApiCreateExternalMetadataView(
+      idProject = project,
+      idUser = userData$id,
+      token = reactUser$token,
+      idView = idView,
+      viewType = viewType,
+      title = title,
+      language = language
+    )
+    reactData$updateSourceLayerList <- runif(1)
+  } else {
+    data <- list(title = list(), abstract = list())
+    data[[c("title", language)]] <- title
+    newView <- list(
+      id = idView,
+      project = project,
+      editor = userData$id,
+      date_modified = Sys.time(),
+      readers = list(),
+      editors = list(),
+      data = data,
+      type = viewType
+    )
+    mxDbAddRow(
+      data = newView,
+      table = .get(config, c("pg", "tables", "views"))
+    )
+  }
 
   # edit flag
   newView$`_edit` <- TRUE

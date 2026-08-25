@@ -182,29 +182,58 @@ mxApiReviseSource <- function(method, idSource, changes, idUser, token) {
   result
 }
 
-#' Create a metadata-only external source through the authenticated API.
-mxApiCreateExternalMetadata <- function(
+#' Create an RT/CC view and its metadata-only source atomically.
+mxApiCreateExternalMetadataView <- function(
   idProject,
   idUser,
   token,
-  metadata = list()
+  idView,
+  viewType,
+  title,
+  language
 ) {
-  route <- .get(config, c("api", "routes", "postExternalMetadataCreate"))
+  route <- .get(
+    config,
+    c("api", "routes", "postExternalMetadataViewCreate")
+  )
   result <- mxApiPost(
     route = route,
     listParam = list(
       idProject = idProject,
       idUser = idUser,
       token = token,
-      metadata = metadata
+      idView = idView,
+      viewType = viewType,
+      title = title,
+      language = language
     ),
     shutdownOnError = FALSE
   )
   status <- .get(result, "status", 0)
   if (status < 200 || status >= 300 || !isTRUE(result$ok)) {
-    stop(.get(result, "message", "External metadata creation failed"))
+    stop(.get(result, "message", "External metadata view creation failed"))
   }
-  result$source
+  result$view
+}
+
+#' Delete a view and any unshared dedicated external metadata through the API.
+mxApiDeleteView <- function(idProject, idUser, token, idView) {
+  route <- .get(config, c("api", "routes", "postViewDelete"))
+  result <- mxApiPost(
+    route = route,
+    listParam = list(
+      idProject = idProject,
+      idUser = idUser,
+      token = token,
+      idView = idView
+    ),
+    shutdownOnError = FALSE
+  )
+  status <- .get(result, "status", 0)
+  if (status < 200 || status >= 300 || !isTRUE(result$ok)) {
+    stop(.get(result, "message", "View deletion failed"))
+  }
+  result
 }
 
 #' Validate an optional external metadata selection through the API.

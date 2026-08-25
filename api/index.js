@@ -264,7 +264,8 @@ app.get("/ogc_meta/collections/:collectionId/items/:id", ogcMeta.mwItem);
 app.post("/upload/image/", upload.mwImage);
 app.post("/upload/vector/", upload.mwVector);
 app.post("/source/revise", source.mwSourceRevise);
-app.post("/source/external/create", source.mwCreateExternalMetadataSource);
+app.post("/view/external/create", view.mwCreateExternalMetadataView);
+app.post("/view/delete", view.mwDeleteView);
 app.post("/send/mail/", mwSendMail);
 
 server.listen(port);
