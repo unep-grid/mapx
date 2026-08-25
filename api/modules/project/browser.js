@@ -139,6 +139,18 @@ export async function setFeaturedProject(socket, idProject, featured, rank) {
   try {
     await client.query("BEGIN");
     await client.query("LOCK TABLE mx_projects IN SHARE ROW EXCLUSIVE MODE");
+    const state = await client.query(
+      `SELECT legacy
+       FROM mx_projects
+       WHERE id = $1 AND active IS TRUE`,
+      [idProject],
+    );
+    if (state.rowCount !== 1) {
+      throw new Error("project_not_found");
+    }
+    if (featured && state.rows[0].legacy === true) {
+      throw new Error("project_featured_archived_forbidden");
+    }
     const result = featured
       ? await client.query(
           `UPDATE mx_projects
@@ -195,11 +207,34 @@ export async function setLegacyProject(socket, idProject, legacy) {
   if (typeof legacy !== "boolean") {
     throw new Error("project_legacy_value_invalid");
   }
-  const result = await pgWrite.query(legacySetSql, [idProject, legacy]);
-  if (result.rowCount !== 1) {
-    throw new Error("project_not_found");
+  const client = await pgWrite.connect();
+  try {
+    await client.query("BEGIN");
+    const state = await client.query(
+      `SELECT featured_rank
+       FROM mx_projects
+       WHERE id = $1 AND active IS TRUE
+       FOR UPDATE`,
+      [idProject],
+    );
+    if (state.rowCount !== 1) {
+      throw new Error("project_not_found");
+    }
+    if (legacy && state.rows[0].featured_rank != null) {
+      throw new Error("project_archive_featured_forbidden");
+    }
+    const result = await client.query(legacySetSql, [idProject, legacy]);
+    if (result.rowCount !== 1) {
+      throw new Error("project_not_found");
+    }
+    await client.query("COMMIT");
+    return result.rows[0].legacy === true;
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
   }
-  return result.rows[0].legacy === true;
 }
 
 export async function ioProjectLegacySet(socket, data, cb) {

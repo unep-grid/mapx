@@ -8376,8 +8376,8 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other obsolete projects are shown last.",
-    "ps": "لومړی شخصي خوښې ښیي، بیا ځانګړي پروژې، ورپسې نورې پروژې د الفبا په ترتیب سره. نورې زړې پروژې په وروستي کې ښودل شوي دي."
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other archived projects are shown last.",
+    "ps": "لومړی شخصي خوښې ښیي، بیا ځانګړي پروژې، او بیا نورې پروژې د الفبا په ترتیب سره. نورې آرشیف شوې پروژې په وروستي کې ښودل شوي."
   },
   {
     "id": "project_list_sort_created_desc",
@@ -8670,24 +8670,34 @@
     "ps": "د مشخص حالت تازه نشو. مهرباني وکړئ بیا هڅه وکړئ."
   },
   {
+    "id": "project_featured_legacy_blocked",
+    "en": "Unarchive this project before adding it to Featured",
+    "ps": "دا پروژه د ځانګړو شویو لیستونو کې اضافه کولو دمخه له آرشیف څخه لرې کړئ"
+  },
+  {
     "id": "project_legacy",
-    "en": "Obsolete project",
-    "ps": "زوړ پروژه"
+    "en": "Archived project",
+    "ps": "آرشیف شوې پروژه"
   },
   {
     "id": "project_legacy_add",
-    "en": "Mark project as obsolete",
-    "ps": "پروژه د نه منلو وړ په توګه نښه کړئ"
+    "en": "Archive project",
+    "ps": "د پروژې آرشیف"
   },
   {
     "id": "project_legacy_remove",
-    "en": "Remove obsolete status",
-    "ps": "زوړ حالت لرې کړئ"
+    "en": "Unarchive project",
+    "ps": "پروژه له آرشیف څخه لرې کړئ"
   },
   {
     "id": "project_legacy_error",
     "en": "Could not update this project status. Please try again.",
     "ps": "د دې پروژې حالت تازه نشو. مهرباني وکړئ بیا هڅه وکړئ."
+  },
+  {
+    "id": "project_legacy_featured_blocked",
+    "en": "Remove this project from Featured before archiving it",
+    "ps": "دا پروژه د آرشیف کولو دمخه له ځانګړي شوي څخه لرې کړئ"
   },
   {
     "id": "project_roles_matrix_title",

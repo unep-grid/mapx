@@ -8376,8 +8376,8 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other obsolete projects are shown last.",
-    "ar": "يعرض أولاً المشاريع المفضلة الشخصية، ثم المشاريع المميزة، تليها المشاريع الأخرى مرتبة أبجدياً. أما المشاريع القديمة فتُعرض في النهاية."
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other archived projects are shown last.",
+    "ar": "يعرض أولاً المشاريع المفضلة الشخصية، ثم المشاريع المميزة، تليها المشاريع الأخرى بالترتيب الأبجدي. أما المشاريع المؤرشفة الأخرى فتُعرض في النهاية."
   },
   {
     "id": "project_list_sort_created_desc",
@@ -8670,24 +8670,34 @@
     "ar": "تعذر تحديث حالة العرض المميز. يرجى المحاولة مرة أخرى."
   },
   {
+    "id": "project_featured_legacy_blocked",
+    "en": "Unarchive this project before adding it to Featured",
+    "ar": "قم بفك ضغط هذا المشروع قبل إضافته إلى قسم المشاريع المميزة"
+  },
+  {
     "id": "project_legacy",
-    "en": "Obsolete project",
-    "ar": "مشروع قديم"
+    "en": "Archived project",
+    "ar": "مشروع مؤرشف"
   },
   {
     "id": "project_legacy_add",
-    "en": "Mark project as obsolete",
-    "ar": "ضع علامة على المشروع باعتباره قديماً"
+    "en": "Archive project",
+    "ar": "مشروع الأرشيف"
   },
   {
     "id": "project_legacy_remove",
-    "en": "Remove obsolete status",
-    "ar": "إزالة الحالة القديمة"
+    "en": "Unarchive project",
+    "ar": "مشروع Unarchive"
   },
   {
     "id": "project_legacy_error",
     "en": "Could not update this project status. Please try again.",
     "ar": "تعذر تحديث حالة هذا المشروع. يرجى المحاولة مرة أخرى."
+  },
+  {
+    "id": "project_legacy_featured_blocked",
+    "en": "Remove this project from Featured before archiving it",
+    "ar": "قم بإزالة هذا المشروع من قسم المشاريع المميزة قبل أرشفته."
   },
   {
     "id": "project_roles_matrix_title",

@@ -54,13 +54,19 @@ const projects = [
     is_member: false,
     is_favorite: false,
     featured_rank: 1000,
-    legacy: true,
+    legacy: false,
     allow_join: true,
     view_count: 20,
     collaborator_count: 2,
     date_created: "2026-01-01T00:00:00Z",
   },
 ];
+
+const archivedProjects = projects.map((project, index) =>
+  index === 1
+    ? { ...project, featured_rank: null, legacy: true }
+    : { ...project },
+);
 
 async function mount(response = { projects }) {
   emitAsync.mockResolvedValueOnce(response);
@@ -175,7 +181,7 @@ describe("mx-project-list", () => {
       element.rows.querySelector(
         `[data-project-id="${projects[1].id}"] [data-action="legacy"]`,
       ).getAttribute("aria-pressed"),
-    ).toBe("true");
+    ).toBe("false");
     expect(
       element.rows.querySelector(
         `[data-project-id="${projects[0].id}"] [data-action="legacy"] .mx-archive-box`,
@@ -183,7 +189,7 @@ describe("mx-project-list", () => {
     ).not.toBeNull();
     expect(
       element.rows.querySelector(
-        `[data-project-id="${projects[1].id}"] [data-action="legacy"] .mx-archive-box-closed`,
+        `[data-project-id="${projects[1].id}"] [data-action="legacy"] .mx-archive-box`,
       ),
     ).not.toBeNull();
     expect(element.rows.querySelector(".mx-project-browser-menu-button"))
@@ -202,7 +208,7 @@ describe("mx-project-list", () => {
 
   it("only shows the delete action for legacy projects, and only for curators", async () => {
     const withCurator = await mount({
-      projects,
+      projects: archivedProjects,
       can_curate_legacy: true,
     });
     expect(
@@ -218,7 +224,7 @@ describe("mx-project-list", () => {
 
     document.body.replaceChildren();
     const withoutCurator = await mount({
-      projects,
+      projects: archivedProjects,
       can_curate_legacy: false,
     });
     expect(
@@ -229,7 +235,7 @@ describe("mx-project-list", () => {
   it("delegates delete clicks and drops the row once deletion succeeds", async () => {
     const onDeleteRequested = vi.fn().mockResolvedValue(true);
     emitAsync.mockResolvedValueOnce({
-      projects,
+      projects: archivedProjects,
       can_curate_legacy: true,
     });
     const element = new ProjectListElement();
@@ -257,7 +263,7 @@ describe("mx-project-list", () => {
   it("keeps the row when the delete flow is cancelled or fails", async () => {
     const onDeleteRequested = vi.fn().mockResolvedValue(false);
     const element = await mount({
-      projects,
+      projects: archivedProjects,
       can_curate_legacy: true,
     });
     element.options.onDeleteRequested = onDeleteRequested;
@@ -409,13 +415,55 @@ describe("mx-project-list", () => {
       ),
     ).not.toBeNull();
     expect(
-      featuredRow.querySelector(
-        ".mx-project-browser-legacy:not([data-action]) .mx-archive-box-closed",
-      ),
-    ).not.toBeNull();
+      featuredRow.querySelector(".mx-project-browser-legacy"),
+    ).toBeNull();
     expect(
       element.rows.querySelectorAll("[data-action='favorite']"),
     ).toHaveLength(2);
+  });
+
+  it("disables mutually exclusive Featured and Archived actions", async () => {
+    const featuredElement = await mount({
+      projects,
+      can_curate_featured: true,
+      can_curate_legacy: true,
+    });
+    const archiveFeatured = featuredElement.rows.querySelector(
+      `[data-project-id="${projects[1].id}"] [data-action="legacy"]`,
+    );
+    expect(archiveFeatured.disabled).toBe(true);
+    expect(archiveFeatured.title).toBe("project_legacy_featured_blocked");
+    expect(
+      archiveFeatured.classList.contains("mx-project-browser-action-blocked"),
+    ).toBe(true);
+
+    document.body.replaceChildren();
+    const archivedElement = await mount({
+      projects: archivedProjects,
+      can_curate_featured: true,
+      can_curate_legacy: true,
+    });
+    const featureArchived = archivedElement.rows.querySelector(
+      `[data-project-id="${projects[1].id}"] [data-action="curator-menu"]`,
+    );
+    expect(featureArchived.disabled).toBe(true);
+    expect(featureArchived.title).toBe("project_featured_legacy_blocked");
+    expect(
+      featureArchived.classList.contains("mx-project-browser-action-blocked"),
+    ).toBe(true);
+
+    await archivedElement.setFeatured(projects[1].id, { featured: true });
+    await featuredElement.setLegacy(projects[1].id);
+    expect(emitAsync).not.toHaveBeenCalledWith(
+      "/client/project/featured/set",
+      expect.anything(),
+      expect.anything(),
+    );
+    expect(emitAsync).not.toHaveBeenCalledWith(
+      "/client/project/legacy/set",
+      expect.anything(),
+      expect.anything(),
+    );
   });
 
   it("hides personal and curator controls from guests", async () => {
@@ -468,6 +516,43 @@ describe("mx-project-list", () => {
     expect(setProject).not.toHaveBeenCalled();
   });
 
+  it("opens from the heading title but ignores passive and disabled heading controls", async () => {
+    const element = await mount({
+      projects,
+      can_curate_featured: true,
+      can_curate_legacy: true,
+    });
+    const featuredRow = element.rows.querySelector(
+      `[data-project-id="${projects[1].id}"]`,
+    );
+    const title = featuredRow.querySelector(".mx-project-browser-title");
+    const heading = featuredRow.querySelector(".mx-project-browser-heading");
+    const stats = featuredRow.querySelector(".mx-project-browser-stats");
+    const disabledArchive = featuredRow.querySelector(
+      '[data-action="legacy"]',
+    );
+
+    setProject.mockResolvedValueOnce(true);
+    title.click();
+    await vi.waitFor(() =>
+      expect(setProject).toHaveBeenCalledWith(
+        projects[1].id,
+        expect.any(Object),
+        "project_list",
+      ),
+    );
+
+    setProject.mockClear();
+    emitAsync.mockClear();
+    stats.click();
+    heading.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    disabledArchive.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+
+    expect(disabledArchive.disabled).toBe(true);
+    expect(setProject).not.toHaveBeenCalled();
+    expect(emitAsync).not.toHaveBeenCalled();
+  });
+
   it("allows an unfeatured project to be featured with an explicit rank", async () => {
     const element = await mount({
       projects,
@@ -509,7 +594,7 @@ describe("mx-project-list", () => {
     expect(element.message.textContent).toBe("project_favorite_error");
   });
 
-  it("lets root users toggle obsolete status and refreshes the indicator", async () => {
+  it("lets root users toggle archived status and refreshes the indicator", async () => {
     const element = await mount({
       projects,
       can_curate_featured: true,
@@ -536,7 +621,7 @@ describe("mx-project-list", () => {
     ).not.toBeNull();
   });
 
-  it("rolls an optimistic obsolete status change back on API errors", async () => {
+  it("rolls an optimistic archived status change back on API errors", async () => {
     const element = await mount({
       projects,
       can_curate_legacy: true,

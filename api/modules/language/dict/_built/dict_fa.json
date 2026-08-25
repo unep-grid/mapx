@@ -8376,8 +8376,8 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other obsolete projects are shown last.",
-    "fa": "ابتدا پروژه‌های مورد علاقه شخصی، سپس پروژه‌های ویژه و به دنبال آن سایر پروژه‌ها به ترتیب حروف الفبا نمایش داده می‌شوند. سایر پروژه‌های منسوخ شده در آخر نمایش داده می‌شوند."
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other archived projects are shown last.",
+    "fa": "ابتدا پروژه‌های مورد علاقه شخصی، سپس پروژه‌های ویژه و به دنبال آن سایر پروژه‌ها به ترتیب حروف الفبا نمایش داده می‌شوند. سایر پروژه‌های بایگانی شده در آخر نمایش داده می‌شوند."
   },
   {
     "id": "project_list_sort_created_desc",
@@ -8670,24 +8670,34 @@
     "fa": "وضعیت ویژه به‌روزرسانی نشد. لطفاً دوباره امتحان کنید."
   },
   {
+    "id": "project_featured_legacy_blocked",
+    "en": "Unarchive this project before adding it to Featured",
+    "fa": "قبل از افزودن این پروژه به ویژه، آن را از بایگانی خارج کنید"
+  },
+  {
     "id": "project_legacy",
-    "en": "Obsolete project",
-    "fa": "پروژه منسوخ شده"
+    "en": "Archived project",
+    "fa": "پروژه بایگانی شده"
   },
   {
     "id": "project_legacy_add",
-    "en": "Mark project as obsolete",
-    "fa": "علامت‌گذاری پروژه به عنوان منسوخ"
+    "en": "Archive project",
+    "fa": "پروژه بایگانی"
   },
   {
     "id": "project_legacy_remove",
-    "en": "Remove obsolete status",
-    "fa": "حذف وضعیت منسوخ"
+    "en": "Unarchive project",
+    "fa": "پروژه از بایگانی خارج کردن"
   },
   {
     "id": "project_legacy_error",
     "en": "Could not update this project status. Please try again.",
     "fa": "به‌روزرسانی وضعیت این پروژه امکان‌پذیر نیست. لطفاً دوباره امتحان کنید."
+  },
+  {
+    "id": "project_legacy_featured_blocked",
+    "en": "Remove this project from Featured before archiving it",
+    "fa": "قبل از بایگانی کردن، این پروژه را از فهرست ویژه حذف کنید"
   },
   {
     "id": "project_roles_matrix_title",

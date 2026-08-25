@@ -59,10 +59,12 @@ const UI_KEYS = [
   "project_featured_rank",
   "project_featured_save_rank",
   "project_featured_error",
+  "project_featured_legacy_blocked",
   "project_legacy",
   "project_legacy_add",
   "project_legacy_remove",
   "project_legacy_error",
+  "project_legacy_featured_blocked",
   "project_delete_action",
   "btn_join_project",
   "admin",
@@ -553,7 +555,13 @@ export class ProjectListElement extends HTMLElement {
       this.el("strong", { class: "mx-project-browser-title" }, project.title),
     );
     if (this.canCurateFeatured) {
-      const featuredLabel = this.label("project_featured_actions");
+      const featuredBlocked =
+        project.legacy && project.featured_rank === null;
+      const featuredLabel = this.label(
+        featuredBlocked
+          ? "project_featured_legacy_blocked"
+          : "project_featured_actions",
+      );
       const featured = iconButton(
         this.el,
         "mx-project-browser-heading-action mx-project-browser-featured",
@@ -564,7 +572,12 @@ export class ProjectListElement extends HTMLElement {
       featured.dataset.projectId = project.id;
       featured.setAttribute("aria-haspopup", "menu");
       featured.setAttribute("aria-expanded", "false");
-      featured.disabled = this.pendingProjects.has(project.id);
+      featured.classList.toggle(
+        "mx-project-browser-action-blocked",
+        featuredBlocked,
+      );
+      featured.disabled =
+        featuredBlocked || this.pendingProjects.has(project.id);
       this.curatorTriggers.set(project.id, featured);
       heading.appendChild(featured);
     } else if (project.featured_rank !== null) {
@@ -584,8 +597,14 @@ export class ProjectListElement extends HTMLElement {
       );
     }
     if (this.canCurateLegacy) {
+      const archiveBlocked =
+        !project.legacy && project.featured_rank !== null;
       const legacyLabel = this.label(
-        project.legacy ? "project_legacy_remove" : "project_legacy_add",
+        archiveBlocked
+          ? "project_legacy_featured_blocked"
+          : project.legacy
+            ? "project_legacy_remove"
+            : "project_legacy_add",
       );
       const legacy = iconButton(
         this.el,
@@ -598,7 +617,11 @@ export class ProjectListElement extends HTMLElement {
       );
       legacy.dataset.projectId = project.id;
       legacy.setAttribute("aria-pressed", String(project.legacy));
-      legacy.disabled = this.pendingProjects.has(project.id);
+      legacy.classList.toggle(
+        "mx-project-browser-action-blocked",
+        archiveBlocked,
+      );
+      legacy.disabled = archiveBlocked || this.pendingProjects.has(project.id);
       heading.appendChild(legacy);
     } else if (project.legacy) {
       heading.appendChild(
@@ -965,7 +988,13 @@ export class ProjectListElement extends HTMLElement {
 
   async setFeatured(projectId, { featured, rank } = {}) {
     const project = this.projects.find((item) => item.id === projectId);
-    if (!project || this.pendingProjects.has(projectId)) return;
+    if (
+      !project ||
+      this.pendingProjects.has(projectId) ||
+      (featured === true && project.legacy)
+    ) {
+      return;
+    }
     const previous = project.featured_rank;
     const restoreCuratorFocus = this._curatorProjectId === projectId;
     this.pendingProjects.add(projectId);
@@ -1003,7 +1032,8 @@ export class ProjectListElement extends HTMLElement {
     if (
       !project ||
       !this.canCurateLegacy ||
-      this.pendingProjects.has(projectId)
+      this.pendingProjects.has(projectId) ||
+      (!project.legacy && project.featured_rank !== null)
     ) {
       return;
     }
@@ -1132,6 +1162,14 @@ export class ProjectListElement extends HTMLElement {
     if (scopeButton) {
       this.state.scope = scopeButton.dataset.scope;
       this.resetResults();
+      return;
+    }
+    const heading = event.target.closest(".mx-project-browser-heading");
+    if (
+      heading &&
+      !event.target.closest(".mx-project-browser-title") &&
+      !event.target.closest(".mx-project-browser-heading-action")
+    ) {
       return;
     }
     const action = event.target.closest("[data-action]");

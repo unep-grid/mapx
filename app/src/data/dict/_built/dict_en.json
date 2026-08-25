@@ -6701,7 +6701,7 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other obsolete projects are shown last."
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other archived projects are shown last."
   },
   {
     "id": "project_list_sort_created_desc",
@@ -6936,20 +6936,28 @@
     "en": "Could not update featured status. Please try again."
   },
   {
+    "id": "project_featured_legacy_blocked",
+    "en": "Unarchive this project before adding it to Featured"
+  },
+  {
     "id": "project_legacy",
-    "en": "Obsolete project"
+    "en": "Archived project"
   },
   {
     "id": "project_legacy_add",
-    "en": "Mark project as obsolete"
+    "en": "Archive project"
   },
   {
     "id": "project_legacy_remove",
-    "en": "Remove obsolete status"
+    "en": "Unarchive project"
   },
   {
     "id": "project_legacy_error",
     "en": "Could not update this project status. Please try again."
+  },
+  {
+    "id": "project_legacy_featured_blocked",
+    "en": "Remove this project from Featured before archiving it"
   },
   {
     "id": "project_roles_matrix_title",

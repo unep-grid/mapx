@@ -365,6 +365,10 @@
   cursor: wait;
 }
 
+.mx-project-browser-heading-action.mx-project-browser-action-blocked {
+  cursor: not-allowed;
+}
+
 .mx-project-browser-stat {
   white-space: nowrap;
 }

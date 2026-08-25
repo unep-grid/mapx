@@ -8376,8 +8376,8 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other obsolete projects are shown last.",
-    "zh": "首先显示个人收藏，然后是精选项目，最后按字母顺序显示其他项目。其他已过时的项目显示在最后。"
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other archived projects are shown last.",
+    "zh": "首先显示个人收藏，然后是精选项目，接着按字母顺序显示其他项目。其他已存档的项目显示在最后。"
   },
   {
     "id": "project_list_sort_created_desc",
@@ -8670,24 +8670,34 @@
     "zh": "无法更新精选状态。请重试。"
   },
   {
+    "id": "project_featured_legacy_blocked",
+    "en": "Unarchive this project before adding it to Featured",
+    "zh": "请先取消归档此项目，然后再将其添加到“精选”页面。"
+  },
+  {
     "id": "project_legacy",
-    "en": "Obsolete project",
-    "zh": "过时的项目"
+    "en": "Archived project",
+    "zh": "已存档项目"
   },
   {
     "id": "project_legacy_add",
-    "en": "Mark project as obsolete",
-    "zh": "将项目标记为已过时"
+    "en": "Archive project",
+    "zh": "档案项目"
   },
   {
     "id": "project_legacy_remove",
-    "en": "Remove obsolete status",
-    "zh": "移除过时状态"
+    "en": "Unarchive project",
+    "zh": "Unarchive 项目"
   },
   {
     "id": "project_legacy_error",
     "en": "Could not update this project status. Please try again.",
     "zh": "无法更新此项目状态。请重试。"
+  },
+  {
+    "id": "project_legacy_featured_blocked",
+    "en": "Remove this project from Featured before archiving it",
+    "zh": "在归档之前，请将此项目从“精选”列表中移除。"
   },
   {
     "id": "project_roles_matrix_title",

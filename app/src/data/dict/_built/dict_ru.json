@@ -8376,8 +8376,8 @@
   },
   {
     "id": "project_list_sort_default_desc",
-    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other obsolete projects are shown last.",
-    "ru": "Сначала отображаются мои личные фавориты, затем рекомендуемые проекты, а затем остальные проекты в алфавитном порядке. Другие устаревшие проекты отображаются в конце."
+    "en": "Shows personal favorites first, then Featured projects, followed by other projects in alphabetical order. Other archived projects are shown last.",
+    "ru": "Сначала отображаются мои личные фавориты, затем избранные проекты, а затем остальные проекты в алфавитном порядке. Другие архивные проекты отображаются в конце."
   },
   {
     "id": "project_list_sort_created_desc",
@@ -8670,24 +8670,34 @@
     "ru": "Не удалось обновить статус \"рекомендуемое\". Пожалуйста, попробуйте еще раз."
   },
   {
+    "id": "project_featured_legacy_blocked",
+    "en": "Unarchive this project before adding it to Featured",
+    "ru": "Разархивируйте этот проект, прежде чем добавлять его в раздел «Рекомендуемые»."
+  },
+  {
     "id": "project_legacy",
-    "en": "Obsolete project",
-    "ru": "Устаревший проект"
+    "en": "Archived project",
+    "ru": "Архив проекта"
   },
   {
     "id": "project_legacy_add",
-    "en": "Mark project as obsolete",
-    "ru": "Пометить проект как устаревший"
+    "en": "Archive project",
+    "ru": "Архивный проект"
   },
   {
     "id": "project_legacy_remove",
-    "en": "Remove obsolete status",
-    "ru": "Удалить устаревший статус"
+    "en": "Unarchive project",
+    "ru": "Проект Unarchive"
   },
   {
     "id": "project_legacy_error",
     "en": "Could not update this project status. Please try again.",
     "ru": "Не удалось обновить статус этого проекта. Пожалуйста, попробуйте еще раз."
+  },
+  {
+    "id": "project_legacy_featured_blocked",
+    "en": "Remove this project from Featured before archiving it",
+    "ru": "Перед архивированием удалите этот проект из раздела «Рекомендуемые»."
   },
   {
     "id": "project_roles_matrix_title",

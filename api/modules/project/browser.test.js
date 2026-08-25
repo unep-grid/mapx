@@ -148,6 +148,9 @@ describe("project browser API", () => {
     const client = {
       query: vi.fn(async (sql, values) => {
         queries.push([sql, values]);
+        if (sql.includes("SELECT legacy")) {
+          return { rowCount: 1, rows: [{ legacy: false }] };
+        }
         if (sql.includes("RETURNING featured_rank")) {
           return {
             rowCount: 1,
@@ -190,31 +193,81 @@ describe("project browser API", () => {
     ).rejects.toThrow("project_featured_rank_invalid");
   });
 
+  it("rejects featuring an archived project", async () => {
+    const client = {
+      query: vi.fn(async (sql) => {
+        if (sql.includes("SELECT legacy")) {
+          return { rowCount: 1, rows: [{ legacy: true }] };
+        }
+        return { rowCount: 0, rows: [] };
+      }),
+      release: vi.fn(),
+    };
+    connect.mockResolvedValue(client);
+
+    await expect(
+      setFeaturedProject(socket({ root: true }), projectId, true),
+    ).rejects.toThrow("project_featured_archived_forbidden");
+    expect(client.query).toHaveBeenCalledWith("ROLLBACK");
+    expect(
+      client.query.mock.calls.some(([sql]) =>
+        String(sql).includes("RETURNING featured_rank"),
+      ),
+    ).toBe(false);
+  });
+
   it("allows only root or project-creator users to update the legacy flag", async () => {
     await expect(
       setLegacyProject(socket(), projectId, true),
     ).rejects.toThrow("project_legacy_access_denied");
     expect(writeQuery).not.toHaveBeenCalled();
 
-    writeQuery.mockResolvedValueOnce({
-      rowCount: 1,
-      rows: [{ legacy: true }],
-    });
+    const client = {
+      query: vi.fn(async (sql) => {
+        if (sql.includes("SELECT featured_rank")) {
+          return { rowCount: 1, rows: [{ featured_rank: null }] };
+        }
+        if (sql === "UPDATE legacy project") {
+          return { rowCount: 1, rows: [{ legacy: true }] };
+        }
+        return { rowCount: 0, rows: [] };
+      }),
+      release: vi.fn(),
+    };
+    connect.mockResolvedValue(client);
     await expect(
       setLegacyProject(socket({ root: true }), projectId, true),
     ).resolves.toBe(true);
-    expect(writeQuery).toHaveBeenCalledWith("UPDATE legacy project", [
+    expect(client.query).toHaveBeenCalledWith("UPDATE legacy project", [
       projectId,
       true,
     ]);
 
-    writeQuery.mockResolvedValueOnce({
-      rowCount: 1,
-      rows: [{ legacy: true }],
-    });
     await expect(
       setLegacyProject(socket({ project_creator: true }), projectId, true),
     ).resolves.toBe(true);
+  });
+
+  it("rejects archiving a featured project", async () => {
+    const client = {
+      query: vi.fn(async (sql) => {
+        if (sql.includes("SELECT featured_rank")) {
+          return { rowCount: 1, rows: [{ featured_rank: 1000 }] };
+        }
+        return { rowCount: 0, rows: [] };
+      }),
+      release: vi.fn(),
+    };
+    connect.mockResolvedValue(client);
+
+    await expect(
+      setLegacyProject(socket({ root: true }), projectId, true),
+    ).rejects.toThrow("project_archive_featured_forbidden");
+    expect(client.query).toHaveBeenCalledWith("ROLLBACK");
+    expect(client.query).not.toHaveBeenCalledWith(
+      "UPDATE legacy project",
+      expect.anything(),
+    );
   });
 
   it("validates legacy values and reports missing active projects", async () => {
@@ -223,7 +276,16 @@ describe("project browser API", () => {
     ).rejects.toThrow("project_legacy_value_invalid");
     expect(writeQuery).not.toHaveBeenCalled();
 
-    writeQuery.mockResolvedValueOnce({ rowCount: 0, rows: [] });
+    const client = {
+      query: vi.fn(async (sql) => {
+        if (sql.includes("SELECT featured_rank")) {
+          return { rowCount: 0, rows: [] };
+        }
+        return { rowCount: 0, rows: [] };
+      }),
+      release: vi.fn(),
+    };
+    connect.mockResolvedValue(client);
     await expect(
       setLegacyProject(socket({ root: true }), projectId, false),
     ).rejects.toThrow("project_not_found");
