@@ -4,7 +4,10 @@ import { updateIndexes } from "#mapx/search";
 import { updateOgcMetaCatalog } from "#mapx/ogc_meta";
 import { updateGeoIpTable } from "#mapx/ip";
 import { updateGeoserver } from "#mapx/geoserver";
-import { checkAllTiles } from "#mapx/tile_check";
+import {
+  TILE_CHECK_ROUTINE_TIMEOUT_MS,
+  tileCheckRoutine,
+} from "./modules/tile_check/routine.js";
 import { clearDownload } from "#mapx/helpers";
 import { once, onceInterval } from "#mapx/helpers";
 import { sendMailAuto } from "#mapx/mail";
@@ -25,11 +28,6 @@ const updateOgcMetaCatalogRoutine = () => updateOgcMetaCatalog();
 const updateGeoIpTableRoutine = () => updateGeoIpTable();
 const updateGeoserverRoutine = () => updateGeoserver();
 const clearDownloadRoutine = () => clearDownload();
-/**
- * Writes results to mx_views_tiles_check only. No notification is sent
- * yet: that's a deferred follow-up (see plan).
- */
-const tileCheckRoutine = () => checkAllTiles();
 /**
  * Config
  */
@@ -84,6 +82,10 @@ const optDaily = {
   intervalMs: 1 * 24 * 60 * 60 * 1000,
   before: true,
 };
+const optTileDaily = {
+  ...optDaily,
+  timeoutMs: TILE_CHECK_ROUTINE_TIMEOUT_MS,
+};
 
 async function startRoutines() {
   /**
@@ -106,7 +108,7 @@ async function startRoutines() {
   onceInterval([updateOgcMetaCatalogRoutine], optHourly);
   onceInterval([updateGeoIpTableRoutine], optWeekly);
   onceInterval([updateGeoserverRoutine, clearDownloadRoutine], optDaily);
-  onceInterval([tileCheckRoutine], optDaily);
+  onceInterval([tileCheckRoutine], optTileDaily);
 }
 
 startRoutines().catch((error) => {

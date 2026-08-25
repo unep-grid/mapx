@@ -119,4 +119,26 @@ describe("checkAllTiles", () => {
     expect(results).toHaveLength(1);
     expect(results[0].valid).toBe(true);
   });
+
+  it("reports the planned total before checking views", async () => {
+    mocks.query.mockResolvedValueOnce({
+      rows: [
+        {
+          id: "MX-AAAAA-AAAAA-AAAAA",
+          project: "P1",
+          tile_url: "https://a/{z}/{x}/{y}.png",
+          bounds: null,
+        },
+      ],
+    });
+    const onPlan = vi.fn();
+    const onDone = vi.fn();
+
+    await checkAllTiles({ onPlan, onDone });
+
+    expect(onPlan).toHaveBeenCalledWith({ total: 1 });
+    expect(onPlan.mock.invocationCallOrder[0]).toBeLessThan(
+      onDone.mock.invocationCallOrder[0],
+    );
+  });
 });

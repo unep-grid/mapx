@@ -4,7 +4,7 @@ import {
   RequestFilteringHttpsAgent,
 } from "request-filtering-agent";
 
-const DEFAULT_TIMEOUT_MS = 15 * 1000;
+const DEFAULT_TIMEOUT_MS = 8 * 1000;
 const MAX_RESPONSE_BYTES = 5 * 1024 * 1024;
 
 /**

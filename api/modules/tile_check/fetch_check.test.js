@@ -3,7 +3,11 @@ import { describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({ fetch: vi.fn() }));
 vi.mock("node-fetch", () => ({ default: mocks.fetch }));
 
-import { matchesImageSignature, matchesSafeSvg } from "./fetch_check.js";
+import {
+  checkUrl,
+  matchesImageSignature,
+  matchesSafeSvg,
+} from "./fetch_check.js";
 
 const PNG_HEADER = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 const JPEG_HEADER = Buffer.from([0xff, 0xd8, 0xff, 0xe0]);
@@ -48,6 +52,31 @@ describe("matchesSafeSvg", () => {
     expect(
       matchesSafeSvg(Buffer.from('<svg><image href="https://example.org/x.png"/></svg>'), "image/svg+xml"),
     ).toBe(false);
+  });
+});
+
+describe("checkUrl", () => {
+  it("aborts an unresponsive resource after eight seconds by default", async () => {
+    vi.useFakeTimers();
+    mocks.fetch.mockImplementation((_url, opt) =>
+      new Promise((_resolve, reject) => {
+        opt.signal.addEventListener("abort", () => {
+          const error = new Error("aborted");
+          error.name = "AbortError";
+          reject(error);
+        });
+      }),
+    );
+
+    try {
+      const pending = checkUrl("https://example.test/tile.png");
+      await vi.advanceTimersByTimeAsync(7_999);
+      expect(mocks.fetch).toHaveBeenCalledTimes(1);
+      await vi.advanceTimersByTimeAsync(1);
+      await expect(pending).resolves.toMatchObject({ detail: "timeout" });
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
 

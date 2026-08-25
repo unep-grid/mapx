@@ -146,9 +146,13 @@ export async function checkProjectTiles(idProject, opt = {}) {
 /**
  * Check every 'rt' view's tile URL across all projects (used by the daily
  * routine).
+ * @param {Object} [opt] see runChecks callbacks
+ * @param {(summary: {total: number}) => void} [opt.onPlan] called after the
+ *   views have been loaded and before checks start.
  * @returns {Promise<Array>} check results
  */
-export async function checkAllTiles() {
+export async function checkAllTiles(opt = {}) {
   const views = await getCheckableViews();
-  return runChecks(views);
+  opt.onPlan?.({ total: views.length });
+  return runChecks(views, opt);
 }
