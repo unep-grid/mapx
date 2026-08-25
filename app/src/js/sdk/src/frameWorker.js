@@ -181,6 +181,15 @@ class FrameWorker extends Events {
       console.warn("Empty request / message.data", msg);
       return false;
     }
+
+    /**
+     * Other window-message consumers, such as AppVisibility, use the same
+     * channel. Only SDK requests belong to the resolver protocol.
+     */
+    if (request.type !== "request") {
+      return false;
+    }
+
     const idRequest = request.idRequest;
     const idResolver = request.idResolver;
     const resolver = fw.opt.resolvers[idResolver];

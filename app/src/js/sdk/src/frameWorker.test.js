@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { FrameWorker } from "./frameWorker.js";
+import { HOST_VISIBILITY_MESSAGE_TYPE } from "./host_visibility.js";
 
 function createWorker(resolvers) {
   const worker = Object.create(FrameWorker.prototype);
@@ -12,6 +13,7 @@ function createWorker(resolvers) {
 function request(idResolver, value) {
   return {
     data: JSON.stringify({
+      type: "request",
       idRequest: 4,
       idResolver,
       value,
@@ -20,6 +22,26 @@ function request(idResolver, value) {
 }
 
 describe("FrameWorker request contract", () => {
+  it("ignores host visibility messages", async () => {
+    const resolvers = {
+      echo: vi.fn(),
+    };
+    const worker = createWorker(resolvers);
+
+    await expect(
+      worker.handleMessageManager({
+        data: JSON.stringify({
+          type: HOST_VISIBILITY_MESSAGE_TYPE,
+          visible: true,
+        }),
+      }),
+    ).resolves.toBe(false);
+
+    expect(resolvers.echo).not.toHaveBeenCalled();
+    expect(worker.postResponse).not.toHaveBeenCalled();
+    expect(worker._post).not.toHaveBeenCalled();
+  });
+
   it("returns an awaited resolver result", async () => {
     const worker = createWorker({
       echo: vi.fn(async (value) => ({ ...value, done: true })),
