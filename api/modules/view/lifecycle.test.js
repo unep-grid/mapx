@@ -4,6 +4,7 @@ const mocks = vi.hoisted(() => ({
   connect: vi.fn(),
   createExternalMetadataSource: vi.fn(),
   getUserRoles: vi.fn(),
+  newIdView: vi.fn(),
 }));
 
 vi.mock("#mapx/db", () => ({
@@ -16,6 +17,7 @@ vi.mock("#mapx/authentication", () => ({
 vi.mock("../source/external.js", () => ({
   createExternalMetadataSource: mocks.createExternalMetadataSource,
 }));
+vi.mock("./id.js", () => ({ newIdView: mocks.newIdView }));
 
 import {
   createExternalMetadataView,
@@ -42,6 +44,7 @@ describe("external metadata view lifecycle", () => {
       ok: true,
       source: { id: idSource },
     });
+    mocks.newIdView.mockReturnValue(idView);
   });
 
   it("creates an RT and its initialized metadata source together", async () => {
@@ -69,7 +72,7 @@ describe("external metadata view lifecycle", () => {
       {
         idUser: 7,
         idProject,
-        idView,
+        idView: "MX-ZZZZZ-ZZZZZ-ZZZZZ",
         viewType: "rt",
         title: " New raster ",
         language: "fr",
@@ -82,6 +85,7 @@ describe("external metadata view lifecycle", () => {
       abstract: {},
       source: { metadataId: idSource, tiles: [] },
     });
+    expect(result.view.id).toBe(idView);
     expect(mocks.createExternalMetadataSource).toHaveBeenCalledWith(
       {
         idUser: 7,
@@ -105,7 +109,6 @@ describe("external metadata view lifecycle", () => {
         {
           idUser: 7,
           idProject,
-          idView,
           viewType: "cc",
           title: "Code",
           language: "en",
@@ -129,7 +132,6 @@ describe("external metadata view lifecycle", () => {
       createExternalMetadataView({
         idUser: 7,
         idProject,
-        idView,
         viewType: "rt",
         title: "Raster",
         language: "en",

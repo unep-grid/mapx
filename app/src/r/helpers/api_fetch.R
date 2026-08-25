@@ -187,7 +187,6 @@ mxApiCreateExternalMetadataView <- function(
   idProject,
   idUser,
   token,
-  idView,
   viewType,
   title,
   language
@@ -202,7 +201,6 @@ mxApiCreateExternalMetadataView <- function(
       idProject = idProject,
       idUser = idUser,
       token = token,
-      idView = idView,
       viewType = viewType,
       title = title,
       language = language

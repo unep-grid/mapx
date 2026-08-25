@@ -9,4 +9,6 @@ export * from "./setViewTilesUrl.js";
 export * from "./setViewRasterConfig.js";
 export * from "./getViewsByProject.js";
 export * from "./source_data.js";
+export * from "./id.js";
+export * from "./create.js";
 export * from "./lifecycle.js";

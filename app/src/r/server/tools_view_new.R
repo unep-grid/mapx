@@ -125,74 +125,75 @@ observe({
 
 
 observeEvent(input$btnAddViewConfirm, {
-  project <- reactData$project
-  userData <- reactUser$data
-  title <- reactData$viewAddTitle
-  idView <- reactData$viewAddId
-  language <- reactData$language
-  viewType <- input$selectViewType
-  hasErrors <- reactData$viewAddHasError
+  mxCatch("Create view", {
+    project <- reactData$project
+    userData <- reactUser$data
+    title <- reactData$viewAddTitle
+    idView <- reactData$viewAddId
+    language <- reactData$language
+    viewType <- input$selectViewType
+    hasErrors <- reactData$viewAddHasError
 
-  if (hasErrors) {
-    return()
-  }
+    if (hasErrors) {
+      return()
+    }
 
-  #
-  # Role check
-  #
-  isGuest <- isGuestUser()
-  userRole <- getUserRole()
-  isPublisher <- !isGuest && "publishers" %in% userRole$groups
+    #
+    # Role check
+    #
+    isGuest <- isGuestUser()
+    userRole <- getUserRole()
+    isPublisher <- !isGuest && "publishers" %in% userRole$groups
 
-  if (!isPublisher) {
-    return()
-  }
-  if (viewType %in% c("rt", "cc")) {
-    newView <- mxApiCreateExternalMetadataView(
-      idProject = project,
-      idUser = userData$id,
-      token = reactUser$token,
-      idView = idView,
-      viewType = viewType,
-      title = title,
-      language = language
+    if (!isPublisher) {
+      return()
+    }
+    if (viewType %in% c("rt", "cc")) {
+      newView <- mxApiCreateExternalMetadataView(
+        idProject = project,
+        idUser = userData$id,
+        token = reactUser$token,
+        viewType = viewType,
+        title = title,
+        language = language
+      )
+      reactData$updateSourceLayerList <- runif(1)
+    } else {
+      data <- list(title = list(), abstract = list())
+      data[[c("title", language)]] <- title
+      newView <- list(
+        id = idView,
+        project = project,
+        editor = userData$id,
+        date_modified = Sys.time(),
+        readers = list(),
+        editors = list(),
+        data = data,
+        type = viewType
+      )
+      mxDbAddRow(
+        data = newView,
+        table = .get(config, c("pg", "tables", "views"))
+      )
+    }
+
+    # edit flag
+    newView$`_edit` <- TRUE
+
+    # add this as new (empty) source
+    mglUpdateViewsList(
+      id = .get(config, c("map", "id")),
+      viewsList = list(newView),
+      render = TRUE,
+      project = project
     )
-    reactData$updateSourceLayerList <- runif(1)
-  } else {
-    data <- list(title = list(), abstract = list())
-    data[[c("title", language)]] <- title
-    newView <- list(
-      id = idView,
-      project = project,
-      editor = userData$id,
-      date_modified = Sys.time(),
-      readers = list(),
-      editors = list(),
-      data = data,
-      type = viewType
+
+    reactData$updateViewListFetchOnly <- runif(1)
+
+    mxModal(
+      id = "createNewView",
+      title = d("view_new_created", language),
+      content = tags$span(d("view_new_created", language))
     )
-    mxDbAddRow(
-      data = newView,
-      table = .get(config, c("pg", "tables", "views"))
-    )
-  }
-
-  # edit flag
-  newView$`_edit` <- TRUE
-
-  # add this as new (empty) source
-  mglUpdateViewsList(
-    id = .get(config, c("map", "id")),
-    viewsList = list(newView),
-    render = TRUE,
-    project = project
-  )
-
-  reactData$updateViewListFetchOnly <- runif(1)
-
-  mxModal(
-    id = "createNewView",
-    title = d("view_new_created", language),
-    content = tags$span(d("view_new_created", language))
-  )
+  })
 })

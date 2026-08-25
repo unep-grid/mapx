@@ -1,5 +1,5 @@
 import multer from "multer";
-import { ioAddViewVt } from "#mapx/view";
+import { ioAddViewVt, newIdView } from "#mapx/view";
 import { access, unlink } from "fs/promises";
 import { constants } from "fs";
 import { spawn } from "child_process";
@@ -7,7 +7,6 @@ import { ioChunkWriter } from "#mapx/chunks";
 import { sendMailAuto } from "#mapx/mail";
 import { handleErrorText } from "#mapx/error";
 import { settings } from "#root/settings";
-import { randomString } from "#mapx/helpers";
 import { newIdSource } from "../source/id.js";
 import { t } from "#mapx/language";
 const { email_admin } = settings.contact;
@@ -500,8 +499,4 @@ export async function fileToPostgres(config) {
       }
     });
   });
-}
-
-function newIdView() {
-  return randomString("MX", 3, 5, false, true, "-");
 }

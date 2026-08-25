@@ -8,6 +8,7 @@ import {
   isViewId,
 } from "@fxi/mx_valid";
 import { createExternalMetadataSource } from "../source/external.js";
+import { insertNewView } from "./create.js";
 
 class ViewLifecycleError extends Error {
   constructor(message, status = 400) {
@@ -20,22 +21,21 @@ function asArray(value) {
   return Array.isArray(value) ? value : [];
 }
 
-function validateOwner({ idUser, idProject, idView }) {
-  if (
-    !Number.isInteger(Number(idUser)) ||
-    !isProjectId(idProject) ||
-    !isViewId(idView)
-  ) {
+function validateOwner({ idUser, idProject, idView = null }) {
+  if (!Number.isInteger(Number(idUser)) || !isProjectId(idProject)) {
+    throw new ViewLifecycleError("Invalid view owner or identifier");
+  }
+  if (idView !== null && !isViewId(idView)) {
     throw new ViewLifecycleError("Invalid view owner or identifier");
   }
 }
 
 /** Create an RT/CC view and its dedicated external metadata atomically. */
 export async function createExternalMetadataView(
-  { idUser, idProject, idView, viewType, title, language = "en" },
+  { idUser, idProject, viewType, title, language = "en" },
   client = null,
 ) {
-  validateOwner({ idUser, idProject, idView });
+  validateOwner({ idUser, idProject });
   if (!["rt", "cc"].includes(viewType)) {
     throw new ViewLifecycleError("Invalid external metadata view type");
   }
@@ -75,27 +75,12 @@ export async function createExternalMetadataView(
     const source = { metadataId: idSource };
     if (viewType === "rt") source.tiles = [];
     const data = { title: titleByLanguage, abstract: {}, source };
-    const inserted = await pgClient.query(
-      `INSERT INTO mx_views (
-         id, editor, date_modified, data, type, project, readers, editors
-       ) VALUES (
-         $1, $2::integer, NOW(), $3::jsonb, $4, $5, '[]'::jsonb, '[]'::jsonb
-       )
-       RETURNING id, editor, date_modified, data, type, project,
-                 readers, editors`,
-      [
-        idView,
-        Number(idUser),
-        JSON.stringify(data),
-        viewType,
-        idProject,
-      ],
+    const view = await insertNewView(
+      { editor: idUser, data, type: viewType, project: idProject },
+      pgClient,
     );
-    if (inserted.rowCount !== 1) {
-      throw new ViewLifecycleError("View creation failed", 500);
-    }
     if (ownsClient) await pgClient.query("COMMIT");
-    return { ok: true, view: inserted.rows[0], idSource };
+    return { ok: true, view, idSource };
   } catch (error) {
     if (ownsClient) await pgClient.query("ROLLBACK");
     throw error;
