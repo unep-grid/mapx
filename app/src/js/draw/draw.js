@@ -24,6 +24,7 @@ import {
   getGeometryFocus,
   splitFeatureForEditing,
 } from "./edit_session.js";
+import { GeometryPreview } from "./geometry_preview.js";
 
 import "./style.less";
 
@@ -38,6 +39,7 @@ const local = {
 class MapxDraw extends EventSimple {
   constructor() {
     super();
+    this._geometryPreview = new GeometryPreview();
   }
 
   /**
@@ -86,6 +88,7 @@ class MapxDraw extends EventSimple {
   destroy() {
     const md = this;
     md.cancelEditSession();
+    md.clearGeometryPreview();
     md.discard();
     md._buttons.forEach(md.removeButton);
     if (md._modal_config) {
@@ -113,6 +116,7 @@ class MapxDraw extends EventSimple {
     if (md._enabled || md._editSession) {
       return;
     }
+    md.clearGeometryPreview();
     await md.ensureDraw();
     const discard = await md.discardPrompt();
     if (!discard) {
@@ -661,6 +665,7 @@ class MapxDraw extends EventSimple {
       };
     }
 
+    md.clearGeometryPreview();
     await md.ensureDraw();
 
     if (md._enabled || md.hasData()) {
@@ -1000,6 +1005,36 @@ class MapxDraw extends EventSimple {
       maxZoom: maxZoom || md._map.getZoom(),
       duration: 300,
     });
+  }
+
+  /**
+   * Display one geometry independently from project views, then focus it.
+   * The preview is replaced on the next call and remains until explicitly
+   * cleared or a draw/edit session starts.
+   * @param {Object} geometry GeoJSON geometry
+   * @param {Object} [opt] focusGeometry options
+   * @returns {Boolean} whether the preview was displayed
+   */
+  showGeometryPreview(geometry, opt = {}) {
+    const md = this;
+    const map = md._map;
+    if (!getGeometryFocus(geometry) || !map?.getStyle?.()) {
+      return false;
+    }
+
+    const data = {
+      type: "Feature",
+      properties: {},
+      geometry,
+    };
+    md._geometryPreview.show(map, data, opt.owner);
+    md.focusGeometry(geometry, opt);
+    return true;
+  }
+
+  /** Remove the temporary feature preview if it exists in the current style. */
+  clearGeometryPreview(owner) {
+    return this._geometryPreview.clear(this._map, owner);
   }
 
   clearButtonsType() {

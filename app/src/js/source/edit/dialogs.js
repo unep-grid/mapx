@@ -12,6 +12,7 @@ import { isPgType, getPgTypes } from "./../../handsontable/utils.js";
 import { isNotEmpty, isEmpty, isSafeName, makeSafeName, isEqual } from "./../../is_test/index.js";
 import { modalIframe } from "../../modal_iframe";
 import { editFeatureGeometry } from "./geometry_flow.js";
+import { previewTableFeatureGeometry } from "./geometry_preview_flow.js";
 
 /**
  * User dialogs : column/row operations, confirmations, geometry tools.
@@ -812,13 +813,7 @@ export const dialogsMixin = {
     if (!et._has_geom || isEmpty(gid)) {
       return;
     }
-    const feature = await et.getFeature(gid);
-    if (isEmpty(feature?.geom)) {
-      return;
-    }
-    draw.focusGeometry(feature.geom, {
-      maxZoom: 12,
-    });
+    await previewTableFeatureGeometry(et, draw, gid, { maxZoom: 12 });
   },
 
   async dialogGeomValidate() {
