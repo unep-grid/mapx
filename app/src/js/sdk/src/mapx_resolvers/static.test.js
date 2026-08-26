@@ -60,6 +60,15 @@ describe("MapxResolversStatic basics", () => {
     expect(mocks.zoomToViewId).toHaveBeenCalledWith(options);
   });
 
+  it("supports zooming all rendered MapX views without options", async () => {
+    mocks.zoomToViewIdVisible.mockResolvedValue(true);
+
+    await expect(
+      MapxResolversStatic.prototype.zoom_to_view_rendered_features(),
+    ).resolves.toBe(true);
+    expect(mocks.zoomToViewIdVisible).toHaveBeenCalledWith({});
+  });
+
   it("gets, lists, and updates languages through the language boundary", () => {
     mocks.getLanguageCurrent.mockReturnValue("fr");
     mocks.getLanguagesAll.mockReturnValue(["en", "fr"]);

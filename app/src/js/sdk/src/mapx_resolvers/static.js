@@ -661,15 +661,18 @@ export class MapxResolversStatic extends MapxResolversPanels {
   }
 
   /**
-   * Zoom to the features of a view currently rendered on the map.
-   * Falls back to the full view extent when no rendered feature is found.
-   * @param {Object} opt Options
-   * @param {String} opt.idView View id
+   * Zoom to features currently rendered on the map.
+   * With a view id, only that view is considered and its full extent is used
+   * when no feature is rendered. Without a view id, all rendered MapX views
+   * are considered and the map returns to the world when none are rendered.
+   * @param {Object} [opt={}] Options
+   * @param {String} [opt.idView] Optional view or composite MapX layer id
    * @return {Promise<Boolean>} Done
    * @example
+   * await mapx.ask("zoom_to_view_rendered_features");
    * await mapx.ask("zoom_to_view_rendered_features", { idView: "MX-ABC" });
    */
-  zoom_to_view_rendered_features(opt) {
+  zoom_to_view_rendered_features(opt = {}) {
     return zoomToViewIdVisible(opt);
   }
 

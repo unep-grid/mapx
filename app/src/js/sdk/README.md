@@ -378,7 +378,7 @@ MapX resolvers available in app only
     * [.set_views_layer_order(opt)](#MapxResolversStatic+set_views_layer_order) ⇒ <code>Boolean</code>
     * [.get_views_layer_order()](#MapxResolversStatic+get_views_layer_order) ⇒ <code>Array</code>
     * [.get_views_with_visible_layer()](#MapxResolversStatic+get_views_with_visible_layer) ⇒ <code>Array</code>
-    * [.zoom_to_view_rendered_features(opt)](#MapxResolversStatic+zoom_to_view_rendered_features) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+    * [.zoom_to_view_rendered_features([opt])](#MapxResolversStatic+zoom_to_view_rendered_features) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.zoom_to_view_extent(opt)](#MapxResolversStatic+zoom_to_view_extent) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.set_view_layer_filter_text(opt)](#MapxResolversStatic+set_view_layer_filter_text) ⇒ <code>void</code>
     * [.get_view_layer_filter_text(opt)](#MapxResolversStatic+get_view_layer_filter_text) ⇒ <code>array</code>
@@ -1316,20 +1316,23 @@ Get list views with visible layers (alias)
 **Returns**: <code>Array</code> - Array of views
 <a name="MapxResolversStatic+zoom_to_view_rendered_features"></a>
 
-#### mapxResolversApp.zoom\_to\_view\_rendered\_features(opt) ⇒ <code>Promise.&lt;Boolean&gt;</code>
-Zoom to the features of a view currently rendered on the map.
-Falls back to the full view extent when no rendered feature is found.
+#### mapxResolversApp.zoom\_to\_view\_rendered\_features([opt]) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+Zoom to features currently rendered on the map.
+With a view id, only that view is considered and its full extent is used
+when no feature is rendered. Without a view id, all rendered MapX views
+are considered and the map returns to the world when none are rendered.
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)
 **Returns**: <code>Promise.&lt;Boolean&gt;</code> - Done
 
-| Param | Type | Description |
-| --- | --- | --- |
-| opt | <code>Object</code> | Options |
-| opt.idView | <code>String</code> | View id |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [opt] | <code>Object</code> | <code>{}</code> | Options |
+| [opt.idView] | <code>String</code> |  | Optional view or composite MapX layer id |
 
 **Example**
 ```js
+await mapx.ask("zoom_to_view_rendered_features");
 await mapx.ask("zoom_to_view_rendered_features", { idView: "MX-ABC" });
 ```
 <a name="MapxResolversStatic+zoom_to_view_extent"></a>
@@ -2133,7 +2136,7 @@ MapX resolvers available in static and app
     * [.set_views_layer_order(opt)](#MapxResolversStatic+set_views_layer_order) ⇒ <code>Boolean</code>
     * [.get_views_layer_order()](#MapxResolversStatic+get_views_layer_order) ⇒ <code>Array</code>
     * [.get_views_with_visible_layer()](#MapxResolversStatic+get_views_with_visible_layer) ⇒ <code>Array</code>
-    * [.zoom_to_view_rendered_features(opt)](#MapxResolversStatic+zoom_to_view_rendered_features) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+    * [.zoom_to_view_rendered_features([opt])](#MapxResolversStatic+zoom_to_view_rendered_features) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.zoom_to_view_extent(opt)](#MapxResolversStatic+zoom_to_view_extent) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.set_view_layer_filter_text(opt)](#MapxResolversStatic+set_view_layer_filter_text) ⇒ <code>void</code>
     * [.get_view_layer_filter_text(opt)](#MapxResolversStatic+get_view_layer_filter_text) ⇒ <code>array</code>
@@ -2671,20 +2674,23 @@ Get list views with visible layers (alias)
 **Returns**: <code>Array</code> - Array of views
 <a name="MapxResolversStatic+zoom_to_view_rendered_features"></a>
 
-#### mapxResolversStatic.zoom\_to\_view\_rendered\_features(opt) ⇒ <code>Promise.&lt;Boolean&gt;</code>
-Zoom to the features of a view currently rendered on the map.
-Falls back to the full view extent when no rendered feature is found.
+#### mapxResolversStatic.zoom\_to\_view\_rendered\_features([opt]) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+Zoom to features currently rendered on the map.
+With a view id, only that view is considered and its full extent is used
+when no feature is rendered. Without a view id, all rendered MapX views
+are considered and the map returns to the world when none are rendered.
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)
 **Returns**: <code>Promise.&lt;Boolean&gt;</code> - Done
 
-| Param | Type | Description |
-| --- | --- | --- |
-| opt | <code>Object</code> | Options |
-| opt.idView | <code>String</code> | View id |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [opt] | <code>Object</code> | <code>{}</code> | Options |
+| [opt.idView] | <code>String</code> |  | Optional view or composite MapX layer id |
 
 **Example**
 ```js
+await mapx.ask("zoom_to_view_rendered_features");
 await mapx.ask("zoom_to_view_rendered_features", { idView: "MX-ABC" });
 ```
 <a name="MapxResolversStatic+zoom_to_view_extent"></a>

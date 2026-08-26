@@ -138,6 +138,7 @@ import { viewFiltersInit } from "./view_filters.js";
 import { elViewListFilters } from "./view_list_filters.js";
 import { getRuntimeLayersByPrefix } from "./runtime_layers.js";
 import { applyCountryHighlight } from "./country_highlight.js";
+import { zoomToRenderedViewFeatures } from "./rendered_features_zoom.js";
 import { ButtonPanelLegend } from "../panel_legend/index.js";
 import { createViewControls } from "../views_builder/view_controls.js";
 import { ButtonFilter } from "../button_filter/index.js";
@@ -4443,46 +4444,40 @@ export async function getViewsBounds(views, asArray = false) {
 }
 
 /**
- * Fly to view id using rendered features
- * @param {object} o options
- * @param {string} o.idView view id
+ * Zoom to features currently rendered by one view or all MapX views.
+ * @param {object} [o] Options
+ * @param {string} [o.idView] Optional view or composite MapX layer id
+ * @returns {Promise<boolean>} Done
  */
-export async function zoomToViewIdVisible(o) {
-  const bbox = await moduleLoad("turf-bbox");
+export async function zoomToViewIdVisible(o = {}) {
+  o = isObject(o) ? o : {};
+  const hasIdView = isNotEmpty(o.idView);
 
-  let geomTemp, idLayerAll, features;
-
-  geomTemp = {
-    type: "FeatureCollection",
-    features: [],
-  };
-
-  const map = getMap();
-
-  idLayerAll = getLayerNamesByPrefix({
-    id: o.id,
-    prefix: o.idView,
-  });
-
-  features = map.queryRenderedFeatures({
-    layers: idLayerAll,
-  });
-
-  features.forEach(function (x) {
-    geomTemp.features.push(x);
-  });
-
-  let done;
-  if (geomTemp.features.length > 0) {
-    const bbx = bbox(geomTemp);
-    const sw = new maplibregl.LngLat(bbx[0], bbx[1]);
-    const ne = new maplibregl.LngLat(bbx[2], bbx[3]);
-    const llb = new maplibregl.LngLatBounds(sw, ne);
-    done = fitMaxBounds(llb);
-  } else {
-    done = zoomToViewId(o);
+  if (hasIdView && !isString(o.idView)) {
+    return false;
   }
-  return done;
+
+  const idView = hasIdView ? getLayerBaseName(o.idView) : null;
+
+  if (idView && !isViewId(idView)) {
+    return false;
+  }
+
+  const map = getMap(o.id);
+  return zoomToRenderedViewFeatures({
+    map,
+    idView,
+    layerSeparator: settings.separators.sublayer,
+    createBounds: async (features) => {
+      const bbox = await moduleLoad("turf-bbox");
+      const bbx = bbox({ type: "FeatureCollection", features });
+      const sw = new maplibregl.LngLat(bbx[0], bbx[1]);
+      const ne = new maplibregl.LngLat(bbx[2], bbx[3]);
+      return new maplibregl.LngLatBounds(sw, ne);
+    },
+    fitBounds: (bounds) => fitMaxBounds(bounds),
+    zoomToViewExtent: () => zoomToViewId({ ...o, idView }),
+  });
 }
 
 /**
