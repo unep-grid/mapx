@@ -1,3 +1,18 @@
+  - [1.14.1-alpha.10](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.10) 
+
+    - fix(view): keep extent lookup read-only
+    - fix(sdk): support global rendered features zoom #1106
+    - fix: setHighlightedCountries regression #1097
+    - fix(sdk): ignore non-request worker messages
+    - chore: update zartigl submodule
+    - fix(view): allocate new ids server-side
+    - fix(metadata): own external metadata with rt and cc views
+    - fix(projects): make featured and archived exclusive
+    - fix(app): display geometry when zooming to feature
+    - fix(api): stabilize tile check routine
+    - chore: update submodule
+
+
   - [1.14.1-alpha.9](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.9) 
 
     - fix(api): validate raster URLs within view bounds
