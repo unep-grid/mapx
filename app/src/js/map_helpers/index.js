@@ -137,6 +137,7 @@ import { elViewListOption } from "./view_list_options.js";
 import { viewFiltersInit } from "./view_filters.js";
 import { elViewListFilters } from "./view_list_filters.js";
 import { getRuntimeLayersByPrefix } from "./runtime_layers.js";
+import { applyCountryHighlight } from "./country_highlight.js";
 import { ButtonPanelLegend } from "../panel_legend/index.js";
 import { createViewControls } from "../views_builder/view_controls.js";
 import { ButtonFilter } from "../button_filter/index.js";
@@ -1479,6 +1480,10 @@ export async function initMapListener(map) {
   theme.on("set_colors", (colors) => {
     highlighter.setOptions({
       highlight_color: colors.mx_map_feature_highlight.color,
+    });
+    applyCountryHighlight({
+      map,
+      countries: settings.highlightedCountries,
     });
   });
 
@@ -3910,21 +3915,15 @@ export function setHighlightedCountries(o) {
     o,
   );
 
-  const countries = o.countries;
   const m = getMap(o.id);
-  const hasCountries = isArray(countries) && countries.length > 0;
-  const hasWorld = hasCountries && countries.indexOf("WLD") > -1;
-  const filter = ["any"];
+  const state = applyCountryHighlight({
+    map: m,
+    idLayer: o.idLayer,
+    countries: o.countries,
+  });
 
-  settings.highlightedCountries = hasCountries ? countries : [];
-
-  if (!hasWorld && hasCountries) {
-    filter.push(["==", ["get", "iso3code"], ""]);
-    filter.push(["!", ["in", ["get", "iso3code"], ["literal", countries]]]);
-  }
-
-  m.setFilter(o.idLayer, filter);
-  return m.getFilter(o.idLayer, filter);
+  settings.highlightedCountries = state.countries;
+  return state.filter;
 }
 
 /**

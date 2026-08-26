@@ -4,6 +4,7 @@ const mocks = vi.hoisted(() => ({
   getLanguageCurrent: vi.fn(),
   getLanguagesAll: vi.fn(),
   updateLanguage: vi.fn(),
+  setHighlightedCountries: vi.fn(),
   zoomToViewId: vi.fn(),
   zoomToViewIdVisible: vi.fn(),
 }));
@@ -15,6 +16,7 @@ vi.mock("../../../language/index.js", () => ({
 }));
 
 vi.mock("../../../map_helpers/index.js", () => ({
+  setHighlightedCountries: mocks.setHighlightedCountries,
   zoomToViewId: mocks.zoomToViewId,
   zoomToViewIdVisible: mocks.zoomToViewIdVisible,
 }));
@@ -69,5 +71,16 @@ describe("MapxResolversStatic basics", () => {
       true,
     );
     expect(mocks.updateLanguage).toHaveBeenCalledWith("en");
+  });
+
+  it("keeps the direct country array contract", () => {
+    const countries = ["COD", "CHN", "USA"];
+    const filter = ["any"];
+    mocks.setHighlightedCountries.mockReturnValue(filter);
+
+    expect(MapxResolversStatic.prototype.set_country_highlight(countries)).toBe(
+      filter,
+    );
+    expect(mocks.setHighlightedCountries).toHaveBeenCalledWith({ countries });
   });
 });
