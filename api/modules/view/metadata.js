@@ -1,4 +1,4 @@
-import { pgRead, pgWrite } from "#mapx/db";
+import { pgRead } from "#mapx/db";
 import { getView } from "#mapx/view";
 import { templates } from "#mapx/template";
 import {
@@ -8,13 +8,8 @@ import {
   isArray,
   isSourceId,
   isBboxMeta,
-  isBbox,
 } from "@fxi/mx_valid";
-import {
-  createSourceRevision,
-  getSourceEditPermission,
-  getSourceMetadata,
-} from "#mapx/source";
+import { getSourceEditPermission, getSourceMetadata } from "#mapx/source";
 
 async function getSessionViewSource(session, idView, client) {
   if (
@@ -88,31 +83,6 @@ export async function ioViewSourceMetadataEditAccess(socket, config, cb) {
     console.error("Source metadata edit access check failed", error);
     cb({ allowed: false });
   }
-}
-
-export async function ioSetViewSourceMetaBbox(socket, config, cb) {
-  try {
-    const session = socket.session;
-
-    if (!session) {
-      throw new Error("Missing session");
-    }
-    const { idView, extent, overwrite = false } = config;
-
-    const res = await setViewSourceMetaBbox(
-      idView,
-      extent,
-      overwrite,
-      session,
-    );
-    return cb(res);
-  } catch (e) {
-    socket.notifyInfoError({
-      idGroup: config.id_request,
-      message: e?.message || e,
-    });
-  }
-  cb(false);
 }
 
 export async function ioViewSourceMetaGet(socket, config, cb) {
@@ -305,105 +275,5 @@ export async function getViewSourceMetadataExtent(idView) {
   } catch (error) {
     console.error("Error getting metadata extent:", error);
     return null;
-  }
-}
-
-/**
- * Client requested a bbox update : missing or wrong stored bbox
- * - This is just there to 'fix' a wrong / missing bbox automatically.
- * - BBbox should be defined at upload / creation or trigger.
- * - It will do nothing if an existing, valid meta bbox is found
- */
-export async function setViewSourceMetaBbox(
-  idView,
-  bbox,
-  overwrite = false,
-  session,
-  client = null,
-) {
-  if (!isViewId(idView)) {
-    throw new Error("Invalid view");
-  }
-  if (
-    !session?.user_authenticated ||
-    !session.project_id ||
-    !Number.isInteger(Number(session.user_id)) ||
-    !session.user_roles?.publisher
-  ) {
-    throw new Error("Not allowed");
-  }
-
-  /**
-   *  Proceed with fix / update
-   */
-  const isBboxMetaOk = isBboxMeta(bbox);
-  const isBboxOk = isBbox(bbox);
-
-  // Fallback to full extent
-  if (!isBboxMetaOk && !isBboxOk) {
-    bbox = {
-      lat_min: -90,
-      lat_max: 90,
-      lng_min: -180,
-      lng_max: 180,
-    };
-  }
-
-  if (isBboxOk) {
-    bbox = {
-      lat_min: Math.min(bbox.lat1, bbox.lat2),
-      lat_max: Math.max(bbox.lat1, bbox.lat2),
-      lng_min: Math.min(bbox.lng1, bbox.lng2),
-      lng_max: Math.max(bbox.lng1, bbox.lng2),
-    };
-  }
-
-  const ownsClient = !client;
-  const pgClient = client || (await pgWrite.connect());
-  try {
-    if (ownsClient) await pgClient.query("BEGIN");
-    const reference = await getSessionViewSource(session, idView, pgClient);
-    if (!reference) {
-      throw new Error("View has no editable metadata source");
-    }
-    const { idSource } = reference;
-
-    await pgClient.query(
-      "SELECT pg_advisory_xact_lock(hashtextextended($1::text, 0))",
-      [idSource],
-    );
-    const permission = await getSourceEditPermission({
-      client: pgClient,
-      idSource,
-      idUser: session.user_id,
-      idProject: session.project_id,
-      roles: session.user_roles,
-    });
-    if (!permission.allowed) {
-      throw new Error("Source edit not allowed");
-    }
-    if (!overwrite && isBboxMeta(permission.source?.data?.meta?.spatial?.bbox)) {
-      throw new Error("Can't update meta bbox if one already set and valid");
-    }
-
-    const bboxJson = JSON.stringify(bbox);
-    const revision = await createSourceRevision({
-      idSource,
-      idUser: session.user_id,
-      client: pgClient,
-      mutate(sourceRevision) {
-        sourceRevision.data ||= {};
-        sourceRevision.data.meta ||= {};
-        sourceRevision.data.meta.spatial ||= {};
-        sourceRevision.data.meta.spatial.bbox = JSON.parse(bboxJson);
-      },
-    });
-    if (ownsClient) await pgClient.query("COMMIT");
-    return revision;
-  } catch (error) {
-    if (ownsClient) await pgClient.query("ROLLBACK");
-    throw error;
-  } finally {
-    if (ownsClient) pgClient.release();
   }
 }

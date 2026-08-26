@@ -139,6 +139,11 @@ import { elViewListFilters } from "./view_list_filters.js";
 import { getRuntimeLayersByPrefix } from "./runtime_layers.js";
 import { applyCountryHighlight } from "./country_highlight.js";
 import { zoomToRenderedViewFeatures } from "./rendered_features_zoom.js";
+import {
+  getDefaultViewExtent,
+  getViewExtentSummaryOptions,
+  resolveViewExtent,
+} from "./view_extent.js";
 import { ButtonPanelLegend } from "../panel_legend/index.js";
 import { createViewControls } from "../views_builder/view_controls.js";
 import { ButtonFilter } from "../button_filter/index.js";
@@ -4303,79 +4308,34 @@ export async function zoomToViewId(o) {
 
 /**
  * Retrieves the geographical extent of a given view.
- * If the extent is not found in the cache, it fetches from a remote source.
- * The function will return an empty array if it times out or if no valid extent is found.
+ * It reads the embedded geometry, stored metadata, then the cached source summary.
+ * It returns the default world extent on timeout or when no valid extent is found.
  *
  * @param {View} view - The view object for which the extent is to be fetched.
  * @returns {Promise<Object>} Promise resolving to the extent / bbox.
  */
 export async function getViewExtent(view) {
   const timeout = settings.maxTimeFetchQuick;
-  let cancelByTimeout = false;
+  view = getView(view);
 
-  const def = {
-    lat1: -80,
-    lat2: 80,
-    lng1: -180,
-    lng2: 180,
-  };
-
-  const ext = await Promise.race([
-    getExtent(),
-    waitTimeoutAsync(timeout, cancel),
-  ]);
-
-  return ext || def;
-
-  async function cancel() {
-    cancelByTimeout = true;
-    return;
+  if (!isView(view)) {
+    console.warn("getViewExtent: view not found");
+    return getDefaultViewExtent();
   }
 
-  async function getExtent() {
-    /*
-     * If it's a self contained geojson view, use the pre-computed extent
-     */
-    if (isViewGj(view)) {
-      return view.data?.geometry?.extent;
-    }
-
-    /*
-     * Use the metadata version for saved view
-     */
-    const extentMeta = await getViewSourceMetadataExtent(view);
-    const hasExtent = isBbox(extentMeta);
-
-    if (hasExtent) {
-      return extentMeta;
-    }
-
-    /**
-     * Use source summary
-     * - raster => client wms query
-     * - vector =>  server node process
-     */
-    const summary = await getViewSourceSummary(view, { useCache: false });
-    const extent = path(summary, "extent_sp", {});
-    if (cancelByTimeout) {
-      console.warn(`getViewExtent timeout for ${view.id}`);
-      return;
-    }
-    if (!isBbox(extent)) {
-      console.warn(`getViewExtent no valid extent found for ${view.id}`);
-      return;
-    }
-
-    if (isViewRt(view) || isViewVt(view)) {
-      /*
-       * make sure to save into metadata to avoid further non cached lookup
-       * - will not alter anything if a valid bbox is already set
-       */
-      await updateViewExtentMeta(view, extent);
-    }
-
-    return extent;
-  }
+  return resolveViewExtent({
+    embeddedExtent: isViewGj(view) ? view.data?.geometry?.extent : null,
+    getMetadataExtent: () => getViewSourceMetadataExtent(view),
+    getSummaryExtent: async () => {
+      const summary = await getViewSourceSummary(
+        view,
+        getViewExtentSummaryOptions(),
+      );
+      return path(summary, "extent_sp", {});
+    },
+    isValidExtent: isBbox,
+    timeoutPromise: waitTimeoutAsync(timeout, null, false),
+  });
 }
 
 async function getViewSourceMetadataExtent(view) {
@@ -4392,15 +4352,6 @@ async function getViewSourceMetadataExtent(view) {
     lng1: bbox.lng_min,
     lng2: bbox.lng_max,
   };
-}
-
-async function updateViewExtentMeta(view, extent) {
-  const res = await ws.emitAsync(
-    "/client/view/update/extent",
-    { extent, idView: view.id, type: view.type },
-    1e3,
-  );
-  return res;
 }
 
 /**

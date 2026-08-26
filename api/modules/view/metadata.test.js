@@ -2,25 +2,19 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   getSourceEditPermission: vi.fn(),
-  createSourceRevision: vi.fn(),
 }));
 
 vi.mock("#mapx/db", () => ({
   pgRead: { query: vi.fn() },
-  pgWrite: { connect: vi.fn() },
 }));
 vi.mock("#mapx/source", () => ({
-  createSourceRevision: mocks.createSourceRevision,
   getSourceMetadata: vi.fn(),
   getSourceEditPermission: mocks.getSourceEditPermission,
 }));
 vi.mock("#mapx/view", () => ({ getView: vi.fn() }));
 vi.mock("#mapx/template", () => ({ templates: {} }));
 
-import {
-  getViewSourceMetadataEditAccess,
-  setViewSourceMetaBbox,
-} from "./metadata.js";
+import { getViewSourceMetadataEditAccess } from "./metadata.js";
 
 const idView = "MX-J9P0S-B421T-2NTTN";
 const idSource = "mx_vector_a_b_c_d_e";
@@ -113,105 +107,5 @@ describe("view source metadata edit access", () => {
     await expect(
       getViewSourceMetadataEditAccess(socket, { idView }, client),
     ).resolves.toEqual({ allowed: false });
-  });
-});
-
-describe("view source metadata bbox revisions", () => {
-  let session;
-  let client;
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-    session = {
-      user_authenticated: true,
-      user_id: 7,
-      project_id: "MX-CURRENT",
-      user_roles: { publisher: true, root: false, group: ["publishers"] },
-    };
-    client = { query: vi.fn() };
-    mocks.getSourceEditPermission.mockResolvedValue({
-      allowed: true,
-      source: { data: { meta: {} } },
-    });
-    mocks.createSourceRevision.mockResolvedValue({ pid: 12 });
-  });
-
-  function resolveView({
-    type = "rt",
-    project = "MX-CURRENT",
-    sourceType = "external",
-    source = "mx_extern_a_b_c_d_e",
-  } = {}) {
-    client.query.mockResolvedValueOnce({
-      rows: [
-        {
-          type,
-          project,
-          id_source: source,
-          source_type: sourceType,
-        },
-      ],
-    });
-  }
-
-  it("authorizes the server-resolved source before inserting a revision", async () => {
-    resolveView();
-    client.query.mockResolvedValueOnce({ rows: [] });
-
-    await expect(
-      setViewSourceMetaBbox(
-        idView,
-        { lat1: 1, lat2: 2, lng1: 3, lng2: 4 },
-        false,
-        session,
-        client,
-      ),
-    ).resolves.toEqual({ pid: 12 });
-
-    expect(mocks.getSourceEditPermission).toHaveBeenCalledWith({
-      client,
-      idSource: "mx_extern_a_b_c_d_e",
-      idUser: 7,
-      idProject: "MX-CURRENT",
-      roles: session.user_roles,
-    });
-    expect(mocks.createSourceRevision).toHaveBeenCalledWith(
-      expect.objectContaining({
-        idSource: "mx_extern_a_b_c_d_e",
-        idUser: 7,
-        client,
-      }),
-    );
-  });
-
-  it.each([
-    ["a view outside the session project", { project: "MX-OTHER" }],
-    ["a non-external RT source", { sourceType: "vector" }],
-    ["an unsupported view type", { type: "sm" }],
-  ])("rejects %s", async (_label, view) => {
-    resolveView(view);
-    await expect(
-      setViewSourceMetaBbox(idView, {}, true, session, client),
-    ).rejects.toThrow("View has no editable metadata source");
-    expect(mocks.createSourceRevision).not.toHaveBeenCalled();
-  });
-
-  it("rejects a session without current publisher authority", async () => {
-    session.user_roles.publisher = false;
-    await expect(
-      setViewSourceMetaBbox(idView, {}, true, session, client),
-    ).rejects.toThrow("Not allowed");
-    expect(client.query).not.toHaveBeenCalled();
-  });
-
-  it("rejects a source denied by its current ACL", async () => {
-    resolveView();
-    client.query.mockResolvedValueOnce({ rows: [] });
-    mocks.getSourceEditPermission.mockResolvedValue({ allowed: false });
-
-    await expect(
-      setViewSourceMetaBbox(idView, {}, true, session, client),
-    ).rejects.toThrow("Source edit not allowed");
-    expect(mocks.createSourceRevision).not.toHaveBeenCalled();
   });
 });

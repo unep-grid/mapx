@@ -36,7 +36,6 @@ import {
   ioViewSourceMetaGet,
   ioViewMetaGet,
   ioViewStatsGet,
-  ioSetViewSourceMetaBbox,
   ioViewSourceMetadataEditAccess,
 } from "#mapx/view";
 import {
@@ -173,7 +172,6 @@ io.use((socket, next) => {
   );
   socket.on("/client/view/get/metadata", use(ioViewMetaGet));
   socket.on("/client/view/get/stats", use(ioViewStatsGet));
-  socket.on("/client/view/update/extent", use(ioSetViewSourceMetaBbox));
   socket.on("/client/project/validate/name", use(ioProjectNameValidate));
   socket.on("/client/project/create", use(ioProjectCreate));
   socket.on("/client/project/roles/get", use(ioProjectRolesGet));
