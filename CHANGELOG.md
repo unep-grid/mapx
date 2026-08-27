@@ -1,3 +1,12 @@
+  - [1.14.1-alpha.11](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.11) 
+
+    - feat(maintenance): add standalone maintenance page
+    - fix(source): align picker types by tool
+    - fix(source): limit settings picker to vectors
+    - fix(view): define raster source type
+    - feat: baltic sea oxygen data
+
+
   - [1.14.1-alpha.10](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.10) 
 
     - fix(view): keep extent lookup read-only
