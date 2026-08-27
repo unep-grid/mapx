@@ -83,7 +83,7 @@ describe("external metadata view lifecycle", () => {
     expect(result.view.data).toEqual({
       title: { fr: "New raster" },
       abstract: {},
-      source: { metadataId: idSource, tiles: [] },
+      source: { metadataId: idSource, type: "raster", tiles: [] },
     });
     expect(result.view.id).toBe(idView);
     expect(mocks.createExternalMetadataSource).toHaveBeenCalledWith(

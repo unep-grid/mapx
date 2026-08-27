@@ -2014,8 +2014,11 @@ export async function addSourceFromView({ view, noLocationCheck, map }) {
 
   const source = clone(view.data.source);
 
-  if (vType === "rt" && useMirror) {
-    modifyTileUrlsToMirror(source);
+  if (vType === "rt") {
+    source.type = "raster";
+    if (useMirror) {
+      modifyTileUrlsToMirror(source);
+    }
   }
 
   removeOldSourceIfExists(view, map, idSource);

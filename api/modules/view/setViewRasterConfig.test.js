@@ -70,6 +70,7 @@ describe("setViewRasterConfig", () => {
     );
 
     expect(sql).toContain("jsonb_build_object(");
+    expect(sql).toContain("'type', 'raster'");
     expect(sql).toContain("'legend', $3::text");
     expect(sql).not.toContain("to_jsonb($3::text)");
     expect(sql).toContain("RETURNING");

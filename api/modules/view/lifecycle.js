@@ -73,7 +73,10 @@ export async function createExternalMetadataView(
     }
 
     const source = { metadataId: idSource };
-    if (viewType === "rt") source.tiles = [];
+    if (viewType === "rt") {
+      source.type = "raster";
+      source.tiles = [];
+    }
     const data = { title: titleByLanguage, abstract: {}, source };
     const view = await insertNewView(
       { editor: idUser, data, type: viewType, project: idProject },

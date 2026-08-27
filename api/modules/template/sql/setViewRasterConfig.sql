@@ -9,6 +9,7 @@ WITH
             THEN data -> 'source'
           ELSE '{}'::jsonb
         END || jsonb_build_object(
+          'type', 'raster',
           'tiles', jsonb_build_array($2::text, $2::text),
           'legend', $3::text,
           'tileSize', $4::integer,
