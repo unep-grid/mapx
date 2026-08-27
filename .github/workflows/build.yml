@@ -23,6 +23,7 @@ jobs:
       DOCKER_REGISTRY: fredmoser
       DOCKER_API_IMAGE: mapx_api
       DOCKER_APP_IMAGE: mapx_app
+      DOCKER_MAINTENANCE_IMAGE: mapx_maintenance
 
     steps:
       - name: Checkout
@@ -53,6 +54,10 @@ jobs:
         id: version
         run: echo "version=$(jq -r '.version' ./app/package.json)" >> $GITHUB_ENV
 
+      # Maintenance has its own release cadence and image version.
+      - name: Get maintenance version
+        run: echo "maintenance_version=$(jq -r '.version' ./maintenance/package.json)" >> $GITHUB_ENV
+
       # Log version for debugging
       - name: Log version
         run: echo "Building version ${{ env.version }}"
@@ -69,9 +74,15 @@ jobs:
             API_TAGS="${API_TAGS},${DOCKER_REGISTRY}/${DOCKER_API_IMAGE}:latest"
             APP_TAGS="${APP_TAGS},${DOCKER_REGISTRY}/${DOCKER_APP_IMAGE}:latest"
           fi
+
+          MAINTENANCE_TAGS="${DOCKER_REGISTRY}/${DOCKER_MAINTENANCE_IMAGE}:${maintenance_version}"
+          if [[ "$PUSH_ENABLED" == "true" ]]; then
+            MAINTENANCE_TAGS="${MAINTENANCE_TAGS},${DOCKER_REGISTRY}/${DOCKER_MAINTENANCE_IMAGE}:latest"
+          fi
           
           echo "API_TAGS=${API_TAGS}" >> $GITHUB_ENV
           echo "APP_TAGS=${APP_TAGS}" >> $GITHUB_ENV
+          echo "MAINTENANCE_TAGS=${MAINTENANCE_TAGS}" >> $GITHUB_ENV
 
       # Docker login only if pushing
       - name: Docker Login
@@ -106,6 +117,17 @@ jobs:
           tags: ${{ env.APP_TAGS }}
           cache-from: type=gha,scope=app-build
           cache-to: type=gha,mode=max,scope=app-build
+
+      # Build the runtime-configurable maintenance image.
+      - name: Build Maintenance Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./maintenance
+          platforms: linux/amd64
+          push: ${{ env.PUSH_ENABLED == 'true' }}
+          tags: ${{ env.MAINTENANCE_TAGS }}
+          cache-from: type=gha,scope=maintenance-build
+          cache-to: type=gha,mode=max,scope=maintenance-build
 
       # Create issue on scheduled build failure with proper version reference
       - name: Create Issue on Failure

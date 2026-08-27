@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#05070d" />
+    <title>MapX — Maintenance</title>
+  </head>
+  <body>
+    <main id="app">
+      <section id="globe-section" class="globe-section" aria-hidden="true">
+        <div id="globe" class="globe" role="presentation"></div>
+      </section>
+      <div class="card-shade" aria-hidden="true"></div>
+      <section
+        class="maintenance-card"
+        aria-labelledby="page-title"
+        aria-describedby="maintenance-messages"
+      >
+        <div class="message-content">
+          <h1 id="page-title">
+            <img src="/map-x-logo-full.svg" alt="MapX" />
+          </h1>
+          <div id="maintenance-messages" class="messages"></div>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
