@@ -9,7 +9,10 @@ observeEvent(input$btnEditSourceSettings, {
       return()
     }
 
-    mxShowSelectSourceEdit(id = "selectSourceLayerForManage")
+    mxShowSelectSourceEdit(
+      id = "selectSourceLayerForManage",
+      acceptedTypes = "vector"
+    )
   })
 })
 
@@ -66,7 +69,8 @@ observeEvent(reactData$triggerSourceManage, {
     userRole <- getUserRole()
     isPublisher <- isTRUE(userRole$publisher)
     language <- reactData$language
-    idSources <- reactListEditSources()
+    sources <- reactTableEditSources()
+    idSources <- sources$id[sources$type %in% "vector"]
     isAllowed <- idSource %in% idSources
     project <- reactData$project
     isRoot <- isTRUE(userRole$root)

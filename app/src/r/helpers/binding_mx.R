@@ -112,7 +112,7 @@ mxShowSelectSourceEdit <- function(
     list(
       update = update,
       id = id,
-      acceptedTypes = acceptedTypes
+      acceptedTypes = as.list(acceptedTypes)
     )
   )
 }

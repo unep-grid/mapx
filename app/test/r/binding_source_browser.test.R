@@ -8,6 +8,14 @@ source(testthat::test_path(
   "helpers",
   "binding_source_browser.R"
 ))
+source(testthat::test_path(
+  "..",
+  "..",
+  "src",
+  "r",
+  "helpers",
+  "binding_mx.R"
+))
 
 test_that("mxSourcePickerInput creates a configured custom element", {
   picker <- mxSourcePickerInput(
@@ -64,5 +72,30 @@ test_that("source picker refresh sends a targeted presentation update", {
   expect_equal(
     messages[["mx-source-picker-refresh"]],
     list(idSource = "mx_extern_a_b_c_d_e")
+  )
+})
+
+test_that("source edit picker preserves a single accepted type as an array", {
+  messages <- list()
+  session <- list(
+    sendCustomMessage = function(type, message) {
+      messages[[type]] <<- message
+    }
+  )
+
+  mxShowSelectSourceEdit(
+    id = "selectSourceLayerForManage",
+    acceptedTypes = "vector",
+    update = 42,
+    session = session
+  )
+
+  expect_equal(
+    messages[["mxShowSelectSourceEdit"]],
+    list(
+      update = 42,
+      id = "selectSourceLayerForManage",
+      acceptedTypes = list("vector")
+    )
   )
 })
