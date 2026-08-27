@@ -44,6 +44,7 @@ export interface MapContextMenuItem {
 
 export type MapContextMenuEditState =
   | "hidden"
+  | "restricted"
   | "loading"
   | "enabled"
   | "locked"

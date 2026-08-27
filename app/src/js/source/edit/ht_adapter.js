@@ -49,6 +49,7 @@ export const htAdapterMixin = {
         key: isMissing ? "btn_edit_geom_add" : "btn_edit_geom_edit",
         icon: isMissing ? "fa-plus" : "fa-pencil",
         className: isMissing ? "edit-table--geom-action-missing" : null,
+        disabled: !et._geometry_edit_enabled,
         action: () => et.dialogEditGeometry(gid),
       }),
     ];
@@ -75,6 +76,7 @@ export const htAdapterMixin = {
   },
 
   renderGeomToolButton(opt) {
+    const tooltipKey = opt.disabled ? "action_not_allowed_dev" : opt.key;
     const button = el(
       "button",
       {
@@ -86,22 +88,28 @@ export const htAdapterMixin = {
           opt.className,
         ].filter(isNotEmpty),
         type: "button",
+        disabled: !!opt.disabled,
         dataset: {
-          lang_key: opt.key,
+          lang_key: tooltipKey,
           lang_type: "tooltip",
         },
         on: {
           click: (event) => {
             event.preventDefault();
             event.stopPropagation();
+            if (button.disabled) {
+              return;
+            }
             opt.action().catch(console.error);
           },
         },
       },
       el("i", { class: ["fa", opt.icon] }),
     );
-    getDictItem(opt.key).then((label) => {
+    getDictItem(tooltipKey).then((label) => {
       button.title = label;
+    });
+    getDictItem(opt.key).then((label) => {
       button.setAttribute("aria-label", label);
     });
     return button;

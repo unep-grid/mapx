@@ -60,6 +60,9 @@ export async function writeUpdates(session, message) {
       if (!isSourceId(update.id_table)) {
         throw new Error("Invalid update table");
       }
+      if (update.id_table !== session._id_table) {
+        throw new Error("Update table does not match edit session");
+      }
       const handler = handlers[update.type];
       if (!handler) {
         throw new Error(`Unknown update type: ${update.type}`);
@@ -325,9 +328,9 @@ async function handlerUpdateGeom({
   tablesUpdated,
 }) {
   const { id_table } = update;
-  const allowed = await session.isGeometryEditAllowed();
+  const allowed = await session.isGeometryEditAllowed(client);
   if (!allowed) {
-    throw new Error("Geometry edit is locked by another session");
+    throw new Error("Geometry editing is not allowed or is locked");
   }
   const row = await updateFeatureGeometry(
     id_table,

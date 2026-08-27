@@ -113,6 +113,7 @@ export class EditTableSessionClient extends EditTableBase {
       et._has_geom = false;
       et._geom_type = null;
       et._geom_mode = false;
+      et._geometry_edit_enabled = settings.user.roles?.developer === true;
       et._validation_geom = {};
       et._table_ready = false;
       et._init_data = [];

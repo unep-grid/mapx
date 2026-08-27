@@ -771,7 +771,13 @@ export const dialogsMixin = {
 
   async dialogEditGeometry(gid) {
     const et = this;
-    if (!et._has_geom || et._geom_mode || et.locked || isEmpty(gid)) {
+    if (
+      !et._geometry_edit_enabled ||
+      !et._has_geom ||
+      et._geom_mode ||
+      et.locked ||
+      isEmpty(gid)
+    ) {
       return;
     }
     if (et.unsaved) {

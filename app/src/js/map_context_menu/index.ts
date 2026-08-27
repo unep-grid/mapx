@@ -1,4 +1,5 @@
 import {
+  canFetchAuthoritativeFeature,
   collectFeatureItems,
   EDIT_STATE_TIMEOUT_MS,
   formatCoordinates,
@@ -17,6 +18,7 @@ import type {
 import { downloadJSON } from "../download/index.js";
 import { el } from "../el_mapx";
 import { settings } from "../mx.js";
+import { getDictItem } from "../language";
 import { copyToClipboard, makeId } from "../mx_helper_misc.js";
 import { modalDialog } from "../mx_helper_modal.js";
 import { editFeatureGeometry } from "../source/edit/geometry_flow.js";
@@ -69,7 +71,7 @@ function setEditState(
   editState: MapContextMenuEditState,
 ) {
   item.editState = editState;
-  item.canEdit = editState === "enabled" || editState === "locked";
+  item.canEdit = canFetchAuthoritativeFeature(editState);
   item.editLocked = editState === "locked";
 }
 
@@ -262,7 +264,11 @@ class MapContextMenu {
     const button = this.button(
       getEditButtonLabel(item.editState),
       () => startQuickEdit(item, this.api),
-      { disabled: item.editState !== "enabled" },
+      {
+        disabled: item.editState !== "enabled",
+        tooltipKey:
+          item.editState === "restricted" ? "action_not_allowed_dev" : null,
+      },
     );
     this.editButtons.set(item, button);
     return button;
@@ -284,14 +290,22 @@ class MapContextMenu {
   button(
     label: string,
     action: () => Promise<any>,
-    opt: { disabled?: boolean } = {},
+    opt: { disabled?: boolean; tooltipKey?: string | null } = {},
   ): HTMLButtonElement {
-    return el(
+    const button = el(
       "button",
       {
         class: "mx-map-context-menu__button",
         type: "button",
         ...(opt.disabled ? { disabled: true } : {}),
+        ...(opt.tooltipKey
+          ? {
+              dataset: {
+                lang_key: opt.tooltipKey,
+                lang_type: "tooltip",
+              },
+            }
+          : {}),
         on: {
           click: async (event: MouseEvent) => {
             event.preventDefault();
@@ -311,6 +325,12 @@ class MapContextMenu {
       },
       label,
     ) as HTMLButtonElement;
+    if (opt.tooltipKey) {
+      getDictItem(opt.tooltipKey).then((tooltip) => {
+        button.title = tooltip;
+      });
+    }
+    return button;
   }
 
   adjustPosition() {
@@ -374,6 +394,8 @@ class MapContextMenu {
 
 function getEditButtonLabel(editState: MapContextMenuEditState) {
   switch (editState) {
+    case "restricted":
+      return "Edit geometry unavailable";
     case "loading":
       return "Edit geometry (loading)";
     case "locked":

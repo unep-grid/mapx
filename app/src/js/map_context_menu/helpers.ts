@@ -108,7 +108,10 @@ export function getInitialEditState(
   item: MapContextMenuItem,
   settings: AnyRecord,
 ): MapContextMenuEditState {
-  return canAttemptEdit(item, settings) ? "loading" : "hidden";
+  if (!canAttemptEdit(item, settings)) {
+    return "hidden";
+  }
+  return "loading";
 }
 
 export function getResolvedEditState(opt: {
@@ -121,7 +124,16 @@ export function getResolvedEditState(opt: {
   if (!canEditFromSummary(item, summary, settings)) {
     return "unavailable";
   }
+  if (settings?.user?.roles?.developer !== true) {
+    return "restricted";
+  }
   return editLocked ? "locked" : "enabled";
+}
+
+export function canFetchAuthoritativeFeature(
+  editState: MapContextMenuEditState,
+) {
+  return ["enabled", "locked", "restricted"].includes(editState);
 }
 
 export function withTimeout<T>(
@@ -149,14 +161,18 @@ export async function resolveEditState(opt: {
   timeoutMs?: number;
 }): Promise<MapContextMenuEditState> {
   const { item, settings, getSummary, isLocked, timeoutMs } = opt;
-  if (!canAttemptEdit(item, settings)) {
-    return "hidden";
+  const initialState = getInitialEditState(item, settings);
+  if (initialState !== "loading") {
+    return initialState;
   }
   try {
     const started = Date.now();
     const summary = await withTimeout(getSummary(), timeoutMs);
     if (!canEditFromSummary(item, summary, settings)) {
       return "unavailable";
+    }
+    if (settings?.user?.roles?.developer !== true) {
+      return "restricted";
     }
     const remainingTimeout = Math.max(
       1,

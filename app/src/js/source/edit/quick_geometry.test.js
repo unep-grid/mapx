@@ -28,6 +28,7 @@ describe("QuickGeometryEditSession", () => {
       id_table: "mx_vector_a_b_c_d_e",
       locked: false,
       geometryEditLock: null,
+      geometryEditAllowed: true,
     };
     wsMock.emitAsync.mockResolvedValueOnce(status);
 
@@ -51,6 +52,7 @@ describe("QuickGeometryEditSession", () => {
       QuickGeometryEditSession.isStatusLocked({
         locked: true,
         geometryEditLock: null,
+        geometryEditAllowed: true,
       }),
     ).toBe(true);
     expect(
@@ -59,14 +61,23 @@ describe("QuickGeometryEditSession", () => {
         geometryEditLock: {
           locked: true,
         },
+        geometryEditAllowed: true,
       }),
     ).toBe(true);
     expect(
       QuickGeometryEditSession.isStatusLocked({
         locked: false,
         geometryEditLock: null,
+        geometryEditAllowed: true,
       }),
     ).toBe(false);
+    expect(
+      QuickGeometryEditSession.isStatusLocked({
+        locked: false,
+        geometryEditLock: null,
+        geometryEditAllowed: false,
+      }),
+    ).toBe(true);
   });
 
   it("reads lock state with a session-scoped get message", async () => {

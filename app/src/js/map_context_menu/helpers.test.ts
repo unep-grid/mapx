@@ -4,6 +4,7 @@ import {
   buildFeatureGeoJSON,
   canAttemptEdit,
   canEditFromSummary,
+  canFetchAuthoritativeFeature,
   collectFeatureItems,
   formatCoordinates,
   getInitialEditState,
@@ -165,9 +166,15 @@ describe("map context menu helpers", () => {
   it("initializes edit UI state before remote checks", () => {
     const settings = {
       mode: { static: false },
-      user: { id: "user_a" },
+      user: { id: "user_a", roles: { developer: true } },
     };
     expect(getInitialEditState(baseItem, settings)).toBe("loading");
+    expect(
+      getInitialEditState(baseItem, {
+        ...settings,
+        user: { id: "user_a", roles: { developer: false } },
+      }),
+    ).toBe("loading");
     expect(
       getInitialEditState(baseItem, {
         ...settings,
@@ -182,6 +189,7 @@ describe("map context menu helpers", () => {
       user: {
         id: "user_a",
         roles: {
+          developer: true,
           groups: ["editors"],
         },
       },
@@ -214,6 +222,27 @@ describe("map context menu helpers", () => {
         editLocked: false,
       }),
     ).toBe("unavailable");
+    expect(
+      getResolvedEditState({
+        item: baseItem,
+        summary,
+        settings: {
+          ...settings,
+          user: {
+            ...settings.user,
+            roles: { ...settings.user.roles, developer: false },
+          },
+        },
+        editLocked: false,
+      }),
+    ).toBe("restricted");
+  });
+
+  it("preserves authoritative feature access for restricted source editors", () => {
+    expect(canFetchAuthoritativeFeature("restricted")).toBe(true);
+    expect(canFetchAuthoritativeFeature("enabled")).toBe(true);
+    expect(canFetchAuthoritativeFeature("unavailable")).toBe(false);
+    expect(canFetchAuthoritativeFeature("loading")).toBe(false);
   });
 
   it("resolves edit state asynchronously and falls back to unavailable", async () => {
@@ -223,6 +252,7 @@ describe("map context menu helpers", () => {
       user: {
         id: "user_a",
         roles: {
+          developer: true,
           groups: ["editors"],
         },
       },
@@ -272,6 +302,29 @@ describe("map context menu helpers", () => {
     expect(isLocked).not.toHaveBeenCalled();
   });
 
+  it("resolves source access but skips lock checks for non-developers", async () => {
+    const getSummary = vi.fn(async () => ({
+      type: "vector",
+      roles: { editor: "user_a", editors: [] },
+    }));
+    const isLocked = vi.fn();
+
+    await expect(
+      resolveEditState({
+        item: baseItem,
+        settings: {
+          mode: { static: false },
+          project: { id: idProject },
+          user: { id: "user_a", roles: { developer: false } },
+        },
+        getSummary,
+        isLocked,
+      }),
+    ).resolves.toBe("restricted");
+    expect(getSummary).toHaveBeenCalledOnce();
+    expect(isLocked).not.toHaveBeenCalled();
+  });
+
   it("resolves timed-out edit checks as unavailable", async () => {
     vi.useFakeTimers();
     const settings = {
@@ -280,6 +333,7 @@ describe("map context menu helpers", () => {
       user: {
         id: "user_a",
         roles: {
+          developer: true,
           groups: ["editors"],
         },
       },

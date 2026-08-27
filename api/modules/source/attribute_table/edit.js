@@ -25,6 +25,7 @@ import {
   refreshLock,
 } from "./locks.js";
 import {
+  isSocketAllowedToEditGeometry,
   isSocketAllowedToEditSource,
   isUserAllowedToEditSource,
 } from "./permissions.js";
@@ -69,10 +70,16 @@ export async function ioEditSourceStatus(socket, options, callback) {
     if (!allowed) {
       return callback(false);
     }
+    const geometryEditAllowed = await isSocketAllowedToEditGeometry(
+      socket,
+      idTable,
+      pgWrite,
+    );
     return callback({
       id_table: idTable,
       locked: !!(await getLock(idTable, "table")),
       geometryEditLock: await getLock(idTable, "geometry"),
+      geometryEditAllowed,
       identity: await getSourceIdentityStatus(idTable),
     });
   } catch (e) {
@@ -144,7 +151,7 @@ const def = {
   size_chunk: 1e3,
 };
 
-class EditTableSession {
+export class EditTableSession {
   constructor(socket, config) {
     const et = this;
     const session = socket.session;
@@ -191,14 +198,29 @@ class EditTableSession {
     return isLockOwner(lock, et._id_session);
   }
 
-  async isGeometryEditAllowed() {
+  async isGeometryEditAuthorized(client = pgWrite) {
     const et = this;
+    return isSocketAllowedToEditGeometry(
+      et._socket,
+      et._id_table,
+      client,
+    );
+  }
+
+  async isGeometryEditAllowed(client = pgWrite) {
+    const et = this;
+    if (!(await et.isGeometryEditAuthorized(client))) {
+      return false;
+    }
     const lock = await et.getGeometryEditLock();
     return !lock || et.isGeometryEditLockOwner(lock);
   }
 
   async acquireGeometryEditLock(update = {}) {
     const et = this;
+    if (!(await et.isGeometryEditAuthorized())) {
+      return false;
+    }
     const lock = await acquireLock({
       idTable: et._id_table,
       scope: "geometry",
