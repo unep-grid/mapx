@@ -11,7 +11,7 @@ observeEvent(input$btnEditSourceSettings, {
 
     mxShowSelectSourceEdit(
       id = "selectSourceLayerForManage",
-      acceptedTypes = "vector"
+      acceptedTypes = c("join", "tabular", "vector")
     )
   })
 })
@@ -70,7 +70,8 @@ observeEvent(reactData$triggerSourceManage, {
     isPublisher <- isTRUE(userRole$publisher)
     language <- reactData$language
     sources <- reactTableEditSources()
-    idSources <- sources$id[sources$type %in% "vector"]
+    acceptedTypes <- c("join", "tabular", "vector")
+    idSources <- sources$id[sources$type %in% acceptedTypes]
     isAllowed <- idSource %in% idSources
     project <- reactData$project
     isRoot <- isTRUE(userRole$root)

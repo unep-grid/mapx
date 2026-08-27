@@ -75,7 +75,7 @@ test_that("source picker refresh sends a targeted presentation update", {
   )
 })
 
-test_that("source edit picker preserves a single accepted type as an array", {
+test_that("source edit picker preserves accepted types as an array", {
   messages <- list()
   session <- list(
     sendCustomMessage = function(type, message) {
@@ -85,7 +85,7 @@ test_that("source edit picker preserves a single accepted type as an array", {
 
   mxShowSelectSourceEdit(
     id = "selectSourceLayerForManage",
-    acceptedTypes = "vector",
+    acceptedTypes = c("join", "tabular", "vector"),
     update = 42,
     session = session
   )
@@ -95,7 +95,7 @@ test_that("source edit picker preserves a single accepted type as an array", {
     list(
       update = 42,
       id = "selectSourceLayerForManage",
-      acceptedTypes = list("vector")
+      acceptedTypes = list("join", "tabular", "vector")
     )
   )
 })

@@ -5,7 +5,10 @@ observeEvent(input$btnEditSourceMetadata, {
     if (!isPublisher) {
       return()
     } else {
-      mxShowSelectSourceEdit(id = "selectSourceLayerForMeta")
+      mxShowSelectSourceEdit(
+        id = "selectSourceLayerForMeta",
+        acceptedTypes = c("external", "join", "tabular", "vector")
+      )
     }
   })
 })
