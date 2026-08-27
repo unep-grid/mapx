@@ -1,3 +1,9 @@
+  - [1.14.1-alpha.12](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.12) 
+
+    - feat(geometry-editor): restrict editing to developers
+    - fix: geom editor draft main panel reload issue
+
+
   - [1.14.1-alpha.11](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.11) 
 
     - feat(maintenance): add standalone maintenance page
