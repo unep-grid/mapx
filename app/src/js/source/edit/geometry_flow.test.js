@@ -257,4 +257,51 @@ describe("editFeatureGeometry", () => {
     expect(mxMock.panels.hide).toHaveBeenCalledWith("main_panel");
     expect(mxMock.panels.show).toHaveBeenCalledWith("main_panel");
   });
+
+  it("restores the main panel before refreshing views after a save", async () => {
+    mxMock.panels.idExists.mockReturnValue(true);
+    mxMock.panels.isVisible.mockReturnValue(true);
+    let resolveTableViews;
+    const tableViewsPending = new Promise((resolve) => {
+      resolveTableViews = resolve;
+    });
+    const session = {
+      getFeature: vi.fn().mockResolvedValue({ gid: 7, geom: null }),
+      getTableViews: vi.fn().mockReturnValue(tableViewsPending),
+    };
+    mxMock.draw.startEditSession.mockResolvedValue({ status: "saved" });
+
+    let settled = false;
+    const editPending = editFeatureGeometry({
+      session,
+      gid: 7,
+      viewsApi: {},
+    }).then((result) => {
+      settled = true;
+      return result;
+    });
+
+    await vi.waitFor(() => {
+      expect(mxMock.panels.show).toHaveBeenCalledWith("main_panel");
+      expect(session.getTableViews).toHaveBeenCalledOnce();
+    });
+    expect(settled).toBe(false);
+
+    resolveTableViews(null);
+    await expect(editPending).resolves.toEqual({ status: "saved" });
+  });
+
+  it("keeps the main panel hidden when it was hidden before editing", async () => {
+    mxMock.panels.idExists.mockReturnValue(true);
+    mxMock.panels.isVisible.mockReturnValue(false);
+    const session = {
+      getFeature: vi.fn().mockResolvedValue({ gid: 7, geom: null }),
+    };
+    mxMock.draw.startEditSession.mockResolvedValue({ status: "cancelled" });
+
+    await editFeatureGeometry({ session, gid: 7, viewsApi: {} });
+
+    expect(mxMock.panels.hide).toHaveBeenCalledWith("main_panel");
+    expect(mxMock.panels.show).not.toHaveBeenCalled();
+  });
 });

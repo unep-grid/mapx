@@ -62,8 +62,9 @@ export async function editFeatureGeometry(opt) {
     throw new Error(`Unsupported geometry type: ${geom.type || "unknown"}`);
   }
   const mainPanelWasVisible = hideMainPanel();
+  let result;
   try {
-    const result = await draw.startEditSession({
+    result = await draw.startEditSession({
       type,
       feature: {
         type: "Feature",
@@ -91,13 +92,13 @@ export async function editFeatureGeometry(opt) {
         }
       },
     });
-    if (result?.status === "saved") {
-      await refreshTableViews(session, viewsApi);
-    }
-    return result;
   } finally {
     restoreMainPanel(mainPanelWasVisible);
   }
+  if (result?.status === "saved") {
+    await refreshTableViews(session, viewsApi);
+  }
+  return result;
 }
 
 /**
