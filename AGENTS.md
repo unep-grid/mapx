@@ -49,6 +49,15 @@ architectural precedent for new work.
 
 ## New frontend code
 
+- Treat Bootstrap, the shared styles in `app/src/css`, and theme variables as
+  the authoritative design system. Before adding module CSS, inspect the shared
+  form, table, window, alert, and third-party component styles. If a shared
+  primitive is incomplete, improve it upstream rather than overriding it
+  locally.
+- Keep module styles limited to feature-specific layout, composition, and
+  genuinely unique states. Do not locally restyle common primitives such as
+  inputs, labels, buttons, checkboxes, tables, alerts, Tom Select, or
+  `<mx-window>`.
 - Do not use jQuery, Selectize, implicit Shiny widget binding, or other legacy
   global plugins. Use native controls by default and Tom Select only when a
   native control cannot meet the interaction requirements.
