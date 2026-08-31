@@ -1,3 +1,12 @@
+  - [1.14.1-alpha.13](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.13) 
+
+    - chore: update submodule
+    - fix(source): preserve editable global settings
+    - docs(agents): clarify frontend style ownership
+    - refactor(ui): reuse shared source settings styles
+    - feat(source): migrate source settings to API
+
+
   - [1.14.1-alpha.12](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.12) 
 
     - feat(geometry-editor): restrict editing to developers
