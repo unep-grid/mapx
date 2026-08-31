@@ -52,6 +52,7 @@ import {
 } from "./views_list_manager";
 import { storyRead } from "./story_map/index.js";
 import { openSourceOverlap } from "./source/overlap";
+import { openSourceSettings } from "./source/settings/index.js";
 import { getValidateSourceGeom } from "./mx_helper_validate_geom_tool.js";
 import { getSourceVtSummaryUI } from "./mx_helper_source_summary.js";
 import { getProjectViewsState } from "./mx_helper_views_state_shiny.js";
@@ -152,6 +153,9 @@ function mapxBindings() {
   bind("mglUpdateView", viewsListUpdateSingle);
   bind("mglReadStory", storyRead);
   bind("mglOpenSourceOverlap", openSourceOverlap);
+  bind("mglOpenSourceSettings", (request) =>
+    openSourceSettings({ root, ...request }),
+  );
   bind("mglGetValidateSourceGeom", getValidateSourceGeom);
   bind("mglGetSourceStatModal", getSourceVtSummaryUI);
   bind("mglGetProjectViewsState", getProjectViewsState);

@@ -6925,6 +6925,58 @@
     "bn": "কিছু নির্বাচিত গুণাবলী আর উপলব্ধ নেই বা অন্য ব্যবহারকারীর দ্বারা এই সেশনের সময় পুনঃনামকরণ করা হয়েছে৷ ভিউ এডিটর রিলোড করতে হবে।"
   },
   {
+    "id": "source_settings_loading",
+    "en": "Loading source settings…"
+  },
+  {
+    "id": "source_settings_load_error",
+    "en": "Unable to load source settings."
+  },
+  {
+    "id": "source_settings_retry",
+    "en": "Retry"
+  },
+  {
+    "id": "source_settings_views_count",
+    "en": "Dependent views ({{count}})"
+  },
+  {
+    "id": "source_settings_dependencies_count",
+    "en": "Dependent sources ({{count}})"
+  },
+  {
+    "id": "source_settings_load_more",
+    "en": "Load more"
+  },
+  {
+    "id": "source_settings_saved",
+    "en": "Source settings saved."
+  },
+  {
+    "id": "source_settings_delete_title",
+    "en": "Delete source"
+  },
+  {
+    "id": "source_settings_delete_description",
+    "en": "Permanently delete this source? This action cannot be undone."
+  },
+  {
+    "id": "source_settings_deleted",
+    "en": "The source was deleted."
+  },
+  {
+    "id": "source_settings_force_global",
+    "en": "This source must remain global because it is used by another project."
+  },
+  {
+    "id": "source_settings_publishers_required",
+    "en": "Publisher access must be retained while content owned by another editor depends on this source."
+  },
+  {
+    "id": "source_settings_delete_blocked",
+    "en": "This source cannot be deleted while dependent sources or views exist."
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer",
     "bn": "মানচিত্র সুরকার"

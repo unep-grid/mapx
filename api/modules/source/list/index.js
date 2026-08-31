@@ -2,10 +2,10 @@ import { pgRead } from "#mapx/db";
 import { getTableDimension, tableExists } from "#mapx/db_utils";
 import { templates } from "#mapx/template";
 import { parseTemplate } from "#mapx/helpers";
-import { isNotEmpty, isEmpty, isSourceId } from "@fxi/mx_valid";
+import { isEmpty, isSourceId } from "@fxi/mx_valid";
 import { validateTokenHandler, getUserRoles } from "#mapx/authentication";
 import { getParamsValidator } from "#mapx/route_validation";
-import { getViewsTableBySource } from "#mapx/view";
+import { getSourceSettingsImpact } from "../settings/index.js";
 
 const validateParamsHandler = getParamsValidator({
   expected: [
@@ -83,15 +83,19 @@ export async function ioSourceList(socket, request, cb) {
  *
  */
 export async function hasSourceDependencies(id_source, client) {
-  const idSources = await getSourceDependencies(id_source, "en", client);
-  if (isNotEmpty(idSources)) {
-    return true;
-  }
-  const views = await getViewsTableBySource(id_source, null, client);
-  if (isNotEmpty(views)) {
-    return true;
-  }
-  return false;
+  const sourceResult = await client.query(
+    "SELECT project, editor FROM mx_sources_latest WHERE id = $1",
+    [id_source],
+  );
+  const source = sourceResult.rows[0];
+  if (!source) return false;
+  const impact = await getSourceSettingsImpact({
+    client,
+    idSource: id_source,
+    idUser: source.editor,
+    idProject: source.project,
+  });
+  return impact.usage.hasDependencies;
 }
 
 /**

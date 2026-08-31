@@ -6925,6 +6925,71 @@
     "fr": "Certains attributs sélectionnés ne sont plus disponibles ou ont été renommés lors de cette session par un autre utilisateur. L'éditeur de vues doit être rechargé."
   },
   {
+    "id": "source_settings_loading",
+    "en": "Loading source settings…",
+    "fr": "Chargement des paramètres de la source…"
+  },
+  {
+    "id": "source_settings_load_error",
+    "en": "Unable to load source settings.",
+    "fr": "Impossible de charger les paramètres de la source."
+  },
+  {
+    "id": "source_settings_retry",
+    "en": "Retry",
+    "fr": "Réessayer"
+  },
+  {
+    "id": "source_settings_views_count",
+    "en": "Dependent views ({{count}})",
+    "fr": "Vues dépendantes ({{count}})"
+  },
+  {
+    "id": "source_settings_dependencies_count",
+    "en": "Dependent sources ({{count}})",
+    "fr": "Sources dépendantes ({{count}})"
+  },
+  {
+    "id": "source_settings_load_more",
+    "en": "Load more",
+    "fr": "Afficher plus"
+  },
+  {
+    "id": "source_settings_saved",
+    "en": "Source settings saved.",
+    "fr": "Paramètres de la source enregistrés."
+  },
+  {
+    "id": "source_settings_delete_title",
+    "en": "Delete source",
+    "fr": "Supprimer la source"
+  },
+  {
+    "id": "source_settings_delete_description",
+    "en": "Permanently delete this source? This action cannot be undone.",
+    "fr": "Supprimer définitivement cette source ? Cette action est irréversible."
+  },
+  {
+    "id": "source_settings_deleted",
+    "en": "The source was deleted.",
+    "fr": "La source a été supprimée."
+  },
+  {
+    "id": "source_settings_force_global",
+    "en": "This source must remain global because it is used by another project.",
+    "fr": "Cette source doit rester globale car elle est utilisée par un autre projet."
+  },
+  {
+    "id": "source_settings_publishers_required",
+    "en": "Publisher access must be retained while content owned by another editor depends on this source.",
+    "fr": "L’accès des éditeurs doit être conservé tant qu’un contenu appartenant à un autre éditeur dépend de cette source."
+  },
+  {
+    "id": "source_settings_delete_blocked",
+    "en": "This source cannot be deleted while dependent sources or views exist.",
+    "fr": "Cette source ne peut pas être supprimée tant que des sources ou des vues en dépendent."
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer",
     "fr": "Composeur de carte"

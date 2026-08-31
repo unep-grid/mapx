@@ -225,6 +225,11 @@ mglRenderViewsList <- function(id = NULL, session = shiny::getDefaultReactiveDom
   ))
 }
 
+#' Open the modern source settings tool.
+mglOpenSourceSettings <- function(session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mglOpenSourceSettings", list())
+}
+
 
 #' Keep all maps position in sync
 #' @param enabled Boolean

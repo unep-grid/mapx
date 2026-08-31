@@ -5,6 +5,11 @@ import { validateTokenHandler } from "#mapx/authentication";
 import { removeSource } from "#mapx/db_utils";
 import { createSourceRevision } from "./revision.js";
 import { getSourceEditPermission } from "./permissions.js";
+import {
+  getSourceSettingsContext,
+  sourceSettingsAllowedValues,
+  SourceSettingsError,
+} from "./settings/index.js";
 
 class SourceRevisionError extends Error {
   constructor(message, status = 400) {
@@ -63,12 +68,33 @@ function reviseMetadata(idSource, idUser, changes, client) {
   });
 }
 
-function reviseSettings(idSource, idUser, changes, roles, client) {
+function validateAllowedValues(key, values, allowed) {
+  if (values.some((value) => !allowed.includes(value))) {
+    throw new SourceRevisionError(`Invalid source ${key}`);
+  }
+}
+
+function reviseSettings(idSource, idUser, changes, roles, source, client) {
   for (const key of ["services", "readers", "editors"]) {
     if (!isArray(changes[key])) {
       throw new SourceRevisionError(`Invalid source ${key}`);
     }
   }
+  validateAllowedValues(
+    "readers",
+    changes.readers,
+    sourceSettingsAllowedValues.readers,
+  );
+  validateAllowedValues(
+    "editors",
+    changes.editors,
+    sourceSettingsAllowedValues.editors,
+  );
+  validateAllowedValues(
+    "services",
+    changes.services,
+    sourceSettingsAllowedValues.servicesByType[source.type] || [],
+  );
   if (Object.hasOwn(changes, "global") && roles.root !== true) {
     throw new SourceRevisionError(
       "Only root users may change global sources",
@@ -95,7 +121,13 @@ function reviseSettings(idSource, idUser, changes, roles, client) {
  * Identity is the only caller-provided authorization input; source project and
  * roles are resolved on the server while holding the source transaction lock.
  */
-export async function reviseSource({ method, idSource, changes = {}, idUser }) {
+export async function reviseSource({
+  method,
+  idSource,
+  changes = {},
+  idUser,
+  idProject = null,
+}) {
   validateRequest(method, idSource, changes, idUser);
 
   const client = await pgWrite.connect();
@@ -109,6 +141,21 @@ export async function reviseSource({ method, idSource, changes = {}, idUser }) {
 
     let result;
     if (method === "delete") {
+      if (idProject) {
+        const context = await getSourceSettingsContext({
+          client,
+          idSource,
+          idUser,
+          idProject,
+        });
+        if (context.usage.hasDependencies) {
+          throw new SourceSettingsError(
+            `Source ${idSource} can't be removed [has dependencies]`,
+            409,
+            { usage: context.usage },
+          );
+        }
+      }
       try {
         await removeSource(idSource, idUser, client);
       } catch (error) {
@@ -119,10 +166,47 @@ export async function reviseSource({ method, idSource, changes = {}, idUser }) {
       }
       result = { ok: true, idSource, deleted: true };
     } else {
-      const revision =
-        method === "metadata"
-          ? await reviseMetadata(idSource, idUser, changes, client)
-          : await reviseSettings(idSource, idUser, changes, roles, client);
+      let revision;
+      if (method === "metadata") {
+        revision = await reviseMetadata(idSource, idUser, changes, client);
+      } else {
+        const context = await getSourceSettingsContext({
+          client,
+          idSource,
+          idUser,
+          idProject: idProject || undefined,
+        });
+        const proposedGlobal =
+          roles.root === true && Object.hasOwn(changes, "global")
+            ? changes.global === true
+            : context.source.global === true;
+        if (!proposedGlobal && context.usage.hasOtherProject) {
+          throw new SourceSettingsError(
+            "A source used by another project must remain global",
+            409,
+            { usage: context.usage },
+          );
+        }
+        if (
+          !proposedGlobal &&
+          !changes.readers.includes("publishers") &&
+          context.usage.hasOtherEditor
+        ) {
+          throw new SourceSettingsError(
+            "Publisher access is required by dependent content",
+            409,
+            { usage: context.usage },
+          );
+        }
+        revision = await reviseSettings(
+          idSource,
+          idUser,
+          changes,
+          roles,
+          context.source,
+          client,
+        );
+      }
       result = { ok: true, idSource, pid: revision.pid };
     }
 
@@ -147,12 +231,18 @@ export async function ioSourceRevise(socket, request, callback) {
       await reviseSource({
         ...request,
         idUser: session.user_id,
+        idProject: session.project_id,
       }),
     );
   } catch (error) {
     console.error("Source revision failed", error);
     await socket.notifyInfoError({ message: error.message });
-    callback({ ok: false, error: error.message });
+    callback({
+      ok: false,
+      error: error.message,
+      status: error.status || 500,
+      details: error.details || null,
+    });
   }
 }
 

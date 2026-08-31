@@ -50,6 +50,8 @@ import {
   ioSourceMetadata,
   ioSourceAttributesAlias,
   ioSourceRevise,
+  ioSourceSettingsGet,
+  ioSourceSettingsUsage,
   ioSourceOverlap,
   ioSourceSearch,
   ioSourcePreviewGet,
@@ -162,6 +164,8 @@ io.use((socket, next) => {
   socket.on("/client/source/get/services", use(ioSourceServices));
   socket.on("/client/source/get/metadata", use(ioSourceMetadata));
   socket.on("/client/source/revise", use(ioSourceRevise));
+  socket.on("/client/source/settings/get", use(ioSourceSettingsGet));
+  socket.on("/client/source/settings/usage", use(ioSourceSettingsUsage));
   socket.on("/client/source/join", use(ioSourceJoin));
   socket.on("/client/source/overlap/run", use(ioSourceOverlap));
   socket.on("/client/view/pin", use(ioViewPin));

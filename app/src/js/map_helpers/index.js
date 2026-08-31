@@ -529,6 +529,15 @@ export function triggerUpdateSourcesList() {
   }
 }
 
+/** Notify the remaining Shiny view-list bridge after source settings change. */
+export function triggerSourceSettingsChanged() {
+  if (isShinyReady()) {
+    Shiny.onInputChange("mx_client_source_settings_changed", {
+      date: new Date() * 1,
+    });
+  }
+}
+
 /**
  * Set the project manually
  * @param {String} idProject project to load

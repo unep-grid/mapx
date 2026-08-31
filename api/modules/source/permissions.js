@@ -25,9 +25,13 @@ export async function getSourceEditPermission({
   roles: sessionRoles = null,
 }) {
   const sourceResult = await client.query(
-    `SELECT editor, editors, project, type, data
-     FROM mx_sources_latest
-     WHERE id = $1`,
+    `SELECT source.editor, source.editors, source.readers, source.services,
+            source.global, source.project, source.type, source.data,
+            coalesce(editor.email, '') AS editor_email,
+            source.id
+     FROM mx_sources_latest source
+     LEFT JOIN mx_users editor ON editor.id = source.editor
+     WHERE source.id = $1`,
     [idSource],
   );
   const source = sourceResult.rows[0] || null;

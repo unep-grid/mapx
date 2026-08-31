@@ -16,3 +16,4 @@ export * from "./permissions.js";
 export * from "./id.js";
 export * from "./external.js";
 export * from "./relation.js";
+export * from "./settings/index.js";
