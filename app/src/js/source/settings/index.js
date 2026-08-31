@@ -46,7 +46,7 @@ export async function openSourceSettings({ root = document.body } = {}) {
     "button",
     {
       type: "button",
-      class: ["btn", "btn-default", "source-settings-window__delete"],
+      class: ["btn", "btn-default", "text-danger"],
       "data-lang_key": "btn_delete",
       disabled: true,
       on: { click: () => component.remove() },
@@ -65,7 +65,6 @@ export async function openSourceSettings({ root = document.body } = {}) {
     labelClose,
   );
   const status = manager.el("span", {
-    class: "source-settings-window__status",
     role: "status",
     "aria-live": "polite",
   });

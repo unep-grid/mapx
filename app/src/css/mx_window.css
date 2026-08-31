@@ -102,8 +102,11 @@ mx-window.mx-window--centered {
 .mx-window__status {
   min-width: 0;
   flex: 1;
+  overflow: hidden;
   color: var(--mx_ui_text_faded);
   text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .mx-window__action[hidden] {

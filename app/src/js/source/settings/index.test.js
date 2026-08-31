@@ -57,6 +57,7 @@ describe("openSourceSettings", () => {
 
     const config = mocks.open.mock.calls[0][0];
     expect(config.footerStart.textContent).toBe("btn_delete");
+    expect(config.footerStart.classList).toContain("text-danger");
     expect(config.footerEnd.map((button) => button.textContent)).toEqual([
       "btn_close",
       "btn_update",

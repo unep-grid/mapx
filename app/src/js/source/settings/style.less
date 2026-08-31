@@ -1,29 +1,6 @@
-.source-settings-window .mx-window__content {
-  background: var(--mx_ui_background);
-}
-
-.source-settings-window__status {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  &--error {
-    color: var(--mx_ui_danger, #b94a48);
-  }
-
-  &--success {
-    color: var(--mx_ui_success, #3c763d);
-  }
-}
-
-.source-settings-window__delete:not(:disabled) {
-  color: var(--mx_ui_danger, #b94a48);
-}
-
 mx-source-settings {
   display: block;
   min-height: 100%;
-  color: var(--mx_ui_text);
 }
 
 .mx-source-settings {
@@ -41,7 +18,6 @@ mx-source-settings {
 
   &__loading {
     margin: 24px;
-    color: var(--mx_ui_text_faded);
     text-align: center;
   }
 
@@ -61,39 +37,10 @@ mx-source-settings {
 
   &__field-label {
     min-width: 0;
-
-    label {
-      margin: 0;
-      color: var(--mx_ui_text);
-      font-weight: 500;
-    }
   }
 
-
-  &__readonly {
-    height: 40px;
-    border-color: var(--mx_ui_border);
-    color: var(--mx_ui_text);
-    background: var(--mx_ui_background_contrast);
-    cursor: default;
-    text-overflow: ellipsis;
-
-    &--muted {
-      color: var(--mx_ui_text_faded);
-      background: var(--mx_ui_background_accent);
-    }
-  }
-
-  &__global {
-    display: flex;
-    min-height: 40px;
-    margin: 0;
-    padding: 0;
-    align-items: center;
-
-    input {
-      margin: 0;
-    }
+  &__field-control {
+    min-width: 0;
   }
 
   &__usage {
@@ -140,50 +87,16 @@ mx-source-settings {
     .table {
       min-width: 620px;
       margin: 0;
-      border-collapse: separate;
-      border-spacing: 0;
-
-      th,
-      td {
-        padding: 9px 11px;
-        border-width: 0 0 1px;
-        vertical-align: middle;
-      }
-
-      thead th {
-        position: sticky;
-        z-index: 1;
-        top: 0;
-        color: var(--mx_ui_text);
-        background: var(--mx_ui_background_faded);
-        font-size: 0.88em;
-        font-weight: 600;
-      }
-
-      tbody td:nth-child(n + 2) {
-        color: var(--mx_ui_text_faded);
-        font-size: 0.92em;
-      }
     }
   }
 
   &__warnings {
     display: flex;
-    padding: 11px 13px;
-    border: 1px solid var(--mx_ui_warning, #d9a300);
-    border-radius: 6px;
     align-items: flex-start;
     gap: 10px;
-    color: var(--mx_ui_text);
-    background: var(--mx_ui_background_accent);
 
     &[hidden] {
       display: none;
-    }
-
-    > i {
-      margin-top: 2px;
-      color: var(--mx_ui_warning, #d9a300);
     }
 
     ul {

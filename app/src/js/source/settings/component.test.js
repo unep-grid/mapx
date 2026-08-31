@@ -127,6 +127,7 @@ describe("MxSourceSettingsElement", () => {
       ".mx-source-settings__readonly",
     );
     expect(fields).toHaveLength(7);
+    expect(component.querySelectorAll(".control-label")).toHaveLength(7);
     expect(readonly).toHaveLength(3);
     expect(readonly[0].readOnly).toBe(true);
     expect(readonly[0].value).toBe("Roads");
@@ -135,6 +136,7 @@ describe("MxSourceSettingsElement", () => {
     expect(component.refs.remove.disabled).toBe(true);
     expect(component.refs.global.disabled).toBe(true);
     expect(component.textContent).toContain("source_settings_publishers_required");
+    expect(component.refs.warnings.classList).toContain("alert-warning");
     expect(
       component.querySelector(".mx-source-settings__usage")
         .nextElementSibling,

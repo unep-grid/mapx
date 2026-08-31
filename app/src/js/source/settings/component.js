@@ -121,7 +121,7 @@ export class MxSourceSettingsElement extends HTMLElement {
       el(
         "div",
         { class: "mx-source-settings mx-source-settings--loading", "aria-busy": "true" },
-        el("p", { class: "mx-source-settings__loading" }, [
+        el("p", { class: ["mx-source-settings__loading", "text-muted"] }, [
           el("i", { class: ["fa", "fa-circle-o-notch", "fa-spin"], "aria-hidden": "true" }),
           " ",
           this.labels?.source_settings_loading || "…",
@@ -171,7 +171,6 @@ export class MxSourceSettingsElement extends HTMLElement {
     const id = this.makeReadOnlyField(
       "source_id",
       `${source.id} · ${source.type}`,
-      "muted",
     );
     const editor = this.makeReadOnlyField(
       "email_editor",
@@ -182,7 +181,7 @@ export class MxSourceSettingsElement extends HTMLElement {
     const services = this.makeSelect("source_services", "services");
     const global = this.makeGlobalField();
     const warnings = el("aside", {
-      class: "mx-source-settings__warnings",
+      class: ["mx-source-settings__warnings", "alert", "alert-warning"],
       role: "status",
     });
     const fields = el(
@@ -223,7 +222,7 @@ export class MxSourceSettingsElement extends HTMLElement {
     this.setBusy(false);
   }
 
-  makeReadOnlyField(labelKey, value, variant = "") {
+  makeReadOnlyField(labelKey, value) {
     const { el } = this.elements;
     const id = `source-settings-${this.instance}-${labelKey}`;
     const input = el("input", {
@@ -232,13 +231,16 @@ export class MxSourceSettingsElement extends HTMLElement {
       class: [
         "form-control",
         "mx-source-settings__readonly",
-        variant && `mx-source-settings__readonly--${variant}`,
-      ].filter(Boolean),
+      ],
       value,
       readonly: true,
     });
     const wrapper = this.makeFieldRow(
-      el("label", { for: id, "data-lang_key": labelKey }, this.labels[labelKey]),
+      el("label", {
+        for: id,
+        class: "control-label",
+        "data-lang_key": labelKey,
+      }, this.labels[labelKey]),
       input,
     );
     return { wrapper, control: input };
@@ -264,7 +266,7 @@ export class MxSourceSettingsElement extends HTMLElement {
     const id = `source-settings-${this.instance}-${name}`;
     const label = el(
       "label",
-      { for: id, "data-lang_key": labelKey },
+      { for: id, class: "control-label", "data-lang_key": labelKey },
       this.labels[labelKey],
     );
     const control = el("select", {
@@ -306,9 +308,10 @@ export class MxSourceSettingsElement extends HTMLElement {
     return this.makeFieldRow(
       el("label", {
         for: id,
+        class: "control-label",
         "data-lang_key": "check_source_global_enable",
       }, this.labels.check_source_global_enable),
-      el("div", { class: "checkbox mx-source-settings__global" }, input),
+      el("div", { class: "checkbox" }, input),
     );
   }
 
@@ -514,11 +517,8 @@ export class MxSourceSettingsElement extends HTMLElement {
     if (!target) return;
     target.textContent = message;
     target.hidden = !message;
-    target.classList.toggle("source-settings-window__status--error", error);
-    target.classList.toggle(
-      "source-settings-window__status--success",
-      Boolean(message) && !error,
-    );
+    target.classList.toggle("text-danger", error);
+    target.classList.toggle("text-success", Boolean(message) && !error);
   }
 
   async onLanguageChange() {
