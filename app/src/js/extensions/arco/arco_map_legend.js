@@ -1,5 +1,10 @@
 import { Zartigl, resolveTimeInputSelection } from "@fxi/zartigl";
-import { catalog, getCatalogLayer, formatVertical } from "@fxi/zartigl/catalog";
+import {
+  catalog,
+  getCatalogEntry,
+  formatVertical,
+  resolveLocalizedText,
+} from "@fxi/zartigl/catalog";
 import { el } from "../../el_mapx";
 import { ElementCreator } from "../../el/src/index.js";
 import { maplibregl, settings as mxSettings } from "../../mx";
@@ -21,7 +26,7 @@ const defaultOptions = {
   idView: null,
   map: null,
   layer: "ocean-current-velocity",
-  backend: "auto",
+  source: "auto",
   elInputs: null,
   elLegend: null,
   title: "ARCO",
@@ -49,6 +54,7 @@ const playbackRates = [1, 2, 5, 10];
 export class ArcoMapLegend {
   constructor(options) {
     this._opt = { ...defaultOptions, ...options };
+    this._opt.source = options.source ?? options.backend ?? this._opt.source;
     if (this._opt.geoVideo?.loop != null) {
       this._opt.loop = this._opt.geoVideo.loop;
     }
@@ -81,7 +87,7 @@ export class ArcoMapLegend {
       this._renderStatus();
     };
     this._on_time_change = (time) => {
-      if (this._z?.getBackend() !== "geovideo") {
+      if (this._z?.getSource()?.type !== "geovideo") {
         return;
       }
       const now = performance.now();
@@ -92,7 +98,7 @@ export class ArcoMapLegend {
       this.setTime(time, { fromBackend: true });
     };
     this._on_playback_change = (playing) => {
-      if (this._z?.getBackend() !== "geovideo") {
+      if (this._z?.getSource()?.type !== "geovideo") {
         return;
       }
       this._setPlaying(playing);
@@ -108,11 +114,16 @@ export class ArcoMapLegend {
     ]);
     this._noUiSlider = noUiSlider;
     this._echarts = echarts;
-    this._layer_def = getCatalogLayer(this._opt.layer, catalog);
+    this._layer_def = resolveCatalogEntry(this._opt.layer, catalog);
 
     if (!this._layer_def) {
       throw new Error(`ARCO catalog layer '${this._opt.layer}' not found`);
     }
+    this._layer_label = resolveLocalizedText(
+      this._layer_def.title,
+      mxSettings.language,
+      catalog.defaultLocale,
+    );
 
     const idView = this._opt.idView || "arco";
     const idLayer = toMapxLayerId(idView);
@@ -121,7 +132,7 @@ export class ArcoMapLegend {
       id: idLayer,
       map: this._opt.map,
       catalog: catalog,
-      backend: this._opt.backend,
+      source: this._opt.source,
       settings: this._opt.settings || undefined,
       timeRange: this._opt.timeRange || undefined,
       geoVideo: {
@@ -135,7 +146,7 @@ export class ArcoMapLegend {
         idLayer,
         type: "arco",
         catalogLayer: this._opt.layer,
-        label: this._layer_def.label,
+        label: this._layer_label,
       },
     });
     this._z.on("loading", this._on_loading);
@@ -311,7 +322,7 @@ export class ArcoMapLegend {
       return;
     }
     this._setPlaying(true);
-    if (this._z.getBackend?.() === "geovideo") {
+    if (this._z.getSource?.()?.type === "geovideo") {
       this._playGeoVideo();
       return;
     }
@@ -323,7 +334,7 @@ export class ArcoMapLegend {
   stop() {
     this._setPlaying(false);
     clearTimeout(this._id_timer);
-    if (this._z?.getBackend?.() === "geovideo") {
+    if (this._z?.getSource?.()?.type === "geovideo") {
       this._z.pause?.();
     }
   }
@@ -376,7 +387,7 @@ export class ArcoMapLegend {
   }
 
   _syncGeoVideoPlaybackOptions() {
-    if (this._z.getBackend?.() !== "geovideo") {
+    if (this._z.getSource?.()?.type !== "geovideo") {
       return;
     }
     this._z.setLoop?.(this._opt.loop);
@@ -455,7 +466,7 @@ export class ArcoMapLegend {
     }
     this._z?.resume();
     if (this._playing) {
-      if (this._z?.getBackend?.() === "geovideo") {
+      if (this._z?.getSource?.()?.type === "geovideo") {
         this._playGeoVideo();
       } else {
         this._tick();
@@ -533,7 +544,7 @@ export class ArcoMapLegend {
     }
     const idQuery = ++this._id_query;
     const mode = this._chart_mode;
-    const unit = this._layer_def.variables?.units || this._meta?.unit || "";
+    const unit = this._z.getVariableMeta().units || this._meta?.unit || "";
     try {
       this._chart.showMessage("Loading…");
       const result =
@@ -559,7 +570,7 @@ export class ArcoMapLegend {
         data: this._series,
         mode: mode,
         unit: unit,
-        label: this._layer_def.label,
+        label: this._layer_label,
         verticalLabel: formatVerticalAxisLabel(this._depth_meta, this._depths),
       });
       if (mode === "time") {
@@ -582,7 +593,7 @@ export class ArcoMapLegend {
     if ("magnitude" in values) {
       return values.magnitude;
     }
-    const { u, v } = this._layer_def.variables || {};
+    const { u, v } = zarrVariables(this._layer_def) || {};
     if (u in values && v in values) {
       return Math.hypot(values[u], values[v]);
     }
@@ -651,7 +662,7 @@ export class ArcoMapLegend {
     if (legend.type === "image" && legend.url) {
       content = el("img", {
         src: legend.url,
-        alt: this._layer_def.label,
+        alt: this._layer_label,
       });
     } else if (legend.type === "gradient") {
       const palette = this._z
@@ -710,7 +721,7 @@ export class ArcoMapLegend {
     const elSubtitle = el(
       "span",
       { class: "arco--subtitle" },
-      this._opt.subtitle || this._layer_def.label,
+      this._opt.subtitle || this._layer_label,
     );
     this.elStatusText = el("span", {
       class: "arco--status",
@@ -1009,7 +1020,7 @@ export class ArcoMapLegend {
   }
 
   _buildChartCol() {
-    const unit = this._layer_def.variables?.units || "";
+    const unit = this._z.getVariableMeta().units || "";
     const verticalLabel = formatVerticalAxisLabel(
       this._depth_meta,
       this._depths,
@@ -1131,7 +1142,7 @@ export class ArcoMapLegend {
       dynamicStyle &&
       isColorDomainEligible({
         kind: this._layer_def.kind,
-        backend: this._z.getBackend(),
+        backend: this._z.getSource()?.type,
         dynamicStyle,
       })
     ) {
@@ -1405,4 +1416,20 @@ function formatTimeTick(ms, granularity) {
 function toMapxLayerId(id) {
   const value = String(id || "arco");
   return value.startsWith("MX-") ? value : `MX-${value}`;
+}
+
+/**
+ * zartigl catalog entries are keyed by UUID; the human-readable slugs
+ * previously used as ids (e.g. "ocean-current-velocity") now only live in
+ * `entry.aliases`, so fall back to matching those for existing configs.
+ */
+function resolveCatalogEntry(id, data) {
+  return (
+    getCatalogEntry(id, data) ??
+    data.layers.find((entry) => entry.aliases?.includes(id))
+  );
+}
+
+function zarrVariables(layerDef) {
+  return layerDef.sources.find((source) => source.type === "zarr")?.variables;
 }

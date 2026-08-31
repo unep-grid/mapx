@@ -56,6 +56,11 @@ export class ArcoChart {
       },
       tooltip: {
         trigger: "axis",
+        backgroundColor: getUiColor("--mx_ui_background", "#fff"),
+        borderColor: getUiColor("--mx_ui_border", "#ccc"),
+        textStyle: {
+          color: getUiColor("--mx_ui_text", "#333"),
+        },
         valueFormatter: (value) =>
           `${isFinite(value) ? value.toPrecision(4) : "-"} ${unit || ""}`,
       },
@@ -82,6 +87,12 @@ export class ArcoChart {
           color: accent,
           lineStyle: {
             width: 1.5,
+          },
+          // Axis-triggered tooltip highlights the hovered point and blurs
+          // the rest of the line by default, which looks like the line
+          // vanishes on hover since no symbol is shown to carry the highlight.
+          emphasis: {
+            disabled: true,
           },
           data: data,
         },

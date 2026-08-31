@@ -14,7 +14,7 @@ const palettes = [
 function createArco(legend) {
   const elLegend = document.createElement("div");
   const arco = new ArcoMapLegend({ elLegend });
-  arco._layer_def = { label: "Surface temperature" };
+  arco._layer_label = "Surface temperature";
   arco._z = {
     getLegend: vi.fn(() => legend),
     getPalettes: vi.fn(() => palettes),
@@ -40,6 +40,28 @@ function createPlaybackArco({ values, loop = true }) {
   arco._updateValueReadout = vi.fn();
   return arco;
 }
+
+describe("ArcoMapLegend source/backend option", () => {
+  it("defaults to auto", () => {
+    const arco = new ArcoMapLegend({});
+    expect(arco._opt.source).toBe("auto");
+  });
+
+  it("accepts the canonical 'source' option", () => {
+    const arco = new ArcoMapLegend({ source: "geovideo" });
+    expect(arco._opt.source).toBe("geovideo");
+  });
+
+  it("falls back to the legacy 'backend' option", () => {
+    const arco = new ArcoMapLegend({ backend: "geovideo" });
+    expect(arco._opt.source).toBe("geovideo");
+  });
+
+  it("prefers 'source' over 'backend' when both are given", () => {
+    const arco = new ArcoMapLegend({ source: "geovideo", backend: "zarr" });
+    expect(arco._opt.source).toBe("geovideo");
+  });
+});
 
 describe("ArcoMapLegend legend rendering", () => {
   it("renders a scalar Zarr gradient with a fixed color domain", () => {
@@ -290,7 +312,7 @@ describe("ArcoMapLegend playback controls", () => {
     arco._visible = false;
     arco._playing = true;
     arco._z = {
-      getBackend: vi.fn(() => "geovideo"),
+      getSource: vi.fn(() => ({ type: "geovideo" })),
       resume: vi.fn(),
       play: vi.fn(() => Promise.resolve()),
     };
@@ -356,7 +378,7 @@ describe("ArcoMapLegend playback controls", () => {
   it("uses native GeoVideo playback and forwards rate and loop changes", async () => {
     const arco = new ArcoMapLegend({ loop: true });
     arco._z = {
-      getBackend: vi.fn(() => "geovideo"),
+      getSource: vi.fn(() => ({ type: "geovideo" })),
       play: vi.fn(() => Promise.resolve()),
       pause: vi.fn(),
       setLoop: vi.fn(),
@@ -381,7 +403,7 @@ describe("ArcoMapLegend playback controls", () => {
     const arco = new ArcoMapLegend({
       geoVideo: { autoplay: true, loop: true, playbackRate: 2 },
     });
-    arco._z = { getBackend: vi.fn(() => "geovideo") };
+    arco._z = { getSource: vi.fn(() => ({ type: "geovideo" })) };
 
     arco._on_playback_change(true);
     arco._buildPlayerButtons(true);
@@ -396,7 +418,7 @@ describe("ArcoMapLegend playback controls", () => {
       geoVideo: { autoplay: true, loop: false, playbackRate: 5 },
     });
     arco._z = {
-      getBackend: vi.fn(() => "geovideo"),
+      getSource: vi.fn(() => ({ type: "geovideo" })),
       setLoop: vi.fn(),
       setPlaybackRate: vi.fn(),
       play: vi.fn(() => Promise.resolve()),
@@ -414,7 +436,7 @@ describe("ArcoMapLegend playback controls", () => {
     const error = new Error("autoplay rejected");
     const arco = new ArcoMapLegend({});
     arco._z = {
-      getBackend: vi.fn(() => "geovideo"),
+      getSource: vi.fn(() => ({ type: "geovideo" })),
       play: vi.fn(() => Promise.reject(error)),
     };
     arco._on_error = vi.fn();

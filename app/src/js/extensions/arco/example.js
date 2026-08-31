@@ -25,7 +25,7 @@ function handler() {
         idView: widget.opt.view.id,
         map: widget.opt.map,
         layer: "sea-surface-temperature-anomaly",
-        backend: "geovideo",
+        source: "geovideo",
         timeRange: { trailing: "P1M" },
         geoVideo: { autoplay: false, loop: true, playbackRate: 1 },
         elLegend: elLegend,
