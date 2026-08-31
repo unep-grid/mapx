@@ -74,12 +74,15 @@ function validateAllowedValues(key, values, allowed) {
   }
 }
 
-function reviseSettings(idSource, idUser, changes, roles, source, client) {
+function validateSettingsChanges(changes) {
   for (const key of ["services", "readers", "editors"]) {
     if (!isArray(changes[key])) {
       throw new SourceRevisionError(`Invalid source ${key}`);
     }
   }
+}
+
+function reviseSettings(idSource, idUser, changes, roles, source, client) {
   validateAllowedValues(
     "readers",
     changes.readers,
@@ -170,6 +173,7 @@ export async function reviseSource({
       if (method === "metadata") {
         revision = await reviseMetadata(idSource, idUser, changes, client);
       } else {
+        validateSettingsChanges(changes);
         const context = await getSourceSettingsContext({
           client,
           idSource,

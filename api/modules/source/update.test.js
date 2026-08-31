@@ -88,6 +88,29 @@ describe("source settings revision policy", () => {
     expect(mocks.client.query).toHaveBeenCalledWith("ROLLBACK");
   });
 
+  it.each([undefined, null])(
+    "rejects invalid readers before dependency policy checks (%s)",
+    async (readers) => {
+      mocks.getSourceSettingsContext.mockResolvedValue({
+        source: { type: "vector", global: false },
+        usage: { hasOtherProject: false, hasOtherEditor: true },
+      });
+
+      await expect(
+        reviseSource({
+          ...baseRequest,
+          changes: { ...baseRequest.changes, readers },
+        }),
+      ).rejects.toMatchObject({
+        message: "Invalid source readers",
+        status: 400,
+      });
+      expect(mocks.getSourceSettingsContext).not.toHaveBeenCalled();
+      expect(mocks.createSourceRevision).not.toHaveBeenCalled();
+      expect(mocks.client.query).toHaveBeenCalledWith("ROLLBACK");
+    },
+  );
+
   it("rejects removing publisher access when another editor depends on it", async () => {
     mocks.getSourceSettingsContext.mockResolvedValue({
       source: { type: "vector", global: false },
