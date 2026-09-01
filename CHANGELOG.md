@@ -1,3 +1,8 @@
+  - [1.14.1-alpha.15](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.15) 
+
+    - fix(source): restrict editing to current project
+
+
   - [1.14.1-alpha.14](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.14) 
 
     - fix: zartigl integration in arco laer and chart line rendering issue when mouse over
