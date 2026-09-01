@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   getSourceIdentityStatus: vi.fn(),
   isSocketAllowedToEditGeometry: vi.fn(),
   isSocketAllowedToEditSource: vi.fn(),
+  isUserAllowedToEditSource: vi.fn(),
   tableExists: vi.fn(),
 }));
 
@@ -36,7 +37,7 @@ vi.mock("./locks.js", () => ({
 vi.mock("./permissions.js", () => ({
   isSocketAllowedToEditGeometry: mocks.isSocketAllowedToEditGeometry,
   isSocketAllowedToEditSource: mocks.isSocketAllowedToEditSource,
-  isUserAllowedToEditSource: vi.fn(),
+  isUserAllowedToEditSource: mocks.isUserAllowedToEditSource,
 }));
 vi.mock("./writes.js", () => ({ writeUpdates: vi.fn() }));
 vi.mock("./geometry.js", () => ({
@@ -120,5 +121,19 @@ describe("geometry edit API gate", () => {
         geometryEditAllowed: false,
       }),
     );
+  });
+
+  it("authorizes table editing with the current socket project", async () => {
+    mocks.isUserAllowedToEditSource.mockResolvedValue(true);
+    const edit = new EditTableSession(createSocket(), { id_table: idTable });
+    edit._id_table = idTable;
+
+    await expect(edit.isAllowed()).resolves.toBe(true);
+    expect(mocks.isUserAllowedToEditSource).toHaveBeenCalledWith({
+      idTable,
+      isAuthenticated: true,
+      idUser: 17,
+      idProject: "MX-AAA-BBB-CCC-DDD-EEE",
+    });
   });
 });

@@ -87,7 +87,9 @@ SELECT
   coalesce(NULLIF(s.data #>> ARRAY['meta','text','title',$4], ''),
            NULLIF(s.data #>> '{meta,text,title,en}', ''), s.id) AS title,
   coalesce(u.email, '') AS editor_email,
-  CASE WHEN s.editor = $2::integer OR s.editors ? $2::text OR s.editors ?| $3::text[]
+  CASE WHEN s.project = $1
+             AND (s.editor = $2::integer OR s.editors ? $2::text
+                  OR s.editors ?| $3::text[])
          THEN 'editable'
        WHEN s.global THEN 'global'
        ELSE 'readable'

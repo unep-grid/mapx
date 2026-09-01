@@ -857,7 +857,7 @@ export class EditTableSession {
         idTable,
         isAuthenticated,
         idUser,
-        rolesGroup: et._user_roles?.group || [],
+        idProject: et._id_project,
       });
       if (allowed) {
         et._tables_allowed.set(idTable, now + ttl);

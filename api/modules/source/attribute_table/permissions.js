@@ -1,4 +1,4 @@
-import { getSourceEditors } from "#mapx/source";
+import { pgRead } from "#mapx/db";
 import { getSourceEditPermission } from "../permissions.js";
 
 /**
@@ -8,27 +8,36 @@ export async function isUserAllowedToEditSource({
   idTable,
   isAuthenticated,
   idUser,
-  rolesGroup = [],
+  idProject,
+  client = pgRead,
 }) {
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !idProject) {
     return false;
   }
-  const sourceData = await getSourceEditors(idTable);
-  const isEditor = sourceData.editor === idUser;
-  const isGroupMember = sourceData.editors.some((group) => {
-    return rolesGroup.includes(group);
+  const permission = await getSourceEditPermission({
+    client,
+    idSource: idTable,
+    idUser,
+    idProject,
   });
-  return isEditor || isGroupMember;
+  return permission.allowed === true;
 }
 
 export async function isSocketAllowedToEditSource(socket, idTable) {
   const session = socket.session || {};
-  return isUserAllowedToEditSource({
-    idTable,
-    isAuthenticated: session.user_authenticated || false,
+  if (!session.user_authenticated || !session.project_id) return false;
+  const permission = await getSourceEditPermission({
+    client: pgRead,
+    idSource: idTable,
     idUser: session.user_id,
-    rolesGroup: session.user_roles?.group || [],
+    idProject: session.project_id,
   });
+  const roles = permission.roles || {};
+  if (Object.keys(roles).length > 0) {
+    session.user_roles = roles;
+    if (socket.data) socket.data.user_roles = roles;
+  }
+  return permission.allowed === true;
 }
 
 /**

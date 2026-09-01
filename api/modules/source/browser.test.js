@@ -114,13 +114,16 @@ describe("source browser filtering", () => {
     expect(sql).toContain("WHEN $17::boolean");
   });
 
-  it("classifies editable global sources by their edit access", () => {
+  it("limits editable global sources to the current project", () => {
     const sql = sourceBrowserInternals.sourceBrowserSql;
-    const editableCase = sql.indexOf("CASE WHEN s.editor = $2::integer");
+    const editableCase = sql.indexOf("CASE WHEN s.project = $1");
     const globalCase = sql.indexOf("WHEN s.global THEN 'global'");
 
     expect(editableCase).toBeGreaterThan(-1);
     expect(globalCase).toBeGreaterThan(editableCase);
+    expect(sql.slice(editableCase, globalCase)).toContain(
+      "s.editor = $2::integer",
+    );
   });
 
   it("reads approximate dimensions from PostgreSQL catalogs", () => {

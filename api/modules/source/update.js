@@ -18,11 +18,12 @@ class SourceRevisionError extends Error {
   }
 }
 
-async function assertUserCanEditSource(client, idSource, idUser) {
+async function assertUserCanEditSource(client, idSource, idUser, idProject) {
   const permission = await getSourceEditPermission({
     client,
     idSource,
     idUser,
+    idProject,
   });
   const { source, roles, allowed } = permission;
   if (!source) {
@@ -140,7 +141,12 @@ export async function reviseSource({
       "SELECT pg_advisory_xact_lock(hashtextextended($1::text, 0))",
       [idSource],
     );
-    const roles = await assertUserCanEditSource(client, idSource, idUser);
+    const roles = await assertUserCanEditSource(
+      client,
+      idSource,
+      idUser,
+      idProject,
+    );
 
     let result;
     if (method === "delete") {

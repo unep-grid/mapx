@@ -47,7 +47,7 @@ vi.mock("./settings/index.js", () => {
   };
 });
 
-import { reviseSource } from "./update.js";
+import { ioSourceRevise, reviseSource } from "./update.js";
 
 const baseRequest = {
   method: "settings",
@@ -132,5 +132,33 @@ describe("source settings revision policy", () => {
     });
     expect(mocks.createSourceRevision).toHaveBeenCalledOnce();
     expect(mocks.client.query).toHaveBeenCalledWith("COMMIT");
+  });
+
+  it("uses the Socket.IO current project for source authorization", async () => {
+    const callback = vi.fn();
+    const socket = {
+      session: {
+        user_authenticated: true,
+        user_id: 7,
+        project_id: "MX-CURRENT",
+      },
+      notifyInfoError: vi.fn(),
+    };
+
+    await ioSourceRevise(
+      socket,
+      { ...baseRequest, idProject: "MX-OTHER" },
+      callback,
+    );
+
+    expect(mocks.getSourceEditPermission).toHaveBeenCalledWith({
+      client: mocks.client,
+      idSource: baseRequest.idSource,
+      idUser: 7,
+      idProject: "MX-CURRENT",
+    });
+    expect(callback).toHaveBeenCalledWith(
+      expect.objectContaining({ ok: true }),
+    );
   });
 });
