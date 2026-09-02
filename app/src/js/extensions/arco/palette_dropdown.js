@@ -4,7 +4,7 @@ let paletteDropdownId = 0;
  * Accessible palette picker with gradient previews.
  * Zartigl supplies palette metadata; presentation remains MapX-specific.
  */
-export function createPaletteDropdown({ palettes, value, onChange }) {
+export function createPaletteDropdown({ document, palettes, value, onChange }) {
   const root = document.createElement("div");
   root.className = "arco--palette_dropdown";
 

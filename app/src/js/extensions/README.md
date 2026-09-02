@@ -43,7 +43,7 @@ ocean data client-side through the [`@fxi/zartigl`](../../../../submodules/zarti
 MapLibre plugin (GPU particle advection for vector fields, palette rasters
 for scalars), so capabilities parsing, tile URL construction and raster
 cross-fade do not apply. It follows the same conventions (options object,
-`init()`/`destroy()`, `example.js` widget handler).
+`init()`/`update()`/`destroy()`, `example.js` widget handler).
 
 Features : allowed time windows, cadence-aware date inputs, time slider and
 playback (including native GeoVideo play/stop/rate/loop), vertical depth slider
@@ -60,14 +60,26 @@ const arco = new ArcoMapLegend({
   idView: widget.opt.view.id,
   map: widget.opt.map,
   layer: "sea-surface-temperature-anomaly",
-  backend: "geovideo",
+  source: "geovideo",
   timeRange: { trailing: "P1M" },
   geoVideo: { autoplay: false, loop: true, playbackRate: 1 },
   elLegend: elLegend,
   elInputs: widget.elContent,
 });
 await arco.init();
+
+await arco.update({
+  time: new Date("2025-01-01T00:00:00Z"),
+  settings: { opacity: 0.8 },
+  geoVideo: { playbackRate: 2 },
+});
 ```
+
+`update()` accepts the same runtime fields as zartigl (`layer`, `source`,
+`timeRange`, `time`, `depth`, `settings`, `geoVideo`, and `visible`). The
+constructor-only `backend` alias remains supported for older widgets; new code
+should use `source`. Existing `setTime()`, `setDepth()`, and `updateSettings()`
+calls remain as compatibility adapters to `update()`.
 
 Build note : `submodules/zartigl/dist/` is gitignored. After a fresh clone
 or zartigl changes, run `cd submodules/zartigl && npm install && npm run build:lib`

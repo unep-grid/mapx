@@ -1,8 +1,47 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+const zartiglMock = vi.hoisted(() => ({
+  instances: [],
+  Zartigl: class {
+    constructor(options) {
+      this.options = options;
+      this.init = vi.fn(() => Promise.resolve());
+      this.update = vi.fn(() => Promise.resolve());
+      this.on = vi.fn();
+      this.off = vi.fn();
+      this.destroy = vi.fn();
+      this.suspend = vi.fn();
+      this.getTimeMeta = vi.fn(() => ({
+        min: 10,
+        max: 20,
+        size: 2,
+        values: [10, 20],
+        current: 10,
+        granularity: "second",
+      }));
+      this.getDepthMeta = vi.fn(() => ({
+        values: [],
+        label: "depth",
+        current: undefined,
+      }));
+      this.getDebugInfo = vi.fn(() => ({ settings: options.settings || {} }));
+      zartiglMock.instances.push(this);
+    }
+  },
+}));
+
+vi.mock("@fxi/zartigl", async (importOriginal) => ({
+  ...(await importOriginal()),
+  Zartigl: zartiglMock.Zartigl,
+}));
+
+vi.mock("../../modules_loader_async", () => ({
+  moduleLoad: vi.fn(() => Promise.resolve({})),
+}));
+
 vi.mock("../../mx", () => ({
   maplibregl: {},
-  settings: { layerBefore: null },
+  settings: { layerBefore: null, language: "en" },
 }));
 
 import { ArcoMapLegend } from "./arco_map_legend.js";
@@ -18,7 +57,14 @@ function createArco(legend) {
   arco._z = {
     getLegend: vi.fn(() => legend),
     getPalettes: vi.fn(() => palettes),
+    update: vi.fn(({ settings }) => {
+      if (settings?.colorDomain) {
+        [legend.min, legend.max] = settings.colorDomain;
+      }
+      return Promise.resolve();
+    }),
   };
+  arco._initialized = true;
   return { arco, elLegend };
 }
 
@@ -32,10 +78,13 @@ function createPlaybackArco({ values, loop = true }) {
   };
   arco._time = values[0];
   arco._z = {
-    setTime: vi.fn(),
+    update: vi.fn(() => Promise.resolve()),
+    getTimeMeta: vi.fn(() => ({ ...arco._time_meta, current: arco._time })),
+    getDepthMeta: vi.fn(() => ({ values: [], label: "depth" })),
     suspend: vi.fn(),
     resume: vi.fn(),
   };
+  arco._initialized = true;
   arco._updateTimeReadout = vi.fn();
   arco._updateValueReadout = vi.fn();
   return arco;
@@ -60,6 +109,98 @@ describe("ArcoMapLegend source/backend option", () => {
   it("prefers 'source' over 'backend' when both are given", () => {
     const arco = new ArcoMapLegend({ source: "geovideo", backend: "zarr" });
     expect(arco._opt.source).toBe("geovideo");
+  });
+});
+
+describe("ArcoMapLegend zartigl 0.5 lifecycle", () => {
+  beforeEach(() => {
+    zartiglMock.instances.length = 0;
+  });
+
+  it("passes declarative state to Zartigl and initializes it", async () => {
+    const arco = new ArcoMapLegend({
+      layer: "ocean-current-velocity",
+      source: "zarr",
+      time: 10,
+      depth: 5,
+      visible: false,
+      timeRange: { trailing: "P1M" },
+      settings: { opacity: 0.8 },
+      geoVideo: { autoplay: false, loop: false, playbackRate: 2 },
+    });
+    arco.build = vi.fn();
+    arco.renderLegend = vi.fn();
+
+    await arco.init();
+
+    const z = zartiglMock.instances[0];
+    expect(z.options.layer).toMatch(/^[0-9a-f-]{36}$/);
+    expect(z.options.layer).not.toBe("ocean-current-velocity");
+    expect(z.options).toMatchObject({
+      source: "zarr",
+      time: 10,
+      depth: 5,
+      visible: false,
+      timeRange: { trailing: "P1M" },
+      settings: { opacity: 0.8 },
+      geoVideo: { autoplay: false, loop: false, playbackRate: 2 },
+    });
+    expect(z.init).toHaveBeenCalledOnce();
+    expect(z.update).not.toHaveBeenCalled();
+  });
+
+  it("forwards combined changes through one unified update", async () => {
+    const arco = createPlaybackArco({ values: [10, 20] });
+
+    await arco.update({ time: 20, depth: 5 });
+
+    expect(arco._z.update).toHaveBeenCalledOnce();
+    expect(arco._z.update).toHaveBeenCalledWith({ time: 20, depth: 5 });
+  });
+
+  it("resolves layer aliases and rebuilds after structural changes", async () => {
+    const arco = createPlaybackArco({ values: [10, 20] });
+    arco._layer_def = { id: "old", kind: "scalar" };
+    arco._rebuild = vi.fn();
+    arco.stop = vi.fn();
+
+    await arco.update({
+      layer: "sea-surface-temperature-anomaly",
+      source: "geovideo",
+      timeRange: { trailing: "P1M" },
+    });
+
+    const forwarded = arco._z.update.mock.calls[0][0];
+    expect(forwarded.layer).toMatch(/^[0-9a-f-]{36}$/);
+    expect(forwarded.layer).not.toBe("sea-surface-temperature-anomaly");
+    expect(forwarded.source).toBe("geovideo");
+    expect(arco.stop).toHaveBeenCalledOnce();
+    expect(arco._rebuild).toHaveBeenCalledOnce();
+  });
+
+  it("does not resynchronize UI after destruction during an update", async () => {
+    let resolveUpdate;
+    const arco = createPlaybackArco({ values: [10, 20] });
+    arco._z.update = vi.fn(
+      () => new Promise((resolve) => {
+        resolveUpdate = resolve;
+      }),
+    );
+    arco._syncStateFromZartigl = vi.fn();
+
+    const pending = arco.update({ time: 20 });
+    arco._destroyed = true;
+    resolveUpdate();
+    await pending;
+
+    expect(arco._syncStateFromZartigl).not.toHaveBeenCalled();
+  });
+
+  it("rejects updates before initialization", async () => {
+    const arco = new ArcoMapLegend({});
+    await expect(arco.update({ time: 10 })).rejects.toThrow(
+      "Call init() before update()",
+    );
   });
 });
 
@@ -105,7 +246,7 @@ describe("ArcoMapLegend legend rendering", () => {
     ).toEqual(["-1.25", "K", "2.50"]);
   });
 
-  it("updates the legend after a runtime color-domain change", () => {
+  it("updates the legend after a runtime color-domain change", async () => {
     const legend = {
       type: "gradient",
       palette: "balance",
@@ -115,11 +256,7 @@ describe("ArcoMapLegend legend rendering", () => {
     };
     const { arco, elLegend } = createArco(legend);
     arco._settings = { colorDomain: null };
-    arco._z.updateSettings = vi.fn(({ colorDomain }) => {
-      [legend.min, legend.max] = colorDomain;
-    });
-
-    arco.updateSettings({ colorDomain: [-3, 3] });
+    await arco.updateSettings({ colorDomain: [-3, 3] });
 
     expect(
       [...elLegend.querySelectorAll(".arco--legend_meta span")].map(
@@ -258,7 +395,8 @@ describe("ArcoMapLegend playback controls", () => {
     expect(arco.getTime()).toBe(10);
     await vi.advanceTimersByTimeAsync(1);
     expect(arco.getTime()).toBe(50);
-    expect(arco._z.setTime).toHaveBeenCalledTimes(1);
+    expect(arco._z.update).toHaveBeenCalledTimes(1);
+    expect(arco._z.update).toHaveBeenCalledWith({ time: 50 });
     arco.stop();
   });
 
@@ -273,7 +411,7 @@ describe("ArcoMapLegend playback controls", () => {
     await vi.advanceTimersByTimeAsync(800);
 
     expect(arco.getTime()).toBe(10);
-    expect(arco._z.setTime).not.toHaveBeenCalled();
+    expect(arco._z.update).not.toHaveBeenCalled();
     arco.stop();
   });
 
@@ -344,7 +482,7 @@ describe("ArcoMapLegend playback controls", () => {
     await vi.advanceTimersByTimeAsync(800);
     expect(finite.getTime()).toBe(50);
     expect(finite._playing).toBe(false);
-    expect(finite._z.setTime).toHaveBeenCalledWith(50);
+    expect(finite._z.update).toHaveBeenCalledWith({ time: 50 });
   });
 
   it("keeps manual navigation at one frame with wrapping", () => {
@@ -381,19 +519,23 @@ describe("ArcoMapLegend playback controls", () => {
       getSource: vi.fn(() => ({ type: "geovideo" })),
       play: vi.fn(() => Promise.resolve()),
       pause: vi.fn(),
-      setLoop: vi.fn(),
-      setPlaybackRate: vi.fn(),
+      update: vi.fn(() => Promise.resolve()),
     };
+    arco._initialized = true;
 
     arco.play();
     await Promise.resolve();
     expect(arco._z.play).toHaveBeenCalledOnce();
 
     arco._cyclePlaybackRate();
-    expect(arco._z.setPlaybackRate).toHaveBeenCalledWith(2);
+    expect(arco._z.update).toHaveBeenCalledWith({
+      geoVideo: { playbackRate: 2 },
+    });
 
     arco.toggleLoop();
-    expect(arco._z.setLoop).toHaveBeenCalledWith(false);
+    expect(arco._z.update).toHaveBeenCalledWith({
+      geoVideo: { loop: false },
+    });
 
     arco.stop();
     expect(arco._z.pause).toHaveBeenCalledOnce();
@@ -413,23 +555,25 @@ describe("ArcoMapLegend playback controls", () => {
     expect(arco.elButtonRate.textContent).toBe("2×");
   });
 
-  it("reapplies generated GeoVideo playback options after initialization", () => {
+  it("forwards generated GeoVideo playback options through update", async () => {
     const arco = new ArcoMapLegend({
       geoVideo: { autoplay: true, loop: false, playbackRate: 5 },
     });
     arco._z = {
       getSource: vi.fn(() => ({ type: "geovideo" })),
-      setLoop: vi.fn(),
-      setPlaybackRate: vi.fn(),
-      play: vi.fn(() => Promise.resolve()),
+      update: vi.fn(() => Promise.resolve()),
     };
+    arco._initialized = true;
 
-    arco._syncGeoVideoPlaybackOptions();
+    await arco.update({
+      geoVideo: { autoplay: true, loop: false, playbackRate: 5 },
+    });
 
-    expect(arco._z.setLoop).toHaveBeenCalledWith(false);
-    expect(arco._z.setPlaybackRate).toHaveBeenCalledWith(5);
-    expect(arco._z.play).toHaveBeenCalledOnce();
-    expect(arco._playing).toBe(true);
+    expect(arco._z.update).toHaveBeenCalledWith({
+      geoVideo: { autoplay: true, loop: false, playbackRate: 5 },
+    });
+    expect(arco._opt.loop).toBe(false);
+    expect(arco._playbackRate).toBe(5);
   });
 
   it("clears optimistic playback state when native autoplay is rejected", async () => {

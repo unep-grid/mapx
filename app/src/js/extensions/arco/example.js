@@ -11,6 +11,9 @@
  */
 function handler() {
   const { moduleLoad, getViewLegend } = mx.helpers;
+  const local = {
+    arco: null,
+  };
 
   const widget_config = {
     onAdd: async function (widget) {
@@ -21,7 +24,7 @@ function handler() {
 
       const elLegend = getViewLegend(widget.opt.view, { clone: false });
 
-      widget._arco = new ArcoMapLegend({
+      local.arco = new ArcoMapLegend({
         idView: widget.opt.view.id,
         map: widget.opt.map,
         layer: "sea-surface-temperature-anomaly",
@@ -32,11 +35,12 @@ function handler() {
         elInputs: widget.elContent,
       });
 
-      await widget._arco.init();
+      await local.arco.init();
     },
 
-    onRemove: async function (widget) {
-      widget?._arco?.destroy();
+    onRemove: function () {
+      local.arco?.destroy();
+      local.arco = null;
     },
 
     onData: async function () {},

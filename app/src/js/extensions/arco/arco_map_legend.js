@@ -40,6 +40,7 @@ const defaultOptions = {
   time: null,
   timeRange: null,
   depth: null,
+  visible: true,
 };
 
 const playbackRates = [1, 2, 5, 10];
@@ -95,7 +96,7 @@ export class ArcoMapLegend {
         return;
       }
       this._lastVideoUiUpdate = now;
-      this.setTime(time, { fromBackend: true });
+      this._syncTime(time);
     };
     this._on_playback_change = (playing) => {
       if (this._z?.getSource()?.type !== "geovideo") {
@@ -132,9 +133,13 @@ export class ArcoMapLegend {
       id: idLayer,
       map: this._opt.map,
       catalog: catalog,
+      layer: this._layer_def.id,
       source: this._opt.source,
       settings: this._opt.settings || undefined,
-      timeRange: this._opt.timeRange || undefined,
+      timeRange: this._opt.timeRange ?? undefined,
+      time: this._opt.time ?? undefined,
+      depth: this._opt.depth ?? undefined,
+      visible: this._opt.visible,
       geoVideo: {
         autoplay: this._opt.geoVideo?.autoplay ?? false,
         loop: this._opt.loop,
@@ -145,7 +150,7 @@ export class ArcoMapLegend {
         idView,
         idLayer,
         type: "arco",
-        catalogLayer: this._opt.layer,
+        catalogLayer: this._layer_def.id,
         label: this._layer_label,
       },
     });
@@ -160,27 +165,14 @@ export class ArcoMapLegend {
       this._z.suspend();
     }
 
-    await this._z.setLayer(this._opt.layer);
+    await this._z.init();
+    if (this.isDestroyed()) return;
 
-    this._time_meta = this._z.getTimeMeta();
-    this._depth_meta = this._z.getDepthMeta();
-    this._depths = orderVerticalValues(
-      this._depth_meta.values,
-      this._depth_meta,
-    );
-    this._time = this._resolveInitialTime(
-      this._opt.time ?? this._time_meta.current ?? this._time_meta.max,
-    );
-    this._depth = this._resolveInitialDepth(
-      this._opt.depth ?? this._depth_meta.current ?? this._depths[0] ?? 0,
-    );
+    this._initialized = true;
+    this._syncStateFromZartigl();
 
     this.build();
     this.renderLegend();
-    this.setDepth(this._depth);
-    this.setTime(this._time);
-    this._syncGeoVideoPlaybackOptions();
-    window._arco = this;
   }
 
   destroy() {
@@ -212,13 +204,141 @@ export class ArcoMapLegend {
     if (this._opt.elLegend) {
       this._opt.elLegend.innerHTML = "";
     }
-    if (window._arco === this) {
-      delete window._arco;
-    }
   }
 
   isDestroyed() {
     return !!this._destroyed;
+  }
+
+  /**
+   * Update any subset of the active zartigl configuration.
+   * Layer aliases accepted by MapX are resolved to canonical catalog UUIDs.
+   *
+   * @param {import("@fxi/zartigl").ZartiglUpdate} change
+   * @returns {Promise<void>}
+   */
+  async update(change) {
+    if (!this._initialized || !this._z) {
+      throw new Error("Call init() before update()");
+    }
+
+    const next = { ...change };
+    let nextLayer = null;
+    if (change.layer != null) {
+      nextLayer = resolveCatalogEntry(change.layer, catalog);
+      if (!nextLayer) {
+        throw new Error(`ARCO catalog layer '${change.layer}' not found`);
+      }
+      next.layer = nextLayer.id;
+    }
+
+    const structural =
+      change.layer != null ||
+      change.source != null ||
+      Object.prototype.hasOwnProperty.call(change, "timeRange");
+
+    if (structural) this.stop();
+    await this._z.update(next);
+    if (this.isDestroyed()) return;
+
+    if (nextLayer) {
+      this._layer_def = nextLayer;
+      this._layer_label = resolveLocalizedText(
+        nextLayer.title,
+        mxSettings.language,
+        catalog.defaultLocale,
+      );
+      this._point = null;
+      this._series = null;
+      this._chart_mode = "time";
+      this._marker?.remove();
+      this._marker = null;
+    }
+    if (change.layer != null || change.source != null) this._meta = null;
+    this._syncOptions(change, nextLayer);
+    if (structural || change.time != null || change.depth != null) {
+      this._syncStateFromZartigl();
+    }
+    if (structural) {
+      if (!this.hasDepth() && this._chart_mode === "depth") {
+        this._chart_mode = "time";
+      }
+      this._id_query++;
+      this._rebuild();
+      if (this._point) void this.updateChart();
+      return;
+    }
+
+    if (change.time != null) this._syncTime(this._time);
+    if (change.depth != null) this._syncDepth(this._depth);
+    if (change.settings) {
+      this._syncSettings(change.settings);
+      if (
+        "palette" in change.settings ||
+        "logScale" in change.settings ||
+        "colorDomain" in change.settings
+      ) {
+        this.renderLegend();
+      }
+      if ("colorDomain" in change.settings) this._syncColorDomainControl();
+    }
+    if (change.geoVideo) this._syncPlaybackControls();
+  }
+
+  _updateFromControl(change) {
+    return this.update(change).catch((error) => {
+      if (error?.name !== "AbortError" && !this.isDestroyed()) {
+        this._on_error(error);
+      }
+    });
+  }
+
+  _syncOptions(change, nextLayer) {
+    if (nextLayer) this._opt.layer = nextLayer.id;
+    if (change.source != null) this._opt.source = change.source;
+    if (Object.prototype.hasOwnProperty.call(change, "timeRange")) {
+      this._opt.timeRange = change.timeRange;
+    }
+    if (change.time != null) this._opt.time = change.time;
+    if (change.depth != null) this._opt.depth = change.depth;
+    if (change.visible != null) this._opt.visible = change.visible;
+    if (change.settings) {
+      this._opt.settings = { ...(this._opt.settings || {}), ...change.settings };
+    }
+    if (change.geoVideo) {
+      this._opt.geoVideo = { ...(this._opt.geoVideo || {}), ...change.geoVideo };
+      if (change.geoVideo.loop != null) this._opt.loop = change.geoVideo.loop;
+      if (change.geoVideo.playbackRate != null) {
+        this._playbackRate = change.geoVideo.playbackRate;
+      }
+    }
+  }
+
+  _syncStateFromZartigl() {
+    this._time_meta = this._z.getTimeMeta();
+    this._depth_meta = this._z.getDepthMeta();
+    this._depths = orderVerticalValues(
+      this._depth_meta.values,
+      this._depth_meta,
+    );
+    this._time = this._time_meta.current ?? this._time_meta.max;
+    this._depth =
+      this._depth_meta.current ?? this._depths[0] ?? this._opt.depth ?? 0;
+    const appliedSettings = this._z.getDebugInfo?.().settings;
+    if (appliedSettings) this._opt.settings = { ...appliedSettings };
+  }
+
+  _rebuild() {
+    this._chart?.destroy();
+    this._colorDomainControl?.destroy();
+    this._paletteDropdown?.destroy();
+    this.elTimeSlider?.noUiSlider?.destroy();
+    this.elDepthSlider?.noUiSlider?.destroy();
+    this._chart = null;
+    this._colorDomainControl = null;
+    this._paletteDropdown = null;
+    this.build();
+    this.renderLegend();
   }
 
   /**
@@ -227,10 +347,12 @@ export class ArcoMapLegend {
   setTime(ms, opt = {}) {
     const { min, max } = this._time_meta;
     const time = Math.max(min, Math.min(max, ms));
-    if (!opt.fromBackend) {
-      this._z.setTime(time);
-    }
-    this._time = this._z.getTimeMeta?.().current ?? time;
+    this._syncTime(time, opt);
+    return this._updateFromControl({ time });
+  }
+
+  _syncTime(time, opt = {}) {
+    this._time = time;
     if (!opt.fromSlider) {
       const index = nearestIndex(this._time_meta.values, this._time);
       this.elTimeSlider?.noUiSlider?.set(index);
@@ -304,7 +426,12 @@ export class ArcoMapLegend {
       return;
     }
     this._depth = nearest;
-    this._z.setDepth(nearest);
+    this._syncDepth(nearest, opt);
+    return this._updateFromControl({ depth: nearest });
+  }
+
+  _syncDepth(nearest, opt = {}) {
+    const index = nearestIndex(this._depths, nearest);
     if (!opt.fromSlider) {
       this.elDepthSlider?.noUiSlider?.set(index);
     }
@@ -356,13 +483,15 @@ export class ArcoMapLegend {
   toggleLoop() {
     this._opt.loop = !this._opt.loop;
     this._syncPlaybackControls();
-    this._z?.setLoop?.(this._opt.loop);
+    void this._updateFromControl({ geoVideo: { loop: this._opt.loop } });
   }
 
   _cyclePlaybackRate() {
     const index = playbackRates.indexOf(this._playbackRate);
     this._playbackRate = playbackRates[(index + 1) % playbackRates.length];
-    this._z?.setPlaybackRate?.(this._playbackRate);
+    void this._updateFromControl({
+      geoVideo: { playbackRate: this._playbackRate },
+    });
     this._syncPlaybackRateButton();
   }
 
@@ -384,17 +513,6 @@ export class ArcoMapLegend {
     this.elButtonPlay?.classList.toggle("playing", this._playing);
     this.elButtonLoop?.classList.toggle("active", this._opt.loop);
     this._syncPlaybackRateButton();
-  }
-
-  _syncGeoVideoPlaybackOptions() {
-    if (this._z.getSource?.()?.type !== "geovideo") {
-      return;
-    }
-    this._z.setLoop?.(this._opt.loop);
-    this._z.setPlaybackRate?.(this._playbackRate);
-    if (this._opt.geoVideo?.autoplay === true && !this._playing) {
-      this.play();
-    }
   }
 
   _playGeoVideo() {
@@ -624,18 +742,8 @@ export class ArcoMapLegend {
    * Settings
    */
   updateSettings(settings) {
-    this._z.updateSettings(settings);
     this._syncSettings(settings);
-    const legendChanged =
-      "palette" in settings ||
-      "logScale" in settings ||
-      "colorDomain" in settings;
-    if (legendChanged) {
-      this.renderLegend();
-    }
-    if ("colorDomain" in settings) {
-      this._syncColorDomainControl();
-    }
+    return this._updateFromControl({ settings });
   }
 
   _syncSettings(settings) {
@@ -1232,6 +1340,7 @@ export class ArcoMapLegend {
       this._settings.palette || defaults.palette || palettes[0]?.id;
     this._paletteDropdown?.destroy();
     const elPalette = createPaletteDropdown({
+      document: this._opt.elInputs.ownerDocument,
       palettes,
       value: paletteDefault,
       onChange: (value) => {
