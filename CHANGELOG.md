@@ -1,3 +1,9 @@
+  - [1.14.1-alpha.16](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.16) 
+
+    - fix: adapt mapx arco bridge to new zartigl api
+    - fix(overlap): qualify geometry profile references
+
+
   - [1.14.1-alpha.15](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.15) 
 
     - fix(source): restrict editing to current project
