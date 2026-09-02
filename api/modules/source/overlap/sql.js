@@ -109,10 +109,10 @@ export function buildOverlapGeometryProfileSql({ idSource }) {
       ),
       ARRAY[]::integer[]
     ) AS dimensions
-    FROM ${table}
-    CROSS JOIN LATERAL ST_Dump(geom) AS part
-    WHERE geom IS NOT NULL
-      AND NOT ST_IsEmpty(geom)
+    FROM ${table} AS overlap_result
+    CROSS JOIN LATERAL ST_Dump(overlap_result.geom) AS part
+    WHERE overlap_result.geom IS NOT NULL
+      AND NOT ST_IsEmpty(overlap_result.geom)
   `;
 }
 

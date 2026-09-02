@@ -195,7 +195,7 @@ describe("ioSourceOverlap", () => {
         if (text.includes("SELECT count(*)")) {
           return { rows: [{ count: 1 }] };
         }
-        if (text.includes("ST_Dump(geom)")) {
+        if (text.includes("ST_Dump(overlap_result.geom)")) {
           return { rows: [{ dimensions: [1] }] };
         }
         return { rowCount: 1, rows: [] };
@@ -247,7 +247,7 @@ describe("ioSourceOverlap", () => {
         if (text.includes("SELECT count(*)")) {
           return { rows: [{ count: 1 }] };
         }
-        if (text.includes("ST_Dump(geom)")) {
+        if (text.includes("ST_Dump(overlap_result.geom)")) {
           return { rows: [{ dimensions: [2] }] };
         }
         return { rowCount: 1, rows: [] };

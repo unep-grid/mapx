@@ -31,9 +31,12 @@ describe("overlap SQL", () => {
   it("profiles actual intersection dimensions without discarding components", () => {
     const sql = buildOverlapGeometryProfileSql({ idSource: output });
 
-    expect(sql).toContain("ST_Dump(geom)");
+    expect(sql).toContain('FROM "mx_vector_k_l_m_n_o" AS overlap_result');
+    expect(sql).toContain("ST_Dump(overlap_result.geom)");
+    expect(sql).toContain("WHERE overlap_result.geom IS NOT NULL");
+    expect(sql).toContain("NOT ST_IsEmpty(overlap_result.geom)");
+    expect(sql).not.toMatch(/ST_Dump\(geom\)|WHERE geom IS NOT NULL/);
     expect(sql).toContain("DISTINCT ST_Dimension(part.geom)");
-    expect(sql).toContain('"mx_vector_k_l_m_n_o"');
   });
 
   it.each([
