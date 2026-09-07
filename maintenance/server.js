@@ -1,24 +1,15 @@
-import { createReadStream } from "node:fs";
-import { stat } from "node:fs/promises";
+import express from "express";
+import { readFileSync } from "node:fs";
 import { createServer } from "node:http";
-import { extname, join, normalize, resolve, sep } from "node:path";
+import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveConfiguration } from "./configuration.js";
 
 const projectDirectory = fileURLToPath(new URL(".", import.meta.url));
-const staticDirectory = resolve(projectDirectory, "dist");
-const port = Number.parseInt(process.env.PORT || "8080", 10);
-
-const contentTypes = {
-  ".css": "text/css; charset=utf-8",
-  ".html": "text/html; charset=utf-8",
-  ".ico": "image/x-icon",
-  ".js": "text/javascript; charset=utf-8",
-  ".json": "application/json; charset=utf-8",
-  ".map": "application/json; charset=utf-8",
-  ".svg": "image/svg+xml",
-  ".woff": "font/woff",
-  ".woff2": "font/woff2",
-};
+const serviceWorker = readFileSync(
+  new URL("./service-worker.js", import.meta.url),
+  "utf8",
+);
 
 const securityHeaders = {
   "Content-Security-Policy": [
@@ -34,98 +25,108 @@ const securityHeaders = {
   "X-Content-Type-Options": "nosniff",
 };
 
-function send(response, statusCode, body, contentType) {
-  response.writeHead(statusCode, {
-    ...securityHeaders,
-    "Cache-Control": "no-store",
-    "Content-Type": contentType,
+/**
+ * Configuration is fixed at startup for each server instance.
+ * @param {object} [options]
+ * @param {ReturnType<typeof resolveConfiguration>} [options.configuration]
+ * @param {import("express").RequestHandler} [options.frontend]
+ * @param {string} [options.staticDirectory]
+ * @returns {import("node:http").Server}
+ */
+export function createMaintenanceServer({
+  configuration = resolveConfiguration(),
+  frontend,
+  staticDirectory = resolve(projectDirectory, "dist"),
+} = {}) {
+  const app = express();
+  app.disable("x-powered-by");
+  app.disable("etag");
+  app.enable("strict routing");
+  app.enable("case sensitive routing");
+  app.use((_request, response, next) => {
+    response.set(securityHeaders).set("Cache-Control", "no-store");
+    next();
   });
-  response.end(body);
-}
-
-function getConfig() {
-  return JSON.stringify({
-    maintenanceEnd: (process.env.MAINTENANCE_END || "").trim(),
-    mapTilerToken: (process.env.MAPTILER_TOKEN || "").trim(),
-  });
-}
-
-function isInsideStaticDirectory(filePath) {
-  return (
-    filePath === staticDirectory || filePath.startsWith(`${staticDirectory}${sep}`)
+  app.all("/healthz", (_request, response) =>
+    response.type("text").send("ok\n"),
   );
-}
-
-function getStaticCacheControl(pathname) {
-  const isFingerprintedAsset =
-    /^\/assets\/[^/]+-[A-Za-z0-9_-]{8,}\.[^/]+$/.test(pathname);
-  return isFingerprintedAsset
-    ? "public, max-age=31536000, immutable"
-    : "no-store";
-}
-
-async function serveStaticFile(response, pathname) {
-  const relativePath = normalize(pathname === "/" ? "/index.html" : pathname);
-  const filePath = resolve(join(staticDirectory, `.${relativePath}`));
-
-  if (!isInsideStaticDirectory(filePath)) {
-    send(response, 403, "Forbidden", "text/plain; charset=utf-8");
-    return;
-  }
-
-  try {
-    const fileStats = await stat(filePath);
-    if (!fileStats.isFile()) {
-      send(response, 404, "Not found", "text/plain; charset=utf-8");
-      return;
-    }
-
-    response.writeHead(200, {
-      ...securityHeaders,
-      "Cache-Control": getStaticCacheControl(pathname),
-      "Content-Type": contentTypes[extname(filePath)] || "application/octet-stream",
+  app.use((request, response, next) => {
+    const hostname = (request.headers.host || "")
+      .trim()
+      .toLowerCase()
+      .replace(/:\d+$/, "");
+    if (!hostname.startsWith(configuration.apiHostPrefix)) return next();
+    const retry = configuration.maintenanceEnd || null;
+    const seconds = Math.ceil((Date.parse(retry) - Date.now()) / 1000);
+    if (seconds > 0) response.set("Retry-After", String(seconds));
+    response.status(503).json({
+      error: "MapX is temporarily unavailable for scheduled maintenance.",
+      retry,
     });
-    createReadStream(filePath).pipe(response);
-  } catch (error) {
-    if (error.code === "ENOENT") {
-      send(response, 404, "Not found", "text/plain; charset=utf-8");
-      return;
-    }
-    send(response, 500, "Internal server error", "text/plain; charset=utf-8");
-  }
-}
-
-export function createMaintenanceServer() {
-  return createServer(async (request, response) => {
-    let requestUrl;
-    try {
-      requestUrl = new URL(request.url || "/", "http://localhost");
-    } catch {
-      send(response, 400, "Bad request", "text/plain; charset=utf-8");
-      return;
-    }
-
-    if (request.method !== "GET" && request.method !== "HEAD") {
-      send(response, 405, "Method not allowed", "text/plain; charset=utf-8");
-      return;
-    }
-
-    if (requestUrl.pathname === "/healthz") {
-      send(response, 200, "ok\n", "text/plain; charset=utf-8");
-      return;
-    }
-
-    if (requestUrl.pathname === "/config.json") {
-      send(response, 200, getConfig(), contentTypes[".json"]);
-      return;
-    }
-
-    await serveStaticFile(response, requestUrl.pathname);
   });
+  app.use((request, response, next) => {
+    if (request.method === "GET" || request.method === "HEAD") return next();
+    response
+      .set("Allow", "GET, HEAD")
+      .status(405)
+      .type("text")
+      .send("Method not allowed");
+  });
+  app.get("/service-worker.js", (_request, response) => {
+    response.set("Service-Worker-Allowed", "/").type("js").send(serviceWorker);
+  });
+  app.get("/config.json", (_request, response) => {
+    response.json({
+      maintenanceEnd: configuration.maintenanceEnd,
+      mapTilerToken: configuration.mapTilerToken,
+    });
+  });
+  app.use(
+    frontend ||
+      express.static(staticDirectory, {
+        redirect: false,
+        fallthrough: false,
+        etag: false,
+        lastModified: false,
+        setHeaders(response, filePath) {
+          const assetPath = filePath
+            .slice(staticDirectory.length)
+            .replaceAll("\\", "/");
+          response.setHeader(
+            "Cache-Control",
+            /^\/assets\/[^/]+-[A-Za-z0-9_-]{8,}\.[^/]+$/.test(assetPath)
+              ? "public, max-age=31536000, immutable"
+              : "no-store",
+          );
+        },
+      }),
+  );
+  app.use((_request, response) =>
+    response.status(404).type("text").send("Not found"),
+  );
+  /** @type {import("express").ErrorRequestHandler} */
+  const handleError = (error, _request, response, next) => {
+    if (response.headersSent) return next(error);
+    const status =
+      error.status >= 400 && error.status < 500 ? error.status : 500;
+    response
+      .status(status)
+      .type("text")
+      .send(
+        status === 500
+          ? "Internal server error"
+          : status === 404
+            ? "Not found"
+            : "Bad request",
+      );
+  };
+  app.use(handleError);
+  return createServer(app);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const server = createMaintenanceServer();
+  const port = Number.parseInt(process.env.PORT || "8080", 10);
   server.listen(port, "0.0.0.0", () => {
     console.log(`MapX maintenance server listening on port ${port}`);
   });

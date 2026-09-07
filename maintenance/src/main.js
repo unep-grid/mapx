@@ -1,3 +1,4 @@
+import { initializeMaintenance } from "./configuration.js";
 import "./style.css";
 import { getGlobeCamera } from "./globe_animation.js";
 import { removeGlobeWhenUnavailable } from "./globe_visibility.js";
@@ -231,19 +232,4 @@ async function startGlobe(token) {
   }
 }
 
-async function loadConfiguration() {
-  try {
-    const response = await fetch("/config.json", { cache: "no-store" });
-    if (!response.ok) {
-      throw new Error(`Configuration request failed: ${response.status}`);
-    }
-    return response.json();
-  } catch {
-    return {};
-  }
-}
-
-loadConfiguration().then((configuration) => {
-  renderMessages(configuration.maintenanceEnd);
-  startGlobe(configuration.mapTilerToken);
-});
+void initializeMaintenance({ renderMessages, startGlobe });

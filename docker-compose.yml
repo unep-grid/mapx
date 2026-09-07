@@ -29,6 +29,22 @@ services:
       #- /var/run/docker.sock:/var/run/docker.sock
       - ~/.docker/run/docker.sock:/var/run/docker.sock
       - ./_shared/traefik/certs:/certs
+  maintenance:
+    image: fredmoser/mapx_maintenance:local
+    build: ./maintenance
+    restart: on-failure
+    depends_on:
+      - traefik
+    env_file: mapx.dev.env
+    environment:
+      PORT: 8080
+    networks:
+      - frontend
+    labels:
+      traefik.enable: true
+      traefik.http.routers.maintenance.rule: Host(`maintenance.mapx.localhost`)
+      traefik.http.routers.maintenance.entrypoints: web
+      traefik.http.services.maintenance.loadbalancer.server.port: 8080
   search:
     image: fredmoser/mapx_search:1.48.2
     restart: on-failure

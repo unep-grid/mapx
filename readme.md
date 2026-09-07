@@ -49,6 +49,7 @@ Some browsers require to modify your hosts file to link custom MapX local "subdo
 127.0.0.1 dev.mapx.localhost
 127.0.0.1 geoserver.mapx.localhost
 127.0.0.1 meta.mapx.localhost
+127.0.0.1 maintenance.mapx.localhost
 ```
 
 ### Docker
@@ -215,6 +216,14 @@ To trigger a manual build:
 
 Postgis: `OperationalError: could not access file "$libdir/postgis-X.X` _Solution:_ run `docker compose exec pg update-postgis.sh`
 
+
+### Maintenance page
+
+From the repository root, run `npm run start:maintenance`, then open
+<http://maintenance.mapx.localhost:8880/>. Compose loads `mapx.dev.env` and
+starts maintenance with Traefik; the API and database are not required.
+Rerun the command after changing maintenance source files or configuration.
+See [the maintenance README](maintenance/README.md) for settings and development.
 
 ### Development session for the `app` service
 

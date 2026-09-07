@@ -21,7 +21,9 @@ WORKDIR /app
 RUN addgroup -S mapx && adduser -S -G mapx mapx
 
 COPY --from=build /app/dist ./dist
-COPY server.js ./server.js
+COPY package*.json ./
+RUN npm ci --omit=dev
+COPY server.js configuration.js service-worker.js ./
 
 RUN chown -R mapx:mapx /app
 USER mapx
