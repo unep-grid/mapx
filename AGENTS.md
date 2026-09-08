@@ -94,6 +94,9 @@ architectural precedent for new work.
 
 ## Validation
 
+- Follow `.prettierrc.json` and `eslint.config.mjs` for JS/TS. Before handoff,
+  run `npm run format` and `npm run lint`; root commands also cover the Git
+  submodules. See `quality/README.md` for scoped commands and policy updates.
 - Test essential behavior and regression-prone boundaries. A bug fix requires a
   regression test when the behavior can be exercised deterministically.
 - Run the checks proportional to the change: targeted tests while developing,

@@ -7,7 +7,11 @@
     "build": "vite build",
     "dev": "node dev.js",
     "start": "node server.js",
-    "test": "npm run build && node --test"
+    "test": "npm run build && node --test",
+    "format": "cd .. && node node_modules/prettier/bin/prettier.cjs --write \"maintenance/**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts}\"",
+    "format:check": "cd .. && node node_modules/prettier/bin/prettier.cjs --check \"maintenance/**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts}\"",
+    "lint": "cd .. && node node_modules/eslint/bin/eslint.js maintenance --max-warnings 0",
+    "lint:fix": "cd .. && node node_modules/eslint/bin/eslint.js maintenance --max-warnings 0 --fix"
   },
   "dependencies": {
     "express": "5.2.1",

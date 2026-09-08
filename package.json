@@ -6,10 +6,18 @@
   "devDependencies": {
     "@commitlint/cli": "^19.7.1",
     "@commitlint/config-conventional": "^19.7.1",
+    "@eslint/js": "9.39.5",
+    "@typescript-eslint/parser": "8.46.4",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
+    "eslint": "9.39.5",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-react": "7.37.5",
+    "globals": "16.5.0",
     "husky": "^9.1.7",
-    "release-it": "^18.1.2"
+    "prettier": "3.6.2",
+    "release-it": "^18.1.2",
+    "typescript": "5.9.3"
   },
   "version": "1.14.1-alpha.16",
   "scripts": {
@@ -31,7 +39,18 @@
     "ci:submodules": "cd submodules/mapx-style && npm install",
     "ci:app": "cd app && npm run ci",
     "ci:api": "cd api && npm run ci",
-    "ci:maintenance": "cd maintenance && npm ci && npm test"
+    "ci:maintenance": "cd maintenance && npm ci && npm test",
+    "format:local": "node node_modules/prettier/bin/prettier.cjs --write \"**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts}\"",
+    "format": "npm run format:local && (cd submodules/mapx-style && node ../../node_modules/prettier/bin/prettier.cjs --write \"**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts}\") && (cd submodules/zartigl && node ../../node_modules/prettier/bin/prettier.cjs --write \"**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts}\")",
+    "format:check:local": "node node_modules/prettier/bin/prettier.cjs --check \"**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts}\"",
+    "format:check": "npm run format:check:local && (cd submodules/mapx-style && node ../../node_modules/prettier/bin/prettier.cjs --check \"**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts}\") && (cd submodules/zartigl && node ../../node_modules/prettier/bin/prettier.cjs --check \"**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts}\")",
+    "lint:local": "node node_modules/eslint/bin/eslint.js . --max-warnings 0",
+    "lint": "npm run lint:local && (cd submodules/mapx-style && node ../../node_modules/eslint/bin/eslint.js . --max-warnings 0) && (cd submodules/zartigl && node ../../node_modules/eslint/bin/eslint.js . --max-warnings 0)",
+    "lint:fix:local": "node node_modules/eslint/bin/eslint.js . --fix --max-warnings 0",
+    "lint:fix": "npm run lint:fix:local && (cd submodules/mapx-style && node ../../node_modules/eslint/bin/eslint.js . --fix --max-warnings 0) && (cd submodules/zartigl && node ../../node_modules/eslint/bin/eslint.js . --fix --max-warnings 0)",
+    "quality": "npm run quality:policy && npm run format:check && npm run lint && npm run test:quality",
+    "quality:policy": "node quality/check-policy.mjs",
+    "test:quality": "node --test quality/*.test.mjs"
   },
   "config": {
     "commitizen": {

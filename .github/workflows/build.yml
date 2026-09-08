@@ -14,7 +14,11 @@ defaults:
     shell: bash
 
 jobs:
+  quality:
+    uses: ./.github/workflows/quality.yml
+
   build:
+    needs: quality
     runs-on: ubuntu-latest
     environment: ci
     env:
@@ -52,11 +56,11 @@ jobs:
       # Extract version from package.json using jq
       - name: Get version
         id: version
-        run: echo "version=$(jq -r '.version' ./app/package.json)" >> $GITHUB_ENV
+        run: echo "version=$(jq -r '.version' ./app/package.json)" >> "$GITHUB_ENV"
 
       # Maintenance has its own release cadence and image version.
       - name: Get maintenance version
-        run: echo "maintenance_version=$(jq -r '.version' ./maintenance/package.json)" >> $GITHUB_ENV
+        run: echo "maintenance_version=$(jq -r '.version' ./maintenance/package.json)" >> "$GITHUB_ENV"
 
       # Log version for debugging
       - name: Log version
@@ -80,9 +84,11 @@ jobs:
             MAINTENANCE_TAGS="${MAINTENANCE_TAGS},${DOCKER_REGISTRY}/${DOCKER_MAINTENANCE_IMAGE}:latest"
           fi
           
-          echo "API_TAGS=${API_TAGS}" >> $GITHUB_ENV
-          echo "APP_TAGS=${APP_TAGS}" >> $GITHUB_ENV
-          echo "MAINTENANCE_TAGS=${MAINTENANCE_TAGS}" >> $GITHUB_ENV
+          {
+            echo "API_TAGS=${API_TAGS}"
+            echo "APP_TAGS=${APP_TAGS}"
+            echo "MAINTENANCE_TAGS=${MAINTENANCE_TAGS}"
+          } >> "$GITHUB_ENV"
 
       # Docker login only if pushing
       - name: Docker Login

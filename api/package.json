@@ -7,8 +7,11 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint ./index.js ./routines.js ./vitest.config.js \"./modules/**/*.test.js\"",
-    "ci": "npm ci && npm run lint && npm run test:coverage"
+    "lint": "cd .. && node node_modules/eslint/bin/eslint.js api --max-warnings 0",
+    "ci": "npm ci && npm run lint && npm run test:coverage",
+    "format": "cd .. && node node_modules/prettier/bin/prettier.cjs --write \"api/**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts}\"",
+    "format:check": "cd .. && node node_modules/prettier/bin/prettier.cjs --check \"api/**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts}\"",
+    "lint:fix": "cd .. && node node_modules/eslint/bin/eslint.js api --max-warnings 0 --fix"
   },
   "author": "unepgrid.ch",
   "license": "MIT",
@@ -55,8 +58,6 @@
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^2.1.8",
-    "eslint": "^8.0.0",
-    "eslint-config-prettier": "^8.4.0",
     "vitest": "^2.1.8"
   }
 }

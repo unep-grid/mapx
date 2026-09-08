@@ -1,0 +1,24 @@
+# Dependencies, caches, archives, and local data
+**/node_modules/**
+**/.git/**
+**/.venv/**
+**/.cache/**
+**/_archives/**
+**/archives/**
+**/_trash/**
+**/_data/**
+**/_postgres/**
+**/_shared/**
+# Generated bundles and reports; owned build scripts and tests remain included.
+**/dist/**
+**/dist-*/**
+**/coverage/**
+**/.nyc_output/**
+**/*.min.js
+**/*.min.css
+app/www/**
+app/src/built/**
+# Each Git submodule runs its own local commands.
+submodules/**
+# Bundled third-party Shiny runtime (including historical local patches).
+app/src/js/shiny.js

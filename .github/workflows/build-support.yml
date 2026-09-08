@@ -44,7 +44,7 @@ jobs:
       # Get version from package.json for Docker tags
       - name: Get version
         id: version
-        run: echo "version=$(node -p "require('./app/package.json').version")" >> $GITHUB_OUTPUT
+        run: echo "version=$(node -p "require('./app/package.json').version")" >> "$GITHUB_OUTPUT"
 
       - name: Build Geoserver Image
         if: inputs.service == 'geoserver'

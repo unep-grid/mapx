@@ -26,7 +26,7 @@
     "serve": "live-server dev --mount=/dist:dist --mount=/data:data",
     "build-serve": "npm run build && live-server dev --mount=/dist:dist",
     "examples": "microbundle --external none -o dist --no-compress && live-server examples --mount=/dist:dist",
-    "examples-lint": "eslint examples/",
+    "examples-lint": "cd ../../../.. && node node_modules/eslint/bin/eslint.js app/src/js/sdk/examples --max-warnings 0",
     "build": "microbundle --external none -o dist",
     "prod": "npm run build && npm run jsdoc &&  npm publish",
     "jsdoc": "jsdoc2md --heading-depth 3 -t ./readme.hbs ./src/mapx_resolvers/*.js > README.md && sed -i.bak -E 's/[[:space:]]+$//' README.md && rm -f README.md.bak",
@@ -51,8 +51,6 @@
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/preset-env": "^7.16.4",
     "core-js": "^3.19.1",
-    "eslint": "^8.8.0",
-    "eslint-plugin-react": "^7.27.1",
     "jsdoc-to-markdown": "^9.1.1",
     "live-server": "^1.1.0",
     "microbundle": "^0.14.2"
