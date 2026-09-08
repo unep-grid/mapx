@@ -4,23 +4,38 @@ const pycswTypename = "pycsw:CoreMetadata";
 const pycswSchema = "http://pycsw.org/metadata";
 const pycswMetadataType = "application/geo+json";
 const isoTopicCategories = new Set([
-  "farming", "biota", "boundaries", "climatologyMeteorologyAtmosphere",
-  "economy", "elevation", "environment", "geoscientificInformation",
-  "health", "imageryBaseMapsEarthCover", "intelligenceMilitary",
-  "inlandWaters", "location", "oceans", "planningCadastre", "society",
-  "structure", "transportation", "utilitiesCommunication",
+  "farming",
+  "biota",
+  "boundaries",
+  "climatologyMeteorologyAtmosphere",
+  "economy",
+  "elevation",
+  "environment",
+  "geoscientificInformation",
+  "health",
+  "imageryBaseMapsEarthCover",
+  "intelligenceMilitary",
+  "inlandWaters",
+  "location",
+  "oceans",
+  "planningCadastre",
+  "society",
+  "structure",
+  "transportation",
+  "utilitiesCommunication",
 ]);
 
-export {
-  buildPycswRecord,
-};
+export { buildPycswRecord };
 
-function buildPycswRecord(row, {
-  language = "en",
-  languages,
-  apiBaseUrl = "https://api.mapx.org",
-  geoserverPublicUrl = "",
-} = {}) {
+function buildPycswRecord(
+  row,
+  {
+    language = "en",
+    languages,
+    apiBaseUrl = "https://api.mapx.org",
+    geoserverPublicUrl = "",
+  } = {},
+) {
   const collectionUrl = `${apiBaseUrl}/ogc_meta/collections/mapx`;
   const record = buildRecord(row, {
     language,
@@ -37,8 +52,10 @@ function buildPycswRecord(row, {
   const catalogMetadata = properties.metadata || {};
   const temporal = catalogMetadata.temporal || {};
   const licenses = catalogMetadata.constraints?.licenses || [];
-  const licenseText = licenses.map((license) => [license.name, license.text]
-    .filter(Boolean).join(" — ")).filter(Boolean).join("; ");
+  const licenseText = licenses
+    .map((license) => [license.name, license.text].filter(Boolean).join(" — "))
+    .filter(Boolean)
+    .join("; ");
   const contacts = getContacts(catalogMetadata.contacts);
 
   return {
@@ -59,7 +76,9 @@ function buildPycswRecord(row, {
     themes: JSON.stringify(properties.themes || []),
     format: "application/geo+json",
     source: row.view_id,
-    date: epochToIso(row.range_end_at || row.view_modified_at || row.view_created_at),
+    date: epochToIso(
+      row.range_end_at || row.view_modified_at || row.view_created_at,
+    ),
     date_modified: properties.updated,
     date_revision: temporal.modified || properties.updated,
     date_creation: properties.created,
@@ -70,20 +89,26 @@ function buildPycswRecord(row, {
     time_begin: epochToIso(row.range_start_at),
     time_end: epochToIso(row.range_end_at),
     topicategory: (catalogMetadata.keywords?.topic || [])
-      .filter((topic) => isoTopicCategories.has(topic)).join(", "),
-    resourcelanguage: catalogMetadata.identification?.languages?.join(", ")
-      || language,
+      .filter((topic) => isoTopicCategories.has(topic))
+      .join(", "),
+    resourcelanguage:
+      catalogMetadata.identification?.languages?.join(", ") || language,
     accessconstraints: licenseText ? "otherRestrictions" : null,
     otherconstraints: licenseText || null,
     conditionapplyingtoaccessanduse: licenseText || null,
     lineage: catalogMetadata.lineage?.statement || null,
-    responsiblepartyrole: contacts.map((contact) => contact.role)
-      .filter(Boolean).join(", "),
+    responsiblepartyrole: contacts
+      .map((contact) => contact.role)
+      .filter(Boolean)
+      .join(", "),
     creator: getPartiesByRole(contacts, ["originator", "author"]),
     publisher: getPartiesByRole(contacts, ["publisher"]),
     contributor: getPartiesByRole(contacts, ["processor"]),
-    organization: contacts.map((contact) => contact.organization)
-      .filter(Boolean).join(", ") || "MapX",
+    organization:
+      contacts
+        .map((contact) => contact.organization)
+        .filter(Boolean)
+        .join(", ") || "MapX",
     links: JSON.stringify(links),
     contacts: JSON.stringify(contacts),
     relation: getMultilingualRecordUrl(collectionUrl, row.view_id),
@@ -129,7 +154,9 @@ function getAnyText(record) {
     ...flattenText(properties.metadata),
     properties.mapx?.project_id,
     ...(properties.mapx?.projects_id || []),
-  ].filter(Boolean).join(" ");
+  ]
+    .filter(Boolean)
+    .join(" ");
 }
 
 function flattenText(value) {
@@ -175,15 +202,19 @@ function getContacts(sourceContacts = []) {
 }
 
 function getPartiesByRole(contacts, roles) {
-  return contacts
-    .filter((contact) => roles.includes(contact.role))
-    .map((contact) => contact.organization || contact.name)
-    .filter(Boolean)
-    .join(", ") || null;
+  return (
+    contacts
+      .filter((contact) => roles.includes(contact.role))
+      .map((contact) => contact.organization || contact.name)
+      .filter(Boolean)
+      .join(", ") || null
+  );
 }
 
 function normalizeContactRole(value) {
-  const role = String(value || "").trim().toLowerCase();
+  const role = String(value || "")
+    .trim()
+    .toLowerCase();
   const roles = {
     administrator: "custodian",
     author: "originator",

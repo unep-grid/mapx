@@ -87,7 +87,7 @@ export async function register(config, session, client) {
       enable_wms,
       language,
     },
-    client
+    client,
   );
 
   if (!ok) {
@@ -314,7 +314,7 @@ export async function updateJoinColumnsNames(
 
     if (joinConfig.id_source !== idSourceJoin) {
       throw new Error(
-        `Join id '${joinConfig.id_source}' should source id ${idSourceJoin} `
+        `Join id '${joinConfig.id_source}' should source id ${idSourceJoin} `,
       );
     }
 
@@ -329,15 +329,15 @@ export async function updateJoinColumnsNames(
     const toUpdateJoinsColumns = joins.filter(
       (join) =>
         join.id_source === idSourceUpdate &&
-        join.columns.includes(oldColumnName)
+        join.columns.includes(oldColumnName),
     );
     const toUpdateJoinsColumnJoin = joins.filter(
       (join) =>
-        join.id_source === idSourceUpdate && join.column_join === oldColumnName
+        join.id_source === idSourceUpdate && join.column_join === oldColumnName,
     );
     const toUpdateJoinsColumnBase = joins.filter(
       (join) =>
-        base.id_source === idSourceUpdate && join.column_base === oldColumnName
+        base.id_source === idSourceUpdate && join.column_base === oldColumnName,
     );
 
     /**
@@ -383,7 +383,7 @@ export async function updateJoinColumnsNames(
         new_column: newColumnName,
       });
     }
-   
+
     await stopIfNotValid(joinConfig, client);
     await updatePgView(joinConfig, client);
     if (revisions) {

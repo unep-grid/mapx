@@ -194,7 +194,7 @@ export class AutoStyle {
                 height: dim.height,
                 borderRadius: dim.radius,
               },
-            })
+            }),
           );
         }
       }
@@ -480,7 +480,7 @@ export class AutoStyle {
         content: chroma.brewer[k].map((c) =>
           el("span", {
             style: { height: "10px", width: "10px", backgroundColor: c },
-          })
+          }),
         ),
       };
     });
@@ -515,7 +515,7 @@ export class AutoStyle {
                 marginRight: "5px",
               },
             },
-            item.value
+            item.value,
           ),
           el(
             "div",
@@ -523,8 +523,8 @@ export class AutoStyle {
               class: "auto_style_palettes",
               style: { display: "flex", flexDirection: "row" },
             },
-            item.content
-          )
+            item.content,
+          ),
         );
       },
       configForm: {
@@ -604,7 +604,7 @@ export class AutoStyle {
           },
         ],
       },
-      elSpanTranslate("auto_style_button_update")
+      elSpanTranslate("auto_style_button_update"),
     );
     as._buttons.push(elBtnDone);
   }

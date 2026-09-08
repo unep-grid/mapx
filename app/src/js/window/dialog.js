@@ -64,7 +64,9 @@ export function openConfirmDialog(options) {
     let settled = false;
     let dialogWindow = null;
     const settle = (value) => {
-      if (settled) return;
+      if (settled) {
+        return;
+      }
       settled = true;
       resolve(value);
     };
@@ -179,7 +181,9 @@ export function openNoticeDialog({
     let settled = false;
     let dialogWindow = null;
     const settle = () => {
-      if (settled) return;
+      if (settled) {
+        return;
+      }
       settled = true;
       resolve();
     };

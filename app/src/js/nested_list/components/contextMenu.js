@@ -152,7 +152,7 @@ class ContextMenu {
       {
         class: cm.li.opt.class.contextMenuGroup,
       },
-      ui
+      ui,
     );
 
     /**
@@ -168,7 +168,7 @@ class ContextMenu {
           left: cm.left + "px",
         },
       },
-      elMenuGroup
+      elMenuGroup,
     );
     elContainer.appendChild(elContext);
     return elContext;
@@ -194,7 +194,7 @@ class ContextMenu {
       {
         class: cm.li.opt.class.contextMenuHeader,
       },
-      title
+      title,
     );
   }
   elButton(idLabel, idAction) {
@@ -210,7 +210,7 @@ class ContextMenu {
           li_event_type: "mousedown",
         },
       },
-      title
+      title,
     );
   }
 
@@ -237,7 +237,7 @@ class ContextMenu {
         {
           class: cm.li.opt.class.contextMenuInputLabel,
         },
-        title
+        title,
       ),
       el("input", {
         class: cm.li.opt.class.contextMenuInput,
@@ -248,7 +248,7 @@ class ContextMenu {
           li_event_type: "input",
         },
         value: value,
-      })
+      }),
     );
   }
 }

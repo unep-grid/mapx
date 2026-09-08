@@ -75,14 +75,13 @@ export async function isSourceDownloadable(idSource) {
   if (isEmpty(joinConfig)) {
     return sourceHasService(idSource, "mx_download");
   } else {
-    
     if (joinConfig.id_source !== idSource) {
       throw new Error("Malformed join configuration");
     }
 
     const thisSourceIsDownloadable = await sourceHasService(
       idSource,
-      "mx_download"
+      "mx_download",
     );
 
     if (!thisSourceIsDownloadable) {

@@ -160,7 +160,9 @@ export class SourceRevisionBatch {
       throw new Error("A source revision batch requires a database client");
     }
     if (!Number.isInteger(Number(idUser))) {
-      throw new Error("A source revision batch requires an authenticated actor");
+      throw new Error(
+        "A source revision batch requires an authenticated actor",
+      );
     }
     this.client = client;
     this.idUser = Number(idUser);

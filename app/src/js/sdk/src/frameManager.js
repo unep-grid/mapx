@@ -1,9 +1,6 @@
 import { Events } from "./events.js";
 import settings from "./settings.json";
-import {
-  MessageFrameCom,
-  RequestFrameCom,
-} from "./messages.js";
+import { MessageFrameCom, RequestFrameCom } from "./messages.js";
 import { HOST_VISIBILITY_MESSAGE_TYPE } from "./host_visibility.js";
 import { parse, stringify, patchObject, isObject } from "./helpers.js";
 import { MapxSdkError } from "./sdk_error.js";

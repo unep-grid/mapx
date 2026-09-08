@@ -75,7 +75,7 @@ export async function validateTokenHandler(req, res, next) {
           user_is_valid: userData.isValid,
         },
       },
-      403
+      403,
     );
     next(e);
   }
@@ -139,7 +139,7 @@ export function validateRoleHandlerFor(role) {
             err: e,
           },
         },
-        403
+        403,
       );
       next(e);
     }

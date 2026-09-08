@@ -235,12 +235,10 @@ describe("QuickGeometryEditSession", () => {
   });
 
   it("rejects editing when geometry lock state is active", async () => {
-    wsMock.emitAsync
-      .mockResolvedValueOnce(false)
-      .mockResolvedValueOnce({
-        locked: true,
-        id_session: "other_session_id",
-      });
+    wsMock.emitAsync.mockResolvedValueOnce(false).mockResolvedValueOnce({
+      locked: true,
+      id_session: "other_session_id",
+    });
     const session = new QuickGeometryEditSession({
       id_table: "mx_vector_a_b_c_d_e",
     });

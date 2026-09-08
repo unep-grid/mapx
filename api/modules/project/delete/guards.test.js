@@ -40,9 +40,9 @@ describe("assertProjectDeletable", () => {
   });
 
   it("rejects users who are neither project creator nor root", async () => {
-    await expect(
-      assertProjectDeletable(socket(), idProject),
-    ).rejects.toThrow("project_delete_access_denied");
+    await expect(assertProjectDeletable(socket(), idProject)).rejects.toThrow(
+      "project_delete_access_denied",
+    );
     expect(readQuery).not.toHaveBeenCalled();
   });
 
@@ -91,15 +91,16 @@ describe("assertProjectDeletable", () => {
       rows: [{ legacy: true, title: "Test project" }],
     });
     await expect(
-      assertProjectDeletable(
-        socket({ project_creator: true }),
-        idProject,
-      ),
+      assertProjectDeletable(socket({ project_creator: true }), idProject),
     ).resolves.toEqual({ title: "Test project" });
   });
 
   it("re-runs the check against a supplied transaction client", async () => {
-    const client = { query: vi.fn().mockResolvedValue({ rows: [{ legacy: true, title: "T" }] }) };
+    const client = {
+      query: vi
+        .fn()
+        .mockResolvedValue({ rows: [{ legacy: true, title: "T" }] }),
+    };
     await assertProjectDeletable(socket({ root: true }), idProject, {
       client,
     });

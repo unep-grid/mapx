@@ -51,7 +51,9 @@ JSONEditor.defaults.editors.svg_input = class mxeditors extends (
               e.preventDefault();
               this.elDropZone.style.backgroundColor = "inherit";
               const file = e.dataTransfer.files[0];
-              if (file) await this.processFile(file);
+              if (file) {
+                await this.processFile(file);
+              }
             },
           ],
         ],
@@ -68,7 +70,9 @@ JSONEditor.defaults.editors.svg_input = class mxeditors extends (
         "input",
         async (e) => {
           const file = e.target.files[0];
-          if (file) await this.processFile(file);
+          if (file) {
+            await this.processFile(file);
+          }
         },
       ],
     });
@@ -106,7 +110,7 @@ JSONEditor.defaults.editors.svg_input = class mxeditors extends (
         backgroundColor: "var(--mx_ui_background)",
         backgroundImage: "var(--mx_ui_pattern_checker)",
         maxWidth: "100%",
-        maxHeight : "300px",
+        maxHeight: "300px",
         overflow: "auto",
       },
     });
@@ -138,7 +142,9 @@ JSONEditor.defaults.editors.svg_input = class mxeditors extends (
     }
 
     const text = await file.text();
-    if (!this.validateSVG(text)) return;
+    if (!this.validateSVG(text)) {
+      return;
+    }
 
     this.svgString = text;
     this.elPreview.innerHTML = text;

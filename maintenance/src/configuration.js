@@ -21,7 +21,9 @@ export async function initializeMaintenance({
       cache: "no-store",
       signal: controller.signal,
     });
-    if (!response.ok) throw new Error("Configuration unavailable");
+    if (!response.ok) {
+      throw new Error("Configuration unavailable");
+    }
     const value = await response.json();
     if (!value || typeof value !== "object" || Array.isArray(value)) {
       throw new Error("Invalid configuration");
@@ -41,7 +43,8 @@ export async function initializeMaintenance({
   } finally {
     clearTimeout(timer);
   }
-  if (configuration.maintenanceEnd)
+  if (configuration.maintenanceEnd) {
     renderMessages(configuration.maintenanceEnd);
+  }
   await startGlobe(configuration.mapTilerToken);
 }

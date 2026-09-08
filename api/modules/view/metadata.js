@@ -61,7 +61,9 @@ export async function getViewSourceMetadataEditAccess(
   const session = socket?.session;
   const idView = config?.idView;
   const reference = await getSessionViewSource(session, idView, client);
-  if (!reference) return { allowed: false };
+  if (!reference) {
+    return { allowed: false };
+  }
   const { idSource } = reference;
 
   const permission = await getSourceEditPermission({

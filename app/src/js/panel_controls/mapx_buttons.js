@@ -7,10 +7,7 @@ import {
   setMapProjection,
 } from "./../map_helpers/index.js";
 import { ShareModal } from "./../share_modal/index.js";
-import {
-  storyMapLock,
-  storyClose,
-} from "./../story_map/index.js";
+import { storyMapLock, storyClose } from "./../story_map/index.js";
 import { settings } from "./../settings";
 import { theme, draw } from "./../mx.js";
 import { IssueReporterClient } from "../issue_reporter/index.js";
@@ -105,14 +102,14 @@ export function generateButtons() {
     }),
     new Button({
       key: "btn_toggle_theme_water",
-      classesIcon: ["mx-water","mx-icon"],
+      classesIcon: ["mx-water", "mx-icon"],
       onInit: (btn) => {
         theme.registerButton(btn, "water");
       },
     }),
     new Button({
       key: "btn_3d_terrain",
-      classesIcon: ["mx-mountain","mx-icon"],
+      classesIcon: ["mx-mountain", "mx-icon"],
       action: function (cmd) {
         const btn = this;
         const action = typeof cmd === "string" ? cmd : "toggle";
@@ -178,7 +175,7 @@ export function generateButtons() {
     }),
     new Button({
       key: "draw_btn_toggle",
-      classesIcon: ["mx-draw--btn-edit","mx-icon"],
+      classesIcon: ["mx-draw--btn-edit", "mx-icon"],
       classesButton: ["btn-ctrl--item-no-mobile"],
       action: () => {
         draw.toggle();

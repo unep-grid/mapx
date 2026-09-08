@@ -276,8 +276,12 @@ export async function getSourceRtSummary(view) {
 function findMatchingLayer(layers, targetName) {
   return layers.find((layer) => {
     // using == in case of type mismatch like '1' = 1
-    if (layer.Name == targetName) return true;
-    if (layer.Title == targetName) return true;
+    if (layer.Name == targetName) {
+      return true;
+    }
+    if (layer.Title == targetName) {
+      return true;
+    }
     const [, compositeName] = layer.Name.split(":");
     return compositeName == targetName;
   });

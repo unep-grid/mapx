@@ -1,15 +1,15 @@
-import './pickolor.css';
-import 'nouislider/distribute/nouislider.css';
+import "./pickolor.css";
+import "nouislider/distribute/nouislider.css";
 
-import noUiSlider from 'nouislider';
-import chroma from 'chroma-js';
-import localforage from 'localforage';
-import {el} from './../el/src/index.js';
-import {draggable} from './draggable.js';
-import * as frameTool from './onNextFrame.js';
-import * as options from './options.js';
+import noUiSlider from "nouislider";
+import chroma from "chroma-js";
+import localforage from "localforage";
+import { el } from "./../el/src/index.js";
+import { draggable } from "./draggable.js";
+import * as frameTool from "./onNextFrame.js";
+import * as options from "./options.js";
 
-export {Pickolor as default};
+export { Pickolor as default };
 
 /**
  * Pickolor quick palette maker
@@ -19,7 +19,7 @@ function Pickolor(opt) {
   pk._built = false;
   pk._destroyed = false;
   pk.db = localforage.createInstance({
-    name: 'pickolor'
+    name: "pickolor",
   });
 
   // set options
@@ -30,7 +30,7 @@ function Pickolor(opt) {
   pk.bind = {};
 
   pk.colors = [];
-  pk.color = '';
+  pk.color = "";
   pk.sliderValues = {};
   pk.observer = {};
   // Set intial cb and values;
@@ -43,12 +43,12 @@ function Pickolor(opt) {
   pk._init = true;
 }
 
-Pickolor.prototype.setCbOnPick = function() {
+Pickolor.prototype.setCbOnPick = function () {
   var pk = this;
   pk.onPick = pk.options.onPick instanceof Function ? pk.options.onPick : alert;
 };
 
-Pickolor.prototype.d = function(id) {
+Pickolor.prototype.d = function (id) {
   var pk = this;
   var item = pk.options.dict.find((d) => d.id === id);
   if (item) {
@@ -58,63 +58,63 @@ Pickolor.prototype.d = function(id) {
   }
 };
 
-Pickolor.prototype.setCbOnInitColor = function() {
+Pickolor.prototype.setCbOnInitColor = function () {
   var pk = this;
   pk.onInitColor =
     pk.options.onInitColor instanceof Function
       ? pk.options.onInitColor
-      : function() {
+      : function () {
           return pk.options.defaultColors.bright;
         };
 };
 
-Pickolor.prototype.setContainer = function(selector) {
+Pickolor.prototype.setContainer = function (selector) {
   var pk = this;
   selector = selector || pk.options.container;
   pk.elContainer = selector instanceof Element ? selector : document.body;
 };
 
-Pickolor.prototype.registerBinds = function(el) {
+Pickolor.prototype.registerBinds = function (el) {
   var pk = this;
   var listener;
   var isBindEl = pk.validateBindEl(el);
   var elBinds = isBindEl
     ? [el]
-    : Array.from(pk.elContainer.querySelectorAll('[data-pickolor_trigger]'));
+    : Array.from(pk.elContainer.querySelectorAll("[data-pickolor_trigger]"));
   // check if there is no duplicate;
   elBinds.forEach((el) => {
     if (pk.validateBindEl(el)) {
       var b = pk.binds.find((b) => b.el === el);
       if (!b) {
         listener = pk.open.bind(pk);
-        el.addEventListener('click', listener);
+        el.addEventListener("click", listener);
         pk.binds.push({
           el: el,
-          listener: listener
+          listener: listener,
         });
       }
     }
   });
 };
 
-Pickolor.prototype.unregisterBindByEl = function(el) {
+Pickolor.prototype.unregisterBindByEl = function (el) {
   var pk = this;
   if (pk.validateBindEl(el)) {
     var b = pk.binds.find((b) => b.el === el);
     if (b) {
       var id = pk.binds.indexOf(b);
-      b.el.removeEventListener('click', b.listener);
+      b.el.removeEventListener("click", b.listener);
       pk.binds.splice(id, 1);
     }
   }
 };
 
-Pickolor.prototype.setCurrentBind = function(selector) {
+Pickolor.prototype.setCurrentBind = function (selector) {
   var pk = this;
   pk.bind = selector instanceof Element ? selector : pk.el;
 };
 
-Pickolor.prototype.open = function(e) {
+Pickolor.prototype.open = function (e) {
   var pk = this;
   pk.build();
   var color = pk.options.defaultColors.dark;
@@ -124,128 +124,128 @@ Pickolor.prototype.open = function(e) {
     color = pk.validateColor(colorUser) ? colorUser : color;
   }
   pk.setColorInput({
-    color: color
+    color: color,
   });
 };
 
-Pickolor.prototype.buildTabs = function() {
+Pickolor.prototype.buildTabs = function () {
   var pk = this;
 
-  var elTabSliders = el('div', {
-    class: ['pickolor-tab-sliders']
+  var elTabSliders = el("div", {
+    class: ["pickolor-tab-sliders"],
   });
-  var elTabJsonEdit = el('div', {
-    class: ['pickolor-tab-json']
+  var elTabJsonEdit = el("div", {
+    class: ["pickolor-tab-json"],
   });
-  var elTabSaveLoad = el('div', {
-    class: ['pickolor-tab-palette']
+  var elTabSaveLoad = el("div", {
+    class: ["pickolor-tab-palette"],
   });
 
   var elPanelOptions = el(
-    'div',
+    "div",
     {
-      class: ['pickolor-options']
+      class: ["pickolor-options"],
     },
-    el('input', {
-      type: 'checkbox',
-      class: 'pickolor-check-panel-options',
-      id: 'pickolorCheckPanelOptions'
+    el("input", {
+      type: "checkbox",
+      class: "pickolor-check-panel-options",
+      id: "pickolorCheckPanelOptions",
     }),
     el(
-      'label',
+      "label",
       {
-        class: 'pickolor-check-panel-options-label',
-        lang_key: 'pk_panel_options',
-        for: 'pickolorCheckPanelOptions'
+        class: "pickolor-check-panel-options-label",
+        lang_key: "pk_panel_options",
+        for: "pickolorCheckPanelOptions",
       },
-      pk.d('pk_panel_options')
-    )
+      pk.d("pk_panel_options"),
+    ),
   );
 
   var elTabsRadio = el(
-    'div',
+    "div",
     {
-      class: ['pickolor-tabs']
+      class: ["pickolor-tabs"],
     },
-    el('input', {
-      type: 'radio',
-      name: 'pickolor-tabs',
-      class: 'pickolor-tab-radio',
-      value: 'pickolor-tab-sliders',
+    el("input", {
+      type: "radio",
+      name: "pickolor-tabs",
+      class: "pickolor-tab-radio",
+      value: "pickolor-tab-sliders",
       checked: true,
-      id: 'pickolor-tab-sliders-radio'
+      id: "pickolor-tab-sliders-radio",
     }),
     el(
-      'label',
+      "label",
       {
-        class: 'pickolor-tab',
-        lang_key: 'pk_tab_settings',
-        for: 'pickolor-tab-sliders-radio'
+        class: "pickolor-tab",
+        lang_key: "pk_tab_settings",
+        for: "pickolor-tab-sliders-radio",
       },
-      pk.d('pk_tab_settings')
+      pk.d("pk_tab_settings"),
     ),
-    el('input', {
-      type: 'radio',
-      name: 'pickolor-tabs',
-      class: 'pickolor-tab-radio',
-      value: 'pickolor-tab-load-save',
-      id: 'pickolor-tab-load-save-radio'
+    el("input", {
+      type: "radio",
+      name: "pickolor-tabs",
+      class: "pickolor-tab-radio",
+      value: "pickolor-tab-load-save",
+      id: "pickolor-tab-load-save-radio",
     }),
     el(
-      'label',
+      "label",
       {
-        class: 'pickolor-tab',
-        lang_key: 'pk_tab_palettes',
-        for: 'pickolor-tab-load-save-radio'
+        class: "pickolor-tab",
+        lang_key: "pk_tab_palettes",
+        for: "pickolor-tab-load-save-radio",
       },
-      pk.d('pk_tab_palettes')
+      pk.d("pk_tab_palettes"),
     ),
-    el('input', {
-      type: 'radio',
-      name: 'pickolor-tabs',
-      class: 'pickolor-tab-radio',
-      value: 'pickolor-tab-json-edit',
-      id: 'pickolor-tab-json-edit-radio'
+    el("input", {
+      type: "radio",
+      name: "pickolor-tabs",
+      class: "pickolor-tab-radio",
+      value: "pickolor-tab-json-edit",
+      id: "pickolor-tab-json-edit-radio",
     }),
     el(
-      'label',
+      "label",
       {
-        class: 'pickolor-tab',
-        lang_key: 'pk_tab_edit_json',
-        for: 'pickolor-tab-json-edit-radio'
+        class: "pickolor-tab",
+        lang_key: "pk_tab_edit_json",
+        for: "pickolor-tab-json-edit-radio",
       },
-      pk.d('pk_tab_edit_json')
+      pk.d("pk_tab_edit_json"),
     ),
     el(
-      'div',
+      "div",
       {
-        class: ['pickolor-tabs-content']
+        class: ["pickolor-tabs-content"],
       },
       el(
-        'div',
+        "div",
         {
-          id: 'pickolor-tab-sliders-content',
-          class: 'pickolor-tab-content'
+          id: "pickolor-tab-sliders-content",
+          class: "pickolor-tab-content",
         },
-        elTabSliders
+        elTabSliders,
       ),
       el(
-        'div',
+        "div",
         {
-          id: 'pickolor-tab-load-save-content',
-          class: 'pickolor-tab-content'
+          id: "pickolor-tab-load-save-content",
+          class: "pickolor-tab-content",
         },
-        elTabSaveLoad
+        elTabSaveLoad,
       ),
       el(
-        'div',
+        "div",
         {
-          id: 'pickolor-tab-json-edit-content',
-          class: 'pickolor-tab-content'
+          id: "pickolor-tab-json-edit-content",
+          class: "pickolor-tab-content",
         },
-        elTabJsonEdit
-      )
-    )
+        elTabJsonEdit,
+      ),
+    ),
   );
 
   pk.elTabSliders = elTabSliders;
@@ -257,7 +257,7 @@ Pickolor.prototype.buildTabs = function() {
   pk.el.appendChild(elPanelOptions);
 };
 
-Pickolor.prototype.buildTabSliders = function() {
+Pickolor.prototype.buildTabSliders = function () {
   pk = this;
   /**
    * Build sliders
@@ -267,31 +267,31 @@ Pickolor.prototype.buildTabSliders = function() {
     /**
      * ui
      */
-    var elContainer = el('div', {
-      class: ['slider-container']
+    var elContainer = el("div", {
+      class: ["slider-container"],
     });
-    var elSlider = el('div', {
-      class: ['slider']
+    var elSlider = el("div", {
+      class: ["slider"],
     });
-    var elContainerMinMax = el('div', {
-      class: 'slider-min-max-container'
+    var elContainerMinMax = el("div", {
+      class: "slider-min-max-container",
     });
-    var elMin = el('input', {
-      type: 'text', // avoid browser things..
+    var elMin = el("input", {
+      type: "text", // avoid browser things..
       dataset: {
-        action: 'input-update-value-slider',
-        idSlider: s.id
-      }
+        action: "input-update-value-slider",
+        idSlider: s.id,
+      },
     });
-    var elMax = el('input', {
-      type: 'text', // avoid browser things
+    var elMax = el("input", {
+      type: "text", // avoid browser things
       dataset: {
-        action: 'input-update-value-slider',
-        idSlider: s.id
-      }
+        action: "input-update-value-slider",
+        idSlider: s.id,
+      },
     });
-    var elTitle = el('span', s.title, {
-      id: s.id
+    var elTitle = el("span", s.title, {
+      id: s.id,
     });
 
     elContainerMinMax.appendChild(elMin);
@@ -305,109 +305,109 @@ Pickolor.prototype.buildTabSliders = function() {
      * Settings
      */
     slider = noUiSlider.create(elSlider, s.opt);
-    s.updateValueSlider = function() {
+    s.updateValueSlider = function () {
       slider.set(
-        s.type === 'numericRange' ? [elMin.value, elMax.value] : elMin.value
+        s.type === "numericRange" ? [elMin.value, elMax.value] : elMin.value,
       );
       pk.update();
     };
-    if (s.type === 'boolean') {
-      elSlider.classList.add('toggle');
-      elMin.style.visibility = 'hidden';
-      elMax.style.visibility = 'hidden';
+    if (s.type === "boolean") {
+      elSlider.classList.add("toggle");
+      elMin.style.visibility = "hidden";
+      elMax.style.visibility = "hidden";
     }
-    if (s.type === 'numeric') {
-      elMax.style.visibility = 'hidden';
+    if (s.type === "numeric") {
+      elMax.style.visibility = "hidden";
     }
-    slider.on('slide', pk.update.bind(pk));
+    slider.on("slide", pk.update.bind(pk));
     pk.sliders.push({
       slider: slider,
       config: s,
       elMin: elMin,
-      elMax: elMax
+      elMax: elMax,
     });
   });
 };
 
-Pickolor.prototype.buildTabJsonEdit = function() {
+Pickolor.prototype.buildTabJsonEdit = function () {
   var pk = this;
 
-  var elInputJson = el('textarea', {
-    class: ['text-area-input-json']
+  var elInputJson = el("textarea", {
+    class: ["text-area-input-json"],
   });
 
   var elContainer = el(
-    'div',
+    "div",
     elInputJson,
-    el('button', 'update', {
-      class: 'button',
+    el("button", "update", {
+      class: "button",
       dataset: {
-        action: 'btn-update-json'
-      }
-    })
+        action: "btn-update-json",
+      },
+    }),
   );
 
   pk.elTabJsonEdit.appendChild(elContainer);
   pk.elInputJson = elInputJson;
 };
 
-Pickolor.prototype.buildPanel = function() {
+Pickolor.prototype.buildPanel = function () {
   var pk = this;
   pk.id = Math.random().toString(32);
 
   var elContainer = pk.elContainer || pk.options.el;
 
-  var elDest = el('div');
-  var elHandle = el('div', {
-    class: 'handle'
+  var elDest = el("div");
+  var elHandle = el("div", {
+    class: "handle",
   });
-  var elInputColor = el('input', {
-    class: ['color-input'],
-    placeholder: '#fff',
+  var elInputColor = el("input", {
+    class: ["color-input"],
+    placeholder: "#fff",
     dataset: {
-      action: 'input-text-color'
-    }
-  });
-
-  var elBtnAdd = el('button', pk.d('pk_btn_add'), {
-    type: 'button',
-    class: ['button'],
-    dataset: {
-      lang_key: 'pk_btn_add',
-      action: 'btn-select-color'
-    }
+      action: "input-text-color",
+    },
   });
 
-  var elBtnClose = el('button', pk.d('pk_btn_close'), {
-    type: 'button',
-    class: ['button'],
+  var elBtnAdd = el("button", pk.d("pk_btn_add"), {
+    type: "button",
+    class: ["button"],
     dataset: {
-      action: 'btn-close',
-      lang_key: 'pk_btn_close'
-    }
+      lang_key: "pk_btn_add",
+      action: "btn-select-color",
+    },
+  });
+
+  var elBtnClose = el("button", pk.d("pk_btn_close"), {
+    type: "button",
+    class: ["button"],
+    dataset: {
+      action: "btn-close",
+      lang_key: "pk_btn_close",
+    },
   });
 
   var elInputGroup = el(
-    'div',
+    "div",
     {
-      class: ['top-group-input']
+      class: ["top-group-input"],
     },
     elInputColor,
     elBtnAdd,
-    elBtnClose
+    elBtnClose,
   );
 
-  var elItems = el('div', {
-    class: ['items']
+  var elItems = el("div", {
+    class: ["items"],
   });
 
   elDest.appendChild(elHandle);
   elDest.appendChild(elInputGroup);
   elDest.appendChild(elItems);
   elContainer.appendChild(elDest);
-  elDest.classList.add('pickolor');
+  elDest.classList.add("pickolor");
   //elDest.classList.add('handle');
-  elDest.style.width = pk.options.width || '300px';
+  elDest.style.width = pk.options.width || "300px";
   pk.elItems = elItems;
   pk.elInputColor = elInputColor;
   pk.elInputGroup = elInputGroup;
@@ -415,40 +415,40 @@ Pickolor.prototype.buildPanel = function() {
   pk.el = elDest;
 };
 
-Pickolor.prototype.buildTabSaveLoad = function() {
+Pickolor.prototype.buildTabSaveLoad = function () {
   var pk = this;
   var elContent = el(
-    'div',
+    "div",
     {
-      class: 'pickolor-tab-palettes'
+      class: "pickolor-tab-palettes",
     },
     el(
-      'button',
+      "button",
       {
-        type: 'button',
-        class: ['button'],
+        type: "button",
+        class: ["button"],
         dataset: {
-          action: 'btn-set-default-palette',
-          lang_key: 'pk_btn_set_default_palette'
-        }
+          action: "btn-set-default-palette",
+          lang_key: "pk_btn_set_default_palette",
+        },
       },
-      pk.d('pk_btn_set_default_palette')
+      pk.d("pk_btn_set_default_palette"),
     ),
     el(
-      'div',
-      'Available soon:',
+      "div",
+      "Available soon:",
       el(
-        'ul',
-        el('li', 'Browse standard palettes'),
-        el('li', 'Save your own palettes'),
-        el('li', 'Share palettes')
-      )
-    )
+        "ul",
+        el("li", "Browse standard palettes"),
+        el("li", "Save your own palettes"),
+        el("li", "Share palettes"),
+      ),
+    ),
   );
   pk.elTabSaveLoad.appendChild(elContent);
 };
 
-Pickolor.prototype.build = function() {
+Pickolor.prototype.build = function () {
   var pk = this;
   if (pk._built) {
     pk.show();
@@ -467,8 +467,8 @@ Pickolor.prototype.build = function() {
    */
   pk.listenClick = pk.handleClick.bind(pk);
   pk.listenChange = pk.handleChange.bind(pk);
-  pk.el.addEventListener('click', pk.listenClick);
-  pk.el.addEventListener('change', pk.listenChange);
+  pk.el.addEventListener("click", pk.listenClick);
+  pk.el.addEventListener("change", pk.listenChange);
   /**
    * Restore value if any
    */
@@ -480,19 +480,19 @@ Pickolor.prototype.build = function() {
   if (!pk.options.disableDraggable) {
     draggable({
       selector: pk.el,
-      classHandle: 'handle',
-      elcontainer: pk.elContainer
+      classHandle: "handle",
+      elcontainer: pk.elContainer,
     });
   }
 };
 
-Pickolor.prototype.observeMutation = function() {
+Pickolor.prototype.observeMutation = function () {
   var pk = this;
   var targetNode = pk.elContainer;
-  var config = {childList: true, subtree: true};
+  var config = { childList: true, subtree: true };
   function callback(mutationsList) {
     for (var mutation of mutationsList) {
-      if (mutation.type === 'childList') {
+      if (mutation.type === "childList") {
         mutation.addedNodes.forEach(autoAddBind);
         mutation.removedNodes.forEach(autoRemoveBind);
       }
@@ -512,72 +512,72 @@ Pickolor.prototype.observeMutation = function() {
   pk.observer.observe(targetNode, config);
 };
 
-Pickolor.prototype.validateBindEl = function(el) {
-  return el instanceof Element && el.dataset.pickolor_trigger === 'true';
+Pickolor.prototype.validateBindEl = function (el) {
+  return el instanceof Element && el.dataset.pickolor_trigger === "true";
 };
 
-Pickolor.prototype.handleClick = function(e) {
+Pickolor.prototype.handleClick = function (e) {
   var pk = this;
   var target = e.target;
   var action = target.dataset.action;
 
-  if (action === 'btn-select-color') {
+  if (action === "btn-select-color") {
     var color = pk.getColorInput();
     pk.onPick(color, pk.bind);
   }
-  if (action === 'btn-close') {
+  if (action === "btn-close") {
     pk.hide();
   }
-  if (action === 'btn-set-default-palette') {
+  if (action === "btn-set-default-palette") {
     pk.setDefault();
   }
-  if (action === 'item-get-color') {
+  if (action === "item-get-color") {
     pk.getColor(e);
   }
-  if (action === 'btn-update-json') {
+  if (action === "btn-update-json") {
     pk.set(pk.elInputJson.value);
     pk.update();
   }
 };
 
-Pickolor.prototype.handleChange = function(e) {
+Pickolor.prototype.handleChange = function (e) {
   var pk = this;
   var action = e.target.dataset.action;
 
-  if (action === 'input-text-color') {
+  if (action === "input-text-color") {
     var color = pk.getColorInput();
     pk.setColorInput({
       color: color,
-      updateColorOnly: true
+      updateColorOnly: true,
     });
   }
-  if (action === 'input-update-value-slider') {
+  if (action === "input-update-value-slider") {
     var id = e.target.dataset.idSlider;
     pk.updateValueSlider(id);
     pk.update();
   }
 };
 
-Pickolor.prototype.getColorInput = function() {
+Pickolor.prototype.getColorInput = function () {
   var pk = this;
   var color = pk.elInputColor.value;
   return pk.getValidColor(color);
 };
 
-Pickolor.prototype.validateColor = function(color) {
+Pickolor.prototype.validateColor = function (color) {
   return chroma.valid(color);
 };
 
-Pickolor.prototype.getValidColor = function(color) {
+Pickolor.prototype.getValidColor = function (color) {
   var pk = this;
   var isValid = pk.validateColor(color);
   if (!isValid) {
-    color = '#fff';
+    color = "#fff";
   }
   return chroma(color).hex();
 };
 
-Pickolor.prototype.setColorInput = function(opt) {
+Pickolor.prototype.setColorInput = function (opt) {
   var pk = this;
   var color = pk.getValidColor(opt.color);
   var updateColorOnly = opt.updateColorOnly;
@@ -609,17 +609,17 @@ Pickolor.prototype.setColorInput = function(opt) {
 //el.style.display = visible ? '' : 'none';
 //};
 
-Pickolor.prototype.hide = function() {
+Pickolor.prototype.hide = function () {
   var pk = this;
-  pk.el.style.display = 'none';
+  pk.el.style.display = "none";
 };
 
-Pickolor.prototype.show = function() {
+Pickolor.prototype.show = function () {
   var pk = this;
-  pk.el.style.display = '';
+  pk.el.style.display = "";
 };
 
-Pickolor.prototype.destroy = function() {
+Pickolor.prototype.destroy = function () {
   var pk = this;
   if (pk._destroyed === true) {
     return;
@@ -629,35 +629,35 @@ Pickolor.prototype.destroy = function() {
     s.slider.destroy();
   });
   pk.binds.forEach((b) => {
-    b.el.removeEventListener('click', b.listener);
+    b.el.removeEventListener("click", b.listener);
   });
   if (pk.el) {
-    pk.el.removeEventListener('click', pk.listenClick);
-    pk.el.removeEventListener('change', pk.listenChange);
+    pk.el.removeEventListener("click", pk.listenClick);
+    pk.el.removeEventListener("change", pk.listenChange);
     pk.el.remove();
   }
   pk._destroyed = true;
 };
 
-Pickolor.prototype.getColor = function(e) {
+Pickolor.prototype.getColor = function (e) {
   if (!e.target.dataset.color) {
     return;
   }
 
   var pk = this;
-  var color = '';
-  var elsItem = pk.elItems.querySelectorAll('.item input');
+  var color = "";
+  var elsItem = pk.elItems.querySelectorAll(".item input");
   elsItem.forEach((e) => {
     if (e.checked) {
       color = e.dataset.color;
     }
   });
   pk.setColorInput({
-    color: color
+    color: color,
   });
 };
 
-Pickolor.prototype.updateValueSlider = function(id) {
+Pickolor.prototype.updateValueSlider = function (id) {
   var pk = this;
   pk.sliders.forEach((s) => {
     if (s.config.id === id) {
@@ -666,23 +666,23 @@ Pickolor.prototype.updateValueSlider = function(id) {
   });
 };
 
-Pickolor.prototype.getSlidersValues = function() {
+Pickolor.prototype.getSlidersValues = function () {
   var pk = this;
   var value, id;
   var values = {};
   pk.sliders.forEach((s) => {
     value = s.slider.get();
     id = s.config.id;
-    if (s.config.type === 'numericRange') {
+    if (s.config.type === "numericRange") {
       value = value.map((v) => Math.round(v * 10) / 10);
       s.elMin.value = value[0];
       s.elMax.value = value[1];
     }
-    if (s.config.type === 'numeric') {
+    if (s.config.type === "numeric") {
       value = value * 1;
       s.elMin.value = Math.round(value * 10) / 10;
     }
-    if (s.config.type === 'boolean') {
+    if (s.config.type === "boolean") {
       //value = Boolean(value * 1);
       value = value * 1;
     }
@@ -692,13 +692,13 @@ Pickolor.prototype.getSlidersValues = function() {
   return values;
 };
 
-Pickolor.prototype.update = function() {
+Pickolor.prototype.update = function () {
   var pk = this;
 
-  if(pk.frame){
+  if (pk.frame) {
     frameTool.cancel(pk.frame);
   }
-  pk.frame = frameTool.onNext(function() {
+  pk.frame = frameTool.onNext(function () {
     var values = pk.getSlidersValues();
     var config = {
       diverge: values.inColDiverge,
@@ -712,20 +712,20 @@ Pickolor.prototype.update = function() {
       lumMin: values.inLumRange[0],
       lumMax: values.inLumRange[1],
       satMin: values.inSatRange[0],
-      satMax: values.inSatRange[1]
+      satMax: values.inSatRange[1],
     };
     var colors = getColors(config);
 
     var backup = {
       slidersValues: values,
-      colors: colors
+      colors: colors,
     };
 
     pk.db.setItem(pk.options.idPalette, backup);
 
     pk.elInputJson.value = JSON.stringify(backup, 0, 2);
 
-    var elContainer = el('div', {class: 'items'});
+    var elContainer = el("div", { class: "items" });
     colors.forEach((c) => {
       var elItem = createItem(c);
       elContainer.appendChild(elItem);
@@ -734,17 +734,16 @@ Pickolor.prototype.update = function() {
     pk.elItems.parentNode.replaceChild(elContainer, pk.elItems);
     pk.elItems = elContainer;
   });
-
 };
 
-Pickolor.prototype.restore = function() {
+Pickolor.prototype.restore = function () {
   var pk = this;
   var restored = false;
   /**
    * Set default
    */
   pk.setColorInput({
-    color: pk.options.defaultColors.dark
+    color: pk.options.defaultColors.dark,
   });
 
   /*
@@ -766,28 +765,28 @@ Pickolor.prototype.restore = function() {
     });
 };
 
-Pickolor.prototype.setDefault = function() {
+Pickolor.prototype.setDefault = function () {
   var pk = this;
   pk.set(pk.options.initPalette);
   pk.update();
 };
 
-Pickolor.prototype.set = function(data) {
+Pickolor.prototype.set = function (data) {
   var pk = this;
   data = data || {};
-  data = typeof data === 'string' && isJSON(data) ? JSON.parse(data) : data;
+  data = typeof data === "string" && isJSON(data) ? JSON.parse(data) : data;
   if (pk.validateDataInput(data)) {
     pk.sliders.forEach((s) => {
       var id = s.config.id;
       var values = data.slidersValues[id];
-      if (typeof values !== 'undefined') {
+      if (typeof values !== "undefined") {
         s.slider.set(values);
       }
     });
   }
 };
 
-Pickolor.prototype.validateDataInput = function(data) {
+Pickolor.prototype.validateDataInput = function (data) {
   var pk = this;
   var keys = pk.getTemplateSliders().map((s) => s.id);
 
@@ -817,24 +816,24 @@ Pickolor.prototype.validateDataInput = function(data) {
 
 function createItem(color) {
   var idRadio = Math.random().toString(32);
-  var elItem = el('div', {
-    class: ['item']
+  var elItem = el("div", {
+    class: ["item"],
   });
-  var elLabel = el('label', {
+  var elLabel = el("label", {
     for: idRadio,
     style: {
-      backgroundColor: color
+      backgroundColor: color,
       //borderColor: color,
-    }
+    },
   });
-  var elInput = el('input', {
+  var elInput = el("input", {
     id: idRadio,
-    type: 'radio',
-    name: 'pickolor-item',
+    type: "radio",
+    name: "pickolor-item",
     dataset: {
       color: color,
-      action: 'item-get-color'
-    }
+      action: "item-get-color",
+    },
   });
   elItem.appendChild(elInput);
   elItem.appendChild(elLabel);
@@ -844,7 +843,7 @@ function createItem(color) {
 
 function getColors(o) {
   var colors = [];
-  var c = '';
+  var c = "";
   var sats = splitIn(o.satMin, o.satMax, o.count);
   var cols = splitIn(o.colMin, o.colMax, o.count, o.colRotation, o.colShift);
   var lums = splitIn(o.lumMin, o.lumMax, o.count);
@@ -864,7 +863,7 @@ function getColors(o) {
    */
 
   for (var i = 0; i < o.count; i++) {
-    c = 'hsl(' + cols[i] + ',' + sats[i] * 100 + '%,' + lums[i] * 100 + '%)';
+    c = "hsl(" + cols[i] + "," + sats[i] * 100 + "%," + lums[i] * 100 + "%)";
     colors.push(chroma(c).hex());
   }
   if (o.random) {
@@ -903,141 +902,141 @@ function getColors(o) {
   /*return colors;*/
 }
 
-Pickolor.prototype.getTemplateSliders = function() {
+Pickolor.prototype.getTemplateSliders = function () {
   var pk = this;
   return [
     {
-      title: pk.d('pk_slider_n_colors'),
-      titleKey: 'pk_slider_n_colors',
-      type: 'numeric',
-      id: 'inColNumber',
+      title: pk.d("pk_slider_n_colors"),
+      titleKey: "pk_slider_n_colors",
+      type: "numeric",
+      id: "inColNumber",
       opt: {
         start: 15,
         step: 1,
         range: {
           min: 1,
-          max: 100
-        }
-      }
+          max: 100,
+        },
+      },
     },
     {
-      title: pk.d('pk_slider_n_hue_rotation'),
-      titleKey: 'pk_slider_n_hue_rotation',
-      id: 'inColRotation',
-      type: 'numeric',
+      title: pk.d("pk_slider_n_hue_rotation"),
+      titleKey: "pk_slider_n_hue_rotation",
+      id: "inColRotation",
+      type: "numeric",
       opt: {
         start: 1,
         step: 0.01,
         range: {
           min: 1,
-          max: 10
-        }
-      }
+          max: 10,
+        },
+      },
     },
     {
-      title: pk.d('pk_slider_hue_shift'),
-      titleKey: 'pk_slider_hue_shift',
-      id: 'inColShift',
-      type: 'numeric',
+      title: pk.d("pk_slider_hue_shift"),
+      titleKey: "pk_slider_hue_shift",
+      id: "inColShift",
+      type: "numeric",
       opt: {
         start: 0,
         step: 1,
         range: {
           min: 0,
-          max: 360
-        }
-      }
+          max: 360,
+        },
+      },
     },
     {
-      title: pk.d('pk_slider_colors'),
-      titleKey: 'pk_slider_colors',
-      id: 'inColRange',
-      type: 'numericRange',
+      title: pk.d("pk_slider_colors"),
+      titleKey: "pk_slider_colors",
+      id: "inColRange",
+      type: "numericRange",
       opt: {
         start: [180, 240],
         step: 1,
         connect: true,
-        behaviour: 'drag',
+        behaviour: "drag",
         range: {
           min: 0,
-          max: 360
-        }
-      }
+          max: 360,
+        },
+      },
     },
     {
-      title: pk.d('pk_slider_saturation'),
-      titleKey: 'pk_slider_saturation',
-      id: 'inSatRange',
-      type: 'numericRange',
+      title: pk.d("pk_slider_saturation"),
+      titleKey: "pk_slider_saturation",
+      id: "inSatRange",
+      type: "numericRange",
       opt: {
         start: [0.5, 0.9],
         step: 0.01,
         connect: true,
-        behaviour: 'drag',
+        behaviour: "drag",
         range: {
           min: 0,
-          max: 1
-        }
-      }
+          max: 1,
+        },
+      },
     },
     {
-      title: pk.d('pk_slider_luminosity'),
-      titleKey: 'pk_slider_luminosity',
-      id: 'inLumRange',
-      type: 'numericRange',
+      title: pk.d("pk_slider_luminosity"),
+      titleKey: "pk_slider_luminosity",
+      id: "inLumRange",
+      type: "numericRange",
       opt: {
         start: [0.5, 0.9],
         step: 0.01,
-        behaviour: 'drag',
+        behaviour: "drag",
         connect: true,
         range: {
           min: 0,
-          max: 1
-        }
-      }
+          max: 1,
+        },
+      },
     },
     {
-      title: pk.d('pk_slider_randomize'),
-      titleKey: 'pk_slider_randomize',
-      id: 'inColRandom',
-      type: 'boolean',
+      title: pk.d("pk_slider_randomize"),
+      titleKey: "pk_slider_randomize",
+      id: "inColRandom",
+      type: "boolean",
       opt: {
         start: 0,
         step: 1,
         range: {
           min: [0, 1],
-          max: 1
-        }
-      }
+          max: 1,
+        },
+      },
     },
     {
-      title: pk.d('pk_slider_reverse'),
-      titleKey: 'pk_slider_reverse',
-      id: 'inColReverse',
-      type: 'boolean',
+      title: pk.d("pk_slider_reverse"),
+      titleKey: "pk_slider_reverse",
+      id: "inColReverse",
+      type: "boolean",
       opt: {
         start: 0,
         step: 1,
         range: {
           min: [0, 1],
-          max: 1
-        }
-      }
+          max: 1,
+        },
+      },
     },
     {
-      title: pk.d('pk_slider_diverge'),
-      titleKey: 'pk_slider_diverge',
-      id: 'inColDiverge',
-      type: 'boolean',
+      title: pk.d("pk_slider_diverge"),
+      titleKey: "pk_slider_diverge",
+      id: "inColDiverge",
+      type: "boolean",
       opt: {
         step: 1,
         start: 0,
         range: {
           min: [0, 1],
-          max: 1
-        }
-      }
-    }
+          max: 1,
+        },
+      },
+    },
   ];
 };
 
@@ -1106,4 +1105,3 @@ function isJSON(str) {
   }
   return true;
 }
-

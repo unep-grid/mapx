@@ -29,7 +29,7 @@ function sortNumber(a, b) {
  */
 export function sortByOrder(arr1, arr2) {
   const orderMap = new Map();
-  
+
   for (const [index, item] of arr2.entries()) {
     orderMap.set(item, index);
   }

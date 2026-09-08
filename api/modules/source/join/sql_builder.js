@@ -48,8 +48,8 @@ export class SQLQueryBuilder {
         .map(
           (col) =>
             `${qualifiedIdentifier(tableAlias, col)} AS ${quoteIdentifier(
-              `${columnPrefix}${col}`
-            )}`
+              `${columnPrefix}${col}`,
+            )}`,
         )
         .join(", ");
     return sql;
@@ -68,7 +68,7 @@ export class SQLQueryBuilder {
           ...[
             qualifiedIdentifier(this.baseAlias, "geom"),
             qualifiedIdentifier(this.baseAlias, "gid"),
-          ]
+          ],
         );
         break;
       case "type":
@@ -76,9 +76,9 @@ export class SQLQueryBuilder {
           ...[
             `ST_GeometryType(${qualifiedIdentifier(
               this.baseAlias,
-              "geom"
+              "geom",
             )}) AS ${quoteIdentifier("geom")}`,
-          ]
+          ],
         );
         break;
       case "type_gid":
@@ -86,10 +86,10 @@ export class SQLQueryBuilder {
           ...[
             `ST_GeometryType(${qualifiedIdentifier(
               this.baseAlias,
-              "geom"
+              "geom",
             )}) AS ${quoteIdentifier("geom")}`,
             qualifiedIdentifier(this.baseAlias, "gid"),
-          ]
+          ],
         );
         break;
       case "exclude":
@@ -109,12 +109,12 @@ export class SQLQueryBuilder {
           columns: join.columns,
           tableAlias: `join_${join._prefix}_alias`,
           columnPrefix: join._prefix,
-        })
+        }),
       )
       .join(",");
 
     const selectParts = [...colsBase, colsMain, colsJoin].filter(
-      (part) => part.length > 0
+      (part) => part.length > 0,
     );
     const selectClause = `SELECT ${selectParts.join(",\n")}`;
 
@@ -125,7 +125,7 @@ export class SQLQueryBuilder {
             AS ${quoteIdentifier(joinAlias)}
             ON ${qualifiedIdentifier(
               this.baseAlias,
-              join.column_base
+              join.column_base,
             )} = ${qualifiedIdentifier(joinAlias, join.column_join)}`;
       })
       .join("\n");

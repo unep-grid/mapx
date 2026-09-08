@@ -103,9 +103,9 @@ describe("ThemeModal window migration", () => {
       buttons.every(
         (button) =>
           button.querySelector(".btn-icon").firstElementChild.matches("span") &&
-          button.querySelector(".btn-icon").lastElementChild.matches(
-            ".btn-icon-wrapper",
-          ),
+          button
+            .querySelector(".btn-icon")
+            .lastElementChild.matches(".btn-icon-wrapper"),
       ),
     ).toBe(true);
     modal.close();
@@ -158,9 +158,8 @@ describe("ThemeModal window migration", () => {
     });
 
     const metadataWindow = manager.windows.get("theme-metadata-create");
-    const confirmButton = metadataWindow.refs.footerEnd.querySelector(
-      ".btn-primary",
-    );
+    const confirmButton =
+      metadataWindow.refs.footerEnd.querySelector(".btn-primary");
     const changeHandler = mocks.editor.on.mock.calls.find(
       ([event]) => event === "change",
     )[1];

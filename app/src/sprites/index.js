@@ -55,20 +55,22 @@ async function makeSprites() {
     const rbase = pxRatio === 1;
     const pngPath = path.join(
       dirOutSprites,
-      rbase ? `sprite.png` : `sprite@${pxRatio}x.png`
+      rbase ? `sprite.png` : `sprite@${pxRatio}x.png`,
     );
     const jsonPath = path.join(
       dirOutSprites,
-      rbase ? `sprite.json` : `sprite@${pxRatio}x.json`
+      rbase ? `sprite.json` : `sprite@${pxRatio}x.json`,
     );
 
     const dataLayout = await new Promise((resolve, reject) => {
       spritezero.generateLayout(
         { imgs: svgs, pixelRatio: pxRatio * 2, format: true },
         (err, dataLayout) => {
-          if (err) reject(err);
+          if (err) {
+            reject(err);
+          }
           resolve(dataLayout);
-        }
+        },
       );
     });
 
@@ -81,15 +83,19 @@ async function makeSprites() {
       spritezero.generateLayout(
         { imgs: svgs, pixelRatio: pxRatio * 2, format: false },
         (err, imageLayout) => {
-          if (err) reject(err);
+          if (err) {
+            reject(err);
+          }
           resolve(imageLayout);
-        }
+        },
       );
     });
 
     const image = await new Promise((resolve, reject) => {
       spritezero.generateImage(imageLayout, (err, image) => {
-        if (err) reject(err);
+        if (err) {
+          reject(err);
+        }
         resolve(image);
       });
     });

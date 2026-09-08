@@ -12,6 +12,10 @@ import { templates } from "#mapx/template";
  */
 export async function setViewTilesUrl(idView, tilesUrl, idProject, client) {
   const pgClient = client || pgWrite;
-  await pgClient.query(templates.setViewTilesUrl, [idView, tilesUrl, idProject]);
+  await pgClient.query(templates.setViewTilesUrl, [
+    idView,
+    tilesUrl,
+    idProject,
+  ]);
   return true;
 }

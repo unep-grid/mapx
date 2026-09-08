@@ -86,7 +86,6 @@ class FlashItem {
       fi.elFlash,
     );
     document.body.appendChild(fi.elContainer);
-    
   }
 
   getCenter(element) {

@@ -93,7 +93,7 @@ export async function ioAddViewVt(socket, config, view_options) {
 
     if (isEmpty(attr)) {
       throw new Error(
-        `No attribute usable for view in source ${config.idSource} `
+        `No attribute usable for view in source ${config.idSource} `,
       );
     }
 

@@ -46,9 +46,7 @@ describe("search source tiles", () => {
         },
         {},
       ),
-    ).toEqual([
-      "https://tiles.example.org/wms?bbox={bbox-epsg-3857}",
-    ]);
+    ).toEqual(["https://tiles.example.org/wms?bbox={bbox-epsg-3857}"]);
   });
 
   it("builds a vector template using the configured development API", () => {
@@ -90,7 +88,10 @@ describe("search source tiles", () => {
   it("returns no tiles for unsupported views or incomplete API settings", () => {
     expect(buildSourceTiles({ view_type: "gj" }, {})).toEqual([]);
     expect(
-      buildSourceTiles({ view_id: "MX-J9P0S-B421T-2NTTN", view_type: "vt" }, {}),
+      buildSourceTiles(
+        { view_id: "MX-J9P0S-B421T-2NTTN", view_type: "vt" },
+        {},
+      ),
     ).toEqual([]);
   });
 });

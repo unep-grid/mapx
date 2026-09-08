@@ -240,11 +240,7 @@ export async function setLegacyProject(socket, idProject, legacy) {
 export async function ioProjectLegacySet(socket, data, cb) {
   data = data || {};
   try {
-    data.legacy = await setLegacyProject(
-      socket,
-      data.id_project,
-      data.legacy,
-    );
+    data.legacy = await setLegacyProject(socket, data.id_project, data.legacy);
     data.success = true;
   } catch (error) {
     data.error = error?.message || error;

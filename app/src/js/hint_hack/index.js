@@ -1,7 +1,7 @@
 import { isTouchDevice } from "../is_touch_device/index.js";
 import { getDictItem } from "../language";
-import './style.css';
-import 'hint.css';
+import "./style.css";
+import "hint.css";
 
 const def = {
   style: {

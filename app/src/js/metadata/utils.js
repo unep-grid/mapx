@@ -130,7 +130,9 @@ export async function getViewSourceMetadata(view) {
  * @returns {Promise<{allowed: boolean, idSource?: string}>}
  */
 export async function getViewSourceMetadataEditAccess(idView) {
-  if (!isViewId(idView)) return { allowed: false };
+  if (!isViewId(idView)) {
+    return { allowed: false };
+  }
   try {
     const access = await ws.emitAsync(
       "/client/view/source/metadata/edit/access",
@@ -874,7 +876,7 @@ async function formatAddress(data) {
     .setPostalCode(data.postal_code)
     .setFormat({
       type: "business",
-      country : 'FR',
+      country: "FR",
       useTransform: true,
     });
 

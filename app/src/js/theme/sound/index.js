@@ -3,8 +3,6 @@ import switchOn from "./switch_on.mp3";
 import switchOff from "./switch_off.mp3";
 import click from "./click.mp3";
 
-
-
 let context;
 
 class Sound {
@@ -21,7 +19,7 @@ class Sound {
       throw new Error("File not found " + snd.url);
     }
     const arrayBuffer = await response.arrayBuffer();
-    
+
     if (!context) {
       context = new AudioContext();
     }
@@ -48,5 +46,3 @@ export const sounds = {
   switch_on: new Sound(switchOn),
   switch_off: new Sound(switchOff),
 };
-
-

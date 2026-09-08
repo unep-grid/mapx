@@ -17,12 +17,12 @@ export {
   parseDatetime,
 };
 
-function buildCatalogSnapshot(rows, {
-  updatedAt = new Date().toISOString(),
-  version = 1,
-} = {}) {
+function buildCatalogSnapshot(
+  rows,
+  { updatedAt = new Date().toISOString(), version = 1 } = {},
+) {
   const records = [...rows].sort((a, b) =>
-    String(a.view_id || "").localeCompare(String(b.view_id || ""))
+    String(a.view_id || "").localeCompare(String(b.view_id || "")),
   );
 
   return {
@@ -33,12 +33,7 @@ function buildCatalogSnapshot(rows, {
   };
 }
 
-function filterCatalogRows(rows, {
-  id,
-  q,
-  bbox,
-  datetime,
-} = {}) {
+function filterCatalogRows(rows, { id, q, bbox, datetime } = {}) {
   if (id) {
     rows = rows.filter((row) => row.view_id === id);
   }
@@ -59,25 +54,29 @@ function filterCatalogRows(rows, {
   return rows;
 }
 
-function pageRows(rows, {
-  limit,
-  offset,
-}) {
+function pageRows(rows, { limit, offset }) {
   return rows.slice(offset, offset + limit);
 }
 
-function buildRecord(row, {
-  language = defaultLanguages.default,
-  languages = defaultLanguages,
-  baseUrl = "",
-  collectionUrl = "",
-  geoserverPublicUrl = "",
-  req = null,
-} = {}) {
-  const title = localize(row.meta_multilingual?.view_title, language, languages);
+function buildRecord(
+  row,
+  {
+    language = defaultLanguages.default,
+    languages = defaultLanguages,
+    baseUrl = "",
+    collectionUrl = "",
+    geoserverPublicUrl = "",
+    req = null,
+  } = {},
+) {
+  const title = localize(
+    row.meta_multilingual?.view_title,
+    language,
+    languages,
+  );
   const description = cleanText(
-    localize(row.meta_multilingual?.view_abstract, language, languages)
-      || localize(row.meta_multilingual?.source_abstract, language, languages)
+    localize(row.meta_multilingual?.view_abstract, language, languages) ||
+      localize(row.meta_multilingual?.source_abstract, language, languages),
   );
   const bbox = getRowBbox(row);
   const metadata = buildCatalogMetadata(row, {
@@ -124,17 +123,21 @@ function buildRecord(row, {
   };
 }
 
-function buildCatalogMetadata(row, {
-  language = defaultLanguages.default,
-  languages = defaultLanguages,
-} = {}) {
-  const title = localize(row.meta_multilingual?.view_title, language, languages);
+function buildCatalogMetadata(
+  row,
+  { language = defaultLanguages.default, languages = defaultLanguages } = {},
+) {
+  const title = localize(
+    row.meta_multilingual?.view_title,
+    language,
+    languages,
+  );
   const abstract = cleanText(
-    localize(row.meta_multilingual?.view_abstract, language, languages)
-      || localize(row.meta_multilingual?.source_abstract, language, languages)
+    localize(row.meta_multilingual?.view_abstract, language, languages) ||
+      localize(row.meta_multilingual?.source_abstract, language, languages),
   );
   const notes = cleanText(
-    localize(row.meta_multilingual?.source_notes, language, languages)
+    localize(row.meta_multilingual?.source_notes, language, languages),
   );
   const bbox = getRowBbox(row);
 
@@ -150,14 +153,18 @@ function buildCatalogMetadata(row, {
     contacts: normalizeContacts(row.source_contacts),
     keywords: {
       free: normalizeTextArray(row.source_keywords),
-      gemet: (row.source_keywords_gemet_multilingual || []).map((item) => removeEmpty({
-        id: item.id,
-        title: localize(item, language, languages),
-      })),
-      m49: (row.source_keywords_m49_multilingual || []).map((item) => removeEmpty({
-        id: item.id,
-        title: localize(item, language, languages),
-      })),
+      gemet: (row.source_keywords_gemet_multilingual || []).map((item) =>
+        removeEmpty({
+          id: item.id,
+          title: localize(item, language, languages),
+        }),
+      ),
+      m49: (row.source_keywords_m49_multilingual || []).map((item) =>
+        removeEmpty({
+          id: item.id,
+          title: localize(item, language, languages),
+        }),
+      ),
       topic: normalizeTextArray(row.source_keywords_topic),
     },
     extent: {
@@ -195,18 +202,22 @@ function buildCatalogMetadata(row, {
   });
 }
 
-function getRecordLinks({
-  row,
-  itemUrl,
-  baseUrl,
-  req,
-  geoserverPublicUrl,
-}) {
+function getRecordLinks({ row, itemUrl, baseUrl, req, geoserverPublicUrl }) {
   const links = [
     link("self", itemUrl, "application/geo+json", "This record"),
-    link("collection", `${baseUrl}/collections/mapx`, "application/json", "MapX public metadata"),
+    link(
+      "collection",
+      `${baseUrl}/collections/mapx`,
+      "application/json",
+      "MapX public metadata",
+    ),
     link("alternate", getAppViewUrl(req, row), "text/html", "Open in MapX"),
-    link("preview", getStaticViewUrl(req, row.view_id), "text/html", "MapX static preview"),
+    link(
+      "preview",
+      getStaticViewUrl(req, row.view_id),
+      "text/html",
+      "MapX static preview",
+    ),
   ];
   const serviceLinks = getGeoServerLinks(row, geoserverPublicUrl);
 
@@ -215,28 +226,38 @@ function getRecordLinks({
 
 function getGeoServerLinks(row, publicUrl) {
   if (
-    !publicUrl
-    || row.is_geoserver_published !== true
-    || !row.project_id
-    || !row.view_id
+    !publicUrl ||
+    row.is_geoserver_published !== true ||
+    !row.project_id ||
+    !row.view_id
   ) {
     return [];
   }
 
   const layer = `${row.project_id}:${row.view_id}`;
   return [
-    link("service", getGeoServerServiceUrl(publicUrl, "wms", {
-      service: "WMS",
-      version: "1.3.0",
-      request: "GetCapabilities",
-      layers: layer,
-    }), "application/xml", "WMS"),
-    link("service", getGeoServerServiceUrl(publicUrl, "wfs", {
-      service: "WFS",
-      version: "2.0.0",
-      request: "GetCapabilities",
-      typeName: layer,
-    }), "application/xml", "WFS"),
+    link(
+      "service",
+      getGeoServerServiceUrl(publicUrl, "wms", {
+        service: "WMS",
+        version: "1.3.0",
+        request: "GetCapabilities",
+        layers: layer,
+      }),
+      "application/xml",
+      "WMS",
+    ),
+    link(
+      "service",
+      getGeoServerServiceUrl(publicUrl, "wfs", {
+        service: "WFS",
+        version: "2.0.0",
+        request: "GetCapabilities",
+        typeName: layer,
+      }),
+      "application/xml",
+      "WFS",
+    ),
   ];
 }
 
@@ -264,7 +285,11 @@ function getLanguage(req, languages = defaultLanguages) {
   return languages.default;
 }
 
-function localize(value, language = defaultLanguages.default, languages = defaultLanguages) {
+function localize(
+  value,
+  language = defaultLanguages.default,
+  languages = defaultLanguages,
+) {
   if (!value) {
     return "";
   }
@@ -295,12 +320,14 @@ function normalizeContacts(items) {
     return [];
   }
 
-  return items.map((item) => removeEmpty({
-    name: cleanText(item?.name),
-    email: cleanText(item?.email),
-    function: cleanText(item?.function),
-    organization: cleanText(item?.organisation_name),
-  }));
+  return items.map((item) =>
+    removeEmpty({
+      name: cleanText(item?.name),
+      email: cleanText(item?.email),
+      function: cleanText(item?.function),
+      organization: cleanText(item?.organisation_name),
+    }),
+  );
 }
 
 function normalizeLicenses(items) {
@@ -308,10 +335,12 @@ function normalizeLicenses(items) {
     return [];
   }
 
-  return items.map((item) => removeEmpty({
-    name: cleanText(item?.name),
-    text: cleanText(item?.text),
-  }));
+  return items.map((item) =>
+    removeEmpty({
+      name: cleanText(item?.name),
+      text: cleanText(item?.text),
+    }),
+  );
 }
 
 function normalizeUrlItems(items) {
@@ -400,16 +429,14 @@ function removeEmpty(value) {
 
 function isEmptyValue(value) {
   return (
-    value === undefined
-    || value === null
-    || value === ""
-    || (Array.isArray(value) && value.length === 0)
-    || (
-      value
-      && typeof value === "object"
-      && !Array.isArray(value)
-      && Object.keys(value).length === 0
-    )
+    value === undefined ||
+    value === null ||
+    value === "" ||
+    (Array.isArray(value) && value.length === 0) ||
+    (value &&
+      typeof value === "object" &&
+      !Array.isArray(value) &&
+      Object.keys(value).length === 0)
   );
 }
 
@@ -451,10 +478,10 @@ function parseBbox(value) {
   const items = bbox.split(",").map((item) => Number(item));
 
   if (
-    items.length !== 4
-    || items.some((item) => !Number.isFinite(item))
-    || items[0] >= items[2]
-    || items[1] >= items[3]
+    items.length !== 4 ||
+    items.some((item) => !Number.isFinite(item)) ||
+    items[0] >= items[2] ||
+    items[1] >= items[3]
   ) {
     const err = new Error("Invalid bbox. Expected west,south,east,north.");
     err.statusCode = 400;
@@ -513,7 +540,9 @@ function getSearchText(row) {
     row.source_periodicity,
     JSON.stringify(row.projects_id || []),
     JSON.stringify(row.projects_title_multilingual || []),
-  ].join(" ").toLowerCase();
+  ]
+    .join(" ")
+    .toLowerCase();
 }
 
 function bboxIntersects(row, bbox) {
@@ -527,10 +556,10 @@ function bboxIntersects(row, bbox) {
   const [west, south, east, north] = bbox;
 
   return (
-    recordWest <= east
-    && recordEast >= west
-    && recordSouth <= north
-    && recordNorth >= south
+    recordWest <= east &&
+    recordEast >= west &&
+    recordSouth <= north &&
+    recordNorth >= south
   );
 }
 
@@ -556,7 +585,9 @@ function parseDateEpoch(value) {
 }
 
 function throwInvalidDatetime() {
-  const err = new Error("Invalid datetime. Expected ISO date/time or start/end interval.");
+  const err = new Error(
+    "Invalid datetime. Expected ISO date/time or start/end interval.",
+  );
   err.statusCode = 400;
   throw err;
 }
@@ -572,16 +603,16 @@ function normalizeBbox(value) {
   const north = Number(value.lat_max ?? value.lat2);
 
   if (
-    !Number.isFinite(west)
-    || !Number.isFinite(south)
-    || !Number.isFinite(east)
-    || !Number.isFinite(north)
-    || west < -180
-    || east > 180
-    || south < -90
-    || north > 90
-    || west >= east
-    || south >= north
+    !Number.isFinite(west) ||
+    !Number.isFinite(south) ||
+    !Number.isFinite(east) ||
+    !Number.isFinite(north) ||
+    west < -180 ||
+    east > 180 ||
+    south < -90 ||
+    north > 90 ||
+    west >= east ||
+    south >= north
   ) {
     return null;
   }
@@ -608,13 +639,15 @@ function bboxToGeometry(bbox) {
 
   return {
     type: "Polygon",
-    coordinates: [[
-      [west, south],
-      [east, south],
-      [east, north],
-      [west, north],
-      [west, south],
-    ]],
+    coordinates: [
+      [
+        [west, south],
+        [east, south],
+        [east, north],
+        [west, north],
+        [west, south],
+      ],
+    ],
   };
 }
 
@@ -644,9 +677,7 @@ function link(rel, href, type, title) {
 
 function getAppBaseUrl(req) {
   const host = req?.get("host") || "api.mapx.org";
-  const appHost = host
-    .replace(/^api\./, "app.")
-    .replace(/^apidev\./, "dev.");
+  const appHost = host.replace(/^api\./, "app.").replace(/^apidev\./, "dev.");
   return `${req?.protocol || "https"}://${appHost}`;
 }
 

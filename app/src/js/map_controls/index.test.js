@@ -138,7 +138,8 @@ describe("MapControlAttribution", () => {
 
     rowsMock.mockReturnValue([...getBaseRows(), getCustomRow()]);
     const controlWithAdditionalRows = new MapControlAttribution();
-    const elWithAdditionalRows = controlWithAdditionalRows.onAdd(createMapMock());
+    const elWithAdditionalRows =
+      controlWithAdditionalRows.onAdd(createMapMock());
     const toggle = elWithAdditionalRows.querySelector(".mx-attribution-toggle");
 
     expect(toggle).toBeTruthy();
@@ -156,12 +157,12 @@ describe("MapControlAttribution", () => {
 
     expect(elControl.querySelector(".mx-attribution-panel")).toBeTruthy();
     expect(elControl.textContent).toContain("ACLED");
-    expect(elControl.querySelectorAll(".mx-attribution-panel-row")).toHaveLength(
-      3,
-    );
-    expect(elControl.querySelector(".mx-attribution-toggle").classList).toContain(
-      "fa-minus",
-    );
+    expect(
+      elControl.querySelectorAll(".mx-attribution-panel-row"),
+    ).toHaveLength(3);
+    expect(
+      elControl.querySelector(".mx-attribution-toggle").classList,
+    ).toContain("fa-minus");
     expect(
       elControl
         .querySelector(".mx-attribution-toggle")
@@ -174,9 +175,9 @@ describe("MapControlAttribution", () => {
 
     expect(elControl.querySelector(".mx-attribution-panel")).toBeNull();
     expect(elControl.textContent).not.toContain("ACLED");
-    expect(elControl.querySelector(".mx-attribution-toggle").classList).toContain(
-      "fa-plus",
-    );
+    expect(
+      elControl.querySelector(".mx-attribution-toggle").classList,
+    ).toContain("fa-plus");
   });
 
   it("updates rows on style changes while preserving expanded state", () => {
@@ -194,9 +195,9 @@ describe("MapControlAttribution", () => {
     expect(elControl.querySelector(".mx-attribution-panel")).toBeTruthy();
     expect(elControl.textContent).toContain("Mineral operations");
     expect(elControl.textContent).not.toContain("ACLED");
-    expect(elControl.querySelector(".mx-attribution-toggle").classList).toContain(
-      "fa-minus",
-    );
+    expect(
+      elControl.querySelector(".mx-attribution-toggle").classList,
+    ).toContain("fa-minus");
   });
 
   it("removes map listeners on remove", () => {
@@ -258,7 +259,9 @@ function getMineralRow() {
     kind: "source",
     id: "MX-V7AY6-OCTNO-ZB4FV-SRC",
     type: "vector",
-    attribution_html: "Mineral operations outside the United States (USGS, 2010)",
-    attribution_text: "Mineral operations outside the United States (USGS, 2010)",
+    attribution_html:
+      "Mineral operations outside the United States (USGS, 2010)",
+    attribution_text:
+      "Mineral operations outside the United States (USGS, 2010)",
   };
 }

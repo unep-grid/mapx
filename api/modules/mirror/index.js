@@ -1,7 +1,11 @@
 import { settings } from "#root/settings";
 import { isNotEmpty } from "@fxi/mx_valid";
 import rateLimit from "express-rate-limit";
-import { handleProxyError, normalizeExternalUrl, proxyRequest } from "./proxy.js";
+import {
+  handleProxyError,
+  normalizeExternalUrl,
+  proxyRequest,
+} from "./proxy.js";
 
 const mwLimiter = rateLimit({
   windowMs: settings.mirror.rateWindowMinutes * 60 * 1000,

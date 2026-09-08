@@ -20,10 +20,7 @@ import {
   itemFlashWarning,
   parseTemplate,
 } from "../mx_helper_misc";
-import {
-  getMapxWindowManager,
-  openConfirmDialog,
-} from "../window/index.js";
+import { getMapxWindowManager, openConfirmDialog } from "../window/index.js";
 import { settings } from "../settings";
 import { getDictItem, getLanguageCurrent } from "../language";
 import {
@@ -43,7 +40,7 @@ import mlcontour from "maplibre-contour";
 import { getApiUrl } from "../api_routes/index.js";
 
 const MAPTILER_SATELLITE_ATTRIBUTION =
-  "<a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a>";
+  '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a>';
 
 function getSatelliteSourceOverrides() {
   const token = settings?.services?.maptiler?.token;

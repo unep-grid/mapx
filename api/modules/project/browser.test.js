@@ -217,9 +217,9 @@ describe("project browser API", () => {
   });
 
   it("allows only root or project-creator users to update the legacy flag", async () => {
-    await expect(
-      setLegacyProject(socket(), projectId, true),
-    ).rejects.toThrow("project_legacy_access_denied");
+    await expect(setLegacyProject(socket(), projectId, true)).rejects.toThrow(
+      "project_legacy_access_denied",
+    );
     expect(writeQuery).not.toHaveBeenCalled();
 
     const client = {

@@ -13,14 +13,20 @@ vi.mock("../../el_mapx", () => ({
     const element = document.createElement(tagName);
 
     for (const option of options.flat(Infinity)) {
-      if (option === null || option === undefined) continue;
+      if (option === null || option === undefined) {
+        continue;
+      }
       if (option instanceof Node) {
         element.appendChild(option);
       } else if (typeof option === "object") {
         for (const [key, value] of Object.entries(option)) {
-          if (key === "class") element.className = value;
-          else if (key === "style") Object.assign(element.style, value);
-          else element.setAttribute(key, value);
+          if (key === "class") {
+            element.className = value;
+          } else if (key === "style") {
+            Object.assign(element.style, value);
+          } else {
+            element.setAttribute(key, value);
+          }
         }
       } else {
         element.append(String(option));
@@ -85,7 +91,9 @@ describe("themes SelectAuto resolver", () => {
     ["a label identical to the ID", "color_light"],
   ])("renders the ID only once for %s", (_case, label) => {
     const themeData = makeTheme("color_light", label);
-    if (label === undefined) delete themeData.label;
+    if (label === undefined) {
+      delete themeData.label;
+    }
 
     const item = config.render.item(themeData, escape);
 

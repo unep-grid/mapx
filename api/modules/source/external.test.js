@@ -95,7 +95,9 @@ describe("external metadata sources", () => {
   it("accepts only an accessible external source", async () => {
     const idSource = "mx_extern_a_b_c_d_e";
     const client = {
-      query: vi.fn().mockResolvedValue({ rowCount: 1, rows: [{ id: idSource }] }),
+      query: vi
+        .fn()
+        .mockResolvedValue({ rowCount: 1, rows: [{ id: idSource }] }),
     };
     await expect(
       validateExternalMetadataSelection(

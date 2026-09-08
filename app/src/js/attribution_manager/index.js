@@ -327,7 +327,10 @@ function getRowDedupeKey(row) {
 function htmlToText(html) {
   const value = `${html}`;
   if (typeof document === "undefined") {
-    return value.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+    return value
+      .replace(/<[^>]*>/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
   }
 
   const el = document.createElement("div");

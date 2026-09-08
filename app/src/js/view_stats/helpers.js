@@ -12,7 +12,10 @@ export function normalizeMonth(value) {
   return String(value).slice(0, 7);
 }
 
-export function buildMonthKeys(referenceDate = new Date(), n = VIEW_STATS_MONTHS) {
+export function buildMonthKeys(
+  referenceDate = new Date(),
+  n = VIEW_STATS_MONTHS,
+) {
   const date = new Date(referenceDate);
   const year = date.getUTCFullYear();
   const month = date.getUTCMonth();
@@ -42,7 +45,11 @@ export function fillMonthlyCounts(rows = [], monthKeys = buildMonthKeys()) {
   }));
 }
 
-export function limitCountryRows(rows = [], limit = 20, othersLabel = "Others") {
+export function limitCountryRows(
+  rows = [],
+  limit = 20,
+  othersLabel = "Others",
+) {
   const data = (rows || []).map((row) => ({
     country: row.country || "?",
     count: normalizeCount(row.count),

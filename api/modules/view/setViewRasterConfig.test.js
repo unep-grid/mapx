@@ -14,13 +14,15 @@ import { templates } from "#mapx/template";
 beforeEach(() => {
   vi.clearAllMocks();
   mocks.query.mockResolvedValue({
-    rows: [{
-      id: "MX-AAAAA-AAAAA-AAAAA",
-      project: "P1",
-      tile_url: "https://a/{z}/{x}/{y}.png",
-      legend_url: "https://a/legend.svg",
-      bounds: null,
-    }],
+    rows: [
+      {
+        id: "MX-AAAAA-AAAAA-AAAAA",
+        project: "P1",
+        tile_url: "https://a/{z}/{x}/{y}.png",
+        legend_url: "https://a/legend.svg",
+        bounds: null,
+      },
+    ],
   });
 });
 
@@ -45,10 +47,12 @@ describe("setViewRasterConfig", () => {
       true,
       "P1",
     ]);
-    expect(stored).toEqual(expect.objectContaining({
-      tile_url: "https://a/{z}/{x}/{y}.png",
-      legend_url: "https://a/legend.svg",
-    }));
+    expect(stored).toEqual(
+      expect.objectContaining({
+        tile_url: "https://a/{z}/{x}/{y}.png",
+        legend_url: "https://a/legend.svg",
+      }),
+    );
   });
 
   it("returns null when the scoped view was not updated", async () => {

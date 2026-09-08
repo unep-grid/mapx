@@ -15,7 +15,9 @@ export interface GenerateSeriesOptions {
   missingSites?: number[];
 }
 
-export function generate_series(options: GenerateSeriesOptions = {}): SeriesDataPoint[] {
+export function generate_series(
+  options: GenerateSeriesOptions = {},
+): SeriesDataPoint[] {
   const { includeMissingMatches = false, missingSites = [3, 6, 7] } = options;
 
   const scenarios = ["a", "b", "c", "d"];
@@ -26,23 +28,23 @@ export function generate_series(options: GenerateSeriesOptions = {}): SeriesData
 
   // Filter out missing sites if includeMissingMatches is true
   const sites = includeMissingMatches
-    ? allSites.filter(site => !missingSites.includes(site))
+    ? allSites.filter((site) => !missingSites.includes(site))
     : allSites;
 
   const data: SeriesDataPoint[] = [];
 
   // Base values for each variable type to make them more realistic
   const baseValues: Record<string, number> = {
-    temp: 15,    // Base temperature in Celsius
-    co2: 400,    // Base CO2 in ppm
-    caco3: 50    // Base CaCO3 percentage
+    temp: 15, // Base temperature in Celsius
+    co2: 400, // Base CO2 in ppm
+    caco3: 50, // Base CaCO3 percentage
   };
 
   // Scaling factors to get values in 1-8 range while maintaining realism
   const scalingFactors: Record<string, number> = {
-    temp: 2,     // Temperature varies ±16°C (15 ± 16 = -1 to 31°C)
-    co2: 50,     // CO2 varies ±400ppm (400 ± 400 = 0 to 800ppm)
-    caco3: 10    // CaCO3 varies ±80% (50 ± 80 = -30 to 130%)
+    temp: 2, // Temperature varies ±16°C (15 ± 16 = -1 to 31°C)
+    co2: 50, // CO2 varies ±400ppm (400 ± 400 = 0 to 800ppm)
+    caco3: 10, // CaCO3 varies ±80% (50 ± 80 = -30 to 130%)
   };
 
   for (const site of sites) {
@@ -57,7 +59,7 @@ export function generate_series(options: GenerateSeriesOptions = {}): SeriesData
             // Shift the pattern based on year (rotates the array)
             const shiftedPattern = [
               ...basePattern.slice(yearIndex % 8),
-              ...basePattern.slice(0, yearIndex % 8)
+              ...basePattern.slice(0, yearIndex % 8),
             ];
 
             // Get the value for this site from the shifted pattern
@@ -69,15 +71,19 @@ export function generate_series(options: GenerateSeriesOptions = {}): SeriesData
             const variableOffset = variables.indexOf(variable) * 0.2;
 
             // Calculate final value with slight randomization
-            const rawValue = patternValue + scenarioOffset + teamOffset + variableOffset;
+            const rawValue =
+              patternValue + scenarioOffset + teamOffset + variableOffset;
 
             // Scale to realistic range for the variable type
-            const scaledValue = baseValues[variable] + (rawValue - 4.5) * scalingFactors[variable];
+            const scaledValue =
+              baseValues[variable] +
+              (rawValue - 4.5) * scalingFactors[variable];
 
             // Round to appropriate precision
-            const finalValue = variable === 'temp' ?
-              Math.round(scaledValue * 10) / 10 : // 1 decimal for temp
-              Math.round(scaledValue); // whole numbers for others
+            const finalValue =
+              variable === "temp"
+                ? Math.round(scaledValue * 10) / 10 // 1 decimal for temp
+                : Math.round(scaledValue); // whole numbers for others
 
             data.push({
               did: site,

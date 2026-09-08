@@ -188,7 +188,7 @@ try {
   geoserver = new GeoServerRestClient(
     s.geoserver.url,
     s.geoserver.user,
-    s.geoserver.password
+    s.geoserver.password,
   );
 } catch (e) {
   console.error("Unexpected error during clients init", e);

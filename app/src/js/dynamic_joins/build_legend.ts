@@ -12,8 +12,15 @@ import type { BuildLegendOptions } from "./types.ts";
  * @returns The legend instance
  */
 export function buildLegendInput(options: BuildLegendOptions): LegendUI {
-  const { elWrapper, onBuilt, onUpdate, colorScale, colorNa, joinType, showLegendNA } =
-    options;
+  const {
+    elWrapper,
+    onBuilt,
+    onUpdate,
+    colorScale,
+    colorNa,
+    joinType,
+    showLegendNA,
+  } = options;
 
   // Add legend-specific styling to wrapper
   elWrapper.classList.add("mx-legend-container");

@@ -35,13 +35,19 @@ function source(overrides = {}) {
   };
 }
 
-function client({ sourceRow = source(), dependencies = [], summary = {} } = {}) {
+function client({
+  sourceRow = source(),
+  dependencies = [],
+  summary = {},
+} = {}) {
   return {
     query: vi.fn(async (sql) => {
       if (sql.includes("FROM mx_sources_latest source")) {
         return { rows: sourceRow ? [sourceRow] : [] };
       }
-      if (sql.includes("FROM pg_depend")) return { rows: dependencies };
+      if (sql.includes("FROM pg_depend")) {
+        return { rows: dependencies };
+      }
       if (sql.includes("count(*)::integer AS count")) {
         return {
           rows: [
@@ -54,7 +60,9 @@ function client({ sourceRow = source(), dependencies = [], summary = {} } = {}) 
           ],
         };
       }
-      if (sql.includes("count(*) OVER()")) return { rows: [] };
+      if (sql.includes("count(*) OVER()")) {
+        return { rows: [] };
+      }
       throw new Error(`Unexpected SQL: ${sql}`);
     }),
   };
@@ -132,7 +140,9 @@ describe("source settings overview", () => {
       { idSource, idUser: 999, idProject: "MX-OTHER" },
       callback,
     );
-    expect(callback).toHaveBeenCalledWith(expect.objectContaining({ ok: true }));
+    expect(callback).toHaveBeenCalledWith(
+      expect.objectContaining({ ok: true }),
+    );
     expect(mocks.getUserRoles).toHaveBeenCalledWith(7, idProject, mocks.pgRead);
   });
 });

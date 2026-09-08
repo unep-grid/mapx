@@ -24,7 +24,9 @@ export function createPaletteDropdown({ document, palettes, value, onChange }) {
   list.hidden = true;
 
   let selected = palettes.findIndex((palette) => palette.id === value);
-  if (selected < 0) selected = 0;
+  if (selected < 0) {
+    selected = 0;
+  }
   let active = selected;
 
   const gradient = (palette) =>
@@ -33,7 +35,9 @@ export function createPaletteDropdown({ document, palettes, value, onChange }) {
   const renderTrigger = () => {
     const palette = palettes[selected];
     trigger.replaceChildren();
-    if (!palette) return;
+    if (!palette) {
+      return;
+    }
     const preview = document.createElement("span");
     preview.className = "arco--palette_preview";
     preview.style.background = gradient(palette);
@@ -77,7 +81,9 @@ export function createPaletteDropdown({ document, palettes, value, onChange }) {
   };
 
   const open = () => {
-    if (!palettes.length) return;
+    if (!palettes.length) {
+      return;
+    }
     list.hidden = false;
     trigger.setAttribute("aria-expanded", "true");
     active = selected;
@@ -87,12 +93,16 @@ export function createPaletteDropdown({ document, palettes, value, onChange }) {
   const close = ({ restoreFocus = false } = {}) => {
     list.hidden = true;
     trigger.setAttribute("aria-expanded", "false");
-    if (restoreFocus) trigger.focus();
+    if (restoreFocus) {
+      trigger.focus();
+    }
   };
 
   function select(index) {
     const palette = palettes[index];
-    if (!palette) return;
+    if (!palette) {
+      return;
+    }
     selected = index;
     active = index;
     renderTrigger();
@@ -110,22 +120,32 @@ export function createPaletteDropdown({ document, palettes, value, onChange }) {
     switch (event.key) {
       case "ArrowDown":
         event.preventDefault();
-        if (list.hidden) open();
-        else move(1);
+        if (list.hidden) {
+          open();
+        } else {
+          move(1);
+        }
         break;
       case "ArrowUp":
         event.preventDefault();
-        if (list.hidden) open();
-        else move(-1);
+        if (list.hidden) {
+          open();
+        } else {
+          move(-1);
+        }
         break;
       case "Home":
-        if (list.hidden) return;
+        if (list.hidden) {
+          return;
+        }
         event.preventDefault();
         active = 0;
         focusActive();
         break;
       case "End":
-        if (list.hidden) return;
+        if (list.hidden) {
+          return;
+        }
         event.preventDefault();
         active = palettes.length - 1;
         focusActive();
@@ -133,11 +153,16 @@ export function createPaletteDropdown({ document, palettes, value, onChange }) {
       case "Enter":
       case " ":
         event.preventDefault();
-        if (list.hidden) open();
-        else select(active);
+        if (list.hidden) {
+          open();
+        } else {
+          select(active);
+        }
         break;
       case "Escape":
-        if (list.hidden) return;
+        if (list.hidden) {
+          return;
+        }
         event.preventDefault();
         close({ restoreFocus: true });
         break;
@@ -145,17 +170,24 @@ export function createPaletteDropdown({ document, palettes, value, onChange }) {
   };
 
   trigger.addEventListener("click", () => {
-    if (list.hidden) open();
-    else close();
+    if (list.hidden) {
+      open();
+    } else {
+      close();
+    }
   });
   trigger.addEventListener("keydown", handleKeys);
   list.addEventListener("keydown", handleKeys);
   root.addEventListener("focusout", (event) => {
-    if (!root.contains(event.relatedTarget)) close();
+    if (!root.contains(event.relatedTarget)) {
+      close();
+    }
   });
 
   const onDocumentPointerDown = (event) => {
-    if (!root.contains(event.target)) close();
+    if (!root.contains(event.target)) {
+      close();
+    }
   };
   document.addEventListener("pointerdown", onDocumentPointerDown);
 

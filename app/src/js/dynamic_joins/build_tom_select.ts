@@ -17,7 +17,9 @@ interface TomSelectConfig {
   onChange: (val: any) => void;
 }
 
-export async function buildTomSelectInput(options: BuildTomSelectOptions): Promise<void> {
+export async function buildTomSelectInput(
+  options: BuildTomSelectOptions,
+): Promise<void> {
   const TomSelect = await moduleLoad("tom-select");
   const { elWrapper, config, onBuilt, onUpdate, data } = options;
   const { name, default: defaultValue } = config;

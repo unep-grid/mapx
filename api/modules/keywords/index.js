@@ -12,7 +12,6 @@ export async function ioKeywordsSearch(socket, config, cb) {
     const res = await searchKeyword(keyword);
 
     cb(res);
-
   } catch (e) {
     cb(false);
     socket.notifyInfoError({

@@ -1,4 +1,3 @@
-
 export class EventSimple {
   constructor() {
     this._cbs = {};

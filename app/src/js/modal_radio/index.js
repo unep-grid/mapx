@@ -1,7 +1,7 @@
 import { modalConfirm } from "../mx_helper_modal.js";
 import { el } from "../el_mapx";
 import "./style.less";
-import {makeId} from "../mx_helper_misc.js";
+import { makeId } from "../mx_helper_misc.js";
 
 /**
  * Modal with radio button options

@@ -15,7 +15,9 @@ for (const failure of [null, "keys", "delete", "navigate", "claim"]) {
     const calls = [];
     const action = async (name) => {
       calls.push(name);
-      if (name === failure) throw new Error(name);
+      if (name === failure) {
+        throw new Error(name);
+      }
     };
     runInNewContext(script, {
       self: {
@@ -48,12 +50,17 @@ for (const failure of [null, "keys", "delete", "navigate", "claim"]) {
     events.install(event);
     await work;
     events.activate(event);
-    if (failure === "claim") await assert.rejects(work, /claim/);
-    else await work;
+    if (failure === "claim") {
+      await assert.rejects(work, /claim/);
+    } else {
+      await work;
+    }
     assert.equal(calls[0], "skip");
     assert.equal(calls.at(-1), "unregister");
-    if (failure !== "claim") assert.ok(calls.includes("navigate"));
-    if (!failure)
+    if (failure !== "claim") {
+      assert.ok(calls.includes("navigate"));
+    }
+    if (!failure) {
       assert.deepEqual(calls, [
         "skip",
         "claim",
@@ -62,5 +69,6 @@ for (const failure of [null, "keys", "delete", "navigate", "claim"]) {
         "navigate",
         "unregister",
       ]);
+    }
   });
 }

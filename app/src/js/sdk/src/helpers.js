@@ -122,7 +122,9 @@ export function patchObject(source, patch) {
     const patchValue = patch[key];
 
     // Skip null/undefined values
-    if (patchValue === null || patchValue === undefined) return;
+    if (patchValue === null || patchValue === undefined) {
+      return;
+    }
 
     // Handle nested objects
     if (

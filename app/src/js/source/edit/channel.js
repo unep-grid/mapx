@@ -55,7 +55,10 @@ export function roomId(idTable) {
  * @param {Function} emit Async emit of the lock refresh event
  * @param {Number} interval Interval [ms]
  */
-export function createLockHeartbeat(emit, interval = defaults.heartbeat_interval) {
+export function createLockHeartbeat(
+  emit,
+  interval = defaults.heartbeat_interval,
+) {
   let id = null;
   return {
     start() {

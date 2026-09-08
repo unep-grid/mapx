@@ -44,11 +44,22 @@ async function mwLanding(req, res) {
     const baseUrl = getBaseUrl(req);
     sendJSON(res, {
       title: "MapX OGC API - Records",
-      description: "Public MapX view and source metadata exposed as OGC API records.",
+      description:
+        "Public MapX view and source metadata exposed as OGC API records.",
       links: [
         link("self", baseUrl, "application/json", "This document"),
-        link("conformance", `${baseUrl}/conformance`, "application/json", "Conformance"),
-        link("data", `${baseUrl}/collections`, "application/json", "Collections"),
+        link(
+          "conformance",
+          `${baseUrl}/conformance`,
+          "application/json",
+          "Conformance",
+        ),
+        link(
+          "data",
+          `${baseUrl}/collections`,
+          "application/json",
+          "Collections",
+        ),
       ],
     });
   } catch (err) {
@@ -70,11 +81,14 @@ async function mwCollections(req, res) {
   try {
     const baseUrl = getBaseUrl(req);
     sendJSON(res, {
-      collections: [
-        getCollection(baseUrl),
-      ],
+      collections: [getCollection(baseUrl)],
       links: [
-        link("self", `${baseUrl}/collections`, "application/json", "Collections"),
+        link(
+          "self",
+          `${baseUrl}/collections`,
+          "application/json",
+          "Collections",
+        ),
         link("root", baseUrl, "application/json", "Landing page"),
       ],
     });
@@ -112,19 +126,23 @@ async function mwItems(req, res) {
         languages,
         geoserverPublicUrl: getGeoServerPublicUrl(),
         req,
-      })
+      }),
     );
 
-    sendJSON(res, {
-      type: "FeatureCollection",
-      timeStamp: new Date().toISOString(),
-      numberMatched: records.total,
-      numberReturned: features.length,
-      features,
-      links: getItemsLinks(req, records.total, paging),
-    }, {
-      contentType: "application/geo+json",
-    });
+    sendJSON(
+      res,
+      {
+        type: "FeatureCollection",
+        timeStamp: new Date().toISOString(),
+        numberMatched: records.total,
+        numberReturned: features.length,
+        features,
+        links: getItemsLinks(req, records.total, paging),
+      },
+      {
+        contentType: "application/geo+json",
+      },
+    );
   } catch (err) {
     sendError(res, err, err.statusCode || 500);
   }
@@ -152,25 +170,26 @@ async function mwItem(req, res) {
       throw err;
     }
 
-    sendJSON(res, buildRecord(records.rows[0], {
-      language,
-      baseUrl,
-      collectionUrl,
-      languages,
-      geoserverPublicUrl: getGeoServerPublicUrl(),
-      req,
-    }), {
-      contentType: "application/geo+json",
-    });
+    sendJSON(
+      res,
+      buildRecord(records.rows[0], {
+        language,
+        baseUrl,
+        collectionUrl,
+        languages,
+        geoserverPublicUrl: getGeoServerPublicUrl(),
+        req,
+      }),
+      {
+        contentType: "application/geo+json",
+      },
+    );
   } catch (err) {
     sendError(res, err, err.statusCode || 500);
   }
 }
 
-async function getRecords({
-  filter = {},
-  paging = {},
-}) {
+async function getRecords({ filter = {}, paging = {} }) {
   const viewId = filter.id?.toUpperCase();
 
   if (viewId && !rxViewId.test(viewId)) {
@@ -201,7 +220,12 @@ function getCollection(baseUrl) {
     itemType: "record",
     links: [
       link("self", collectionUrl, "application/json", collectionTitle),
-      link("items", `${collectionUrl}/items`, "application/geo+json", "Records"),
+      link(
+        "items",
+        `${collectionUrl}/items`,
+        "application/geo+json",
+        "Records",
+      ),
     ],
   };
 }
@@ -209,15 +233,34 @@ function getCollection(baseUrl) {
 function getItemsLinks(req, total, paging) {
   const links = [
     link("self", getRequestUrl(req), "application/geo+json", "This document"),
-    link("collection", `${getBaseUrl(req)}/collections/${collectionId}`, "application/json", collectionTitle),
+    link(
+      "collection",
+      `${getBaseUrl(req)}/collections/${collectionId}`,
+      "application/json",
+      collectionTitle,
+    ),
   ];
 
   if (paging.offset + paging.limit < total) {
-    links.push(link("next", getPageUrl(req, paging.offset + paging.limit), "application/geo+json", "Next page"));
+    links.push(
+      link(
+        "next",
+        getPageUrl(req, paging.offset + paging.limit),
+        "application/geo+json",
+        "Next page",
+      ),
+    );
   }
 
   if (paging.offset > 0) {
-    links.push(link("prev", getPageUrl(req, Math.max(0, paging.offset - paging.limit)), "application/geo+json", "Previous page"));
+    links.push(
+      link(
+        "prev",
+        getPageUrl(req, Math.max(0, paging.offset - paging.limit)),
+        "application/geo+json",
+        "Previous page",
+      ),
+    );
   }
 
   return links;
@@ -303,14 +346,20 @@ function getGeoServerPublicUrl() {
 
 async function updateOgcMetaCatalog() {
   const start = Date.now();
-  const { rows } = await pgReadLong.query(templates.getViewsPublicForSearchIndex);
+  const { rows } = await pgReadLong.query(
+    templates.getViewsPublicForSearchIndex,
+  );
   const catalog = buildCatalogSnapshot(rows, {
     version: cacheVersion,
   });
   const pycsw = await updatePycswCatalog(catalog.records);
 
   await redisSetJSON(cacheKey, catalog);
-  console.log(`Updated OGC metadata catalog (${catalog.count} records, ${pycsw.count} pycsw records) in ${Date.now() - start} ms`);
+  console.log(
+    `Updated OGC metadata catalog (${catalog.count} records, ${
+      pycsw.count
+    } pycsw records) in ${Date.now() - start} ms`,
+  );
 
   return catalog;
 }
@@ -319,9 +368,9 @@ async function getOgcMetaCatalog() {
   const catalog = await redisGetJSON(cacheKey);
 
   if (
-    !catalog
-    || catalog.version !== cacheVersion
-    || !Array.isArray(catalog.records)
+    !catalog ||
+    catalog.version !== cacheVersion ||
+    !Array.isArray(catalog.records)
   ) {
     const err = new Error("OGC metadata catalog is not ready");
     err.statusCode = 503;

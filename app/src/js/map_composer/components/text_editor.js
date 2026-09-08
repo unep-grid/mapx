@@ -50,7 +50,7 @@ export class EditorToolbar {
     const enable = isNotEmpty(v) ? v : ed.enabled;
 
     const elsEditables = ed.boxTarget.elContent.querySelectorAll(
-      "[data-mc_editable=true]"
+      "[data-mc_editable=true]",
     );
     for (const e of elsEditables) {
       if (enable === true) {
@@ -87,7 +87,7 @@ function btnEdit(cmd, content) {
         mc_cmd: cmd,
       },
     },
-    content
+    content,
   );
 }
 
@@ -103,20 +103,20 @@ function buildEl() {
       { class: ["mc-box-bar-edit-btn-group", "btn-group-vertical"] },
       btnEdit(
         "item:add",
-        el("span", el("i", { class: "fa fa-sticky-note-o" }), el("b", "+"))
-      )
+        el("span", el("i", { class: "fa fa-sticky-note-o" }), el("b", "+")),
+      ),
     ),
     el(
       "div",
       { class: ["mc-box-bar-edit-btn-group", "btn-group-vertical"] },
       btnEdit(
         "sizeText:more",
-        el("span", el("i", { class: "fa fa-font" }), el("b", "+"))
+        el("span", el("i", { class: "fa fa-font" }), el("b", "+")),
       ),
       btnEdit(
         "sizeText:less",
-        el("span", el("i", { class: "fa fa-font" }), el("b", "-"))
-      )
+        el("span", el("i", { class: "fa fa-font" }), el("b", "-")),
+      ),
     ),
     el(
       "div",
@@ -125,7 +125,7 @@ function buildEl() {
       btnEdit("italic", el("i", "I")),
       btnEdit("underline", el("u", "U")),
       btnEdit("strikeThrough", el("s", "S")),
-      btnEdit("removeFormat", el("span", { class: ["fa", "fa-times"] }))
+      btnEdit("removeFormat", el("span", { class: ["fa", "fa-times"] })),
     ),
     el(
       "div",
@@ -134,7 +134,7 @@ function buildEl() {
       btnEdit("formatBlock:H1", el("span", "H1")),
       btnEdit("formatBlock:H2", el("span", "H2")),
       btnEdit("formatBlock:H3", el("span", "H3")),
-      btnEdit("formatBlock:DIV", el("span", { class: ["fa", "fa-times"] }))
+      btnEdit("formatBlock:DIV", el("span", { class: ["fa", "fa-times"] })),
     ),
     el(
       "div",
@@ -143,14 +143,14 @@ function buildEl() {
         "insertUnorderedList",
         el("span", {
           class: ["fa", "fa-list-ul"],
-        })
+        }),
       ),
       btnEdit(
         "insertOrderedList",
         el("span", {
           class: ["fa", "fa-list-ol"],
-        })
-      )
+        }),
+      ),
     ),
     el(
       "div",
@@ -159,21 +159,21 @@ function buildEl() {
         "justifyLeft",
         el("span", {
           class: ["fa", "fa-align-left"],
-        })
+        }),
       ),
       btnEdit(
         "justifyCenter",
         el("span", {
           class: ["fa", "fa-align-center"],
-        })
+        }),
       ),
       btnEdit(
         "justifyRight",
         el("span", {
           class: ["fa", "fa-align-right"],
-        })
-      )
-    )
+        }),
+      ),
+    ),
   );
 }
 
@@ -230,7 +230,7 @@ function paste(e) {
 }
 
 function sanitizeBlocks(boxActive) {
-  if (!boxActive instanceof Box) {
+  if ((!boxActive) instanceof Box) {
     return;
   }
   if (!boxActive.editable) {

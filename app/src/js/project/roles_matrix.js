@@ -411,10 +411,18 @@ export class RoleMatrix {
 
     // Start with current state
     for (const user of rm.users) {
-      if (user.is_contact) state.contacts.push(user.id);
-      if (user.is_admin) state.admins.push(user.id);
-      if (user.is_publisher) state.publishers.push(user.id);
-      if (user.is_member) state.members.push(user.id);
+      if (user.is_contact) {
+        state.contacts.push(user.id);
+      }
+      if (user.is_admin) {
+        state.admins.push(user.id);
+      }
+      if (user.is_publisher) {
+        state.publishers.push(user.id);
+      }
+      if (user.is_member) {
+        state.members.push(user.id);
+      }
     }
 
     // Apply changes

@@ -71,7 +71,6 @@ class MainPanel extends EventSimple {
       htmlImport,
     );
 
-
     mp.panel = new ButtonPanel(mp.opt.panel);
     mp.panel.elPanelContent.appendChild(mp.elContent);
 

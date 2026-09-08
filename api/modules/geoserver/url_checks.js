@@ -33,7 +33,7 @@ async function ensureGeoserverUrlChecks(options = {}) {
       fetchIn,
       "PUT",
       `urlchecks/${encodeURIComponent(CHECK_NAME)}.json`,
-      check
+      check,
     );
     await verifyUrlCheck(settingsIn, fetchIn, check);
     await notify?.({
@@ -126,7 +126,7 @@ function getApiPublicBaseUrls(settingsIn) {
       buildBaseUrl("http:", "api.mapx.localhost", port),
       buildBaseUrl("http:", "apidev.mapx.localhost", port),
       buildBaseUrl("http:", "localhost", port),
-      buildBaseUrl("http:", "0.0.0.0", port)
+      buildBaseUrl("http:", "0.0.0.0", port),
     );
   }
 
@@ -158,11 +158,13 @@ function normalizeBaseUrl(value) {
 
 function deriveStyleSvgRegex(baseUrls) {
   const urls = Array.isArray(baseUrls) ? baseUrls : [baseUrls];
-  const normalizedUrls = [...new Set(urls.map(normalizeBaseUrl).filter(Boolean))];
+  const normalizedUrls = [
+    ...new Set(urls.map(normalizeBaseUrl).filter(Boolean)),
+  ];
 
   if (normalizedUrls.length === 0) {
     throw new Error(
-      "At least one GeoServer URL check SVG base URL is required"
+      "At least one GeoServer URL check SVG base URL is required",
     );
   }
 
@@ -183,7 +185,7 @@ async function getUrlCheck(settingsIn, fetchIn, name) {
   const payload = await requestJson(
     settingsIn,
     fetchIn,
-    `urlchecks/${encodeURIComponent(name)}.json`
+    `urlchecks/${encodeURIComponent(name)}.json`,
   );
   return normalizeUrlCheck(payload);
 }
@@ -243,9 +245,9 @@ async function requestJson(settingsIn, fetchIn, path) {
 
   if (!response.ok) {
     throw new Error(
-      `GeoServer URL checks request failed: GET ${path} ${response.status} ${await readResponseText(
-        response
-      )}`
+      `GeoServer URL checks request failed: GET ${path} ${
+        response.status
+      } ${await readResponseText(response)}`,
     );
   }
 
@@ -281,9 +283,11 @@ async function saveUrlCheck(settingsIn, fetchIn, method, path, check) {
   }
 
   throw new Error(
-    `GeoServer URL checks request failed: ${method} ${path} JSON ${jsonResponse.status} ${jsonError}; XML ${
-      xmlResponse.status
-    } ${await readResponseText(xmlResponse)}`
+    `GeoServer URL checks request failed: ${method} ${path} JSON ${
+      jsonResponse.status
+    } ${jsonError}; XML ${xmlResponse.status} ${await readResponseText(
+      xmlResponse,
+    )}`,
   );
 }
 
@@ -298,7 +302,7 @@ function buildHeaders(settingsIn, headers = {}) {
   return {
     ...headers,
     Authorization: `Basic ${Buffer.from(`${user}:${password}`).toString(
-      "base64"
+      "base64",
     )}`,
   };
 }

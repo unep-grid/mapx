@@ -5,7 +5,9 @@ const windowMocks = vi.hoisted(() => {
     el: vi.fn((tag, ...options) => {
       const element = document.createElement(tag);
       for (const option of options) {
-        if (typeof option === "string") element.append(option);
+        if (typeof option === "string") {
+          element.append(option);
+        }
         if (option instanceof Promise) {
           option.then((value) => element.append(String(value)));
         }

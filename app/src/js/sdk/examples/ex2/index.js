@@ -54,5 +54,4 @@ mapx.on("ready", async () => {
   }
 
   $ul.appendTo($("#actions"));
-
 });

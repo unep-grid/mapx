@@ -8,7 +8,9 @@ import { copyToClipboard } from "../mx_helpers.js";
 /** Normalize to (-180, 180] with -180 pushed to +180 for stability */
 function norm180(x) {
   let y = ((((x + 180) % 360) + 360) % 360) - 180;
-  if (y === -180) y = 180;
+  if (y === -180) {
+    y = 180;
+  }
   return y;
 }
 

@@ -1,4 +1,3 @@
-
 /**
  * Return the intersect between two Polygons or multiPolygon
  * @param {Object} poly1
@@ -7,8 +6,8 @@
  */
 export function intersect(poly1, poly2) {
   return Promise.all([
-    import('martinez-polygon-clipping'),
-    import('@turf/helpers')
+    import("martinez-polygon-clipping"),
+    import("@turf/helpers"),
   ]).then((m) => {
     const martinez = m[0];
     const helpers = m[1];
@@ -22,7 +21,7 @@ export function intersect(poly1, poly2) {
 
     const intersection = martinez.intersection(
       geom1.coordinates,
-      geom2.coordinates
+      geom2.coordinates,
     );
     if (intersection === null || intersection.length === 0) {
       return null;
@@ -38,4 +37,3 @@ export function intersect(poly1, poly2) {
     return multiPolygon(intersection, properties);
   });
 }
-

@@ -25,9 +25,7 @@ describe("join source picker schema", () => {
       requiredCapabilities: [],
       accessMode: "readable",
     });
-    expect(
-      schema.properties.base.properties.columns.mx_options.watch,
-    ).toEqual({
+    expect(schema.properties.base.properties.columns.mx_options.watch).toEqual({
       property: "id_source",
       path: "root.base",
     });

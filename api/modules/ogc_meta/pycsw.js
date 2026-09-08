@@ -4,16 +4,20 @@ import { buildPycswRecord } from "./pycsw_helpers.js";
 
 const batchSize = 250;
 
-export {
-  updatePycswCatalog,
-};
+export { updatePycswCatalog };
 
-async function updatePycswCatalog(rows, {
-  language = settings.pycsw?.language || settings.validation_defaults.languages.default,
-  geoserverPublicUrl = settings.geoserver_public?.url || settings.geoserver?.url_public || "",
-  enabled = settings.pycsw?.enabled !== false,
-  table = settings.pycsw?.table || "mx_pycsw_records",
-} = {}) {
+async function updatePycswCatalog(
+  rows,
+  {
+    language = settings.pycsw?.language ||
+      settings.validation_defaults.languages.default,
+    geoserverPublicUrl = settings.geoserver_public?.url ||
+      settings.geoserver?.url_public ||
+      "",
+    enabled = settings.pycsw?.enabled !== false,
+    table = settings.pycsw?.table || "mx_pycsw_records",
+  } = {},
+) {
   if (!enabled) {
     return {
       skipped: true,
@@ -21,12 +25,14 @@ async function updatePycswCatalog(rows, {
     };
   }
 
-  const records = rows.map((row) => buildPycswRecord(row, {
-    language,
-    languages: settings.validation_defaults.languages,
-    apiBaseUrl: getApiPublicBaseUrl(),
-    geoserverPublicUrl,
-  }));
+  const records = rows.map((row) =>
+    buildPycswRecord(row, {
+      language,
+      languages: settings.validation_defaults.languages,
+      apiBaseUrl: getApiPublicBaseUrl(),
+      geoserverPublicUrl,
+    }),
+  );
   const tableSql = quoteTableName(table);
   const client = await pgWrite.connect();
 
@@ -133,5 +139,8 @@ function quoteTableName(table) {
     throw new Error(`Invalid pycsw table name: ${table}`);
   }
 
-  return table.split(".").map((part) => `"${part}"`).join(".");
+  return table
+    .split(".")
+    .map((part) => `"${part}"`)
+    .join(".");
 }

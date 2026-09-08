@@ -14,7 +14,7 @@ export function getProjectViewsState(opt) {
   opt = Object.assign(
     {},
     { idProject: settings.project.id, idInput: "projectViewsStates" },
-    opt
+    opt,
   );
   const idInput = opt.idInput;
   const isCurrentProject = opt.idProject === settings.project.id;
@@ -26,7 +26,7 @@ export function getProjectViewsState(opt) {
   }
   if (!isCurrentProject) {
     console.warn(
-      "getProjectViewsState: project requested is not the current project"
+      "getProjectViewsState: project requested is not the current project",
     );
     return;
   }

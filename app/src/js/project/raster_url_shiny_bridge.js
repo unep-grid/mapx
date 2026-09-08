@@ -10,19 +10,27 @@ const installedRoots = new WeakSet();
  * @param {{root: HTMLElement}} options
  */
 export function installRasterUrlShinyBridge({ root }) {
-  if (!root?.ownerDocument || installedRoots.has(root)) return;
+  if (!root?.ownerDocument || installedRoots.has(root)) {
+    return;
+  }
   installedRoots.add(root);
   const configurator = new RasterUrlConfigurator({ root });
 
   root.addEventListener("click", (event) => {
     const ElementClass = root.ownerDocument.defaultView?.Element;
-    if (!ElementClass || !(event.target instanceof ElementClass)) return;
+    if (!ElementClass || !(event.target instanceof ElementClass)) {
+      return;
+    }
     const button = event.target.closest("[data-raster-url-configure]");
-    if (!button || !root.contains(button)) return;
+    if (!button || !root.contains(button)) {
+      return;
+    }
     const editor = /** @type {HTMLElement|null} */ (
       button.closest("[data-raster-url-editor]")
     );
-    if (!editor) return;
+    if (!editor) {
+      return;
+    }
     openEditor({ configurator, editor }).catch(console.error);
   });
 }
@@ -32,7 +40,9 @@ export function installRasterUrlShinyBridge({ root }) {
  */
 async function openEditor({ configurator, editor }) {
   const refs = formRefs(editor);
-  if (!refs || !editor.dataset.rasterUrlView) return;
+  if (!refs || !editor.dataset.rasterUrlView) {
+    return;
+  }
   await configurator.show({
     idView: editor.dataset.rasterUrlView,
     mode: "draft",
@@ -65,7 +75,9 @@ function formRefs(editor) {
   const useMirror = /** @type {HTMLInputElement|null} */ (
     editor.querySelector("#checkRasterTileUseMirror")
   );
-  if (!tiles || !legend || !tileSize || !useMirror) return null;
+  if (!tiles || !legend || !tileSize || !useMirror) {
+    return null;
+  }
   return { tiles, legend, tileSize, useMirror };
 }
 

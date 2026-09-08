@@ -1,2 +1,1 @@
-export {NotifCenter} from './nc.js';
-
+export { NotifCenter } from "./nc.js";

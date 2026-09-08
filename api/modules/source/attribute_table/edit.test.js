@@ -87,7 +87,10 @@ describe("geometry edit API gate", () => {
 
   it("acquires a geometry lock for an authorized developer", async () => {
     mocks.isSocketAllowedToEditGeometry.mockResolvedValue(true);
-    mocks.acquireLock.mockResolvedValue({ locked: true, id_session: "session" });
+    mocks.acquireLock.mockResolvedValue({
+      locked: true,
+      id_session: "session",
+    });
     const edit = new EditTableSession(createSocket(), { id_table: idTable });
     edit._id_table = idTable;
     edit._id_session = "session";

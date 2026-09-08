@@ -166,7 +166,9 @@ export class ArcoMapLegend {
     }
 
     await this._z.init();
-    if (this.isDestroyed()) return;
+    if (this.isDestroyed()) {
+      return;
+    }
 
     this._initialized = true;
     this._syncStateFromZartigl();
@@ -237,9 +239,13 @@ export class ArcoMapLegend {
       change.source != null ||
       Object.prototype.hasOwnProperty.call(change, "timeRange");
 
-    if (structural) this.stop();
+    if (structural) {
+      this.stop();
+    }
     await this._z.update(next);
-    if (this.isDestroyed()) return;
+    if (this.isDestroyed()) {
+      return;
+    }
 
     if (nextLayer) {
       this._layer_def = nextLayer;
@@ -254,7 +260,9 @@ export class ArcoMapLegend {
       this._marker?.remove();
       this._marker = null;
     }
-    if (change.layer != null || change.source != null) this._meta = null;
+    if (change.layer != null || change.source != null) {
+      this._meta = null;
+    }
     this._syncOptions(change, nextLayer);
     if (structural || change.time != null || change.depth != null) {
       this._syncStateFromZartigl();
@@ -265,12 +273,18 @@ export class ArcoMapLegend {
       }
       this._id_query++;
       this._rebuild();
-      if (this._point) void this.updateChart();
+      if (this._point) {
+        void this.updateChart();
+      }
       return;
     }
 
-    if (change.time != null) this._syncTime(this._time);
-    if (change.depth != null) this._syncDepth(this._depth);
+    if (change.time != null) {
+      this._syncTime(this._time);
+    }
+    if (change.depth != null) {
+      this._syncDepth(this._depth);
+    }
     if (change.settings) {
       this._syncSettings(change.settings);
       if (
@@ -280,9 +294,13 @@ export class ArcoMapLegend {
       ) {
         this.renderLegend();
       }
-      if ("colorDomain" in change.settings) this._syncColorDomainControl();
+      if ("colorDomain" in change.settings) {
+        this._syncColorDomainControl();
+      }
     }
-    if (change.geoVideo) this._syncPlaybackControls();
+    if (change.geoVideo) {
+      this._syncPlaybackControls();
+    }
   }
 
   _updateFromControl(change) {
@@ -294,20 +312,38 @@ export class ArcoMapLegend {
   }
 
   _syncOptions(change, nextLayer) {
-    if (nextLayer) this._opt.layer = nextLayer.id;
-    if (change.source != null) this._opt.source = change.source;
+    if (nextLayer) {
+      this._opt.layer = nextLayer.id;
+    }
+    if (change.source != null) {
+      this._opt.source = change.source;
+    }
     if (Object.prototype.hasOwnProperty.call(change, "timeRange")) {
       this._opt.timeRange = change.timeRange;
     }
-    if (change.time != null) this._opt.time = change.time;
-    if (change.depth != null) this._opt.depth = change.depth;
-    if (change.visible != null) this._opt.visible = change.visible;
+    if (change.time != null) {
+      this._opt.time = change.time;
+    }
+    if (change.depth != null) {
+      this._opt.depth = change.depth;
+    }
+    if (change.visible != null) {
+      this._opt.visible = change.visible;
+    }
     if (change.settings) {
-      this._opt.settings = { ...(this._opt.settings || {}), ...change.settings };
+      this._opt.settings = {
+        ...(this._opt.settings || {}),
+        ...change.settings,
+      };
     }
     if (change.geoVideo) {
-      this._opt.geoVideo = { ...(this._opt.geoVideo || {}), ...change.geoVideo };
-      if (change.geoVideo.loop != null) this._opt.loop = change.geoVideo.loop;
+      this._opt.geoVideo = {
+        ...(this._opt.geoVideo || {}),
+        ...change.geoVideo,
+      };
+      if (change.geoVideo.loop != null) {
+        this._opt.loop = change.geoVideo.loop;
+      }
       if (change.geoVideo.playbackRate != null) {
         this._playbackRate = change.geoVideo.playbackRate;
       }
@@ -325,7 +361,9 @@ export class ArcoMapLegend {
     this._depth =
       this._depth_meta.current ?? this._depths[0] ?? this._opt.depth ?? 0;
     const appliedSettings = this._z.getDebugInfo?.().settings;
-    if (appliedSettings) this._opt.settings = { ...appliedSettings };
+    if (appliedSettings) {
+      this._opt.settings = { ...appliedSettings };
+    }
   }
 
   _rebuild() {
@@ -376,7 +414,9 @@ export class ArcoMapLegend {
     if (Number.isFinite(value)) {
       return value;
     }
-    return this._time_meta.current ?? this._time_meta.max ?? this._time_meta.min;
+    return (
+      this._time_meta.current ?? this._time_meta.max ?? this._time_meta.min
+    );
   }
 
   _timeStep() {
@@ -909,10 +949,11 @@ export class ArcoMapLegend {
           density: 100,
           stepped: true,
           format: {
-            to: (index) => formatTimeTick(
-              values[Math.round(index)],
-              this._time_meta.granularity,
-            ),
+            to: (index) =>
+              formatTimeTick(
+                values[Math.round(index)],
+                this._time_meta.granularity,
+              ),
           },
         },
       });
@@ -930,8 +971,8 @@ export class ArcoMapLegend {
     }
 
     const navigationEnabled = values.length > 1;
-    const transportEnabled = navigationEnabled ||
-      this._time_meta.timelineKind === "snapshot-loop";
+    const transportEnabled =
+      navigationEnabled || this._time_meta.timelineKind === "snapshot-loop";
     const elButtons = this._buildPlayerButtons(playback, {
       navigationEnabled,
       transportEnabled,
@@ -978,11 +1019,7 @@ export class ArcoMapLegend {
       this.elButtonPlay = el(
         "button",
         {
-          class: [
-            "btn",
-            "btn-default",
-            this._playing ? "playing" : null,
-          ],
+          class: ["btn", "btn-default", this._playing ? "playing" : null],
           disabled: transportEnabled ? null : true,
           title: "Play",
           on: { click: () => this.play() },
@@ -1040,12 +1077,16 @@ export class ArcoMapLegend {
         event.target.value,
         granularity,
       );
-      if (time === undefined) return;
+      if (time === undefined) {
+        return;
+      }
       this.stop();
       this.setTime(time);
     };
     if (granularity === "year") {
-      const years = [...new Set(values.map((time) => new Date(time).getUTCFullYear()))];
+      const years = [
+        ...new Set(values.map((time) => new Date(time).getUTCFullYear())),
+      ];
       return el(
         "select",
         {
@@ -1057,11 +1098,12 @@ export class ArcoMapLegend {
         years.map((year) => el("option", { value: year }, String(year))),
       );
     }
-    const type = granularity === "month"
-      ? "month"
-      : granularity === "day"
-        ? "date"
-        : "datetime-local";
+    const type =
+      granularity === "month"
+        ? "month"
+        : granularity === "day"
+          ? "date"
+          : "datetime-local";
     return el("input", {
       type,
       class: ["form-control", "arco--date_input"],
@@ -1223,25 +1265,29 @@ export class ArcoMapLegend {
           this.updateSettings({ opacity: value });
         },
       }),
-      dynamicStyle ? this._buildRangeRow({
-        label: "Vibrance",
-        min: -1,
-        max: 1,
-        step: 0.01,
-        get: () => this._settings.vibrance,
-        set: (value) => {
-          this._settings.vibrance = value;
-          this.updateSettings({ vibrance: value });
-        },
-      }) : null,
-      dynamicStyle ? this._buildCheckboxRow({
-        label: "Log scale",
-        get: () => this._settings.logScale,
-        set: (value) => {
-          this._settings.logScale = value;
-          this.updateSettings({ logScale: value });
-        },
-      }) : null,
+      dynamicStyle
+        ? this._buildRangeRow({
+            label: "Vibrance",
+            min: -1,
+            max: 1,
+            step: 0.01,
+            get: () => this._settings.vibrance,
+            set: (value) => {
+              this._settings.vibrance = value;
+              this.updateSettings({ vibrance: value });
+            },
+          })
+        : null,
+      dynamicStyle
+        ? this._buildCheckboxRow({
+            label: "Log scale",
+            get: () => this._settings.logScale,
+            set: (value) => {
+              this._settings.logScale = value;
+              this.updateSettings({ logScale: value });
+            },
+          })
+        : null,
     ];
 
     this._colorDomainControl?.destroy();
@@ -1431,10 +1477,7 @@ export class ArcoMapLegend {
       );
     }
     if (this.elTimeInput) {
-      this.elTimeInput.value = timeInputValue(
-        ms,
-        this._time_meta.granularity,
-      );
+      this.elTimeInput.value = timeInputValue(ms, this._time_meta.granularity);
     }
   }
 
@@ -1450,9 +1493,15 @@ export class ArcoMapLegend {
 
 function formatDateTime(ms, granularity = "minute") {
   const iso = new Date(ms).toISOString();
-  if (granularity === "year") return iso.slice(0, 4);
-  if (granularity === "month") return iso.slice(0, 7);
-  if (granularity === "day") return iso.slice(0, 10);
+  if (granularity === "year") {
+    return iso.slice(0, 4);
+  }
+  if (granularity === "month") {
+    return iso.slice(0, 7);
+  }
+  if (granularity === "day") {
+    return iso.slice(0, 10);
+  }
   if (granularity === "second") {
     return `${iso.slice(0, 10)} ${iso.slice(11, 19)} UTC`;
   }
@@ -1460,22 +1509,36 @@ function formatDateTime(ms, granularity = "minute") {
 }
 
 function timeInputLabel(granularity) {
-  if (granularity === "year") return "Year";
-  if (granularity === "month") return "Month";
-  if (granularity === "day") return "Date";
+  if (granularity === "year") {
+    return "Year";
+  }
+  if (granularity === "month") {
+    return "Month";
+  }
+  if (granularity === "day") {
+    return "Date";
+  }
   return "Date & time";
 }
 
 function timeInputValue(ms, granularity) {
   const iso = new Date(ms).toISOString();
-  if (granularity === "year") return iso.slice(0, 4);
-  if (granularity === "month") return iso.slice(0, 7);
-  if (granularity === "day") return iso.slice(0, 10);
+  if (granularity === "year") {
+    return iso.slice(0, 4);
+  }
+  if (granularity === "month") {
+    return iso.slice(0, 7);
+  }
+  if (granularity === "day") {
+    return iso.slice(0, 10);
+  }
   return iso.slice(0, granularity === "second" ? 19 : 16);
 }
 
 function timeInputStep(meta) {
-  if (meta.granularity === "second") return Math.max(1, (meta.step || 1000) / 1000);
+  if (meta.granularity === "second") {
+    return Math.max(1, (meta.step || 1000) / 1000);
+  }
   if (meta.granularity === "minute" || meta.granularity === "hour") {
     return Math.max(60, (meta.step || 60000) / 1000);
   }
@@ -1516,9 +1579,15 @@ function countDecimals(step) {
 
 function formatTimeTick(ms, granularity) {
   const iso = new Date(ms).toISOString();
-  if (granularity === "year") return iso.slice(0, 4);
-  if (granularity === "month") return iso.slice(0, 7);
-  if (granularity === "day") return iso.slice(0, 10);
+  if (granularity === "year") {
+    return iso.slice(0, 4);
+  }
+  if (granularity === "month") {
+    return iso.slice(0, 7);
+  }
+  if (granularity === "day") {
+    return iso.slice(0, 10);
+  }
   return `${iso.slice(5, 10)} ${iso.slice(11, 16)}`;
 }
 

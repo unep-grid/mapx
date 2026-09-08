@@ -38,7 +38,9 @@ export class MxStoryNavigationElement extends HTMLElement {
   }
 
   connectedCallback() {
-    if (!this._built) this.build();
+    if (!this._built) {
+      this.build();
+    }
   }
 
   build() {
@@ -125,12 +127,21 @@ export class MxStoryNavigationElement extends HTMLElement {
    * @param {number} [config.aspectRatio]
    */
   configure(config = {}) {
-    if (!this._built) this.build();
-    if (config.steps) this._steps = config.steps;
-    if (config.activeIndex !== undefined)
+    if (!this._built) {
+      this.build();
+    }
+    if (config.steps) {
+      this._steps = config.steps;
+    }
+    if (config.activeIndex !== undefined) {
       this._activeIndex = config.activeIndex;
-    if (config.locked !== undefined) this._locked = config.locked;
-    if (config.showQuit !== undefined) this._showQuit = config.showQuit;
+    }
+    if (config.locked !== undefined) {
+      this._locked = config.locked;
+    }
+    if (config.showQuit !== undefined) {
+      this._showQuit = config.showQuit;
+    }
     if (Number.isFinite(config.aspectRatio) && config.aspectRatio > 0) {
       this._aspectRatio = config.aspectRatio;
     }
@@ -155,7 +166,9 @@ export class MxStoryNavigationElement extends HTMLElement {
    * locked story overlay instead of the button itself).
    */
   shakeLock() {
-    if (!this._built) return;
+    if (!this._built) {
+      return;
+    }
     shake(this.refs.lock, { type: "no_way" });
   }
 
@@ -179,12 +192,16 @@ export class MxStoryNavigationElement extends HTMLElement {
     const end = Math.min(total - 1, start + WINDOW_SIZE - 1);
     start = Math.max(0, end - WINDOW_SIZE + 1);
     const indices = [];
-    for (let i = start; i <= end; i++) indices.push(i);
+    for (let i = start; i <= end; i++) {
+      indices.push(i);
+    }
     return indices;
   }
 
   render() {
-    if (!this._built) return;
+    if (!this._built) {
+      return;
+    }
     const total = this._steps.length;
     const hasMultiple = total > 1;
 
@@ -214,7 +231,9 @@ export class MxStoryNavigationElement extends HTMLElement {
   }
 
   renderLock() {
-    if (!this._built) return;
+    if (!this._built) {
+      return;
+    }
     const icon = this.refs.lock.querySelector(".fa");
     const activeKey = this._locked
       ? "lock-toggle-locked"
@@ -320,7 +339,9 @@ export class MxStoryNavigationElement extends HTMLElement {
       return;
     }
     const button = target.closest("[data-nav-action]");
-    if (!button) return;
+    if (!button) {
+      return;
+    }
     this.onAction(button.dataset.navAction);
   }
 
@@ -328,7 +349,9 @@ export class MxStoryNavigationElement extends HTMLElement {
   onGridClick(event) {
     const target = /** @type {HTMLElement} */ (event.target);
     const tile = target.closest("[data-step]");
-    if (!tile) return;
+    if (!tile) {
+      return;
+    }
     this.dispatchNavEvent("mx-story-nav-goto", {
       to: Number(tile.dataset.step),
     });

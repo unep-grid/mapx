@@ -23,7 +23,9 @@ function cacheKey(idSource, timestamp) {
 }
 
 function parseCachedPreview(value) {
-  if (!value) return null;
+  if (!value) {
+    return null;
+  }
   try {
     const preview = JSON.parse(value);
     return preview?.kind === "vector" ? preview : null;
@@ -40,7 +42,9 @@ function parseCachedPreview(value) {
  * @returns {Promise<Record<string, any> | null>}
  */
 export async function generateSourcePreview(idSource, client = pgRead) {
-  if (!isSourceId(idSource)) throw new Error("source_id_invalid");
+  if (!isSourceId(idSource)) {
+    throw new Error("source_id_invalid");
+  }
   const sql = parseTemplate(templates.getSvgSourcePreview, {
     layer: quoteIdentifier(idSource),
     layer_name: idSource,
@@ -77,7 +81,9 @@ export async function getSourcePreview(
   viewId = null,
   dependencies = {},
 ) {
-  if (!isSourceId(idSource)) throw new Error("source_id_invalid");
+  if (!isSourceId(idSource)) {
+    throw new Error("source_id_invalid");
+  }
   const {
     client = pgRead,
     redisGetFn = redisGet,
@@ -91,15 +97,21 @@ export async function getSourcePreview(
     `SELECT type FROM mx_sources_latest WHERE id = $1`,
     [idSource],
   );
-  if (source.rows[0]?.type !== "vector") return null;
+  if (source.rows[0]?.type !== "vector") {
+    return null;
+  }
 
   const timestamp = await getTimestamp(idSource, client);
   const key = cacheKey(idSource, timestamp);
   const cached = parseCachedPreview(await redisGetFn(key));
-  if (cached) return cached;
+  if (cached) {
+    return cached;
+  }
 
   const preview = await generateSourcePreview(idSource, client);
-  if (preview) await redisSetFn(key, JSON.stringify(preview));
+  if (preview) {
+    await redisSetFn(key, JSON.stringify(preview));
+  }
   return preview;
 }
 

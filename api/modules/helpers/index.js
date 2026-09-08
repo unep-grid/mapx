@@ -134,7 +134,10 @@ function sendError(res, error, code = 500) {
   let errorMessage = isString(error) ? error : error.message;
 
   if (res.headersSent) {
-    console.error("Could not send error response after headers were sent", error);
+    console.error(
+      "Could not send error response after headers were sent",
+      error,
+    );
     if (!res.writableEnded) {
       res.end();
     }

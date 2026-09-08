@@ -45,7 +45,9 @@ let pickerCounter = 0;
  */
 
 function arrayValue(value) {
-  if (Array.isArray(value)) return value.filter(Boolean).map(String);
+  if (Array.isArray(value)) {
+    return value.filter(Boolean).map(String);
+  }
   return value ? [String(value)] : [];
 }
 
@@ -54,7 +56,9 @@ function hasOwn(object, property) {
 }
 
 function normalizeActions(value) {
-  if (!Array.isArray(value)) return [];
+  if (!Array.isArray(value)) {
+    return [];
+  }
   return value
     .filter(
       (action) =>
@@ -113,14 +117,18 @@ function debounce(callback, wait) {
 }
 
 function dateLabel(value) {
-  if (!value) return "";
+  if (!value) {
+    return "";
+  }
   return new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(
     new Date(value),
   );
 }
 
 function numberLabel(value) {
-  if (value === null || value === undefined || value === "") return "";
+  if (value === null || value === undefined || value === "") {
+    return "";
+  }
   const number = Number(value);
   return Number.isFinite(number)
     ? new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(
@@ -133,8 +141,12 @@ function dimensionLabel(item) {
   const parts = [];
   const rows = numberLabel(item?.row_estimate);
   const columns = numberLabel(item?.column_count);
-  if (rows) parts.push(`~${rows} rows`);
-  if (columns) parts.push(`${columns} fields`);
+  if (rows) {
+    parts.push(`~${rows} rows`);
+  }
+  if (columns) {
+    parts.push(`${columns} fields`);
+  }
   return parts.join(" · ");
 }
 
@@ -211,7 +223,9 @@ export class MxSourcePickerElement extends HTMLElement {
     this._config.maxItems = this._config.multiple
       ? Math.max(1, Number(this._config.maxItems) || 1)
       : 1;
-    if (this.isConnected) this.renderField();
+    if (this.isConnected) {
+      this.renderField();
+    }
   }
 
   get config() {
@@ -240,7 +254,9 @@ export class MxSourcePickerElement extends HTMLElement {
     this.selectedItems = new Map(
       values.map((id) => [id, { id, title: id, type: "vector" }]),
     );
-    if (this.isConnected) this.renderField();
+    if (this.isConnected) {
+      this.renderField();
+    }
   }
 
   connectedCallback() {
@@ -267,8 +283,12 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (name !== "disabled" || oldValue === newValue) return;
-    if (this.isConnected) this.renderField();
+    if (name !== "disabled" || oldValue === newValue) {
+      return;
+    }
+    if (this.isConnected) {
+      this.renderField();
+    }
     this.updateBrowserDisabledState();
   }
 
@@ -301,10 +321,15 @@ export class MxSourcePickerElement extends HTMLElement {
       }
     }
     for (const id of this.pendingSelectedItems?.keys() || []) {
-      if (excluded.has(id)) this.pendingSelectedItems.delete(id);
+      if (excluded.has(id)) {
+        this.pendingSelectedItems.delete(id);
+      }
     }
-    if (selectionChanged && emit) this.commit();
-    else if (this.isConnected) this.renderField();
+    if (selectionChanged && emit) {
+      this.commit();
+    } else if (this.isConnected) {
+      this.renderField();
+    }
     if (this.refs?.browser?.isConnected) {
       this.updateConfirmButton();
       this.loadResults();
@@ -319,7 +344,9 @@ export class MxSourcePickerElement extends HTMLElement {
 
   async hydrateSelectedItems() {
     const selectedIds = [...this.selectedItems.keys()];
-    if (!selectedIds.length) return;
+    if (!selectedIds.length) {
+      return;
+    }
     const generation = ++this.selectionHydrationGeneration;
     let response;
     try {
@@ -347,13 +374,19 @@ export class MxSourcePickerElement extends HTMLElement {
       return;
     }
     for (const item of response.items) {
-      if (this.selectedItems.has(item.id)) this.selectedItems.set(item.id, item);
+      if (this.selectedItems.has(item.id)) {
+        this.selectedItems.set(item.id, item);
+      }
       if (this.pendingSelectedItems?.has(item.id)) {
         this.pendingSelectedItems.set(item.id, item);
       }
-      if (this.activeItem?.id === item.id) this.activeItem = item;
+      if (this.activeItem?.id === item.id) {
+        this.activeItem = item;
+      }
     }
-    if (this.isConnected) this.renderField();
+    if (this.isConnected) {
+      this.renderField();
+    }
     this.renderBrowserSelection();
     if (this.activeItem && this.refs?.previewMeta) {
       this.showPreview(this.activeItem);
@@ -437,7 +470,11 @@ export class MxSourcePickerElement extends HTMLElement {
           dataset: { sourceId: item.id },
         });
         row.append(
-          el("span", { class: "mx-source-picker__selected-item-title" }, item.title),
+          el(
+            "span",
+            { class: "mx-source-picker__selected-item-title" },
+            item.title,
+          ),
           this.buildSelectionAction("move-up", item, "Move up", {
             disabled: this.disabled || this.validating || index === 0,
           }),
@@ -519,15 +556,21 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   onFieldClick(event) {
-    if (this.disabled || this.validating) return;
+    if (this.disabled || this.validating) {
+      return;
+    }
     const actionElement = event.target.closest("[data-action]");
     const action = actionElement?.dataset.action;
-    if (action === "open") this.open();
+    if (action === "open") {
+      this.open();
+    }
     if (action === "picker-action") {
       const configuredAction = this.config.actions.find(
         (candidate) => candidate.id === actionElement.dataset.actionId,
       );
-      if (!configuredAction || actionElement.disabled) return;
+      if (!configuredAction || actionElement.disabled) {
+        return;
+      }
       this.dispatchEvent(
         new CustomEvent("mx-source-picker-action", {
           bubbles: true,
@@ -555,7 +598,9 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   open() {
-    if (this.disabled || this.validating) return;
+    if (this.disabled || this.validating) {
+      return;
+    }
     this.pendingSelectedItems = new Map(this.selectedItems);
     this.activeItem = [...this.pendingSelectedItems.values()][0] || null;
     this.buildBrowser();
@@ -591,7 +636,9 @@ export class MxSourcePickerElement extends HTMLElement {
     const entries = [...this.selectedItems.entries()];
     const current = entries.findIndex(([sourceId]) => sourceId === id);
     const target = current + offset;
-    if (current < 0 || target < 0 || target >= entries.length) return;
+    if (current < 0 || target < 0 || target >= entries.length) {
+      return;
+    }
     [entries[current], entries[target]] = [entries[target], entries[current]];
     this.selectedItems = new Map(entries);
     this.commit({
@@ -603,14 +650,14 @@ export class MxSourcePickerElement extends HTMLElement {
   removeCommittedItem(id) {
     const ids = [...this.selectedItems.keys()];
     const index = ids.indexOf(id);
-    if (index < 0) return;
+    if (index < 0) {
+      return;
+    }
     this.selectedItems.delete(id);
     const remaining = [...this.selectedItems.keys()];
     const focusId = remaining[Math.min(index, remaining.length - 1)];
     this.commit(
-      focusId
-        ? { sourceId: focusId, action: "remove-item" }
-        : undefined,
+      focusId ? { sourceId: focusId, action: "remove-item" } : undefined,
     );
     if (!focusId) {
       this.querySelector("[data-action='open']")?.focus();
@@ -790,9 +837,7 @@ export class MxSourcePickerElement extends HTMLElement {
       validationStatus,
     };
     search.addEventListener("input", this.onBrowserInput);
-    search.addEventListener("keydown", (event) =>
-      this.onSearchKeydown(event),
-    );
+    search.addEventListener("keydown", (event) => this.onSearchKeydown(event));
     for (const control of [sourceType, geometry, tag, sort]) {
       control.addEventListener("change", () => {
         if (
@@ -826,16 +871,23 @@ export class MxSourcePickerElement extends HTMLElement {
     });
     this.updateFilterState();
     this.updateConfirmButton();
-    if (this.activeItem) this.showPreview(this.activeItem);
-    else this.renderNeutralPreview();
+    if (this.activeItem) {
+      this.showPreview(this.activeItem);
+    } else {
+      this.renderNeutralPreview();
+    }
   }
 
   async loadResults({ append = false } = {}) {
     const refs = this.refs;
-    if (!refs || (append && (!this.hasMoreResults || this.loadingMore))) return;
+    if (!refs || (append && (!this.hasMoreResults || this.loadingMore))) {
+      return;
+    }
     const generation = ++this.searchGeneration;
     const requestOffset = append ? this.nextOffset : 0;
-    if (append) this.loadingMore = true;
+    if (append) {
+      this.loadingMore = true;
+    }
     this.previewToken = null;
     refs.results.setAttribute("aria-busy", "true");
     if (append) {
@@ -879,7 +931,9 @@ export class MxSourcePickerElement extends HTMLElement {
       response = { error: "source_search_failed" };
     }
     if (generation !== this.searchGeneration || refs !== this.refs) {
-      if (append) this.loadingMore = false;
+      if (append) {
+        this.loadingMore = false;
+      }
       return;
     }
     if (response?.error) {
@@ -901,19 +955,25 @@ export class MxSourcePickerElement extends HTMLElement {
     const previousItems = append ? this.items || [] : [];
     const knownIds = new Set(previousItems.map((item) => item.id));
     const uniquePageItems = pageItems.filter((item) => {
-      if (knownIds.has(item.id)) return false;
+      if (knownIds.has(item.id)) {
+        return false;
+      }
       knownIds.add(item.id);
       return true;
     });
     this.items = [...previousItems, ...uniquePageItems];
     for (const item of uniquePageItems) {
-      if (this.selectedItems.has(item.id))
+      if (this.selectedItems.has(item.id)) {
         this.selectedItems.set(item.id, item);
-      if (this.pendingSelectedItems?.has(item.id))
+      }
+      if (this.pendingSelectedItems?.has(item.id)) {
         this.pendingSelectedItems.set(item.id, item);
+      }
     }
     this.renderField();
-    if (!append) this.updateTagFacet(response?.facets?.tags || []);
+    if (!append) {
+      this.updateTagFacet(response?.facets?.tags || []);
+    }
     this.resultTotal = Number(response?.total) || 0;
     this.nextOffset =
       Number(response?.offset ?? requestOffset) + responseItems.length;
@@ -925,8 +985,9 @@ export class MxSourcePickerElement extends HTMLElement {
     const rows = uniquePageItems.map((item, index) =>
       this.buildResult(item, previousItems.length + index),
     );
-    if (append) refs.results.append(...rows);
-    else {
+    if (append) {
+      refs.results.append(...rows);
+    } else {
       refs.results.replaceChildren(...rows);
       refs.resultsScroller.scrollTop = 0;
     }
@@ -942,9 +1003,9 @@ export class MxSourcePickerElement extends HTMLElement {
     this.renderBrowserSelection();
     this.updateConfirmButton();
     this.updateBrowserDisabledState();
-    if (this.activeItem && (!append || !activeId))
+    if (this.activeItem && (!append || !activeId)) {
       this.showPreview(this.activeItem);
-    else {
+    } else {
       if (!append) {
         refs.previewMeta.replaceChildren();
         this.renderNeutralPreview();
@@ -971,7 +1032,9 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   updateLoadMoreState({ loading = false, error = false } = {}) {
-    if (!this.refs?.loadMore) return;
+    if (!this.refs?.loadMore) {
+      return;
+    }
     const hasMore = this.hasMoreResults || loading || error;
     this.refs.loadControls.hidden = !hasMore;
     this.refs.loadMore.hidden = !hasMore;
@@ -1004,8 +1067,11 @@ export class MxSourcePickerElement extends HTMLElement {
       typeof force === "boolean" ? force : this.refs.filters.hidden === true;
     this.refs.filters.hidden = !open;
     this.refs.filtersButton.setAttribute("aria-expanded", String(open));
-    if (open) this.refs.sourceType.focus();
-    else if (force === false) this.refs.filtersButton.focus();
+    if (open) {
+      this.refs.sourceType.focus();
+    } else if (force === false) {
+      this.refs.filtersButton.focus();
+    }
   }
 
   clearFilters() {
@@ -1019,7 +1085,9 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   updateFilterState() {
-    if (!this.refs?.filtersButton) return;
+    if (!this.refs?.filtersButton) {
+      return;
+    }
     const active =
       Boolean(this.refs.sourceType.value) ||
       Boolean(this.refs.geometry.value) ||
@@ -1033,13 +1101,17 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   updateConfirmButton() {
-    if (!this.refs?.confirm) return;
+    if (!this.refs?.confirm) {
+      return;
+    }
     this.refs.confirm.disabled =
       this.disabled || this.validating || !this.pendingSelectedItems?.size;
   }
 
   updateBrowserDisabledState() {
-    if (!this.refs?.browser) return;
+    if (!this.refs?.browser) {
+      return;
+    }
     for (const control of [
       this.refs.search,
       this.refs.filtersButton,
@@ -1105,16 +1177,22 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   onResultAction(event) {
-    if (this.disabled || this.validating) return;
+    if (this.disabled || this.validating) {
+      return;
+    }
     const id = event.target.closest("[data-source-id]")?.dataset.sourceId;
     const item = this.items?.find((candidate) => candidate.id === id);
-    if (!item) return;
+    if (!item) {
+      return;
+    }
     this.activateItem(item, { select: true });
   }
 
   activateItem(item, { select = false, focus = false } = {}) {
     this.activeItem = item;
-    if (select) this.updatePendingSelection(item);
+    if (select) {
+      this.updatePendingSelection(item);
+    }
     this.renderBrowserSelection();
     this.updateConfirmButton();
     this.showPreview(item);
@@ -1131,10 +1209,11 @@ export class MxSourcePickerElement extends HTMLElement {
     this.setValidationMessage("");
     const id = item.id;
     if (this.config.multiple) {
-      if (this.pendingSelectedItems.has(id))
+      if (this.pendingSelectedItems.has(id)) {
         this.pendingSelectedItems.delete(id);
-      else if (this.pendingSelectedItems.size < this.config.maxItems)
+      } else if (this.pendingSelectedItems.size < this.config.maxItems) {
         this.pendingSelectedItems.set(id, item);
+      }
     } else {
       this.pendingSelectedItems = new Map([[id, item]]);
     }
@@ -1142,23 +1221,24 @@ export class MxSourcePickerElement extends HTMLElement {
 
   /** @param {number | "first" | "last"} direction */
   moveActive(direction) {
-    if (!this.items?.length) return;
+    if (!this.items?.length) {
+      return;
+    }
     const current = this.items.findIndex(
       (item) => item.id === this.activeItem?.id,
     );
     const start =
-      current >= 0 ? current : typeof direction === "number" && direction < 0
-        ? this.items.length
-        : -1;
+      current >= 0
+        ? current
+        : typeof direction === "number" && direction < 0
+          ? this.items.length
+          : -1;
     const next =
       direction === "first"
         ? 0
         : direction === "last"
           ? this.items.length - 1
-          : Math.min(
-              this.items.length - 1,
-              Math.max(0, start + direction),
-            );
+          : Math.min(this.items.length - 1, Math.max(0, start + direction));
     this.activateItem(this.items[next], {
       select: !this.config.multiple,
       focus: true,
@@ -1166,8 +1246,12 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   onSearchKeydown(event) {
-    if (this.disabled || this.validating) return;
-    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+    if (this.disabled || this.validating) {
+      return;
+    }
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") {
+      return;
+    }
     event.preventDefault();
     const selectedIndex = this.items?.findIndex((item) =>
       this.pendingSelectedItems?.has(item.id),
@@ -1188,9 +1272,13 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   onResultsKeydown(event) {
-    if (this.disabled || this.validating) return;
+    if (this.disabled || this.validating) {
+      return;
+    }
     const row = event.target.closest("[data-source-id]");
-    if (!row) return;
+    if (!row) {
+      return;
+    }
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
       this.moveActive(event.key === "ArrowDown" ? 1 : -1);
@@ -1206,7 +1294,9 @@ export class MxSourcePickerElement extends HTMLElement {
       const item = this.items.find(
         (candidate) => candidate.id === row.dataset.sourceId,
       );
-      if (item) this.activateItem(item, { select: true, focus: true });
+      if (item) {
+        this.activateItem(item, { select: true, focus: true });
+      }
       return;
     }
     if (event.key === "Enter" && !this.refs.confirm.disabled) {
@@ -1216,7 +1306,9 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   renderBrowserSelection() {
-    if (!this.refs?.results) return;
+    if (!this.refs?.results) {
+      return;
+    }
     for (const row of this.refs.results.children) {
       const selected =
         this.pendingSelectedItems?.has(row.dataset.sourceId) === true;
@@ -1235,11 +1327,7 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   confirmSelection() {
-    if (
-      this.disabled ||
-      this.validating ||
-      !this.pendingSelectedItems?.size
-    ) {
+    if (this.disabled || this.validating || !this.pendingSelectedItems?.size) {
       return;
     }
     if (typeof this.config.validateSelection === "function") {
@@ -1256,7 +1344,9 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   async validateAndConfirm() {
-    if (this.validating || !this.pendingSelectedItems?.size) return;
+    if (this.validating || !this.pendingSelectedItems?.size) {
+      return;
+    }
     const generation = ++this.validationGeneration;
     const selectedItems = new Map(this.pendingSelectedItems);
     const items = [...selectedItems.values()];
@@ -1294,7 +1384,9 @@ export class MxSourcePickerElement extends HTMLElement {
   }
 
   setValidationMessage(message) {
-    if (!this.refs?.validationStatus) return;
+    if (!this.refs?.validationStatus) {
+      return;
+    }
     this.refs.validationStatus.textContent = message;
     this.refs.validationStatus.hidden = !message;
   }
@@ -1313,9 +1405,7 @@ export class MxSourcePickerElement extends HTMLElement {
         {},
         [
           item.editor_email || "unknown editor",
-          item.date_modified
-            ? `Modified ${dateLabel(item.date_modified)}`
-            : "",
+          item.date_modified ? `Modified ${dateLabel(item.date_modified)}` : "",
           dimensionLabel(item),
           Number(item.view_count) > 0
             ? `Used by ${numberLabel(item.view_count)} views`
@@ -1326,7 +1416,9 @@ export class MxSourcePickerElement extends HTMLElement {
       ),
     );
     this.renderNeutralPreview(item);
-    if (item.type !== "vector") return;
+    if (item.type !== "vector") {
+      return;
+    }
     let response;
     try {
       response = await ws.emitAsync(
@@ -1337,7 +1429,9 @@ export class MxSourcePickerElement extends HTMLElement {
     } catch {
       return;
     }
-    if (token !== this.previewToken || !response?.preview) return;
+    if (token !== this.previewToken || !response?.preview) {
+      return;
+    }
     this.renderPreview(response.preview);
   }
 

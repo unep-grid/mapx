@@ -193,7 +193,7 @@ async function rebuild(socket, options) {
       socket,
       layers,
       idGroup,
-      idProgress
+      idProgress,
     );
     out.n_styles_refreshed = refresh.refreshed;
     out.n_styles_skipped = refresh.skipped;
@@ -335,7 +335,7 @@ async function createLayer(socket, layer, idGroup, idProgress) {
     "EPSG:4326",
     true,
     layer.abstract,
-    layer.bbox_source
+    layer.bbox_source,
   );
 
   if (layer.style_custom) {
@@ -366,7 +366,7 @@ async function createLayer(socket, layer, idGroup, idProgress) {
 async function refreshDbViewAltStyles(socket, layers, idGroup, idProgress) {
   if (!socket?.connected || !socket?.mx_emit_ws_response) {
     throw new Error(
-      "Client-side style regeneration requires a connected MapX client"
+      "Client-side style regeneration requires a connected MapX client",
     );
   }
 
@@ -413,7 +413,7 @@ async function refreshDbViewAltStyles(socket, layers, idGroup, idProgress) {
           error: e,
         };
       }
-    })
+    }),
   );
 
   summary.skipped = layers.length - layersToRefresh.length;
@@ -431,7 +431,7 @@ async function refreshDbViewAltStyles(socket, layers, idGroup, idProgress) {
     throw new Error(
       `SLD style regeneration failed for ${failed.length} view(s): ${failed
         .map((result) => result.id)
-        .join(", ")}`
+        .join(", ")}`,
     );
   }
 
@@ -472,7 +472,7 @@ async function createDatastore(socket, ws, idGroup, idProgress) {
     db.read.user,
     db.read.password,
     db.schema,
-    db.name
+    db.name,
   );
 
   await socket.notifyProgress({

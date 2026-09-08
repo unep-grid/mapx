@@ -85,7 +85,7 @@ class Button extends EventSimple {
         },
         "aria-label": getDictItem(opt.key),
       },
-      btn.elIcon
+      btn.elIcon,
     );
     if (opt.display === false) {
       btn.hide();
@@ -95,7 +95,7 @@ class Button extends EventSimple {
      * NOTE: el can ingest promises as children.
      */
     getDictItem(btn.opt.key).then((txt) =>
-      btn.elButton.setAttribute("aria-label", txt)
+      btn.elButton.setAttribute("aria-label", txt),
     );
   }
 
@@ -203,7 +203,6 @@ class Button extends EventSimple {
     this.elButton.remove();
     this.fire("destroy");
   }
-
 }
 
 export { Button };

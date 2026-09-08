@@ -10,7 +10,9 @@ import {
 
 const S3_PUBLIC_AUTHORIZATION = "AWS all_users:";
 
-const _allowedPrefixes = parseAllowedPrefixes(settings.s3_proxy.allowedPrefixes);
+const _allowedPrefixes = parseAllowedPrefixes(
+  settings.s3_proxy.allowedPrefixes,
+);
 
 const mwGet = [mwS3Proxy];
 const mwHead = [mwS3Proxy];

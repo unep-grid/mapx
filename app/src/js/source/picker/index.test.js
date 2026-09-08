@@ -499,9 +499,9 @@ describe("MxSourcePickerElement", () => {
     await picker.hydrateSelectedItems();
 
     expect(picker.value).toEqual(ids);
-    expect([...picker.selectedItems.values()].map((item) => item.title)).toEqual(
-      ["Road network", "Population"],
-    );
+    expect(
+      [...picker.selectedItems.values()].map((item) => item.title),
+    ).toEqual(["Road network", "Population"]);
   });
 
   it("ignores search responses superseded by a newer request", async () => {
@@ -555,9 +555,9 @@ describe("MxSourcePickerElement", () => {
 
     expect(picker.items.map((item) => item.title)).toEqual(["Population"]);
     expect(
-      [...picker.refs.results.querySelectorAll(".mx-source-browser__title")].map(
-        (element) => element.innerText,
-      ),
+      [
+        ...picker.refs.results.querySelectorAll(".mx-source-browser__title"),
+      ].map((element) => element.innerText),
     ).toEqual(["Population"]);
   });
 
@@ -757,7 +757,9 @@ describe("MxSourcePickerElement", () => {
     );
     picker.refs.geometry.value = "line";
     picker.refs.geometry.dispatchEvent(new Event("change"));
-    expect(picker.refs.filtersButton.classList.contains("is-active")).toBe(true);
+    expect(picker.refs.filtersButton.classList.contains("is-active")).toBe(
+      true,
+    );
 
     picker.refs.clearFilters.click();
 
@@ -857,9 +859,9 @@ describe("MxSourcePickerElement", () => {
 
     picker.selectedItems.clear();
     picker.renderField();
-    expect(picker.querySelector("[data-action-id='createSource']").disabled).toBe(
-      false,
-    );
+    expect(
+      picker.querySelector("[data-action-id='createSource']").disabled,
+    ).toBe(false);
     expect(picker.querySelector("[data-action-id='editSource']").disabled).toBe(
       true,
     );
@@ -905,7 +907,9 @@ describe("MxSourcePickerElement", () => {
       ...picker.items.map((item) => picker.buildResult(item)),
     );
 
-    for (const row of picker.refs.results.children) row.click();
+    for (const row of picker.refs.results.children) {
+      row.click();
+    }
 
     expect([...picker.pendingSelectedItems.keys()]).toEqual([
       "mx_vector_a_b_c_d_e",
@@ -933,16 +937,14 @@ describe("MxSourcePickerElement", () => {
     picker.addEventListener("mx-source-picker-change", listener);
 
     picker
-      .querySelector(
-        `[data-source-id="${items[1].id}"][data-action="move-up"]`,
-      )
+      .querySelector(`[data-source-id="${items[1].id}"][data-action="move-up"]`)
       .click();
 
     expect(picker.value).toEqual([items[1].id, items[0].id, items[2].id]);
     expect(listener).toHaveBeenCalledTimes(1);
-    expect(listener.mock.calls[0][0].detail.items.map((item) => item.id)).toEqual(
-      picker.value,
-    );
+    expect(
+      listener.mock.calls[0][0].detail.items.map((item) => item.id),
+    ).toEqual(picker.value);
     expect(
       picker.querySelector(
         `[data-source-id="${items[1].id}"][data-action="move-down"]`,
@@ -1158,9 +1160,7 @@ describe("MxSourcePickerElement", () => {
       title: "Road network",
       type: "vector",
     });
-    expect(
-      picker.refs.previewCanvas.querySelector(".fa-clone"),
-    ).not.toBeNull();
+    expect(picker.refs.previewCanvas.querySelector(".fa-clone")).not.toBeNull();
     expect(mocks.emitAsync).toHaveBeenCalledWith(
       "/client/source/preview/get",
       expect.objectContaining({ idSource: "mx_vector_a_b_c_d_e" }),
@@ -1201,9 +1201,7 @@ describe("MxSourcePickerElement", () => {
 
     const path = picker.refs.previewCanvas.querySelector("svg g path");
     expect(path.getAttribute("d")).toBe("M0 0L10 -10Z");
-    expect(path.closest("g").getAttribute("transform")).toBe(
-      "translate(0 36)",
-    );
+    expect(path.closest("g").getAttribute("transform")).toBe("translate(0 36)");
   });
 
   it("renders deterministic point bins at the SQL-provided size", () => {

@@ -1,6 +1,6 @@
-import {FrameManager} from './frameManager.js';
-import {FrameWorker} from './frameWorker.js';
-import {MapxSdkError} from './sdk_error.js';
+import { FrameManager } from "./frameManager.js";
+import { FrameWorker } from "./frameWorker.js";
+import { MapxSdkError } from "./sdk_error.js";
 
 /**
  * Class to wrap frame manager with custom options
@@ -28,4 +28,4 @@ class Worker extends FrameWorker {
   }
 }
 
-export {Manager, Worker, MapxSdkError};
+export { Manager, Worker, MapxSdkError };

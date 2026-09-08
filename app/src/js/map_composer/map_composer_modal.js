@@ -120,7 +120,6 @@ export class MapComposerModal {
         width: dimTitle.width + 30,
         height: dimTitle.height + 30,
       });
-
     }
 
     config.attributions = new AttributionManager(map, {

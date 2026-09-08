@@ -22,7 +22,7 @@ export function getFormatsList() {
  * @return {Boolean} valid
  */
 export function isFormatValid(format) {
-  return !!getFormatInfo(format,false)
+  return !!getFormatInfo(format, false);
 }
 
 /**
@@ -31,7 +31,7 @@ export function isFormatValid(format) {
  * @param {Boolean} use default If format not found, return default
  * @return {Object|Boolean} format info object or false if not found and useDefault is false
  */
-export function getFormatInfo(format, useDefault=true) {
+export function getFormatInfo(format, useDefault = true) {
   const fLower = (format || "").toLowerCase();
   for (const f of formatsList) {
     const fLName = f.name.toLowerCase();

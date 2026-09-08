@@ -10,7 +10,10 @@ describe("getRuntimeLayersByPrefix", () => {
     };
     const map = {
       getStyle: () => ({
-        layers: [{ id: "background" }, { id: "MX-STYLE", metadata: { idView: "MX-STYLE" } }],
+        layers: [
+          { id: "background" },
+          { id: "MX-STYLE", metadata: { idView: "MX-STYLE" } },
+        ],
       }),
       getLayersOrder: () => ["background", "MX-CUSTOM", "MX-STYLE"],
       getLayer: (id) => (id === "MX-CUSTOM" ? customLayer : undefined),
@@ -30,8 +33,8 @@ describe("getRuntimeLayersByPrefix", () => {
       getLayer: () => undefined,
     };
 
-    expect(getRuntimeLayersByPrefix({ map, prefix: "MX-" }).map((layer) => layer.id)).toEqual([
-      "MX-STYLE",
-    ]);
+    expect(
+      getRuntimeLayersByPrefix({ map, prefix: "MX-" }).map((layer) => layer.id),
+    ).toEqual(["MX-STYLE"]);
   });
 });

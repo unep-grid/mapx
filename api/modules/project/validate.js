@@ -37,7 +37,7 @@ export async function validate(name) {
       WHERE lower(title ->> 'en') = lower($1)
       LIMIT 1
     `,
-    [name]
+    [name],
   );
 
   const available = res.rowCount > 0 && res.rows[0].count === 0;

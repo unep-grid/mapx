@@ -814,7 +814,9 @@ export function date(val) {
 }
 
 export function formatDate(dateString, language = "en") {
-  if (!dateString) return "";
+  if (!dateString) {
+    return "";
+  }
   const date = new Date(dateString);
   return date.toLocaleDateString(language, {
     year: "numeric",

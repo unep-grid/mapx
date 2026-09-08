@@ -102,7 +102,8 @@ describe("AttributionManager", () => {
         source: "MX-V7AY6-OCTNO-ZB4FV-SRC",
         attribution_html:
           '<a href="https://mrdata.usgs.gov/">Mineral operations outside the United States (USGS, 2010)</a>',
-        attribution_text: "Mineral operations outside the United States (USGS, 2010)",
+        attribution_text:
+          "Mineral operations outside the United States (USGS, 2010)",
       },
     ]);
   });

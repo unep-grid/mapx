@@ -241,7 +241,7 @@ async function extractFromPostgres(res, config) {
   await writeFile(`${folderPath}/info.txt`, txtTimeStamp);
   await writeFile(
     `${folderPath}/metadata.json`,
-    JSON.stringify(metadata, 0, 2)
+    JSON.stringify(metadata, 0, 2),
   );
 
   /**
@@ -375,7 +375,7 @@ async function getSqlClip(idSource, iso3codes, attrPg, language) {
       t("get_source_invalid_geom", language, {
         idLayer: test.id,
         title: test.title,
-      })
+      }),
     );
   }
 

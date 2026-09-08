@@ -31,12 +31,17 @@ export function createSourceMetadataEditShortcut({
       on: {
         click: async () => {
           const idSource = button.dataset.idSource;
-          if (!idSource) return;
+          if (!idSource) {
+            return;
+          }
           button.disabled = true;
           try {
             const opened = await onEdit(idSource);
-            if (opened !== false) onOpened();
-            else button.disabled = false;
+            if (opened !== false) {
+              onOpened();
+            } else {
+              button.disabled = false;
+            }
           } catch (error) {
             console.error("Could not open source metadata editor", error);
             button.disabled = false;

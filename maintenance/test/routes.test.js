@@ -95,7 +95,9 @@ for (const development of [false, true]) {
     ]) {
       const result = await get("/anything", method, "API.EXAMPLE.COM:443");
       assert.equal(result.status, 503);
-      if (method !== "HEAD") assert.equal(JSON.parse(result.body).retry, null);
+      if (method !== "HEAD") {
+        assert.equal(JSON.parse(result.body).retry, null);
+      }
     }
     assert.equal(
       (await get("/healthz", "POST", "api.example.com")).status,

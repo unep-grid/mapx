@@ -1,61 +1,59 @@
-import {el} from './../el/src/index.js';
-import {elSpanTranslate} from './../el_mapx';
-import {modal, modalPrompt} from './../mx_helper_modal';
-import {isUrl} from './../is_test/index.js';
-import {mirrorUrlCreate} from './index.js';
+import { el } from "./../el/src/index.js";
+import { elSpanTranslate } from "./../el_mapx";
+import { modal, modalPrompt } from "./../mx_helper_modal";
+import { isUrl } from "./../is_test/index.js";
+import { mirrorUrlCreate } from "./index.js";
 //const urlDummy = 'http://tile.openstreetmap.org/${z}/${x}/${y}.png';
 //const urlDummy ='https://app.staging.mapx.org/sprites/sprite.png';
-const urlPlaceholder = 'https://a.tile.thunderforest.com/cycle/{z}/{x}/{y}@2x.png'
-const urlDummy = 'https://a.tile.thunderforest.com/cycle/14/8531/5803@2x.png'
+const urlPlaceholder =
+  "https://a.tile.thunderforest.com/cycle/{z}/{x}/{y}@2x.png";
+const urlDummy = "https://a.tile.thunderforest.com/cycle/14/8531/5803@2x.png";
 
 export async function modalMirror() {
   try {
     const url = await modalPrompt({
-      title: elSpanTranslate('tool_mirror_title'),
-      label: elSpanTranslate('tool_mirror_enter_url'),
-      confirm: elSpanTranslate('tool_mirror_btn_create'),
+      title: elSpanTranslate("tool_mirror_title"),
+      label: elSpanTranslate("tool_mirror_enter_url"),
+      confirm: elSpanTranslate("tool_mirror_btn_create"),
       inputOptions: {
-        type: 'text',
+        type: "text",
         value: urlDummy,
-        placeholder : urlPlaceholder
+        placeholder: urlPlaceholder,
       },
       onInput: (url, elBtnConfirm) => {
         const valid = isUrl(url);
         if (valid) {
           elBtnConfirm.disabled = false;
-          elBtnConfirm.classList.remove('disabled');
+          elBtnConfirm.classList.remove("disabled");
         } else {
           elBtnConfirm.disabled = true;
-          elBtnConfirm.classList.add('disabled');
+          elBtnConfirm.classList.add("disabled");
         }
-      }
+      },
     });
-    if(!url){
-       return;
+    if (!url) {
+      return;
     }
 
     const urlMirror = mirrorUrlCreate(url);
 
     const elRes = el(
-      'div',
-      {style: {display: 'flex', flexDirection: 'column'}},
-      el('label', elSpanTranslate('tool_mirror_res_url')),
+      "div",
+      { style: { display: "flex", flexDirection: "column" } },
+      el("label", elSpanTranslate("tool_mirror_res_url")),
       el(
-        'textarea',
-        {style: {fontFamily: 'monospace', padding: '10px'}},
-        urlMirror
+        "textarea",
+        { style: { fontFamily: "monospace", padding: "10px" } },
+        urlMirror,
       ),
-      el('a', {href: urlMirror, target: '_blank'}, 'Test link'),
-      el(
-        'small',
-        elSpanTranslate('tool_mirror_res_warn'),
-      )
+      el("a", { href: urlMirror, target: "_blank" }, "Test link"),
+      el("small", elSpanTranslate("tool_mirror_res_warn")),
     );
 
     modal({
-      title: elSpanTranslate('tool_mirror_title'),
+      title: elSpanTranslate("tool_mirror_title"),
       content: elRes,
-      addBackground: true
+      addBackground: true,
     });
   } catch (e) {
     console.warn(e);

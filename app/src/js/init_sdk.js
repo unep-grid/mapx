@@ -1,8 +1,4 @@
-import {
-  getDocumentHostname,
-  getQueryParameter,
-  isNested,
-} from "./url_utils";
+import { getDocumentHostname, getQueryParameter, isNested } from "./url_utils";
 import { Worker } from "./sdk/src/index.js";
 import { settings } from "./settings";
 import {

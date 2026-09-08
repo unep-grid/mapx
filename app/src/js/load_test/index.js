@@ -7,7 +7,7 @@ export async function loadTest(url, n) {
       const start = Date.now();
       const r = await fetch(url);
       if (!r.ok) {
-        throw 'failed';
+        throw "failed";
       } else {
         await r.blob();
         res.push(Date.now() - start);
@@ -30,6 +30,6 @@ export async function loadTest(url, n) {
     min,
     median,
     mean,
-    url
+    url,
   };
 }

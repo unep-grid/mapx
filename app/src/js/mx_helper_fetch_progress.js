@@ -87,7 +87,7 @@ export async function fetchProgress(url, opt) {
         const reader = response.body.getReader();
         read(reader, controller);
       },
-    })
+    }),
   );
 
   /**
@@ -129,7 +129,7 @@ export async function fetchProgress_xhr(url, opt) {
   const promTimeout = new Promise((_, reject) => {
     setTimeout(() => {
       reject(
-        `fetchProgress_xhr : timeout exceeded ( ${settings.maxTimeFetch} ms )`
+        `fetchProgress_xhr : timeout exceeded ( ${settings.maxTimeFetch} ms )`,
       );
     }, settings.maxTimeFetch);
   });
@@ -159,7 +159,7 @@ export async function fetchProgress_xhr(url, opt) {
         if (p.loaded >= opt.maxSize) {
           xmlhttp.abort();
           reject(
-            `fetchProgress_xhr : Size limit exceeded ( ${opt.maxSize} B )`
+            `fetchProgress_xhr : Size limit exceeded ( ${opt.maxSize} B )`,
           );
         }
       }

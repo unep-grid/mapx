@@ -22,7 +22,7 @@ export async function setViewStyleAlt(idView, config, client) {
         sld: "",
         mapbox: "{}",
       },
-      config
+      config,
     );
     await pgClient.query(sql, [idView, configQuery.mapbox, configQuery.sld]);
     return true;
@@ -48,12 +48,9 @@ export async function ioUpdateDbViewAltStyle(socket, options, client) {
     return { valid: false };
   }
 
-  const response = await socket.mx_emit_ws_response(
-    "/server/view/style/get",
-    {
-      idView: idView,
-    }
-  );
+  const response = await socket.mx_emit_ws_response("/server/view/style/get", {
+    idView: idView,
+  });
   const { result, error } = response || {};
 
   if (error) {

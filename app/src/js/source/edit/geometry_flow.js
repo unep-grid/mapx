@@ -49,7 +49,9 @@ export async function editFeatureGeometry(opt) {
     typeof session.getGeometryInfo === "function"
       ? await session.getGeometryInfo()
       : null;
-  const declaredType = `${geometryInfo?.type || geom?.type || ""}`.toUpperCase();
+  const declaredType = `${
+    geometryInfo?.type || geom?.type || ""
+  }`.toUpperCase();
   const allowMultipart =
     declaredType === "GEOMETRY" || declaredType.startsWith("MULTI");
   const type = geom ? getGeometryTypeSimple(geom) : geomType || "polygon";

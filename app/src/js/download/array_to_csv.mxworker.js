@@ -15,6 +15,6 @@ self.onmessage = function (e) {
         throw new Error(err);
       }
       self.postMessage(csv);
-    }
+    },
   );
 };

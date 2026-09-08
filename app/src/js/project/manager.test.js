@@ -4,17 +4,23 @@ const { projectList, projectListWindow, windowManager } = vi.hoisted(() => {
   const projectList = { configure: vi.fn() };
   const projectListWindow = { close: vi.fn() };
   const el = vi.fn((tag, ...args) => {
-    if (tag === "mx-project-list") return projectList;
+    if (tag === "mx-project-list") {
+      return projectList;
+    }
     const node = document.createElement(tag);
     for (const arg of args) {
-      if (arg === null || arg === undefined) continue;
+      if (arg === null || arg === undefined) {
+        continue;
+      }
       if (arg instanceof Node) {
         node.appendChild(arg);
       } else if (typeof arg === "string" || typeof arg === "number") {
         node.appendChild(document.createTextNode(String(arg)));
       } else if (typeof arg === "object") {
         for (const [key, value] of Object.entries(arg)) {
-          if (value === undefined) continue;
+          if (value === undefined) {
+            continue;
+          }
           if (key === "class") {
             node.className = Array.isArray(value) ? value.join(" ") : value;
           } else if (key === "on" && value) {
@@ -74,14 +80,15 @@ const { openConfirmDialog, analyze, channelInstances } = vi.hoisted(() => ({
   channelInstances: [],
 }));
 const openNoticeDialog = vi.hoisted(() =>
-  vi.fn(({ manager, windowConfig = {}, ...config }) =>
-    new Promise((resolve) => {
-      manager.open({
-        ...config,
-        ...windowConfig,
-        onClose: resolve,
-      });
-    }),
+  vi.fn(
+    ({ manager, windowConfig = {}, ...config }) =>
+      new Promise((resolve) => {
+        manager.open({
+          ...config,
+          ...windowConfig,
+          onClose: resolve,
+        });
+      }),
   ),
 );
 vi.mock("../window/dialog.js", () => ({
@@ -192,7 +199,9 @@ describe("ProjectManager delete", () => {
 
   it("shows a notice and returns false when analyze reports an error", async () => {
     openConfirmDialog.mockResolvedValueOnce("Old Project");
-    analyze.mockResolvedValueOnce({ error: "project_delete_not_legacy_forbidden" });
+    analyze.mockResolvedValueOnce({
+      error: "project_delete_not_legacy_forbidden",
+    });
     const manager = new ProjectManager();
     manager.testAuth = vi.fn().mockResolvedValue(true);
 

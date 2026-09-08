@@ -51,7 +51,7 @@ export async function getGeometryColumnInfo(idTable, client = pgWrite) {
       AND f_geometry_column = $2
     LIMIT 1
     `,
-    [idTable, cols.geom]
+    [idTable, cols.geom],
   );
   const row = res.rows[0] || {};
   return {
@@ -73,7 +73,7 @@ export async function getGeometryTypeSimple(idTable, client = pgWrite) {
     WHERE ${quoteId(cols.geom)} IS NOT NULL
       AND NOT ST_IsEmpty(${quoteId(cols.geom)})
     LIMIT 1
-    `
+    `,
   );
   return toGeomTypeSimple(res.rows[0]?.geom_type) || "polygon";
 }
@@ -123,7 +123,7 @@ export async function getFeatureByGid(idTable, gid, client = pgWrite) {
     FROM ${quoteId(idTable)}
     WHERE ${quoteId(cols.gid)} = $1
     `,
-    [gid]
+    [gid],
   );
   if (res.rowCount === 0) {
     throw new Error("Feature not found");
@@ -148,10 +148,10 @@ export async function addGeometryStatusToRows(idTable, rows, client = pgWrite) {
     FROM ${quoteId(idTable)}
     WHERE ${quoteId(cols.gid)} = ANY($1::int[])
     `,
-    [gids]
+    [gids],
   );
   const statusByGid = new Map(
-    res.rows.map((row) => [row[cols.gid], row[cols.geom_status]])
+    res.rows.map((row) => [row[cols.gid], row[cols.geom_status]]),
   );
   for (const row of rows) {
     row[cols.geom_status] = statusByGid.get(row[cols.gid]) || "null";
@@ -175,13 +175,13 @@ export async function insertTableRow(idTable, geometry, client = pgWrite) {
       VALUES (${getGeomSqlExpression(columnInfo.type)})
       RETURNING ${quoteId(cols.gid)}
       `,
-      [JSON.stringify(geom)]
+      [JSON.stringify(geom)],
     );
   } else {
     res = await client.query(
       `INSERT INTO ${quoteId(idTable)} DEFAULT VALUES RETURNING ${quoteId(
-        cols.gid
-      )}`
+        cols.gid,
+      )}`,
     );
   }
 
@@ -193,7 +193,7 @@ export async function updateFeatureGeometry(
   idTable,
   gid,
   geometry,
-  client = pgWrite
+  client = pgWrite,
 ) {
   if (!isSourceId(idTable) || !isNumeric(gid)) {
     throw new Error("Invalid geometry update");
@@ -210,7 +210,7 @@ export async function updateFeatureGeometry(
       SET ${quoteId(cols.geom)} = NULL
       WHERE ${quoteId(cols.gid)} = $1
       `,
-      [gid]
+      [gid],
     );
     assertSingleGeometryUpdate(res);
   } else {
@@ -222,7 +222,7 @@ export async function updateFeatureGeometry(
       SET ${quoteId(cols.geom)} = ${geomSql}
       WHERE ${quoteId(cols.gid)} = $2
       `,
-      [JSON.stringify(geom), gid]
+      [JSON.stringify(geom), gid],
     );
     assertSingleGeometryUpdate(res);
   }

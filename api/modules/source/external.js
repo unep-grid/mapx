@@ -29,7 +29,9 @@ export async function createExternalMetadataSource(
   const ownsClient = !client;
   const pgClient = client || (await pgWrite.connect());
   try {
-    if (ownsClient) await pgClient.query("BEGIN");
+    if (ownsClient) {
+      await pgClient.query("BEGIN");
+    }
     const roles = await getUserRoles(idUser, idProject, pgClient);
     if (roles.publisher !== true) {
       throw new ExternalMetadataError("External metadata creation denied", 403);
@@ -63,13 +65,19 @@ export async function createExternalMetadataSource(
         500,
       );
     }
-    if (ownsClient) await pgClient.query("COMMIT");
+    if (ownsClient) {
+      await pgClient.query("COMMIT");
+    }
     return { ok: true, source: inserted };
   } catch (error) {
-    if (ownsClient) await pgClient.query("ROLLBACK");
+    if (ownsClient) {
+      await pgClient.query("ROLLBACK");
+    }
     throw error;
   } finally {
-    if (ownsClient) pgClient.release();
+    if (ownsClient) {
+      pgClient.release();
+    }
   }
 }
 
@@ -84,10 +92,14 @@ export async function validateExternalMetadataSelection(
   if (idSource === null || idSource === undefined || idSource === "") {
     return { valid: true, idSource: null };
   }
-  if (!isSourceId(idSource)) return { valid: false, idSource: null };
+  if (!isSourceId(idSource)) {
+    return { valid: false, idSource: null };
+  }
 
   const roles = await getUserRoles(idUser, idProject, client);
-  if (roles.publisher !== true) return { valid: false, idSource: null };
+  if (roles.publisher !== true) {
+    return { valid: false, idSource: null };
+  }
   const result = await client.query(
     `SELECT s.id
      FROM mx_sources_latest s

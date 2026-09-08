@@ -79,7 +79,9 @@ export class EventSimple {
       (!isArray(type) && !isString(type)) ||
       (isArray(type) && type.some((t) => isEmpty(t) || !isString(t)))
     ) {
-      throw new Error("'type' must be a non-empty string or an array of non-empty strings.");
+      throw new Error(
+        "'type' must be a non-empty string or an array of non-empty strings.",
+      );
     }
 
     const exists = !!evt._find(type, cb, group, once);
@@ -116,7 +118,9 @@ export class EventSimple {
         (!isArray(type) && !isString(type)) ||
         (isArray(type) && type.some((t) => isEmpty(t) || !isString(t)))
       ) {
-        throw new Error("'type' must be a non-empty string or an array of non-empty strings.");
+        throw new Error(
+          "'type' must be a non-empty string or an array of non-empty strings.",
+        );
       }
 
       cb = cb || function () {};
@@ -144,7 +148,9 @@ export class EventSimple {
       (!isArray(type) && !isString(type)) ||
       (isArray(type) && type.some((t) => isEmpty(t) || !isString(t)))
     ) {
-      throw new Error("'type' must be a non-empty string or an array of non-empty strings.");
+      throw new Error(
+        "'type' must be a non-empty string or an array of non-empty strings.",
+      );
     }
 
     const item = evt._find(type, cb, group, once);
@@ -204,7 +210,9 @@ export class EventSimple {
 
   // Helper method to compare types, ignoring the order if both are arrays
   _typesMatch(a, b) {
-    if (a.length !== b.length) return false;
+    if (a.length !== b.length) {
+      return false;
+    }
     // If both are arrays, compare them ignoring order
     if (isArray(a) && isArray(b)) {
       const sortedA = [...a].sort();

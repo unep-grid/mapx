@@ -48,16 +48,18 @@ describe("raster URL Shiny bridge", () => {
     editor.querySelector(".fa-pencil").click();
 
     expect(configurators[0].options.root).toBe(root);
-    expect(configurators[0].show).toHaveBeenCalledWith(expect.objectContaining({
-      idView: "MX-AAAAA-BBBBB-CCCCC",
-      mode: "draft",
-      config: {
-        tiles: "https://old.test/{z}/{x}/{y}.png",
-        legend: "https://old.test/legend.png",
-        tileSize: 256,
-        useMirror: true,
-      },
-    }));
+    expect(configurators[0].show).toHaveBeenCalledWith(
+      expect.objectContaining({
+        idView: "MX-AAAAA-BBBBB-CCCCC",
+        mode: "draft",
+        config: {
+          tiles: "https://old.test/{z}/{x}/{y}.png",
+          legend: "https://old.test/legend.png",
+          tileSize: 256,
+          useMirror: true,
+        },
+      }),
+    );
 
     const { onApplied } = configurators[0].show.mock.calls[0][0];
     onApplied(
@@ -70,10 +72,16 @@ describe("raster URL Shiny bridge", () => {
       },
     );
 
-    expect(editor.querySelector("#textRasterTileUrl").value).toContain("new.test");
-    expect(editor.querySelector("#textRasterTileLegend").value).toContain("new.test");
+    expect(editor.querySelector("#textRasterTileUrl").value).toContain(
+      "new.test",
+    );
+    expect(editor.querySelector("#textRasterTileLegend").value).toContain(
+      "new.test",
+    );
     expect(editor.querySelector("#selectRasterTileSize").value).toBe("512");
-    expect(editor.querySelector("#checkRasterTileUseMirror").checked).toBe(false);
+    expect(editor.querySelector("#checkRasterTileUseMirror").checked).toBe(
+      false,
+    );
     expect(changed).toEqual([
       "textRasterTileUrl",
       "textRasterTileLegend",

@@ -73,7 +73,7 @@ export function validateSql(req, res, next) {
       findValues(ast, "value").indexOf("*") > -1;
     if (hasStar) {
       messages.push(
-        "Asterisk cannot be used to select all columns or by functions."
+        "Asterisk cannot be used to select all columns or by functions.",
       );
     }
 
@@ -92,7 +92,7 @@ export function validateSql(req, res, next) {
     type: "error",
     msg: messages,
   });
-  return next(new Error(messages.join(' ')));
+  return next(new Error(messages.join(" ")));
 }
 
 /**

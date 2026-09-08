@@ -32,7 +32,7 @@ class App extends React.Component {
             views: values[1],
             mapx: mapx,
           });
-        }
+        },
       );
     });
   }
@@ -142,8 +142,7 @@ class MxView extends React.Component {
             .then(() => {
               this.setState({ active: !this.state.active });
             });
-        }}
-      >
+        }}>
         {view.data.title.en}
       </a>
     );

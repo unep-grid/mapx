@@ -95,8 +95,8 @@ function getParamsValidator(opt) {
         typeof req.body === "object"
           ? req.body
           : typeof req.query === "object"
-          ? req.query
-          : req;
+            ? req.query
+            : req;
 
       const result = paramsValidator(body, opt);
 
@@ -106,7 +106,7 @@ function getParamsValidator(opt) {
 
       if (result.unexpected.length > 0) {
         return stop(
-          `Unexpected parameter:  ${JSON.stringify(result.unexpected)}`
+          `Unexpected parameter:  ${JSON.stringify(result.unexpected)}`,
         );
       }
 

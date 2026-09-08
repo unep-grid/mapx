@@ -74,7 +74,7 @@ class ChaosTest {
     }
 
     const hasLayers = ct.layersBefore.every((layer) =>
-      layersAfter.includes(layer)
+      layersAfter.includes(layer),
     );
     const hasViews = ct.viewsBefore.every((view) => viewsAfter.includes(view));
 

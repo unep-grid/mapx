@@ -653,9 +653,9 @@ export class Uploader {
     }
 
     /**
-    * Sequencial approach required for multi files format, like 
-    * shapefile. If using Promise.all, file are not grouped correctly
-    */ 
+     * Sequencial approach required for multi files format, like
+     * shapefile. If using Promise.all, file are not grouped correctly
+     */
     for (const file of files) {
       const item = new Item(file, up);
       if (!item.supported) {

@@ -1,33 +1,33 @@
 const mapx = new mxsdk.Manager({
-  container: document.getElementById('mapx'),
+  container: document.getElementById("mapx"),
   verbose: true,
   url: {
-    host: 'dev.mapx.localhost',
-    port: 8880
+    host: "dev.mapx.localhost",
+    port: 8880,
   },
   params: {
-    closePanels: true
-  }
+    closePanels: true,
+  },
 });
 
-mapx.on('ready', () => {
+mapx.on("ready", () => {
   /**
    * Display current project name
    */
-  mapx.ask('get_project').then((s) => {
-    $('#project').text(s);
+  mapx.ask("get_project").then((s) => {
+    $("#project").text(s);
   });
 
   /**
    * Build toggle buttons for each collections found
    */
-  mapx.ask('get_views').then((views) => {
-    var no_collection_name = 'Views in no collection';
+  mapx.ask("get_views").then((views) => {
+    var no_collection_name = "Views in no collection";
     var collections = {};
     collections[no_collection_name] = [];
     views.forEach((view) => {
       //var view_collections = [];
-      if ('collections' in view.data && Array.isArray(view.data.collections)) {
+      if ("collections" in view.data && Array.isArray(view.data.collections)) {
         view.data.collections.forEach((collection) => {
           if (collections[collection] === undefined) {
             collections[collection] = [];
@@ -39,57 +39,55 @@ mapx.on('ready', () => {
       }
     });
 
-    var $ul = $('<ul>');
-    Object.keys(collections).forEach(function(key) {
+    var $ul = $("<ul>");
+    Object.keys(collections).forEach(function (key) {
       var collection = collections[key];
-      var $views_collection = $('<ul>');
+      var $views_collection = $("<ul>");
       collection.forEach((view) => {
         var $a = $('<a href="#">')
           .text(view.data.title.en)
-          .click(view, function(e) {
+          .click(view, function (e) {
             e.preventDefault();
             var $this = $(this);
             var view = e.data;
-            $this.toggleClass('active');
-            var op = $this.hasClass('active') ? 'view_add' : 'view_remove';
+            $this.toggleClass("active");
+            var op = $this.hasClass("active") ? "view_add" : "view_remove";
             mapx
               .ask(op, {
-                idView: view.id
+                idView: view.id,
               })
-              .then(function() {
-                if (op === 'view_add') {
-                  $('#output').show();
-                  $('#output .content').html(null);
-                  $('#output .content').append(
-                    $('<h3>').text(view.data.title.en)
+              .then(function () {
+                if (op === "view_add") {
+                  $("#output").show();
+                  $("#output .content").html(null);
+                  $("#output .content").append(
+                    $("<h3>").text(view.data.title.en),
                   );
-                  $('#output .content').append(
-                    $('<p>').html(view.data.abstract.en)
+                  $("#output .content").append(
+                    $("<p>").html(view.data.abstract.en),
                   );
                   mapx
-                    .ask('get_view_legend_image', {idView: view.id})
-                    .then(function(data) {
-                      $('#output .content').append(
-                        $('<img>').attr('src', data)
+                    .ask("get_view_legend_image", { idView: view.id })
+                    .then(function (data) {
+                      $("#output .content").append(
+                        $("<img>").attr("src", data),
                       );
                     });
                 }
               });
           });
-        $views_collection.append($('<li>').html($a));
+        $views_collection.append($("<li>").html($a));
       });
-      $('<li>')
-        .attr('data-collection', key)
-        .append($('<span>').text(key), $views_collection)
+      $("<li>")
+        .attr("data-collection", key)
+        .append($("<span>").text(key), $views_collection)
         .appendTo($ul);
     });
-    $ul.appendTo($('#actions'));
+    $ul.appendTo($("#actions"));
   });
 });
 
-$('#output .close').click(function(e) {
+$("#output .close").click(function (e) {
   e.preventDefault();
-  $(this)
-    .closest('#output')
-    .hide();
+  $(this).closest("#output").hide();
 });

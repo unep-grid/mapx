@@ -82,22 +82,19 @@ export class LegendVt {
     const lvt = this;
     for (const div of lvt._el_container.querySelectorAll("[data-sprite-id]")) {
       const url = theme.getImageDataUrl(div.dataset.spriteId);
-      if (url) div.style.backgroundImage = `url("${url}")`;
+      if (url) {
+        div.style.backgroundImage = `url("${url}")`;
+      }
     }
     for (const div of lvt._el_container.querySelectorAll("[data-sdf-id]")) {
       const [url, metrics] = await Promise.all([
-        theme.getSvgDataUrl(
-          div.dataset.sdfId,
-          div.dataset.sdfColor,
-        ),
+        theme.getSvgDataUrl(div.dataset.sdfId, div.dataset.sdfColor),
         theme.getIconMetrics?.(div.dataset.sdfId),
       ]);
-      lvt._setSdfIconSize(
-        div,
-        Number(div.dataset.sdfSize),
-        metrics,
-      );
-      if (url) div.style.backgroundImage = `url("${url}")`;
+      lvt._setSdfIconSize(div, Number(div.dataset.sdfSize), metrics);
+      if (url) {
+        div.style.backgroundImage = `url("${url}")`;
+      }
     }
   }
 

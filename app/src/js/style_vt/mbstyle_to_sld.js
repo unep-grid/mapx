@@ -248,10 +248,14 @@ export function fixSldExternalGraphicFormat(sldString) {
     return sldString;
   }
 
-  const graphics = dom.querySelectorAll("ExternalGraphic, sld\\:ExternalGraphic");
+  const graphics = dom.querySelectorAll(
+    "ExternalGraphic, sld\\:ExternalGraphic",
+  );
 
   for (const graphic of graphics) {
-    const resource = graphic.querySelector("OnlineResource, sld\\:OnlineResource");
+    const resource = graphic.querySelector(
+      "OnlineResource, sld\\:OnlineResource",
+    );
     const href =
       resource?.getAttribute("xlink:href") || resource?.getAttribute("href");
 
@@ -275,7 +279,10 @@ function isSvgHref(href) {
     return false;
   }
   try {
-    const url = new URL(href, globalThis.location?.origin || "http://localhost");
+    const url = new URL(
+      href,
+      globalThis.location?.origin || "http://localhost",
+    );
     return url.pathname.endsWith(".svg");
   } catch (e) {
     return href.split("?")[0].endsWith(".svg");

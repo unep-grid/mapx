@@ -187,11 +187,7 @@ export class ProjectDeleteSession {
         { client },
       );
 
-      const impact = await getProjectDeleteImpact(
-        ds._id_project,
-        null,
-        client,
-      );
+      const impact = await getProjectDeleteImpact(ds._id_project, null, client);
 
       const viewIds = [
         ...new Set([
@@ -230,10 +226,9 @@ export class ProjectDeleteSession {
             `DROP ${kind} IF EXISTS ${quoteIdentifier(idSource)}${cascade}`,
           );
         }
-        const del = await client.query(
-          `DELETE FROM mx_sources WHERE id = $1`,
-          [idSource],
-        );
+        const del = await client.query(`DELETE FROM mx_sources WHERE id = $1`, [
+          idSource,
+        ]);
         if (del.rowCount < 1) {
           throw new Error(`project_delete_source_not_removed`);
         }

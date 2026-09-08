@@ -158,7 +158,6 @@ export async function getSourceSummary(opt) {
       attributes_types: tableTypes,
     };
 
-
     for (const id_stat of stats) {
       switch (id_stat) {
         case "base":
@@ -168,7 +167,7 @@ export async function getSourceSummary(opt) {
           Object.assign(
             out,
             { roles: await getSourceEditors(opt.idSource) },
-            opt
+            opt,
           );
           break;
         case "spatial":
@@ -197,7 +196,7 @@ export async function getSourceSummary(opt) {
           if (isContinous) {
             Object.assign(
               out,
-              await getOrCalc("getSourceSummary_attr_continuous", opt)
+              await getOrCalc("getSourceSummary_attr_continuous", opt),
             );
 
             break;
@@ -205,7 +204,7 @@ export async function getSourceSummary(opt) {
 
           Object.assign(
             out,
-            await getOrCalc("getSourceSummary_attr_categorical", opt)
+            await getOrCalc("getSourceSummary_attr_categorical", opt),
           );
           break;
       }
@@ -281,7 +280,7 @@ async function updateSourceFromView(opt) {
 export async function getSourceEditors(idSource) {
   const res = await pgRead.query(
     "select editor, editors, readers from mx_sources_latest where id=$1",
-    [idSource]
+    [idSource],
   );
   if (res.rowCount === 0) {
     return {};

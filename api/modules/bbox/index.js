@@ -1,21 +1,17 @@
-import {redisGet, redisSet, pgRead} from '#mapx/db';
-import {getParamsValidator} from '#mapx/route_validation';
-import {sendError, sendJSON} from '#mapx/helpers';
-import crypto from 'crypto';
+import { redisGet, redisSet, pgRead } from "#mapx/db";
+import { getParamsValidator } from "#mapx/route_validation";
+import { sendError, sendJSON } from "#mapx/helpers";
+import crypto from "crypto";
 const validateParamsHandlerBbox = getParamsValidator({
-  expected: ['name', 'code', 'srid', 'language']
+  expected: ["name", "code", "srid", "language"],
 });
 
 const mwGetBbox = [validateParamsHandlerBbox, handlerBbox];
 
-export  {
-  mwGetBbox
-};
+export { mwGetBbox };
 
 async function handlerBbox(req, res) {
-  const {
-    query
-  } = req;
+  const { query } = req;
   try {
     query.code = query.code || query.name;
 
@@ -30,9 +26,9 @@ async function handlerBbox(req, res) {
   ))) bbox`;
 
     const hash = crypto
-      .createHash('md5')
+      .createHash("md5")
       .update(JSON.stringify(q))
-      .digest('hex');
+      .digest("hex");
 
     const cached = await redisGet(hash);
 
@@ -56,7 +52,7 @@ async function handlerBbox(req, res) {
         coords[0][0], //west
         coords[0][1], //south
         coords[2][0], //east
-        coords[2][1] //north
+        coords[2][1], //north
       ];
 
       await redisSet(hash, JSON.stringify(bbox));

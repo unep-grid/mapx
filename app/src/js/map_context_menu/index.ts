@@ -232,9 +232,7 @@ class MapContextMenu {
       { class: "mx-map-context-menu__group" },
       el("div", { class: "mx-map-context-menu__header" }, "Coordinates"),
       el("div", { class: "mx-map-context-menu__coords" }, this.coordinates),
-      this.button("Copy coordinates", () =>
-        copyToClipboard(this.coordinates),
-      ),
+      this.button("Copy coordinates", () => copyToClipboard(this.coordinates)),
     );
   }
 

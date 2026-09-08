@@ -47,7 +47,9 @@ export function getRealIp(headers, def = "0.0.0.0") {
 
   for (const header of ipHeaders) {
     const raw = headers[header];
-    if (!raw) continue;
+    if (!raw) {
+      continue;
+    }
 
     // x-forwarded-for can be a list: client, proxy1, proxy2
     const first = raw.split(",")[0].trim();

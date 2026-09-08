@@ -53,13 +53,16 @@ describe("table geometry edit access", () => {
 
   it("rejects programmatic geometry editor entry for non-developers", async () => {
     const acquireGeometryEditLock = vi.fn();
-    await dialogsMixin.dialogEditGeometry.call({
-      _geometry_edit_enabled: false,
-      _has_geom: true,
-      _geom_mode: false,
-      locked: false,
-      acquireGeometryEditLock,
-    }, 3);
+    await dialogsMixin.dialogEditGeometry.call(
+      {
+        _geometry_edit_enabled: false,
+        _has_geom: true,
+        _geom_mode: false,
+        locked: false,
+        acquireGeometryEditLock,
+      },
+      3,
+    );
 
     expect(acquireGeometryEditLock).not.toHaveBeenCalled();
   });

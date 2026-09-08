@@ -102,5 +102,3 @@ export function getAppPathUrl(id) {
    */
   return `${base}/${settings.paths[id]}`;
 }
-
-

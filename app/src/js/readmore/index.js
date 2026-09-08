@@ -1,6 +1,6 @@
-import {el} from './../el/src/index.js';
-import {onNextFrame} from './../animation_frame/index.js';
-import './style.less';
+import { el } from "./../el/src/index.js";
+import { onNextFrame } from "./../animation_frame/index.js";
+import "./style.less";
 /**
  * Add a read more button under a div that is too high.
  * @param {Element|Selector} selector Select div to update or set content
@@ -36,11 +36,11 @@ export function uiReadMore(selector, options) {
        */
       let id = Math.random().toString(32);
       let elContainer = elContainers[i];
-      let elReadMore = el('div');
-      let elCheckbox = el('input');
-      let elContent = el('div');
-      let elLabelMore = el('label');
-      let elLabelCaret = el('div');
+      let elReadMore = el("div");
+      let elCheckbox = el("input");
+      let elContent = el("div");
+      let elLabelMore = el("label");
+      let elLabelCaret = el("div");
 
       /**
        * Set content
@@ -49,14 +49,14 @@ export function uiReadMore(selector, options) {
         /**
          * Default. Use first child.
          */
-        elContent = elContainer.querySelector('*');
+        elContent = elContainer.querySelector("*");
         /* if null, maybe a test content / text node outside
          * a div was found: extract innerHTML, remove it from container.
          */
         if (!elContent) {
-          elContent = el('div');
+          elContent = el("div");
           elContent.innerHTML = elContainer.innerHTML;
-          elContainer.innerHTML = '';
+          elContainer.innerHTML = "";
         }
       } else {
         /**
@@ -75,7 +75,7 @@ export function uiReadMore(selector, options) {
        */
       if (
         !elContent ||
-        elContent.classList.contains('readmore') ||
+        elContent.classList.contains("readmore") ||
         elContent.childElementCount === 0
       ) {
         //console.log("skip");
@@ -83,19 +83,19 @@ export function uiReadMore(selector, options) {
         /**
          * Set elements attributes
          */
-        elReadMore.className = 'readmore';
-        elCheckbox.className = 'readmore-check';
-        elContent.className = elContent.className + ' readmore-content';
+        elReadMore.className = "readmore";
+        elCheckbox.className = "readmore-check";
+        elContent.className = elContent.className + " readmore-content";
         if (options.boxedContent) {
-          elContent.classList.add('readmore-content-boxed');
+          elContent.classList.add("readmore-content-boxed");
         }
-        elLabelMore.className = 'readmore-label';
-        elLabelCaret.className = 'readmore-label-caret fa fa-chevron-down';
+        elLabelMore.className = "readmore-label";
+        elLabelCaret.className = "readmore-label-caret fa fa-chevron-down";
 
         elCheckbox.id = id;
-        elCheckbox.setAttribute('type', 'checkbox');
-        elCheckbox.setAttribute('role', 'button');
-        elLabelMore.setAttribute('for', id);
+        elCheckbox.setAttribute("type", "checkbox");
+        elCheckbox.setAttribute("role", "button");
+        elLabelMore.setAttribute("for", id);
 
         elReadMore.appendChild(elContent);
         elContainer.appendChild(elReadMore);
@@ -119,10 +119,10 @@ export function uiReadMore(selector, options) {
            */
 
           elReadMore.style.maxHeight = options.maxHeightOpened
-            ? options.maxHeightOpened + 'px'
-            : rect.height + pad + 'px';
+            ? options.maxHeightOpened + "px"
+            : rect.height + pad + "px";
           elLabelMore.appendChild(elLabelCaret);
-          elContent.style.maxHeight = options.maxHeightClosed + 'px';
+          elContent.style.maxHeight = options.maxHeightClosed + "px";
           elReadMore.insertBefore(elCheckbox, elContent);
           elReadMore.insertBefore(elLabelMore, elContent);
         }
@@ -132,7 +132,7 @@ export function uiReadMore(selector, options) {
           isFinite(options.maxHeightOpened) &&
           rect.height > options.maxHeightOpened
         ) {
-          elContent.style.overflow = 'auto';
+          elContent.style.overflow = "auto";
         }
       }
     }

@@ -27,7 +27,7 @@ export async function isLayerValid(
   autoCorrect,
   analyze,
   validate,
-  onProgress
+  onProgress,
 ) {
   /**
    * Allow config object as first argument

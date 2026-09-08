@@ -50,7 +50,7 @@ export class MapInfoBox {
         for (const key in f.properties) {
           if (debug) {
             //if (["class","structure"].includes(key)) {
-              console.log(`${lId}. k:${key} v:${f.properties[key]}`);
+            console.log(`${lId}. k:${key} v:${f.properties[key]}`);
             //}
           }
           if (triggerName.includes(key)) {

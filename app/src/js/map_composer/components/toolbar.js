@@ -250,7 +250,7 @@ class Toolbar extends Box {
           mc_event_type: "change",
           mc_state_name: "predefined_dim",
         },
-      }
+      },
       // options generated later (translations);
     );
     toolbar.elGroupPreset = el(
@@ -259,7 +259,7 @@ class Toolbar extends Box {
         class: "form-group",
       },
       [el("label", tt("mc_label_predefined_dim")), toolbar.elSelectPreset],
-      el("span", { class: "text-muted" }, tt("mc_label_predefined_dim_desc"))
+      el("span", { class: "text-muted" }, tt("mc_label_predefined_dim_desc")),
     );
 
     /**
@@ -280,9 +280,13 @@ class Toolbar extends Box {
             mc_event_type: "click",
           },
         },
-        tt("mc_button_toggle_landscape")
+        tt("mc_button_toggle_landscape"),
       ),
-      el("span", { class: "text-muted" }, tt("mc_button_toggle_landscape_desc"))
+      el(
+        "span",
+        { class: "text-muted" },
+        tt("mc_button_toggle_landscape_desc"),
+      ),
     );
 
     /**
@@ -303,9 +307,9 @@ class Toolbar extends Box {
             mc_event_type: "click",
           },
         },
-        tt("mc_button_fit_map_page")
+        tt("mc_button_fit_map_page"),
       ),
-      el("span", { class: "text-muted" }, tt("mc_button_fit_map_page_desc"))
+      el("span", { class: "text-muted" }, tt("mc_button_fit_map_page_desc")),
     );
 
     /**
@@ -357,10 +361,10 @@ class Toolbar extends Box {
                 mc_event_type: "click",
               },
             }),
-          ]
+          ],
         ),
         el("span", { class: "text-muted" }, tt("mc_button_zoom_desc")),
-      ]
+      ],
     );
 
     /**
@@ -382,9 +386,9 @@ class Toolbar extends Box {
             mc_event_type: "click",
           },
         },
-        tt("mc_button_export")
+        tt("mc_button_export"),
       ),
-      el("span", { class: "text-muted" }, tt("mc_button_export_desc"))
+      el("span", { class: "text-muted" }, tt("mc_button_export_desc")),
     );
 
     /**
@@ -404,7 +408,7 @@ class Toolbar extends Box {
           mc_state_name: "unit",
         },
       },
-      elUnitOptions
+      elUnitOptions,
     );
 
     toolbar.elGroupUnits = el(
@@ -413,7 +417,7 @@ class Toolbar extends Box {
         class: "form-group",
       },
       [el("label", tt("mc_label_unit")), toolbar.elInputUnit],
-      el("span", { class: "text-muted" }, tt("mc_label_unit_desc"))
+      el("span", { class: "text-muted" }, tt("mc_label_unit_desc")),
     );
 
     /**
@@ -440,7 +444,7 @@ class Toolbar extends Box {
       },
       el("label", tt("mc_label_scale")),
       toolbar.elInputScaleContent,
-      el("span", { class: "text-muted" }, tt("mc_label_scale_desc"))
+      el("span", { class: "text-muted" }, tt("mc_label_scale_desc")),
     );
 
     /**
@@ -465,7 +469,7 @@ class Toolbar extends Box {
       },
       el("label", tt("mc_label_width")),
       toolbar.elInputPageWidth,
-      el("span", { class: "text-muted" }, tt("mc_label_width_desc"))
+      el("span", { class: "text-muted" }, tt("mc_label_width_desc")),
     );
 
     /**
@@ -490,7 +494,7 @@ class Toolbar extends Box {
       },
       el("label", tt("mc_label_height")),
       toolbar.elInputPageHeight,
-      el("span", { class: "text-muted" }, tt("mc_label_height_desc"))
+      el("span", { class: "text-muted" }, tt("mc_label_height_desc")),
     );
 
     /**
@@ -515,7 +519,7 @@ class Toolbar extends Box {
         max: 10,
         min: 1,
       }),
-      el("span", { class: "text-muted" }, tt("mc_label_legend_columns_desc"))
+      el("span", { class: "text-muted" }, tt("mc_label_legend_columns_desc")),
     );
 
     /**
@@ -543,10 +547,10 @@ class Toolbar extends Box {
               mc_state_name: "mode",
             },
           },
-          elModesOptions
+          elModesOptions,
         ),
       ],
-      el("span", { class: "text-muted" }, tt("mc_label_mode_desc"))
+      el("span", { class: "text-muted" }, tt("mc_label_mode_desc")),
     );
 
     return el(
@@ -566,7 +570,7 @@ class Toolbar extends Box {
         toolbar.elGroupHeight,
         toolbar.elGroupLegendColumns,
         toolbar.elGroupModes,
-      ]
+      ],
     );
   }
 }

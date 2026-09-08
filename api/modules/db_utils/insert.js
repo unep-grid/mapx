@@ -26,7 +26,7 @@ export async function insertRow(rowOrig, tableName) {
 
     if (result.rowCount !== 1) {
       throw new Error(
-        `Expected 1 row to be inserted, but got ${result.rowCount} rows.`
+        `Expected 1 row to be inserted, but got ${result.rowCount} rows.`,
       );
     }
 

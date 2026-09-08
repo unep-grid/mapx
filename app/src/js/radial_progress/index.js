@@ -44,7 +44,7 @@ class RadialProgress {
       {
         class: "radial-progress",
       },
-      rp.elCanvas
+      rp.elCanvas,
     );
     rp.elTarget.appendChild(rp.el);
     window.rp = rp;
@@ -59,7 +59,7 @@ class RadialProgress {
       rp.opt.radius,
       rp.opt.radius - rp.opt.stroke,
       0,
-      (percent / 100) * 2 * Math.PI
+      (percent / 100) * 2 * Math.PI,
     );
     rp.ctx.stroke();
   }
@@ -72,7 +72,7 @@ class RadialProgress {
       text,
       rp.opt.radius,
       rp.opt.radius + 0.5 * rp.opt.fontHeight,
-      rp.opt.radius * 2
+      rp.opt.radius * 2,
     );
   }
 

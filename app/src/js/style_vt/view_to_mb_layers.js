@@ -284,7 +284,6 @@ export async function getViewMapboxLayers(v, opt) {
 
     ruleAll.filter = filter;
 
-
     if (hasSymbol) {
       /**
        * Symbol only
@@ -392,12 +391,12 @@ export async function getViewMapboxLayers(v, opt) {
 
       if (includeUpper && lastUpperBound === toValue) {
         /**
-        * Avoid duplicate when the last two rules could overlap 
-        * last upperbound === last rule 
-        * >= 1 <= 2 
-        * > 2 <= 3
-        * == 3 <- duplicate 
-        */ 
+         * Avoid duplicate when the last two rules could overlap
+         * last upperbound === last rule
+         * >= 1 <= 2
+         * > 2 <= 3
+         * == 3 <- duplicate
+         */
         continue;
       }
 
@@ -579,7 +578,7 @@ export async function getViewMapboxLayers(v, opt) {
         useOutlineAuto: polygonBorderConfig.enableAutoColor,
         outlineOpacity: polygonBorderConfig.opacity,
       },
-      opt
+      opt,
     );
 
     if (!config.label && config.rule) {

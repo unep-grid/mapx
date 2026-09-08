@@ -1,7 +1,7 @@
-import {modal} from './../mx_helper_modal.js';
-import {el} from './../el/src/index.js';
-import {moduleLoad} from './../modules_loader_async/index.js';
-import {getApiUrl} from './../api_routes';
+import { modal } from "./../mx_helper_modal.js";
+import { el } from "./../el/src/index.js";
+import { moduleLoad } from "./../modules_loader_async/index.js";
+import { getApiUrl } from "./../api_routes";
 
 export class ModalEpsg {
   constructor() {
@@ -27,19 +27,19 @@ export class ModalEpsg {
 
   async build() {
     const me = this;
-    const TomSelect = await moduleLoad('tom-select');
-    const elSelect = el('select');
-    const elContent = el('div', elSelect);
+    const TomSelect = await moduleLoad("tom-select");
+    const elSelect = el("select");
+    const elContent = el("div", elSelect);
 
     me._modal = modal({
-      title: 'EPSG',
+      title: "EPSG",
       content: elContent,
-      onClose: me.destroy
+      onClose: me.destroy,
     });
 
     me._ts = new TomSelect(elSelect, {
-      valueField: 'srid',
-      searchField: ['srid', 'name', 'region'],
+      valueField: "srid",
+      searchField: ["srid", "name", "region"],
       allowEmptyOption: true,
       options: null,
       load: async (_, callback) => {
@@ -49,7 +49,7 @@ export class ModalEpsg {
             callback();
             return;
           }
-          const url = getApiUrl('getEpsgCodesFull');
+          const url = getApiUrl("getEpsgCodesFull");
           const epsgCodeResp = await fetch(url);
           const epsgCodes = await epsgCodeResp.json();
           callback(epsgCodes);
@@ -60,25 +60,25 @@ export class ModalEpsg {
         }
       },
       create: false,
-      sortField: {field: 'srid'},
+      sortField: { field: "srid" },
       items: [4326],
-      dropdownParent: 'body',
+      dropdownParent: "body",
       render: {
         option: (data, escape) => {
           return el(
-            'div',
-            el('h4', escape(data.name)),
-            el('small', `EPSG:${escape(data.srid)} – ${escape(data.region)}`)
+            "div",
+            el("h4", escape(data.name)),
+            el("small", `EPSG:${escape(data.srid)} – ${escape(data.region)}`),
           );
         },
         item: (data, escape) => {
           return el(
-            'div',
-            el('span', escape(data.name)),
-            el('span', {class: 'text-muted'}, ` EPSG:${escape(data.srid)} `)
+            "div",
+            el("span", escape(data.name)),
+            el("span", { class: "text-muted" }, ` EPSG:${escape(data.srid)} `),
           );
-        }
-      }
+        },
+      },
     });
   }
 }

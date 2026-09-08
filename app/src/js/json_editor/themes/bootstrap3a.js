@@ -11,7 +11,9 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     el.className = "col-md-" + size;
   },
   afterInputReady: function (input) {
-    if (input.controlgroup) return;
+    if (input.controlgroup) {
+      return;
+    }
     input.controlgroup = this.closest(input, ".form-group");
     if (this.closest(input, ".compact")) {
       input.controlgroup.style.marginBottom = 0;
@@ -55,7 +57,9 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
       group.appendChild(input);
     }
 
-    if (description) group.appendChild(description);
+    if (description) {
+      group.appendChild(description);
+    }
 
     return group;
   },
@@ -95,7 +99,9 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   },
 
   addInputError: function (input, text) {
-    if (!input.controlgroup) return;
+    if (!input.controlgroup) {
+      return;
+    }
     input.controlgroup.className += " has-error";
     if (!input.errmsg) {
       input.errmsg = document.createElement("p");
@@ -108,7 +114,9 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     input.errmsg.textContent = text;
   },
   removeInputError: function (input) {
-    if (!input.errmsg) return;
+    if (!input.errmsg) {
+      return;
+    }
     input.errmsg.style.display = "none";
     input.controlgroup.className = input.controlgroup.className.replace(
       /\s?has-error/g,
@@ -155,7 +163,9 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     return container;
   },
   updateProgressBar: function (progressBar, progress) {
-    if (!progressBar) return;
+    if (!progressBar) {
+      return;
+    }
 
     var bar = progressBar.firstChild;
     var percentage = progress + "%";
@@ -164,7 +174,9 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     bar.innerHTML = percentage;
   },
   updateProgressBarUnknown: function (progressBar) {
-    if (!progressBar) return;
+    if (!progressBar) {
+      return;
+    }
 
     var bar = progressBar.firstChild;
     progressBar.className = "progress progress-striped active";

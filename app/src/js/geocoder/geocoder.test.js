@@ -1,12 +1,12 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { Geocoder } from './index.js';
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { Geocoder } from "./index.js";
 
 // Mock mapboxgl
-vi.mock('../mx', () => ({
+vi.mock("../mx", () => ({
   maplibregl: {
     Marker: class {
       constructor() {
-        this.element = document.createElement('div');
+        this.element = document.createElement("div");
       }
       setLngLat(coords) {
         this._lngLat = coords;
@@ -19,120 +19,132 @@ vi.mock('../mx', () => ({
       getElement() {
         return this.element;
       }
-    }
-  }
+    },
+  },
 }));
 
-describe('Geocoder', () => {
+describe("Geocoder", () => {
   let geocoder;
   let mockMap;
   let mockElement;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
-    mockElement = document.createElement('div');
+
+    mockElement = document.createElement("div");
     mockMap = {
       getCenter: () => ({ lat: 0, lng: 0 }),
-      getBounds: () => [[-180, -90], [180, 90]],
+      getBounds: () => [
+        [-180, -90],
+        [180, 90],
+      ],
       flyTo: vi.fn(),
-      fitBounds: vi.fn()
+      fitBounds: vi.fn(),
     };
 
     // Mock fetch responses
-    global.fetch = vi.fn(() => 
+    global.fetch = vi.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve({
-          features: [{
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [2.3522, 48.8566]
-            },
-            properties: {
-              name: 'Paris',
-              city: 'Paris',
-              country: 'France',
-              osm_type: 'N'
-            }
-          }]
-        })
-      })
+        json: () =>
+          Promise.resolve({
+            features: [
+              {
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: [2.3522, 48.8566],
+                },
+                properties: {
+                  name: "Paris",
+                  city: "Paris",
+                  country: "France",
+                  osm_type: "N",
+                },
+              },
+            ],
+          }),
+      }),
     );
   });
 
-  describe('Initialization', () => {
-    it('should initialize with valid configuration', async () => {
+  describe("Initialization", () => {
+    it("should initialize with valid configuration", async () => {
       geocoder = new Geocoder();
       await geocoder.init({
         elTarget: mockElement,
-        map: mockMap
+        map: mockMap,
       });
 
       expect(geocoder.config).toBeDefined();
-      expect(geocoder.config.language).toBe('en');
+      expect(geocoder.config.language).toBe("en");
       expect(geocoder.config.limit).toBe(10);
     });
 
-    it('should throw error when initialized without target element', async () => {
+    it("should throw error when initialized without target element", async () => {
       geocoder = new Geocoder();
-      await expect(geocoder.init({
-        map: mockMap
-      })).rejects.toThrow('Geocoder : no target');
+      await expect(
+        geocoder.init({
+          map: mockMap,
+        }),
+      ).rejects.toThrow("Geocoder : no target");
     });
   });
 
-  describe('API Interaction', () => {
-    it('should build search URL with correct parameters', async () => {
+  describe("API Interaction", () => {
+    it("should build search URL with correct parameters", async () => {
       geocoder = new Geocoder();
       await geocoder.init({
         elTarget: mockElement,
         map: mockMap,
-        language: 'fr'
+        language: "fr",
       });
 
-      const url = geocoder.buildSearchURL('Paris');
-      expect(url.toString()).toContain('https://photon.komoot.io/');
-      expect(url.searchParams.get('q')).toBe('Paris');
-      expect(url.searchParams.get('lang')).toBe('fr');
-      expect(url.searchParams.get('limit')).toBe('10');
+      const url = geocoder.buildSearchURL("Paris");
+      expect(url.toString()).toContain("https://photon.komoot.io/");
+      expect(url.searchParams.get("q")).toBe("Paris");
+      expect(url.searchParams.get("lang")).toBe("fr");
+      expect(url.searchParams.get("limit")).toBe("10");
     });
 
-    it('should include proximity parameters when enabled', async () => {
+    it("should include proximity parameters when enabled", async () => {
       geocoder = new Geocoder();
       await geocoder.init({
         elTarget: mockElement,
         map: mockMap,
-        proximity: true
+        proximity: true,
       });
 
-      const url = geocoder.buildSearchURL('Paris');
-      expect(url.searchParams.get('lat')).toBe('0');
-      expect(url.searchParams.get('lon')).toBe('0');
+      const url = geocoder.buildSearchURL("Paris");
+      expect(url.searchParams.get("lat")).toBe("0");
+      expect(url.searchParams.get("lon")).toBe("0");
     });
 
-    it('should handle API errors gracefully', async () => {
-      global.fetch = vi.fn(() => 
+    it("should handle API errors gracefully", async () => {
+      global.fetch = vi.fn(() =>
         Promise.resolve({
           ok: false,
-          status: 404
-        })
+          status: 404,
+        }),
       );
 
       geocoder = new Geocoder();
       await geocoder.init({
         elTarget: mockElement,
-        map: mockMap
+        map: mockMap,
       });
 
-      await expect(geocoder.fetchGeoJSON('invalid')).rejects.toThrow('HTTP error! status: 404');
+      await expect(geocoder.fetchGeoJSON("invalid")).rejects.toThrow(
+        "HTTP error! status: 404",
+      );
     });
 
-    it('should abort pending requests when new search is initiated', async () => {
+    it("should abort pending requests when new search is initiated", async () => {
       // Mock a slow fetch
-      global.fetch = vi.fn(() => new Promise(resolve => setTimeout(resolve, 100)));
-      
+      global.fetch = vi.fn(
+        () => new Promise((resolve) => setTimeout(resolve, 100)),
+      );
+
       const abortSpy = vi.fn();
       const mockController = { abort: abortSpy, signal: {} };
       global.AbortController = vi.fn(() => mockController);
@@ -140,115 +152,119 @@ describe('Geocoder', () => {
       geocoder = new Geocoder();
       await geocoder.init({
         elTarget: mockElement,
-        map: mockMap
+        map: mockMap,
       });
 
       // Start first request
-      geocoder._executeSearch('first');
-      
+      geocoder._executeSearch("first");
+
       // Start second request immediately
-      geocoder._executeSearch('second');
-      
-      expect(abortSpy).toHaveBeenCalledWith(geocoder.config.errors.abord_new_query);
-      
+      geocoder._executeSearch("second");
+
+      expect(abortSpy).toHaveBeenCalledWith(
+        geocoder.config.errors.abord_new_query,
+      );
+
       // Clean up
       geocoder.destroy();
     });
   });
 
-  describe('Location Processing', () => {
-    it('should format location string correctly', async () => {
+  describe("Location Processing", () => {
+    it("should format location string correctly", async () => {
       geocoder = new Geocoder();
       await geocoder.init({
         elTarget: mockElement,
-        map: mockMap
+        map: mockMap,
       });
 
       const location = geocoder.formatLocationString({
-        name: 'Paris',
-        city: 'Paris',
-        state: 'Île-de-France',
-        country: 'France'
+        name: "Paris",
+        city: "Paris",
+        state: "Île-de-France",
+        country: "France",
       });
 
-      expect(location).toBe('Paris, Paris, Île-de-France, France');
+      expect(location).toBe("Paris, Paris, Île-de-France, France");
     });
 
-    it('should handle missing location properties', async () => {
+    it("should handle missing location properties", async () => {
       geocoder = new Geocoder();
       await geocoder.init({
         elTarget: mockElement,
-        map: mockMap
+        map: mockMap,
       });
 
       const location = geocoder.formatLocationString({
-        name: 'Paris',
-        country: 'France'
+        name: "Paris",
+        country: "France",
       });
 
-      expect(location).toBe('Paris, France');
+      expect(location).toBe("Paris, France");
     });
 
-    it('should convert OSM node types to correct icon classes', async () => {
+    it("should convert OSM node types to correct icon classes", async () => {
       geocoder = new Geocoder();
       await geocoder.init({
         elTarget: mockElement,
-        map: mockMap
+        map: mockMap,
       });
 
-      expect(geocoder.osmNodeToIconClass({ osm_type: 'N' })).toBe('gcm--node');
-      expect(geocoder.osmNodeToIconClass({ osm_type: 'W' })).toBe('gcm--way');
-      expect(geocoder.osmNodeToIconClass({ osm_type: 'R' })).toBe('gcm--relation');
+      expect(geocoder.osmNodeToIconClass({ osm_type: "N" })).toBe("gcm--node");
+      expect(geocoder.osmNodeToIconClass({ osm_type: "W" })).toBe("gcm--way");
+      expect(geocoder.osmNodeToIconClass({ osm_type: "R" })).toBe(
+        "gcm--relation",
+      );
     });
   });
 
-  describe('Callbacks', () => {
-    it('should call onLocationSelect when location is selected', async () => {
+  describe("Callbacks", () => {
+    it("should call onLocationSelect when location is selected", async () => {
       const onLocationSelect = vi.fn();
       geocoder = new Geocoder();
       await geocoder.init({
         elTarget: mockElement,
         map: mockMap,
-        onLocationSelect
+        onLocationSelect,
       });
 
       const mockResult = {
         feature: {
           geometry: { coordinates: [2.3522, 48.8566] },
-          properties: {}
-        }
+          properties: {},
+        },
       };
 
       geocoder.handleLocationSelect(mockResult);
       expect(onLocationSelect).toHaveBeenCalledWith(mockResult);
     });
 
-    it('should call onGeoJSONSave when saving features', async () => {
+    it("should call onGeoJSONSave when saving features", async () => {
       const onGeoJSONSave = vi.fn();
       geocoder = new Geocoder();
       await geocoder.init({
         elTarget: mockElement,
         map: mockMap,
-        onGeoJSONSave
+        onGeoJSONSave,
       });
 
       const mockFeature = {
-        type: 'Feature',
+        type: "Feature",
         geometry: {
-          type: 'Point',
-          coordinates: [2.3522, 48.8566]
-        }
+          type: "Point",
+          coordinates: [2.3522, 48.8566],
+        },
       };
 
       // Add a marker
       const marker = geocoder.addMarker({ feature: mockFeature });
-      
+
       // Save GeoJSON
       await geocoder.saveToGeoJSON();
 
       expect(onGeoJSONSave).toHaveBeenCalledWith({
-        type: 'FeatureCollection',
-        features: [mockFeature]
+        type: "FeatureCollection",
+        features: [mockFeature],
       });
     });
   });

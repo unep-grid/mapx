@@ -20,7 +20,7 @@ export function handleViewClick(event) {
 
     const dataset = elTarget.dataset;
     const noConfig = isEmpty(Object.keys(dataset));
-    
+
     if (noConfig) {
       return;
     }

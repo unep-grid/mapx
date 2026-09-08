@@ -308,7 +308,7 @@ async function showSourceTableAttributeModal(opt) {
       for (let i = 0; i < sampleSize; i++) {
         const row = data[i];
         const value = row[c.data];
-        if (value != null && value !== '') {
+        if (value != null && value !== "") {
           const valueWidth = value.toString().length * 10;
           if (valueWidth > maxWidth) {
             maxWidth = valueWidth;
@@ -465,7 +465,7 @@ export async function getTableAttributeConfigFromView(view) {
     idSource: idSource,
     labels: labels,
     attributes: attributes,
-    hiddenColumns: ['gid'],
+    hiddenColumns: ["gid"],
   };
 }
 

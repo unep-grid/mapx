@@ -825,11 +825,13 @@ async function storyUpdateSlides() {
     if (toActivate) {
       if (state.storyStepPending === null || state.storyStepPending !== s) {
         state.storyStepPending = s;
-        storyPlayStep(s).finally(() => {
-          if (state.storyStepPending === s) {
-            state.storyStepPending = null;
-          }
-        }).catch(() => {});
+        storyPlayStep(s)
+          .finally(() => {
+            if (state.storyStepPending === s) {
+              state.storyStepPending = null;
+            }
+          })
+          .catch(() => {});
         break;
       }
     }
@@ -869,7 +871,10 @@ function trackStoryOperation(state, operation) {
   return operation;
 }
 
-function interruptStoryActivity({ clearNumeric = true, stopAutoplay = true } = {}) {
+function interruptStoryActivity({
+  clearNumeric = true,
+  stopAutoplay = true,
+} = {}) {
   const state = getState();
   state.storyOperationToken = getStoryOperationToken(state) + 1;
   state.storyStepPending = null;
@@ -912,7 +917,7 @@ async function storyHandleKeyDown(event) {
   if (isNum) {
     /*
      * Combo : 1 ... 2 -> 12
-    */
+     */
     prevent();
     interruptStoryActivity({ clearNumeric: false });
     clearTimeout(keyState.idTimeout);
@@ -1657,10 +1662,7 @@ export function storySetTransform(o) {
 export function storyPlayStep(stepNum) {
   const state = getState();
   const operationToken = getStoryOperationToken(state);
-  return trackStoryOperation(
-    state,
-    storyPlayStepImpl(stepNum, operationToken),
-  );
+  return trackStoryOperation(state, storyPlayStepImpl(stepNum, operationToken));
 }
 
 async function storyPlayStepImpl(stepNum, operationToken) {
@@ -1918,11 +1920,15 @@ async function updatePanelBehaviour(settings, step, operationToken) {
      */
     switch (dBehaviour) {
       case "open":
-        if (!isStoryOperationCurrent(state, operationToken)) return;
+        if (!isStoryOperationCurrent(state, operationToken)) {
+          return;
+        }
         await dashboard.exec("show");
         break;
       case "closed":
-        if (!isStoryOperationCurrent(state, operationToken)) return;
+        if (!isStoryOperationCurrent(state, operationToken)) {
+          return;
+        }
         await dashboard.exec("hide");
         break;
       default:
@@ -1936,10 +1942,14 @@ async function updatePanelBehaviour(settings, step, operationToken) {
             continue;
           }
           if (config.panel_init_close) {
-            if (!isStoryOperationCurrent(state, operationToken)) return;
+            if (!isStoryOperationCurrent(state, operationToken)) {
+              return;
+            }
             await dashboard.exec("hide");
           } else {
-            if (!isStoryOperationCurrent(state, operationToken)) return;
+            if (!isStoryOperationCurrent(state, operationToken)) {
+              return;
+            }
             await dashboard.exec("show");
           }
           break;

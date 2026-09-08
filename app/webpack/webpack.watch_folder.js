@@ -46,7 +46,7 @@ class WatchFolderPlugin {
             wfp.log(`WatchFolderPlugin : close after update ${filename}`);
             watcher[watchFolder].close();
           }
-        }
+        },
       );
 
       callback();

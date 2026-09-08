@@ -10,8 +10,12 @@ const {
   urlLegend,
 } = vi.hoisted(() => {
   const append = (node, value) => {
-    if (Array.isArray(value)) return value.forEach((item) => append(node, item));
-    if (value instanceof Node) return node.appendChild(value);
+    if (Array.isArray(value)) {
+      return value.forEach((item) => append(node, item));
+    }
+    if (value instanceof Node) {
+      return node.appendChild(value);
+    }
     if (value !== null && value !== undefined) {
       node.appendChild(document.createTextNode(String(value)));
     }
@@ -19,20 +23,36 @@ const {
   const el = (tag, ...args) => {
     const node = document.createElement(tag);
     for (const arg of args) {
-      if (Array.isArray(arg) || arg instanceof Node || typeof arg !== "object") {
+      if (
+        Array.isArray(arg) ||
+        arg instanceof Node ||
+        typeof arg !== "object"
+      ) {
         append(node, arg);
         continue;
       }
-      if (!arg) continue;
+      if (!arg) {
+        continue;
+      }
       for (const [key, value] of Object.entries(arg)) {
-        if (value === undefined) continue;
-        if (key === "class") node.className = Array.isArray(value) ? value.join(" ") : value;
-        else if (key === "on") {
-          for (const [event, handler] of Object.entries(value)) node.addEventListener(event, handler);
-        } else if (key === "dataset") Object.assign(node.dataset, value);
-        else if (key === "checked") node.checked = Boolean(value);
-        else if (key === "disabled") node.disabled = Boolean(value);
-        else node.setAttribute(key, String(value));
+        if (value === undefined) {
+          continue;
+        }
+        if (key === "class") {
+          node.className = Array.isArray(value) ? value.join(" ") : value;
+        } else if (key === "on") {
+          for (const [event, handler] of Object.entries(value)) {
+            node.addEventListener(event, handler);
+          }
+        } else if (key === "dataset") {
+          Object.assign(node.dataset, value);
+        } else if (key === "checked") {
+          node.checked = Boolean(value);
+        } else if (key === "disabled") {
+          node.disabled = Boolean(value);
+        } else {
+          node.setAttribute(key, String(value));
+        }
       }
     }
     return node;
@@ -106,7 +126,9 @@ describe("RasterUrlConfigurator", () => {
     windowManager.open.mockImplementation((options) => {
       document.body.append(options.content);
       for (const item of [options.footerStart, ...(options.footerEnd || [])]) {
-        if (item) document.body.append(item);
+        if (item) {
+          document.body.append(item);
+        }
       }
       return { close: vi.fn() };
     });
@@ -120,7 +142,11 @@ describe("RasterUrlConfigurator", () => {
 
   it("renders current values and marks edited URLs as unchecked", async () => {
     const editor = new RasterUrlConfigurator({ root: document.body });
-    await editor.show({ idView: "MX-AAAAA-BBBBB-CCCCC", mode: "persist", config });
+    await editor.show({
+      idView: "MX-AAAAA-BBBBB-CCCCC",
+      mode: "persist",
+      config,
+    });
 
     expect(editor.refs.tiles.value).toBe(config.tiles);
     expect(editor.refs.legend.value).toBe(config.legend);
@@ -144,7 +170,11 @@ describe("RasterUrlConfigurator", () => {
       },
     ]);
     const editor = new RasterUrlConfigurator({ root: document.body });
-    await editor.show({ idView: "MX-AAAAA-BBBBB-CCCCC", mode: "persist", config });
+    await editor.show({
+      idView: "MX-AAAAA-BBBBB-CCCCC",
+      mode: "persist",
+      config,
+    });
 
     await editor.getLayers();
     expect(wmsGetLayers).toHaveBeenCalledWith(
@@ -156,7 +186,9 @@ describe("RasterUrlConfigurator", () => {
     expect(editor.refs.feedback.textContent).toBe(
       "raster_url_wms_layers_loaded: 1",
     );
-    expect(editor.refs.feedback.textContent).not.toContain("[object HTMLSpanElement]");
+    expect(editor.refs.feedback.textContent).not.toContain(
+      "[object HTMLSpanElement]",
+    );
     expect(moduleLoad).toHaveBeenCalledWith("tom-select");
     expect(editor.layerSelect.settings.searchField).toEqual([
       "name",
@@ -172,10 +204,13 @@ describe("RasterUrlConfigurator", () => {
       abstract: "A detailed layer description",
     });
     const selectedItem = editor.layerSelect.settings.render.item(optionData);
-    const dropdownOption = editor.layerSelect.settings.render.option(optionData);
+    const dropdownOption =
+      editor.layerSelect.settings.render.option(optionData);
     expect(selectedItem.textContent).toContain("Example layer");
     expect(selectedItem.textContent).toContain("workspace:layer");
-    expect(dropdownOption.textContent).toContain("A detailed layer description");
+    expect(dropdownOption.textContent).toContain(
+      "A detailed layer description",
+    );
     editor.layerSelect.setValue("workspace:layer");
     expect(editor.refs.btnGenerate.disabled).toBe(false);
 
@@ -196,7 +231,11 @@ describe("RasterUrlConfigurator", () => {
 
   it("keeps the WMS reload action icon-only and accessibly labelled", async () => {
     const editor = new RasterUrlConfigurator({ root: document.body });
-    await editor.show({ idView: "MX-AAAAA-BBBBB-CCCCC", mode: "persist", config });
+    await editor.show({
+      idView: "MX-AAAAA-BBBBB-CCCCC",
+      mode: "persist",
+      config,
+    });
     await Promise.resolve();
 
     expect(editor.refs.btnLoad.querySelector(".fa-refresh")).not.toBeNull();
@@ -237,7 +276,9 @@ describe("RasterUrlConfigurator", () => {
     );
     expect(editor.refs.tilesStatus.dataset.state).toBe("invalid");
     expect(editor.refs.legendStatus.dataset.state).toBe("valid");
-    expect(editor.refs.feedback.textContent).not.toContain("[object HTMLSpanElement]");
+    expect(editor.refs.feedback.textContent).not.toContain(
+      "[object HTMLSpanElement]",
+    );
 
     const row = { id_view: "MX-AAAAA-BBBBB-CCCCC", valid: true };
     ws.emitAsync.mockResolvedValueOnce({ row });
@@ -250,7 +291,10 @@ describe("RasterUrlConfigurator", () => {
       }),
       30000,
     );
-    expect(onApplied).toHaveBeenCalledWith(row, expect.objectContaining({ tiles: config.tiles }));
+    expect(onApplied).toHaveBeenCalledWith(
+      row,
+      expect.objectContaining({ tiles: config.tiles }),
+    );
     expect(editor.window.close).toHaveBeenCalledWith("saved");
     expect(editor.working).toBe(false);
 
@@ -273,12 +317,18 @@ describe("RasterUrlConfigurator", () => {
     let resolveFirst;
     let resolveSecond;
     ws.emitAsync
-      .mockImplementationOnce(() => new Promise((resolve) => {
-        resolveFirst = resolve;
-      }))
-      .mockImplementationOnce(() => new Promise((resolve) => {
-        resolveSecond = resolve;
-      }));
+      .mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            resolveFirst = resolve;
+          }),
+      )
+      .mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            resolveSecond = resolve;
+          }),
+      );
     const editor = new RasterUrlConfigurator({ root: document.body });
 
     const firstShow = editor.show({
@@ -316,9 +366,12 @@ describe("RasterUrlConfigurator", () => {
       config,
       onApplied: firstSaved,
     });
-    ws.emitAsync.mockImplementationOnce(() => new Promise((resolve) => {
-      resolveSave = resolve;
-    }));
+    ws.emitAsync.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          resolveSave = resolve;
+        }),
+    );
 
     const pendingSave = editor.handleSave();
     await editor.show({
@@ -381,8 +434,10 @@ describe("RasterUrlConfigurator", () => {
       expect.objectContaining({ tileSize: 256, useMirror: true }),
     );
     expect(editor.window.close).toHaveBeenCalledWith("applied");
-    expect(ws.emitAsync.mock.calls.some(([event]) =>
-      event === "/client/view/raster/config/save"
-    )).toBe(false);
+    expect(
+      ws.emitAsync.mock.calls.some(
+        ([event]) => event === "/client/view/raster/config/save",
+      ),
+    ).toBe(false);
   });
 });

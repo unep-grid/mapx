@@ -1,41 +1,41 @@
 import {
   validateTokenHandler,
-  validateRoleHandlerFor
-} from '#mapx/authentication';
-import {settings} from '#root/settings';
+  validateRoleHandlerFor,
+} from "#mapx/authentication";
+import { settings } from "#root/settings";
 
-import multer from 'multer';
-import fs from 'fs';
-import crypto from 'crypto';
-import path from 'path';
-import md5File from 'md5-file';
+import multer from "multer";
+import fs from "fs";
+import crypto from "crypto";
+import path from "path";
+import md5File from "md5-file";
 const storage = multer.diskStorage({
-  destination: function(_, __, cb) {
+  destination: function (_, __, cb) {
     const pathTemp = settings.image.path.temporary;
     cb(null, pathTemp);
   },
-  filename: function(_, __, cb) {
+  filename: function (_, __, cb) {
     const fileHash = crypto
-      .createHash('md5')
-      .update(Date.now() + '')
-      .digest('hex');
+      .createHash("md5")
+      .update(Date.now() + "")
+      .digest("hex");
 
     cb(null, fileHash);
-  }
+  },
 });
 
-const upload = multer({storage: storage}).single('image');
+const upload = multer({ storage: storage }).single("image");
 
 export const mwUpload = [
   uploadHandler,
   validateTokenHandler,
-  validateRoleHandlerFor('member'),
+  validateRoleHandlerFor("member"),
   moveFilesHandler,
-  sendHandler
+  sendHandler,
 ];
 
 function uploadHandler(req, res, next) {
-  upload(req, res, function() {
+  upload(req, res, function () {
     next();
   });
 }
@@ -68,12 +68,12 @@ async function moveFilesHandler(req, _, next) {
 function copyFile(source, target) {
   const rd = fs.createReadStream(source);
   const wr = fs.createWriteStream(target);
-  return new Promise(function(resolve, reject) {
-    rd.on('error', reject);
-    wr.on('error', reject);
-    wr.on('finish', resolve);
+  return new Promise(function (resolve, reject) {
+    rd.on("error", reject);
+    wr.on("error", reject);
+    wr.on("finish", resolve);
     rd.pipe(wr);
-  }).catch(function(error) {
+  }).catch(function (error) {
     rd.destroy();
     wr.end();
     throw error;
@@ -83,9 +83,9 @@ function copyFile(source, target) {
 function sendHandler(req, res, next) {
   const data = {
     url: req.file.url,
-    size: [req.body.width, req.body.height]
+    size: [req.body.width, req.body.height],
   };
-  res.write(JSON.stringify({type: 'message', msg: data}) + '\t\n');
+  res.write(JSON.stringify({ type: "message", msg: data }) + "\t\n");
   res.status(200).end();
   next();
 }

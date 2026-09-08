@@ -224,7 +224,7 @@ class Box {
         },
         on: ["click", box.destroy.bind(box)],
       },
-      el("i", { class: ["mc-handle-icon", "fa", "fa-times"] })
+      el("i", { class: ["mc-handle-icon", "fa", "fa-times"] }),
     );
   }
 
@@ -308,7 +308,7 @@ class Box {
         "translate3d",
         newLeftSnap + "px",
         newTopSnap + "px",
-        "0"
+        "0",
       );
       box.top = newTopSnap;
       box.left = newLeftSnap;
@@ -457,7 +457,7 @@ class Box {
   getTextSize() {
     const box = this;
     return Number(
-      window.getComputedStyle(box.el).fontSize.split("px")[0] || 12
+      window.getComputedStyle(box.el).fontSize.split("px")[0] || 12,
     );
   }
 
@@ -612,7 +612,7 @@ class Box {
             left: oX + dX,
             top: oY,
             inPx: true,
-          })
+          }),
         );
         if (!drag.hitLeft) {
           box.setWidth(oW - dX, true);
@@ -625,7 +625,7 @@ class Box {
             left: oX,
             top: oY + dY,
             inPx: true,
-          })
+          }),
         );
         if (!drag.hitTop) {
           box.setHeight(oH - dY, true);

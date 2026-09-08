@@ -4,7 +4,7 @@ import { modalSimple } from "../mx_helper_modal";
 import { jsonDiff } from "../mx_helper_utils_json";
 import { elSpanTranslate } from "../el_mapx";
 import "./style.css";
-import {clone} from "../mx_helper_misc";
+import { clone } from "../mx_helper_misc";
 
 /**
  * Class for handling data diff inspection with configurable context labels and callbacks

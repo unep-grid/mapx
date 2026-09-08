@@ -5,7 +5,7 @@ import glob from "glob";
 
 const opt = {
   ignoreAttributes: false,
-  processEntities: false
+  processEntities: false,
 };
 
 const parser = new XMLParser(opt);
@@ -19,7 +19,7 @@ glob("./orig/*.svg", async (e, files) => {
     for (const f of files) {
       await update(f);
     }
-    console.log('done');
+    console.log("done");
   } catch (e) {
     console.error(e);
   }

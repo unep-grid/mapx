@@ -41,7 +41,9 @@ export class SpotlightManager {
    * @internal
    */
   init(config) {
-    if (this._init) return;
+    if (this._init) {
+      return;
+    }
     this.initConfig(config);
     this.initUI();
     if (isFirefox()) {

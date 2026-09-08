@@ -88,7 +88,7 @@ export class Magnifier extends EventSimple {
         },
       },
       m._el_handle,
-      m._el_map
+      m._el_map,
     );
 
     m._draggie = new Draggabilly(m._el_main, {
@@ -110,8 +110,12 @@ export class Magnifier extends EventSimple {
 
   syncMap(mapSrc, mapDest) {
     const m = this;
-    if (m.locked) return;
-    if (!m.built) return;
+    if (m.locked) {
+      return;
+    }
+    if (!m.built) {
+      return;
+    }
     try {
       m.lock();
 

@@ -1,15 +1,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const { connect, assertProjectDeletable, getProjectDeleteImpact } =
-  vi.hoisted(() => ({
+const { connect, assertProjectDeletable, getProjectDeleteImpact } = vi.hoisted(
+  () => ({
     connect: vi.fn(),
     assertProjectDeletable: vi.fn(),
     getProjectDeleteImpact: vi.fn(),
-  }));
+  }),
+);
 
 vi.mock("#mapx/db", () => ({ pgWrite: { connect } }));
 vi.mock("#mapx/template", () => ({
-  templates: { removeDeletedViewsExternal: "REMOVE_DELETED_VIEWS_EXTERNAL_SQL" },
+  templates: {
+    removeDeletedViewsExternal: "REMOVE_DELETED_VIEWS_EXTERNAL_SQL",
+  },
 }));
 vi.mock("./guards.js", () => ({ assertProjectDeletable }));
 vi.mock("./impact.js", () => ({ getProjectDeleteImpact }));
@@ -26,11 +29,7 @@ import {
 const idProject = "MX-T6R-PJF-2DF-3OI-LBF";
 
 const defaultImpact = {
-  sources: [
-    { id: "src_vector" },
-    { id: "src_join" },
-    { id: "src_external" },
-  ],
+  sources: [{ id: "src_vector" }, { id: "src_join" }, { id: "src_external" }],
   views: [{ id: "view_own" }],
   themes: [{ id: "theme_own" }],
   sourcesDependent: [{ id: "src_dependent" }],
@@ -109,7 +108,10 @@ describe("ProjectDeleteSession", () => {
 
     let awaitingCommitPayload = null;
     socket.emit.mockImplementation((event, payload) => {
-      if (event === events.server_progress && payload.step === "awaiting_commit") {
+      if (
+        event === events.server_progress &&
+        payload.step === "awaiting_commit"
+      ) {
         awaitingCommitPayload = payload;
         session.confirmCommit();
       }
@@ -140,23 +142,25 @@ describe("ProjectDeleteSession", () => {
       true,
     );
     expect(
-      sqlCalls.some((s) => s.includes('"src_external"') && s.startsWith("DROP")),
+      sqlCalls.some(
+        (s) => s.includes('"src_external"') && s.startsWith("DROP"),
+      ),
     ).toBe(false);
     expect(
-      sqlCalls.some((s) => s === 'DROP TABLE IF EXISTS "src_dependent" CASCADE'),
+      sqlCalls.some(
+        (s) => s === 'DROP TABLE IF EXISTS "src_dependent" CASCADE',
+      ),
     ).toBe(true);
     const externalViewsCleanup = client.calls.find(
       ([sql]) => sql === "REMOVE_DELETED_VIEWS_EXTERNAL_SQL",
     );
-    expect(externalViewsCleanup?.[1]).toEqual([
-      ["view_own", "view_dependent"],
-    ]);
+    expect(externalViewsCleanup?.[1]).toEqual([["view_own", "view_dependent"]]);
     expect(sqlCalls.some((s) => s.startsWith("DELETE FROM mx_themes"))).toBe(
       true,
     );
-    expect(
-      sqlCalls.some((s) => s.startsWith("DELETE FROM mx_projects")),
-    ).toBe(true);
+    expect(sqlCalls.some((s) => s.startsWith("DELETE FROM mx_projects"))).toBe(
+      true,
+    );
 
     expect(
       socket.emit.mock.calls.some(([event]) => event === events.server_done),
@@ -178,7 +182,10 @@ describe("ProjectDeleteSession", () => {
     const session = new ProjectDeleteSession(socket, idProject);
 
     socket.emit.mockImplementation((event, payload) => {
-      if (event === events.server_progress && payload.step === "awaiting_commit") {
+      if (
+        event === events.server_progress &&
+        payload.step === "awaiting_commit"
+      ) {
         session.confirmCommit();
       }
     });
@@ -186,9 +193,7 @@ describe("ProjectDeleteSession", () => {
     await session.run();
 
     expect(
-      client.calls.some(
-        ([sql]) => sql === "REMOVE_DELETED_VIEWS_EXTERNAL_SQL",
-      ),
+      client.calls.some(([sql]) => sql === "REMOVE_DELETED_VIEWS_EXTERNAL_SQL"),
     ).toBe(false);
   });
 
@@ -224,7 +229,10 @@ describe("ProjectDeleteSession", () => {
     const session = new ProjectDeleteSession(socket, idProject);
 
     socket.emit.mockImplementation((event, payload) => {
-      if (event === events.server_progress && payload.step === "awaiting_commit") {
+      if (
+        event === events.server_progress &&
+        payload.step === "awaiting_commit"
+      ) {
         session.requestStop();
       }
     });
@@ -307,7 +315,10 @@ describe("ProjectDeleteSession", () => {
     session.confirmCommit();
 
     socket.emit.mockImplementation((event, payload) => {
-      if (event === events.server_progress && payload.step === "awaiting_commit") {
+      if (
+        event === events.server_progress &&
+        payload.step === "awaiting_commit"
+      ) {
         session.confirmCommit();
       }
     });
@@ -372,7 +383,9 @@ describe("ioProjectDeleteStart / Stop / Commit", () => {
       resolveFirst = resolve;
       ioProjectDeleteStart(socket, { id_project: idProject }, resolve);
     });
-    await vi.waitFor(() => expect(assertProjectDeletable).toHaveBeenCalledOnce());
+    await vi.waitFor(() =>
+      expect(assertProjectDeletable).toHaveBeenCalledOnce(),
+    );
 
     const second = await new Promise((resolve) =>
       ioProjectDeleteStart(socket, { id_project: idProject }, resolve),
@@ -385,7 +398,9 @@ describe("ioProjectDeleteStart / Stop / Commit", () => {
 
     resolveGuard({ title: "Old Project" });
     await vi.waitFor(() => expect(resolveFirst).toBeDefined());
-    await vi.waitFor(() => expect(firstPromise).resolves.toEqual({ success: true }));
+    await vi.waitFor(() =>
+      expect(firstPromise).resolves.toEqual({ success: true }),
+    );
     ioProjectDeleteStop(socket, {}, () => {});
   });
 
@@ -424,7 +439,9 @@ describe("ioProjectDeleteStart / Stop / Commit", () => {
       ioProjectDeleteStart(socket, { id_project: idProject }, resolve),
     );
 
-    await vi.waitFor(() => expect(assertProjectDeletable).toHaveBeenCalledOnce());
+    await vi.waitFor(() =>
+      expect(assertProjectDeletable).toHaveBeenCalledOnce(),
+    );
     ioProjectDeleteStop(socket, {}, () => {});
     resolveGuard({ title: "Old Project" });
 
@@ -452,11 +469,7 @@ describe("ioProjectDeleteStart / Stop / Commit", () => {
 
   it("stop/commit on a socket with no active session are safe no-ops", () => {
     const socket = makeSocket();
-    expect(() =>
-      ioProjectDeleteStop(socket, {}, () => {}),
-    ).not.toThrow();
-    expect(() =>
-      ioProjectDeleteCommit(socket, {}, () => {}),
-    ).not.toThrow();
+    expect(() => ioProjectDeleteStop(socket, {}, () => {})).not.toThrow();
+    expect(() => ioProjectDeleteCommit(socket, {}, () => {})).not.toThrow();
   });
 });

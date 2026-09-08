@@ -19,4 +19,3 @@ export async function fileFormatsVectorDownload() {
   const formats = await fileFormatsVector();
   return formats.filter((f) => !!f.download);
 }
-

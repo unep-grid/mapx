@@ -86,11 +86,14 @@ for (const failure of ["http", "json", "network", "timeout"]) {
       renderMessages: (date) => assert.equal(date, undefined),
       startGlobe: (token) => assert.ok(!token),
       fetchConfiguration: async (_url, { signal }) => {
-        if (failure === "timeout")
+        if (failure === "timeout") {
           return new Promise((_resolve, reject) =>
             signal.addEventListener("abort", () => reject(signal.reason)),
           );
-        if (failure === "network") throw new Error("offline");
+        }
+        if (failure === "network") {
+          throw new Error("offline");
+        }
         return {
           ok: failure !== "http",
           json: async () => {

@@ -225,7 +225,7 @@ export async function makeSimpleLayer(opt) {
         },
         paint: {
           "icon-opacity": opt.opacity || 1,
-          "icon-halo-width":0 ,
+          "icon-halo-width": 0,
           "icon-halo-color": opt.colorSecondary,
           "icon-color": opt.color,
           "text-color": "#000",
@@ -278,7 +278,6 @@ export async function makeSimpleLayer(opt) {
       });
       break;
   }
-
 
   return layer;
 }

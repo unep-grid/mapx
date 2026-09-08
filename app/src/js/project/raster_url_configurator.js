@@ -49,7 +49,9 @@ export class RasterUrlConfigurator {
     rc.mode = mode;
     rc.onApplied = onApplied;
     const nextConfig = config || (await rc.fetchConfig(idView));
-    if (!rc.isSessionCurrent(sessionId)) return;
+    if (!rc.isSessionCurrent(sessionId)) {
+      return;
+    }
     rc.config = nextConfig;
     rc.buildWindow(sessionId);
   }
@@ -60,7 +62,9 @@ export class RasterUrlConfigurator {
       { idView },
       15 * 1000,
     );
-    if (data.error) throw new Error(data.error);
+    if (data.error) {
+      throw new Error(data.error);
+    }
     return data.config;
   }
 
@@ -91,7 +95,10 @@ export class RasterUrlConfigurator {
     rc.refs.legend.value = config.legend || "";
     rc.refs.tileSize = el(
       "select",
-      { class: "form-control", on: { change: () => rc.handleResourceInput("tile") } },
+      {
+        class: "form-control",
+        on: { change: () => rc.handleResourceInput("tile") },
+      },
       [256, 512].map((size) => el("option", { value: size }, String(size))),
     );
     rc.refs.tileSize.value = String(config.tileSize || 512);
@@ -150,36 +157,52 @@ export class RasterUrlConfigurator {
       rc.buildWmsSteps(),
     );
 
-    rc.refs.btnTest = el("button", {
-      class: ["btn", "btn-default"],
-      type: "button",
-      on: { click: rc.handleTest },
-    }, [
-      el("i", { class: ["fa", "fa-flask"], "aria-hidden": "true" }),
-      " ",
-      tt("project_tiles_url_editor_btn_test"),
-    ]);
-    rc.refs.btnSave = el("button", {
-      class: ["btn", "btn-primary"],
-      type: "button",
-      on: { click: rc.handleSave },
-    }, tt(
-      rc.mode === "draft"
-        ? "btn_update"
-        : "project_tiles_url_editor_btn_save",
-    ));
-    rc.refs.btnCancel = el("button", {
-      class: ["btn", "btn-default"],
-      type: "button",
-      on: { click: () => rc.window?.close("cancel") },
-    }, tt("btn_cancel"));
+    rc.refs.btnTest = el(
+      "button",
+      {
+        class: ["btn", "btn-default"],
+        type: "button",
+        on: { click: rc.handleTest },
+      },
+      [
+        el("i", { class: ["fa", "fa-flask"], "aria-hidden": "true" }),
+        " ",
+        tt("project_tiles_url_editor_btn_test"),
+      ],
+    );
+    rc.refs.btnSave = el(
+      "button",
+      {
+        class: ["btn", "btn-primary"],
+        type: "button",
+        on: { click: rc.handleSave },
+      },
+      tt(
+        rc.mode === "draft"
+          ? "btn_update"
+          : "project_tiles_url_editor_btn_save",
+      ),
+    );
+    rc.refs.btnCancel = el(
+      "button",
+      {
+        class: ["btn", "btn-default"],
+        type: "button",
+        on: { click: () => rc.window?.close("cancel") },
+      },
+      tt("btn_cancel"),
+    );
 
     rc.window = rc.windowManager.open({
       key: WINDOW_KEY,
       title: tt("project_tiles_url_editor_title"),
-      content: el("div", {
-        class: ["mx-window-dialog__content", "raster-url-configurator"],
-      }, [settingsSection, wmsSection, rc.refs.feedback]),
+      content: el(
+        "div",
+        {
+          class: ["mx-window-dialog__content", "raster-url-configurator"],
+        },
+        [settingsSection, wmsSection, rc.refs.feedback],
+      ),
       footerStart: rc.refs.btnCancel,
       footerEnd: [rc.refs.btnTest, rc.refs.btnSave],
       modal: true,
@@ -202,7 +225,9 @@ export class RasterUrlConfigurator {
   }
 
   closeSession(sessionId) {
-    if (!this.isSessionCurrent(sessionId)) return;
+    if (!this.isSessionCurrent(sessionId)) {
+      return;
+    }
     this.sessionId += 1;
     this.working = false;
     this.destroyLayerSelect();
@@ -227,30 +252,42 @@ export class RasterUrlConfigurator {
     if (rc.refs.preset.options.length) {
       rc.refs.service.value = rc.refs.preset.value;
     }
-    rc.refs.layer = el("select", {
-      class: "form-control",
-      disabled: true,
-      on: { change: rc.updateGenerateButton },
-    }, el("option", { value: "" }, tt("raster_url_wms_select_layer")));
-    rc.refs.btnLoad = el("button", {
-      class: ["btn", "btn-default"],
-      type: "button",
-      on: { click: rc.getLayers },
-    }, [
-      el("i", { class: ["fa", "fa-refresh"], "aria-hidden": "true" }),
-      el("span", { class: "sr-only" }, tt("raster_url_wms_load_layers")),
-    ]);
+    rc.refs.layer = el(
+      "select",
+      {
+        class: "form-control",
+        disabled: true,
+        on: { change: rc.updateGenerateButton },
+      },
+      el("option", { value: "" }, tt("raster_url_wms_select_layer")),
+    );
+    rc.refs.btnLoad = el(
+      "button",
+      {
+        class: ["btn", "btn-default"],
+        type: "button",
+        on: { click: rc.getLayers },
+      },
+      [
+        el("i", { class: ["fa", "fa-refresh"], "aria-hidden": "true" }),
+        el("span", { class: "sr-only" }, tt("raster_url_wms_load_layers")),
+      ],
+    );
     rc.setAccessibleLabel(rc.refs.btnLoad, "raster_url_wms_load_layers");
-    rc.refs.btnGenerate = el("button", {
-      class: ["btn", "btn-info"],
-      type: "button",
-      disabled: true,
-      on: { click: rc.generateUrls },
-    }, [
-      el("i", { class: ["fa", "fa-magic"], "aria-hidden": "true" }),
-      " ",
-      tt("raster_url_wms_generate"),
-    ]);
+    rc.refs.btnGenerate = el(
+      "button",
+      {
+        class: ["btn", "btn-info"],
+        type: "button",
+        disabled: true,
+        on: { click: rc.generateUrls },
+      },
+      [
+        el("i", { class: ["fa", "fa-magic"], "aria-hidden": "true" }),
+        " ",
+        tt("raster_url_wms_generate"),
+      ],
+    );
   }
 
   buildWmsSteps() {
@@ -258,12 +295,20 @@ export class RasterUrlConfigurator {
     const el = rc.el;
     return el("div", { class: "raster-url-wms-steps" }, [
       rc.step(1, tt("wms_select_reviewed_service"), rc.refs.preset),
-      rc.step(2, tt("wms_input_service_url"), el("div", {
-        class: "input-group",
-      }, [
-        rc.refs.service,
-        el("span", { class: "input-group-btn" }, rc.refs.btnLoad),
-      ])),
+      rc.step(
+        2,
+        tt("wms_input_service_url"),
+        el(
+          "div",
+          {
+            class: "input-group",
+          },
+          [
+            rc.refs.service,
+            el("span", { class: "input-group-btn" }, rc.refs.btnLoad),
+          ],
+        ),
+      ),
       rc.step(3, tt("wms_select_layer"), rc.refs.layer),
       el("div", { class: "raster-url-wms-steps__action" }, [
         rc.refs.btnGenerate,
@@ -307,10 +352,14 @@ export class RasterUrlConfigurator {
 
   step(number, label, control) {
     return this.el("div", { class: "raster-url-wms-step" }, [
-      this.el("span", {
-        class: "raster-url-wms-step__number",
-        "aria-hidden": "true",
-      }, String(number)),
+      this.el(
+        "span",
+        {
+          class: "raster-url-wms-step__number",
+          "aria-hidden": "true",
+        },
+        String(number),
+      ),
       this.el("label", { class: "control-label" }, label),
       this.el("div", { class: "raster-url-wms-step__control" }, control),
     ]);
@@ -339,11 +388,15 @@ export class RasterUrlConfigurator {
   renderHealth(health) {
     this.renderStatus(
       this.refs.tilesStatus,
-      rasterStatusLabel(health, "tile", { configured: Boolean(this.refs.tiles.value.trim()) }),
+      rasterStatusLabel(health, "tile", {
+        configured: Boolean(this.refs.tiles.value.trim()),
+      }),
     );
     this.renderStatus(
       this.refs.legendStatus,
-      rasterStatusLabel(health, "legend", { configured: Boolean(this.refs.legend.value.trim()) }),
+      rasterStatusLabel(health, "legend", {
+        configured: Boolean(this.refs.legend.value.trim()),
+      }),
     );
   }
 
@@ -383,10 +436,18 @@ export class RasterUrlConfigurator {
   setWorking(value) {
     const rc = this;
     rc.working = value;
-    for (const button of [rc.refs.btnTest, rc.refs.btnSave, rc.refs.btnCancel]) {
-      if (button) button.disabled = value;
+    for (const button of [
+      rc.refs.btnTest,
+      rc.refs.btnSave,
+      rc.refs.btnCancel,
+    ]) {
+      if (button) {
+        button.disabled = value;
+      }
     }
-    if (rc.refs.btnLoad) rc.refs.btnLoad.disabled = value;
+    if (rc.refs.btnLoad) {
+      rc.refs.btnLoad.disabled = value;
+    }
     rc.updateGenerateButton();
   }
 
@@ -396,13 +457,17 @@ export class RasterUrlConfigurator {
       { idView: this.idView, ...config },
       30 * 1000,
     );
-    if (data.error) throw new Error(data.error);
+    if (data.error) {
+      throw new Error(data.error);
+    }
     return data.result || {};
   }
 
   async handleTest() {
     const rc = this;
-    if (rc.working) return;
+    if (rc.working) {
+      return;
+    }
     const sessionId = rc.sessionId;
     rc.setWorking(true);
     rc.setFeedback("info", tt("project_tiles_url_editor_testing"));
@@ -412,24 +477,32 @@ export class RasterUrlConfigurator {
     }
     try {
       const result = await rc.testConfig();
-      if (!rc.isSessionCurrent(sessionId)) return;
+      if (!rc.isSessionCurrent(sessionId)) {
+        return;
+      }
       rc.renderHealth(result);
       rc.setFeedback("info", rc.healthSummary(result));
     } catch (error) {
-      if (!rc.isSessionCurrent(sessionId)) return;
+      if (!rc.isSessionCurrent(sessionId)) {
+        return;
+      }
       rc.setFeedback("danger", error?.message || String(error));
       rc.renderStatus(rc.refs.tilesStatus, rasterStatusConfig("incomplete"));
       if (rc.refs.legend.value.trim()) {
         rc.renderStatus(rc.refs.legendStatus, rasterStatusConfig("incomplete"));
       }
     } finally {
-      if (rc.isSessionCurrent(sessionId)) rc.setWorking(false);
+      if (rc.isSessionCurrent(sessionId)) {
+        rc.setWorking(false);
+      }
     }
   }
 
   async handleSave() {
     const rc = this;
-    if (rc.working) return;
+    if (rc.working) {
+      return;
+    }
     const sessionId = rc.sessionId;
     const window = rc.window;
     const onApplied = rc.onApplied;
@@ -447,7 +520,9 @@ export class RasterUrlConfigurator {
       let result;
       if (rc.mode === "draft") {
         result = await rc.testConfig(config);
-        if (!rc.isSessionCurrent(sessionId)) return;
+        if (!rc.isSessionCurrent(sessionId)) {
+          return;
+        }
         rc.renderHealth(result);
         if (result.valid !== true) {
           rc.setFeedback("info", rc.healthSummary(result));
@@ -460,15 +535,21 @@ export class RasterUrlConfigurator {
           { idView: rc.idView, config },
           30 * 1000,
         );
-        if (data.error) throw new Error(data.error);
+        if (data.error) {
+          throw new Error(data.error);
+        }
         result = data.row;
       }
       onApplied?.(result, config);
-      if (!rc.isSessionCurrent(sessionId) || rc.window !== window) return;
+      if (!rc.isSessionCurrent(sessionId) || rc.window !== window) {
+        return;
+      }
       rc.setWorking(false);
       window?.close(rc.mode === "draft" ? "applied" : "saved");
     } catch (error) {
-      if (!rc.isSessionCurrent(sessionId)) return;
+      if (!rc.isSessionCurrent(sessionId)) {
+        return;
+      }
       rc.setFeedback("danger", error?.message || String(error));
       rc.setWorking(false);
     }
@@ -505,24 +586,40 @@ export class RasterUrlConfigurator {
   destroyLayerSelect() {
     const rc = this;
     rc.layerRequestId += 1;
-    if (rc.layerSelect?.destroy) rc.layerSelect.destroy();
+    if (rc.layerSelect?.destroy) {
+      rc.layerSelect.destroy();
+    }
     rc.layerSelect = null;
   }
 
   layerOption(data, includeAbstract) {
     const el = this.el;
     const title = data.title || data.name || data.value;
-    const children = [el("span", { class: "raster-url-layer-option__title" }, title)];
+    const children = [
+      el("span", { class: "raster-url-layer-option__title" }, title),
+    ];
     if (data.name) {
-      children.push(el("span", {
-        class: ["text-muted", "small", "raster-url-layer-option__id"],
-      }, data.name));
+      children.push(
+        el(
+          "span",
+          {
+            class: ["text-muted", "small", "raster-url-layer-option__id"],
+          },
+          data.name,
+        ),
+      );
     }
     if (includeAbstract && data.abstract) {
-      children.push(el("span", {
-        class: ["text-muted", "small", "raster-url-layer-option__abstract"],
-        title: data.abstract,
-      }, data.abstract.slice(0, 300)));
+      children.push(
+        el(
+          "span",
+          {
+            class: ["text-muted", "small", "raster-url-layer-option__abstract"],
+            title: data.abstract,
+          },
+          data.abstract.slice(0, 300),
+        ),
+      );
     }
     return el("div", { class: "raster-url-layer-option" }, children);
   }
@@ -549,16 +646,26 @@ export class RasterUrlConfigurator {
     }));
     rc.refs.layer.replaceChildren(
       rc.el("option", { value: "" }, tt("raster_url_wms_select_layer")),
-      ...options.map((option) => rc.el("option", {
-        value: option.value,
-        dataset: { data: JSON.stringify(option) },
-      }, option.text)),
+      ...options.map((option) =>
+        rc.el(
+          "option",
+          {
+            value: option.value,
+            dataset: { data: JSON.stringify(option) },
+          },
+          option.text,
+        ),
+      ),
     );
     rc.refs.layer.disabled = options.length === 0;
-    if (!options.length) return;
+    if (!options.length) {
+      return;
+    }
 
     const TomSelect = await moduleLoad("tom-select");
-    if (requestId !== rc.layerRequestId || !rc.refs.layer.isConnected) return;
+    if (requestId !== rc.layerRequestId || !rc.refs.layer.isConnected) {
+      return;
+    }
     rc.layerSelect = new TomSelect(rc.refs.layer, {
       allowEmptyOption: true,
       closeAfterSelect: true,
@@ -581,7 +688,9 @@ export class RasterUrlConfigurator {
   async getLayers() {
     const rc = this;
     const url = rc.refs.service.value.trim();
-    if (rc.working) return;
+    if (rc.working) {
+      return;
+    }
     if (!url) {
       rc.setFeedback("warning", tt("raster_url_wms_service_required"));
       return;
@@ -602,7 +711,9 @@ export class RasterUrlConfigurator {
         },
       });
       await rc.initLayerSelect(layers, requestId);
-      if (requestId !== rc.layerRequestId) return;
+      if (requestId !== rc.layerRequestId) {
+        return;
+      }
       if (layers.length) {
         rc.setFeedback(
           "success",
@@ -614,7 +725,9 @@ export class RasterUrlConfigurator {
         rc.setFeedback("warning", tt("raster_url_wms_no_layers"));
       }
     } catch (error) {
-      if (requestId !== rc.layerRequestId) return;
+      if (requestId !== rc.layerRequestId) {
+        return;
+      }
       rc.setFeedback("danger", error?.message || String(error));
     } finally {
       if (requestId === rc.layerRequestId) {

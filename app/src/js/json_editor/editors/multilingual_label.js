@@ -5,7 +5,10 @@ import { el, elButtonFa } from "./../../el_mapx/index.js";
 import { checkLanguage, getDictItem } from "./../../language/index.js";
 import { makeId } from "./../../mx_helper_misc.js";
 import { modalSimple } from "./../../mx_helper_modal.js";
-import { clearTranslations, getTranslationCount } from "./multilingual_label_helpers.js";
+import {
+  clearTranslations,
+  getTranslationCount,
+} from "./multilingual_label_helpers.js";
 import "./multilingual_label.less";
 
 const FORMAT = "mapx-multilingual-label";
@@ -133,7 +136,11 @@ JSONEditor.defaults.editors.mapxMultilingualLabel = class extends (
     const ruleValue = this.parent?.getValue()?.value;
     if (fallbackLabel) {
       this.input.placeholder = `${fallbackLanguage.toUpperCase()}: ${fallbackLabel}`;
-    } else if (ruleValue === undefined || ruleValue === null || ruleValue === "") {
+    } else if (
+      ruleValue === undefined ||
+      ruleValue === null ||
+      ruleValue === ""
+    ) {
       this.input.placeholder = "";
     } else {
       this.input.placeholder = this._valueLabel
@@ -227,26 +234,22 @@ JSONEditor.defaults.editors.mapxMultilingualLabel = class extends (
               ],
             },
             [
-              el(
-                "div",
-                { class: "mx-multilingual-label-modal-header" },
-                [
-                  el(
-                    "label",
-                    { for: id },
-                    `${languageNames[index]} (${language.toUpperCase()})`,
-                  ),
-                  el(
-                    "label",
-                    {
-                      for: sourceId,
-                      class: "mx-multilingual-label-source",
-                      title: `${copySourceLabel}: ${languageNames[index]}`,
-                    },
-                    sourceRadio,
-                  ),
-                ],
-              ),
+              el("div", { class: "mx-multilingual-label-modal-header" }, [
+                el(
+                  "label",
+                  { for: id },
+                  `${languageNames[index]} (${language.toUpperCase()})`,
+                ),
+                el(
+                  "label",
+                  {
+                    for: sourceId,
+                    class: "mx-multilingual-label-source",
+                    title: `${copySourceLabel}: ${languageNames[index]}`,
+                  },
+                  sourceRadio,
+                ),
+              ]),
               input,
             ],
           ),

@@ -28,14 +28,18 @@ export function installSourcePickerShinyBridge({ root, shiny }) {
     const picker = [...root.querySelectorAll("mx-source-picker")].find(
       (candidate) => candidate.dataset.shinyInput === message?.inputId,
     );
-    if (!picker) return;
+    if (!picker) {
+      return;
+    }
     picker.value = message?.value ?? null;
     picker.commit();
     picker.hydrateSelectedItems();
   });
   shiny.addCustomMessageHandler?.("mx-source-picker-refresh", (message) => {
     const idSource = message?.idSource;
-    if (typeof idSource !== "string" || !idSource) return;
+    if (typeof idSource !== "string" || !idSource) {
+      return;
+    }
     for (const picker of root.querySelectorAll("mx-source-picker")) {
       if (arrayValue(picker.value).includes(idSource)) {
         picker.hydrateSelectedItems();
@@ -45,13 +49,17 @@ export function installSourcePickerShinyBridge({ root, shiny }) {
   root.addEventListener("mx-source-picker-change", (event) => {
     const picker = event.target;
     const inputId = picker?.dataset?.shinyInput;
-    if (!inputId) return;
+    if (!inputId) {
+      return;
+    }
     const ownExclusionInput = picker.dataset.excludeSourceInput;
     if (ownExclusionInput) {
       const sourcePicker = [...root.querySelectorAll("mx-source-picker")].find(
         (candidate) => candidate.dataset.shinyInput === ownExclusionInput,
       );
-      if (picker.setExcludedIds(arrayValue(sourcePicker?.value))) return;
+      if (picker.setExcludedIds(arrayValue(sourcePicker?.value))) {
+        return;
+      }
     }
     if (shiny.setInputValue) {
       shiny.setInputValue(inputId, event.detail.value, { priority: "event" });
@@ -66,7 +74,9 @@ export function installSourcePickerShinyBridge({ root, shiny }) {
   });
   root.addEventListener("mx-source-picker-action", (event) => {
     const action = event.detail?.action;
-    if (!action || !event.target?.dataset?.shinyInput) return;
+    if (!action || !event.target?.dataset?.shinyInput) {
+      return;
+    }
     const payload = {
       value: event.detail.value ?? null,
       update: Date.now(),
@@ -95,7 +105,9 @@ export async function pickSourceForShiny({
   shiny,
   language = "en",
 }) {
-  if (!request?.id || !shiny?.setInputValue) return;
+  if (!request?.id || !shiny?.setInputValue) {
+    return;
+  }
   const result = await pickSources({
     root,
     multiple: false,
@@ -107,7 +119,9 @@ export async function pickSourceForShiny({
     language,
     label: "Source",
   });
-  if (!result?.value || Array.isArray(result.value)) return;
+  if (!result?.value || Array.isArray(result.value)) {
+    return;
+  }
   shiny.setInputValue(
     request.id,
     { idSource: result.value, update: Date.now() },

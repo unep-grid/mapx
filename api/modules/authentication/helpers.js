@@ -50,20 +50,19 @@ export async function getUserRoles(idUser, idProject, client = pgWrite) {
    * All admin are publisher, member
    * All publisher are member
    */
-  
-  // global roles from environment 
+
+  // global roles from environment
   roles.root = isUserRoot(idUser);
   roles.project_creator = isUserProjectCreator(idUser);
-  
-   // project roles
+
+  // project roles
   roles.admin = roles.root || pData.admins.includes(idUser);
   roles.publisher = roles.admin || pData.publishers.includes(idUser);
   roles.member = roles.publisher || pData.members.includes(idUser);
   roles.guest = !roles.member && pData.public;
 
-  // hybrid roles 
+  // hybrid roles
   roles.developer = roles.publisher && isUserDeveloper(idUser);
-
 
   if (roles.guest) {
     roles.list.push("guest");

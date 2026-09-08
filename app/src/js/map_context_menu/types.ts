@@ -66,7 +66,10 @@ export interface MapContextMenuMapApi {
   ) => RenderedFeature[];
   getLayerNamesByPrefix: (opt: AnyRecord) => string[];
   getView: (idView: string) => AnyRecord;
-  getViewSourceSummary: (idView: string, opt: AnyRecord) => Promise<SourceSummary>;
+  getViewSourceSummary: (
+    idView: string,
+    opt: AnyRecord,
+  ) => Promise<SourceSummary>;
   getViewTitle: (view: AnyRecord) => string;
   getViewsOrder: () => string[];
   viewsReplace: (views: AnyRecord[]) => Promise<boolean>;

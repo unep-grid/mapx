@@ -200,11 +200,7 @@ export class EditTableSession {
 
   async isGeometryEditAuthorized(client = pgWrite) {
     const et = this;
-    return isSocketAllowedToEditGeometry(
-      et._socket,
-      et._id_table,
-      client,
-    );
+    return isSocketAllowedToEditGeometry(et._socket, et._id_table, client);
   }
 
   async isGeometryEditAllowed(client = pgWrite) {
@@ -323,7 +319,7 @@ export class EditTableSession {
 
     if (!lightweight && dim.ncol > def.max_columns) {
       et.error(
-        `Full table: too many columns. ${dim.ncol} > ${def.max_columns} `
+        `Full table: too many columns. ${dim.ncol} > ${def.max_columns} `,
       );
       return;
     }
@@ -562,7 +558,7 @@ export class EditTableSession {
         case "geometry_info": {
           const hasGeom = await columnExists(cols.geom, et._id_table);
           return callback(
-            hasGeom ? await getGeometryColumnInfo(et._id_table) : false
+            hasGeom ? await getGeometryColumnInfo(et._id_table) : false,
           );
         }
         case "columns_used": {
@@ -572,7 +568,7 @@ export class EditTableSession {
         case "table_views": {
           const data = await getViewsTableBySource(
             et._id_table,
-            et._id_project
+            et._id_project,
           );
           return callback(data);
         }
@@ -686,7 +682,8 @@ export class EditTableSession {
           } else {
             // only the owner ( or a free lock ) can be released :
             // a joining client can no longer clear someone else's batch lock
-            ok = (await releaseLock(et._id_table, "table", et._id_session)) && ok;
+            ok =
+              (await releaseLock(et._id_table, "table", et._id_session)) && ok;
           }
           break;
         case "geometry_edit_lock":
@@ -731,7 +728,7 @@ export class EditTableSession {
         Object.assign(
           validation,
           // id, useCache, autoCorrect, analyze, validate;
-          await isLayerValid(et._id_table, true, false, false, false)
+          await isLayerValid(et._id_table, true, false, false, false),
         );
       }
       const pgRes = await getSourceAttributeTable({
@@ -906,5 +903,4 @@ export class EditTableSession {
 
     return true;
   }
-
 }

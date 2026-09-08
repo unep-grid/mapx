@@ -22,9 +22,13 @@ const { editorInstances, windowManager } = vi.hoisted(() => {
         append(node, arg);
         continue;
       }
-      if (!arg) continue;
+      if (!arg) {
+        continue;
+      }
       for (const [key, value] of Object.entries(arg)) {
-        if (value === undefined) continue;
+        if (value === undefined) {
+          continue;
+        }
         if (key === "class") {
           node.className = Array.isArray(value) ? value.join(" ") : value;
         } else if (key === "on") {
@@ -54,7 +58,9 @@ vi.mock("../el_mapx", () => ({
     const node = document.createElement("span");
     node.dataset.lang_key = key;
     node.dataset.lang_type = "text";
-    if (options?.data) node.dataset.lang_data = JSON.stringify(options.data);
+    if (options?.data) {
+      node.dataset.lang_data = JSON.stringify(options.data);
+    }
     node.textContent = key;
     return node;
   }),
@@ -63,7 +69,9 @@ vi.mock("../language/index.js", () => ({
   getDictItem: vi.fn((key) => Promise.resolve(key)),
 }));
 vi.mock("../is_test/index.js", () => ({
-  isEmpty: vi.fn((value) => value === null || value === undefined || value === ""),
+  isEmpty: vi.fn(
+    (value) => value === null || value === undefined || value === "",
+  ),
 }));
 vi.mock("./tiles_check_channel.js", () => ({ TilesCheckChannel: vi.fn() }));
 vi.mock("./raster_url_configurator.js", () => ({
@@ -111,10 +119,12 @@ describe("TilesReport edit action", () => {
         "project_tiles_url_editor_title",
       );
     });
-    expect(row.querySelector(".tiles-report-check .fa-heartbeat")).not.toBeNull();
     expect(
-      row.querySelector(".tiles-report-check").dataset.lang_key,
-    ).toBe("project_tiles_report_btn_check");
+      row.querySelector(".tiles-report-check .fa-heartbeat"),
+    ).not.toBeNull();
+    expect(row.querySelector(".tiles-report-check").dataset.lang_key).toBe(
+      "project_tiles_report_btn_check",
+    );
 
     editButton.click();
 
@@ -215,19 +225,19 @@ describe("TilesReport edit action", () => {
     report.buildTable();
 
     report.resetRowsPending();
-    expect(report.rowRefs.get("MX-AAAAA-BBBBB-CCCCC").statusCell.textContent).toContain(
-      "project_tiles_report_status_pending",
-    );
+    expect(
+      report.rowRefs.get("MX-AAAAA-BBBBB-CCCCC").statusCell.textContent,
+    ).toContain("project_tiles_report_status_pending");
 
     report.setRowChecking("MX-DDDDD-EEEEE-FFFFF");
-    expect(report.rowRefs.get("MX-DDDDD-EEEEE-FFFFF").statusCell.textContent).toContain(
-      "project_tiles_report_status_checking",
-    );
+    expect(
+      report.rowRefs.get("MX-DDDDD-EEEEE-FFFFF").statusCell.textContent,
+    ).toContain("project_tiles_report_status_checking");
 
     report.setRowDone("MX-AAAAA-BBBBB-CCCCC", { valid: true });
-    expect(report.rowRefs.get("MX-AAAAA-BBBBB-CCCCC").statusCell.textContent).toContain(
-      "project_tiles_report_status_valid",
-    );
+    expect(
+      report.rowRefs.get("MX-AAAAA-BBBBB-CCCCC").statusCell.textContent,
+    ).toContain("project_tiles_report_status_valid");
 
     report.setRowDone("MX-AAAAA-BBBBB-CCCCC", {
       valid: false,
@@ -243,11 +253,11 @@ describe("TilesReport edit action", () => {
     ).not.toBeNull();
 
     report.setRowsIncomplete();
-    expect(report.rowRefs.get("MX-DDDDD-EEEEE-FFFFF").statusCell.textContent).toContain(
-      "project_tiles_report_status_incomplete",
-    );
-    expect(report.rowRefs.get("MX-AAAAA-BBBBB-CCCCC").statusCell.textContent).toContain(
-      "project_tiles_report_status_invalid",
-    );
+    expect(
+      report.rowRefs.get("MX-DDDDD-EEEEE-FFFFF").statusCell.textContent,
+    ).toContain("project_tiles_report_status_incomplete");
+    expect(
+      report.rowRefs.get("MX-AAAAA-BBBBB-CCCCC").statusCell.textContent,
+    ).toContain("project_tiles_report_status_invalid");
   });
 });

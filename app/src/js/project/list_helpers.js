@@ -78,8 +78,12 @@ const NATURAL_SORT_DIRECTION = {
 function compareTime(a, b, direction) {
   const aIsValid = Number.isFinite(a);
   const bIsValid = Number.isFinite(b);
-  if (aIsValid !== bIsValid) return aIsValid ? -1 : 1;
-  if (!aIsValid) return 0;
+  if (aIsValid !== bIsValid) {
+    return aIsValid ? -1 : 1;
+  }
+  if (!aIsValid) {
+    return 0;
+  }
   return (a - b) * direction;
 }
 
@@ -89,9 +93,13 @@ function compareTime(a, b, direction) {
  */
 export function nextProjectSort(currentSort, column) {
   const naturalDirection = NATURAL_SORT_DIRECTION[column];
-  if (!naturalDirection) return currentSort;
+  if (!naturalDirection) {
+    return currentSort;
+  }
   const naturalSort = `${column}_${naturalDirection}`;
-  if (!String(currentSort).startsWith(`${column}_`)) return naturalSort;
+  if (!String(currentSort).startsWith(`${column}_`)) {
+    return naturalSort;
+  }
   return `${column}_${currentSort.endsWith("_asc") ? "desc" : "asc"}`;
 }
 

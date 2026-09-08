@@ -83,9 +83,8 @@ function createFixture() {
 }
 
 function configuredServiceOptions() {
-  return tomSelectMock.instances.find(
-    ({ config }) => config.options.length > 0,
-  )?.config.options;
+  return tomSelectMock.instances.find(({ config }) => config.options.length > 0)
+    ?.config.options;
 }
 
 describe("wmsBuildQueryUi", () => {

@@ -10,9 +10,7 @@ vi.mock("../../settings/index.js", () => ({
   settings: { language: "en" },
 }));
 vi.mock("../../language/index.js", () => ({
-  getDictItem: vi.fn(async (keys) =>
-    Array.isArray(keys) ? keys : keys,
-  ),
+  getDictItem: vi.fn(async (keys) => (Array.isArray(keys) ? keys : keys)),
 }));
 vi.mock("../picker/index.js", () => ({
   pickSources: mocks.pickSources,
@@ -34,7 +32,9 @@ vi.mock("../../window/index.js", () => ({
           element.setAttribute(key, value);
         }
       }
-      if (children) element.append(children);
+      if (children) {
+        element.append(children);
+      }
       return element;
     },
     open: mocks.open,

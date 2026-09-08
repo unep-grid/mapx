@@ -50,7 +50,10 @@ export function toHttpError(error, defaultStatusCode = 500) {
     return error;
   }
 
-  return new HttpError(error?.message || "Proxy request failed", defaultStatusCode);
+  return new HttpError(
+    error?.message || "Proxy request failed",
+    defaultStatusCode,
+  );
 }
 
 export function handleProxyError(res, error, options = {}) {

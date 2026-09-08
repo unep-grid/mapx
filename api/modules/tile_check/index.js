@@ -26,13 +26,18 @@ export async function checkRasterUrls(view) {
       ? checkUrl(view.legend_url)
       : { valid: null, detail: "not_configured", tested_url: null },
   ]);
-  const valid = tileResult.valid === true &&
+  const valid =
+    tileResult.valid === true &&
     (!legendConfigured || legendResult.valid === true);
-  const detail = [
-    !tileResult.valid && `tiles:${tileResult.detail || "invalid"}`,
-    legendConfigured && !legendResult.valid &&
-      `legend:${legendResult.detail || "invalid"}`,
-  ].filter(Boolean).join(", ") || null;
+  const detail =
+    [
+      !tileResult.valid && `tiles:${tileResult.detail || "invalid"}`,
+      legendConfigured &&
+        !legendResult.valid &&
+        `legend:${legendResult.detail || "invalid"}`,
+    ]
+      .filter(Boolean)
+      .join(", ") || null;
 
   return {
     valid,

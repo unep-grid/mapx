@@ -25,14 +25,12 @@ import { toPgColumn } from "#mapx/helpers";
 const base = "ST_SetSRID(ST_GeomFromGeoJSON($1), 4326)";
 
 describe("getGeomSqlExpression", () => {
-  it.each([
-    "GEOMETRY",
-    "MULTIPOINT",
-    "MULTILINESTRING",
-    "MULTIPOLYGON",
-  ])("promotes writes for %s columns", (type) => {
-    expect(getGeomSqlExpression(type)).toBe(`ST_Multi(${base})`);
-  });
+  it.each(["GEOMETRY", "MULTIPOINT", "MULTILINESTRING", "MULTIPOLYGON"])(
+    "promotes writes for %s columns",
+    (type) => {
+      expect(getGeomSqlExpression(type)).toBe(`ST_Multi(${base})`);
+    },
+  );
 
   it.each(["POINT", "LINESTRING", "POLYGON"])(
     "preserves explicitly simple %s columns",

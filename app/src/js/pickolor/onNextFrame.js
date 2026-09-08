@@ -1,8 +1,4 @@
-
-
-
-export {onNext,cancel};
-
+export { onNext, cancel };
 
 var nf =
   window.requestAnimationFrame ||
@@ -10,10 +6,9 @@ var nf =
   window.mozRequestAnimationFrame ||
   window.msRequestAnimationFrame ||
   window.oRequestAnimationFrame ||
-  function(callback) {
+  function (callback) {
     window.setTimeout(callback, 1000 / 60);
   };
-
 
 var cf =
   window.cancelAnimationFrame ||

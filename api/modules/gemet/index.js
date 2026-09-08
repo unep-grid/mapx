@@ -1,32 +1,29 @@
-import {pgRead} from '#mapx/db';
-import {getParamsValidator} from '#mapx/route_validation';
+import { pgRead } from "#mapx/db";
+import { getParamsValidator } from "#mapx/route_validation";
 import {
   parseTemplate,
   sendJSON,
   sendError,
-  arrayToPgArray
-} from '#mapx/helpers';
-import {templates} from '#mapx/template';
+  arrayToPgArray,
+} from "#mapx/helpers";
+import { templates } from "#mapx/template";
 
 const validateParamsHandlerText = getParamsValidator({
-  required: ['searchText', 'language'],
-  expected: ['pageNumber', 'maxByPage']
+  required: ["searchText", "language"],
+  expected: ["pageNumber", "maxByPage"],
 });
 
 const validateParamsHandlerConcept = getParamsValidator({
-  required: ['idConcepts', 'language']
+  required: ["idConcepts", "language"],
 });
 
 const mwGemetSearchText = [validateParamsHandlerText, handlerSearchText];
 const mwGemetSearchConcept = [
   validateParamsHandlerConcept,
-  handlerSearchConcept
+  handlerSearchConcept,
 ];
 
-export  {
-  mwGemetSearchText,
-  mwGemetSearchConcept
-};
+export { mwGemetSearchText, mwGemetSearchConcept };
 
 async function handlerSearchText(req, res) {
   try {
@@ -34,7 +31,7 @@ async function handlerSearchText(req, res) {
       language: req.query.language,
       text: req.query.searchText,
       limit: req.query.maxByPage,
-      offset: (req.query.pageNumber - 1) * req.query.maxByPage
+      offset: (req.query.pageNumber - 1) * req.query.maxByPage,
     });
     const now = Date.now();
     const result = await pgRead.query(q);
@@ -51,7 +48,7 @@ async function handlerSearchConcept(req, res) {
     const idConcept = req.query.idConcepts;
     const q = parseTemplate(templates.getGemetConcept, {
       language: req.query.language,
-      concept: arrayToPgArray(idConcept)
+      concept: arrayToPgArray(idConcept),
     });
     const result = await pgRead.query(q);
     const list = result.rows.map((r) => r.hits);

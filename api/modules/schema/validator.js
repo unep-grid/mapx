@@ -114,7 +114,7 @@ export class Validator {
     config,
     value,
     _, //parentSchema,
-    dataPath // {parentData,rootData,etc..}
+    dataPath, // {parentData,rootData,etc..}
     //parentData,
     //parentDataProperty,
   ) {

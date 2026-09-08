@@ -1,4 +1,3 @@
-
 export const errorToIgnore = [
-  /mapterhorn.com/ // expected 404 
+  /mapterhorn.com/, // expected 404
 ];

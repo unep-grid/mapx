@@ -1,4 +1,4 @@
-const diacTable = require('./table_diacritics.json');
+const diacTable = require("./table_diacritics.json");
 
 /**
  * Remove diacritics
@@ -7,22 +7,21 @@ const diacTable = require('./table_diacritics.json');
  * @return promise
  */
 export function cleanDiacritic(str) {
-  return str.replace(/[À-ž]/g, function(ch) {
+  return str.replace(/[À-ž]/g, function (ch) {
     return diacTable[ch.charCodeAt(0)] || ch;
   });
 }
 
-
 /**
-* Wrapper around levenshtein : clean before compute distance
+ * Wrapper around levenshtein : clean before compute distance
  * @param {string} String a
  * @param {string} String b
  * @return {Number} Distance from 0 to 1, neut
-*/ 
+ */
 export function levenshtein(a, b) {
   // only keep meaningfull characters
-  a = a.replace(/[^0-9A-zÀ-ÿ\,\&\|\$]/g, '').toLowerCase();
-  b = b.replace(/[^0-9A-zÀ-ÿ\,\&\|\$]/g, '').toLowerCase();
+  a = a.replace(/[^0-9A-zÀ-ÿ\,\&\|\$]/g, "").toLowerCase();
+  b = b.replace(/[^0-9A-zÀ-ÿ\,\&\|\$]/g, "").toLowerCase();
 
   a = cleanDiacritic(a);
   b = cleanDiacritic(b);

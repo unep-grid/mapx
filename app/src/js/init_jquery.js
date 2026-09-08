@@ -10,7 +10,7 @@ window.Selectize = Selectize;
 
 window.addEventListener("load", async () => {
   /**
-   * Additional modules required by Shiny. 
+   * Additional modules required by Shiny.
    */
   await import("selectize-plugin-a11y");
 

@@ -37,7 +37,9 @@ function getThemeModeIcon(isDark) {
  * @returns {string} Formatted date
  */
 function formatDate(dateString) {
-  if (!dateString) return "";
+  if (!dateString) {
+    return "";
+  }
   try {
     return new Date(dateString).toLocaleDateString();
   } catch (e) {

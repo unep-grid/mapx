@@ -11,7 +11,7 @@ import path from "path";
 export async function deleteOldFiles(
   directoryPath,
   prefixPattern = "",
-  maxAgeInHours = 48
+  maxAgeInHours = 48,
 ) {
   try {
     const filesAndFolders = await fs.readdir(directoryPath);
@@ -48,7 +48,7 @@ export async function clearDownload() {
   const done = await deleteOldFiles(
     settings.vector.path.download,
     settings.ttl.downloads.prefix,
-    settings.ttl.downloads.hours
+    settings.ttl.downloads.hours,
   );
   return done;
 }

@@ -9,7 +9,9 @@ import {
   matchesSafeSvg,
 } from "./fetch_check.js";
 
-const PNG_HEADER = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+const PNG_HEADER = Buffer.from([
+  0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a,
+]);
 const JPEG_HEADER = Buffer.from([0xff, 0xd8, 0xff, 0xe0]);
 const GIF_HEADER = Buffer.from("GIF89a");
 const XML_BODY = Buffer.from(
@@ -41,16 +43,25 @@ describe("matchesImageSignature", () => {
 describe("matchesSafeSvg", () => {
   it("accepts a simple SVG legend", () => {
     expect(
-      matchesSafeSvg(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"></svg>'), "image/svg+xml"),
+      matchesSafeSvg(
+        Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"></svg>'),
+        "image/svg+xml",
+      ),
     ).toBe(true);
   });
 
   it("rejects executable or external SVG content", () => {
     expect(
-      matchesSafeSvg(Buffer.from('<svg><script>alert(1)</script></svg>'), "image/svg+xml"),
+      matchesSafeSvg(
+        Buffer.from("<svg><script>alert(1)</script></svg>"),
+        "image/svg+xml",
+      ),
     ).toBe(false);
     expect(
-      matchesSafeSvg(Buffer.from('<svg><image href="https://example.org/x.png"/></svg>'), "image/svg+xml"),
+      matchesSafeSvg(
+        Buffer.from('<svg><image href="https://example.org/x.png"/></svg>'),
+        "image/svg+xml",
+      ),
     ).toBe(false);
   });
 });
@@ -58,14 +69,15 @@ describe("matchesSafeSvg", () => {
 describe("checkUrl", () => {
   it("aborts an unresponsive resource after eight seconds by default", async () => {
     vi.useFakeTimers();
-    mocks.fetch.mockImplementation((_url, opt) =>
-      new Promise((_resolve, reject) => {
-        opt.signal.addEventListener("abort", () => {
-          const error = new Error("aborted");
-          error.name = "AbortError";
-          reject(error);
-        });
-      }),
+    mocks.fetch.mockImplementation(
+      (_url, opt) =>
+        new Promise((_resolve, reject) => {
+          opt.signal.addEventListener("abort", () => {
+            const error = new Error("aborted");
+            error.name = "AbortError";
+            reject(error);
+          });
+        }),
     );
 
     try {

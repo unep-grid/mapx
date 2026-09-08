@@ -17,7 +17,9 @@ vi.mock("./button.js", () => {
       this.enable = vi.fn(() => this.elButton.classList.add("active"));
       this.disable = vi.fn(() => this.elButton.classList.remove("active"));
       this.isActive = vi.fn(() => this.elButton.classList.contains("active"));
-      if (opt.onInit) opt.onInit(this);
+      if (opt.onInit) {
+        opt.onInit(this);
+      }
     }
   }
 
@@ -45,7 +47,9 @@ vi.mock("../geocoder/modal.js", () => ({ GeocoderModal: vi.fn() }));
 import { generateButtons } from "./mapx_buttons.js";
 
 function getTerrainButton() {
-  return generateButtons().find((button) => button.opt.key === "btn_3d_terrain");
+  return generateButtons().find(
+    (button) => button.opt.key === "btn_3d_terrain",
+  );
 }
 
 describe("btn_3d_terrain", () => {

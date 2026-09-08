@@ -69,7 +69,9 @@ describe("mbstyle_to_sld", () => {
       const out = getMapboxStyleForSld(style, { geomType: "polygon" });
 
       expect(out).not.toBe(style);
-      expect(out.sprite).toBe("https://example.com/style/v1/sprites/sprite_patterns");
+      expect(out.sprite).toBe(
+        "https://example.com/style/v1/sprites/sprite_patterns",
+      );
       expect(style.sprite).toBe(sprites);
     });
 

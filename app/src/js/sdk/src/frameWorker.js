@@ -47,7 +47,7 @@ class FrameWorker extends Events {
     if (!opt.sdkToken) {
       opt.sdkToken = Math.random().toString(32);
       console.warn(
-        "Missing sdkToken : multiple SDK instances on the same page not supported."
+        "Missing sdkToken : multiple SDK instances on the same page not supported.",
       );
     }
     fw.handleMessageManager = fw.handleMessageManager.bind(fw);
@@ -211,7 +211,7 @@ class FrameWorker extends Events {
                 idRequest: idRequest,
                 idResolver: idResolver,
               },
-            })
+            }),
           );
         }
         if (resolver instanceof Function) {

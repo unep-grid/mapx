@@ -32,7 +32,6 @@ export async function modalChangelog() {
     elContainer: elContainer,
   });
 
-
   function clear() {
     textFilter?.destroy();
   }

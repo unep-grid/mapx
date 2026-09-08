@@ -77,8 +77,8 @@ class RadioGroup {
               },
               for: id,
             },
-            qs.opt.builder(it)
-          )
+            qs.opt.builder(it),
+          ),
         );
         const selected = isEmpty(qs.opt.value)
           ? i === 0
@@ -90,7 +90,7 @@ class RadioGroup {
         }
 
         return elItem;
-      })
+      }),
     );
     qs._listener = qs.update.bind(qs);
     qs.el.addEventListener("change", qs._listener);

@@ -72,10 +72,7 @@ export function getRoleGroups(roles: AnyRecord = {}) {
     .filter((value) => value !== undefined && value !== null && value !== "");
 }
 
-export function canAttemptEdit(
-  item: MapContextMenuItem,
-  settings: AnyRecord,
-) {
+export function canAttemptEdit(item: MapContextMenuItem, settings: AnyRecord) {
   return (
     !settings?.mode?.static &&
     isSourceId(item.idSource) &&

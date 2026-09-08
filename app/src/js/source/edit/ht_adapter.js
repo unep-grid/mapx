@@ -64,11 +64,7 @@ export const htAdapterMixin = {
       );
     }
 
-    const content = el(
-      "div",
-      { class: "edit-table--geom-tools" },
-      buttons,
-    );
+    const content = el("div", { class: "edit-table--geom-tools" }, buttons);
 
     td.className = "htCenter htMiddle edit-table--geom-cell";
     td.replaceChildren(content);

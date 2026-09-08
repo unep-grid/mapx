@@ -101,7 +101,9 @@ describe("MxWindowManager", () => {
 
     manager.open({ key: "first" });
     manager.open({ key: "second" });
-    expect(add.mock.calls.filter(([type]) => type === "resize")).toHaveLength(1);
+    expect(add.mock.calls.filter(([type]) => type === "resize")).toHaveLength(
+      1,
+    );
 
     manager.close("first");
     expect(

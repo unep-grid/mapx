@@ -309,12 +309,20 @@ export class TilesReport {
   }
 
   statusLabel(row, resource = "overall") {
-    if (resource === "legend" && !row.legend_url && row.legend_configured !== true) {
+    if (
+      resource === "legend" &&
+      !row.legend_url &&
+      row.legend_configured !== true
+    ) {
       return rasterStatusConfig("not_configured");
     }
-    if (isEmpty(row.checked_at)) return rasterStatusConfig("unchecked");
+    if (isEmpty(row.checked_at)) {
+      return rasterStatusConfig("unchecked");
+    }
     return rasterStatusLabel(row, resource, {
-      configured: resource !== "legend" || Boolean(row.legend_url || row.legend_configured),
+      configured:
+        resource !== "legend" ||
+        Boolean(row.legend_url || row.legend_configured),
     });
   }
 
@@ -331,11 +339,12 @@ export class TilesReport {
     const state = tr.rowStates.get(idView) || {};
     state[resource] = status.state;
     tr.rowStates.set(idView, state);
-    const cell = resource === "tile"
-      ? refs.tileStatusCell
-      : resource === "legend"
-        ? refs.legendStatusCell
-        : refs.statusCell;
+    const cell =
+      resource === "tile"
+        ? refs.tileStatusCell
+        : resource === "legend"
+          ? refs.legendStatusCell
+          : refs.statusCell;
     cell.replaceChildren(
       tr.el(
         "span",
@@ -358,7 +367,9 @@ export class TilesReport {
   setRowChecking(idView) {
     const tr = this;
     const refs = tr.rowRefs.get(idView);
-    if (!refs) return;
+    if (!refs) {
+      return;
+    }
     tr.setRowStatus(idView, tr.statusConfig("checking"), "tile");
     tr.setRowStatus(idView, tr.statusConfig("checking"), "overall");
     if (refs.legendStatusCell.dataset.configured !== "false") {
@@ -410,11 +421,12 @@ export class TilesReport {
         code: row.tile_detail,
         httpStatus: row.tile_http_status,
       },
-      row.legend_configured && row.legend_detail && {
-        resource: "legend",
-        code: row.legend_detail,
-        httpStatus: row.legend_http_status,
-      },
+      row.legend_configured &&
+        row.legend_detail && {
+          resource: "legend",
+          code: row.legend_detail,
+          httpStatus: row.legend_http_status,
+        },
     ].filter(Boolean);
 
     if (details.length || !row.detail) {
@@ -436,7 +448,9 @@ export class TilesReport {
     const tr = this;
     const nodes = [];
     for (const [index, detail] of tr.detailItems(row).entries()) {
-      if (index > 0) nodes.push(", ");
+      if (index > 0) {
+        nodes.push(", ");
+      }
       if (detail.resource) {
         nodes.push(tt(DETAIL_RESOURCE_KEYS[detail.resource]), ": ");
       }
@@ -536,7 +550,9 @@ export class TilesReport {
   handleEdit(row) {
     const tr = this;
     if (!tr._urlEditor) {
-      tr._urlEditor = new RasterUrlConfigurator({ root: tr.windowManager.root });
+      tr._urlEditor = new RasterUrlConfigurator({
+        root: tr.windowManager.root,
+      });
     }
     tr._urlEditor.show({
       idView: row.id_view,
@@ -558,7 +574,9 @@ export class TilesReport {
 
   async handleCheck(row) {
     const tr = this;
-    if (tr.rowStates.get(row.id_view)?.overall === "checking") return;
+    if (tr.rowStates.get(row.id_view)?.overall === "checking") {
+      return;
+    }
     tr.setRowStatus(row.id_view, tr.statusConfig("pending"), "tile");
     tr.setRowStatus(row.id_view, tr.statusConfig("pending"), "overall");
     if (row.legend_url) {
@@ -571,7 +589,9 @@ export class TilesReport {
         { idView: row.id_view },
         30 * 1000,
       );
-      if (data.error) throw new Error(data.error);
+      if (data.error) {
+        throw new Error(data.error);
+      }
       Object.assign(row, data.row);
       tr.setRowDone(row.id_view, data.row);
     } catch (error) {

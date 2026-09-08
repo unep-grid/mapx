@@ -20,7 +20,7 @@ const dirSqlAdmin = new URL("sql_admin", import.meta.url).pathname;
  */
 const sqlHasPatch = readTxt(path.join(dirSqlBase, "has_patch.template.sql"));
 const sqlRegisterPatch = readTxt(
-  path.join(dirSqlBase, "register_patch.template.sql")
+  path.join(dirSqlBase, "register_patch.template.sql"),
 );
 const sqlInit = readTxt(path.join(dirSqlBase, "init.sql"));
 const sqlIsInit = readTxt(path.join(dirSqlBase, "exists.sql"));

@@ -145,7 +145,7 @@ async function handlerUpdateCell({ client, update, tablesUpdated }) {
       column_name,
       column_type,
       value_new,
-      client
+      client,
     );
     tablesUpdated.add(id_table);
   }
@@ -336,7 +336,7 @@ async function handlerUpdateGeom({
     id_table,
     update.gid,
     update.geom,
-    client
+    client,
   );
   update.row = row;
   update[cols.geom_status] = row[cols.geom_status];

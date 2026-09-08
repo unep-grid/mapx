@@ -210,7 +210,9 @@ export class ProjectManager {
         return false;
       }
       const title = projectTitle || idProject;
-      const modalTitle = `${await getDictItem("project_delete_title")} "${title}"`;
+      const modalTitle = `${await getDictItem(
+        "project_delete_title",
+      )} "${title}"`;
       const windowManager = getMapxWindowManager();
       const key = "project-delete";
 
@@ -428,7 +430,9 @@ export class ProjectManager {
             return;
           }
           if (message.step === "awaiting_commit") {
-            const question = await getDictItem("project_delete_commit_question");
+            const question = await getDictItem(
+              "project_delete_commit_question",
+            );
             const text = question
               .replace("{{title}}", message.project_title || title)
               .replace("{{count}}", String(message.removed?.total ?? ""));
@@ -447,7 +451,9 @@ export class ProjectManager {
             }
             return;
           }
-          progressLabel.textContent = await getDictItem("project_delete_analyze");
+          progressLabel.textContent = await getDictItem(
+            "project_delete_analyze",
+          );
         },
         onDone: async () => {
           await closeWithNotice("project_deleted");

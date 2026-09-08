@@ -21,7 +21,11 @@ export class TimeMapLegend extends BaseTimeMapLegend {
 
   // Implement abstract method for URL construction
   constructUrl(selectedDate, selectedElevation, selectedStyle) {
-    return this.constructWmtsUrl(selectedDate, selectedElevation, selectedStyle);
+    return this.constructWmtsUrl(
+      selectedDate,
+      selectedElevation,
+      selectedStyle,
+    );
   }
 
   // Implement abstract method for capabilities URL
@@ -72,7 +76,6 @@ export class TimeMapLegend extends BaseTimeMapLegend {
     const { baseURL, product, dataset } = this._opt;
     return `${baseURL}/${product}/${dataset}/?${params.toString()}`;
   }
-
 
   createLayerInfo(xmlDoc) {
     let { variable } = this._opt;
@@ -176,5 +179,4 @@ export class TimeMapLegend extends BaseTimeMapLegend {
 
     return out;
   }
-
 }

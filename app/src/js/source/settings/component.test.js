@@ -30,9 +30,7 @@ vi.mock("../../settings/index.js", () => ({
   settings: { language: "en" },
 }));
 vi.mock("../../language/index.js", () => ({
-  getDictItem: vi.fn(async (keys) =>
-    Array.isArray(keys) ? keys : keys,
-  ),
+  getDictItem: vi.fn(async (keys) => (Array.isArray(keys) ? keys : keys)),
 }));
 vi.mock("../../modules_loader_async/index.js", () => ({
   moduleLoad: mocks.moduleLoad,
@@ -91,23 +89,29 @@ describe("MxSourceSettingsElement", () => {
     vi.clearAllMocks();
     mocks.tomSelectInstances.length = 0;
     mocks.ws.emitAsync.mockImplementation(async (route) => {
-      if (route === "/client/source/settings/get") return structuredClone(overview);
+      if (route === "/client/source/settings/get") {
+        return structuredClone(overview);
+      }
       if (route === "/client/source/settings/usage") {
         return {
           ok: true,
-          rows: [{
-            id: "view_1",
-            title: "Dependent view",
-            email_editor: "other@example.test",
-            project: "MX-PROJECT",
-            title_project: "Project",
-          }],
+          rows: [
+            {
+              id: "view_1",
+              title: "Dependent view",
+              email_editor: "other@example.test",
+              project: "MX-PROJECT",
+              title_project: "Project",
+            },
+          ],
           total: 1,
           limit: 25,
           offset: 0,
         };
       }
-      if (route === "/client/source/revise") return { ok: true, pid: 2 };
+      if (route === "/client/source/revise") {
+        return { ok: true, pid: 2 };
+      }
       throw new Error(`Unexpected route: ${route}`);
     });
     component = document.createElement("mx-source-settings");
@@ -135,11 +139,12 @@ describe("MxSourceSettingsElement", () => {
     expect(readonly[2].value).toBe("editor@example.test");
     expect(component.refs.remove.disabled).toBe(true);
     expect(component.refs.global.disabled).toBe(true);
-    expect(component.textContent).toContain("source_settings_publishers_required");
+    expect(component.textContent).toContain(
+      "source_settings_publishers_required",
+    );
     expect(component.refs.warnings.classList).toContain("alert-warning");
     expect(
-      component.querySelector(".mx-source-settings__usage")
-        .nextElementSibling,
+      component.querySelector(".mx-source-settings__usage").nextElementSibling,
     ).toBe(component.refs.warnings);
   });
 
@@ -152,7 +157,10 @@ describe("MxSourceSettingsElement", () => {
     await vi.waitFor(() =>
       expect(mocks.ws.emitAsync).toHaveBeenCalledWith(
         "/client/source/settings/usage",
-        expect.objectContaining({ idSource: overview.source.id, category: "views" }),
+        expect.objectContaining({
+          idSource: overview.source.id,
+          category: "views",
+        }),
         30000,
       ),
     );
@@ -164,8 +172,12 @@ describe("MxSourceSettingsElement", () => {
     editableOverview.constraints.blockDelete = false;
     editableOverview.permissions.canSetGlobal = true;
     mocks.ws.emitAsync.mockImplementation(async (route) => {
-      if (route === "/client/source/settings/get") return editableOverview;
-      if (route === "/client/source/revise") return { ok: true, pid: 2 };
+      if (route === "/client/source/settings/get") {
+        return editableOverview;
+      }
+      if (route === "/client/source/revise") {
+        return { ok: true, pid: 2 };
+      }
       return { ok: true, rows: [], total: 0 };
     });
     component.remove();
@@ -201,7 +213,9 @@ describe("MxSourceSettingsElement", () => {
     component.disconnectedCallback();
     component.remove();
     await vi.waitFor(() => {
-      expect(instances.map((instance) => instance.destroy.mock.calls.length)).toEqual([1, 1, 1]);
+      expect(
+        instances.map((instance) => instance.destroy.mock.calls.length),
+      ).toEqual([1, 1, 1]);
       expect(mocks.events.offGroup).toHaveBeenCalledWith(component.eventGroup);
     });
   });

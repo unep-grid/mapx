@@ -22,7 +22,7 @@ export class MapNorthArrow {
         class: ["mc-item-scalable-image"],
         style: { transformOrigin: "top right" },
       },
-      elArrow
+      elArrow,
     );
 
     const elNorthCtrl = el(
@@ -30,7 +30,7 @@ export class MapNorthArrow {
       {
         class: "maplibregl-ctrl",
       },
-      elWrapper
+      elWrapper,
     );
 
     map.on("rotate", function () {

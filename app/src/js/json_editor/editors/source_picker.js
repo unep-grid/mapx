@@ -6,10 +6,7 @@ import "../../source/picker/index.js";
 const RENDERER = "source-picker";
 
 JSONEditor.defaults.resolvers.unshift((schema) => {
-  if (
-    schema.type === "string" &&
-    schema.mx_options?.renderer === RENDERER
-  ) {
+  if (schema.type === "string" && schema.mx_options?.renderer === RENDERER) {
     return "mapxSourcePicker";
   }
 });
@@ -39,7 +36,9 @@ JSONEditor.defaults.editors.mapxSourcePicker = class MapxSourcePicker extends (
       language: settings.language || "en",
     };
     this._onPickerChange = (event) => {
-      if (this._suppressChange || event.target !== this.input) return;
+      if (this._suppressChange || event.target !== this.input) {
+        return;
+      }
       this.refreshValue();
       this.onChange(true);
     };
@@ -87,14 +86,20 @@ JSONEditor.defaults.editors.mapxSourcePicker = class MapxSourcePicker extends (
 
   enable() {
     if (!this.always_disabled) {
-      if (this.input) this.input.disabled = false;
+      if (this.input) {
+        this.input.disabled = false;
+      }
       super.enable();
     }
   }
 
   disable(alwaysDisabled) {
-    if (alwaysDisabled) this.always_disabled = true;
-    if (this.input) this.input.disabled = true;
+    if (alwaysDisabled) {
+      this.always_disabled = true;
+    }
+    if (this.input) {
+      this.input.disabled = true;
+    }
     super.disable();
   }
 

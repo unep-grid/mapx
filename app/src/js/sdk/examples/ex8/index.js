@@ -159,7 +159,7 @@ mapx.on("mapx_ready", async () => {
     onValueChange: (value) => {
       sliderTime.set([start, value]);
     },
-    framerate : 10,
+    framerate: 10,
     duration: 2,
     startValue: start,
     endValue: end,

@@ -66,7 +66,7 @@ export class ArcoChart {
       },
       xAxis: {
         type: mode === "time" ? "time" : "value",
-        name: mode === "time" ? null : (verticalLabel || "Depth"),
+        name: mode === "time" ? null : verticalLabel || "Depth",
         nameLocation: "middle",
         nameGap: 22,
       },

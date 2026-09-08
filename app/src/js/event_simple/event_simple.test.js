@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { EventSimple } from "./index.js"; 
+import { EventSimple } from "./index.js";
 
 describe("EventSimple", () => {
   let eventManager;

@@ -94,7 +94,10 @@ describe("window dialogs", () => {
   );
 
   it.each([
-    ["cancel button", (dialog) => dialog.refs.footerEnd.lastElementChild.click()],
+    [
+      "cancel button",
+      (dialog) => dialog.refs.footerEnd.lastElementChild.click(),
+    ],
     ["header close", (dialog) => dialog.refs.close.click()],
     [
       "Escape",

@@ -14,7 +14,13 @@ describe("feature identity filters", () => {
         { gid: "2" },
         { gid: undefined },
       ]),
-    ).toEqual(["match", ["to-string", ["get", "gid"]], ["1", "2"], true, false]);
+    ).toEqual([
+      "match",
+      ["to-string", ["get", "gid"]],
+      ["1", "2"],
+      true,
+      false,
+    ]);
   });
 
   it("falls back to feature ids when gid is missing", () => {

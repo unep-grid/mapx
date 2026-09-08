@@ -179,7 +179,10 @@ describe("external metadata view lifecycle", () => {
         return { rowCount: 2, rows: [] };
       }
       if (text.includes("FROM mx_views_latest")) {
-        return { rowCount: references, rows: references ? [{ exists: 1 }] : [] };
+        return {
+          rowCount: references,
+          rows: references ? [{ exists: 1 }] : [],
+        };
       }
       if (text.includes("DELETE FROM mx_sources")) {
         return { rowCount: 3, rows: [] };
@@ -192,10 +195,7 @@ describe("external metadata view lifecycle", () => {
     const client = deletionClient();
 
     await expect(
-      deleteViewWithExternalMetadata(
-        { idUser: 7, idProject, idView },
-        client,
-      ),
+      deleteViewWithExternalMetadata({ idUser: 7, idProject, idView }, client),
     ).resolves.toEqual({ ok: true, idView, idSourceDeleted: idSource });
 
     expect(
@@ -237,10 +237,7 @@ describe("external metadata view lifecycle", () => {
     const client = deletionClient({ editor: 9, editors: ["admins"] });
 
     await expect(
-      deleteViewWithExternalMetadata(
-        { idUser: 7, idProject, idView },
-        client,
-      ),
+      deleteViewWithExternalMetadata({ idUser: 7, idProject, idView }, client),
     ).rejects.toMatchObject({ status: 403 });
     expect(
       client.query.mock.calls.some(([sql]) =>

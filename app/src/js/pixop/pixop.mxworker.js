@@ -86,7 +86,7 @@ async function handleMessages(m) {
                 ctx.drawImage(
                   imgBuffer,
                   x / w.dpr - d.radius,
-                  y / w.dpr - d.radius
+                  y / w.dpr - d.radius,
                 );
               }
             }
@@ -151,6 +151,5 @@ async function handleMessages(m) {
       nPixelFound: countAll,
       timing: performance.now() - start,
     });
-
   }
 }

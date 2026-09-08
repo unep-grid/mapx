@@ -1,1 +1,1 @@
-declare module '@fxi/mx_valid'
+declare module "@fxi/mx_valid";

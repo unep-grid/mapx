@@ -25,9 +25,7 @@ export function getStepPreviewData({ elStep, name = "" }) {
   const slideTexts = slideFronts.map((elSlide) =>
     normalizeText(elSlide.textContent || ""),
   );
-  const text = slideTexts
-    .filter(Boolean)
-    .join(" ");
+  const text = slideTexts.filter(Boolean).join(" ");
   const coverImage = /** @type {HTMLImageElement | null} */ (
     elStep.querySelector(COVER_SELECTOR)
   );

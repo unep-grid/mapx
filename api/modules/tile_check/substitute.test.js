@@ -23,7 +23,9 @@ describe("buildTestUrl", () => {
   it("substitutes {-y} with the TMS-flipped y", () => {
     const url = buildTestUrl("https://example.com/{z}/{x}/{-y}.png");
     const flipped = Math.pow(2, DEFAULT_Z) - 1 - DEFAULT_Y;
-    expect(url).toBe(`https://example.com/${DEFAULT_Z}/${DEFAULT_X}/${flipped}.png`);
+    expect(url).toBe(
+      `https://example.com/${DEFAULT_Z}/${DEFAULT_X}/${flipped}.png`,
+    );
   });
 
   it("substitutes {quadkey}", () => {

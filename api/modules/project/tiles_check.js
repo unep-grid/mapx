@@ -339,7 +339,9 @@ export async function ioViewRasterConfigTest(socket, data, cb) {
       [data.idView, idProject],
     );
     const view = rows[0];
-    if (!view) throw new Error("view_not_found");
+    if (!view) {
+      throw new Error("view_not_found");
+    }
     const config = normalizeRasterConfig(data);
     const result = await checkRasterUrls({
       tile_url: config.tiles,
@@ -364,7 +366,9 @@ export async function ioViewRasterConfigSave(socket, data, cb) {
     const idProject = socket.session.project_id;
     const config = normalizeRasterConfig(data.config);
     const view = await setViewRasterConfig(data.idView, config, idProject);
-    if (!view) throw new Error("view_not_found");
+    if (!view) {
+      throw new Error("view_not_found");
+    }
     const [row] = await runChecks([view]);
     data.row = row;
     data.success = true;

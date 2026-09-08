@@ -1,6 +1,5 @@
 import { SourcesJoinManager } from "./index.js";
 
-
 export async function modalSourceJoin(opt, { root } = {}) {
   try {
     const msj = new SourcesJoinManager({ root });

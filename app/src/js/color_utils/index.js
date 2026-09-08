@@ -1,10 +1,8 @@
-import chroma from 'chroma-js';
-
+import chroma from "chroma-js";
 
 /**
-*  TODO: Replace remaining custom functions with method from chroma
-*/
-
+ *  TODO: Replace remaining custom functions with method from chroma
+ */
 
 /**
  * Generate a random hsla color string, with fixed saturation and lightness
@@ -27,17 +25,17 @@ export function randomHsl(opacity, random, saturation, lightness) {
     random = Math.random();
   }
   var res =
-    'hsla(' +
+    "hsla(" +
     random * 360 +
-    ', ' +
+    ", " +
     saturation +
-    '% ' +
-    ', ' +
+    "% " +
+    ", " +
     lightness +
-    '% ' +
-    ', ' +
+    "% " +
+    ", " +
     opacity +
-    ')';
+    ")";
   return res;
 }
 
@@ -46,18 +44,17 @@ export function randomHsl(opacity, random, saturation, lightness) {
  */
 export function colorToRgba(color, opacity) {
   const c = chroma(color);
-  if (typeof opacity !== 'undefined') {
-    return c.alpha(opacity*1).css();
+  if (typeof opacity !== "undefined") {
+    return c.alpha(opacity * 1).css();
   }
   return c.css();
 }
 
-
 /**
-* Validate color
-* @param {Any} color
-* @return {Boolean} valid
-*/
+ * Validate color
+ * @param {Any} color
+ * @return {Boolean} valid
+ */
 export function validate(color) {
   return chroma.valid(color);
 }
@@ -68,14 +65,12 @@ export function validate(color) {
  */
 export function rgba2hex(rgb) {
   const c = chroma(rgb);
-  return c.hex('rgb');
+  return c.hex("rgb");
 }
 export function colorToHex(color) {
   const c = chroma(color);
-  return c.hex('rgb');
+  return c.hex("rgb");
 }
-
-
 
 /**
  * convert any color to obj with key alpha and hex color
@@ -86,10 +81,10 @@ export function colorToHex(color) {
 export function color2obj(color, hexOnly) {
   const c = chroma(color);
   if (hexOnly) {
-    return c.hex('rgb');
+    return c.hex("rgb");
   }
   return {
     color: c.hex(),
-    alpha: c.alpha()
+    alpha: c.alpha(),
   };
 }

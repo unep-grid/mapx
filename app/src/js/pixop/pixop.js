@@ -62,7 +62,7 @@ export class PixOp {
   }
   show() {
     this.setOpacity(1);
-    }
+  }
 
   render(opt) {
     const px = this;
@@ -128,7 +128,7 @@ export class PixOp {
           fillColor: "#F00",
           strokeColor: "#F00",
           circleRadius: 100, // meter radius for point -> area
-          spotlightRadius : 100,  // spotlight radius
+          spotlightRadius: 100, // spotlight radius
           spotlightBuffer: 10, // pixel used to draw spotlight
         },
       },

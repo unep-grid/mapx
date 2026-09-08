@@ -1,21 +1,21 @@
-import storage from 'localforage';
-import {isObject} from './../is_test/index.js';
+import storage from "localforage";
+import { isObject } from "./../is_test/index.js";
 /**
  * Based on https://gist.github.com/okoghenun/dc176adc88024a914ffaf8d6c4c7e6b9
  */
 const miniCacheDb = storage.createInstance({
-  name: 'minicache'
+  name: "minicache",
 });
 
 const def = {
-  ttl: 1000 * 60 * 60 * 24 // 1 day
+  ttl: 1000 * 60 * 60 * 24, // 1 day
 };
 
 export async function miniCacheSet(key, value, opt) {
   opt = Object.assign({}, def, opt);
   const item = {
     ts: new Date().getTime() + parseInt(opt.ttl),
-    value: JSON.parse(JSON.stringify(value))
+    value: JSON.parse(JSON.stringify(value)),
   };
   let out = null;
   try {
@@ -29,8 +29,8 @@ export async function miniCacheSet(key, value, opt) {
 
 export async function miniCacheGet(key) {
   const res = await Promise.race([miniCacheDb.getItem(key), wait(200)]);
-  if (res === 'timeout') {
-    console.warn('miniCacheGet: timeout');
+  if (res === "timeout") {
+    console.warn("miniCacheGet: timeout");
   }
   if (!isObject(res)) {
     return;
@@ -59,7 +59,7 @@ export async function miniCacheClear() {
 async function wait(n) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve('timeout');
+      resolve("timeout");
     }, n || 1000);
   });
 }

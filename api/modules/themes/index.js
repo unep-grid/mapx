@@ -95,7 +95,7 @@ export async function ioThemeCreate(socket, data, cb) {
         themeInsert.water,
         themeInsert.description,
         themeInsert.label,
-      ]
+      ],
     );
 
     if (setAsProjectDefault) {
@@ -125,9 +125,9 @@ export async function ioThemeList(socket, data, cb) {
 
     const { rows } = await pgRead.query(query, [idProject]);
     // Add _storage property to each theme for frontend icon display
-    const themesWithStorage = rows.map(theme => ({
+    const themesWithStorage = rows.map((theme) => ({
       ...theme,
-      _storage: "db"
+      _storage: "db",
     }));
     data.themes = themesWithStorage;
     data.success = true;
@@ -182,7 +182,7 @@ export async function ioThemeSave(socket, data, cb) {
     // Check uf exists upsert
     const { rows } = await pgRead.query(
       `SELECT creator FROM mx_themes WHERE id = $1`,
-      [idTheme]
+      [idTheme],
     );
 
     if (isEmpty(rows)) {
@@ -219,7 +219,7 @@ export async function ioThemeSave(socket, data, cb) {
         data.theme.description || {},
         data.theme.label || {},
         idTheme,
-      ]
+      ],
     );
 
     if (setAsProjectDefault) {
@@ -239,7 +239,7 @@ async function updateThemeProject(idTheme, idProject) {
       `UPDATE mx_projects SET
         theme = $1
       WHERE id = $2`,
-      [idTheme, idProject]
+      [idTheme, idProject],
     );
   }
 }
@@ -263,7 +263,7 @@ export async function ioThemeDelete(socket, data, cb) {
     // Check if theme exists and permissions
     const { rows } = await pgRead.query(
       `SELECT pid FROM mx_themes WHERE id = $1`,
-      [idTheme]
+      [idTheme],
     );
 
     if (rows.length === 0) {
@@ -291,7 +291,7 @@ export async function ioThemeValidateId(_, data, cb) {
 
     const { rows } = await pgRead.query(
       `SELECT pid FROM mx_themes WHERE id = $1 LIMIT 1`,
-      [idTheme]
+      [idTheme],
     );
 
     data.exists = rows.length > 0;
@@ -315,9 +315,9 @@ export async function ioThemeGet(_, data, cb) {
     // Get theme
     const { rows } = await pgRead.query(
       `SELECT * FROM mx_themes WHERE id = $1 LIMIT 1`,
-      [idTheme]
+      [idTheme],
     );
-    const theme = rows.length === 0 ? {}: rows[0];
+    const theme = rows.length === 0 ? {} : rows[0];
     theme._storage = "db";
     data.theme = theme;
     data.success = true;

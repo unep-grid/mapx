@@ -149,7 +149,9 @@ export class ProjectListElement extends HTMLElement {
   }
 
   connectedCallback() {
-    if (this._connected) return;
+    if (this._connected) {
+      return;
+    }
     this._connected = true;
     this.classList.add("mx-project-browser");
     this.addEventListener("click", this._onClick);
@@ -206,7 +208,9 @@ export class ProjectListElement extends HTMLElement {
 
   async init() {
     await this.loadLabels();
-    if (!this._connected) return;
+    if (!this._connected) {
+      return;
+    }
     this.buildShell();
     await this.loadProjects();
   }
@@ -436,10 +440,14 @@ export class ProjectListElement extends HTMLElement {
   }
 
   setupIntersectionObserver() {
-    if (typeof IntersectionObserver !== "function") return;
+    if (typeof IntersectionObserver !== "function") {
+      return;
+    }
     this._intersectionObserver = new IntersectionObserver(
       (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) this.loadMore();
+        if (entries.some((entry) => entry.isIntersecting)) {
+          this.loadMore();
+        }
       },
       { root: this.results, rootMargin: "160px 0px" },
     );
@@ -453,7 +461,9 @@ export class ProjectListElement extends HTMLElement {
         { language: this.options?.language || settings.language },
         30 * 1000,
       );
-      if (response?.error) throw new Error(response.error);
+      if (response?.error) {
+        throw new Error(response.error);
+      }
       this.projects = (response?.projects || [])
         .map((project) => normalizeProject(project, this.themeLabels))
         .filter((project) => project.id !== settings.project.id);
@@ -493,7 +503,9 @@ export class ProjectListElement extends HTMLElement {
       "project_list_results",
     )}`;
     this.updateControls();
-    if (resetScroll) this.results.scrollTop = 0;
+    if (resetScroll) {
+      this.results.scrollTop = 0;
+    }
     this.loadLogos(visibleProjects);
   }
 
@@ -555,8 +567,7 @@ export class ProjectListElement extends HTMLElement {
       this.el("strong", { class: "mx-project-browser-title" }, project.title),
     );
     if (this.canCurateFeatured) {
-      const featuredBlocked =
-        project.legacy && project.featured_rank === null;
+      const featuredBlocked = project.legacy && project.featured_rank === null;
       const featuredLabel = this.label(
         featuredBlocked
           ? "project_featured_legacy_blocked"
@@ -597,8 +608,7 @@ export class ProjectListElement extends HTMLElement {
       );
     }
     if (this.canCurateLegacy) {
-      const archiveBlocked =
-        !project.legacy && project.featured_rank !== null;
+      const archiveBlocked = !project.legacy && project.featured_rank !== null;
       const legacyLabel = this.label(
         archiveBlocked
           ? "project_legacy_featured_blocked"
@@ -728,7 +738,9 @@ export class ProjectListElement extends HTMLElement {
         ),
       );
     }
-    if (meta.childElementCount > 0) text.appendChild(meta);
+    if (meta.childElementCount > 0) {
+      text.appendChild(meta);
+    }
 
     const actions = this.el("span", { class: "mx-project-browser-actions" });
     const chevron = this.el("i", {
@@ -741,7 +753,9 @@ export class ProjectListElement extends HTMLElement {
   }
 
   updateSortDescription() {
-    if (!this.sortSelect) return;
+    if (!this.sortSelect) {
+      return;
+    }
     const descriptionKey = {
       default: "project_list_sort_default_desc",
       created_desc: "project_list_sort_created_desc_desc",
@@ -817,7 +831,9 @@ export class ProjectListElement extends HTMLElement {
 
   openCuratorMenu(projectId, trigger) {
     const project = this.projects.find((item) => item.id === projectId);
-    if (!project || !this.canCurateFeatured) return;
+    if (!project || !this.canCurateFeatured) {
+      return;
+    }
     this.toggleTools(false);
     this._curatorTrigger = trigger;
     this._curatorProjectId = projectId;
@@ -926,10 +942,14 @@ export class ProjectListElement extends HTMLElement {
   }
 
   closeCuratorMenu({ restoreFocus = false } = {}) {
-    if (!this.curatorPopover || this.curatorPopover.hidden) return;
+    if (!this.curatorPopover || this.curatorPopover.hidden) {
+      return;
+    }
     this._curatorTrigger?.setAttribute("aria-expanded", "false");
     this.curatorPopover.hidden = true;
-    if (restoreFocus) this._curatorTrigger?.focus();
+    if (restoreFocus) {
+      this._curatorTrigger?.focus();
+    }
     this._curatorTrigger = null;
     this._curatorProjectId = null;
   }
@@ -962,7 +982,9 @@ export class ProjectListElement extends HTMLElement {
 
   async setFavorite(projectId) {
     const project = this.projects.find((item) => item.id === projectId);
-    if (!project || this.pendingProjects.has(projectId)) return;
+    if (!project || this.pendingProjects.has(projectId)) {
+      return;
+    }
     const previous = project.is_favorite;
     project.is_favorite = !previous;
     this.pendingProjects.add(projectId);
@@ -974,7 +996,9 @@ export class ProjectListElement extends HTMLElement {
         { id_project: projectId, favorite: project.is_favorite },
         30 * 1000,
       );
-      if (response?.error) throw new Error(response.error);
+      if (response?.error) {
+        throw new Error(response.error);
+      }
     } catch (error) {
       console.error("Project favorite error", error);
       project.is_favorite = previous;
@@ -982,7 +1006,9 @@ export class ProjectListElement extends HTMLElement {
     } finally {
       this.pendingProjects.delete(projectId);
       this.renderResults();
-      if (errorKey) this.showError(errorKey);
+      if (errorKey) {
+        this.showError(errorKey);
+      }
     }
   }
 
@@ -1004,13 +1030,17 @@ export class ProjectListElement extends HTMLElement {
     let errorKey = null;
     try {
       const payload = { id_project: projectId, featured };
-      if (rank !== undefined) payload.rank = rank;
+      if (rank !== undefined) {
+        payload.rank = rank;
+      }
       const response = await ws.emitAsync(
         "/client/project/featured/set",
         payload,
         30 * 1000,
       );
-      if (response?.error) throw new Error(response.error);
+      if (response?.error) {
+        throw new Error(response.error);
+      }
       project.featured_rank =
         response.featured_rank === null ? null : Number(response.featured_rank);
     } catch (error) {
@@ -1023,7 +1053,9 @@ export class ProjectListElement extends HTMLElement {
       if (restoreCuratorFocus) {
         this.curatorTriggers.get(projectId)?.focus();
       }
-      if (errorKey) this.showError(errorKey);
+      if (errorKey) {
+        this.showError(errorKey);
+      }
     }
   }
 
@@ -1059,7 +1091,9 @@ export class ProjectListElement extends HTMLElement {
     } finally {
       this.pendingProjects.delete(projectId);
       this.renderResults();
-      if (errorKey) this.showError(errorKey);
+      if (errorKey) {
+        this.showError(errorKey);
+      }
     }
   }
 
@@ -1087,7 +1121,9 @@ export class ProjectListElement extends HTMLElement {
           { ids: batch },
           30 * 1000,
         );
-        if (response?.error) throw new Error(response.error);
+        if (response?.error) {
+          throw new Error(response.error);
+        }
         for (const [id, logo] of Object.entries(response?.logos || {})) {
           this.logos.set(id, logo);
           const avatar = this.avatarElements.get(id);
@@ -1122,7 +1158,9 @@ export class ProjectListElement extends HTMLElement {
   loadMore() {
     const total = this.selectedProjects.length;
     const nextLimit = nextProjectRenderLimit(this.renderLimit, total);
-    if (nextLimit === this.renderLimit) return;
+    if (nextLimit === this.renderLimit) {
+      return;
+    }
     this.renderLimit = nextLimit;
     this.renderResults();
   }
@@ -1137,7 +1175,9 @@ export class ProjectListElement extends HTMLElement {
   }
 
   onInput(event) {
-    if (event.target !== this.searchInput) return;
+    if (event.target !== this.searchInput) {
+      return;
+    }
     clearTimeout(this._searchTimer);
     this._searchTimer = setTimeout(() => {
       this.state.search = event.target.value;
@@ -1147,13 +1187,17 @@ export class ProjectListElement extends HTMLElement {
 
   onChange(event) {
     const filter = event.target.dataset.filter;
-    if (!filter) return;
+    if (!filter) {
+      return;
+    }
     if (filter === "theme") {
       this.state.themes = event.target.value ? [event.target.value] : [];
     } else {
       this.state[filter] = event.target.value;
     }
-    if (filter === "sort") this.updateSortDescription();
+    if (filter === "sort") {
+      this.updateSortDescription();
+    }
     this.resetResults();
   }
 
@@ -1173,7 +1217,9 @@ export class ProjectListElement extends HTMLElement {
       return;
     }
     const action = event.target.closest("[data-action]");
-    if (!action) return;
+    if (!action) {
+      return;
+    }
     const projectId = action.dataset.projectId;
     switch (action.dataset.action) {
       case "toggle-tools":
@@ -1265,7 +1311,9 @@ export class ProjectListElement extends HTMLElement {
       }
       return;
     }
-    if (event.key !== "Enter" && event.key !== " ") return;
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
     const row = event.target.closest(
       '.mx-project-browser-row[data-action="open"]',
     );
@@ -1276,16 +1324,22 @@ export class ProjectListElement extends HTMLElement {
   }
 
   onContextMenu(event) {
-    if (!this.canCurateFeatured) return;
+    if (!this.canCurateFeatured) {
+      return;
+    }
     const row = event.target.closest(".mx-project-browser-row");
-    if (!row) return;
+    if (!row) {
+      return;
+    }
     event.preventDefault();
     const trigger = this.curatorTriggers.get(row.dataset.projectId);
     this.openCuratorMenu(row.dataset.projectId, trigger);
   }
 
   async runAction(action, projectId) {
-    if (!projectId) return;
+    if (!projectId) {
+      return;
+    }
     if (action === "join") {
       requestProjectMembership(projectId);
       return;
@@ -1300,7 +1354,9 @@ export class ProjectListElement extends HTMLElement {
         },
         "project_list",
       );
-      if (projectLoaded === true) this.options?.onProjectLoaded?.(projectId);
+      if (projectLoaded === true) {
+        this.options?.onProjectLoaded?.(projectId);
+      }
     }
   }
 }

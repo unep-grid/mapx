@@ -91,7 +91,7 @@ function mxCopyStreamToTable(stream, table) {
         reject(err);
       }
       const copyStream = client.query(
-        from(`COPY ${table} FROM STDIN CSV HEADER`)
+        from(`COPY ${table} FROM STDIN CSV HEADER`),
       );
       stream.on("error", (e) => {
         done(e);

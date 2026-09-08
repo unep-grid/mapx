@@ -15,7 +15,7 @@ export function buildForm(upl) {
       id: "upl_epsg_code",
       name: "epsgCode",
       dataset: { type: "epsg" },
-    })
+    }),
   );
 
   const elFormTitle = el(
@@ -38,8 +38,8 @@ export function buildForm(upl) {
         id: "upl_title",
         type: "text",
       },
-      opt.title
-    )
+      opt.title,
+    ),
   );
 
   const elInputFile = el("input", {
@@ -60,13 +60,13 @@ export function buildForm(upl) {
         click: upl.handleClick,
       },
     },
-    st("upl_browse_or_drop")
+    st("upl_browse_or_drop"),
   );
 
   const elForm = el(
     "form",
     { name: "dl_form", id: "dl_modal", on: ["change", md.update] },
-    [elFormTitle, elFormEpsg, elFormFileDragDrop, elMsgContainer, elInputFile]
+    [elFormTitle, elFormEpsg, elFormFileDragDrop, elMsgContainer, elInputFile],
   );
 
   return {

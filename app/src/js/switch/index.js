@@ -43,10 +43,10 @@ class Switch {
         el(
           "div",
           { class: "switch-container" },
-          el("div", { class: "switch-handle" })
-        )
+          el("div", { class: "switch-handle" }),
+        ),
       ),
-      el("span", sw.opt.labelRight)
+      el("span", sw.opt.labelRight),
     );
     sw.elSwitch = elSwitch;
     sw.elInput = elInput;

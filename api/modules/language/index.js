@@ -93,7 +93,7 @@ async function importDict() {
       const keys = Object.keys(row).join(",");
       const values = Object.values(row).map(client.escapeLiteral).join(",");
       await client.query(
-        `INSERT INTO mx_dict_translate (${keys}) VALUES (${values})`
+        `INSERT INTO mx_dict_translate (${keys}) VALUES (${values})`,
       );
     }
     await client.query("COMMIT");
@@ -113,7 +113,7 @@ async function importDict() {
 export async function getDictM49iso3() {
   try {
     const resp = await pgRead.query(
-      `select * from mx_dict_translate where id ~ '(^m49_.*|^[A-Z]{3})'`
+      `select * from mx_dict_translate where id ~ '(^m49_.*|^[A-Z]{3})'`,
     );
     return resp.rows;
   } catch (e) {

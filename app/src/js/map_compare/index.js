@@ -62,14 +62,16 @@ export class MapCompare {
 
     if (this._horizontal) {
       if (this._mapA) {
-        this._mapA.getContainer().style.clipPath =
-          `inset(0 0 ${size - position}px 0)`;
+        this._mapA.getContainer().style.clipPath = `inset(0 0 ${
+          size - position
+        }px 0)`;
       }
       this.ui.elDivider.style.top = `${position}px`;
     } else {
       if (this._mapA) {
-        this._mapA.getContainer().style.clipPath =
-          `inset(0 ${size - position}px 0 0)`;
+        this._mapA.getContainer().style.clipPath = `inset(0 ${
+          size - position
+        }px 0 0)`;
       }
       this.ui.elDivider.style.left = `${position}px`;
     }

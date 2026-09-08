@@ -1,20 +1,16 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const {
-  emitAsync,
-  requestProjectMembership,
-  setProject,
-  settingsValue,
-} = vi.hoisted(() => ({
-  emitAsync: vi.fn(),
-  requestProjectMembership: vi.fn(),
-  setProject: vi.fn(),
-  settingsValue: {
-    language: "en",
-    project: { id: "CURRENT" },
-    user: { guest: false },
-  },
-}));
+const { emitAsync, requestProjectMembership, setProject, settingsValue } =
+  vi.hoisted(() => ({
+    emitAsync: vi.fn(),
+    requestProjectMembership: vi.fn(),
+    setProject: vi.fn(),
+    settingsValue: {
+      language: "en",
+      project: { id: "CURRENT" },
+      user: { guest: false },
+    },
+  }));
 
 vi.mock("../mx.js", () => ({ ws: { emitAsync } }));
 vi.mock("../language", () => ({
@@ -108,10 +104,9 @@ describe("mx-project-list", () => {
 
   it("keeps public access implicit and renders compact accessible role shields", async () => {
     const element = await mount();
-    expect([...element.roleSelect.options].map((option) => option.value)).toEqual([
-      "any",
-      "admin",
-    ]);
+    expect(
+      [...element.roleSelect.options].map((option) => option.value),
+    ).toEqual(["any", "admin"]);
     const adminRole = element.rows.querySelector(
       `[data-project-id="${projects[0].id}"] .mx-project-role`,
     );
@@ -137,11 +132,11 @@ describe("mx-project-list", () => {
 
   it("explains date sorting and reset behavior", async () => {
     const element = await mount();
-    expect(element.sortSelect.title).toBe(
-      "project_list_sort_default_desc",
-    );
+    expect(element.sortSelect.title).toBe("project_list_sort_default_desc");
     expect(element.clearButton.title).toBe("project_list_clear_desc");
-    expect([...element.sortSelect.options].map((option) => option.value)).toEqual([
+    expect(
+      [...element.sortSelect.options].map((option) => option.value),
+    ).toEqual([
       "default",
       "created_desc",
       "created_asc",
@@ -155,7 +150,9 @@ describe("mx-project-list", () => {
 
     element.sortSelect.value = "created_desc";
     element.sortSelect.dispatchEvent(new Event("change", { bubbles: true }));
-    expect(element.sortSelect.title).toBe("project_list_sort_created_desc_desc");
+    expect(element.sortSelect.title).toBe(
+      "project_list_sort_created_desc_desc",
+    );
 
     element.sortSelect.value = "created_asc";
     element.sortSelect.dispatchEvent(new Event("change", { bubbles: true }));
@@ -178,9 +175,11 @@ describe("mx-project-list", () => {
       element.rows.querySelectorAll("[data-action='legacy']"),
     ).toHaveLength(2);
     expect(
-      element.rows.querySelector(
-        `[data-project-id="${projects[1].id}"] [data-action="legacy"]`,
-      ).getAttribute("aria-pressed"),
+      element.rows
+        .querySelector(
+          `[data-project-id="${projects[1].id}"] [data-action="legacy"]`,
+        )
+        .getAttribute("aria-pressed"),
     ).toBe("false");
     expect(
       element.rows.querySelector(
@@ -192,8 +191,9 @@ describe("mx-project-list", () => {
         `[data-project-id="${projects[1].id}"] [data-action="legacy"] .mx-archive-box`,
       ),
     ).not.toBeNull();
-    expect(element.rows.querySelector(".mx-project-browser-menu-button"))
-      .toBeNull();
+    expect(
+      element.rows.querySelector(".mx-project-browser-menu-button"),
+    ).toBeNull();
     expect(
       element.rows.querySelector(
         `[data-project-id="${projects[0].id}"] [data-action="curator-menu"] .fa-bookmark-o`,
@@ -290,11 +290,13 @@ describe("mx-project-list", () => {
     const stats = featuredRow.querySelectorAll(".mx-project-browser-stat");
     expect(stats).toHaveLength(2);
     expect(stats[0].querySelector(".mx-icon.mx-view")).not.toBeNull();
-    expect(stats[0].querySelector(".mx-project-browser-stat-value").innerText)
-      .toBe("20");
+    expect(
+      stats[0].querySelector(".mx-project-browser-stat-value").innerText,
+    ).toBe("20");
     expect(stats[1].querySelector(".fa-users")).not.toBeNull();
-    expect(stats[1].querySelector(".mx-project-browser-stat-value").innerText)
-      .toBe("2");
+    expect(
+      stats[1].querySelector(".mx-project-browser-stat-value").innerText,
+    ).toBe("2");
 
     const heading = [
       ...featuredRow.querySelector(".mx-project-browser-heading").children,
@@ -414,9 +416,7 @@ describe("mx-project-list", () => {
         ".mx-project-browser-featured:not([data-action]) .fa-bookmark",
       ),
     ).not.toBeNull();
-    expect(
-      featuredRow.querySelector(".mx-project-browser-legacy"),
-    ).toBeNull();
+    expect(featuredRow.querySelector(".mx-project-browser-legacy")).toBeNull();
     expect(
       element.rows.querySelectorAll("[data-action='favorite']"),
     ).toHaveLength(2);
@@ -528,9 +528,7 @@ describe("mx-project-list", () => {
     const title = featuredRow.querySelector(".mx-project-browser-title");
     const heading = featuredRow.querySelector(".mx-project-browser-heading");
     const stats = featuredRow.querySelector(".mx-project-browser-stats");
-    const disabledArchive = featuredRow.querySelector(
-      '[data-action="legacy"]',
-    );
+    const disabledArchive = featuredRow.querySelector('[data-action="legacy"]');
 
     setProject.mockResolvedValueOnce(true);
     title.click();
@@ -610,9 +608,11 @@ describe("mx-project-list", () => {
       expect.any(Number),
     );
     expect(
-      element.rows.querySelector(
-        `[data-project-id="${projects[0].id}"] [data-action="legacy"]`,
-      ).getAttribute("aria-pressed"),
+      element.rows
+        .querySelector(
+          `[data-project-id="${projects[0].id}"] [data-action="legacy"]`,
+        )
+        .getAttribute("aria-pressed"),
     ).toBe("true");
     expect(
       element.rows.querySelector(

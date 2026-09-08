@@ -1,5 +1,5 @@
-import { existsSync, readFileSync, readdirSync } from 'fs';
-import { join } from 'path';
+import { existsSync, readFileSync, readdirSync } from "fs";
+import { join } from "path";
 
 /**
  * Check if a file exists in the build directory
@@ -7,7 +7,7 @@ import { join } from 'path';
  * @returns {boolean}
  */
 export function fileExists(filePath) {
-  const fullPath = join(process.cwd(), 'www', filePath);
+  const fullPath = join(process.cwd(), "www", filePath);
   return existsSync(fullPath);
 }
 
@@ -17,7 +17,7 @@ export function fileExists(filePath) {
  * @returns {boolean}
  */
 export function directoryExists(dirPath) {
-  const fullPath = join(process.cwd(), 'www', dirPath);
+  const fullPath = join(process.cwd(), "www", dirPath);
   return existsSync(fullPath);
 }
 
@@ -28,9 +28,11 @@ export function directoryExists(dirPath) {
  * @returns {string[]} List of matching filenames
  */
 export function getFilesMatching(dirPath, pattern) {
-  const fullPath = join(process.cwd(), 'www', dirPath);
-  if (!existsSync(fullPath)) return [];
-  return readdirSync(fullPath).filter(file => pattern.test(file));
+  const fullPath = join(process.cwd(), "www", dirPath);
+  if (!existsSync(fullPath)) {
+    return [];
+  }
+  return readdirSync(fullPath).filter((file) => pattern.test(file));
 }
 
 /**
@@ -40,9 +42,11 @@ export function getFilesMatching(dirPath, pattern) {
  * @returns {boolean}
  */
 export function fileContains(filePath, content) {
-  const fullPath = join(process.cwd(), 'www', filePath);
-  if (!existsSync(fullPath)) return false;
-  const fileContent = readFileSync(fullPath, 'utf-8');
+  const fullPath = join(process.cwd(), "www", filePath);
+  if (!existsSync(fullPath)) {
+    return false;
+  }
+  const fileContent = readFileSync(fullPath, "utf-8");
   if (content instanceof RegExp) {
     return content.test(fileContent);
   }
@@ -55,8 +59,10 @@ export function fileContains(filePath, content) {
  * @returns {boolean}
  */
 export function fileHasContent(filePath) {
-  const fullPath = join(process.cwd(), 'www', filePath);
-  if (!existsSync(fullPath)) return false;
+  const fullPath = join(process.cwd(), "www", filePath);
+  if (!existsSync(fullPath)) {
+    return false;
+  }
   const stats = existsSync(fullPath);
   return stats.size > 0;
 }
@@ -67,12 +73,14 @@ export function fileHasContent(filePath) {
  * @returns {string[]} List of file paths
  */
 export function getAllFiles(dirPath) {
-  const fullPath = join(process.cwd(), 'www', dirPath);
-  if (!existsSync(fullPath)) return [];
-  
+  const fullPath = join(process.cwd(), "www", dirPath);
+  if (!existsSync(fullPath)) {
+    return [];
+  }
+
   const files = [];
   const entries = readdirSync(fullPath, { withFileTypes: true });
-  
+
   for (const entry of entries) {
     const fullEntryPath = join(dirPath, entry.name);
     if (entry.isDirectory()) {
@@ -81,6 +89,6 @@ export function getAllFiles(dirPath) {
       files.push(fullEntryPath);
     }
   }
-  
+
   return files;
 }

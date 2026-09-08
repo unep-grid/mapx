@@ -31,22 +31,21 @@ export function getViewLegendState(view) {
   return lvt.getCheckedValues();
 }
 
-
- /**
-   * Retrieves the values from the rules.
-   *
-   * For numeric rules, the method returns an array of range arrays ([from, to]),
-   * otherwise, it just returns an array of values.
-   *
-   * @returns {Array} An array of checked values. For numeric rules, each entry is an array of format [from, to].
-   *
-   * @example
-   * // Non-numeric rules
-   * getViewLegendValues(); // e.g. ["value1", "value2", ...]
-   *
-   * // Numeric rules
-   * getViewLegendValues(); // e.g. [[0, 10], [10, 20], ...]
-   */
+/**
+ * Retrieves the values from the rules.
+ *
+ * For numeric rules, the method returns an array of range arrays ([from, to]),
+ * otherwise, it just returns an array of values.
+ *
+ * @returns {Array} An array of checked values. For numeric rules, each entry is an array of format [from, to].
+ *
+ * @example
+ * // Non-numeric rules
+ * getViewLegendValues(); // e.g. ["value1", "value2", ...]
+ *
+ * // Numeric rules
+ * getViewLegendValues(); // e.g. [[0, 10], [10, 20], ...]
+ */
 export function getViewLegendValues(view) {
   view = getView(view);
   if (!(view._legend instanceof LegendVt)) {
@@ -55,6 +54,3 @@ export function getViewLegendValues(view) {
   const lvt = view._legend;
   return lvt.getValues();
 }
-
-
-

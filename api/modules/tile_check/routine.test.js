@@ -8,10 +8,7 @@ vi.mock("./index.js", () => ({
   checkAllTiles: mocks.checkAllTiles,
 }));
 
-import {
-  TILE_CHECK_ROUTINE_TIMEOUT_MS,
-  tileCheckRoutine,
-} from "./routine.js";
+import { TILE_CHECK_ROUTINE_TIMEOUT_MS, tileCheckRoutine } from "./routine.js";
 
 describe("tileCheckRoutine", () => {
   beforeEach(() => {

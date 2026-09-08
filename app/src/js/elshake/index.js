@@ -4,7 +4,9 @@ const types = ["no_way", "look_at_me"];
 const DURATION = 820;
 
 export async function shake(element, options = {}) {
-  if (!element) throw new Error("Element required");
+  if (!element) {
+    throw new Error("Element required");
+  }
 
   const settings = {
     type: types[0],

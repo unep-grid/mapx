@@ -62,7 +62,8 @@ describe("errorHandler", () => {
 
     errorHandler({
       error: {
-        message: "Bad response: 404 for https://tiles.mapterhorn.com/6/31/22.webp",
+        message:
+          "Bad response: 404 for https://tiles.mapterhorn.com/6/31/22.webp",
         _mapxStyleIgnore: true,
       },
     });

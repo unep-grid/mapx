@@ -1,12 +1,7 @@
 import express from "express";
 import { pgWrite } from "#mapx/db";
 import { getUserRoles, validateTokenHandler } from "#mapx/authentication";
-import {
-  isProjectId,
-  isSourceId,
-  isString,
-  isViewId,
-} from "@fxi/mx_valid";
+import { isProjectId, isSourceId, isString, isViewId } from "@fxi/mx_valid";
 import { createExternalMetadataSource } from "../source/external.js";
 import { insertNewView } from "./create.js";
 
@@ -47,7 +42,9 @@ export async function createExternalMetadataView(
   const ownsClient = !client;
   const pgClient = client || (await pgWrite.connect());
   try {
-    if (ownsClient) await pgClient.query("BEGIN");
+    if (ownsClient) {
+      await pgClient.query("BEGIN");
+    }
     const roles = await getUserRoles(idUser, idProject, pgClient);
     if (roles.publisher !== true) {
       throw new ViewLifecycleError("View creation denied", 403);
@@ -82,13 +79,19 @@ export async function createExternalMetadataView(
       { editor: idUser, data, type: viewType, project: idProject },
       pgClient,
     );
-    if (ownsClient) await pgClient.query("COMMIT");
+    if (ownsClient) {
+      await pgClient.query("COMMIT");
+    }
     return { ok: true, view, idSource };
   } catch (error) {
-    if (ownsClient) await pgClient.query("ROLLBACK");
+    if (ownsClient) {
+      await pgClient.query("ROLLBACK");
+    }
     throw error;
   } finally {
-    if (ownsClient) pgClient.release();
+    if (ownsClient) {
+      pgClient.release();
+    }
   }
 }
 
@@ -101,7 +104,9 @@ export async function deleteViewWithExternalMetadata(
   const ownsClient = !client;
   const pgClient = client || (await pgWrite.connect());
   try {
-    if (ownsClient) await pgClient.query("BEGIN");
+    if (ownsClient) {
+      await pgClient.query("BEGIN");
+    }
     const roles = await getUserRoles(idUser, idProject, pgClient);
     const viewResult = await pgClient.query(
       `SELECT editor, editors, project, type, data
@@ -187,13 +192,19 @@ export async function deleteViewWithExternalMetadata(
       }
     }
 
-    if (ownsClient) await pgClient.query("COMMIT");
+    if (ownsClient) {
+      await pgClient.query("COMMIT");
+    }
     return { ok: true, idView, idSourceDeleted };
   } catch (error) {
-    if (ownsClient) await pgClient.query("ROLLBACK");
+    if (ownsClient) {
+      await pgClient.query("ROLLBACK");
+    }
     throw error;
   } finally {
-    if (ownsClient) pgClient.release();
+    if (ownsClient) {
+      pgClient.release();
+    }
   }
 }
 

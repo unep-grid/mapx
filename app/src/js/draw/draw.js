@@ -205,7 +205,10 @@ class MapxDraw extends EventSimple {
     // wrapped in ["literal", [...]]. Patch line-dasharray entries accordingly.
     const drawStyles = clone(drawTheme).map((layer) => {
       if (Array.isArray(layer.paint?.["line-dasharray"])) {
-        layer.paint["line-dasharray"] = ["literal", layer.paint["line-dasharray"]];
+        layer.paint["line-dasharray"] = [
+          "literal",
+          layer.paint["line-dasharray"],
+        ];
       }
       return layer;
     });
@@ -888,10 +891,7 @@ class MapxDraw extends EventSimple {
       return;
     }
     const activeMode = md._draw.getMode();
-    if (
-      !session.opt.allowMultipart &&
-      !activeMode?.startsWith("draw_")
-    ) {
+    if (!session.opt.allowMultipart && !activeMode?.startsWith("draw_")) {
       md.enforceSingleEditFeature();
     }
     let result;

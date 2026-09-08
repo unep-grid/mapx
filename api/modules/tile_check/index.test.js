@@ -45,8 +45,16 @@ beforeEach(() => {
 describe("runChecks", () => {
   it("calls onStart before onDone for each view, in order", async () => {
     const views = [
-      { id: "MX-AAAAA-AAAAA-AAAAA", project: "P1", tile_url: "https://a/{z}/{x}/{y}.png" },
-      { id: "MX-BBBBB-BBBBB-BBBBB", project: "P1", tile_url: "https://b/{z}/{x}/{y}.png" },
+      {
+        id: "MX-AAAAA-AAAAA-AAAAA",
+        project: "P1",
+        tile_url: "https://a/{z}/{x}/{y}.png",
+      },
+      {
+        id: "MX-BBBBB-BBBBB-BBBBB",
+        project: "P1",
+        tile_url: "https://b/{z}/{x}/{y}.png",
+      },
     ];
     const events = [];
 
@@ -65,7 +73,11 @@ describe("runChecks", () => {
 
   it("stores a row via pgWrite for each view", async () => {
     const views = [
-      { id: "MX-AAAAA-AAAAA-AAAAA", project: "P1", tile_url: "https://a/{z}/{x}/{y}.png" },
+      {
+        id: "MX-AAAAA-AAAAA-AAAAA",
+        project: "P1",
+        tile_url: "https://a/{z}/{x}/{y}.png",
+      },
     ];
     await runChecks(views);
     expect(mocks.query).toHaveBeenCalledTimes(1);
@@ -76,7 +88,11 @@ describe("runChecks", () => {
 
   it("runs without callbacks (daily routine path)", async () => {
     const views = [
-      { id: "MX-AAAAA-AAAAA-AAAAA", project: "P1", tile_url: "https://a/{z}/{x}/{y}.png" },
+      {
+        id: "MX-AAAAA-AAAAA-AAAAA",
+        project: "P1",
+        tile_url: "https://a/{z}/{x}/{y}.png",
+      },
     ];
     await expect(runChecks(views)).resolves.toHaveLength(1);
   });

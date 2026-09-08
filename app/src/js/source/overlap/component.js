@@ -33,7 +33,9 @@ export class MxSourceOverlapElement extends HTMLElement {
       this.attachSocketListeners();
       return;
     }
-    if (this.initialized) return;
+    if (this.initialized) {
+      return;
+    }
     this.initialize().catch((error) => {
       const message = error?.message || "Unable to load the overlap tool";
       this.replaceChildren(
@@ -223,9 +225,10 @@ export class MxSourceOverlapElement extends HTMLElement {
   }
 
   makeSourcePicker() {
-    const picker = /** @type {import("../picker/index.js").MxSourcePickerElement} */ (
-      this.ownerDocument.createElement("mx-source-picker")
-    );
+    const picker =
+      /** @type {import("../picker/index.js").MxSourcePickerElement} */ (
+        this.ownerDocument.createElement("mx-source-picker")
+      );
     picker.config = {
       label: this.labels.select_overlap_layers,
       multiple: true,
@@ -260,7 +263,9 @@ export class MxSourceOverlapElement extends HTMLElement {
 
   getSelectedSources() {
     const value = this.sourcePicker?.value;
-    if (Array.isArray(value)) return value;
+    if (Array.isArray(value)) {
+      return value;
+    }
     return value ? [value] : [];
   }
 
@@ -336,7 +341,9 @@ export class MxSourceOverlapElement extends HTMLElement {
   }
 
   onResult(result) {
-    if (result?.id_request !== this.idRequest) return;
+    if (result?.id_request !== this.idRequest) {
+      return;
+    }
     this.setBusy(false);
     if (!result.success) {
       this.setResult(result.error || "Overlap request failed", true);
@@ -355,7 +362,9 @@ export class MxSourceOverlapElement extends HTMLElement {
   }
 
   onProgress(progress) {
-    if (progress?.id_request !== this.idRequest) return;
+    if (progress?.id_request !== this.idRequest) {
+      return;
+    }
     this.appendLog(progress.message);
   }
 
@@ -371,7 +380,9 @@ export class MxSourceOverlapElement extends HTMLElement {
     this.refs.modeArea.disabled = busy;
     this.refs.modeCreate.disabled = busy;
     this.refs.title.disabled = busy;
-    if (this.sourcePicker) this.sourcePicker.disabled = busy;
+    if (this.sourcePicker) {
+      this.sourcePicker.disabled = busy;
+    }
     this.countrySelect?.[busy ? "disable" : "enable"]();
     this.refs.form.setAttribute("aria-busy", `${busy}`);
   }
@@ -386,7 +397,9 @@ export class MxSourceOverlapElement extends HTMLElement {
   }
 
   appendLog(message) {
-    if (!message) return;
+    if (!message) {
+      return;
+    }
     const firstMessage = this.refs.logsDetails.hidden;
     this.refs.logsDetails.hidden = false;
     if (firstMessage) {

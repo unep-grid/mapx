@@ -42,7 +42,7 @@ async function updateIndexes() {
     const cid = config.idx_views;
     const start = Date.now();
     const { rows: results } = await pgReadLong.query(
-      templates.getViewsPublicForSearchIndex
+      templates.getViewsPublicForSearchIndex,
     );
     const documents = results.map((doc) => ({
       ...doc,
@@ -84,7 +84,10 @@ async function withRetry(fn, { attempts = 3, baseDelayMs = 2000 } = {}) {
       }
       lastErr = e;
       if (i < attempts - 1) {
-        console.warn(`Meili operation failed, retry ${i + 1}/${attempts - 1}`, e);
+        console.warn(
+          `Meili operation failed, retry ${i + 1}/${attempts - 1}`,
+          e,
+        );
         await wait(baseDelayMs * 2 ** i);
       }
     }
@@ -102,8 +105,8 @@ function assertTaskOk(task) {
   if (task.status !== "succeeded") {
     throw new Error(
       `Meili task ${task.uid} (${task.type}) ${task.status}: ${JSON.stringify(
-        task.error
-      )}`
+        task.error,
+      )}`,
     );
   }
   return task;
@@ -150,8 +153,8 @@ async function updateIndexForLanguage(language, documents, cid) {
   if (!(await withRetry(() => indexExists(uid)))) {
     assertTaskOk(
       await withRetry(() =>
-        meili.createIndex(uid, { primaryKey: cid.primaryKey }).waitTask()
-      )
+        meili.createIndex(uid, { primaryKey: cid.primaryKey }).waitTask(),
+      ),
     );
   }
 
@@ -159,9 +162,7 @@ async function updateIndexForLanguage(language, documents, cid) {
    * Remove leftover staging index from a previously failed run.
    */
   if (await withRetry(() => indexExists(uidNext))) {
-    assertTaskOk(
-      await withRetry(() => meili.deleteIndex(uidNext).waitTask())
-    );
+    assertTaskOk(await withRetry(() => meili.deleteIndex(uidNext).waitTask()));
   }
 
   /**
@@ -169,8 +170,8 @@ async function updateIndexForLanguage(language, documents, cid) {
    */
   assertTaskOk(
     await withRetry(() =>
-      meili.createIndex(uidNext, { primaryKey: cid.primaryKey }).waitTask()
-    )
+      meili.createIndex(uidNext, { primaryKey: cid.primaryKey }).waitTask(),
+    ),
   );
   const indexNext = meili.index(uidNext);
 
@@ -188,15 +189,15 @@ async function updateIndexForLanguage(language, documents, cid) {
             filterableAttributes: cid.filterableAttributes,
             synonyms,
           })
-          .waitTask({ timeout: 60000 })
-      )
+          .waitTask({ timeout: 60000 }),
+      ),
     );
 
     const docsToIndex = documents.map((doc) => processDocuments(doc, language));
     assertTaskOk(
       await withRetry(() =>
-        indexNext.addDocuments(docsToIndex).waitTask({ timeout: 120000 })
-      )
+        indexNext.addDocuments(docsToIndex).waitTask({ timeout: 120000 }),
+      ),
     );
 
     /**
@@ -205,7 +206,7 @@ async function updateIndexForLanguage(language, documents, cid) {
     const { numberOfDocuments } = await indexNext.getStats();
     if (numberOfDocuments !== docsToIndex.length) {
       throw new Error(
-        `Index ${uidNext}: expected ${docsToIndex.length} documents, got ${numberOfDocuments}`
+        `Index ${uidNext}: expected ${docsToIndex.length} documents, got ${numberOfDocuments}`,
       );
     }
 
@@ -217,8 +218,8 @@ async function updateIndexForLanguage(language, documents, cid) {
       await withRetry(() =>
         meili
           .swapIndexes([{ indexes: [uid, uidNext] }])
-          .waitTask({ timeout: 60000 })
-      )
+          .waitTask({ timeout: 60000 }),
+      ),
     );
   } catch (e) {
     /**
@@ -272,7 +273,7 @@ async function handlerKey(_, res) {
     try {
       const { results } = await meili.getKeys();
       const searchKey = results.find(
-        (k) => k.actions.length === 1 && k.actions[0] === "search"
+        (k) => k.actions.length === 1 && k.actions[0] === "search",
       );
       key = searchKey?.key || "";
     } catch (e) {
@@ -319,7 +320,7 @@ function processDocuments(item, language) {
    */
   for (const g of gm) {
     itemClone.source_keywords_gemet_label.push(
-      g[language] || g[languages.default]
+      g[language] || g[languages.default],
     );
   }
   delete itemClone.source_keywords_gemet_multilingual;
@@ -331,7 +332,7 @@ function processDocuments(item, language) {
    */
   for (const m of m4) {
     itemClone.source_keywords_m49_label.push(
-      m[language] || m[languages.default]
+      m[language] || m[languages.default],
     );
   }
   delete itemClone.source_keywords_m49_multilingual;

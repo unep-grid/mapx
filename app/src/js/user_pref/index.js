@@ -71,4 +71,3 @@ function validate(key) {
     throw new Error(`User pref : unknown key ${key}`);
   }
 }
-

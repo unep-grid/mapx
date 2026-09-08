@@ -24,7 +24,10 @@ export async function buildSlider(options: BuildSliderOptions): Promise<void> {
   const computeMax = max === "auto" || isEmpty(max);
 
   if (computeMin || computeMax) {
-    const values = data.map((row) => row[name]).filter(isNotEmpty).map(Number);
+    const values = data
+      .map((row) => row[name])
+      .filter(isNotEmpty)
+      .map(Number);
 
     if (computeMin) {
       actualMin = Math.min(...values);
@@ -35,7 +38,9 @@ export async function buildSlider(options: BuildSliderOptions): Promise<void> {
   }
 
   const startValues: number[] = isNotEmpty(defaultValue)
-    ? Array.isArray(defaultValue) ? defaultValue : [defaultValue]
+    ? Array.isArray(defaultValue)
+      ? defaultValue
+      : [defaultValue]
     : [actualMin, actualMax];
 
   if (single && startValues.length > 1) {
@@ -112,12 +117,14 @@ export async function buildSlider(options: BuildSliderOptions): Promise<void> {
   }
 
   function formatText(value: string | number): string {
-    const numValue = typeof value === 'string' ? parseFloat(value) : value;
-    return integer ? `${parseInt(numValue.toString())}` : `${numValue.toFixed(2)}`;
+    const numValue = typeof value === "string" ? parseFloat(value) : value;
+    return integer
+      ? `${parseInt(numValue.toString())}`
+      : `${numValue.toFixed(2)}`;
   }
 
   function formatNum(value: string | number): number {
-    const numValue = typeof value === 'string' ? parseFloat(value) : value;
+    const numValue = typeof value === "string" ? parseFloat(value) : value;
     return integer ? parseInt(numValue.toString()) : numValue;
   }
 }

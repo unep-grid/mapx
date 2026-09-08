@@ -6,7 +6,10 @@ function handler() {
 
   const widget_config = {
     onAdd: async function (widget) {
-      const { WMSTimeMapLegend } = await moduleLoad("extension", "wms_time_map_legend");
+      const { WMSTimeMapLegend } = await moduleLoad(
+        "extension",
+        "wms_time_map_legend",
+      );
 
       const elLegend = getViewLegend(widget.opt.view, { clone: false });
 
@@ -14,7 +17,8 @@ function handler() {
       const config = {
         idView: widget.opt.view.id,
         map: widget.opt.map,
-        baseURL: "https://wrd-geoserver-ikicongo.azurewebsites.net/geoserver/ows",
+        baseURL:
+          "https://wrd-geoserver-ikicongo.azurewebsites.net/geoserver/ows",
         layerName: "iki-congo:CDI", // The WMS layer name
         elLegend: elLegend,
         elInputs: widget.elContent,
@@ -57,7 +61,10 @@ function handlerMultiLayer() {
 
   const widget_config = {
     onAdd: async function (widget) {
-      const { WMSTimeMapLegend } = await moduleLoad("extension", "wms_time_map_legend");
+      const { WMSTimeMapLegend } = await moduleLoad(
+        "extension",
+        "wms_time_map_legend",
+      );
 
       const elLegend = getViewLegend(widget.opt.view, { clone: false });
 

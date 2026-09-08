@@ -36,7 +36,7 @@ import {
 import { Facet } from "./facet.js";
 import { def } from "./default.js";
 import { bindAll } from "../bind_class_methods";
-import {modalIframe} from "../modal_iframe";
+import { modalIframe } from "../modal_iframe";
 
 class Search extends EventSimple {
   constructor(opt) {
@@ -842,8 +842,8 @@ class Search extends EventSimple {
           {
             modalIframe({
               title: getDictItem("btn_help"),
-               doc_id : 'doc_search_tool'
-            })
+              doc_id: "doc_search_tool",
+            });
           }
           break;
         case "update_facet_filter":

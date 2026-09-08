@@ -323,7 +323,9 @@ export class BaseTimeMapLegend {
   }
 
   constructGetCapabilitiesUrl() {
-    throw new Error("constructGetCapabilitiesUrl must be implemented by subclass");
+    throw new Error(
+      "constructGetCapabilitiesUrl must be implemented by subclass",
+    );
   }
 
   async parseCapabilities(xmlText) {
@@ -337,9 +339,7 @@ export class BaseTimeMapLegend {
       const url = this.constructGetCapabilitiesUrl();
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error(
-          `Get capabilities error! Status: ${response.status}`,
-        );
+        throw new Error(`Get capabilities error! Status: ${response.status}`);
       }
       const xmlText = await response.text();
       this._capabilities = await this.parseCapabilities(xmlText);

@@ -1,6 +1,5 @@
 import { createCanvas } from "./mx_helper_canvas";
 
-
 /**
  *  create a star on a canvas
  *  @param {Number} options.diameter Diameter

@@ -23,7 +23,9 @@ export class MxWindowElement extends HTMLElement {
   }
 
   connectedCallback() {
-    if (!this._built) this.build();
+    if (!this._built) {
+      this.build();
+    }
   }
 
   disconnectedCallback() {
@@ -101,7 +103,9 @@ export class MxWindowElement extends HTMLElement {
 
   /** @param {import("./manager.js").MxWindowConfig} config */
   configure(config) {
-    if (!this._built) this.build();
+    if (!this._built) {
+      this.build();
+    }
     const { el } = this.elementCreator;
     this.config = config;
     this.dataset.windowKey = config.key || "";
@@ -165,8 +169,12 @@ export class MxWindowElement extends HTMLElement {
         this.style[property] = typeof value === "number" ? `${value}px` : value;
       }
     }
-    if (geometry.top === undefined) this.style.top = "50%";
-    if (geometry.left === undefined) this.style.left = "50%";
+    if (geometry.top === undefined) {
+      this.style.top = "50%";
+    }
+    if (geometry.left === undefined) {
+      this.style.left = "50%";
+    }
     this.classList.toggle(
       "mx-window--centered",
       geometry.top === undefined && geometry.left === undefined,
@@ -175,8 +183,12 @@ export class MxWindowElement extends HTMLElement {
 
   setupResizeObserver(callback) {
     this._resizeObserver?.disconnect();
-    if (typeof callback !== "function" || typeof ResizeObserver !== "function")
+    if (
+      typeof callback !== "function" ||
+      typeof ResizeObserver !== "function"
+    ) {
       return;
+    }
     this._resizeObserver = new ResizeObserver((entries) =>
       callback(entries, this),
     );
@@ -202,7 +214,9 @@ export class MxWindowElement extends HTMLElement {
   }
 
   collapse() {
-    if (this.collapsed) return;
+    if (this.collapsed) {
+      return;
+    }
     this.restoreRect = this.getBoundingClientRect();
     this.collapsed = true;
     this.classList.add("mx-window--collapsed");
@@ -215,7 +229,9 @@ export class MxWindowElement extends HTMLElement {
   }
 
   expand() {
-    if (!this.collapsed) return;
+    if (!this.collapsed) {
+      return;
+    }
     this.collapsed = false;
     this.classList.remove("mx-window--collapsed");
     this.refs.body.hidden = false;
@@ -226,14 +242,20 @@ export class MxWindowElement extends HTMLElement {
     this.refs.resizeHandle.hidden = this.config?.resizable === false;
     this.refs.collapse.setAttribute("aria-label", "Collapse");
     this.refs.collapse.firstElementChild.className = "fa fa-minus";
-    if (this.restoreRect) this.setRect(this.restoreRect);
+    if (this.restoreRect) {
+      this.setRect(this.restoreRect);
+    }
     this.dispatchWindowEvent("mx-window-expand");
   }
 
   /** @param {MxWindowSnapSide} side */
   snap(side) {
-    if (this.collapsed) this.expand();
-    if (!this.snapSide) this.restoreRect = this.getBoundingClientRect();
+    if (this.collapsed) {
+      this.expand();
+    }
+    if (!this.snapSide) {
+      this.restoreRect = this.getBoundingClientRect();
+    }
     this.classList.remove("mx-window--centered");
     this.style.transform = "none";
     this.style.top = "0px";
@@ -246,7 +268,9 @@ export class MxWindowElement extends HTMLElement {
   }
 
   restore() {
-    if (!this.restoreRect) return;
+    if (!this.restoreRect) {
+      return;
+    }
     this.setRect(this.restoreRect);
     this.snapSide = null;
     this.dispatchWindowEvent("mx-window-restore");
@@ -257,14 +281,18 @@ export class MxWindowElement extends HTMLElement {
       this.snap(this.snapSide);
       return;
     }
-    if (this.classList.contains("mx-window--centered")) return;
+    if (this.classList.contains("mx-window--centered")) {
+      return;
+    }
     const rect = this.getBoundingClientRect();
     const view = this.ownerDocument.defaultView;
     const viewportWidth =
       this.ownerDocument.documentElement.clientWidth || view?.innerWidth || 0;
     const viewportHeight =
       this.ownerDocument.documentElement.clientHeight || view?.innerHeight || 0;
-    if (!viewportWidth || !viewportHeight) return;
+    if (!viewportWidth || !viewportHeight) {
+      return;
+    }
     this.setRect({
       left: Math.max(0, Math.min(rect.left, viewportWidth - 48)),
       top: Math.max(0, Math.min(rect.top, viewportHeight - 48)),
@@ -285,22 +313,35 @@ export class MxWindowElement extends HTMLElement {
 
   onAction(event) {
     const button = event.target.closest("[data-window-action]");
-    if (!button) return;
+    if (!button) {
+      return;
+    }
     const action = button.dataset.windowAction;
-    if (action === "close") this.close("button");
-    if (action === "collapse") this.collapsed ? this.expand() : this.collapse();
-    if (action === "snap-left")
+    if (action === "close") {
+      this.close("button");
+    }
+    if (action === "collapse") {
+      this.collapsed ? this.expand() : this.collapse();
+    }
+    if (action === "snap-left") {
       this.snapSide === "left" ? this.restore() : this.snap("left");
-    if (action === "snap-right")
+    }
+    if (action === "snap-right") {
       this.snapSide === "right" ? this.restore() : this.snap("right");
+    }
   }
 
   onPointerDown(event) {
-    if (event.button !== 0) return;
-    const action = event.currentTarget.dataset.windowAction;
-    if (action !== "resize" && event.target.closest(".mx-window__actions"))
+    if (event.button !== 0) {
       return;
-    if (action !== "resize" && this.config?.draggable === false) return;
+    }
+    const action = event.currentTarget.dataset.windowAction;
+    if (action !== "resize" && event.target.closest(".mx-window__actions")) {
+      return;
+    }
+    if (action !== "resize" && this.config?.draggable === false) {
+      return;
+    }
     const rect = this.getBoundingClientRect();
     this.setRect(rect);
     this.pointerState = {
@@ -319,7 +360,9 @@ export class MxWindowElement extends HTMLElement {
 
   onPointerMove(event) {
     const state = this.pointerState;
-    if (!state || state.id !== event.pointerId) return;
+    if (!state || state.id !== event.pointerId) {
+      return;
+    }
     const dx = event.clientX - state.startX;
     const dy = event.clientY - state.startY;
     const viewportWidth =
@@ -361,7 +404,9 @@ export class MxWindowElement extends HTMLElement {
   }
 
   onPointerUp(event) {
-    if (!this.pointerState || this.pointerState.id !== event.pointerId) return;
+    if (!this.pointerState || this.pointerState.id !== event.pointerId) {
+      return;
+    }
     this.stopPointerInteraction();
   }
 
@@ -381,5 +426,6 @@ export class MxWindowElement extends HTMLElement {
   }
 }
 
-if (!customElements.get("mx-window"))
+if (!customElements.get("mx-window")) {
   customElements.define("mx-window", MxWindowElement);
+}

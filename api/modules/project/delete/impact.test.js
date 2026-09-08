@@ -79,16 +79,8 @@ describe("getProjectDeleteImpact", () => {
 
     // only queried for the global source, not the local one
     expect(getSourceDependencies).toHaveBeenCalledTimes(1);
-    expect(getSourceDependencies).toHaveBeenCalledWith(
-      "global_1",
-      "en",
-      c,
-    );
-    expect(getViewsTableBySource).toHaveBeenCalledWith(
-      "global_1",
-      null,
-      c,
-    );
+    expect(getSourceDependencies).toHaveBeenCalledWith("global_1", "en", c);
+    expect(getViewsTableBySource).toHaveBeenCalledWith("global_1", null, c);
 
     // same-project dependents are excluded ( already covered by the
     // project's own views/sources ) ; cross-project ones are kept

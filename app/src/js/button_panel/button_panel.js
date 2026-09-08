@@ -762,7 +762,6 @@ export class ButtonPanel extends EventSimple {
 
     if (panel.isActive()) {
       if (!skipFire) {
-
         panel.fire("open");
         return;
       }

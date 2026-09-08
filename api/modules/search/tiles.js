@@ -21,9 +21,7 @@ export function buildSourceTiles(document, api) {
   }
 
   const idView = encodeURIComponent(document.view_id);
-  return [
-    `${apiBaseUrl}/get/tile/{x}/{y}/{z}.mvt?idView=${idView}`,
-  ];
+  return [`${apiBaseUrl}/get/tile/{x}/{y}/{z}.mvt?idView=${idView}`];
 }
 
 /**

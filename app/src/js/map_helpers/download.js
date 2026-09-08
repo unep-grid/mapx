@@ -2,7 +2,7 @@ import { DownloadSourceModal } from "./../download_source";
 import { isView, isViewId } from "./../is_test";
 import { getView } from "./index.js";
 import { getViewSourceSummary } from "./../mx_helper_source_summary";
-import {settings} from "./../settings";
+import { settings } from "./../settings";
 /**
  * Download source for vector view : show modal panel
  * @param {String} idView Id of the vector view

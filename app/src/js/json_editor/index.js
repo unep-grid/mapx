@@ -163,10 +163,10 @@ export async function jedInit(o) {
 
   return new Promise((resolve) => {
     /**
-    * The jedInit should return only on the editor ready 
-    *  - apparently, only one cb can be set on 'ready' event
-    *  - this should probably be refactored
-    */ 
+     * The jedInit should return only on the editor ready
+     *  - apparently, only one cb can be set on 'ready' event
+     *  - this should probably be refactored
+     */
     editor.on("ready", async function () {
       const hasShiny = isShinyReady();
 

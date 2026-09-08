@@ -69,9 +69,9 @@ describe("geometry edit helpers", () => {
         geometries: [],
       }),
     ).toBeNull();
-    expect(
-      isCompleteGeometry({ type: "Polygon", coordinates: [[]] }),
-    ).toBe(false);
+    expect(isCompleteGeometry({ type: "Polygon", coordinates: [[]] })).toBe(
+      false,
+    );
     expect(
       isCompleteGeometry({ type: "LineString", coordinates: [[0, 0]] }),
     ).toBe(false);
@@ -93,9 +93,7 @@ describe("geometry edit helpers", () => {
     };
     const dataB = {
       type: "FeatureCollection",
-      features: [
-        { id: "b", type: "Feature", properties: {}, geometry: point },
-      ],
+      features: [{ id: "b", type: "Feature", properties: {}, geometry: point }],
     };
 
     expect(getCompleteFeatureCollection(dataA).features).toHaveLength(1);
@@ -106,9 +104,7 @@ describe("geometry edit helpers", () => {
 
   it("calculates focus for points and multipart bounds", () => {
     expect(getGeometryFocus(null)).toBeNull();
-    expect(
-      getGeometryFocus({ type: "Point", coordinates: [6, 46] }),
-    ).toEqual({
+    expect(getGeometryFocus({ type: "Point", coordinates: [6, 46] })).toEqual({
       bounds: [
         [6, 46],
         [6, 46],
@@ -232,9 +228,7 @@ describe("prepareGeometryForSave", () => {
       status: "valid",
       geometry: null,
     });
-    expect(
-      prepareGeometryForSave(placeholder([[0, 0]]), policy),
-    ).toEqual({
+    expect(prepareGeometryForSave(placeholder([[0, 0]]), policy)).toEqual({
       status: "incomplete",
     });
   });
@@ -440,28 +434,26 @@ describe("prepareGeometryForSave", () => {
     expect(onSave).not.toHaveBeenCalled();
   });
 
-  it.each([
-    "draw_point",
-    "draw_line_string",
-    "draw_polygon",
-    "draw_circle",
-  ])("rejects the %s mode before inspecting geometry", async (activeMode) => {
-    const onSave = vi.fn();
-    const result = await applyGeometrySave(
-      { type: "FeatureCollection", features: [] },
-      {
-        type: "point",
-        allowMultipart: true,
-        promoteToMulti: true,
-        allowEmptyPlaceholder: true,
-        activeMode,
-      },
-      onSave,
-    );
+  it.each(["draw_point", "draw_line_string", "draw_polygon", "draw_circle"])(
+    "rejects the %s mode before inspecting geometry",
+    async (activeMode) => {
+      const onSave = vi.fn();
+      const result = await applyGeometrySave(
+        { type: "FeatureCollection", features: [] },
+        {
+          type: "point",
+          allowMultipart: true,
+          promoteToMulti: true,
+          allowEmptyPlaceholder: true,
+          activeMode,
+        },
+        onSave,
+      );
 
-    expect(result).toEqual({ status: "active_drawing" });
-    expect(onSave).not.toHaveBeenCalled();
-  });
+      expect(result).toEqual({ status: "active_drawing" });
+      expect(onSave).not.toHaveBeenCalled();
+    },
+  );
 
   it("persists the same complete-looking line after drawing finishes", async () => {
     const onSave = vi.fn();

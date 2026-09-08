@@ -956,9 +956,8 @@ export class ThemeModal extends EventSimple {
     let setAsProjectDefault = false;
     if (create && storageLocation === "db") {
       if (notDefault) {
-        setAsProjectDefault = await tm._theme.confirmSetAsProjectDefault(
-          metadata,
-        );
+        setAsProjectDefault =
+          await tm._theme.confirmSetAsProjectDefault(metadata);
       }
     }
 
@@ -1028,7 +1027,9 @@ export class ThemeModal extends EventSimple {
       // Show metadata editor modal for exporting
       const metadata = await tm.showMetadataEditorModal("export", currentTheme);
 
-      if (!metadata) return; // User cancelled
+      if (!metadata) {
+        return;
+      } // User cancelled
 
       // Create theme object with metadata and current colors
       const theme = Object.assign({}, currentTheme, metadata, {

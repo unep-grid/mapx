@@ -61,6 +61,5 @@ describe("source join socket errors", () => {
       { message: "Unsupported method unsupported_test_method" },
     ]);
     expect(consoleError).toHaveBeenCalledOnce();
-
   });
 });

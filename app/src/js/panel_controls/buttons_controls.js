@@ -98,7 +98,6 @@ class ButtonsControls extends EventSimple {
     btnGrp.elGroup.remove();
     btnGrp.buttons.forEach((btn) => btn.destroy());
   }
-  
 }
 
 export { ButtonsControls };

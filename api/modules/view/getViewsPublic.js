@@ -1,24 +1,21 @@
-import {pgRead} from '#mapx/db';
-import {parseTemplate, sendJSON, sendError} from '#mapx/helpers';
-import {templates} from '#mapx/template';
-import {validateTokenHandler} from '#mapx/authentication';
-import {getParamsValidator} from '#mapx/route_validation';
+import { pgRead } from "#mapx/db";
+import { parseTemplate, sendJSON, sendError } from "#mapx/helpers";
+import { templates } from "#mapx/template";
+import { validateTokenHandler } from "#mapx/authentication";
+import { getParamsValidator } from "#mapx/route_validation";
 
 const validateParamsHandler = getParamsValidator({
-  required: ['idUser', 'idProject', 'token'],
-  expected: ['idProjectExclude', 'selectKeys', 'types', 'language']
+  required: ["idUser", "idProject", "token"],
+  expected: ["idProjectExclude", "selectKeys", "types", "language"],
 });
 
 const mwGetListPublic = [
   validateParamsHandler,
   validateTokenHandler,
-  getViewsPublicHandler
+  getViewsPublicHandler,
 ];
 
-export  {
-  mwGetListPublic,
-  getViewsPublic
-};
+export { mwGetListPublic, getViewsPublic };
 
 async function getViewsPublicHandler(req, res) {
   try {
@@ -26,9 +23,9 @@ async function getViewsPublicHandler(req, res) {
     const data = await getViewsPublic(req.query);
     const out = {
       views: data,
-      timing: new Date() - start
+      timing: new Date() - start,
     };
-    sendJSON(res, out, {end: true});
+    sendJSON(res, out, { end: true });
   } catch (err) {
     sendError(res, err);
   }
@@ -55,7 +52,7 @@ async function getViewsPublic(opt) {
   /**
    * Convert array to sql code for the template
    */
-  opt.sqlTypesFilter = opt.types.map((c) => `'` + c + `'`).join(',');
+  opt.sqlTypesFilter = opt.types.map((c) => `'` + c + `'`).join(",");
 
   /**
    * Parse sql template

@@ -1,18 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
 
-const {
-  getGeoInfo,
-  getRealIp,
-  getUserRoles,
-  validateToken,
-  validateUser,
-} = vi.hoisted(() => ({
-  getGeoInfo: vi.fn(),
-  getRealIp: vi.fn(),
-  getUserRoles: vi.fn(),
-  validateToken: vi.fn(),
-  validateUser: vi.fn(),
-}));
+const { getGeoInfo, getRealIp, getUserRoles, validateToken, validateUser } =
+  vi.hoisted(() => ({
+    getGeoInfo: vi.fn(),
+    getRealIp: vi.fn(),
+    getUserRoles: vi.fn(),
+    validateToken: vi.fn(),
+    validateUser: vi.fn(),
+  }));
 
 vi.mock("#mapx/ip", () => ({
   getGeoInfo,

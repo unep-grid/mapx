@@ -238,7 +238,9 @@ describe("multilingual label editor", () => {
 
     const labelEditor = editor.getEditor("root.label_en");
     const modal = await labelEditor.openTranslations();
-    const inputs = modal.querySelectorAll('.mx-multilingual-label-modal input[type="text"]');
+    const inputs = modal.querySelectorAll(
+      '.mx-multilingual-label-modal input[type="text"]',
+    );
     const radios = modal.querySelectorAll(
       '.mx-multilingual-label-modal input[type="radio"]',
     );

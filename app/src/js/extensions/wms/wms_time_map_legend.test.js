@@ -163,14 +163,14 @@ describe("WMSTimeMapLegend time dimensions", () => {
     expect(legend.getDateInputAsUtc(new Date(1998, 1, 1)).toISO()).toBe(
       "1998-02-01T00:00:00.000Z",
     );
-    expect(legend.validate(legend.getDateInputAsUtc(new Date(1998, 1, 1)))).toBe(
-      true,
-    );
-    expect(legend.validate(legend.getDateInputAsUtc(new Date(1998, 0, 31)))).toBe(
-      false,
-    );
-    expect(legend.validate(legend.getDateInputAsUtc(new Date(1998, 1, 2)))).toBe(
-      false,
-    );
+    expect(
+      legend.validate(legend.getDateInputAsUtc(new Date(1998, 1, 1))),
+    ).toBe(true);
+    expect(
+      legend.validate(legend.getDateInputAsUtc(new Date(1998, 0, 31))),
+    ).toBe(false);
+    expect(
+      legend.validate(legend.getDateInputAsUtc(new Date(1998, 1, 2))),
+    ).toBe(false);
   });
 });

@@ -8,7 +8,7 @@ export async function updateJoinColumnsNames(
   oldColumnName,
   newColumnName,
   client = pgRead,
-  socket = null
+  socket = null,
 ) {
   try {
     const sourcesToUpdate = await getSourcesToUpdate(idSourceUpdate, client);
@@ -21,7 +21,7 @@ export async function updateJoinColumnsNames(
         data,
         idSourceUpdate,
         oldColumnName,
-        newColumnName
+        newColumnName,
       );
 
       if (updates.length > 0) {
@@ -87,7 +87,7 @@ async function applyUpdatesAndEmitViews(updates, joinConfig, client, socket) {
       update.id_source,
       update.old_column,
       update.new_column,
-      client
+      client,
     );
     await emitUpdateViews(views, socket);
   }

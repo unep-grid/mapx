@@ -59,9 +59,7 @@ describe("on-demand source preview", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mocks.sourceIsAccessible.mockResolvedValue(true);
-    mocks.getSourceLastTimestamp.mockResolvedValue(
-      "2026-07-30T10:00:00.000Z",
-    );
+    mocks.getSourceLastTimestamp.mockResolvedValue("2026-07-30T10:00:00.000Z");
     mocks.redisGet.mockResolvedValue(null);
     mocks.redisSet.mockResolvedValue("OK");
   });

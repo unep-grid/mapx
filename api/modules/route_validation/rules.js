@@ -292,7 +292,7 @@ const rules = [
       d = asArray(d);
       isValid = d.reduce(
         (a, x) => a && isSourceId(x) && !tableNotQueryable.includes(x),
-        true
+        true,
       );
       return {
         valid: isValid,

@@ -21,7 +21,7 @@ vi.mock("#mapx/view", () => ({
 vi.mock("#mapx/authentication", () => ({
   isAdmin: (socket) =>
     socket?.session?.user_authenticated === true &&
-      socket?.session?.user_roles?.admin === true,
+    socket?.session?.user_roles?.admin === true,
   isPublisher: (socket) =>
     socket?.session?.user_authenticated === true &&
     socket?.session?.user_roles?.publisher === true,
@@ -113,7 +113,10 @@ describe("ioViewTilesUrlTest", () => {
 
 describe("ioViewTilesUrlSave", () => {
   it("rejects non-admin callers", async () => {
-    const data = { idView: "MX-AAAAA-AAAAA-AAAAA", url: "https://a/{z}/{x}/{y}.png" };
+    const data = {
+      idView: "MX-AAAAA-AAAAA-AAAAA",
+      url: "https://a/{z}/{x}/{y}.png",
+    };
     await new Promise((resolve) =>
       ioViewTilesUrlSave(
         fakeSocket({ user_roles: { admin: false } }),
@@ -142,7 +145,10 @@ describe("ioViewTilesUrlSave", () => {
   });
 
   it("saves then immediately re-checks the new URL, returning the fresh row", async () => {
-    const data = { idView: "MX-AAAAA-AAAAA-AAAAA", url: "https://a/{z}/{x}/{y}.png" };
+    const data = {
+      idView: "MX-AAAAA-AAAAA-AAAAA",
+      url: "https://a/{z}/{x}/{y}.png",
+    };
     await new Promise((resolve) =>
       ioViewTilesUrlSave(fakeSocket(), data, resolve),
     );
@@ -272,8 +278,9 @@ describe("raster URL configuration", () => {
     expect(data.success).toBe(true);
     const fetchedUrls = mocks.fetch.mock.calls.map(([url]) => String(url));
     expect(fetchedUrls).toHaveLength(2);
-    expect(fetchedUrls.every((url) => url.startsWith("https://stored.test/")))
-      .toBe(true);
+    expect(
+      fetchedUrls.every((url) => url.startsWith("https://stored.test/")),
+    ).toBe(true);
   });
 
   it("rejects a save when no matching view was persisted", async () => {

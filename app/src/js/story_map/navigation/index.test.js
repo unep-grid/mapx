@@ -109,9 +109,9 @@ describe("MxStoryNavigationElement", () => {
     const cardLabel = cardText.querySelector(".mx-story-nav__card-label");
     expect(cardText.children).toHaveLength(1);
     expect(cardLabel.children).toHaveLength(3);
-    expect(cardLabel.querySelector(".mx-story-nav__card-index").textContent).toBe(
-      "1 – ",
-    );
+    expect(
+      cardLabel.querySelector(".mx-story-nav__card-index").textContent,
+    ).toBe("1 – ");
     expect(
       cardLabel.querySelector("strong:not(.mx-story-nav__card-index)")
         .innerText,
@@ -129,9 +129,8 @@ describe("MxStoryNavigationElement", () => {
       secondCardLabel.querySelector(".mx-story-nav__card-index").textContent,
     ).toBe("2 – ");
     expect(
-      secondCardLabel.querySelector(
-        "strong:not(.mx-story-nav__card-index)",
-      ).innerText,
+      secondCardLabel.querySelector("strong:not(.mx-story-nav__card-index)")
+        .innerText,
     ).toBe("Step 2");
 
     card.querySelector("img").dispatchEvent(new Event("error"));
@@ -163,11 +162,10 @@ describe("MxStoryNavigationElement", () => {
       coverImageSrc: "/cover.jpg",
     });
 
-    elStep.querySelector(".mx-story-image-cover").classList.remove(
-      "mx-story-image-cover",
-    );
+    elStep
+      .querySelector(".mx-story-image-cover")
+      .classList.remove("mx-story-image-cover");
     elStep.querySelector("img").classList.add("mx-image-cover");
     expect(getStepPreviewData({ elStep }).coverImageSrc).toBe("/cover.jpg");
   });
-
 });

@@ -37,8 +37,9 @@ export class MxWindowManager {
     if (
       !isElement(root) ||
       root.namespaceURI !== "http://www.w3.org/1999/xhtml"
-    )
+    ) {
       throw new TypeError("MxWindowManager requires a root element");
+    }
     this.root = root;
     this.elementCreator = new ElementCreator({
       document: root.ownerDocument,
@@ -51,7 +52,9 @@ export class MxWindowManager {
     this.lastZIndex = 2000;
     this._onLayerPointerDown = (event) => {
       const targetWindow = event.target.closest("mx-window");
-      if (targetWindow) this.bringToFront(targetWindow);
+      if (targetWindow) {
+        this.bringToFront(targetWindow);
+      }
     };
     this._onKeyDown = (event) => this.onKeyDown(event);
     this._onViewportResize = () => {
@@ -72,14 +75,18 @@ export class MxWindowManager {
       const rect = existing.getBoundingClientRect();
       const scrollTop = existing.refs.body.scrollTop;
       existing.configure({ ...existing.config, ...config, key });
-      if (rect.width > 0 && rect.height > 0) existing.setRect(rect);
+      if (rect.width > 0 && rect.height > 0) {
+        existing.setRect(rect);
+      }
       existing.refs.body.scrollTop = scrollTop;
       existing.show();
       this.bringToFront(existing);
       this.focusInitial(existing);
       return existing;
     }
-    if (existing) return existing;
+    if (existing) {
+      return existing;
+    }
 
     const doc = this.root.ownerDocument;
     const backdrop = config.modal === false ? null : this.el("div");
@@ -112,14 +119,18 @@ export class MxWindowManager {
       typeof windowOrKey === "string"
         ? this.windows.get(windowOrKey)
         : windowOrKey;
-    if (!element) return false;
+    if (!element) {
+      return false;
+    }
     const key = element.dataset.windowKey;
     element.dispatchWindowEvent("mx-window-close", { reason });
     element.config?.onClose?.(reason);
     element.backdrop?.remove();
     element.remove();
     this.windows.delete(key);
-    if (this.windows.size === 0) this.stopViewportTracking();
+    if (this.windows.size === 0) {
+      this.stopViewportTracking();
+    }
     element.returnFocus?.focus?.();
     return true;
   }
@@ -127,7 +138,9 @@ export class MxWindowManager {
   /** @param {{excludeKeys?: string[]}} [options] */
   closeAll({ excludeKeys = [] } = {}) {
     for (const [key, element] of this.windows) {
-      if (!excludeKeys.includes(key)) this.close(element, "close-all");
+      if (!excludeKeys.includes(key)) {
+        this.close(element, "close-all");
+      }
     }
   }
 
@@ -137,7 +150,9 @@ export class MxWindowManager {
       ? this.lastZIndex + 1000
       : ++this.lastZIndex;
     element.style.zIndex = String(zIndex);
-    if (element.backdrop) element.backdrop.style.zIndex = String(zIndex - 1);
+    if (element.backdrop) {
+      element.backdrop.style.zIndex = String(zIndex - 1);
+    }
   }
 
   /** @param {import("./element.js").MxWindowElement} element */
@@ -162,13 +177,17 @@ export class MxWindowManager {
     const active = openWindows.sort(
       (a, b) => Number(b.style.zIndex) - Number(a.style.zIndex),
     )[0];
-    if (!active) return;
+    if (!active) {
+      return;
+    }
     if (event.key === "Escape" && active.config?.closeable !== false) {
       event.preventDefault();
       this.close(active, "escape");
       return;
     }
-    if (event.key !== "Tab" || active.config?.modal === false) return;
+    if (event.key !== "Tab" || active.config?.modal === false) {
+      return;
+    }
     const focusable = this.getFocusable(active);
     if (focusable.length === 0) {
       event.preventDefault();
@@ -188,7 +207,9 @@ export class MxWindowManager {
   }
 
   startViewportTracking() {
-    if (this._trackingViewport) return;
+    if (this._trackingViewport) {
+      return;
+    }
     this.root.ownerDocument.defaultView?.addEventListener(
       "resize",
       this._onViewportResize,
@@ -197,7 +218,9 @@ export class MxWindowManager {
   }
 
   stopViewportTracking() {
-    if (!this._trackingViewport) return;
+    if (!this._trackingViewport) {
+      return;
+    }
     this.root.ownerDocument.defaultView?.removeEventListener(
       "resize",
       this._onViewportResize,

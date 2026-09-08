@@ -88,7 +88,9 @@ export async function hasSourceDependencies(id_source, client) {
     [id_source],
   );
   const source = sourceResult.rows[0];
-  if (!source) return false;
+  if (!source) {
+    return false;
+  }
   const impact = await getSourceSettingsImpact({
     client,
     idSource: id_source,
@@ -107,7 +109,7 @@ export async function hasSourceDependencies(id_source, client) {
 export async function getSourceIdsIncludingJoin(
   idSource,
   idProject,
-  client = pgRead
+  client = pgRead,
 ) {
   if (!isSourceId(idSource)) {
     throw new Error("Missing source id");
@@ -129,7 +131,7 @@ export async function getSourceIdsIncludingJoin(
 export async function getSourceDependencies(
   idSource,
   language = "en",
-  client = pgRead
+  client = pgRead,
 ) {
   if (!isSourceId(idSource)) {
     throw new Error("Missing source id");
@@ -188,13 +190,12 @@ export async function getSourcesList(options) {
   }
   if (!add_global && !readable && !editable) {
     throw new Error(
-      "At least one of Global, Editable or Readable should be true"
+      "At least one of Global, Editable or Readable should be true",
     );
   }
 
   const qSqlTemplate = templates.getSourcesListByRoles;
   const qSql = parseTemplate(qSqlTemplate, { language });
-
 
   const res = await pgRead.query({
     text: qSql,

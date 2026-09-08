@@ -51,7 +51,7 @@ export async function getViewsBySource(idSource) {
 export async function getViewsTableBySource(
   idSource,
   idProject,
-  client = pgRead
+  client = pgRead,
 ) {
   if (!isSourceId(idSource)) {
     throw Error("No valid");
@@ -63,7 +63,7 @@ export async function getViewsTableBySource(
   const idSourcesAll = await getSourceIdsIncludingJoin(
     idSource,
     idProject,
-    client
+    client,
   );
 
   for (const id of idSourcesAll) {

@@ -16,7 +16,7 @@ export class EditTableBase extends EventSimple {
   constructor(ws, config) {
     super();
     const base = this;
-    base._ws = ws; 
+    base._ws = ws;
     base._socket = ws.socket;
     base._config = Object.assign({}, defaults, config);
     base._id = makeId();

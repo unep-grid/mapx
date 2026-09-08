@@ -56,18 +56,28 @@ export function rasterStatusLabel(
   resource = "overall",
   { configured = true } = {},
 ) {
-  if (!configured || (resource === "legend" && health?.legend_configured === false)) {
+  if (
+    !configured ||
+    (resource === "legend" && health?.legend_configured === false)
+  ) {
     return rasterStatusConfig("not_configured");
   }
-  if (!health) return rasterStatusConfig("unchecked");
+  if (!health) {
+    return rasterStatusConfig("unchecked");
+  }
 
-  const valid = resource === "tile"
-    ? (health.tile_valid ?? health.valid)
-    : resource === "legend"
-      ? health.legend_valid
-      : health.valid;
+  const valid =
+    resource === "tile"
+      ? (health.tile_valid ?? health.valid)
+      : resource === "legend"
+        ? health.legend_valid
+        : health.valid;
 
-  if (valid === true) return rasterStatusConfig("valid");
-  if (valid === false) return rasterStatusConfig("invalid");
+  if (valid === true) {
+    return rasterStatusConfig("valid");
+  }
+  if (valid === false) {
+    return rasterStatusConfig("invalid");
+  }
   return rasterStatusConfig("unchecked");
 }

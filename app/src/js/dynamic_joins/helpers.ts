@@ -55,32 +55,30 @@ export function getColorForValue(
 }
 
 /**
- * Gets color for value 
+ * Gets color for value
  */
 export function getColorFromClassesLinear(
   value: number,
   legendClasses: LegendClasses,
   colorNa: string,
 ): string {
-  
   if (!isNumeric(value) || isEmpty(value)) {
     return colorNa;
   }
 
   for (const classInfo of legendClasses) {
-    const inLowerBound = classInfo.isFirst 
-      ? value >= classInfo.lowerBound 
+    const inLowerBound = classInfo.isFirst
+      ? value >= classInfo.lowerBound
       : value > classInfo.lowerBound;
     const inUpperBound = value <= classInfo.upperBound;
-    
+
     if (inLowerBound && inUpperBound) {
       return classInfo.color;
     }
   }
-  
+
   return colorNa;
 }
-
 
 /**
  * Gets legend class information from a chroma scale
@@ -117,11 +115,6 @@ export function getLegendClasses(
   return out;
 }
 
-
-
-
-
-
 /**
  * Formats interval notation label
  */
@@ -138,7 +131,9 @@ function formatIntervalLabel(
 
 export const aggregators: Record<string, AggregatorFunction> = {
   none: (vals: any[]) => {
-    if (vals.length === 1) return vals[0];
+    if (vals.length === 1) {
+      return vals[0];
+    }
     if (vals.length > 1) {
       console.warn(
         `No aggregator set. Expected single value, got ${vals.length}. Using first.`,

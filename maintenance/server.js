@@ -55,17 +55,23 @@ export function createMaintenanceServer({
       .trim()
       .toLowerCase()
       .replace(/:\d+$/, "");
-    if (!hostname.startsWith(configuration.apiHostPrefix)) return next();
+    if (!hostname.startsWith(configuration.apiHostPrefix)) {
+      return next();
+    }
     const retry = configuration.maintenanceEnd || null;
     const seconds = Math.ceil((Date.parse(retry) - Date.now()) / 1000);
-    if (seconds > 0) response.set("Retry-After", String(seconds));
+    if (seconds > 0) {
+      response.set("Retry-After", String(seconds));
+    }
     response.status(503).json({
       error: "MapX is temporarily unavailable for scheduled maintenance.",
       retry,
     });
   });
   app.use((request, response, next) => {
-    if (request.method === "GET" || request.method === "HEAD") return next();
+    if (request.method === "GET" || request.method === "HEAD") {
+      return next();
+    }
     response
       .set("Allow", "GET, HEAD")
       .status(405)
@@ -106,7 +112,9 @@ export function createMaintenanceServer({
   );
   /** @type {import("express").ErrorRequestHandler} */
   const handleError = (error, _request, response, next) => {
-    if (response.headersSent) return next(error);
+    if (response.headersSent) {
+      return next(error);
+    }
     const status =
       error.status >= 400 && error.status < 500 ? error.status : 500;
     response

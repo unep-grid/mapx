@@ -25,7 +25,9 @@ export async function isUserAllowedToEditSource({
 
 export async function isSocketAllowedToEditSource(socket, idTable) {
   const session = socket.session || {};
-  if (!session.user_authenticated || !session.project_id) return false;
+  if (!session.user_authenticated || !session.project_id) {
+    return false;
+  }
   const permission = await getSourceEditPermission({
     client: pgRead,
     idSource: idTable,
@@ -35,7 +37,9 @@ export async function isSocketAllowedToEditSource(socket, idTable) {
   const roles = permission.roles || {};
   if (Object.keys(roles).length > 0) {
     session.user_roles = roles;
-    if (socket.data) socket.data.user_roles = roles;
+    if (socket.data) {
+      socket.data.user_roles = roles;
+    }
   }
   return permission.allowed === true;
 }
@@ -44,11 +48,7 @@ export async function isSocketAllowedToEditSource(socket, idTable) {
  * Resolve geometry-edit permission from current server-side roles and source
  * ACL. The supplied client may be the transaction that will write geometry.
  */
-export async function isSocketAllowedToEditGeometry(
-  socket,
-  idTable,
-  client,
-) {
+export async function isSocketAllowedToEditGeometry(socket, idTable, client) {
   const session = socket.session || {};
   if (!session.user_authenticated) {
     return false;

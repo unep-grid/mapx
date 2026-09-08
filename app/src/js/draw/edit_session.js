@@ -243,8 +243,7 @@ export function getGeometryFocus(geometry) {
       (bounds[0][0] + bounds[1][0]) / 2,
       (bounds[0][1] + bounds[1][1]) / 2,
     ],
-    isPoint:
-      bounds[0][0] === bounds[1][0] && bounds[0][1] === bounds[1][1],
+    isPoint: bounds[0][0] === bounds[1][0] && bounds[0][1] === bounds[1][1],
   };
 }
 
@@ -285,11 +284,7 @@ function isPosition(value) {
 }
 
 function isCompleteRing(ring) {
-  if (
-    !Array.isArray(ring) ||
-    ring.length < 4 ||
-    !ring.every(isPosition)
-  ) {
+  if (!Array.isArray(ring) || ring.length < 4 || !ring.every(isPosition)) {
     return false;
   }
   const first = ring[0];

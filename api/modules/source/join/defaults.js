@@ -1,4 +1,3 @@
-
 export const join_default = {
   id_source: "",
   columns: [],

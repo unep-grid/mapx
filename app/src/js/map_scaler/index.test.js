@@ -48,9 +48,7 @@ describe("MapScaler", () => {
 
   it("scales zoom interpolate outputs without wrapping the camera expression", () => {
     const baseExpr = ["interpolate", ["linear"], ["zoom"], 1, 10, 18, 20];
-    const map = createMap([
-      { id: "label", layout: { "text-size": baseExpr } },
-    ]);
+    const map = createMap([{ id: "label", layout: { "text-size": baseExpr } }]);
     const scaler = new MapScaler(map);
 
     scaler.text(2);

@@ -1,13 +1,13 @@
-import {Translator} from './translate.js';
+import { Translator } from "./translate.js";
 const t = new Translator();
 
 class MessageBase {
   constructor() {
     Object.assign(this, {
-      // idPair worker <-> manager 
+      // idPair worker <-> manager
       idPair: null,
       // type is always replaced...
-      type: 'base'
+      type: "base",
     });
   }
 }
@@ -18,17 +18,17 @@ class MessageFrameCom extends MessageBase {
     Object.assign(
       this,
       {
-        level: 'log',
-        text: '',
-        key: '',
+        level: "log",
+        text: "",
+        key: "",
         emitter: null,
         vars: {},
-        lang: 'en'
+        lang: "en",
       },
       opt,
       {
-        type: 'message'
-      }
+        type: "message",
+      },
     );
     if (this.key) {
       this.text = t.get(this.key, this.vars, this.lang);
@@ -43,12 +43,12 @@ class StateFrameCom extends MessageBase {
     Object.assign(
       this,
       {
-        state: null
+        state: null,
       },
       opt,
       {
-        type: 'state'
-      }
+        type: "state",
+      },
     );
     return this;
   }
@@ -60,12 +60,12 @@ class EventFrameCom extends MessageBase {
     Object.assign(
       this,
       {
-        value: null
+        value: null,
       },
       opt,
       {
-        type: 'event'
-      }
+        type: "event",
+      },
     );
     return this;
   }
@@ -80,12 +80,12 @@ class ResponseFrameCom extends MessageBase {
         idRequest: null,
         value: [],
         success: true,
-        error: null
+        error: null,
       },
       opt,
       {
-        type: 'response'
-      }
+        type: "response",
+      },
     );
     return this;
   }
@@ -99,12 +99,12 @@ class RequestFrameCom extends MessageBase {
       {
         idRequest: null,
         idResolver: null,
-        value: null
+        value: null,
       },
       opt,
       {
-        type: 'request'
-      }
+        type: "request",
+      },
     );
     return this;
   }
@@ -115,5 +115,5 @@ export {
   ResponseFrameCom,
   StateFrameCom,
   RequestFrameCom,
-  EventFrameCom
+  EventFrameCom,
 };

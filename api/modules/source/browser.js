@@ -348,7 +348,9 @@ function normalizeLanguage(language) {
 }
 
 function normalizeStringArray(value, allowed, fallback = []) {
-  if (!Array.isArray(value)) return fallback;
+  if (!Array.isArray(value)) {
+    return fallback;
+  }
   return [...new Set(value.filter((item) => allowed.has(item)))];
 }
 
@@ -572,7 +574,9 @@ export async function validateSourceSelection(
 }
 
 function arrayValue(value) {
-  if (Array.isArray(value)) return value;
+  if (Array.isArray(value)) {
+    return value;
+  }
   return typeof value === "string" ? value.split(",") : [];
 }
 

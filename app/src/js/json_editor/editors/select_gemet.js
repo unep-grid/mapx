@@ -103,7 +103,9 @@ JSONEditor.defaults.editors.selectizeGemet = class mxeditors extends (
          * When the user search, fetch and
          * format results for the callback
          */
-        if (!query.length) return callback();
+        if (!query.length) {
+          return callback();
+        }
         this.clearOptions();
         try {
           const data = await searchGemet(query);

@@ -15,7 +15,9 @@ export async function insertNewView(
 ) {
   for (let attempt = 0; attempt < MAX_ID_ATTEMPTS; attempt += 1) {
     const idView = newIdView();
-    if (!isViewId(idView)) continue;
+    if (!isViewId(idView)) {
+      continue;
+    }
 
     await client.query(
       "SELECT pg_advisory_xact_lock(hashtextextended($1::text, 0))",
@@ -40,7 +42,9 @@ export async function insertNewView(
         JSON.stringify(editors),
       ],
     );
-    if (inserted.rowCount === 1) return inserted.rows[0];
+    if (inserted.rowCount === 1) {
+      return inserted.rows[0];
+    }
   }
 
   throw new Error("Could not allocate a unique view identifier");

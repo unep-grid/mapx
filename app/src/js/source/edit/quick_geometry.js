@@ -6,8 +6,6 @@ import { EditChannel } from "./channel.js";
  */
 export class QuickGeometryEditSession extends EditChannel {
   static isStatusLocked(status) {
-    return (
-      status?.geometryEditAllowed !== true || super.isStatusLocked(status)
-    );
+    return status?.geometryEditAllowed !== true || super.isStatusLocked(status);
   }
 }

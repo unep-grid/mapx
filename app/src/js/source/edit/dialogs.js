@@ -1,5 +1,9 @@
 import { settings } from "../../settings";
-import { modalPrompt, modalConfirm, modalDialog } from "./../../mx_helper_modal.js";
+import {
+  modalPrompt,
+  modalConfirm,
+  modalDialog,
+} from "./../../mx_helper_modal.js";
 import { pickEditableTableSource } from "./source_picker.js";
 import { el, elButtonFa, tt } from "../../el_mapx";
 import { getDictTemplate, getDictItem } from "./../../language";
@@ -9,7 +13,13 @@ import { draw } from "../../mx.js";
 import { viewLink, getView, viewsReplace } from "../../map_helpers/index.js";
 import { getSourceVtSummaryUI } from "../../mx_helper_source_summary";
 import { isPgType, getPgTypes } from "./../../handsontable/utils.js";
-import { isNotEmpty, isEmpty, isSafeName, makeSafeName, isEqual } from "./../../is_test/index.js";
+import {
+  isNotEmpty,
+  isEmpty,
+  isSafeName,
+  makeSafeName,
+  isEqual,
+} from "./../../is_test/index.js";
 import { modalIframe } from "../../modal_iframe";
 import { editFeatureGeometry } from "./geometry_flow.js";
 import { previewTableFeatureGeometry } from "./geometry_preview_flow.js";
@@ -163,7 +173,9 @@ export const dialogsMixin = {
     const { default: Muuri } = await import("muuri");
     const et = this;
     const source = et._config.id_source_dialog;
-    const columns = et.getColumns().filter((c) => !et.isColumnOrderFixed(c.data));
+    const columns = et
+      .getColumns()
+      .filter((c) => !et.isColumnOrderFixed(c.data));
     const orderBefore = columns.map((c) => c.data);
     let grid;
 

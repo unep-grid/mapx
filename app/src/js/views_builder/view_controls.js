@@ -450,7 +450,7 @@ export async function createViewControls(view) {
     );
   }
 
-  if (hasEditRight)
+  if (hasEditRight) {
     controlItems.push(
       el(
         "li",
@@ -471,6 +471,7 @@ export async function createViewControls(view) {
         ),
       ),
     );
+  }
 
   if (isRegistered && !isTemp && (isSm || isVt || isRt || isCc)) {
     controlItems.push(

@@ -17,6 +17,3 @@ export function createState(obj) {
   });
   return proxy;
 }
-
-
-

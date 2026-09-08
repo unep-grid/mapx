@@ -67,7 +67,7 @@ async function sanitize(value, type) {
 
   const r = await pgTest.query(
     `SELECT mx_try_cast($1,cast(NULL as ${type}))::text casted`,
-    [value]
+    [value],
   );
   const v = r.rows[0].casted;
   return v;
@@ -488,7 +488,7 @@ LIMIT 1`);
 export async function getLayerExtent(
   idSource,
   recalc = false,
-  client = pgWrite
+  client = pgWrite,
 ) {
   if (!isSourceId(idSource)) {
     throw new Error(`Invalid source ${idSource}`);
@@ -522,11 +522,7 @@ export async function getLayerExtent(
  *   console.error('Invalid bbox metadata');
  * }
  */
-export async function updateLayerExtentMeta(
-  idSource,
-  idUser,
-  client = null,
-) {
+export async function updateLayerExtentMeta(idSource, idUser, client = null) {
   if (!isSourceId(idSource)) {
     throw new Error(`Invalid source id: ${idSource}`);
   }
@@ -563,7 +559,7 @@ async function registerOrRemoveSource(
   title,
   type = "vector",
   enable_download = null,
-  enable_wms = false
+  enable_wms = false,
 ) {
   if (typeof idSource === "object") {
     const options = idSource;
@@ -751,7 +747,7 @@ async function deleteRowByGid(idTable, idsRow) {
     const result = await pgClient.query(deleteQuery, [idsRow]);
     if (result.rowCount !== nRows) {
       throw new Error(
-        `Expected to delete ${nRows} row(s), but deleted ${result.rowCount} row(s)`
+        `Expected to delete ${nRows} row(s), but deleted ${result.rowCount} row(s)`,
       );
     }
   });
@@ -770,7 +766,7 @@ async function deleteRowByGid(idTable, idsRow) {
 async function getColumnsTypesSimple(
   idSource,
   idAttr,
-  idAttrExclude = ["geom"]
+  idAttrExclude = ["geom"],
 ) {
   if (!isSourceId(idSource)) {
     return [];
@@ -994,7 +990,7 @@ async function renameTableColumn(
   idSource,
   oldName,
   newName,
-  pgClient = pgWrite
+  pgClient = pgWrite,
 ) {
   try {
     /**
@@ -1011,7 +1007,7 @@ async function renameTableColumn(
 
     if (!oldExists) {
       throw new Error(
-        `Table "${idSource}" does not exist or does not have a column ${oldName}`
+        `Table "${idSource}" does not exist or does not have a column ${oldName}`,
       );
     }
 
@@ -1026,7 +1022,7 @@ async function renameTableColumn(
     await pgClient.query(
       `ALTER TABLE ${idSource}
       RENAME COLUMN "${oldName}"
-      TO "${newName}"`
+      TO "${newName}"`,
     );
   } catch (error) {
     console.error("Error renaming source column", error);
@@ -1048,7 +1044,7 @@ async function updateViewsAttribute(
   idSource,
   oldName,
   newName,
-  pgClient = pgWrite
+  pgClient = pgWrite,
 ) {
   try {
     /*
@@ -1088,8 +1084,8 @@ async function updateViewsAttributeBatch(updates, pgClient = pgWrite) {
       update.id_source,
       update.old_column,
       update.new_column,
-      pgClient
-    )
+      pgClient,
+    ),
   );
   const results = await Promise.all(updatePromises);
   const views = results.flat();
@@ -1112,7 +1108,7 @@ async function duplicateTableColumn(
   idSource,
   sourceColumn,
   newColumn,
-  pgClient
+  pgClient,
 ) {
   try {
     if (sourceColumn === newColumn) {
@@ -1122,7 +1118,7 @@ async function duplicateTableColumn(
     const columnTypes = await getColumnsTypesSimple(idSource, [sourceColumn]);
     if (isEmpty(columnTypes)) {
       throw new Error(
-        `Table "${idSource}" does not exist or lacks column "${sourceColumn}".`
+        `Table "${idSource}" does not exist or lacks column "${sourceColumn}".`,
       );
     }
 
@@ -1148,7 +1144,7 @@ async function removeTableColumn(idTable, column, pgClient = pgWrite) {
 
 async function getColumnCells(id_table, column_name, client) {
   const { rows } = await client.query(
-    `SELECT gid, "${column_name}" FROM ${id_table} ORDER BY gid`
+    `SELECT gid, "${column_name}" FROM ${id_table} ORDER BY gid`,
   );
 
   const cells = rows.map((row) => ({
@@ -1164,7 +1160,7 @@ async function addTableColumn(
   column,
   type,
   identity = false,
-  pgClient = pgWrite
+  pgClient = pgWrite,
 ) {
   let columnType;
 
@@ -1190,7 +1186,7 @@ async function updateTableCellByGid(
   column_name,
   column_type,
   value_new = null,
-  client = pgRead
+  client = pgRead,
 ) {
   const isArrayType = column_type.toLowerCase() === "array";
   const isDate = regDatePg.test(column_type);

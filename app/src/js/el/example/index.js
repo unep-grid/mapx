@@ -1,16 +1,16 @@
 var el = El.el;
 
 var elTitle = el(
-  'h1',
+  "h1",
   {
-    style: {cursor: 'pointer'},
+    style: { cursor: "pointer" },
     on: {
-      click: function() {
-        alert('clicked');
-      }
-    }
+      click: function () {
+        alert("clicked");
+      },
+    },
   },
-  'Hello World'
+  "Hello World",
 );
 
 document.body.appendChild(elTitle);

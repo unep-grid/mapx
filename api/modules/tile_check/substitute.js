@@ -24,8 +24,7 @@ function tileFromLonLat(lon, lat, z) {
   const latRad = (lat * Math.PI) / 180;
   const x = Math.floor(((lon + 180) / 360) * n);
   const y = Math.floor(
-    ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) *
-      n,
+    ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * n,
   );
   return {
     z,
@@ -52,8 +51,12 @@ function quadKey(x, y, z) {
   for (let i = z; i > 0; i--) {
     let digit = 0;
     const mask = 1 << (i - 1);
-    if ((x & mask) !== 0) digit += 1;
-    if ((y & mask) !== 0) digit += 2;
+    if ((x & mask) !== 0) {
+      digit += 1;
+    }
+    if ((y & mask) !== 0) {
+      digit += 2;
+    }
     key += digit;
   }
   return key;

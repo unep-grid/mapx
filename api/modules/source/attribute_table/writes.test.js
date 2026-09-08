@@ -135,9 +135,9 @@ describe("geometry update authorization", () => {
   it("rejects the write in its transaction when geometry editing is denied", async () => {
     const isGeometryEditAllowed = vi.fn().mockResolvedValue(false);
 
-    await expect(
-      updateGeometry({ isGeometryEditAllowed }),
-    ).rejects.toThrow("Geometry editing is not allowed or is locked");
+    await expect(updateGeometry({ isGeometryEditAllowed })).rejects.toThrow(
+      "Geometry editing is not allowed or is locked",
+    );
 
     expect(isGeometryEditAllowed).toHaveBeenCalledWith(mocks.client);
     expect(mocks.updateFeatureGeometry).not.toHaveBeenCalled();

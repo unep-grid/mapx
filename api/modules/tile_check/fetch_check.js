@@ -31,7 +31,8 @@ const IMAGE_SIGNATURES = [
   { type: "image/gif", bytes: [0x47, 0x49, 0x46, 0x38] },
 ];
 
-const SVG_DISALLOWED = /<!doctype\b|<script\b|\bon[a-z][\w-]*\s*=|(?:href|src)\s*=\s*["']\s*(?:https?:|javascript:|data:|file:|\/\/)|url\s*\(\s*["']?(?:https?:|javascript:|data:|file:|\/\/)/i;
+const SVG_DISALLOWED =
+  /<!doctype\b|<script\b|\bon[a-z][\w-]*\s*=|(?:href|src)\s*=\s*["']\s*(?:https?:|javascript:|data:|file:|\/\/)|url\s*\(\s*["']?(?:https?:|javascript:|data:|file:|\/\/)/i;
 
 export function matchesImageSignature(buffer) {
   return IMAGE_SIGNATURES.some((sig) =>
@@ -130,12 +131,21 @@ export async function checkUrl(url, opt = {}) {
     }
     const buffer = Buffer.concat(chunks);
 
-    if (!matchesImageSignature(buffer) && !matchesSafeSvg(buffer, content_type)) {
+    if (
+      !matchesImageSignature(buffer) &&
+      !matchesSafeSvg(buffer, content_type)
+    ) {
       const detail =
         content_type && /xml|text/.test(content_type)
           ? "service_exception"
           : "invalid_image_signature";
-      return { valid: false, http_status, content_type, detail, tested_url: url };
+      return {
+        valid: false,
+        http_status,
+        content_type,
+        detail,
+        tested_url: url,
+      };
     }
 
     return {
@@ -146,11 +156,12 @@ export async function checkUrl(url, opt = {}) {
       tested_url: url,
     };
   } catch (e) {
-    const detail = e?.name === "AbortError"
-      ? "timeout"
-      : isBlockedByFilter(e)
-        ? "blocked_private_address"
-        : "fetch_error";
+    const detail =
+      e?.name === "AbortError"
+        ? "timeout"
+        : isBlockedByFilter(e)
+          ? "blocked_private_address"
+          : "fetch_error";
     return { valid: false, detail, tested_url: url };
   } finally {
     clearTimeout(timer);
@@ -165,6 +176,7 @@ export async function checkUrl(url, opt = {}) {
  */
 function isBlockedByFilter(error) {
   return (
-    typeof error?.message === "string" && error.message.includes("is not allowed")
+    typeof error?.message === "string" &&
+    error.message.includes("is not allowed")
   );
 }

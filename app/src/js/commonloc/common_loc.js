@@ -1,7 +1,11 @@
 import commonloc from "./locations.json";
 import { isArray } from "./../is_test/index.js";
 import { getDictItem, getDictItemId } from "./../language";
-import { getMap, getBoundsArray, fitMaxBounds } from "./../map_helpers/index.js";
+import {
+  getMap,
+  getBoundsArray,
+  fitMaxBounds,
+} from "./../map_helpers/index.js";
 import { getArrayDiff } from "./../array_stat";
 import { settings } from "../settings";
 
@@ -12,7 +16,7 @@ const CONFIG = {
   fitOptions: {
     animate: true,
   },
-  maxResults: 5,  // Instance-specific search limit
+  maxResults: 5, // Instance-specific search limit
 };
 
 export class CommonLoc {
@@ -42,12 +46,16 @@ export class CommonLoc {
     };
 
     const bbox = await this.getBbox(options);
-    if (!bbox) return null;
+    if (!bbox) {
+      return null;
+    }
 
     const currentBounds = getBoundsArray();
     const hasChanged = getArrayDiff(currentBounds, bbox).length > 0;
 
-    if (!hasChanged) return bbox;
+    if (!hasChanged) {
+      return bbox;
+    }
 
     const fitted = fitMaxBounds(bbox, params);
     if (fitted) {
@@ -65,10 +73,7 @@ export class CommonLoc {
    * @returns {Promise<Array<number>|null>} Bounds array [west, south, east, north]
    */
   async getBbox(options = {}) {
-    const {
-      code = this.config.defaultCode,
-      name = null,
-    } = options;
+    const { code = this.config.defaultCode, name = null } = options;
 
     try {
       let codes = code;
@@ -78,12 +83,16 @@ export class CommonLoc {
         const names = isArray(name) ? name : [name];
         for (const n of names) {
           const id = await getDictItemId(n, settings.language); // Uses dynamic global language
-          if (id) codes.push(id);
+          if (id) {
+            codes.push(id);
+          }
         }
       }
 
       codes = isArray(codes) ? codes : [codes];
-      if (codes.length === 0) return null;
+      if (codes.length === 0) {
+        return null;
+      }
 
       const bounds = [...this.config.defaultBounds];
 
@@ -116,7 +125,9 @@ export class CommonLoc {
    * @returns {Promise<Array<GeoJSON.Feature>>} Array of GeoJSON features
    */
   async geolocate(query, options = {}) {
-    if (!query?.trim()) return [];
+    if (!query?.trim()) {
+      return [];
+    }
 
     const { limit = this.config.maxResults } = options;
 
@@ -153,7 +164,7 @@ export class CommonLoc {
         codes.map(async (code) => ({
           code,
           name: await getDictItem(code, settings.language), // Uses dynamic global language
-        }))
+        })),
       );
       return table;
     } catch (error) {
@@ -161,14 +172,14 @@ export class CommonLoc {
       return [];
     }
   }
-  
-/**
- * Gets list of available location codes
- * @returns {Array<string>} Array of location codes
- */
-getListCodes() {
-  return Object.keys(commonloc);
-}
+
+  /**
+   * Gets list of available location codes
+   * @returns {Array<string>} Array of location codes
+   */
+  getListCodes() {
+    return Object.keys(commonloc);
+  }
 
   /**
    * Calculate search relevance score
@@ -186,9 +197,15 @@ getListCodes() {
 
     for (const str of testStrings) {
       const testStr = str.toLowerCase();
-      if (testStr === query) totalScore += score.exact;
-      if (testStr.includes(query)) totalScore += score.partial;
-      if (testStr.startsWith(query)) totalScore += score.start;
+      if (testStr === query) {
+        totalScore += score.exact;
+      }
+      if (testStr.includes(query)) {
+        totalScore += score.partial;
+      }
+      if (testStr.startsWith(query)) {
+        totalScore += score.start;
+      }
     }
 
     return totalScore;

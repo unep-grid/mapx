@@ -32,7 +32,12 @@ describe("setViewTilesUrl", () => {
 
   it("uses a supplied client instead of pgWrite when given one", async () => {
     const client = { query: vi.fn().mockResolvedValue({}) };
-    await setViewTilesUrl("MX-AAAAA-AAAAA-AAAAA", "https://a/x.png", "P1", client);
+    await setViewTilesUrl(
+      "MX-AAAAA-AAAAA-AAAAA",
+      "https://a/x.png",
+      "P1",
+      client,
+    );
     expect(client.query).toHaveBeenCalledTimes(1);
     expect(mocks.query).not.toHaveBeenCalled();
   });

@@ -14,7 +14,9 @@ export function openSourceMetadataEditorForShiny({
   idSource,
   shiny = globalThis.Shiny,
 }) {
-  if (!idSource || !shiny?.setInputValue) return false;
+  if (!idSource || !shiny?.setInputValue) {
+    return false;
+  }
   shiny.setInputValue(
     "selectSourceLayerForMeta",
     { idSource, update: Date.now() },

@@ -1,9 +1,9 @@
-import {NestedList} from '../index.js';
+import { NestedList } from "../index.js";
 
 class Group {
   constructor(opt, li) {
     if (!(li instanceof NestedList)) {
-      throw new Error('NestedList instance not valid');
+      throw new Error("NestedList instance not valid");
     }
     let group = this;
     group.opt = opt;
@@ -25,48 +25,45 @@ class Group {
     if (opt.collapsed) {
       cl.push(li.opt.class.groupCollapsed);
     }
-    if(opt.invisible){
-       cl.push(li.opt.class.groupInvisible);
+    if (opt.invisible) {
+      cl.push(li.opt.class.groupInvisible);
     }
 
     opt.title = li.validateGroupTitleObject(opt.title);
     opt.color = li.validateColor(opt.color);
-    opt.date = opt.date || Date.now() ;
+    opt.date = opt.date || Date.now();
 
-    group.el = li.el('div', {
+    group.el = li.el("div", {
       id: group.id,
       class: cl,
       style: `--group_color: ${opt.color}`,
       dataset: {
-        li_date : opt.date,
+        li_date: opt.date,
         li_color: opt.color,
         li_title: JSON.stringify(opt.title),
-        li_id_action: 'li_group_toggle',
-        li_event_type: 'click'
-      }
+        li_id_action: "li_group_toggle",
+        li_event_type: "click",
+      },
     });
 
     group.elHeader = li.el(
-      'div',
+      "div",
       {
-        class: [li.opt.class.groupHeader]
+        class: [li.opt.class.groupHeader],
       },
-      li.el('span', {
-        class: [li.opt.class.arrowBottom, li.opt.class.groupCaret]
+      li.el("span", {
+        class: [li.opt.class.arrowBottom, li.opt.class.groupCaret],
       }),
       li.el(
-        'span',
+        "span",
         {
-          class: [li.opt.class.groupTitle, li.opt.class.dragHandle]
+          class: [li.opt.class.groupTitle, li.opt.class.dragHandle],
         },
-        opt.title[language] || opt.title[languageDefault]
+        opt.title[language] || opt.title[languageDefault],
       ),
-      li.el(
-        'div',
-        {
-          class: li.opt.class.groupLabel
-        }
-      )
+      li.el("div", {
+        class: li.opt.class.groupLabel,
+      }),
     );
 
     group.el.appendChild(group.elHeader);
@@ -74,11 +71,11 @@ class Group {
     if (hasItem) {
       group.el.appendChild(opt.content);
     }
-   /**
-   * Save instance in el ? mmh... why not.
-   */
-   group.el._instance = group;
+    /**
+     * Save instance in el ? mmh... why not.
+     */
+    group.el._instance = group;
   }
 }
 
-export {Group};
+export { Group };

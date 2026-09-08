@@ -24,7 +24,7 @@ export function isColorDomainEligible({ kind, backend, dynamicStyle }) {
 export function resolveInitialColorDomain(settings, rasterDefaults) {
   return settings.colorDomain !== undefined
     ? settings.colorDomain
-    : rasterDefaults.colorDomain ?? null;
+    : (rasterDefaults.colorDomain ?? null);
 }
 
 /**

@@ -43,7 +43,7 @@ async function cleanIfNeeded() {
     addListener();
   } else {
     console.log(
-      `SW - There is not enough storage, MapX will try to remove cache.`
+      `SW - There is not enough storage, MapX will try to remove cache.`,
     );
     const hadSW = await clearServiceWorker();
     const hadCache = await clearSwCache();
@@ -57,7 +57,7 @@ async function cleanIfNeeded() {
     }
 
     console.log(
-      `SW - Lack of storage space, MapX will not try to register service worker restart.`
+      `SW - Lack of storage space, MapX will not try to register service worker restart.`,
     );
   }
 }
@@ -89,9 +89,8 @@ async function hasEnoughStorage() {
 async function handleInitSw() {
   console.log("SW - Register ...");
   try {
-    const registration = await navigator.serviceWorker.register(
-      "/service-worker.js"
-    );
+    const registration =
+      await navigator.serviceWorker.register("/service-worker.js");
     await handleRegistration(registration);
   } catch (e) {
     console.error(e);
@@ -112,7 +111,7 @@ function handleRegistration(registration) {
 
     navigator.serviceWorker.addEventListener(
       "controllerchange",
-      handleControllerChange
+      handleControllerChange,
     );
 
     console.log("SW - Handle registration...");
@@ -174,7 +173,6 @@ async function showRefreshUI(registration) {
   const hasMapx = window.mx && !!getDictItem;
   const skipWaiting = !hasMapx || isEmbeded;
 
-
   if (skipWaiting) {
     console.log(`SW - update SW now, skip waiting`);
     return update();
@@ -190,7 +188,7 @@ async function showRefreshUI(registration) {
       class: ["btn", "btn-default"],
       on: ["click", () => modalChangelog(true)],
     },
-    t("update_app_button_read_changlog")
+    t("update_app_button_read_changlog"),
   );
   const elMessage = el("p", t("update_app_msg"));
 

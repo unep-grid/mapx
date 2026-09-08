@@ -122,7 +122,6 @@ class Page extends Box {
        * Download
        */
       await downloadZip(zip, "map_compose_export.zip", mc.state.exportTab);
-
     } catch (e) {
       page.message.flash({
         level: "error",

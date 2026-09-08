@@ -2,11 +2,7 @@ import { el, elWait } from "../el_mapx";
 import { getViewAuto } from "../map_helpers";
 import { modal } from "../mx_helper_modal";
 import { isView } from "../is_test_mapx";
-import {
-  getViewStats,
-  ViewStats,
-  viewStatsToUi,
-} from "../view_stats";
+import { getViewStats, ViewStats, viewStatsToUi } from "../view_stats";
 
 export { getViewStats, ViewStats, viewStatsToUi };
 

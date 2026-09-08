@@ -52,7 +52,9 @@ function handler() {
         source: cc.idSource,
         paint: {
           "circle-radius": 6,
-          "circle-color": mx.theme.getColorThemeItem("mx_map_feature_highlight"),
+          "circle-color": mx.theme.getColorThemeItem(
+            "mx_map_feature_highlight",
+          ),
         },
         filter: ["==", "$type", "Point"],
       });

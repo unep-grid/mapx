@@ -23,7 +23,7 @@ async function ioSourceListColumns(socket, request, cb) {
     const columns = await getColumnsTypesSimple(
       options.id_source,
       null,
-      options.ignore_attr
+      options.ignore_attr,
     );
 
     const response = Object.assign({}, request, { columns });

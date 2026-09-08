@@ -45,7 +45,7 @@ export function unitConvert(opt) {
   opt = Object.assign(
     {},
     { value: null, dpi: getDpi(), unitFrom: "px", unitTo: "px" },
-    opt
+    opt,
   );
 
   if (isEmpty(opt.value)) {

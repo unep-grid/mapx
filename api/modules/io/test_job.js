@@ -5,7 +5,7 @@
 export async function ioTestSum(socket, request, cb) {
   const response = await socket.mx_emit_ws_response(
     "/server/test/sum",
-    request
+    request,
   );
   cb(response);
 }
@@ -17,7 +17,7 @@ export async function ioTestSum(socket, request, cb) {
 export async function ioTestEcho(socket, request, cb) {
   const response = await socket.mx_emit_ws_response(
     "/server/test/echo",
-    request
+    request,
   );
   cb(response);
 }

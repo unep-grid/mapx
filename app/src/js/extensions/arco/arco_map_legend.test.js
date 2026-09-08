@@ -46,9 +46,7 @@ vi.mock("../../mx", () => ({
 
 import { ArcoMapLegend } from "./arco_map_legend.js";
 
-const palettes = [
-  { id: "balance", colors: ["#0000ff", "#ffffff", "#ff0000"] },
-];
+const palettes = [{ id: "balance", colors: ["#0000ff", "#ffffff", "#ff0000"] }];
 
 function createArco(legend) {
   const elLegend = document.createElement("div");
@@ -182,9 +180,10 @@ describe("ArcoMapLegend zartigl 0.5 lifecycle", () => {
     let resolveUpdate;
     const arco = createPlaybackArco({ values: [10, 20] });
     arco._z.update = vi.fn(
-      () => new Promise((resolve) => {
-        resolveUpdate = resolve;
-      }),
+      () =>
+        new Promise((resolve) => {
+          resolveUpdate = resolve;
+        }),
     );
     arco._syncStateFromZartigl = vi.fn();
 
@@ -502,9 +501,9 @@ describe("ArcoMapLegend playback controls", () => {
     scalar._layer_def = { kind: "scalar" };
     const scalarButtons = scalar._buildPlayerButtons(!scalar.isVector());
     expect(scalarButtons.querySelectorAll("button")).toHaveLength(6);
-    expect(scalarButtons.querySelector(".arco--playback_rate").textContent).toBe(
-      "1×",
-    );
+    expect(
+      scalarButtons.querySelector(".arco--playback_rate").textContent,
+    ).toBe("1×");
 
     const vector = new ArcoMapLegend({});
     vector._layer_def = { kind: "vector" };
@@ -599,7 +598,12 @@ describe("ArcoMapLegend cadence-aware time input", () => {
     ["year", [Date.UTC(2024, 0, 1), Date.UTC(2025, 0, 1)], "SELECT", null],
     ["month", [Date.UTC(2025, 0, 1), Date.UTC(2025, 1, 1)], "INPUT", "month"],
     ["day", [Date.UTC(2025, 0, 1), Date.UTC(2025, 0, 2)], "INPUT", "date"],
-    ["hour", [Date.UTC(2025, 0, 1), Date.UTC(2025, 0, 1, 6)], "INPUT", "datetime-local"],
+    [
+      "hour",
+      [Date.UTC(2025, 0, 1), Date.UTC(2025, 0, 1, 6)],
+      "INPUT",
+      "datetime-local",
+    ],
   ])("renders a native %s control", (granularity, values, tagName, type) => {
     const arco = new ArcoMapLegend({});
     arco._time_meta = {
@@ -614,15 +618,21 @@ describe("ArcoMapLegend cadence-aware time input", () => {
     const input = arco._buildDateInput();
 
     expect(input.tagName).toBe(tagName);
-    if (type) expect(input.type).toBe(type);
+    if (type) {
+      expect(input.type).toBe(type);
+    }
   });
 
   it("snaps a native date selection to an available timestamp", () => {
     const values = [Date.UTC(2025, 0, 1), Date.UTC(2025, 0, 3)];
     const arco = new ArcoMapLegend({});
     arco._time_meta = {
-      min: values[0], max: values[1], size: 2, values,
-      step: undefined, granularity: "day",
+      min: values[0],
+      max: values[1],
+      size: 2,
+      values,
+      step: undefined,
+      granularity: "day",
     };
     arco.setTime = vi.fn();
     const input = arco._buildDateInput();
@@ -637,8 +647,12 @@ describe("ArcoMapLegend cadence-aware time input", () => {
     const values = [Date.UTC(2025, 0, 28), Date.UTC(2025, 1, 28)];
     const arco = new ArcoMapLegend({});
     arco._time_meta = {
-      min: values[0], max: values[1], size: 2, values,
-      step: undefined, granularity: "month",
+      min: values[0],
+      max: values[1],
+      size: 2,
+      values,
+      step: undefined,
+      granularity: "month",
     };
     arco.setTime = vi.fn();
     const input = arco._buildDateInput();
@@ -653,7 +667,11 @@ describe("ArcoMapLegend cadence-aware time input", () => {
     const time = Date.UTC(2025, 0, 1);
     const arco = new ArcoMapLegend({});
     arco._time_meta = {
-      min: time, max: time, size: 1, values: [time], granularity: "day",
+      min: time,
+      max: time,
+      size: 1,
+      values: [time],
+      granularity: "day",
     };
 
     expect(arco._buildDateInput().disabled).toBe(true);
@@ -661,7 +679,11 @@ describe("ArcoMapLegend cadence-aware time input", () => {
       navigationEnabled: false,
       transportEnabled: false,
     });
-    expect([...buttons.querySelectorAll("button")].every((button) => button.disabled)).toBe(true);
+    expect(
+      [...buttons.querySelectorAll("button")].every(
+        (button) => button.disabled,
+      ),
+    ).toBe(true);
   });
 
   it("keeps video transport enabled for a single-frame snapshot loop", () => {

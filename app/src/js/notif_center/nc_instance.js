@@ -23,7 +23,7 @@ class NotifCenterMapx extends NotifCenter {
         button_classes: ["fa", "fa-bell"],
         tooltip_position: "top-right",
         position: "bottom-left",
-        container_classes : ['button-panel--pinned-always'],
+        container_classes: ["button-panel--pinned-always"],
         container_style: {
           width: "470px", // same as MainPanel
           height: "40%",

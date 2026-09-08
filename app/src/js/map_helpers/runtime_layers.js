@@ -5,7 +5,9 @@ function normalizePrefix(prefix) {
   if (typeof prefix === "string") {
     return new RegExp("^" + prefix);
   }
-  throw new Error('getRuntimeLayersByPrefix requires "prefix" set as a string or regex');
+  throw new Error(
+    'getRuntimeLayersByPrefix requires "prefix" set as a string or regex',
+  );
 }
 
 /**

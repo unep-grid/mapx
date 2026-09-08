@@ -1,8 +1,17 @@
 import { el } from "../../el_mapx";
 import { getDictItem } from "./../../language";
 import { clone } from "../../mx_helper_misc.js";
-import { isPgType, isPgTypeDate, typeConvert } from "./../../handsontable/utils.js";
-import { isEmpty, isStringRange, isSafeName, isArray } from "./../../is_test/index.js";
+import {
+  isPgType,
+  isPgTypeDate,
+  typeConvert,
+} from "./../../handsontable/utils.js";
+import {
+  isEmpty,
+  isStringRange,
+  isSafeName,
+  isArray,
+} from "./../../is_test/index.js";
 
 /**
  * Column model : creation, ordering, naming rules and type lookups.

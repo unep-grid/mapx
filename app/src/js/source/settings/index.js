@@ -19,12 +19,15 @@ export async function openSourceSettings({ root = document.body } = {}) {
     language,
     label: await getDictItem("source_select_layer", language),
   });
-  if (!result?.value || Array.isArray(result.value)) return null;
+  if (!result?.value || Array.isArray(result.value)) {
+    return null;
+  }
 
   const manager = getMapxWindowManager(root);
-  const component = /** @type {import("./component.js").MxSourceSettingsElement} */ (
-    manager.el("mx-source-settings")
-  );
+  const component =
+    /** @type {import("./component.js").MxSourceSettingsElement} */ (
+      manager.el("mx-source-settings")
+    );
   component.applicationRoot = root;
   component.idSource = result.value;
   const [labelSave, labelDelete, labelClose] = await getDictItem(

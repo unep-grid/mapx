@@ -1,26 +1,26 @@
-import 'bootstrap/dist/css/bootstrap.css';
-import 'font-awesome/css/font-awesome.min.css';
-import 'maplibre-gl/dist/maplibre-gl.css';
-import 'flag-icons/css/flag-icons.min.css';
+import "bootstrap/dist/css/bootstrap.css";
+import "font-awesome/css/font-awesome.min.css";
+import "maplibre-gl/dist/maplibre-gl.css";
+import "flag-icons/css/flag-icons.min.css";
 
-import '../css/mx_variables.css';
-import '../css/mx_base.css';
-import '../css/mx_error.css';
-import '../css/mx_ace_editor.css';
-import '../css/mx_modifiers.css';
-import '../css/mx_mapbox.css';
-import '../css/mx_table.css';
-import '../css/mx_modal.css';
-import '../css/mx_window.css';
-import '../css/mx_project_list.css';
-import '../css/mx_project_tiles_report.css';
-import '../css/mx_raster_url.css';
-import '../css/mx_legends.css';
-import '../css/mx_icons.less';
+import "../css/mx_variables.css";
+import "../css/mx_base.css";
+import "../css/mx_error.css";
+import "../css/mx_ace_editor.css";
+import "../css/mx_modifiers.css";
+import "../css/mx_mapbox.css";
+import "../css/mx_table.css";
+import "../css/mx_modal.css";
+import "../css/mx_window.css";
+import "../css/mx_project_list.css";
+import "../css/mx_project_tiles_report.css";
+import "../css/mx_raster_url.css";
+import "../css/mx_legends.css";
+import "../css/mx_icons.less";
 
-import * as mx from './mx.js';
+import * as mx from "./mx.js";
 window.mx = mx;
 /**
-* MapLibre GL preload workers as soon as possible
-*/
+ * MapLibre GL preload workers as soon as possible
+ */
 mx.maplibregl.prewarm();
