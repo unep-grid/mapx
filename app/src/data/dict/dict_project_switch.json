@@ -1,0 +1,27 @@
+[
+  {
+    "id": "project_loading",
+    "en": "Loading…",
+    "fr": "Chargement…"
+  },
+  {
+    "id": "project_switch_failed",
+    "en": "The project could not be loaded. You can retry.",
+    "fr": "Le projet n’a pas pu être chargé. Vous pouvez réessayer."
+  },
+  {
+    "id": "project_switch_unknown",
+    "en": "The server has not confirmed the project. Reload the page to restore the session.",
+    "fr": "Le serveur n’a pas confirmé le projet. Rechargez la page pour rétablir la session."
+  },
+  {
+    "id": "project_switch_retry",
+    "en": "Retry",
+    "fr": "Réessayer"
+  },
+  {
+    "id": "project_switch_reload",
+    "en": "Reload page",
+    "fr": "Recharger la page"
+  }
+]

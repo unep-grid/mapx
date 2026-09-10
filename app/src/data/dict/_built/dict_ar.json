@@ -6926,55 +6926,68 @@
   },
   {
     "id": "source_settings_loading",
-    "en": "Loading source settings…"
+    "en": "Loading source settings…",
+    "ar": "جارٍ تحميل إعدادات المصدر…"
   },
   {
     "id": "source_settings_load_error",
-    "en": "Unable to load source settings."
+    "en": "Unable to load source settings.",
+    "ar": "تعذر تحميل إعدادات المصدر."
   },
   {
     "id": "source_settings_retry",
-    "en": "Retry"
+    "en": "Retry",
+    "ar": "إعادة المحاولة"
   },
   {
     "id": "source_settings_views_count",
-    "en": "Dependent views ({{count}})"
+    "en": "Dependent views ({{count}})",
+    "ar": "وجهات النظر التابعة ( {{count}} )"
   },
   {
     "id": "source_settings_dependencies_count",
-    "en": "Dependent sources ({{count}})"
+    "en": "Dependent sources ({{count}})",
+    "ar": "المصادر التابعة ( {{count}} )"
   },
   {
     "id": "source_settings_load_more",
-    "en": "Load more"
+    "en": "Load more",
+    "ar": "تحميل المزيد"
   },
   {
     "id": "source_settings_saved",
-    "en": "Source settings saved."
+    "en": "Source settings saved.",
+    "ar": "تم حفظ إعدادات المصدر."
   },
   {
     "id": "source_settings_delete_title",
-    "en": "Delete source"
+    "en": "Delete source",
+    "ar": "حذف المصدر"
   },
   {
     "id": "source_settings_delete_description",
-    "en": "Permanently delete this source? This action cannot be undone."
+    "en": "Permanently delete this source? This action cannot be undone.",
+    "ar": "هل تريد حذف هذا المصدر نهائياً؟ لا يمكن التراجع عن هذا الإجراء."
   },
   {
     "id": "source_settings_deleted",
-    "en": "The source was deleted."
+    "en": "The source was deleted.",
+    "ar": "تم حذف المصدر."
   },
   {
     "id": "source_settings_force_global",
-    "en": "This source must remain global because it is used by another project."
+    "en": "This source must remain global because it is used by another project.",
+    "ar": "يجب أن يظل هذا المصدر عالميًا لأنه يُستخدم من قبل مشروع آخر."
   },
   {
     "id": "source_settings_publishers_required",
-    "en": "Publisher access must be retained while content owned by another editor depends on this source."
+    "en": "Publisher access must be retained while content owned by another editor depends on this source.",
+    "ar": "يجب الاحتفاظ بصلاحيات الناشر طالما أن المحتوى المملوك لمحرر آخر يعتمد على هذا المصدر."
   },
   {
     "id": "source_settings_delete_blocked",
-    "en": "This source cannot be deleted while dependent sources or views exist."
+    "en": "This source cannot be deleted while dependent sources or views exist.",
+    "ar": "لا يمكن حذف هذا المصدر طالما أن المصادر أو طرق العرض التابعة له موجودة."
   },
   {
     "id": "mc_title",
@@ -9140,6 +9153,31 @@
     "id": "project_removed_from_group",
     "en": "removed from: {{group}} \n",
     "ar": "تمت إزالته من: {{group}}\n"
+  },
+  {
+    "id": "project_loading",
+    "en": "Loading…",
+    "ar": "تحميل…"
+  },
+  {
+    "id": "project_switch_failed",
+    "en": "The project could not be loaded. You can retry.",
+    "ar": "تعذر تحميل المشروع. يمكنك المحاولة مرة أخرى."
+  },
+  {
+    "id": "project_switch_unknown",
+    "en": "The server has not confirmed the project. Reload the page to restore the session.",
+    "ar": "لم يؤكد الخادم المشروع. أعد تحميل الصفحة لاستعادة الجلسة."
+  },
+  {
+    "id": "project_switch_retry",
+    "en": "Retry",
+    "ar": "إعادة المحاولة"
+  },
+  {
+    "id": "project_switch_reload",
+    "en": "Reload page",
+    "ar": "إعادة تحميل الصفحة"
   },
   {
     "id": "schema_story_theme",

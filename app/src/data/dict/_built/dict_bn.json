@@ -6926,55 +6926,68 @@
   },
   {
     "id": "source_settings_loading",
-    "en": "Loading source settings…"
+    "en": "Loading source settings…",
+    "bn": "উৎস সেটিংস লোড হচ্ছে…"
   },
   {
     "id": "source_settings_load_error",
-    "en": "Unable to load source settings."
+    "en": "Unable to load source settings.",
+    "bn": "উৎস সেটিংস লোড করা সম্ভব হয়নি।"
   },
   {
     "id": "source_settings_retry",
-    "en": "Retry"
+    "en": "Retry",
+    "bn": "পুনরায় চেষ্টা করুন"
   },
   {
     "id": "source_settings_views_count",
-    "en": "Dependent views ({{count}})"
+    "en": "Dependent views ({{count}})",
+    "bn": "নির্ভরশীল মতামত ( {{count}} )"
   },
   {
     "id": "source_settings_dependencies_count",
-    "en": "Dependent sources ({{count}})"
+    "en": "Dependent sources ({{count}})",
+    "bn": "নির্ভরশীল উৎস ( {{count}} )"
   },
   {
     "id": "source_settings_load_more",
-    "en": "Load more"
+    "en": "Load more",
+    "bn": "আরও লোড করুন"
   },
   {
     "id": "source_settings_saved",
-    "en": "Source settings saved."
+    "en": "Source settings saved.",
+    "bn": "উৎস সেটিংস সংরক্ষিত হয়েছে।"
   },
   {
     "id": "source_settings_delete_title",
-    "en": "Delete source"
+    "en": "Delete source",
+    "bn": "উৎস মুছে ফেলুন"
   },
   {
     "id": "source_settings_delete_description",
-    "en": "Permanently delete this source? This action cannot be undone."
+    "en": "Permanently delete this source? This action cannot be undone.",
+    "bn": "এই উৎসটি স্থায়ীভাবে মুছে ফেলবেন? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।"
   },
   {
     "id": "source_settings_deleted",
-    "en": "The source was deleted."
+    "en": "The source was deleted.",
+    "bn": "উৎসটি মুছে ফেলা হয়েছে।"
   },
   {
     "id": "source_settings_force_global",
-    "en": "This source must remain global because it is used by another project."
+    "en": "This source must remain global because it is used by another project.",
+    "bn": "এই উৎসটি অবশ্যই বৈশ্বিক থাকতে হবে, কারণ এটি অন্য একটি প্রকল্পে ব্যবহৃত হয়।"
   },
   {
     "id": "source_settings_publishers_required",
-    "en": "Publisher access must be retained while content owned by another editor depends on this source."
+    "en": "Publisher access must be retained while content owned by another editor depends on this source.",
+    "bn": "যতক্ষণ পর্যন্ত অন্য কোনো সম্পাদকের মালিকানাধীন বিষয়বস্তু এই উৎসের উপর নির্ভরশীল থাকবে, ততক্ষণ পর্যন্ত প্রকাশকের প্রবেশাধিকার অবশ্যই বজায় রাখতে হবে।"
   },
   {
     "id": "source_settings_delete_blocked",
-    "en": "This source cannot be deleted while dependent sources or views exist."
+    "en": "This source cannot be deleted while dependent sources or views exist.",
+    "bn": "নির্ভরশীল সোর্স বা ভিউ বিদ্যমান থাকলে এই সোর্সটি মুছে ফেলা যাবে না।"
   },
   {
     "id": "mc_title",
@@ -9140,6 +9153,31 @@
     "id": "project_removed_from_group",
     "en": "removed from: {{group}} \n",
     "bn": "থেকে সরানো হয়েছে: {{group}}\n"
+  },
+  {
+    "id": "project_loading",
+    "en": "Loading…",
+    "bn": "লোড হচ্ছে…"
+  },
+  {
+    "id": "project_switch_failed",
+    "en": "The project could not be loaded. You can retry.",
+    "bn": "প্রকল্পটি লোড করা যায়নি। আপনি আবার চেষ্টা করতে পারেন।"
+  },
+  {
+    "id": "project_switch_unknown",
+    "en": "The server has not confirmed the project. Reload the page to restore the session.",
+    "bn": "সার্ভার প্রকল্পটি নিশ্চিত করেনি। সেশনটি পুনরুদ্ধার করতে পৃষ্ঠাটি পুনরায় লোড করুন।"
+  },
+  {
+    "id": "project_switch_retry",
+    "en": "Retry",
+    "bn": "পুনরায় চেষ্টা করুন"
+  },
+  {
+    "id": "project_switch_reload",
+    "en": "Reload page",
+    "bn": "পৃষ্ঠাটি পুনরায় লোড করুন"
   },
   {
     "id": "schema_story_theme",

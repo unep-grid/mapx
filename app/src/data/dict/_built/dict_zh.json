@@ -6926,55 +6926,68 @@
   },
   {
     "id": "source_settings_loading",
-    "en": "Loading source settings…"
+    "en": "Loading source settings…",
+    "zh": "正在加载源设置…"
   },
   {
     "id": "source_settings_load_error",
-    "en": "Unable to load source settings."
+    "en": "Unable to load source settings.",
+    "zh": "无法加载源设置。"
   },
   {
     "id": "source_settings_retry",
-    "en": "Retry"
+    "en": "Retry",
+    "zh": "重试"
   },
   {
     "id": "source_settings_views_count",
-    "en": "Dependent views ({{count}})"
+    "en": "Dependent views ({{count}})",
+    "zh": "依赖视图（ {{count}} ）"
   },
   {
     "id": "source_settings_dependencies_count",
-    "en": "Dependent sources ({{count}})"
+    "en": "Dependent sources ({{count}})",
+    "zh": "依赖源（ {{count}} ）"
   },
   {
     "id": "source_settings_load_more",
-    "en": "Load more"
+    "en": "Load more",
+    "zh": "加载更多"
   },
   {
     "id": "source_settings_saved",
-    "en": "Source settings saved."
+    "en": "Source settings saved.",
+    "zh": "源设置已保存。"
   },
   {
     "id": "source_settings_delete_title",
-    "en": "Delete source"
+    "en": "Delete source",
+    "zh": "删除源"
   },
   {
     "id": "source_settings_delete_description",
-    "en": "Permanently delete this source? This action cannot be undone."
+    "en": "Permanently delete this source? This action cannot be undone.",
+    "zh": "永久删除此来源？此操作无法撤销。"
   },
   {
     "id": "source_settings_deleted",
-    "en": "The source was deleted."
+    "en": "The source was deleted.",
+    "zh": "来源已被删除。"
   },
   {
     "id": "source_settings_force_global",
-    "en": "This source must remain global because it is used by another project."
+    "en": "This source must remain global because it is used by another project.",
+    "zh": "该资源必须保持全局状态，因为它被另一个项目使用。"
   },
   {
     "id": "source_settings_publishers_required",
-    "en": "Publisher access must be retained while content owned by another editor depends on this source."
+    "en": "Publisher access must be retained while content owned by another editor depends on this source.",
+    "zh": "当其他编辑拥有的内容依赖于此来源时，必须保留出版商的访问权限。"
   },
   {
     "id": "source_settings_delete_blocked",
-    "en": "This source cannot be deleted while dependent sources or views exist."
+    "en": "This source cannot be deleted while dependent sources or views exist.",
+    "zh": "只要存在依赖源或视图，就无法删除此源。"
   },
   {
     "id": "mc_title",
@@ -9140,6 +9153,31 @@
     "id": "project_removed_from_group",
     "en": "removed from: {{group}} \n",
     "zh": "已从以下位置移除： {{group}}\n"
+  },
+  {
+    "id": "project_loading",
+    "en": "Loading…",
+    "zh": "加载中…"
+  },
+  {
+    "id": "project_switch_failed",
+    "en": "The project could not be loaded. You can retry.",
+    "zh": "项目加载失败，您可以重试。"
+  },
+  {
+    "id": "project_switch_unknown",
+    "en": "The server has not confirmed the project. Reload the page to restore the session.",
+    "zh": "服务器尚未确认该项目。请重新加载页面以恢复会话。"
+  },
+  {
+    "id": "project_switch_retry",
+    "en": "Retry",
+    "zh": "重试"
+  },
+  {
+    "id": "project_switch_reload",
+    "en": "Reload page",
+    "zh": "重新加载页面"
   },
   {
     "id": "schema_story_theme",

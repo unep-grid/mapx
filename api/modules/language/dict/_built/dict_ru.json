@@ -6926,55 +6926,68 @@
   },
   {
     "id": "source_settings_loading",
-    "en": "Loading source settings…"
+    "en": "Loading source settings…",
+    "ru": "Загрузка настроек источника…"
   },
   {
     "id": "source_settings_load_error",
-    "en": "Unable to load source settings."
+    "en": "Unable to load source settings.",
+    "ru": "Не удалось загрузить настройки источника."
   },
   {
     "id": "source_settings_retry",
-    "en": "Retry"
+    "en": "Retry",
+    "ru": "Повторить попытку"
   },
   {
     "id": "source_settings_views_count",
-    "en": "Dependent views ({{count}})"
+    "en": "Dependent views ({{count}})",
+    "ru": "Зависимые представления ( {{count}} )"
   },
   {
     "id": "source_settings_dependencies_count",
-    "en": "Dependent sources ({{count}})"
+    "en": "Dependent sources ({{count}})",
+    "ru": "Зависимые источники ( {{count}} )"
   },
   {
     "id": "source_settings_load_more",
-    "en": "Load more"
+    "en": "Load more",
+    "ru": "Загрузить ещё"
   },
   {
     "id": "source_settings_saved",
-    "en": "Source settings saved."
+    "en": "Source settings saved.",
+    "ru": "Настройки источника сохранены."
   },
   {
     "id": "source_settings_delete_title",
-    "en": "Delete source"
+    "en": "Delete source",
+    "ru": "Удалить источник"
   },
   {
     "id": "source_settings_delete_description",
-    "en": "Permanently delete this source? This action cannot be undone."
+    "en": "Permanently delete this source? This action cannot be undone.",
+    "ru": "Хотите навсегда удалить этот источник? Это действие необратимо."
   },
   {
     "id": "source_settings_deleted",
-    "en": "The source was deleted."
+    "en": "The source was deleted.",
+    "ru": "Источник был удалён."
   },
   {
     "id": "source_settings_force_global",
-    "en": "This source must remain global because it is used by another project."
+    "en": "This source must remain global because it is used by another project.",
+    "ru": "Этот источник должен оставаться глобальным, поскольку он используется в другом проекте."
   },
   {
     "id": "source_settings_publishers_required",
-    "en": "Publisher access must be retained while content owned by another editor depends on this source."
+    "en": "Publisher access must be retained while content owned by another editor depends on this source.",
+    "ru": "Доступ издателя должен сохраняться до тех пор, пока контент, принадлежащий другому редактору, зависит от этого источника."
   },
   {
     "id": "source_settings_delete_blocked",
-    "en": "This source cannot be deleted while dependent sources or views exist."
+    "en": "This source cannot be deleted while dependent sources or views exist.",
+    "ru": "Этот источник нельзя удалить, пока существуют зависимые источники или представления."
   },
   {
     "id": "mc_title",
@@ -9140,6 +9153,31 @@
     "id": "project_removed_from_group",
     "en": "removed from: {{group}} \n",
     "ru": "удалено из: {{group}}\n"
+  },
+  {
+    "id": "project_loading",
+    "en": "Loading…",
+    "ru": "Загрузка…"
+  },
+  {
+    "id": "project_switch_failed",
+    "en": "The project could not be loaded. You can retry.",
+    "ru": "Проект не удалось загрузить. Можете попробовать еще раз."
+  },
+  {
+    "id": "project_switch_unknown",
+    "en": "The server has not confirmed the project. Reload the page to restore the session.",
+    "ru": "Сервер не подтвердил проект. Перезагрузите страницу, чтобы восстановить сессию."
+  },
+  {
+    "id": "project_switch_retry",
+    "en": "Retry",
+    "ru": "Повторить попытку"
+  },
+  {
+    "id": "project_switch_reload",
+    "en": "Reload page",
+    "ru": "Перезагрузить страницу"
   },
   {
     "id": "schema_story_theme",

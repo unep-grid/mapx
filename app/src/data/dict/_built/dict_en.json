@@ -7324,6 +7324,26 @@
     "en": "removed from: {{group}} \n"
   },
   {
+    "id": "project_loading",
+    "en": "Loading…"
+  },
+  {
+    "id": "project_switch_failed",
+    "en": "The project could not be loaded. You can retry."
+  },
+  {
+    "id": "project_switch_unknown",
+    "en": "The server has not confirmed the project. Reload the page to restore the session."
+  },
+  {
+    "id": "project_switch_retry",
+    "en": "Retry"
+  },
+  {
+    "id": "project_switch_reload",
+    "en": "Reload page"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme"
   },

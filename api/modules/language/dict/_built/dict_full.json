@@ -18007,67 +18007,171 @@
   {
     "id": "source_settings_loading",
     "en": "Loading source settings…",
-    "fr": "Chargement des paramètres de la source…"
+    "fr": "Chargement des paramètres de la source…",
+    "es": "Cargando configuración de origen…",
+    "ru": "Загрузка настроек источника…",
+    "zh": "正在加载源设置…",
+    "de": "Lade Quelleinstellungen…",
+    "bn": "উৎস সেটিংস লোড হচ্ছে…",
+    "fa": "در حال بارگذاری تنظیمات منبع…",
+    "ps": "د سرچینې ترتیبات پورته کیږي…",
+    "ar": "جارٍ تحميل إعدادات المصدر…"
   },
   {
     "id": "source_settings_load_error",
     "en": "Unable to load source settings.",
-    "fr": "Impossible de charger les paramètres de la source."
+    "fr": "Impossible de charger les paramètres de la source.",
+    "es": "No se pudo cargar la configuración de origen.",
+    "ru": "Не удалось загрузить настройки источника.",
+    "zh": "无法加载源设置。",
+    "de": "Die Quelleinstellungen konnten nicht geladen werden.",
+    "bn": "উৎস সেটিংস লোড করা সম্ভব হয়নি।",
+    "fa": "بارگیری تنظیمات منبع امکان‌پذیر نیست.",
+    "ps": "د سرچینې ترتیبات نشي پورته کولی.",
+    "ar": "تعذر تحميل إعدادات المصدر."
   },
   {
     "id": "source_settings_retry",
     "en": "Retry",
-    "fr": "Réessayer"
+    "fr": "Réessayer",
+    "es": "Rever",
+    "ru": "Повторить попытку",
+    "zh": "重试",
+    "de": "Wiederholen",
+    "bn": "পুনরায় চেষ্টা করুন",
+    "fa": "دوباره امتحان کنید",
+    "ps": "بیا هڅه وکړئ",
+    "ar": "إعادة المحاولة"
   },
   {
     "id": "source_settings_views_count",
     "en": "Dependent views ({{count}})",
-    "fr": "Vues dépendantes ({{count}})"
+    "fr": "Vues dépendantes ({{count}})",
+    "es": "Vistas dependientes ( {{count}} )",
+    "ru": "Зависимые представления ( {{count}} )",
+    "zh": "依赖视图（ {{count}} ）",
+    "de": "Abhängige Ansichten ( {{count}} )",
+    "bn": "নির্ভরশীল মতামত ( {{count}} )",
+    "fa": "نماهای وابسته ( {{count}} )",
+    "ps": "تړلي نظرونه ( {{count}} )",
+    "ar": "وجهات النظر التابعة ( {{count}} )"
   },
   {
     "id": "source_settings_dependencies_count",
     "en": "Dependent sources ({{count}})",
-    "fr": "Sources dépendantes ({{count}})"
+    "fr": "Sources dépendantes ({{count}})",
+    "es": "Fuentes dependientes ( {{count}} )",
+    "ru": "Зависимые источники ( {{count}} )",
+    "zh": "依赖源（ {{count}} ）",
+    "de": "Abhängige Quellen ( {{count}} )",
+    "bn": "নির্ভরশীল উৎস ( {{count}} )",
+    "fa": "منابع وابسته ( {{count}} )",
+    "ps": "تړلې سرچینې ( {{count}} )",
+    "ar": "المصادر التابعة ( {{count}} )"
   },
   {
     "id": "source_settings_load_more",
     "en": "Load more",
-    "fr": "Afficher plus"
+    "fr": "Afficher plus",
+    "es": "Cargar más",
+    "ru": "Загрузить ещё",
+    "zh": "加载更多",
+    "de": "Mehr laden",
+    "bn": "আরও লোড করুন",
+    "fa": "بارگذاری بیشتر",
+    "ps": "نور بار کړئ",
+    "ar": "تحميل المزيد"
   },
   {
     "id": "source_settings_saved",
     "en": "Source settings saved.",
-    "fr": "Paramètres de la source enregistrés."
+    "fr": "Paramètres de la source enregistrés.",
+    "es": "Configuración de origen guardada.",
+    "ru": "Настройки источника сохранены.",
+    "zh": "源设置已保存。",
+    "de": "Quelleneinstellungen gespeichert.",
+    "bn": "উৎস সেটিংস সংরক্ষিত হয়েছে।",
+    "fa": "تنظیمات منبع ذخیره شد.",
+    "ps": "د سرچینې ترتیبات خوندي شول.",
+    "ar": "تم حفظ إعدادات المصدر."
   },
   {
     "id": "source_settings_delete_title",
     "en": "Delete source",
-    "fr": "Supprimer la source"
+    "fr": "Supprimer la source",
+    "es": "Eliminar origen",
+    "ru": "Удалить источник",
+    "zh": "删除源",
+    "de": "Quelle löschen",
+    "bn": "উৎস মুছে ফেলুন",
+    "fa": "حذف منبع",
+    "ps": "سرچینه ړنګ کړئ",
+    "ar": "حذف المصدر"
   },
   {
     "id": "source_settings_delete_description",
     "en": "Permanently delete this source? This action cannot be undone.",
-    "fr": "Supprimer définitivement cette source ? Cette action est irréversible."
+    "fr": "Supprimer définitivement cette source ? Cette action est irréversible.",
+    "es": "¿Eliminar permanentemente esta fuente? Esta acción no se puede deshacer.",
+    "ru": "Хотите навсегда удалить этот источник? Это действие необратимо.",
+    "zh": "永久删除此来源？此操作无法撤销。",
+    "de": "Diese Quelle endgültig löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "bn": "এই উৎসটি স্থায়ীভাবে মুছে ফেলবেন? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।",
+    "fa": "آیا می‌خواهید این منبع را به‌طور دائم حذف کنید؟ این اقدام قابل بازگشت نیست.",
+    "ps": "دا سرچینه په دایمي ډول حذف کړئ؟ دا عمل بیرته نشي راوستلی.",
+    "ar": "هل تريد حذف هذا المصدر نهائياً؟ لا يمكن التراجع عن هذا الإجراء."
   },
   {
     "id": "source_settings_deleted",
     "en": "The source was deleted.",
-    "fr": "La source a été supprimée."
+    "fr": "La source a été supprimée.",
+    "es": "La fuente fue eliminada.",
+    "ru": "Источник был удалён.",
+    "zh": "来源已被删除。",
+    "de": "Die Quelle wurde gelöscht.",
+    "bn": "উৎসটি মুছে ফেলা হয়েছে।",
+    "fa": "منبع حذف شد.",
+    "ps": "سرچینه حذف شوه.",
+    "ar": "تم حذف المصدر."
   },
   {
     "id": "source_settings_force_global",
     "en": "This source must remain global because it is used by another project.",
-    "fr": "Cette source doit rester globale car elle est utilisée par un autre projet."
+    "fr": "Cette source doit rester globale car elle est utilisée par un autre projet.",
+    "es": "Esta fuente debe seguir siendo global porque la utiliza otro proyecto.",
+    "ru": "Этот источник должен оставаться глобальным, поскольку он используется в другом проекте.",
+    "zh": "该资源必须保持全局状态，因为它被另一个项目使用。",
+    "de": "Diese Quelle muss global bleiben, da sie von einem anderen Projekt verwendet wird.",
+    "bn": "এই উৎসটি অবশ্যই বৈশ্বিক থাকতে হবে, কারণ এটি অন্য একটি প্রকল্পে ব্যবহৃত হয়।",
+    "fa": "این منبع باید سراسری باقی بماند زیرا توسط پروژه دیگری استفاده می‌شود.",
+    "ps": "دا سرچینه باید نړیواله پاتې شي ځکه چې دا د بلې پروژې لخوا کارول کیږي.",
+    "ar": "يجب أن يظل هذا المصدر عالميًا لأنه يُستخدم من قبل مشروع آخر."
   },
   {
     "id": "source_settings_publishers_required",
     "en": "Publisher access must be retained while content owned by another editor depends on this source.",
-    "fr": "L’accès des éditeurs doit être conservé tant qu’un contenu appartenant à un autre éditeur dépend de cette source."
+    "fr": "L’accès des éditeurs doit être conservé tant qu’un contenu appartenant à un autre éditeur dépend de cette source.",
+    "es": "El acceso del editor debe mantenerse mientras el contenido propiedad de otro editor dependa de esta fuente.",
+    "ru": "Доступ издателя должен сохраняться до тех пор, пока контент, принадлежащий другому редактору, зависит от этого источника.",
+    "zh": "当其他编辑拥有的内容依赖于此来源时，必须保留出版商的访问权限。",
+    "de": "Der Zugriff des Herausgebers muss erhalten bleiben, solange Inhalte, die einem anderen Herausgeber gehören, von dieser Quelle abhängen.",
+    "bn": "যতক্ষণ পর্যন্ত অন্য কোনো সম্পাদকের মালিকানাধীন বিষয়বস্তু এই উৎসের উপর নির্ভরশীল থাকবে, ততক্ষণ পর্যন্ত প্রকাশকের প্রবেশাধিকার অবশ্যই বজায় রাখতে হবে।",
+    "fa": "دسترسی ناشر باید حفظ شود در حالی که محتوای متعلق به ویرایشگر دیگری به این منبع وابسته است.",
+    "ps": "د خپرونکي لاسرسی باید وساتل شي پداسې حال کې چې د بل مدیر ملکیت لرونکی مینځپانګه پدې سرچینې پورې اړه لري.",
+    "ar": "يجب الاحتفاظ بصلاحيات الناشر طالما أن المحتوى المملوك لمحرر آخر يعتمد على هذا المصدر."
   },
   {
     "id": "source_settings_delete_blocked",
     "en": "This source cannot be deleted while dependent sources or views exist.",
-    "fr": "Cette source ne peut pas être supprimée tant que des sources ou des vues en dépendent."
+    "fr": "Cette source ne peut pas être supprimée tant que des sources ou des vues en dépendent.",
+    "es": "Esta fuente no se puede eliminar mientras existan fuentes o vistas dependientes.",
+    "ru": "Этот источник нельзя удалить, пока существуют зависимые источники или представления.",
+    "zh": "只要存在依赖源或视图，就无法删除此源。",
+    "de": "Diese Quelle kann nicht gelöscht werden, solange abhängige Quellen oder Ansichten vorhanden sind.",
+    "bn": "নির্ভরশীল সোর্স বা ভিউ বিদ্যমান থাকলে এই সোর্সটি মুছে ফেলা যাবে না।",
+    "fa": "این منبع را نمی‌توان تا زمانی که منابع یا نماهای وابسته وجود دارند، حذف کرد.",
+    "ps": "دا سرچینه نشي حذف کیدی پداسې حال کې چې تړلې سرچینې یا لیدونه شتون لري.",
+    "ar": "لا يمكن حذف هذا المصدر طالما أن المصادر أو طرق العرض التابعة له موجودة."
   },
   {
     "id": "mc_title",
@@ -23697,6 +23801,71 @@
     "ps": "لرې شوی له: {{group}}\n",
     "bn": "থেকে সরানো হয়েছে: {{group}}\n",
     "de": "entfernt von: {{group}}\n"
+  },
+  {
+    "id": "project_loading",
+    "en": "Loading…",
+    "fr": "Chargement…",
+    "es": "Cargando…",
+    "ru": "Загрузка…",
+    "zh": "加载中…",
+    "de": "Laden…",
+    "bn": "লোড হচ্ছে…",
+    "fa": "در حال بارگذاری…",
+    "ps": "بارول…",
+    "ar": "تحميل…"
+  },
+  {
+    "id": "project_switch_failed",
+    "en": "The project could not be loaded. You can retry.",
+    "fr": "Le projet n’a pas pu être chargé. Vous pouvez réessayer.",
+    "es": "No se pudo cargar el proyecto. Puedes intentarlo de nuevo.",
+    "ru": "Проект не удалось загрузить. Можете попробовать еще раз.",
+    "zh": "项目加载失败，您可以重试。",
+    "de": "Das Projekt konnte nicht geladen werden. Sie können es erneut versuchen.",
+    "bn": "প্রকল্পটি লোড করা যায়নি। আপনি আবার চেষ্টা করতে পারেন।",
+    "fa": "پروژه قابل بارگیری نیست. می‌توانید دوباره امتحان کنید.",
+    "ps": "پروژه ونه شوه پورته کېدای. تاسو بیا هڅه کولی شئ.",
+    "ar": "تعذر تحميل المشروع. يمكنك المحاولة مرة أخرى."
+  },
+  {
+    "id": "project_switch_unknown",
+    "en": "The server has not confirmed the project. Reload the page to restore the session.",
+    "fr": "Le serveur n’a pas confirmé le projet. Rechargez la page pour rétablir la session.",
+    "es": "El servidor no ha confirmado el proyecto. Recargue la página para restaurar la sesión.",
+    "ru": "Сервер не подтвердил проект. Перезагрузите страницу, чтобы восстановить сессию.",
+    "zh": "服务器尚未确认该项目。请重新加载页面以恢复会话。",
+    "de": "Der Server hat das Projekt nicht bestätigt. Laden Sie die Seite neu, um die Sitzung wiederherzustellen.",
+    "bn": "সার্ভার প্রকল্পটি নিশ্চিত করেনি। সেশনটি পুনরুদ্ধার করতে পৃষ্ঠাটি পুনরায় লোড করুন।",
+    "fa": "سرور پروژه را تأیید نکرده است. برای بازیابی جلسه، صفحه را مجدداً بارگذاری کنید.",
+    "ps": "سرور پروژه نه ده تایید کړې. د غونډې د بیا رغونې لپاره پاڼه بیا پورته کړئ.",
+    "ar": "لم يؤكد الخادم المشروع. أعد تحميل الصفحة لاستعادة الجلسة."
+  },
+  {
+    "id": "project_switch_retry",
+    "en": "Retry",
+    "fr": "Réessayer",
+    "es": "Rever",
+    "ru": "Повторить попытку",
+    "zh": "重试",
+    "de": "Wiederholen",
+    "bn": "পুনরায় চেষ্টা করুন",
+    "fa": "دوباره امتحان کنید",
+    "ps": "بیا هڅه وکړئ",
+    "ar": "إعادة المحاولة"
+  },
+  {
+    "id": "project_switch_reload",
+    "en": "Reload page",
+    "fr": "Recharger la page",
+    "es": "Recargar página",
+    "ru": "Перезагрузить страницу",
+    "zh": "重新加载页面",
+    "de": "Seite neu laden",
+    "bn": "পৃষ্ঠাটি পুনরায় লোড করুন",
+    "fa": "صفحه را دوباره بارگذاری کنید",
+    "ps": "پاڼه بیا پورته کړئ",
+    "ar": "إعادة تحميل الصفحة"
   },
   {
     "id": "schema_story_theme",
