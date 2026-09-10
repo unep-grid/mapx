@@ -79,4 +79,13 @@ describe("setViewRasterConfig", () => {
     expect(sql).not.toContain("to_jsonb($3::text)");
     expect(sql).toContain("RETURNING");
   });
+
+  it("heals a null view data instead of perpetuating it", () => {
+    const sql = readFileSync(
+      new URL("../template/sql/setViewRasterConfig.sql", import.meta.url),
+      "utf8",
+    );
+
+    expect(sql).toContain("jsonb_set(\n        coalesce(data, '{}'::jsonb),");
+  });
 });

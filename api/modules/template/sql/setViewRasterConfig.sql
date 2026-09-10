@@ -2,7 +2,7 @@ WITH
   updated_view_data AS (
     SELECT
       jsonb_set(
-        data,
+        coalesce(data, '{}'::jsonb),
         '{source}',
         CASE
           WHEN jsonb_typeof(data -> 'source') = 'object'

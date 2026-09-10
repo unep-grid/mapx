@@ -91,9 +91,11 @@ export class ViewsListManager {
     const vlm = this;
     if (vlm.mData.viewsFilter instanceof ViewsFilter) {
       await vlm.mData.viewsFilter.destroy();
+      vlm.mData.viewsFilter = null;
     }
     if (vlm.mData.viewsList instanceof NestedList) {
       await vlm.mData.viewsList.destroy();
+      vlm.mData.viewsList = null;
     }
     if (vlm.mData.views.length > 0) {
       vlm.mData.views.length = 0;
@@ -145,7 +147,6 @@ export class ViewsListManager {
         { id: "render_item_content", action: vlm.handleRenderItemContent },
         { id: "order_change", action: viewsLayersOrderUpdate },
         { id: "destroy", action: viewsCloseAll },
-        { id: "clear_all_items", action: viewsCloseAll },
         { id: "init", action: vlm.handleInit },
       ],
     });
