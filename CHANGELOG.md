@@ -1,3 +1,16 @@
+  - [1.14.1-alpha.17](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.17) 
+
+    - fix(views): stop viewsCloseAll from firing on every list render
+    - refactor(project): replace ProjectSwitch's dependencies bag with direct imports
+    - feat: new switch project manager and logic refactor
+    - feat: language item for project switch
+    - chore: record formatting revisions and update submodules
+    - style: normalize JavaScript and TypeScript formatting
+    - chore: unify JavaScript and TypeScript quality checks
+    - chore: update zartigl submodule
+    - fix(maintenance): fix configuration issue and simplify
+
+
   - [1.14.1-alpha.16](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.16) 
 
     - fix: adapt mapx arco bridge to new zartigl api
