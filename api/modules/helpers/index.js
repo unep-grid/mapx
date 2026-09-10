@@ -102,17 +102,21 @@ function sendJSON(res, data, opt) {
     };
     opt.end = opt.end || false;
     data = isString(data) ? data : JSON.stringify(data || "");
+    if (opt.toRes) {
+      data = data + "\t\n";
+    }
     if (!res.headersSent) {
-      res.setHeader("Mapx-Content-Length", data.length || 0);
+      // The browser measures decoded UTF-8 bytes, not JavaScript characters.
+      // A streamed response has no known total at its first write.
+      if (opt.end) {
+        res.setHeader("Mapx-Content-Length", Buffer.byteLength(data, "utf8"));
+      }
       res.setHeader("Content-Type", opt.contentType || "application/json");
       res.setHeader("Cache-Control", "max-age=0, s-maxage=0");
 
       if (opt.etag) {
         res.setHeader("Etag", opt.etag);
       }
-    }
-    if (opt.toRes) {
-      data = data + "\t\n";
     }
     if (opt.end) {
       res.send(data);

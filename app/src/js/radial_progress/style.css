@@ -11,3 +11,15 @@
   top: 0;
   left: 0;
 }
+
+.radial-progress--indeterminate canvas {
+  animation: radial-progress-spin 1s linear infinite;
+}
+
+@keyframes radial-progress-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radial-progress--indeterminate canvas { animation: none; }
+}

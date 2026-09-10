@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, readdirSync } from "fs";
+import { existsSync, statSync, readFileSync, readdirSync } from "fs";
 import { join } from "path";
 
 /**
@@ -63,7 +63,7 @@ export function fileHasContent(filePath) {
   if (!existsSync(fullPath)) {
     return false;
   }
-  const stats = existsSync(fullPath);
+  const stats = statSync(fullPath);
   return stats.size > 0;
 }
 

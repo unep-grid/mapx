@@ -43,7 +43,7 @@ class WsHandler {
   }
 
   get id() {
-    return this.socket.id || null;
+    return this.socket?.id || null;
   }
 
   get connected() {
@@ -53,18 +53,19 @@ class WsHandler {
 
   destroy() {
     const ws = this;
-    if (ws.connected) {
+    if (ws.socket) {
       ws.socket.disconnect();
     }
     ws.removeHandlers();
     delete ws._socket;
   }
 
-  async connect() {
+  /** @param {{waitForConnection?: boolean}} [options] */
+  async connect(options = {}) {
     const ws = this;
     const auth = {};
 
-    if (ws.connected) {
+    if (ws.socket) {
       ws.destroy();
     }
 
@@ -91,27 +92,72 @@ class WsHandler {
     });
 
     ws.initHandlers();
+    if (options.waitForConnection) {
+      const socket = ws.socket;
+      try {
+        await ws.waitForConnection(socket);
+      } catch (error) {
+        if (ws.socket === socket) {
+          ws.destroy();
+        }
+        throw error;
+      }
+    }
+  }
+
+  /** Wait for authentication and release all listeners on every exit.
+   * @param {import('socket.io-client').Socket} socket
+   * @param {number} timeout
+   * @returns {Promise<void>}
+   */
+  waitForConnection(socket, timeout = 30000) {
+    if (socket.connected) {
+      return Promise.resolve();
+    }
+    return new Promise((resolve, reject) => {
+      const cleanup = () => {
+        clearTimeout(timer);
+        socket.off("connect", connected);
+        socket.off("connect_error", failed);
+        socket.off("disconnect", disconnected);
+      };
+      const connected = () => {
+        cleanup();
+        resolve();
+      };
+      const failed = (error) => {
+        cleanup();
+        reject(error);
+      };
+      const disconnected = () =>
+        failed(new Error("Socket disconnected during connection"));
+      const timer = setTimeout(
+        () => failed(new Error("Socket connection timed out")),
+        timeout,
+      );
+      socket.on("connect", connected);
+      socket.on("connect_error", failed);
+      socket.on("disconnect", disconnected);
+    });
   }
 
   initHandlers() {
-    const ws = this;
-    if (ws._init_handler) {
+    if (this._handlers) {
       return;
     }
-    for (const key in ws._opt.handlers) {
-      const handler = ws._opt.handlers[key].bind(ws);
-      ws.socket.on(key, handler);
+    this._handlers = new Map();
+    for (const [key, callback] of Object.entries(this._opt.handlers)) {
+      const handler = callback.bind(this);
+      this._handlers.set(key, handler);
+      this.socket.on(key, handler);
     }
-    ws._init_handler = true;
   }
 
   removeHandlers() {
-    const ws = this;
-    for (const key in ws._opt.handlers) {
-      const handler = ws._opt.handlers[key].bind(ws);
-      ws.socket.off(key, handler);
+    for (const [key, handler] of this._handlers || []) {
+      this.socket?.off(key, handler);
     }
-    ws._init_handler = false;
+    this._handlers = null;
   }
 
   /*

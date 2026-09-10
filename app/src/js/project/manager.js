@@ -1,9 +1,24 @@
+import { ProjectSwitch } from "./switch.js";
+import { ProjectLoadingFeedback } from "./loading_feedback.js";
+import { isShinyReady } from "../mx_helper_misc.js";
+import { isProjectId } from "../is_test/index.js";
+import { setQueryParametersInitReset } from "../url_utils/index.js";
 import { settings } from "./../settings";
-import { modalConfirm, modalPrompt } from "./../mx_helper_modal.js";
+import {
+  modalConfirm,
+  modalPrompt,
+  modalGetAll,
+  modalCloseAll,
+} from "./../mx_helper_modal.js";
 import { ws } from "./../mx.js";
 import { el } from "./../el/src/index.js";
 import { bindAll } from "../bind_class_methods";
-import { requestProjectMembership, setProject } from "../map_helpers";
+import {
+  requestProjectMembership,
+  requestProjectSelection,
+  viewsCloseAll,
+  updateViewsList,
+} from "../map_helpers";
 import { tt } from "../el_mapx";
 import { getDictItem } from "./../language";
 import { getQueryParameterInit } from "../url_utils/url_utils.js";
@@ -19,10 +34,14 @@ const options = {
 };
 
 export class ProjectManager {
-  constructor() {
+  /** @param {ConstructorParameters<typeof ProjectSwitch>[0]} [switchDependencies] */
+  constructor(switchDependencies) {
     const pm = this;
     pm.disable();
     bindAll(pm);
+    this.transition = switchDependencies
+      ? new ProjectSwitch(switchDependencies)
+      : null;
   }
   /**
    * Create new project
@@ -139,8 +158,97 @@ export class ProjectManager {
     return valid;
   }
 
-  async open(idProject) {
-    await setProject(idProject);
+  /** Configure the legacy adapters once, at the application composition root.
+   * @param {{events: import('../event_simple/index.js').EventSimple, ws: import('../ws_handler/ws_handler.js').WsHandler, theme: Object, root: HTMLElement}} context
+   */
+  configureTransition({ events, ws: socket, theme, root }) {
+    if (this.transition) {
+      throw new Error("Project transition already configured");
+    }
+    this.loadingFeedback = new ProjectLoadingFeedback(root);
+    this.transitionRoot = root;
+    this.onLegacyProjectAction = this.guardLegacyProjectAction.bind(this);
+    root.addEventListener("click", this.onLegacyProjectAction, true);
+    this.transition = new ProjectSwitch({
+      events,
+      currentProject: () => settings.project.id,
+      validProject: isProjectId,
+      available: isShinyReady,
+      confirm: async (options) => {
+        const manager = getMapxWindowManager(root);
+        const hasWindows = [...manager.windows.keys()].some(
+          (key) => key !== "project-list",
+        );
+        const hasModals =
+          modalGetAll({ ignoreSelectors: ["#uiSelectProject"] }).length > 0;
+        if (
+          !options.askConfirm &&
+          !(options.askConfirmIfModal !== false && (hasWindows || hasModals))
+        ) {
+          return true;
+        }
+        return openConfirmDialog({
+          manager,
+          title: tt("modal_check_confirm_project_change_title"),
+          content: tt("modal_check_confirm_project_change_txt"),
+          confirmLabel: tt("btn_confirm"),
+          cancelLabel: tt("btn_cancel"),
+        });
+      },
+      prepare: async () => {
+        modalCloseAll();
+        getMapxWindowManager(root).closeAll();
+        setQueryParametersInitReset();
+        await viewsCloseAll();
+      },
+      request: requestProjectSelection,
+      connect: () => socket.connect({ waitForConnection: true }),
+      initTheme: () => theme.init(),
+      reloadViews: (id) =>
+        updateViewsList({ project: id, useQueryFilters: false }),
+      feedback: this.loadingFeedback,
+      setSwitchActive: (active) =>
+        root.classList.toggle("mx-project-switch-active", active),
+      reportError: (error) => console.error("Project change failed", error),
+    });
+  }
+
+  /** Boundary for buttons still bound directly by Shiny. @param {MouseEvent} event */
+  guardLegacyProjectAction(event) {
+    if (!this.transition?.isBlocked()) {
+      return;
+    }
+    if (
+      !event.target.closest?.(
+        ".mx-tools-group.shiny-html-output .action-button",
+      )
+    ) {
+      return;
+    }
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    if (this.transition.pending?.started) {
+      this.loadingFeedback.reveal(this.loadingFeedback.active);
+    }
+  }
+
+  destroy() {
+    this.transitionRoot?.removeEventListener(
+      "click",
+      this.onLegacyProjectAction,
+      true,
+    );
+    this.loadingFeedback?.destroy();
+  }
+
+  /** @param {string} idProject @param {import('./switch.js').SwitchOptions} [options] */
+  set(idProject, options) {
+    return this.transition.set(idProject, options);
+  }
+
+  /** @param {string} idProject @returns {Promise<boolean>} */
+  open(idProject) {
+    return this.set(idProject);
   }
 
   /**

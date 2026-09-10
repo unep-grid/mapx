@@ -1,6 +1,6 @@
 import { isIconFont, isCanvas, isEmpty } from "./../is_test_mapx";
 import { FlashCircle } from "./../icon_flash";
-import { events } from "./../mx.js";
+import { events, project, settings } from "./../mx.js";
 import * as actions from "./actions.js";
 
 export function handleViewClick(event) {
@@ -29,6 +29,15 @@ export function handleViewClick(event) {
       dataset.tool_id || dataset.view_action_handler || dataset.view_action_key;
 
     if (!key) {
+      return;
+    }
+    // The retained list may still belong to the previous project. Reject its
+    // actions here, without making the rest of the application inert.
+    if (
+      project.transition &&
+      !project.transition.canInteract(settings.project.id)
+    ) {
+      event.preventDefault();
       return;
     }
     const action = actions[key];

@@ -2,7 +2,7 @@ import { NestedList } from "./../nested_list/index.js";
 import { ViewsFilter } from "./../views_filter/index.js";
 import { ViewBase } from "./../views_builder/view_base.js";
 import { settings } from "./../settings";
-import { isTrue, isView, isArray } from "./../is_test_mapx";
+import { isTrue, isView, isArray } from "./../is_test/index.js";
 import { itemFlashSave } from "./../mx_helper_misc.js";
 import { getQueryParameterInit } from "./../url_utils";
 import { bindAll } from "./../bind_class_methods/index.js";
@@ -37,6 +37,9 @@ export class ViewsListManager {
   constructor(options) {
     const vlm = this;
     vlm.idMap = options.id;
+    vlm.project = options.project || settings.project.id;
+    vlm.isCurrent =
+      options.isCurrent || (() => vlm.project === settings.project.id);
     vlm.mData = getMapData(vlm.idMap);
     vlm.elFilterText = document.getElementById("viewsFilterText");
     vlm.elFilterTags = document.getElementById("viewsFilterContainer");
@@ -57,8 +60,14 @@ export class ViewsListManager {
 
   async init() {
     const vlm = this;
+    if (!vlm.isCurrent()) {
+      return;
+    }
     if (previousInstance) {
       await previousInstance.clear();
+    }
+    if (!vlm.isCurrent()) {
+      return;
     }
     previousInstance = vlm;
     await vlm.render();
@@ -99,6 +108,9 @@ export class ViewsListManager {
   async render() {
     const vlm = this;
     await vlm.clear();
+    if (!vlm.isCurrent()) {
+      return;
+    }
     vlm.mData.views.push(...vlm._views);
 
     /**
@@ -106,7 +118,7 @@ export class ViewsListManager {
      * - initialized after viewsFilter
      */
     vlm.mData.viewsList = new NestedList(vlm.elViewsList, {
-      id: settings.project.id,
+      id: vlm.project,
       state: vlm.state,
       locked: vlm.noViewsMode,
       useStateStored: true,
@@ -242,6 +254,9 @@ export class ViewsListManager {
   async handleRenderItemContent(config) {
     try {
       const vlm = this;
+      if (!vlm.isCurrent()) {
+        return;
+      }
       const li = vlm.li;
       const elItem = config.el;
       const data = config.data;
@@ -296,6 +311,9 @@ export class ViewsListManager {
             view: view,
           });
         }
+        if (!vlm.isCurrent()) {
+          return;
+        }
         if (!update && open) {
           await viewAdd(view);
         }
@@ -304,6 +322,9 @@ export class ViewsListManager {
       /**
        * Update Filters
        */
+      if (!vlm.isCurrent()) {
+        return;
+      }
       vlm.mData.viewsFilter.update();
     } catch (e) {
       console.error("handleRenderItemContent error", e);
@@ -373,7 +394,7 @@ export class ViewsListManager {
     const li = vlm.li;
     const staticMode = !!settings.mode.static;
 
-    if (!isView(view)) {
+    if (!vlm.isCurrent() || !isView(view)) {
       return;
     }
 

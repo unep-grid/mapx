@@ -1,4 +1,4 @@
-import { el } from "./../el/src/index.js";
+import { ElementCreator } from "./../el/src/index.js";
 import { settings } from "./settings.js";
 import { onNextFrame, cancelFrame } from "./../animation_frame/index.js";
 import { isEmpty } from "./../is_test/index.js";
@@ -19,6 +19,9 @@ class RadialProgress {
   }
 
   init() {
+    this.elCreator = new ElementCreator({
+      document: this.elTarget.ownerDocument,
+    });
     this.build();
     this.updateContext();
     this.update(0);
@@ -26,6 +29,7 @@ class RadialProgress {
 
   destroy() {
     let rp = this;
+    cancelFrame(rp._fid);
     if (rp.elTarget && rp.el) {
       rp.el.remove();
     }
@@ -33,6 +37,7 @@ class RadialProgress {
 
   build() {
     let rp = this;
+    const { el } = rp.elCreator;
     rp.elCanvas = el("canvas", {
       style: {
         width: rp.opt.radius * 2 + "px",
@@ -47,7 +52,6 @@ class RadialProgress {
       rp.elCanvas,
     );
     rp.elTarget.appendChild(rp.el);
-    window.rp = rp;
   }
 
   circle(percent, color) {
@@ -78,7 +82,7 @@ class RadialProgress {
 
   updateContext() {
     let rp = this;
-    let dpr = window.devicePixelRatio || 1;
+    let dpr = rp.elTarget.ownerDocument.defaultView.devicePixelRatio || 1;
     let rect = rp.elCanvas.getBoundingClientRect();
     rp.elCanvas.width = dpr * rect.width;
     rp.elCanvas.height = dpr * rect.height;
@@ -92,22 +96,33 @@ class RadialProgress {
     rp.ctx.lineCap = "round";
   }
 
+  /** @param {boolean} [active] */
+  setIndeterminate(active = true) {
+    this.update(active ? 25 : 0);
+    this.el.classList.toggle("radial-progress--indeterminate", active);
+    this.indeterminate = active;
+    this.el.removeAttribute("aria-valuenow");
+  }
+
   update(percent, text) {
     const rp = this;
+    this.indeterminate = false;
+    this.el.classList.remove("radial-progress--indeterminate");
+    this.el.setAttribute("role", "progressbar");
+    this.el.setAttribute("aria-valuemin", "0");
+    this.el.setAttribute("aria-valuemax", "100");
+    this.el.setAttribute("aria-valuenow", String(Math.round(percent)));
     percent = Math.ceil(percent);
     cancelFrame(rp._fid);
     rp._fid = onNextFrame(() => {
       rp._p = percent;
       rp.updateContext();
       rp.clear(percent);
-      if (percent === 0) {
-        return;
-      }
       if (rp.opt.addTrack) {
         rp.circle(100, rp.opt.trackColor);
       }
       rp.circle(percent);
-      if (rp.opt.addText) {
+      if (rp.opt.addText && !rp.indeterminate) {
         rp.text(text);
       }
     });
@@ -115,6 +130,7 @@ class RadialProgress {
 
   clear() {
     let rp = this;
+    cancelFrame(rp._fid);
     rp.ctx.clearRect(0, 0, rp.elCanvas.width, rp.elCanvas.height);
   }
 }

@@ -24,98 +24,130 @@ const defProgress = {
   headerContentLength: "content-length",
 };
 
-/**
- * Produce a promise that reject after settings.maxTimeFetch ms ellapsed
- * @return {Promise}
- */
-function getPromMaxTime(ms) {
-  if (!ms) {
-    ms = settings.maxTimeFetch;
-  }
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      reject({ message: `fetchProgress : timeout exceeded ( ${ms} ms )` });
-      resolve(null);
-    }, ms);
-  });
-}
-
-/**
- *  Fetch : wrapper around fetch + progress
- *  @param {String} url url to fetch
- *  @param {Object} opt options
- */
-export async function fetchProgress(url, opt) {
-  opt = Object.assign({}, defProgress, opt);
-
-  const modeProgress = window.Response && window.ReadableStream;
-  let err = "";
-  let loaded = 1;
-  let total = 1;
-
-  const promTimeout = getPromMaxTime();
-  const promFetch = fetch(url, { cache: "no-cache" });
-  const response = await Promise.race([promFetch, promTimeout]);
-
-  if (!response.ok) {
-    err = response.status + " " + response.statusText;
-    throw new Error(err);
-  }
-
-  const contentLength =
-    response.headers.get("Mapx-Content-Length") ||
-    response.headers.get("content-length");
-
-  if (!modeProgress || !contentLength) {
-    opt.onProgress({
-      loaded: loaded,
-      total: total,
+/** A single measured response, owning its reader, deadline and cancellation. */
+export class FetchProgressRequest {
+  /** @param {string | URL} url @param {Object} [options] */
+  constructor(url, options) {
+    this.url = url;
+    this.options = { ...defProgress, ...options };
+    this.controller = new AbortController();
+    this.loaded = 0;
+    this.onAbort = () => this.controller.abort();
+    if (this.options.signal?.aborted) {
+      this.controller.abort();
+    }
+    this.options.signal?.addEventListener("abort", this.onAbort, {
+      once: true,
     });
-    return response;
   }
 
-  total = parseInt(contentLength, 10);
-  loaded = 0;
+  cleanup() {
+    clearTimeout(this.timer);
+    this.options.signal?.removeEventListener("abort", this.onAbort);
+  }
 
-  /**
-   * Return readable stream instead of json
-   */
-
-  return new Response(
-    new ReadableStream({
-      start(controller) {
-        const reader = response.body.getReader();
-        read(reader, controller);
-      },
-    }),
-  );
-
-  /**
-   * Read helper
-   */
-
-  async function read(reader, controller) {
+  /** @returns {Promise<Response>} */
+  async run() {
+    this.timer = setTimeout(
+      () => this.controller.abort(),
+      settings.maxTimeFetch,
+    );
     try {
-      const { done, value } = await reader.read();
-      if (done) {
-        opt.onComplete({
-          loaded: loaded,
-          total: total,
+      const response = await fetch(this.url, {
+        cache: "no-cache",
+        signal: this.controller.signal,
+      });
+      if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+      }
+      const explicitLength = response.headers.get("Mapx-Content-Length");
+      const total = Number(
+        explicitLength || response.headers.get("content-length"),
+      );
+      const encoding = response.headers.get("content-encoding");
+      this.total = total;
+      this.measurable =
+        Number.isFinite(total) &&
+        total > 0 &&
+        (!!explicitLength || !encoding || encoding === "identity");
+      if (!response.body?.getReader || typeof ReadableStream === "undefined") {
+        this.options.onProgress({
+          loaded: 0,
+          total: 0,
+          lengthComputable: false,
         });
+        this.cleanup();
+        return response;
+      }
+      this.reader = response.body.getReader();
+      if (!this.measurable) {
+        this.options.onProgress({
+          loaded: 0,
+          total: 0,
+          lengthComputable: false,
+        });
+      }
+      return new Response(
+        new ReadableStream({
+          pull: (controller) => this.read(controller),
+          cancel: async (reason) => {
+            this.cleanup();
+            this.controller.abort();
+            await this.reader.cancel(reason);
+            this.reader.releaseLock();
+          },
+        }),
+        {
+          status: response.status,
+          statusText: response.statusText,
+          headers: response.headers,
+        },
+      );
+    } catch (error) {
+      this.cleanup();
+      this.controller.abort();
+      throw error;
+    }
+  }
+
+  /** @param {ReadableStreamDefaultController<Uint8Array>} controller */
+  async read(controller) {
+    try {
+      const { done, value } = await this.reader.read();
+      if (done) {
+        this.cleanup();
+        this.options.onComplete({ loaded: this.loaded, total: this.total });
+        this.reader.releaseLock();
         controller.close();
         return;
       }
-      loaded += value.byteLength;
-      opt.onProgress({
-        loaded: loaded,
-        total: total,
+      this.loaded += value.byteLength;
+      if (this.loaded > this.options.maxSize) {
+        throw new Error("Response exceeds maximum size");
+      }
+      this.options.onProgress({
+        loaded: this.loaded,
+        total: this.measurable ? this.total : 0,
+        lengthComputable: this.measurable && this.loaded <= this.total,
       });
       controller.enqueue(value);
-      read(reader, controller);
-    } catch (e) {
-      throw new Error(e);
+    } catch (error) {
+      this.cleanup();
+      this.controller.abort();
+      controller.error(error);
+      try {
+        await this.reader.cancel(error);
+      } catch {
+        /* Already failed. */
+      }
+      this.reader.releaseLock();
     }
   }
+}
+
+/** Legacy transport entry point. @param {string | URL} url @param {Object} opt */
+export function fetchProgress(url, opt) {
+  return new FetchProgressRequest(url, opt).run();
 }
 
 /**
@@ -126,35 +158,26 @@ export async function fetchProgress(url, opt) {
 export async function fetchProgress_xhr(url, opt) {
   opt = Object.assign({}, defProgress, opt);
 
-  const promTimeout = new Promise((_, reject) => {
-    setTimeout(() => {
-      reject(
-        `fetchProgress_xhr : timeout exceeded ( ${settings.maxTimeFetch} ms )`,
-      );
-    }, settings.maxTimeFetch);
-  });
-
   const promFetch = new Promise((resolve, reject) => {
     let xmlhttp = new XMLHttpRequest();
-    let hasContentLength = false;
 
     xmlhttp.open("GET", url, true);
+    xmlhttp.timeout = settings.maxTimeFetch;
+    xmlhttp.ontimeout = () => reject(new Error("Response timed out"));
     xmlhttp.onprogress = (d) => {
       let p = {
         total: d.total,
         loaded: d.loaded,
+        lengthComputable: d.lengthComputable,
       };
       if (p.total === 0 || !d.lengthComputable) {
         let cLength = d.target.getResponseHeader(opt.headerContentLength) * 1;
         if (cLength > 0) {
           p.total = cLength;
-          hasContentLength = true;
+          p.lengthComputable = true;
         }
       }
 
-      if (hasContentLength) {
-        p.loaded = d.target.response.length;
-      }
       if (opt.maxSize < Infinity) {
         if (p.loaded >= opt.maxSize) {
           xmlhttp.abort();
@@ -190,5 +213,5 @@ export async function fetchProgress_xhr(url, opt) {
     xmlhttp.send();
   });
 
-  return Promise.race([promFetch, promTimeout]);
+  return promFetch;
 }

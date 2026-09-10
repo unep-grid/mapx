@@ -6,7 +6,7 @@ import { isElement } from "../is_test/index.js";
 /**
  * @typedef {Object} MxWindowConfig
  * @property {string} [key]
- * @property {string} [title]
+ * @property {Node | string} [title]
  * @property {Node | string | Array<Node | string>} [content]
  * @property {Node | string | Array<Node | string>} [footerStart]
  * @property {Node | string | Array<Node | string>} [footerEnd]

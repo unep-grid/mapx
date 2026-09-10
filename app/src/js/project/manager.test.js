@@ -1,3 +1,4 @@
+const switchSet = vi.hoisted(() => vi.fn());
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { projectList, projectListWindow, windowManager } = vi.hoisted(() => {
@@ -361,4 +362,15 @@ describe("ProjectManager delete", () => {
     closeLatestWindow("close");
     expect(await resultPromise).toBe(false);
   });
+});
+
+it("delegates manager set/open and preserves the switch result", async () => {
+  const { ProjectManager } = await import("./manager.js");
+  const manager = new ProjectManager();
+  manager.transition = { set: switchSet };
+  switchSet.mockResolvedValueOnce(true).mockResolvedValueOnce(false);
+  const options = { askConfirm: true };
+  await expect(manager.set("TARGET", options)).resolves.toBe(true);
+  expect(switchSet).toHaveBeenCalledWith("TARGET", options);
+  await expect(manager.open("TARGET")).resolves.toBe(false);
 });

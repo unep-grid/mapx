@@ -1,5 +1,6 @@
 import {
   ws,
+  project,
   nc,
   mg,
   events,
@@ -59,20 +60,13 @@ import {
   isShinyReady,
   quickHash,
 } from "./../mx_helper_misc.js";
-import {
-  modal,
-  modalGetAll,
-  modalCloseAll,
-  modalConfirm,
-  modalDialog,
-} from "./../mx_helper_modal.js";
+import { modal, modalConfirm, modalDialog } from "./../mx_helper_modal.js";
 import { errorHandler } from "./../error_handler/index.js";
 import { waitTimeoutAsync } from "./../animation_frame";
 import { getArrayDistinct, sortByOrder } from "./../array_stat/index.js";
 import { getApiUrl } from "./../api_routes";
 import { getViewSourceSummary } from "./../mx_helper_source_summary";
 import {
-  setQueryParametersInitReset,
   getQueryParametersAsObject,
   getQueryParameterInit,
   getQueryParameter,
@@ -124,7 +118,6 @@ import {
   isViewVtWithAttributeType,
   isBoundsInsideBounds,
   isSourceId,
-  isProjectId,
   isViewInstance,
   isBboxMeta,
   isBbox,
@@ -147,7 +140,7 @@ import {
 import { ButtonPanelLegend } from "../panel_legend/index.js";
 import { createViewControls } from "../views_builder/view_controls.js";
 import { ButtonFilter } from "../button_filter/index.js";
-import { ViewsUpdateHelper } from "../views_list_update/index.js";
+import { ViewsListUpdate } from "../views_list_update/index.js";
 import { getViewSourceMetadata } from "../metadata/utils.js";
 import { eventToPointBbox } from "./utils.js";
 import {
@@ -545,109 +538,15 @@ export function triggerSourceSettingsChanged() {
  * @param {(projectId: string) => void} [opt.onRequest] Called after the change
  * request is emitted
  * @param {String} [origin] Request origin
- * @returns {Promise<boolean|undefined>}
+ * @returns {Promise<boolean>}
  */
-export async function setProject(idProject, opt, origin) {
-  const hasShiny = isShinyReady();
+export function setProject(idProject, opt, origin) {
+  return project.set(idProject, opt, origin);
+}
 
-  if (!hasShiny) {
-    console.warn("Project change requires a valid app session");
-    return;
-  }
-
-  if (!isProjectId(idProject)) {
-    return;
-  }
-
-  opt = Object.assign({}, { askConfirmIfModal: true, askConfirm: false }, opt);
-  const idCurrentProject = settings.project.id;
-  const isGuest = settings.user.guest;
-
-  if (idProject === idCurrentProject) {
-    return false;
-  }
-  /**
-   * Check if some modal are still there
-   */
-  const modals = modalGetAll({ ignoreSelectors: ["#uiSelectProject"] });
-  const askConfirm =
-    opt.askConfirm || (opt.askConfirmIfModal && modals.length > 0);
-  let changeNow = true;
-
-  if (askConfirm) {
-    changeNow = await modalConfirm({
-      title: tt("modal_check_confirm_project_change_title"),
-      content: tt("modal_check_confirm_project_change_txt"),
-    });
-  }
-  if (!changeNow) {
-    return false;
-  }
-
-  modalCloseAll();
-
-  const promWait = waitTimeoutAsync(10e3, null, "timeout");
-  const promRes = events.once("settings_project_change");
-
+/** Thin bridge to the remaining R project selection observer. */
+export function requestProjectSelection(idProject) {
   Shiny.onInputChange("selectProject", idProject);
-  opt.onRequest?.(idProject);
-
-  const res = await Promise.race([promRes, promWait]);
-
-  const idProjectNew = res?.new_project;
-  const idProjectOld = res?.old_project;
-  const hadTimeout = res === "timeout";
-
-  const validProject = isProjectId(idProjectNew);
-  const projectNotChanged = validProject && idProjectNew === idProjectOld;
-  const projectRefused = !validProject || idProjectNew !== idProject;
-
-  if (hadTimeout || projectRefused || projectNotChanged) {
-    await modalDialog({
-      title: tt("modal_check_confirm_project_change_fail_title"),
-      content: tt(
-        isGuest
-          ? "modal_check_confirm_project_change_fail_content_not_logged"
-          : "modal_check_confirm_project_change_fail_content_logged",
-      ),
-    });
-    console.error("Project change failed", {
-      hadTimeout,
-      validProject,
-      projectRefused,
-      projectNotChanged,
-    });
-    return false;
-  }
-
-  /**
-   * Clean params and close views
-   */
-  setQueryParametersInitReset();
-  await viewsCloseAll();
-
-  /**
-   * Restart websocket
-   */
-  await ws.connect();
-  await theme.init();
-
-  /**
-   * Wait the view list to be updated
-   */
-  await events.once("views_list_updated");
-
-  /**
-   * Fire project:changed event
-   */
-  events.fire({
-    type: "project_changed",
-    data: {
-      new_project: idProject,
-      old_project: idCurrentProject,
-    },
-  });
-  return true;
 }
 
 /**
@@ -707,7 +606,7 @@ export function initListenerGlobal() {
       if (!state) {
         return;
       }
-      await setProject(state.project, "popstate");
+      await setProject(state.project, undefined, "popstate");
     },
   });
 
@@ -2216,9 +2115,21 @@ export async function getViewsRemote(idViews) {
  * @param {Boolean} opt.useQueryFilters In fetch all mode, use query filters
  */
 export async function updateViewsList(opt) {
-  const vu = new ViewsUpdateHelper();
-  const views = vu.updateViewsList(opt);
-  return views;
+  const projectId = opt?.project || settings.project.id;
+  return project.transition.updateViews(
+    projectId,
+    (isCurrent, commit, signal, loading) =>
+      new ViewsListUpdate({
+        commit,
+        loading,
+      }).updateViewsList({
+        ...opt,
+        project: projectId,
+        isCurrent,
+        signal,
+      }),
+    !(isArrayOfViews(opt?.viewsList) && isNotEmpty(opt.viewsList)),
+  );
 }
 
 /**

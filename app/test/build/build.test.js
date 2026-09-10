@@ -34,6 +34,14 @@ describe("Build verification", () => {
       expect(fileContains("manifest.json", '"name": "MapX"')).toBe(true);
     });
 
+    it("should report non-empty files as having content", () => {
+      expect(fileHasContent("manifest.json")).toBe(true);
+    });
+
+    it("should report a missing file as not having content", () => {
+      expect(fileHasContent("does-not-exist.json")).toBe(false);
+    });
+
     it("should have favicons", () => {
       const favicons = getFilesMatching(".", /\.(ico|png)$/);
       expect(favicons.length).toBeGreaterThan(0);

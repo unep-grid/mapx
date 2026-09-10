@@ -94,6 +94,7 @@ export async function fetchViews(o) {
   }
 
   const data = await fetchJsonProgress(url, {
+    signal: opt.signal,
     onProgress: opt.onProgress || onProgress,
     onError: opt.onError || onError,
     onComplete: opt.onComplete || onComplete,
@@ -112,6 +113,9 @@ export async function fetchViews(o) {
   const idViewsExist = dataOut.views.map((v) => v.id);
   const idViewsDiff = getArrayDiff(opt.idViews, idViewsExist);
 
+  if (opt.isCurrent && !opt.isCurrent()) {
+    return dataDefault;
+  }
   if (idViewsDiff.length > 0 && !hasModalLogin) {
     /**
      * Ask for temporary views

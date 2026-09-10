@@ -1,8 +1,6 @@
-import { theme } from "../init_theme";
 import { updateIfEmpty } from "../mx_helper_misc";
 import { isArrayOfViews } from "../is_test";
 import { isNotEmpty } from "../is_test";
-import { RadialProgress } from "../radial_progress";
 import {
   getGeoJSONViewsFromStorage,
   getViewsFilter,
@@ -19,18 +17,15 @@ import { events } from "../mx";
 /**
  * Class to manage and update the views list
  */
-export class ViewsUpdateHelper {
+export class ViewsListUpdate {
   /**
-   * Initialize the ViewsUpdateHelper
+   * Initialize the ViewsListUpdate
    */
-  constructor() {
+  /** @param {{loading?: {update: (data: Object) => void, finishing: () => void}, commit?: (work: () => Promise<unknown>) => Promise<unknown>}} [context] */
+  constructor({ loading, commit = (work) => work() } = {}) {
+    this.loading = loading;
+    this.commit = commit;
     this.views = [];
-    this.elProgContainer = null;
-    this.nCache = 0;
-    this.nNetwork = 0;
-    this.nTot = 0;
-    this.prog = null;
-    this.progressColor = theme.getColorThemeItem("mx_ui_link");
     this.opt = {};
   }
 
@@ -42,10 +37,12 @@ export class ViewsUpdateHelper {
    * @param {Array} opt.viewsList views list
    * @param {Boolean} opt.render Render given view
    * @param {Boolean} opt.resetView Reset given view
+   * @param {AbortSignal} [opt.signal]
+   * @param {() => boolean} [opt.isCurrent] Guard against stale project updates
    * @param {Boolean} opt.useQueryFilters In fetch all mode, use query filters
    */
   async updateViewsList(opt) {
-    this.opt = opt;
+    this.opt = opt || {};
 
     /*
      * See default used:
@@ -65,10 +62,6 @@ export class ViewsUpdateHelper {
     const viewsToAdd = this.opt.viewsList;
     const hasViewsList = isArrayOfViews(viewsToAdd) && isNotEmpty(viewsToAdd);
 
-    if (hasViewsList) {
-      this.nTot = viewsToAdd.length;
-    }
-
     /**
      * Set fetch mode
      */
@@ -81,16 +74,12 @@ export class ViewsUpdateHelper {
       this.views.push(...(await this.addAsyncAll()));
     }
 
-    /**
-     * Remove progress if it has been instantiated. See :
-     *  - updateProgress
-     */
-    if (this.prog instanceof RadialProgress) {
-      this.prog.destroy();
+    if (this.opt.isCurrent && !this.opt.isCurrent()) {
+      return [];
     }
-
     events.fire({
       type: "views_list_updated",
+      data: { project: this.opt.project },
     });
 
     return this.views;
@@ -116,9 +105,12 @@ export class ViewsUpdateHelper {
      */
     const data = await fetchViews({
       onProgress: this.updateProgress.bind(this),
+      signal: this.opt.signal,
       idProject: this.opt.project,
       useQueryFilters: this.opt.useQueryFilters,
+      isCurrent: this.opt.isCurrent,
     });
+    this.loading?.finishing();
     views.push(...data.views);
     state.push(
       ...data.states.reduce((a, s) => {
@@ -133,61 +125,76 @@ export class ViewsUpdateHelper {
     /**
      * Render
      */
-    await viewsListRenderNew({
-      id: this.opt.id,
-      views: views,
-      state: state,
-    });
-
-    /**
-     * Add additional logic if query param should be used
-     */
-    if (this.opt.useQueryFilters) {
-      const conf = getQueryInit();
-      const viewsList = getViewsList();
-
-      /**
-       * Set flat mode (hide categories)
-       */
-      if (conf.isFlatMode) {
-        viewsList.setModeFlat(true, { permanent: true });
-      }
-      const idViewsOpen = conf.idViewsOpen;
-      const isFilterActivated = conf.isFilterActivated;
-
-      /**
-       * Move view to open to the top
-       */
-      if (isNotEmpty(idViewsOpen)) {
-        const idViewsOpenInv = idViewsOpen.reverse();
-        viewsList.setModeAnimate(false);
-        for (const id of idViewsOpenInv) {
-          viewsList.moveTargetTop(id);
-        }
-        viewsList.setModeAnimate(true);
-      }
-
-      /**
-       * Add views
-       */
-      for (const id of idViewsOpen) {
-        await viewAdd(id);
-      }
-
-      /**
-       * If any view requested to be open, filter activated
-       */
-      if (isFilterActivated && idViewsOpen.length > 0) {
-        const viewsFilter = getViewsFilter();
-        viewsFilter.filterActivated(true);
-      }
-
-      /**
-       * Update layers order
-       */
-      layersOrderAuto("update_views_list");
+    if (this.opt.isCurrent && !this.opt.isCurrent()) {
+      return [];
     }
+    await this.commit(async () => {
+      if (this.opt.isCurrent && !this.opt.isCurrent()) {
+        return;
+      }
+      await viewsListRenderNew({
+        id: this.opt.id,
+        views: views,
+        state: state,
+        project: this.opt.project,
+        isCurrent: this.opt.isCurrent,
+      });
 
+      /**
+       * Add additional logic if query param should be used
+       */
+      if (this.opt.isCurrent && !this.opt.isCurrent()) {
+        return [];
+      }
+      if (this.opt.useQueryFilters) {
+        const conf = getQueryInit();
+        const viewsList = getViewsList();
+
+        /**
+         * Set flat mode (hide categories)
+         */
+        if (conf.isFlatMode) {
+          viewsList.setModeFlat(true, { permanent: true });
+        }
+        const idViewsOpen = conf.idViewsOpen;
+        const isFilterActivated = conf.isFilterActivated;
+
+        /**
+         * Move view to open to the top
+         */
+        if (isNotEmpty(idViewsOpen)) {
+          const idViewsOpenInv = idViewsOpen.reverse();
+          viewsList.setModeAnimate(false);
+          for (const id of idViewsOpenInv) {
+            viewsList.moveTargetTop(id);
+          }
+          viewsList.setModeAnimate(true);
+        }
+
+        /**
+         * Add views
+         */
+        for (const id of idViewsOpen) {
+          if (this.opt.isCurrent && !this.opt.isCurrent()) {
+            return [];
+          }
+          await viewAdd(id);
+        }
+
+        /**
+         * If any view requested to be open, filter activated
+         */
+        if (isFilterActivated && idViewsOpen.length > 0) {
+          const viewsFilter = getViewsFilter();
+          viewsFilter.filterActivated(true);
+        }
+
+        /**
+         * Update layers order
+         */
+        layersOrderAuto("update_views_list");
+      }
+    });
     return views;
   }
 
@@ -199,51 +206,29 @@ export class ViewsUpdateHelper {
     if (isArrayOfViews(view)) {
       view = view[0];
     }
-    await viewsListAddSingle(view, {
-      open: true,
-      render: true,
+    return this.commit(async () => {
+      if (this.opt.isCurrent && !this.opt.isCurrent()) {
+        return [];
+      }
+      await viewsListAddSingle(view, {
+        open: true,
+        render: true,
+      });
+      if (this.opt.isCurrent && !this.opt.isCurrent()) {
+        return [];
+      }
+      events.fire({
+        type: "view_created",
+      });
+      return view;
     });
-    events.fire({
-      type: "view_created",
-    });
-    return view;
   }
 
-  /**
-   * Update progress
-   * @param {Object} d Progress data
-   */
-  updateProgress(d) {
-    d = d || {
-      loaded: this.nCache + this.nNetwork,
-      total: this.nTot,
-    };
-
-    /**
-     * Init
-     */
-    if (!this.elProgContainer) {
-      this.elProgContainer = document.querySelector(".mx-views-list");
+  /** @param {{loaded: number, total: number, lengthComputable: boolean}} data */
+  updateProgress(data) {
+    if (this.opt.isCurrent && !this.opt.isCurrent()) {
+      return;
     }
-
-    if (!this.prog && this.elProgContainer) {
-      this.elProgContainer.replaceChildren();
-      this.prog = new RadialProgress(this.elProgContainer, {
-        radius: 30,
-        stroke: 4,
-        strokeColor: this.progressColor,
-      });
-    }
-
-    /**
-     * Update
-     */
-    if (
-      this.prog instanceof RadialProgress &&
-      this.prog.update &&
-      this.elProgContainer
-    ) {
-      this.prog.update((d.loaded / d.total) * 100);
-    }
+    this.loading?.update(data);
   }
 }
