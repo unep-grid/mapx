@@ -1,5 +1,10 @@
-/**
- * @typedef {Object} SwitchOptions
+import { events, ws, theme } from "../mx.js";
+import { settings } from "../settings";
+import { isProjectId } from "../is_test/index.js";
+import { isShinyReady } from "../mx_helper_misc.js";
+import { requestProjectSelection, updateViewsList } from "../map_helpers";
+
+/** * @typedef {Object} SwitchOptions
  * @property {boolean} [askConfirm]
  * @property {boolean} [askConfirmIfModal]
  * @property {(projectId: string) => void} [onRequest]
@@ -29,24 +34,53 @@
  */
 export class ProjectSwitch {
   /**
- * @param {Object} dependencies
-   * @param {import('../event_simple/index.js').EventSimple} dependencies.events
-   * @param {() => string} dependencies.currentProject
-   * @param {(id: string) => boolean} dependencies.validProject
-   * @param {() => boolean} dependencies.available
-   * @param {(options: SwitchOptions) => Promise<boolean>} dependencies.confirm
-   * @param {() => Promise<void>} dependencies.prepare
-   * @param {(id: string) => void} dependencies.request
-   * @param {() => Promise<void>} dependencies.connect
-   * @param {() => Promise<void>} dependencies.initTheme
-   * @param {(id: string) => Promise<unknown>} dependencies.reloadViews
-   * @param {import("./loading_feedback.js").ProjectLoadingFeedback} [dependencies.feedback]
-   * @param {(active: boolean) => void} [dependencies.setSwitchActive]
-   * @param {(error: unknown) => void} dependencies.reportError
-   * @param {number} [dependencies.timeout] Failure deadline, never a presentation delay
+   * @param {Object} [options]
+   * @param {import('../event_simple/index.js').EventSimple} [options.events]
+   * @param {() => string} [options.currentProject]
+   * @param {(id: string) => boolean} [options.validProject]
+   * @param {() => boolean} [options.available]
+   * @param {(options: SwitchOptions) => Promise<boolean>} [options.confirm]
+   * @param {() => Promise<void>} [options.prepare]
+   * @param {(id: string) => void} [options.request]
+   * @param {() => Promise<void>} [options.connect]
+   * @param {() => Promise<void>} [options.initTheme]
+   * @param {(id: string) => Promise<unknown>} [options.reloadViews]
+   * @param {import("./loading_feedback.js").ProjectLoadingFeedback} [options.feedback]
+   * @param {(active: boolean) => void} [options.setSwitchActive]
+   * @param {(error: unknown) => void} [options.reportError]
+   * @param {number} [options.timeout] Failure deadline, never a presentation delay
    */
-  constructor(dependencies) {
-    this.dependencies = dependencies;
+  constructor({
+    events: eventsArg = events,
+    currentProject = () => settings.project.id,
+    validProject = isProjectId,
+    available = isShinyReady,
+    confirm,
+    prepare,
+    request = requestProjectSelection,
+    connect = () => ws.connect({ waitForConnection: true }),
+    initTheme = () => theme.init(),
+    reloadViews = (id) =>
+      updateViewsList({ project: id, useQueryFilters: false }),
+    feedback,
+    setSwitchActive,
+    reportError = (error) => console.error("Project change failed", error),
+    timeout,
+  } = {}) {
+    this.events = eventsArg;
+    this.currentProject = currentProject;
+    this.validProject = validProject;
+    this.available = available;
+    this.confirm = confirm;
+    this.prepare = prepare;
+    this.request = request;
+    this.connect = connect;
+    this.initTheme = initTheme;
+    this.reloadViews = reloadViews;
+    this.feedback = feedback;
+    this.setSwitchActive = setSwitchActive;
+    this.reportError = reportError;
+    this.timeout = timeout;
     /** @type {PendingSwitch | null} */
     this.pending = null;
     /** @type {PendingSwitch | null} */
@@ -55,16 +89,15 @@ export class ProjectSwitch {
     this.generation = 0;
     this.updates = new Set();
     this.commits = Promise.resolve();
-    this.displayedProject = dependencies.currentProject();
+    this.displayedProject = this.currentProject();
   }
 
   /** @param {string} id @param {SwitchOptions} [options] @returns {Promise<boolean>} */
   set(id, options = {}) {
-    const d = this.dependencies;
     if (
-      !d.available() ||
+      !this.available() ||
       typeof id !== "string" ||
-      !d.validProject(id) ||
+      !this.validProject(id) ||
       this.failure?.unknown
     ) {
       return Promise.resolve(false);
@@ -75,7 +108,7 @@ export class ProjectSwitch {
     if (this.pending?.id === id && !this.queued) {
       return this.pending.result;
     }
-    if (!this.pending && !this.failure && id === d.currentProject()) {
+    if (!this.pending && !this.failure && id === this.currentProject()) {
       return Promise.resolve(false);
     }
     const next = this.create(id, options);
@@ -131,7 +164,7 @@ export class ProjectSwitch {
   launch(pending) {
     this.pending = pending;
     if (this.failure) {
-      this.dependencies.feedback?.close(this.failure.progress);
+      this.feedback?.close(this.failure.progress);
     }
     this.failure = null;
     void this.start(pending);
@@ -139,36 +172,35 @@ export class ProjectSwitch {
 
   /** @param {PendingSwitch} pending */
   async start(pending) {
-    const d = this.dependencies;
     try {
-      const confirmed = await d.confirm(pending.options);
+      const confirmed = await this.confirm(pending.options);
       if (!confirmed) {
         // Cancellation also cancels choices made while the dialog was open.
         this.queued?.resolve(false);
         this.queued = null;
-        if (d.currentProject() === this.displayedProject) {
+        if (this.currentProject() === this.displayedProject) {
           this.finish(pending, false);
           return;
         }
         // An earlier, approved selection already reached R. Restore that
         // project's list without closing windows the user just chose to keep.
         pending.resolve(false);
-        pending.id = d.currentProject();
+        pending.id = this.currentProject();
       }
       pending.started = true;
       this.invalidate();
-      pending.progress ||= d.feedback?.begin();
-      d.setSwitchActive?.(true);
+      pending.progress ||= this.feedback?.begin();
+      this.setSwitchActive?.(true);
       await this.commits;
       if (confirmed) {
-        await d.prepare();
+        await this.prepare();
       }
       if (this.pending !== pending) {
         return;
       }
       pending.timer = setTimeout(() => {
         this.fail(pending, new Error("Project transition timed out"));
-      }, d.timeout ?? 60000);
+      }, this.timeout ?? 60000);
       pending.settingsListener = (data) => {
         if (
           !pending.requested ||
@@ -189,13 +221,13 @@ export class ProjectSwitch {
           void this.synchronize(pending);
         }
       };
-      d.events.on("settings_project_change", pending.settingsListener);
-      if (pending.id === d.currentProject()) {
+      this.events.on("settings_project_change", pending.settingsListener);
+      if (pending.id === this.currentProject()) {
         pending.acknowledged = true;
         void this.synchronize(pending, true);
       } else {
         pending.requested = true;
-        d.request(pending.id);
+        this.request(pending.id);
         pending.options.onRequest?.(pending.id);
       }
     } catch (error) {
@@ -209,7 +241,7 @@ export class ProjectSwitch {
     try {
       // Coalesce with an abandoned switch's still-in-flight reconnect instead
       // of starting a second one back-to-back.
-      this.connecting ||= this.dependencies.connect().finally(() => {
+      this.connecting ||= this.connect().finally(() => {
         this.connecting = null;
       });
       await this.connecting;
@@ -220,7 +252,7 @@ export class ProjectSwitch {
         this.finish(pending, false);
         return;
       }
-      await this.dependencies.initTheme();
+      await this.initTheme();
       if (this.pending !== pending) {
         return;
       }
@@ -231,7 +263,7 @@ export class ProjectSwitch {
       pending.synchronizing = false;
       pending.releaseViews(true);
       if (reload) {
-        await this.dependencies.reloadViews(pending.id);
+        await this.reloadViews(pending.id);
       }
     } catch (error) {
       if (this.pending === pending && this.queued) {
@@ -269,11 +301,11 @@ export class ProjectSwitch {
     const isCurrent = () =>
       !this.failure &&
       generation === this.generation &&
-      project === this.dependencies.currentProject();
+      project === this.currentProject();
     if (!isCurrent()) {
       return [];
     }
-    const feedback = this.dependencies.feedback;
+    const feedback = this.feedback;
     // Only a started switch owns the blocking overlay; a bare full refresh
     // (e.g. an R settings change with no explicit view list) must not pop it.
     const progress = pending ? pending.progress : null;
@@ -332,7 +364,7 @@ export class ProjectSwitch {
       !this.failure &&
       !this.pending?.started &&
       id === this.displayedProject &&
-      id === this.dependencies.currentProject()
+      id === this.currentProject()
     );
   }
 
@@ -341,16 +373,16 @@ export class ProjectSwitch {
     if (this.pending !== pending) {
       return;
     }
-    this.dependencies.reportError(error);
+    this.reportError(error);
     this.invalidate();
     this.queued?.resolve(false);
     this.queued = null;
     const unknown = pending.requested && !pending.acknowledged;
     if (pending.started) {
       this.failure = { unknown, progress: pending.progress };
-      this.dependencies.feedback?.fail(
+      this.feedback?.fail(
         pending.progress,
-        unknown ? null : () => this.set(this.dependencies.currentProject()),
+        unknown ? null : () => this.set(this.currentProject()),
       );
     }
     this.finish(pending, false);
@@ -363,23 +395,20 @@ export class ProjectSwitch {
     }
     clearTimeout(pending.timer);
     if (pending.settingsListener) {
-      this.dependencies.events.off(
-        "settings_project_change",
-        pending.settingsListener,
-      );
+      this.events.off("settings_project_change", pending.settingsListener);
     }
     pending.releaseViews(false);
     if (this.queued) {
       this.queued.progress = pending.progress;
     } else if (!this.failure) {
-      this.dependencies.feedback?.close(pending.progress);
-      this.dependencies.setSwitchActive?.(false);
+      this.feedback?.close(pending.progress);
+      this.setSwitchActive?.(false);
     }
     this.pending = null;
     if (success) {
       const old = this.displayedProject;
       this.displayedProject = pending.id;
-      void this.dependencies.events.fire("project_changed", {
+      void this.events.fire("project_changed", {
         new_project: pending.id,
         old_project: old,
       });

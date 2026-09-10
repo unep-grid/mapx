@@ -2,6 +2,22 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { EventSimple } from "../event_simple/index.js";
 import { ProjectSwitch } from "./switch.js";
 
+vi.mock("../mx.js", () => ({
+  events: new EventSimple(),
+  ws: { connect: vi.fn() },
+  theme: { init: vi.fn() },
+}));
+vi.mock("../settings", () => ({ settings: { project: { id: "A" } } }));
+vi.mock("../is_test/index.js", async (importOriginal) => ({
+  ...(await importOriginal()),
+  isProjectId: vi.fn(() => true),
+}));
+vi.mock("../mx_helper_misc.js", () => ({ isShinyReady: vi.fn(() => true) }));
+vi.mock("../map_helpers", () => ({
+  requestProjectSelection: vi.fn(),
+  updateViewsList: vi.fn(),
+}));
+
 function deferred() {
   let resolve, reject;
   const promise = new Promise((yes, no) => {

@@ -41,7 +41,7 @@ const hinthack = new HintHack();
 const project = new ProjectManager();
 const ws = new WsHandlerMapx();
 const nc = new NotifCenterMapx();
-project.configureTransition({ events, ws, theme, root: document.body });
+project.configureTransition(document.body);
 const highlighter = new HighlighterMapx();
 const spotlight = new SpotlightManager();
 const selectize = {}; // manage selectize by groups id

@@ -1,7 +1,5 @@
 import { ProjectSwitch } from "./switch.js";
 import { ProjectLoadingFeedback } from "./loading_feedback.js";
-import { isShinyReady } from "../mx_helper_misc.js";
-import { isProjectId } from "../is_test/index.js";
 import { setQueryParametersInitReset } from "../url_utils/index.js";
 import { settings } from "./../settings";
 import {
@@ -13,12 +11,7 @@ import {
 import { ws } from "./../mx.js";
 import { el } from "./../el/src/index.js";
 import { bindAll } from "../bind_class_methods";
-import {
-  requestProjectMembership,
-  requestProjectSelection,
-  viewsCloseAll,
-  updateViewsList,
-} from "../map_helpers";
+import { requestProjectMembership, viewsCloseAll } from "../map_helpers";
 import { tt } from "../el_mapx";
 import { getDictItem } from "./../language";
 import { getQueryParameterInit } from "../url_utils/url_utils.js";
@@ -159,9 +152,9 @@ export class ProjectManager {
   }
 
   /** Configure the legacy adapters once, at the application composition root.
-   * @param {{events: import('../event_simple/index.js').EventSimple, ws: import('../ws_handler/ws_handler.js').WsHandler, theme: Object, root: HTMLElement}} context
+   * @param {HTMLElement} root
    */
-  configureTransition({ events, ws: socket, theme, root }) {
+  configureTransition(root) {
     if (this.transition) {
       throw new Error("Project transition already configured");
     }
@@ -170,10 +163,6 @@ export class ProjectManager {
     this.onLegacyProjectAction = this.guardLegacyProjectAction.bind(this);
     root.addEventListener("click", this.onLegacyProjectAction, true);
     this.transition = new ProjectSwitch({
-      events,
-      currentProject: () => settings.project.id,
-      validProject: isProjectId,
-      available: isShinyReady,
       confirm: async (options) => {
         const manager = getMapxWindowManager(root);
         const hasWindows = [...manager.windows.keys()].some(
@@ -201,15 +190,9 @@ export class ProjectManager {
         setQueryParametersInitReset();
         await viewsCloseAll();
       },
-      request: requestProjectSelection,
-      connect: () => socket.connect({ waitForConnection: true }),
-      initTheme: () => theme.init(),
-      reloadViews: (id) =>
-        updateViewsList({ project: id, useQueryFilters: false }),
       feedback: this.loadingFeedback,
       setSwitchActive: (active) =>
         root.classList.toggle("mx-project-switch-active", active),
-      reportError: (error) => console.error("Project change failed", error),
     });
   }
 
