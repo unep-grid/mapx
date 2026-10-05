@@ -9566,8 +9566,8 @@
   },
   {
     "id": "schema_story_map_anim",
-    "en": "Map animation",
-    "zh": "地图动画"
+    "en": "Map camera animation",
+    "zh": "地图摄像机动画"
   },
   {
     "id": "schema_story_autoplay_timeout",
@@ -9576,8 +9576,8 @@
   },
   {
     "id": "schema_story_autoplay_timeout_desc",
-    "en": "Waiting time before going to the next step.",
-    "zh": "下一步前的等待时间"
+    "en": "Autoplay only: waiting time before going to the next step.",
+    "zh": "仅自动播放：等待时间，然后再进行下一步。"
   },
   {
     "id": "schema_story_autoplay_transition",
@@ -9586,13 +9586,23 @@
   },
   {
     "id": "schema_story_autoplay_transition_desc",
-    "en": "Duration of the transition between steps.",
-    "zh": "步骤切换的持续时间"
+    "en": "Duration of the slides scroll to the next step, also used when navigating with the keyboard or the buttons.",
+    "zh": "幻灯片滚动到下一步的持续时间，也适用于使用键盘或按钮进行导航。"
   },
   {
     "id": "schema_story_autoplay",
-    "en": "Autoplay settings",
-    "zh": "自动播放设置"
+    "en": "Step transition",
+    "zh": "阶跃过渡"
+  },
+  {
+    "id": "schema_story_scroll_anim_fun_desc",
+    "en": "Easing function of the slides scroll. Ease the start and/or end of the scroll.",
+    "zh": "幻灯片滚动缓动功能。缓动滚动开始和/或结束。"
+  },
+  {
+    "id": "schema_story_scroll_anim_fun_exp_desc",
+    "en": "Exponent of the slides scroll easing function. This will amplify or reduce the rate of the easing.",
+    "zh": "幻灯片滚动缓动函数的指数。这将增大或减小缓动效果的速率。"
   },
   {
     "id": "schema_story_step_name",

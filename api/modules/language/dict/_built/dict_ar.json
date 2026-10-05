@@ -9566,8 +9566,8 @@
   },
   {
     "id": "schema_story_map_anim",
-    "en": "Map animation",
-    "ar": "الرسوم المتحركة على الخريطة "
+    "en": "Map camera animation",
+    "ar": "رسوم متحركة لكاميرا الخريطة"
   },
   {
     "id": "schema_story_autoplay_timeout",
@@ -9576,8 +9576,8 @@
   },
   {
     "id": "schema_story_autoplay_timeout_desc",
-    "en": "Waiting time before going to the next step.",
-    "ar": "وقت الانتظار قبل الانتقال إلى الخطوة التالية."
+    "en": "Autoplay only: waiting time before going to the next step.",
+    "ar": "التشغيل التلقائي فقط: وقت الانتظار قبل الانتقال إلى الخطوة التالية."
   },
   {
     "id": "schema_story_autoplay_transition",
@@ -9586,13 +9586,23 @@
   },
   {
     "id": "schema_story_autoplay_transition_desc",
-    "en": "Duration of the transition between steps.",
-    "ar": "مدة الانتقال بين الخطوات. "
+    "en": "Duration of the slides scroll to the next step, also used when navigating with the keyboard or the buttons.",
+    "ar": "مدة عرض الشرائح تؤدي إلى الخطوة التالية، وتستخدم أيضًا عند التنقل باستخدام لوحة المفاتيح أو الأزرار."
   },
   {
     "id": "schema_story_autoplay",
-    "en": "Autoplay settings",
-    "ar": "إعدادات التشغيل التلقائي "
+    "en": "Step transition",
+    "ar": "الانتقال التدريجي"
+  },
+  {
+    "id": "schema_story_scroll_anim_fun_desc",
+    "en": "Easing function of the slides scroll. Ease the start and/or end of the scroll.",
+    "ar": "وظيفة تسهيل حركة الشرائح. تسهيل بداية و/أو نهاية حركة التمرير."
+  },
+  {
+    "id": "schema_story_scroll_anim_fun_exp_desc",
+    "en": "Exponent of the slides scroll easing function. This will amplify or reduce the rate of the easing.",
+    "ar": "مُعامل وظيفة تسهيل تمرير الشرائح. سيؤدي هذا إلى زيادة أو تقليل معدل التسهيل."
   },
   {
     "id": "schema_story_step_name",

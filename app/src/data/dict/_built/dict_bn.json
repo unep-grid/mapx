@@ -9566,8 +9566,8 @@
   },
   {
     "id": "schema_story_map_anim",
-    "en": "Map animation",
-    "bn": "মানচিত্র অ্যানিমেশন "
+    "en": "Map camera animation",
+    "bn": "মানচিত্র ক্যামেরা অ্যানিমেশন"
   },
   {
     "id": "schema_story_autoplay_timeout",
@@ -9576,8 +9576,8 @@
   },
   {
     "id": "schema_story_autoplay_timeout_desc",
-    "en": "Waiting time before going to the next step.",
-    "bn": "পরবর্তী ধাপে যাওয়ার আগে অপেক্ষার সময়।"
+    "en": "Autoplay only: waiting time before going to the next step.",
+    "bn": "শুধুমাত্র স্বয়ংক্রিয় প্লে: পরবর্তী ধাপে যাওয়ার আগে অপেক্ষার সময়।"
   },
   {
     "id": "schema_story_autoplay_transition",
@@ -9586,13 +9586,23 @@
   },
   {
     "id": "schema_story_autoplay_transition_desc",
-    "en": "Duration of the transition between steps.",
-    "bn": "পদক্ষেপের মধ্যে রূপান্তরের সময়কাল। "
+    "en": "Duration of the slides scroll to the next step, also used when navigating with the keyboard or the buttons.",
+    "bn": "স্লাইডগুলো পরবর্তী ধাপে স্ক্রল করার সময়কাল, যা কিবোর্ড বা বাটন ব্যবহার করে নেভিগেট করার সময়েও ব্যবহৃত হয়।"
   },
   {
     "id": "schema_story_autoplay",
-    "en": "Autoplay settings",
-    "bn": "অটোপ্লে সেটিংস "
+    "en": "Step transition",
+    "bn": "ধাপ পরিবর্তন"
+  },
+  {
+    "id": "schema_story_scroll_anim_fun_desc",
+    "en": "Easing function of the slides scroll. Ease the start and/or end of the scroll.",
+    "bn": "স্লাইড স্ক্রলের ইজিং ফাংশন। স্ক্রলের শুরু এবং/অথবা শেষ ইজ করুন।"
+  },
+  {
+    "id": "schema_story_scroll_anim_fun_exp_desc",
+    "en": "Exponent of the slides scroll easing function. This will amplify or reduce the rate of the easing.",
+    "bn": "স্লাইড স্ক্রোল ইজিং ফাংশনের এক্সপোনেন্ট। এটি ইজিং-এর হারকে বাড়াবে বা কমাবে।"
   },
   {
     "id": "schema_story_step_name",

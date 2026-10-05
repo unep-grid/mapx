@@ -9566,8 +9566,8 @@
   },
   {
     "id": "schema_story_map_anim",
-    "en": "Map animation",
-    "de": "Kartenanimation "
+    "en": "Map camera animation",
+    "de": "Kartenkamera-Animation"
   },
   {
     "id": "schema_story_autoplay_timeout",
@@ -9576,8 +9576,8 @@
   },
   {
     "id": "schema_story_autoplay_timeout_desc",
-    "en": "Waiting time before going to the next step.",
-    "de": "Wartezeit bis zum nächsten Schritt."
+    "en": "Autoplay only: waiting time before going to the next step.",
+    "de": "Nur Autoplay: Wartezeit vor dem nächsten Schritt."
   },
   {
     "id": "schema_story_autoplay_transition",
@@ -9586,13 +9586,23 @@
   },
   {
     "id": "schema_story_autoplay_transition_desc",
-    "en": "Duration of the transition between steps.",
-    "de": "Dauer des Übergangs zwischen den Schritten. "
+    "en": "Duration of the slides scroll to the next step, also used when navigating with the keyboard or the buttons.",
+    "de": "Dauer des Scrollens zum nächsten Folienschritt, wird auch bei der Navigation mit der Tastatur oder den Tasten verwendet."
   },
   {
     "id": "schema_story_autoplay",
-    "en": "Autoplay settings",
-    "de": "Autoplay-Einstellungen "
+    "en": "Step transition",
+    "de": "Stufenübergang"
+  },
+  {
+    "id": "schema_story_scroll_anim_fun_desc",
+    "en": "Easing function of the slides scroll. Ease the start and/or end of the scroll.",
+    "de": "Die Scrollfunktion erleichtert das Scrollen der Folien. Den Start und/oder das Ende des Scrollvorgangs erleichtern."
+  },
+  {
+    "id": "schema_story_scroll_anim_fun_exp_desc",
+    "en": "Exponent of the slides scroll easing function. This will amplify or reduce the rate of the easing.",
+    "de": "Exponent der Scroll-Easing-Funktion. Dadurch wird die Geschwindigkeit des Scrollvorgangs verstärkt oder verringert."
   },
   {
     "id": "schema_story_step_name",
