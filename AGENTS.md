@@ -78,6 +78,14 @@ architectural precedent for new work.
   for translated attributes, so an open interface updates when the language
   changes without reloading the application. Let the dictionary runner fill
   missing values for the other supported languages.
+- Treat existing translations as unreliable: most non-English values, and
+  some French ones, were machine-translated without context by
+  `app/src/node/build_dict.js`. Do not reuse a generic key such as `btn_ok`
+  only because its English value matches; add a key specific to the context
+  when the meaning differs. When touching a key, review its English and French
+  values against where it is used, and clear the other languages when its
+  source meaning changes so the runner regenerates them. Do not mass-retranslate
+  unless requested.
 - Protect performance: avoid redundant rendering, duplicate listeners, hidden
   polling, unnecessary network calls, and dependencies that duplicate existing
   capabilities.
