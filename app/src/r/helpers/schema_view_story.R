@@ -521,8 +521,8 @@ mxSchemaViewStory <- function(view, language) {
     title = tt("schema_story_map_anim_duration"),
     description = tt("schema_story_map_anim_duration_desc"),
     type = "number",
-    min = 1,
-    default = 1
+    minimum = 0,
+    default = 1000
   )
 
   animPathMethod <- list(
@@ -552,8 +552,8 @@ mxSchemaViewStory <- function(view, language) {
     title = tt("schema_story_map_anim_fun_exp"),
     description = tt("schema_story_map_anim_fun_exp_desc"),
     type = "number",
-    min = 0,
-    max = 10,
+    minimum = 0,
+    maximum = 10,
     default = 1
   )
 
@@ -572,13 +572,14 @@ mxSchemaViewStory <- function(view, language) {
   )
 
   #
-  # autoplay
+  # Step transition : story scroll between steps, used by autoplay and
+  # keyboard / buttons navigation. Key 'autoplay' kept for compatibility.
   #
   autoplayTimeout <- list(
     title = tt("schema_story_autoplay_timeout"),
     description = tt("schema_story_autoplay_timeout_desc"),
     type = "number",
-    min = 1000,
+    minimum = 0,
     default = 3000
   )
 
@@ -586,25 +587,15 @@ mxSchemaViewStory <- function(view, language) {
     title = tt("schema_story_autoplay_transition"),
     description = tt("schema_story_autoplay_transition_desc"),
     type = "number",
-    min = 1,
-    default = 1
+    minimum = 1,
+    default = 1000
   )
 
-  autoplayAnimFunction <- list(
-    title = tt("schema_story_map_anim_fun"),
-    description = tt("schema_story_map_anim_fun_desc"),
-    type = "string",
-    enum = list("easeIn", "easeOut", "easeInOut")
-  )
+  autoplayAnimFunction <- animFunction
+  autoplayAnimFunction$description <- tt("schema_story_scroll_anim_fun_desc")
 
-  autoplayAnimFunctionPower <- list(
-    title = tt("schema_story_map_anim_fun_exp"),
-    description = tt("schema_story_map_anim_fun_exp_desc"),
-    type = "number",
-    min = 0,
-    max = 10,
-    default = 1
-  )
+  autoplayAnimFunctionPower <- animFunctionPower
+  autoplayAnimFunctionPower$description <- tt("schema_story_scroll_anim_fun_exp_desc")
 
   stepAutoplay <- list(
     type = "object",
