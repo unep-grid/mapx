@@ -1,3 +1,22 @@
+/* Cover fill; stretch sizing keeps editor margins on all sides */
+.mx-story-cover() {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  width: -webkit-fill-available !important;
+  width: -moz-available !important;
+  width: stretch !important;
+  height: 100% !important;
+  height: -webkit-fill-available !important;
+  height: -moz-available !important;
+  height: stretch !important;
+  object-fit: cover !important;
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+  zoom: 100% !important;
+}
+
 .mx-story-layout {
   position: relative;
   left: 50%;
@@ -88,34 +107,6 @@
         padding: 10px;
         text-align: center;
       }
-    }
-
-    .width-100p {
-      width: 100%;
-    }
-    .margin-top-10p {
-      margin-top: 10%;
-    }
-    .margin-bottom-10p {
-      margin-bottom: 10%;
-    }
-    .margin-left-10p {
-      margin-left: 10%;
-    }
-    .margin-right-10p {
-      margin-right: 10%;
-    }
-    .margin-top-5p {
-      margin-top: 5%;
-    }
-    .margin-bottom-5p {
-      margin-bottom: 5%;
-    }
-    .margin-left-5p {
-      margin-left: 5%;
-    }
-    .margin-right-5p {
-      margin-right: 5%;
     }
 
     .mx-story-step {
@@ -247,18 +238,7 @@
           img,
           .ce-element--type-image,
           iframe {
-            position: absolute !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100% !important;
-            height: 100% !important;
-            min-width: 100% !important;
-            min-height: 100% !important;
-            object-fit: cover !important;
-            background-size: cover;
-            background-position: center;
-            z-index: -1;
-            zoom: 100% !important;
+            .mx-story-cover();
           }
         }
 
@@ -365,6 +345,35 @@
             margin-right: auto;
             max-width: 100%;
           }
+
+          /* Editor utility classes: keep last to override media and align margins */
+          .width-100p {
+            width: 100%;
+          }
+          .margin-top-10p {
+            margin-top: 10%;
+          }
+          .margin-bottom-10p {
+            margin-bottom: 10%;
+          }
+          .margin-left-10p {
+            margin-left: 10%;
+          }
+          .margin-right-10p {
+            margin-right: 10%;
+          }
+          .margin-top-5p {
+            margin-top: 5%;
+          }
+          .margin-bottom-5p {
+            margin-bottom: 5%;
+          }
+          .margin-left-5p {
+            margin-left: 5%;
+          }
+          .margin-right-5p {
+            margin-right: 5%;
+          }
         }
 
         .mx-story-slide-back {
@@ -387,18 +396,7 @@
 .image-cover,
 .mx-image-cover,
 .mx-image-cover.ce-element--type-image {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  min-width: 100% !important;
-  min-height: 100% !important;
-  object-fit: cover !important;
-  background-size: cover;
-  background-position: center;
-  z-index: -1;
-  zoom: 100% !important;
+  .mx-story-cover();
 }
 
 /* Bullet navigation */
