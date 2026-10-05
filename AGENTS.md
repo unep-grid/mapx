@@ -106,3 +106,9 @@ architectural precedent for new work.
   broadening an exception without documenting and justifying the tradeoff.
 - Run `git diff --check` and report validations performed and any validation that
   could not be run.
+
+## Commits
+
+- Use Conventional Commits only.
+- Keep commit messages to one line.
+- Do not add co-author attribution unless requested.
