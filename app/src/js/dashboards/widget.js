@@ -346,7 +346,6 @@ class Widget extends EventSimple {
 
     const bbox = eventToPointBbox(event);
     const items = await getLayersPropertiesAtBbox({
-      map: widget.config.map,
       type: viewType,
       bbox: bbox,
       idView: idView,

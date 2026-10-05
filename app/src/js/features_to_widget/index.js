@@ -14,6 +14,7 @@ import {
   isString,
 } from "../is_test_mapx/index.js";
 import { getAttributesAlias } from "../metadata/utils.js";
+import { getAttributesNames } from "./attributes.js";
 import { dashboard } from "../dashboards/index.js";
 import { EventSimple } from "../event_simple/index.js";
 import { Widget } from "../dashboards/widget.js";
@@ -263,7 +264,7 @@ export class FeaturesToWidget extends EventSimple {
       item.elSpinner.remove();
 
       const attrOrder = getViewAttributes(view);
-      const attrNames = Object.keys(attributes[0] || {});
+      const attrNames = getAttributesNames(attributes);
 
       if (isEmpty(attrOrder)) {
         attrOrder.push(...attrNames);

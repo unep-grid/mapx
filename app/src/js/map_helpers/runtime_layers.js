@@ -37,3 +37,28 @@ export function getRuntimeLayersByPrefix(options) {
     .map((id) => styleLayerById.get(id) || map.getLayer(id))
     .filter(Boolean);
 }
+
+/**
+ * Get map sources used by a view's layers, keyed by source id.
+ *
+ * Views may render several layers from several sources (e.g. custom-code
+ * views); only the layer id is bound to the view id, not the source id.
+ */
+export function getViewSourcesFromLayers(options) {
+  const { map, idView } = options || {};
+  const style = map?.getStyle();
+  const sources = style?.sources ?? {};
+  const out = {};
+
+  if (!idView) {
+    return out;
+  }
+
+  for (const layer of style?.layers ?? []) {
+    if (!layer.id.startsWith(idView) || !sources[layer.source]) {
+      continue;
+    }
+    out[layer.source] = sources[layer.source];
+  }
+  return out;
+}

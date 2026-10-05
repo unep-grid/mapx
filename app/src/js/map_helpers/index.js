@@ -129,7 +129,10 @@ import { FlashItem } from "../icon_flash/index.js";
 import { elViewListOption } from "./view_list_options.js";
 import { viewFiltersInit } from "./view_filters.js";
 import { elViewListFilters } from "./view_list_filters.js";
-import { getRuntimeLayersByPrefix } from "./runtime_layers.js";
+import {
+  getRuntimeLayersByPrefix,
+  getViewSourcesFromLayers,
+} from "./runtime_layers.js";
 import { applyCountryHighlight } from "./country_highlight.js";
 import { zoomToRenderedViewFeatures } from "./rendered_features_zoom.js";
 import {
@@ -169,15 +172,6 @@ const mx_local = {
   search: null,
   features_widget: null,
 };
-
-/**
- * Export current map sources;
- * @returns {Object} Object of sources and config, with source id as config
- */
-export function getMapSources() {
-  const sources = getMap().getStyle()?.sources;
-  return sources;
-}
 
 /**
  * Export style basemap
@@ -1681,7 +1675,6 @@ export async function handleClickEvent(event, idMap) {
    */
   const bbox = eventToPointBbox(event);
   const attributes = getLayersPropertiesAtBbox({
-    map: map,
     bbox: bbox,
     type: ["vt", "gj", "cc", "rt"],
     asObject: false,
@@ -3969,7 +3962,6 @@ export function getViewAttributes(
 /**
  * Query layers properties at point
  * @param {Object} opt Options
- * @param {Object||String} opt.map Map object or id of the map
  * @param {Object} opt.bbox
  * @param {String} opt.type Type : vt or rt
  * @param {String} opt.idView Use only given view id
@@ -3977,7 +3969,8 @@ export function getViewAttributes(
  * @return {Object} Object with view id as keys
  */
 export function getLayersPropertiesAtBbox(opt) {
-  const { map, idView, asObject, type, bbox } = opt;
+  const { idView, asObject, type, bbox } = opt;
+  const map = getMap();
   const hasViewId = isViewId(idView);
   const modeObject = isTrue(asObject);
   const items = {
@@ -4004,8 +3997,6 @@ export function getLayersPropertiesAtBbox(opt) {
 
   const idViewsSorted = sortByOrder(idViews, idViewsOrder);
 
-  const sources = getMapSources();
-
   /**
    * Fetch view data for one or many views
    * and fetch properties
@@ -4019,20 +4010,19 @@ export function getLayersPropertiesAtBbox(opt) {
         return;
       }
       const idView = view.id;
-      for (const id in sources) {
-        const reg = new RegExp(`^${idView}`);
-
-        if (reg.test(id)) {
-          const type = sources[id].type;
-          switch (type) {
-            case "raster":
-              items.raster[idView] = fetchRasterProp(view, sources[id], bbox);
-              break;
-            case "vector":
-            case "geojson":
-              items.vector[view.id] = fetchVectorProp(view, bbox);
-              break;
-          }
+      const sources = getViewSourcesFromLayers({ map, idView });
+      for (const source of Object.values(sources)) {
+        switch (source.type) {
+          case "raster":
+            items.raster[idView] = fetchRasterProp(view, source, bbox);
+            break;
+          case "vector":
+          case "geojson":
+            /**
+             * One query covers all vector layers of the view
+             */
+            items.vector[idView] ??= fetchVectorProp(view, bbox);
+            break;
         }
       }
     });
