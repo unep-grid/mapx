@@ -11,8 +11,18 @@ observeEvent(input$styleEdit_init, {
 
   style <- .get(view, c("data", "style"))
   language <- reactData$language
-  hasLayer <- isNotEmpty(.get(view, c("data", "source", "layerInfo", "name")))
-  hasSources <- isTRUE(reactSourceMainAccessible())
+  idSource <- .get(view, c("data", "source", "layerInfo", "name"))
+  hasLayer <- isNotEmpty(idSource)
+  #
+  # Validate the view's own source, not the config editor's source input
+  #
+  hasSources <- hasLayer && isTRUE(mxApiValidateSourceSelection(
+    idProject = reactData$project,
+    idUser = reactUser$data$id,
+    idSources = idSource,
+    idView = view$id,
+    token = reactUser$token
+  ))
   hasStyle <- isNotEmpty(style)
 
   mxCatch(title = "style edit init", {
@@ -21,8 +31,11 @@ observeEvent(input$styleEdit_init, {
       errors <- logical(0)
       warnings <- logical(0)
 
-      if (!hasLayer) warnings["error_no_layer"] <- TRUE
-      if (!hasSources) errors["error_no_source"] <- TRUE
+      if (!hasLayer) {
+        warnings["error_no_layer"] <- TRUE
+      } else {
+        errors["error_no_source"] <- TRUE
+      }
 
       output$txtValidSchema <- renderUI({
         mxErrorsToUi(
@@ -38,7 +51,7 @@ observeEvent(input$styleEdit_init, {
           disable = TRUE
         )
         mxToggleButton(
-          id = "btnViewResetStyle",
+          id = "btnViewPreviewStyle",
           disable = TRUE
         )
       }
@@ -120,17 +133,27 @@ observeEvent(input$btnViewSaveStyle, {
 })
 #
 # View style close
+# -> does not need the editor values: restore the stored, non-previewed view
 #
 observeEvent(input$btnViewCloseStyle, {
-  mxToggleButton(
-    id = "btnViewSaveStyle",
-    disable = TRUE
+  mxModal(
+    id = "modalViewEdit",
+    close = TRUE
   )
-  mxToggleButton(
-    id = "btnViewPreviewStyle",
-    disable = TRUE
+  idView <- .get(reactData$viewDataEdited, c("id"))
+  if (isEmpty(idView)) {
+    return()
+  }
+  views <- mxApiGetViews(
+    idViews = idView,
+    idProject = reactData$project,
+    idUser = reactUser$data$id,
+    token = reactUser$token
   )
-  jedTriggerGetValues("styleEdit", "close")
+  viewStored <- if (length(views) > 0) views[[1]]
+  if (isNotEmpty(viewStored)) {
+    mglUpdateView(viewStored)
+  }
 })
 
 
@@ -144,9 +167,7 @@ observeEvent(input$styleEdit_values, {
   style <- values$data
   idEvent <- values$idEvent
   editor <- reactUser$data$id
-  project <- reactData$project
   view <- reactData$viewDataEdited
-  token <- reactUser$token
   isEditable <- view[["_edit"]] && view[["type"]] == "vt"
 
   if (isEditable) {
@@ -177,26 +198,6 @@ observeEvent(input$styleEdit_values, {
     switch(idEvent,
       "preview" = {
         mglUpdateView(view)
-      },
-      "close" = {
-        #
-        # Use the latest version to make sure
-        # the use see the non-altered version
-        #
-        mxModal(
-          id = "modalViewEdit",
-          close = TRUE
-        )
-        views <- mxApiGetViews(
-          idViews = view$id,
-          idProject = project,
-          idUser = editor,
-          token = token
-        )
-        viewStored <- views[[1]]
-        if (isNotEmpty(viewStored)) {
-          mglUpdateView(viewStored)
-        }
       },
       "save" = {
         view[["_edit"]] <- NULL

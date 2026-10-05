@@ -101,6 +101,11 @@ observe({
         btnList <- tagList()
 
         #
+        # Shared schema issues output: clear any previous modal state
+        #
+        output$txtValidSchema <- renderUI(NULL)
+
+        #
         # Switch through actions
         #
         switch(viewAction$action,

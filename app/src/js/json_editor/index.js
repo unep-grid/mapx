@@ -330,15 +330,25 @@ export function jedUpdate(o) {
 
 /**
  * Get jed editor value
+ * - Waits for the editor to be ready: json-editor getValue throws before
  * @param {Object} o options
  * @param {String} o.id Id of target element
+ * @param {String} [o.idEvent] Event id forwarded with the values
+ * @return {Promise<Object|undefined>} Values, when shiny is not available
  */
 export async function jedGetValuesById(o) {
   const id = o.id;
   const editor = jed.editors[id];
   const hasShiny = isShinyReady();
-  const hasJed = isObject(jed);
-  if (!hasJed) {
+  if (!editor || editor.destroyed) {
+    console.warn(`jed editor ${id} not available`);
+    return;
+  }
+  if (!editor.ready) {
+    await new Promise((resolve) => editor.on("ready", resolve));
+  }
+  if (jed.editors[id] !== editor) {
+    // replaced while waiting
     return;
   }
   const values = {
