@@ -4,6 +4,7 @@ import { getApiUrl } from "./../api_routes";
 import { sendData } from "./../mx_helper_misc.js";
 import { modal } from "./../mx_helper_modal.js";
 import { settings } from "./../settings";
+import { disableUnloadListener } from "./content_tools_unload.js";
 import { updateEditorLanguage } from "./editor_language.js";
 
 const customStyle = [
@@ -427,6 +428,7 @@ async function loadContentTools() {
     });
     ContentTools.StylePalette.add(style);
     ContentTools.IMAGE_UPLOADER = contentToolsImageUploader;
+    disableUnloadListener(ContentTools);
     ContentTools._init = true;
   }
   /**
