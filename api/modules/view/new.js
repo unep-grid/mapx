@@ -203,14 +203,17 @@ export async function ioAddViewVt(socket, config, view_options) {
     if (enable_download) {
       view._has_download = true;
     }
-    const result = await socket.mx_emit_ws_response("/server/view/add", {
-      view: view,
-    });
-    if (result.error) {
-      throw new Error(result.error);
+    // HTTP uploads have no client socket: the view is loaded with the project
+    if (socket.mx_emit_ws_response) {
+      const result = await socket.mx_emit_ws_response("/server/view/add", {
+        view: view,
+      });
+      if (result.error) {
+        throw new Error(result.error);
+      }
     }
   } catch (e) {
-    throw new Error(e);
+    throw e;
   }
 
   return true;
