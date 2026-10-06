@@ -128,7 +128,7 @@ function mapxBindings() {
   bind("mxJoinEditor", (request) => modalSourceJoin(request, { root }));
   bind("mxEditTable", (request) => editTable({ ...request, root }));
   bind("mxGeomTools", geomTools);
-  bind("mxUploader", uploadSource);
+  bind("mxUploader", (request) => uploadSource({ ...request, root }));
   bind("mxProjectAdd", project.create);
   bind("mxProjectManageRoles", project.showRoleMatrix);
   bind("mxProjectTilesReport", project.showTilesReport);

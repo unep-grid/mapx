@@ -295,9 +295,10 @@ export async function btn_opt_get_geojson(dataset) {
  * Upload handler for GeoJSON
  *
  * @param {DOMStringMap} dataset
+ * @param {HTMLElement} trigger
  * @returns {void}
  */
-export async function btn_upload_geojson(dataset) {
+export async function btn_upload_geojson(dataset, trigger) {
   const idView = dataset.view_action_target;
   const item = await data.geojson.getItem(idView);
   const geojson = item?.view?.data?.source?.data;
@@ -314,7 +315,10 @@ export async function btn_upload_geojson(dataset) {
   const strGeoJSON = JSON.stringify(geojson);
   const blob = new Blob([strGeoJSON], { type: "application/json" });
   const file = new File([blob], filename, { type: "application/json" });
-  const uploader = new Uploader({ file });
+  const uploader = new Uploader({
+    file,
+    root: trigger.ownerDocument.body,
+  });
   await uploader.init();
 }
 

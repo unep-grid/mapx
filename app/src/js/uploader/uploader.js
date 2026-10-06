@@ -1,7 +1,11 @@
 import { isNotEmpty, isEmpty } from "./../is_test";
-import { modalConfirm, modalSimple } from "./../mx_helper_modal.js";
-import { tt, el } from "./../el_mapx";
-import { fileSelector, formatByteSize, prevent } from "./../mx_helper_misc.js";
+import {
+  copyToClipboard,
+  fileSelector,
+  formatByteSize,
+  parseTemplate,
+  prevent,
+} from "./../mx_helper_misc.js";
 import { bindAll } from "../bind_class_methods";
 import { fileFormatsVectorUpload } from "./utils";
 import { Item } from "./item.js";
@@ -12,6 +16,11 @@ import { isArray } from "../is_test";
 import { settings as mx_settings } from "./../settings";
 import "./style.less";
 import { isBoolean } from "../is_test";
+import { getApiUrl } from "../api_routes/index.js";
+import { getMapxWindowManager } from "../window/index.js";
+import { openConfirmDialog } from "../window/dialog.js";
+import { buildUploadApiEnvironment } from "./api_config.js";
+import { tt } from "../el_mapx";
 
 const config = {
   max_items: 20,
@@ -26,7 +35,7 @@ export class Uploader {
    */
   constructor(config) {
     const up = this;
-    up._config = config;
+    up._config = config || {};
   }
 
   /**
@@ -71,7 +80,10 @@ export class Uploader {
     /**
      * Build initial UI
      */
-    up.build();
+    up._windowManager =
+      config.windowManager || getMapxWindowManager(config.root);
+    up._el = up._windowManager.el;
+    await up.build();
 
     /**
      * Initial message
@@ -105,18 +117,54 @@ export class Uploader {
   async destroy() {
     const up = this;
     if (up._destroy) {
-      return;
+      return true;
     }
-    const cleared = await up.reset();
-    if (!cleared) {
+    return await up._window.close("api");
+  }
+
+  /**
+   * Validate a close initiated by the window chrome or by destroy().
+   * @returns {Promise<boolean>}
+   */
+  async beforeClose() {
+    const up = this;
+    if (up.disabled) {
+      return false;
+    }
+    if (up.empty) {
+      return true;
+    }
+    const ok = await up.confirm({
+      key: "uploader-close-confirm",
+      title: tt("up_confirm_close_title"),
+      content: tt("up_confirm_close", { n: up.count }),
+    });
+    if (!ok) {
+      return false;
+    }
+    return await up.reset(true);
+  }
+
+  /** Complete teardown after MxWindowManager has accepted the close. */
+  finalizeDestroy() {
+    const up = this;
+    if (up._destroy) {
       return;
     }
     for (const cb of up._destroy_cb) {
       cb();
     }
     up._destroy = true;
-    up._modal.close();
-    return true;
+  }
+
+  /** @param {Object} options */
+  confirm(options) {
+    return openConfirmDialog({
+      manager: this._windowManager,
+      confirmLabel: tt("btn_confirm"),
+      cancelLabel: tt("btn_cancel"),
+      ...options,
+    });
   }
 
   /**
@@ -178,8 +226,9 @@ export class Uploader {
    * Build the Uploader UI
    * @returns {void}
    */
-  build() {
+  async build() {
     const up = this;
+    const el = up._el;
 
     up._el_container = el("div", {
       on: {
@@ -192,6 +241,11 @@ export class Uploader {
       class: "uploader",
       message: "",
     });
+    up._el_content = el(
+      "div",
+      { class: "uploader-window__content" },
+      up._el_container,
+    );
 
     up._el_button_upload = el(
       "button",
@@ -218,27 +272,72 @@ export class Uploader {
       tt("up_button_reset"),
     );
 
-    up._el_button_close = el(
+    up._el_button_copy_api = el(
       "button",
       {
-        class: ["btn", "btn-default", "disabled"],
-        on: ["click", up.destroy],
+        class: ["btn", "btn-default"],
+        type: "button",
+        dataset: {
+          lang_key: "up_button_copy_api_warning",
+          lang_type: "tooltip",
+        },
+        on: ["click", up.copyApiEnvironment],
       },
-      tt("up_button_close"),
+      tt("up_button_copy_api"),
     );
 
-    up._modal = modalSimple({
-      title: "Upload",
-      content: up._el_container,
-      buttons: [up._el_button_close, up._el_button_add],
-      buttonsAlt: [up._el_button_reset, up._el_button_upload],
-      onClose: up.destroy,
-      removeCloseButton: true,
-      style: {
-        minWidth: "500px",
-        resize: "none",
+    const footerStart = el(
+      "div",
+      {
+        class: "btn-group",
+        role: "group",
+        "aria-label": await t("up_actions_files"),
       },
+      [up._el_button_add, up._el_button_copy_api],
+    );
+    const footerEnd = el(
+      "div",
+      {
+        class: "btn-group",
+        role: "group",
+        "aria-label": await t("up_actions_upload"),
+      },
+      [up._el_button_reset, up._el_button_upload],
+    );
+
+    up._window = up._windowManager.open({
+      key: "vector-uploader",
+      replace: true,
+      modal: true,
+      title: tt("upl_title"),
+      content: up._el_content,
+      footerStart,
+      footerEnd,
+      draggable: true,
+      resizable: true,
+      collapsible: true,
+      snappable: true,
+      closeable: true,
+      geometry: {
+        width: 720,
+        height: 620,
+        minWidth: "min(500px, 100vw)",
+      },
+      beforeClose: up.beforeClose,
+      onClose: up.finalizeDestroy,
     });
+  }
+
+  /** Copy the current session values expected by upload_mapx. */
+  async copyApiEnvironment() {
+    const up = this;
+    const environment = buildUploadApiEnvironment({
+      apiUrl: getApiUrl(),
+      userId: mx_settings.user.id,
+      token: mx_settings.user.token,
+      projectId: mx_settings.project.id,
+    });
+    await copyToClipboard(environment);
   }
 
   /**
@@ -390,7 +489,7 @@ export class Uploader {
     }
 
     up.updateButtonUpload();
-    up.updateButtonClose();
+    up.updateWindowClose();
     up.updateButtonAddFiles();
     up.updateButtonReset();
   }
@@ -455,13 +554,8 @@ export class Uploader {
    * Update close button
    * @returns {void}
    */
-  updateButtonClose() {
-    const up = this;
-    if (up.disabled) {
-      up._el_button_close.classList.add("disabled");
-    } else {
-      up._el_button_close.classList.remove("disabled");
-    }
+  updateWindowClose() {
+    this._window?.setCloseEnabled(!this.disabled);
   }
 
   /**
@@ -482,9 +576,10 @@ export class Uploader {
     force = isBoolean(force) && force === true;
 
     if (!force && up.count > 1) {
-      const ok = await modalConfirm({
-        title: t("up_confirm_reset_title"),
-        content: tt("up_confirm_reset", { data: { n: up.count } }),
+      const ok = await up.confirm({
+        key: "uploader-reset-confirm",
+        title: tt("up_confirm_reset_title"),
+        content: tt("up_confirm_reset", { n: up.count }),
       });
       if (!ok) {
         return false;
@@ -509,10 +604,12 @@ export class Uploader {
     const up = this;
     try {
       if (up.count > 1) {
-        const ok = await modalConfirm({
-          title: t("up_confirm_upload_title"),
+        const ok = await up.confirm({
+          key: "uploader-upload-confirm",
+          title: tt("up_confirm_upload_title"),
           content: tt("up_confirm_upload", {
-            data: { n: up.count, size: formatByteSize(up.size) },
+            n: up.count,
+            size: formatByteSize(up.size),
           }),
         });
         if (!ok) {
