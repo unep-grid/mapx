@@ -1,6 +1,6 @@
 import multer from "multer";
 import { ioAddViewVt, newIdView } from "#mapx/view";
-import { access, unlink } from "fs/promises";
+import { access, rm, unlink } from "fs/promises";
 import { constants } from "fs";
 import { spawn } from "child_process";
 import { ioChunkWriter } from "#mapx/chunks";
@@ -10,10 +10,12 @@ import { settings } from "#root/settings";
 import { newIdSource } from "../source/id.js";
 import { t } from "#mapx/language";
 import { sendError } from "#mapx/helpers";
+import { discardUpload } from "./discard.js";
 const { email_admin } = settings.contact;
 import {
-  removeSource,
-  removeView,
+  withTransaction,
+  tableExists,
+  isSourceRegistered,
   isLayerValid,
   tableHasValues,
   registerOrRemoveSource,
@@ -153,19 +155,34 @@ async function cleanFileOnErrorHandler(err, req, _, next) {
  * Complete save process
  */
 async function save(socket, config) {
-  config.idSource = newIdSource();
-  config.idView = newIdView();
   try {
-    await ioConvertOgr(socket, config);
-    await ioAddSource(socket, config);
-    await ioAddViewVt(socket, config);
-    await handleSuccess(socket, config);
-  } catch (e) {
-    await handleFailure(socket, config, e);
-
-    throw new Error(e);
+    config.idSource = newIdSource();
+    config.idView = newIdView();
+    /**
+     * The failure cleanup drops anything named after these ids: never start
+     * on an id that already exists, it would not belong to this upload.
+     */
+    const taken =
+      (await tableExists(config.idSource)) ||
+      (await isSourceRegistered(config.idSource));
+    if (taken) {
+      throw new Error(`Source id ${config.idSource} already exists`);
+    }
+    try {
+      await ioConvertOgr(socket, config);
+      await ioAddSource(socket, config);
+      await ioAddViewVt(socket, config);
+      await handleSuccess(socket, config);
+    } catch (e) {
+      await handleFailure(socket, config, e);
+      throw e;
+    }
   } finally {
     await cleanFile(config?.file?.path);
+    if (config?.outDir) {
+      // chunked uploads: sidecar files and their request directory
+      await rm(config.outDir, { recursive: true, force: true });
+    }
   }
 }
 
@@ -211,13 +228,23 @@ async function handleFailure(socket, config, e) {
     const idSource = config?.idSource;
     const idView = config?.idView;
     // Cleanup failures must not prevent the error notification
-    const sourceRemoved = await removeSource(idSource).catch(() => false);
-    const viewRemoved = await removeView(idView).catch(() => false);
+    let cleaned = false;
+    try {
+      await withTransaction((client) =>
+        discardUpload({ idSource, idView }, client),
+      );
+      cleaned = true;
+    } catch (eCleanup) {
+      console.error(
+        `Upload cleanup failed for source ${idSource} / view ${idView}`,
+        eCleanup,
+      );
+    }
 
     const msg = t("upl_api_save_failed", config.language, {
       title: config.title,
-      sourceRemoved,
-      viewRemoved,
+      sourceRemoved: cleaned,
+      viewRemoved: cleaned,
       filename,
       error: e.message || e,
     });
@@ -226,10 +253,15 @@ async function handleFailure(socket, config, e) {
       filename,
     });
 
-    socket.notifyInfoError({
-      idGroup: config.id_request,
-      message: msg,
-    });
+    try {
+      await socket.notifyInfoError({
+        idGroup: config.id_request,
+        message: msg,
+      });
+    } catch (eNotify) {
+      // the admin mail must still be sent
+      console.error(eNotify);
+    }
 
     await sendMailAuto({
       to: [userEmail, email_admin],
@@ -477,6 +509,11 @@ export async function fileToPostgres(config) {
     const ogr = spawn("sh", args);
 
     /**
+     * Spawn failure: 'close' may never fire
+     */
+    ogr.on("error", reject);
+
+    /**
      * Handle stdout
      */
     ogr.stdout.on("data", (data) => {
@@ -505,9 +542,9 @@ export async function fileToPostgres(config) {
     });
 
     /*
-     * Handle exit
+     * Handle exit, once stdout/stderr are drained
      */
-    ogr.on("exit", async (code, signal) => {
+    ogr.on("close", async (code, signal) => {
       try {
         if (code !== 0) {
           throw Error(

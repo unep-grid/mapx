@@ -1,4 +1,6 @@
 #!/bin/sh
+# Fail when either ogr2ogr or psql fails (busybox ash in the API image)
+set -o pipefail
 
 LAYER_FILE=$1
 LAYER_NAME=$2
@@ -9,7 +11,7 @@ LCO=""
 NLT=""
 
 
-if [ "$CSV_MODE" == "yes" ]
+if [ "$CSV_MODE" = "yes" ]
 then
   OPT=$OPT' -oo AUTODETECT_TYPE=YES'
 else
@@ -51,6 +53,7 @@ PG_USE_COPY=YES \
   | \
   PGPASSWORD=$POSTGRES_USER_WRITE_PASSWORD \
   psql \
+  -v ON_ERROR_STOP=1 \
   -d $POSTGRES_DB \
   -h $POSTGRES_HOST \
   -U $POSTGRES_USER_WRITE \
