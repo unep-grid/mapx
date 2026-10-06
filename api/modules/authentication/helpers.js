@@ -133,7 +133,7 @@ export async function validateToken(userToken) {
   return {
     isGuest: tokenData.is_guest,
     key: tokenData.key,
-    isValid: tokenData.valid_until * 1 > now / 1000,
+    isValid: tokenData.valid_until * 1 > now,
   };
 }
 

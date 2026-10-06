@@ -1,5 +1,5 @@
 import { sendError } from "#mapx/helpers";
-import { isEmail, isEmpty } from "@fxi/mx_valid";
+import { isEmail } from "@fxi/mx_valid";
 import {
   validateToken,
   validateUser,
@@ -121,7 +121,7 @@ export function validateRoleHandlerFor(role) {
 
       roles = await getUserRoles(idUser, idProject);
 
-      if (isEmpty(roles) || isEmpty(!roles[role])) {
+      if (!roles?.[role]) {
         throw Error("Unautorized role");
       }
 
