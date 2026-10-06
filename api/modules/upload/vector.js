@@ -9,6 +9,7 @@ import { handleErrorText } from "#mapx/error";
 import { settings } from "#root/settings";
 import { newIdSource } from "../source/id.js";
 import { t } from "#mapx/language";
+import { sendError } from "#mapx/helpers";
 const { email_admin } = settings.contact;
 import {
   removeSource,
@@ -51,6 +52,7 @@ export const mwUpload = [
   validateTokenHandler,
   validateRoleHandlerFor("publisher"),
   saveHandler,
+  cleanFileOnErrorHandler,
 ];
 
 /**
@@ -101,19 +103,50 @@ export async function ioUploadSource(socket, chunk, callback) {
 }
 
 /**
- * Convert handler
+ * Convert handler (http)
+ * Multipart fields are strings: flags are parsed explicitly.
+ * Progress and errors are streamed as notifications. A failure before the
+ * stream starts is returned as HTTP 500.
  */
-async function saveHandler(req, res, next) {
+export async function saveHandler(req, res) {
   try {
-    const config = req.body;
-    config.file = req.file; // multer;
-    await save(res, config);
-    res.status(200).end();
-    next();
+    await save(res, getHttpUploadConfig(req));
+    res.end();
   } catch (e) {
-    res.status(403).end();
-    next(e);
+    sendError(res, e, 500);
   }
+}
+
+const uploadFlags = [
+  "create_view",
+  "enable_download",
+  "enable_wms",
+  "assign_srs",
+];
+
+/**
+ * Build the save config from a multer request
+ * @param {Request} req Express request, with multer `file`
+ * @return {Object} config
+ */
+export function getHttpUploadConfig(req) {
+  const config = {
+    ...req.body,
+    file: req.file,
+  };
+  for (const key of uploadFlags) {
+    const value = config[key];
+    config[key] = value === true || value === "true" || value === "1";
+  }
+  return config;
+}
+
+/**
+ * Remove the multer file when a previous handler rejected the request
+ */
+async function cleanFileOnErrorHandler(err, req, _, next) {
+  await cleanFile(req.file?.path);
+  next(err);
 }
 
 /**
@@ -177,8 +210,9 @@ async function handleFailure(socket, config, e) {
     const filename = config?.file?.name || config?.file?.filename;
     const idSource = config?.idSource;
     const idView = config?.idView;
-    const sourceRemoved = await removeSource(idSource);
-    const viewRemoved = await removeView(idView);
+    // Cleanup failures must not prevent the error notification
+    const sourceRemoved = await removeSource(idSource).catch(() => false);
+    const viewRemoved = await removeView(idView).catch(() => false);
 
     const msg = t("upl_api_save_failed", config.language, {
       title: config.title,
