@@ -85,6 +85,36 @@ describe("MxWindowManager", () => {
     expect(onClose).toHaveBeenCalledWith("consumer");
   });
 
+  it("supports synchronous and asynchronous close vetoes", async () => {
+    const sync = manager.open({
+      key: "sync-veto",
+      beforeClose: () => false,
+    });
+    expect(sync.close("button")).toBe(false);
+    expect(manager.windows.has("sync-veto")).toBe(true);
+
+    const beforeClose = vi.fn(async () => true);
+    const asyncWindow = manager.open({ key: "async-close", beforeClose });
+    await asyncWindow.close("escape");
+    expect(beforeClose).toHaveBeenCalledWith("escape");
+    expect(manager.windows.has("async-close")).toBe(false);
+
+    expect(manager.close(sync, "force")).toBe(true);
+  });
+
+  it("disables user-facing close without hiding the action", () => {
+    const element = manager.open({ key: "disabled-close" });
+    element.setCloseEnabled(false);
+
+    expect(element.refs.close.hidden).toBe(false);
+    expect(element.refs.close.disabled).toBe(true);
+    expect(element.close("button")).toBe(false);
+    expect(manager.windows.has("disabled-close")).toBe(true);
+
+    element.setCloseEnabled(true);
+    expect(element.close("button")).toBe(true);
+  });
+
   it("closes the front window with Escape", () => {
     manager.open({ key: "back" });
     const front = manager.open({ key: "front" });

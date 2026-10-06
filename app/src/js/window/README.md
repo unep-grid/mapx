@@ -21,10 +21,13 @@ const windowElement = manager.open({
 });
 ```
 
-The manager API is `open`, `close`, `closeAll`, `bringToFront` and `destroy`.
+The manager API is `open`, `requestClose`, `close`, `closeAll`, `bringToFront`
+and `destroy`. `requestClose` runs an optional `beforeClose` guard and is used
+by the header action and Escape; `close` remains an unconditional teardown for
+application-controlled cleanup.
 Window instances expose `show`, `hide`, `close`, `setTitle`, `collapse`,
-`expand`, `snap` and `restore`. Lifecycle and geometry changes emit bubbling
-`mx-window-*` DOM events.
+`expand`, `snap`, `restore` and `setCloseEnabled`. Lifecycle and geometry
+changes emit bubbling `mx-window-*` DOM events.
 
 Pass a single Bootstrap `.btn-group` node to `footerStart` for a connected tool
 toolbar. Pass independent decision buttons to `footerEnd`, as the dialog helpers

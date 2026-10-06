@@ -16,6 +16,7 @@ export class MxWindowElement extends HTMLElement {
     this.restoreRect = null;
     this.collapsed = false;
     this.snapSide = null;
+    this.closeEnabled = true;
     this._built = false;
     this._onPointerDown = this.onPointerDown.bind(this);
     this._onPointerMove = this.onPointerMove.bind(this);
@@ -120,6 +121,7 @@ export class MxWindowElement extends HTMLElement {
     this.setNodes(this.refs.title, config.title);
     this.refs.header.hidden = config.header === false;
     this.refs.close.hidden = config.closeable === false;
+    this.setCloseEnabled(config.closeEnabled !== false);
     this.refs.collapse.hidden = config.collapsible === false;
     this.refs.snapLeft.hidden = config.snappable === false;
     this.refs.snapRight.hidden = config.snappable === false;
@@ -206,7 +208,13 @@ export class MxWindowElement extends HTMLElement {
   }
 
   close(reason = "api") {
-    this.manager?.close(this, reason);
+    return this.manager?.requestClose(this, reason);
+  }
+
+  setCloseEnabled(enabled) {
+    this.closeEnabled = enabled !== false;
+    this.refs.close.disabled = !this.closeEnabled;
+    this.refs.close.setAttribute("aria-disabled", String(!this.closeEnabled));
   }
 
   setTitle(title) {

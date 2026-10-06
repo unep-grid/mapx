@@ -20,8 +20,10 @@ import { isElement } from "../is_test/index.js";
  * @property {boolean} [collapsible]
  * @property {boolean} [snappable]
  * @property {boolean} [closeable]
+ * @property {boolean} [closeEnabled]
  * @property {Record<string, string | number | undefined>} [geometry]
  * @property {(entries: ResizeObserverEntry[], window: import("./element.js").MxWindowElement) => void} [onResize]
+ * @property {(reason: string) => boolean | Promise<boolean>} [beforeClose]
  * @property {(reason: string) => void} [onClose]
  */
 
@@ -135,6 +137,46 @@ export class MxWindowManager {
     return true;
   }
 
+  /**
+   * Request a user-facing close. Consumers may veto it synchronously or
+   * asynchronously without changing the force-close semantics of close().
+   * @param {import("./element.js").MxWindowElement | string} windowOrKey
+   * @param {string} [reason]
+   * @returns {boolean | Promise<boolean>}
+   */
+  requestClose(windowOrKey, reason = "api") {
+    const element =
+      typeof windowOrKey === "string"
+        ? this.windows.get(windowOrKey)
+        : windowOrKey;
+    if (!element || !element.closeEnabled) {
+      return false;
+    }
+
+    const beforeClose = element.config?.beforeClose;
+    if (typeof beforeClose !== "function") {
+      return this.close(element, reason);
+    }
+
+    try {
+      const allowed = beforeClose(reason);
+      if (allowed && typeof allowed.then === "function") {
+        return allowed
+          .then((result) =>
+            result === false ? false : this.close(element, reason),
+          )
+          .catch((error) => {
+            console.error(error);
+            return false;
+          });
+      }
+      return allowed === false ? false : this.close(element, reason);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+
   /** @param {{excludeKeys?: string[]}} [options] */
   closeAll({ excludeKeys = [] } = {}) {
     for (const [key, element] of this.windows) {
@@ -182,7 +224,7 @@ export class MxWindowManager {
     }
     if (event.key === "Escape" && active.config?.closeable !== false) {
       event.preventDefault();
-      this.close(active, "escape");
+      this.requestClose(active, "escape");
       return;
     }
     if (event.key !== "Tab" || active.config?.modal === false) {
