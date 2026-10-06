@@ -11196,8 +11196,8 @@
   },
   {
     "id": "up_button_add_files",
-    "en": "Add files...",
-    "fa": "افزودن فایل ..."
+    "en": "Add files....",
+    "fa": "اضافه کردن فایل‌ها ...."
   },
   {
     "id": "up_button_upload",
@@ -11208,6 +11208,26 @@
     "id": "up_button_reset",
     "en": "Reset",
     "fa": "بازنشانی کنید"
+  },
+  {
+    "id": "up_button_copy_api",
+    "en": "Copy API configuration",
+    "fa": "کپی کردن پیکربندی API"
+  },
+  {
+    "id": "up_button_copy_api_warning",
+    "en": "Copy temporary and sensitive session credentials",
+    "fa": "کپی کردن اعتبارنامه‌های موقت و حساس جلسه"
+  },
+  {
+    "id": "up_actions_files",
+    "en": "File and API actions",
+    "fa": "اقدامات فایل و API"
+  },
+  {
+    "id": "up_actions_upload",
+    "en": "Upload actions",
+    "fa": "آپلود اکشن‌ها"
   },
   {
     "id": "up_confirm_reset_title",
@@ -11228,6 +11248,16 @@
     "id": "up_confirm_upload",
     "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
     "fa": "آپلود را تایید کنید {{n}} عناصر، در مجموع {{size}} ?"
+  },
+  {
+    "id": "up_confirm_close_title",
+    "en": "Close the uploader",
+    "fa": "آپلودر را ببندید"
+  },
+  {
+    "id": "up_confirm_close",
+    "en": "Discard {{n}} pending files and close?",
+    "fa": "دور انداختن {{n}} پرونده‌های در حال بررسی و بسته شدن؟"
   },
   {
     "id": "up_settings",

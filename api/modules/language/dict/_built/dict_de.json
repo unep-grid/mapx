@@ -11196,8 +11196,8 @@
   },
   {
     "id": "up_button_add_files",
-    "en": "Add files...",
-    "de": "Dateien hinzufügen..."
+    "en": "Add files....",
+    "de": "Dateien hinzufügen...."
   },
   {
     "id": "up_button_upload",
@@ -11208,6 +11208,26 @@
     "id": "up_button_reset",
     "en": "Reset",
     "de": "Zurücksetzen"
+  },
+  {
+    "id": "up_button_copy_api",
+    "en": "Copy API configuration",
+    "de": "API-Konfiguration kopieren"
+  },
+  {
+    "id": "up_button_copy_api_warning",
+    "en": "Copy temporary and sensitive session credentials",
+    "de": "Kopieren Sie temporäre und sensible Sitzungszugangsdaten."
+  },
+  {
+    "id": "up_actions_files",
+    "en": "File and API actions",
+    "de": "Datei- und API-Aktionen"
+  },
+  {
+    "id": "up_actions_upload",
+    "en": "Upload actions",
+    "de": "Upload-Aktionen"
   },
   {
     "id": "up_confirm_reset_title",
@@ -11228,6 +11248,16 @@
     "id": "up_confirm_upload",
     "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
     "de": "Hochladen bestätigen {{n}} Elemente, für insgesamt {{size}} ?"
+  },
+  {
+    "id": "up_confirm_close_title",
+    "en": "Close the uploader",
+    "de": "Schließe den Uploader."
+  },
+  {
+    "id": "up_confirm_close",
+    "en": "Discard {{n}} pending files and close?",
+    "de": "Verwerfen {{n}} Ausstehende Dateien und schließen?"
   },
   {
     "id": "up_settings",

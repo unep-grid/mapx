@@ -11196,8 +11196,8 @@
   },
   {
     "id": "up_button_add_files",
-    "en": "Add files...",
-    "zh": "添加文件..."
+    "en": "Add files....",
+    "zh": "添加文件……"
   },
   {
     "id": "up_button_upload",
@@ -11208,6 +11208,26 @@
     "id": "up_button_reset",
     "en": "Reset",
     "zh": "重置"
+  },
+  {
+    "id": "up_button_copy_api",
+    "en": "Copy API configuration",
+    "zh": "复制 API 配置"
+  },
+  {
+    "id": "up_button_copy_api_warning",
+    "en": "Copy temporary and sensitive session credentials",
+    "zh": "复制临时和敏感会话凭据"
+  },
+  {
+    "id": "up_actions_files",
+    "en": "File and API actions",
+    "zh": "文件和 API 操作"
+  },
+  {
+    "id": "up_actions_upload",
+    "en": "Upload actions",
+    "zh": "上传操作"
   },
   {
     "id": "up_confirm_reset_title",
@@ -11228,6 +11248,16 @@
     "id": "up_confirm_upload",
     "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
     "zh": "确认上传 {{n}}元素，总共有 {{size}}？"
+  },
+  {
+    "id": "up_confirm_close_title",
+    "en": "Close the uploader",
+    "zh": "关闭上传器"
+  },
+  {
+    "id": "up_confirm_close",
+    "en": "Discard {{n}} pending files and close?",
+    "zh": "丢弃 {{n}}待处理文件和关闭？"
   },
   {
     "id": "up_settings",

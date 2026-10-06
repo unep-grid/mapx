@@ -11196,7 +11196,7 @@
   },
   {
     "id": "up_button_add_files",
-    "en": "Add files...",
+    "en": "Add files....",
     "bn": "ফাইল যোগ করুন..."
   },
   {
@@ -11208,6 +11208,26 @@
     "id": "up_button_reset",
     "en": "Reset",
     "bn": "রিসেট"
+  },
+  {
+    "id": "up_button_copy_api",
+    "en": "Copy API configuration",
+    "bn": "এপিআই কনফিগারেশন কপি করুন"
+  },
+  {
+    "id": "up_button_copy_api_warning",
+    "en": "Copy temporary and sensitive session credentials",
+    "bn": "অস্থায়ী এবং সংবেদনশীল সেশন ক্রেডেনশিয়াল কপি করুন"
+  },
+  {
+    "id": "up_actions_files",
+    "en": "File and API actions",
+    "bn": "ফাইল এবং এপিআই অ্যাকশন"
+  },
+  {
+    "id": "up_actions_upload",
+    "en": "Upload actions",
+    "bn": "আপলোড অ্যাকশন"
   },
   {
     "id": "up_confirm_reset_title",
@@ -11228,6 +11248,16 @@
     "id": "up_confirm_upload",
     "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
     "bn": "আপলোড নিশ্চিত করুন {{n}} উপাদান, মোট জন্য {{size}} ?"
+  },
+  {
+    "id": "up_confirm_close_title",
+    "en": "Close the uploader",
+    "bn": "আপলোডারটি বন্ধ করুন"
+  },
+  {
+    "id": "up_confirm_close",
+    "en": "Discard {{n}} pending files and close?",
+    "bn": "বাতিল করুন {{n}} বিচারাধীন ফাইলগুলো বন্ধ করা হবে?"
   },
   {
     "id": "up_settings",

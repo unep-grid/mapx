@@ -11196,8 +11196,8 @@
   },
   {
     "id": "up_button_add_files",
-    "en": "Add files...",
-    "ps": "فایلونه زیات کړئ..."
+    "en": "Add files....",
+    "ps": "فایلونه اضافه کړئ...."
   },
   {
     "id": "up_button_upload",
@@ -11208,6 +11208,26 @@
     "id": "up_button_reset",
     "en": "Reset",
     "ps": "بیا تنظیم کړئ"
+  },
+  {
+    "id": "up_button_copy_api",
+    "en": "Copy API configuration",
+    "ps": "د API ترتیب کاپي کړئ"
+  },
+  {
+    "id": "up_button_copy_api_warning",
+    "en": "Copy temporary and sensitive session credentials",
+    "ps": "د لنډمهاله او حساسو غونډو اسناد کاپي کړئ"
+  },
+  {
+    "id": "up_actions_files",
+    "en": "File and API actions",
+    "ps": "د فایل او API کړنې"
+  },
+  {
+    "id": "up_actions_upload",
+    "en": "Upload actions",
+    "ps": "د پورته کولو کړنې"
   },
   {
     "id": "up_confirm_reset_title",
@@ -11228,6 +11248,16 @@
     "id": "up_confirm_upload",
     "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
     "ps": "پورته کول تایید کړئ {{n}} عناصر، د ټولیز لپاره {{size}} ؟"
+  },
+  {
+    "id": "up_confirm_close_title",
+    "en": "Close the uploader",
+    "ps": "اپلوډر بند کړئ"
+  },
+  {
+    "id": "up_confirm_close",
+    "en": "Discard {{n}} pending files and close?",
+    "ps": "پرېښودل {{n}} دوتنې پاتې دي او تړل کیږي؟"
   },
   {
     "id": "up_settings",

@@ -11107,7 +11107,7 @@
   {
     "id": "upl_title",
     "en": "Upload",
-    "fr": "Télécharger"
+    "fr": "Téléversement"
   },
   {
     "id": "upl_title_layer_name",
@@ -11196,18 +11196,38 @@
   },
   {
     "id": "up_button_add_files",
-    "en": "Add files...",
-    "fr": "Ajouter des fichiers..."
+    "en": "Add files....",
+    "fr": "Ajouter des fichiers…"
   },
   {
     "id": "up_button_upload",
     "en": "Upload",
-    "fr": "Télécharger"
+    "fr": "Téléverser"
   },
   {
     "id": "up_button_reset",
     "en": "Reset",
     "fr": "Réinitialiser"
+  },
+  {
+    "id": "up_button_copy_api",
+    "en": "Copy API configuration",
+    "fr": "Copier la configuration API"
+  },
+  {
+    "id": "up_button_copy_api_warning",
+    "en": "Copy temporary and sensitive session credentials",
+    "fr": "Copier les identifiants de session temporaires et sensibles"
+  },
+  {
+    "id": "up_actions_files",
+    "en": "File and API actions",
+    "fr": "Actions sur les fichiers et l’API"
+  },
+  {
+    "id": "up_actions_upload",
+    "en": "Upload actions",
+    "fr": "Actions de téléversement"
   },
   {
     "id": "up_confirm_reset_title",
@@ -11217,17 +11237,27 @@
   {
     "id": "up_confirm_reset",
     "en": "Confirm removing {{n}} elements ?",
-    "fr": "Confirmer la suppression {{n}} éléments ?"
+    "fr": "Confirmer la suppression de {{n}} éléments ?"
   },
   {
     "id": "up_confirm_upload_title",
     "en": "Confirm upload",
-    "fr": "Confirmer le téléchargement"
+    "fr": "Confirmer le téléversement"
   },
   {
     "id": "up_confirm_upload",
     "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
-    "fr": "Confirmer le téléchargement {{n}} éléments, pour un total de {{size}} ?"
+    "fr": "Confirmer le téléversement de {{n}} éléments, pour un total de {{size}} ?"
+  },
+  {
+    "id": "up_confirm_close_title",
+    "en": "Close the uploader",
+    "fr": "Fermer l’outil de téléversement"
+  },
+  {
+    "id": "up_confirm_close",
+    "en": "Discard {{n}} pending files and close?",
+    "fr": "Supprimer les {{n}} fichiers en attente et fermer ?"
   },
   {
     "id": "up_settings",

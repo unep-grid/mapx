@@ -8957,7 +8957,7 @@
   },
   {
     "id": "up_button_add_files",
-    "en": "Add files..."
+    "en": "Add files...."
   },
   {
     "id": "up_button_upload",
@@ -8966,6 +8966,22 @@
   {
     "id": "up_button_reset",
     "en": "Reset"
+  },
+  {
+    "id": "up_button_copy_api",
+    "en": "Copy API configuration"
+  },
+  {
+    "id": "up_button_copy_api_warning",
+    "en": "Copy temporary and sensitive session credentials"
+  },
+  {
+    "id": "up_actions_files",
+    "en": "File and API actions"
+  },
+  {
+    "id": "up_actions_upload",
+    "en": "Upload actions"
   },
   {
     "id": "up_confirm_reset_title",
@@ -8982,6 +8998,14 @@
   {
     "id": "up_confirm_upload",
     "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?"
+  },
+  {
+    "id": "up_confirm_close_title",
+    "en": "Close the uploader"
+  },
+  {
+    "id": "up_confirm_close",
+    "en": "Discard {{n}} pending files and close?"
   },
   {
     "id": "up_settings",
