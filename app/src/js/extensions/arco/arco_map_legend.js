@@ -88,7 +88,7 @@ export class ArcoMapLegend {
       this._renderStatus();
     };
     this._on_time_change = (time) => {
-      if (this._z?.getSource()?.type !== "geovideo") {
+      if (!this._usesNativePlayback()) {
         return;
       }
       const now = performance.now();
@@ -99,7 +99,7 @@ export class ArcoMapLegend {
       this._syncTime(time);
     };
     this._on_playback_change = (playing) => {
-      if (this._z?.getSource()?.type !== "geovideo") {
+      if (!this._usesNativePlayback()) {
         return;
       }
       this._setPlaying(playing);
@@ -489,7 +489,7 @@ export class ArcoMapLegend {
       return;
     }
     this._setPlaying(true);
-    if (this._z.getSource?.()?.type === "geovideo") {
+    if (this._usesNativePlayback()) {
       this._playGeoVideo();
       return;
     }
@@ -501,7 +501,7 @@ export class ArcoMapLegend {
   stop() {
     this._setPlaying(false);
     clearTimeout(this._id_timer);
-    if (this._z?.getSource?.()?.type === "geovideo") {
+    if (this._usesNativePlayback()) {
       this._z.pause?.();
     }
   }
@@ -624,7 +624,7 @@ export class ArcoMapLegend {
     }
     this._z?.resume();
     if (this._playing) {
-      if (this._z?.getSource?.()?.type === "geovideo") {
+      if (this._usesNativePlayback()) {
         this._playGeoVideo();
       } else {
         this._tick();
@@ -925,14 +925,28 @@ export class ArcoMapLegend {
   }
 
   isVector() {
-    return this._layer_def.kind === "vector";
+    return this._layer_def?.kind === "vector";
+  }
+
+  /**
+   * Native video playback is for scalar GeoVideo. Vector GeoVideo is decoded
+   * frame by frame and steps through time with the timer, like Zarr.
+   */
+  _usesNativePlayback() {
+    return this._z?.getSource?.()?.type === "geovideo" && !this.isVector();
+  }
+
+  /**
+   * Timeline playback controls: scalar layers, and vector layers rendered from
+   * GeoVideo (cheap cached frames). Vector Zarr reloads the field at each step.
+   */
+  _hasTimelinePlayback() {
+    return !this.isVector() || this._z?.getSource?.()?.type === "geovideo";
   }
 
   _buildTimeRow() {
     const { values } = this._time_meta;
-    // continuous playback only for scalar layers : vector layers
-    // reload the velocity field at each step, no frame cache
-    const playback = !this.isVector();
+    const playback = this._hasTimelinePlayback();
 
     this.elTimeInput = this._buildDateInput();
     this.elTimeSlider = el("div", { class: "arco--time_slider" });

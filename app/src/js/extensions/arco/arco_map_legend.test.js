@@ -462,6 +462,40 @@ describe("ArcoMapLegend playback controls", () => {
     expect(arco._tick).not.toHaveBeenCalled();
   });
 
+  it("steps vector GeoVideo with the timer instead of native playback", async () => {
+    vi.useFakeTimers();
+    const arco = createPlaybackArco({ values: [10, 20, 30] });
+    arco._layer_def = { kind: "vector" };
+    arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
+    arco._z.play = vi.fn(() => Promise.resolve());
+    arco._z.pause = vi.fn();
+
+    expect(arco._usesNativePlayback()).toBe(false);
+    expect(arco._hasTimelinePlayback()).toBe(true);
+    arco.play();
+    await vi.advanceTimersByTimeAsync(800);
+    expect(arco._z.play).not.toHaveBeenCalled();
+    expect(arco._z.update).toHaveBeenCalledWith({ time: 20 });
+
+    arco._on_time_change(30);
+    expect(arco.getTime()).toBe(20);
+    arco.stop();
+    expect(arco._z.pause).not.toHaveBeenCalled();
+  });
+
+  it("enables timeline playback for scalar and vector GeoVideo, not vector Zarr", () => {
+    const arco = new ArcoMapLegend({});
+    arco._z = { getSource: vi.fn(() => ({ type: "zarr" })) };
+    arco._layer_def = { kind: "scalar" };
+    expect(arco._hasTimelinePlayback()).toBe(true);
+    arco._layer_def = { kind: "vector" };
+    expect(arco._hasTimelinePlayback()).toBe(false);
+    arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
+    expect(arco._hasTimelinePlayback()).toBe(true);
+    arco._layer_def = { kind: "scalar" };
+    expect(arco._usesNativePlayback()).toBe(true);
+  });
+
   it("wraps skipped playback when looping and stops otherwise", async () => {
     vi.useFakeTimers();
     const looping = createPlaybackArco({ values: [10, 20, 50] });
