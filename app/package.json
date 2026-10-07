@@ -10,6 +10,7 @@
   "browserslist": "last 2 years",
   "scripts": {
     "test": "vitest run",
+    "test:unit": "vitest run --exclude 'test/build/**'",
     "test:watch": "vitest watch",
     "test:build": "vitest run test/build/build.test.js",
     "test:sdk": "vitest run src/js/sdk/src",
