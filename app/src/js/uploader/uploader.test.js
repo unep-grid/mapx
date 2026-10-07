@@ -21,6 +21,15 @@ vi.mock("./item.js", () => ({ Item: vi.fn() }));
 vi.mock("./../language", () => ({
   getDictItem: vi.fn(async (key) => key),
 }));
+// el_mapx pulls mx.js (the whole application) through is_test_mapx
+vi.mock("../el_mapx", () => ({
+  tt: vi.fn((key) => {
+    const span = document.createElement("span");
+    span.dataset.lang_key = key;
+    span.textContent = key;
+    return span;
+  }),
+}));
 vi.mock("../animation_frame", () => ({
   waitTimeoutAsync: vi.fn(async () => {}),
 }));
