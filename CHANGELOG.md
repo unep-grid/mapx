@@ -1,3 +1,8 @@
+  - [1.14.1-beta.1](https://github.com/unep-grid/mapx/tree/1.14.1-beta.1) 
+
+    - fix(test): run import_vector test with a pipefail-capable shell
+
+
   - [1.14.1-beta.0](https://github.com/unep-grid/mapx/tree/1.14.1-beta.0) 
 
     - fix(test): uploader test

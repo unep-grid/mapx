@@ -19,7 +19,7 @@
     "release-it": "^18.1.2",
     "typescript": "5.9.3"
   },
-  "version": "1.14.1-beta.0",
+  "version": "1.14.1-beta.1",
   "scripts": {
     "prepare": "husky",
     "commit": "cz",
