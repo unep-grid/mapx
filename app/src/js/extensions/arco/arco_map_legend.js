@@ -17,6 +17,7 @@ import {
   resolveInitialColorDomain,
 } from "./color_domain_control.js";
 import { createPaletteDropdown } from "./palette_dropdown.js";
+import { TimeScrub } from "./time_scrub.js";
 import { formatVerticalAxisLabel, orderVerticalValues } from "./vertical.js";
 import { createVisibilityGate } from "../../app_visibility/index.js";
 import "../shared/style.less";
@@ -88,7 +89,7 @@ export class ArcoMapLegend {
       this._renderStatus();
     };
     this._on_time_change = (time) => {
-      if (!this._usesNativePlayback()) {
+      if (!this._usesNativePlayback() || this._scrub.interacting) {
         return;
       }
       const now = performance.now();
@@ -99,11 +100,24 @@ export class ArcoMapLegend {
       this._syncTime(time);
     };
     this._on_playback_change = (playing) => {
-      if (!this._usesNativePlayback()) {
+      if (!this._usesNativePlayback() || this._scrub.interacting) {
         return;
       }
       this._setPlaying(playing);
     };
+    // Slider drag : keep the playing state, seek live, resume on release
+    this._scrub = new TimeScrub({
+      isPlaying: () => this._playing,
+      pause: () => this._suspendPlayback(),
+      present: (time) => this._syncTime(time, { fromSlider: true }),
+      apply: (time) => void this._updateFromControl({ time }),
+      live: () => this._z?.getSource?.()?.type === "geovideo",
+      finish: (_time, resume) => {
+        if (resume && this._playing) {
+          this._resumePlayback();
+        }
+      },
+    });
     this._on_pick = this._handlePickClick.bind(this);
     this._update_chart_debounced = debounce(() => this.updateChart(), 350);
   }
@@ -264,8 +278,10 @@ export class ArcoMapLegend {
       this._meta = null;
     }
     this._syncOptions(change, nextLayer);
-    if (structural || change.time != null || change.depth != null) {
+    if (structural) {
       this._syncStateFromZartigl();
+    } else if (change.time != null || change.depth != null) {
+      this._syncAxesFromZartigl();
     }
     if (structural) {
       if (!this.hasDepth() && this._chart_mode === "depth") {
@@ -279,7 +295,9 @@ export class ArcoMapLegend {
       return;
     }
 
-    if (change.time != null) {
+    // While scrubbing, the slider owns the time : a resolved, older seek must
+    // not move the handle back.
+    if (change.time != null && !this._scrub.interacting) {
       this._syncTime(this._time);
     }
     if (change.depth != null) {
@@ -351,19 +369,29 @@ export class ArcoMapLegend {
   }
 
   _syncStateFromZartigl() {
+    this._syncAxesFromZartigl();
+    const appliedSettings = this._z.getDebugInfo?.().settings;
+    if (appliedSettings) {
+      this._opt.settings = { ...appliedSettings };
+    }
+  }
+
+  /**
+   * Time and depth state only : cheap enough for every playback or scrub
+   * step, unlike getDebugInfo() which reads layout.
+   */
+  _syncAxesFromZartigl() {
     this._time_meta = this._z.getTimeMeta();
     this._depth_meta = this._z.getDepthMeta();
     this._depths = orderVerticalValues(
       this._depth_meta.values,
       this._depth_meta,
     );
-    this._time = this._time_meta.current ?? this._time_meta.max;
+    if (!this._scrub.interacting) {
+      this._time = this._time_meta.current ?? this._time_meta.max;
+    }
     this._depth =
       this._depth_meta.current ?? this._depths[0] ?? this._opt.depth ?? 0;
-    const appliedSettings = this._z.getDebugInfo?.().settings;
-    if (appliedSettings) {
-      this._opt.settings = { ...appliedSettings };
-    }
   }
 
   _rebuild() {
@@ -499,10 +527,29 @@ export class ArcoMapLegend {
   }
 
   stop() {
+    this._scrub.cancel();
     this._setPlaying(false);
+    this._suspendPlayback();
+  }
+
+  /**
+   * Halt the timer or native video without changing the playing state.
+   */
+  _suspendPlayback() {
     clearTimeout(this._id_timer);
     if (this._usesNativePlayback()) {
       this._z.pause?.();
+    }
+  }
+
+  _resumePlayback() {
+    if (!this._visible) {
+      return;
+    }
+    if (this._usesNativePlayback()) {
+      this._playGeoVideo();
+    } else {
+      this._tick();
     }
   }
 
@@ -623,12 +670,8 @@ export class ArcoMapLegend {
       return;
     }
     this._z?.resume();
-    if (this._playing) {
-      if (this._usesNativePlayback()) {
-        this._playGeoVideo();
-      } else {
-        this._tick();
-      }
+    if (this._playing && !this._scrub.interacting) {
+      this._resumePlayback();
     }
   }
 
@@ -937,11 +980,12 @@ export class ArcoMapLegend {
   }
 
   /**
-   * Timeline playback controls: scalar layers, and vector layers rendered from
-   * GeoVideo (cheap cached frames). Vector Zarr reloads the field at each step.
+   * Timeline playback controls: scalar layers only. On vector layers the
+   * particles carry the motion : stepping the field at a fixed cadence never
+   * lets the trails settle, so time is navigated manually.
    */
   _hasTimelinePlayback() {
-    return !this.isVector() || this._z?.getSource?.()?.type === "geovideo";
+    return !this.isVector();
   }
 
   _buildTimeRow() {
@@ -974,12 +1018,22 @@ export class ArcoMapLegend {
       this.elTimeSlider.noUiSlider.on("update", (sliderValues) => {
         this._updateTimeReadout(values[Math.round(Number(sliderValues[0]))]);
       });
-      this.elTimeSlider.noUiSlider.on("change", (sliderValues) => {
-        this.stop();
-        this.setTime(values[Math.round(Number(sliderValues[0]))], {
-          fromSlider: true,
-        });
+      const sliderTime = (sliderValues) =>
+        values[Math.round(Number(sliderValues[0]))];
+      this.elTimeSlider.noUiSlider.on("start", () => this._scrub.begin());
+      this.elTimeSlider.noUiSlider.on("slide", (sliderValues) => {
+        this._scrub.request(sliderTime(sliderValues));
       });
+      this.elTimeSlider.noUiSlider.on("change", (sliderValues) => {
+        // A tap on the track fires 'change' without 'start' / 'end'
+        const tap = !this._scrub.interacting;
+        this._scrub.begin();
+        this._scrub.request(sliderTime(sliderValues));
+        if (tap) {
+          this._scrub.end();
+        }
+      });
+      this.elTimeSlider.noUiSlider.on("end", () => this._scrub.end());
     } else {
       this.elTimeSlider.classList.add("disabled");
     }

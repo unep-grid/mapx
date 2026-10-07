@@ -113,22 +113,26 @@ export class ArcoChart {
     if (!this._chart || this._mode !== "time" || this.isEmpty()) {
       return;
     }
-    this._chart.setOption({
-      series: [
-        {
-          markLine: {
-            symbol: "none",
-            animation: false,
-            label: { show: false },
-            lineStyle: {
-              type: "dashed",
-              color: getAccentColor(),
+    // lazyUpdate : coalesce rapid cursor moves (scrub, playback) per frame
+    this._chart.setOption(
+      {
+        series: [
+          {
+            markLine: {
+              symbol: "none",
+              animation: false,
+              label: { show: false },
+              lineStyle: {
+                type: "dashed",
+                color: getAccentColor(),
+              },
+              data: [{ xAxis: ms }],
             },
-            data: [{ xAxis: ms }],
           },
-        },
-      ],
-    });
+        ],
+      },
+      { lazyUpdate: true },
+    );
   }
 
   showMessage(text) {

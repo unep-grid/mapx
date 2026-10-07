@@ -462,8 +462,7 @@ describe("ArcoMapLegend playback controls", () => {
     expect(arco._tick).not.toHaveBeenCalled();
   });
 
-  it("steps vector GeoVideo with the timer instead of native playback", async () => {
-    vi.useFakeTimers();
+  it("navigates vector GeoVideo manually without native video playback", () => {
     const arco = createPlaybackArco({ values: [10, 20, 30] });
     arco._layer_def = { kind: "vector" };
     arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
@@ -471,19 +470,16 @@ describe("ArcoMapLegend playback controls", () => {
     arco._z.pause = vi.fn();
 
     expect(arco._usesNativePlayback()).toBe(false);
-    expect(arco._hasTimelinePlayback()).toBe(true);
-    arco.play();
-    await vi.advanceTimersByTimeAsync(800);
-    expect(arco._z.play).not.toHaveBeenCalled();
+    arco.stepNext(true);
     expect(arco._z.update).toHaveBeenCalledWith({ time: 20 });
 
     arco._on_time_change(30);
     expect(arco.getTime()).toBe(20);
-    arco.stop();
+    expect(arco._z.play).not.toHaveBeenCalled();
     expect(arco._z.pause).not.toHaveBeenCalled();
   });
 
-  it("enables timeline playback for scalar and vector GeoVideo, not vector Zarr", () => {
+  it("enables timeline playback for scalar layers only", () => {
     const arco = new ArcoMapLegend({});
     arco._z = { getSource: vi.fn(() => ({ type: "zarr" })) };
     arco._layer_def = { kind: "scalar" };
@@ -491,7 +487,7 @@ describe("ArcoMapLegend playback controls", () => {
     arco._layer_def = { kind: "vector" };
     expect(arco._hasTimelinePlayback()).toBe(false);
     arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
-    expect(arco._hasTimelinePlayback()).toBe(true);
+    expect(arco._hasTimelinePlayback()).toBe(false);
     arco._layer_def = { kind: "scalar" };
     expect(arco._usesNativePlayback()).toBe(true);
   });
@@ -607,6 +603,102 @@ describe("ArcoMapLegend playback controls", () => {
     });
     expect(arco._opt.loop).toBe(false);
     expect(arco._playbackRate).toBe(5);
+  });
+
+  it("keeps native GeoVideo playing through a slider scrub", () => {
+    vi.useFakeTimers();
+    const arco = createPlaybackArco({ values: [10, 20, 30, 40] });
+    arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
+    arco._z.play = vi.fn(() => Promise.resolve());
+    arco._z.pause = vi.fn(() => arco._on_playback_change(false));
+    arco._buildPlayerButtons(true);
+    arco.play();
+
+    arco._scrub.begin();
+    arco._scrub.request(30);
+    vi.advanceTimersToNextFrame();
+    arco._on_time_change(20);
+    arco._scrub.request(40);
+    arco._scrub.end();
+
+    expect(arco._z.pause).toHaveBeenCalledOnce();
+    expect(arco._playing).toBe(true);
+    expect(arco.elButtonPlay.classList.contains("playing")).toBe(true);
+    expect(arco._z.update.mock.calls).toEqual([[{ time: 30 }], [{ time: 40 }]]);
+    expect(arco.getTime()).toBe(40);
+    expect(arco._z.play).toHaveBeenCalledTimes(2);
+  });
+
+  it("keeps the scrubbed time when an older seek resolves", async () => {
+    const arco = createPlaybackArco({ values: [10, 20, 30, 40] });
+    arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
+    arco._z.getDebugInfo = vi.fn(() => ({ settings: {} }));
+    arco.elTimeSlider = { noUiSlider: { set: vi.fn() } };
+    // zartigl applied the first seek, the handle has moved on
+    arco._time_meta.current = 20;
+    arco._z.getTimeMeta = vi.fn(() => ({ ...arco._time_meta }));
+
+    arco._scrub.begin();
+    arco._scrub.request(20);
+    const seek = arco.update({ time: 20 });
+    arco._scrub.request(40);
+    await seek;
+
+    expect(arco.getTime()).toBe(40);
+    expect(arco.elTimeSlider.noUiSlider.set).not.toHaveBeenCalled();
+    expect(arco._z.getDebugInfo).not.toHaveBeenCalled();
+    arco._scrub.cancel();
+  });
+
+  it("resumes timer playback from the scrubbed time", async () => {
+    vi.useFakeTimers();
+    const arco = createPlaybackArco({ values: [10, 20, 30, 40] });
+    arco._z.getSource = vi.fn(() => ({ type: "zarr" }));
+    arco.play();
+
+    arco._scrub.begin();
+    arco._scrub.request(20);
+    arco._scrub.request(30);
+    await vi.advanceTimersByTimeAsync(800);
+    expect(arco._z.update).not.toHaveBeenCalled();
+    expect(arco.getTime()).toBe(30);
+
+    arco._scrub.end();
+    expect(arco._z.update).toHaveBeenCalledOnce();
+    expect(arco._z.update).toHaveBeenCalledWith({ time: 30 });
+    await vi.advanceTimersByTimeAsync(800);
+    expect(arco.getTime()).toBe(40);
+    arco.stop();
+  });
+
+  it("seeks without starting playback when scrubbing while stopped", async () => {
+    vi.useFakeTimers();
+    const arco = createPlaybackArco({ values: [10, 20, 30] });
+
+    arco._scrub.begin();
+    arco._scrub.request(20);
+    arco._scrub.end();
+    await vi.advanceTimersByTimeAsync(1600);
+
+    expect(arco._playing).toBe(false);
+    expect(arco._z.update).toHaveBeenCalledWith({ time: 20 });
+    expect(arco.getTime()).toBe(20);
+  });
+
+  it("does not resume after an explicit stop during a scrub", async () => {
+    vi.useFakeTimers();
+    const arco = createPlaybackArco({ values: [10, 20, 30] });
+    arco.play();
+
+    arco._scrub.begin();
+    arco._scrub.request(20);
+    arco.stop();
+    arco._scrub.end();
+    await vi.advanceTimersByTimeAsync(1600);
+
+    expect(arco._playing).toBe(false);
+    expect(arco.getTime()).toBe(20);
+    expect(arco._z.update).not.toHaveBeenCalled();
   });
 
   it("clears optimistic playback state when native autoplay is rejected", async () => {
