@@ -1,3 +1,32 @@
+  - [1.14.1-beta.0](https://github.com/unep-grid/mapx/tree/1.14.1-beta.0) 
+
+    - fix(test): uploader test
+    - feat(arco): smooth time slider scrubbing during playback, manual time navigation for vector layers
+    - chore: update submodule
+    - chore(zartigl): update submodule for vector GeoVideo
+    - feat(arco): step through vector GeoVideo frames instead of native playback
+    - fix(upload): discard view, source, table and files on failed upload
+    - fix(chunks): validate upload request id and remove partial uploads
+    - fix(view): skip websocket view push for http uploads
+    - fix(upload): make upload_mapx helper work in zsh and bash 3.2
+    - feat(uploader): migrate to mx-window and copy upload API configuration
+    - feat(window): add beforeClose guard and disabled close state
+    - chore(dict): add uploader items and rebuild dictionaries
+    - fix(upload): make http vector upload usable for scripted imports
+    - fix(auth): enforce role check and token expiry in http middlewares
+    - chore: submodule
+    - fix(story_map): skip deprecated ContentTools unload listener
+    - docs: translation not always reliable
+    - chore: include translation
+    - fix(story_map): clarify step transition and map camera animation settings in story schema
+    - fix(story_map): apply editor margin classes over media and cover image styles (#1143)
+    - chore: remove unused new story map draft
+    - fix(style): validate the edited view source and guard json editor values before ready
+    - fix(features): query view sources through its layers and list attributes from all rows
+    - docs: updated agents commit instruction
+    - fix: maintenance image version bump
+
+
   - [1.14.1-alpha.17](https://github.com/unep-grid/mapx/tree/1.14.1-alpha.17) 
 
     - fix(views): stop viewsCloseAll from firing on every list render
