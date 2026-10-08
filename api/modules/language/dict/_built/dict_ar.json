@@ -6990,6 +6990,11 @@
     "ar": "لا يمكن حذف هذا المصدر طالما أن المصادر أو طرق العرض التابعة له موجودة."
   },
   {
+    "id": "arco_playback_speed",
+    "en": "Playback speed (time steps per second)",
+    "ar": "سرعة التشغيل (خطوات زمنية في الثانية)"
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer",
     "ar": "مؤلف الخرائط"
@@ -11196,8 +11201,8 @@
   },
   {
     "id": "up_button_add_files",
-    "en": "Add files....",
-    "ar": "أضف الملفات..."
+    "en": "Add files...",
+    "ar": "إضافة ملفات..."
   },
   {
     "id": "up_button_upload",

@@ -6990,6 +6990,11 @@
     "zh": "只要存在依赖源或视图，就无法删除此源。"
   },
   {
+    "id": "arco_playback_speed",
+    "en": "Playback speed (time steps per second)",
+    "zh": "播放速度（每秒时间步数）"
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer",
     "zh": "地图编辑器"
@@ -11196,8 +11201,8 @@
   },
   {
     "id": "up_button_add_files",
-    "en": "Add files....",
-    "zh": "添加文件……"
+    "en": "Add files...",
+    "zh": "添加文件..."
   },
   {
     "id": "up_button_upload",

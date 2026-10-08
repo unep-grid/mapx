@@ -5592,6 +5592,10 @@
     "en": "This source cannot be deleted while dependent sources or views exist."
   },
   {
+    "id": "arco_playback_speed",
+    "en": "Playback speed (time steps per second)"
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer"
   },
@@ -8957,7 +8961,7 @@
   },
   {
     "id": "up_button_add_files",
-    "en": "Add files...."
+    "en": "Add files..."
   },
   {
     "id": "up_button_upload",

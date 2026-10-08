@@ -6990,6 +6990,11 @@
     "fa": "این منبع را نمی‌توان تا زمانی که منابع یا نماهای وابسته وجود دارند، حذف کرد."
   },
   {
+    "id": "arco_playback_speed",
+    "en": "Playback speed (time steps per second)",
+    "fa": "سرعت پخش (گام‌های زمانی در ثانیه)"
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer",
     "fa": "Map Composer"
@@ -11196,8 +11201,8 @@
   },
   {
     "id": "up_button_add_files",
-    "en": "Add files....",
-    "fa": "اضافه کردن فایل‌ها ...."
+    "en": "Add files...",
+    "fa": "اضافه کردن فایل‌ها..."
   },
   {
     "id": "up_button_upload",

@@ -6990,6 +6990,11 @@
     "es": "Esta fuente no se puede eliminar mientras existan fuentes o vistas dependientes."
   },
   {
+    "id": "arco_playback_speed",
+    "en": "Playback speed (time steps per second)",
+    "es": "Velocidad de reproducción (pasos de tiempo por segundo)"
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer",
     "es": "Creador de mapas"
@@ -11196,8 +11201,8 @@
   },
   {
     "id": "up_button_add_files",
-    "en": "Add files....",
-    "es": "Agregar archivos...."
+    "en": "Add files...",
+    "es": "Agregar archivos..."
   },
   {
     "id": "up_button_upload",

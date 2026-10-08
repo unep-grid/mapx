@@ -6990,6 +6990,11 @@
     "ps": "دا سرچینه نشي حذف کیدی پداسې حال کې چې تړلې سرچینې یا لیدونه شتون لري."
   },
   {
+    "id": "arco_playback_speed",
+    "en": "Playback speed (time steps per second)",
+    "ps": "د پلې بیک سرعت (په ثانیه کې د وخت ګامونه)"
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer",
     "ps": "د نقشې کمپوزر"
@@ -11196,8 +11201,8 @@
   },
   {
     "id": "up_button_add_files",
-    "en": "Add files....",
-    "ps": "فایلونه اضافه کړئ...."
+    "en": "Add files...",
+    "ps": "فایلونه اضافه کړئ..."
   },
   {
     "id": "up_button_upload",

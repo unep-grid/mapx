@@ -6990,6 +6990,11 @@
     "de": "Diese Quelle kann nicht gelöscht werden, solange abhängige Quellen oder Ansichten vorhanden sind."
   },
   {
+    "id": "arco_playback_speed",
+    "en": "Playback speed (time steps per second)",
+    "de": "Wiedergabegeschwindigkeit (Zeitschritte pro Sekunde)"
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer",
     "de": "Kartenkomponist"
@@ -11196,8 +11201,8 @@
   },
   {
     "id": "up_button_add_files",
-    "en": "Add files....",
-    "de": "Dateien hinzufügen...."
+    "en": "Add files...",
+    "de": "Dateien hinzufügen..."
   },
   {
     "id": "up_button_upload",

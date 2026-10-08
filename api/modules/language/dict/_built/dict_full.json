@@ -18174,6 +18174,19 @@
     "ar": "لا يمكن حذف هذا المصدر طالما أن المصادر أو طرق العرض التابعة له موجودة."
   },
   {
+    "id": "arco_playback_speed",
+    "en": "Playback speed (time steps per second)",
+    "fr": "Vitesse de lecture (pas de temps par seconde)",
+    "es": "Velocidad de reproducción (pasos de tiempo por segundo)",
+    "ru": "Скорость воспроизведения (шагов по времени в секунду)",
+    "zh": "播放速度（每秒时间步数）",
+    "de": "Wiedergabegeschwindigkeit (Zeitschritte pro Sekunde)",
+    "bn": "প্লেব্যাকের গতি (প্রতি সেকেন্ডে সময় ধাপ)",
+    "fa": "سرعت پخش (گام‌های زمانی در ثانیه)",
+    "ps": "د پلې بیک سرعت (په ثانیه کې د وخت ګامونه)",
+    "ar": "سرعة التشغيل (خطوات زمنية في الثانية)"
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer",
     "fr": "Composeur de carte",
@@ -29108,16 +29121,16 @@
   },
   {
     "id": "up_button_add_files",
-    "en": "Add files....",
+    "en": "Add files...",
     "fr": "Ajouter des fichiers…",
-    "es": "Agregar archivos....",
-    "ru": "Добавить файлы....",
-    "zh": "添加文件……",
-    "ar": "أضف الملفات...",
-    "fa": "اضافه کردن فایل‌ها ....",
-    "ps": "فایلونه اضافه کړئ....",
+    "es": "Agregar archivos...",
+    "ru": "Добавить файлы...",
+    "zh": "添加文件...",
+    "ar": "إضافة ملفات...",
+    "fa": "اضافه کردن فایل‌ها...",
+    "ps": "فایلونه اضافه کړئ...",
     "bn": "ফাইল যোগ করুন...",
-    "de": "Dateien hinzufügen...."
+    "de": "Dateien hinzufügen..."
   },
   {
     "id": "up_button_upload",

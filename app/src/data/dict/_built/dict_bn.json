@@ -6990,6 +6990,11 @@
     "bn": "নির্ভরশীল সোর্স বা ভিউ বিদ্যমান থাকলে এই সোর্সটি মুছে ফেলা যাবে না।"
   },
   {
+    "id": "arco_playback_speed",
+    "en": "Playback speed (time steps per second)",
+    "bn": "প্লেব্যাকের গতি (প্রতি সেকেন্ডে সময় ধাপ)"
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer",
     "bn": "মানচিত্র সুরকার"
@@ -11196,7 +11201,7 @@
   },
   {
     "id": "up_button_add_files",
-    "en": "Add files....",
+    "en": "Add files...",
     "bn": "ফাইল যোগ করুন..."
   },
   {
