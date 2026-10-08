@@ -1,3 +1,12 @@
+  - [1.14.1-beta.2](https://github.com/unep-grid/mapx/tree/1.14.1-beta.2) 
+
+    - chore: update dictionnaries
+    - chore: update submodule
+    - feat(arco): playback speed in time steps per second
+    - chore: added local _tmp folder in gitignore
+    - chore(test): run app, api, maintenance and submodule tests from root npm test
+
+
   - [1.14.1-beta.1](https://github.com/unep-grid/mapx/tree/1.14.1-beta.1) 
 
     - fix(test): run import_vector test with a pipefail-capable shell
