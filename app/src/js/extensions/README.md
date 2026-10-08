@@ -62,7 +62,7 @@ const arco = new ArcoMapLegend({
   layer: "sea-surface-temperature-anomaly",
   source: "geovideo",
   timeRange: { trailing: "P1M" },
-  geoVideo: { autoplay: false, loop: true, playbackRate: 1 },
+  geoVideo: { autoplay: false, loop: true, stepsPerSecond: 2 },
   elLegend: elLegend,
   elInputs: widget.elContent,
 });
@@ -71,9 +71,16 @@ await arco.init();
 await arco.update({
   time: new Date("2025-01-01T00:00:00Z"),
   settings: { opacity: 0.8 },
-  geoVideo: { playbackRate: 2 },
+  geoVideo: { stepsPerSecond: 4 },
 });
 ```
+
+Playback speed is in time steps per second (0.25–32 in the legend), so it means
+the same for monthly and hourly data, for GeoVideo and Zarr playback alike.
+While a GeoVideo is shown with `source: "auto"`, the time and depth controls
+span the Zarr axes: a deeper level or a time outside the video switches to
+Zarr, and archive playback continues from one monthly or yearly chunk to the
+next.
 
 `update()` accepts the same runtime fields as zartigl (`layer`, `source`,
 `timeRange`, `time`, `depth`, `settings`, `geoVideo`, and `visible`). The

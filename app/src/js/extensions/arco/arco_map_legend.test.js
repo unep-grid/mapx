@@ -67,7 +67,7 @@ function createArco(legend) {
 }
 
 function createPlaybackArco({ values, loop = true }) {
-  const arco = new ArcoMapLegend({ loop, playbackInterval: 800 });
+  const arco = new ArcoMapLegend({ loop });
   arco._time_meta = {
     min: values[0],
     max: values.at(-1),
@@ -124,7 +124,7 @@ describe("ArcoMapLegend zartigl 0.5 lifecycle", () => {
       visible: false,
       timeRange: { trailing: "P1M" },
       settings: { opacity: 0.8 },
-      geoVideo: { autoplay: false, loop: false, playbackRate: 2 },
+      geoVideo: { autoplay: false, loop: false, stepsPerSecond: 2 },
     });
     arco.build = vi.fn();
     arco.renderLegend = vi.fn();
@@ -141,7 +141,7 @@ describe("ArcoMapLegend zartigl 0.5 lifecycle", () => {
       visible: false,
       timeRange: { trailing: "P1M" },
       settings: { opacity: 0.8 },
-      geoVideo: { autoplay: false, loop: false, playbackRate: 2 },
+      geoVideo: { autoplay: false, loop: false, stepsPerSecond: 2 },
     });
     expect(z.init).toHaveBeenCalledOnce();
     expect(z.update).not.toHaveBeenCalled();
@@ -351,27 +351,30 @@ describe("ArcoMapLegend playback controls", () => {
   it("prefers nested GeoVideo settings over the legacy loop option", () => {
     const arco = new ArcoMapLegend({
       loop: false,
-      geoVideo: { loop: true, playbackRate: 5 },
+      geoVideo: { loop: true, stepsPerSecond: 5 },
     });
 
     expect(arco._opt.loop).toBe(true);
-    expect(arco._playbackRate).toBe(5);
+    expect(arco._playbackSpeed).toBe(5);
   });
 
   afterEach(() => {
     vi.useRealTimers();
   });
 
-  it("cycles through the compact playback rates", () => {
+  it("cycles through playback speeds in steps per second", () => {
     const arco = createPlaybackArco({ values: [10, 20] });
     arco.elButtonRate = document.createElement("button");
 
-    expect(arco._playbackRate).toBe(1);
-    for (const expected of [2, 5, 10, 1]) {
-      arco._cyclePlaybackRate();
-      expect(arco._playbackRate).toBe(expected);
-      expect(arco.elButtonRate.textContent).toBe(`${expected}×`);
+    expect(arco._playbackSpeed).toBe(2);
+    for (const expected of [4, 8, 16, 32, 0.25, 0.5, 1, 2]) {
+      arco._cyclePlaybackSpeed();
+      expect(arco._playbackSpeed).toBe(expected);
+      expect(arco.elButtonRate.textContent).toBe(`${expected}/s`);
     }
+    expect(arco._z.update).toHaveBeenLastCalledWith({
+      geoVideo: { stepsPerSecond: 2 },
+    });
   });
 
   it("skips real timestamps on irregular time axes", () => {
@@ -383,26 +386,38 @@ describe("ArcoMapLegend playback controls", () => {
     expect(arco._timeAtOffset(5, { wrap: true })).toBe(20);
   });
 
-  it("advances by the selected rate without changing timer cadence", async () => {
+  it("advances one time step per tick at the selected speed", async () => {
     vi.useFakeTimers();
     const arco = createPlaybackArco({ values: [10, 20, 50, 100] });
-    arco._playbackRate = 2;
+    arco._playbackSpeed = 2;
     arco._playing = true;
 
     arco._tick();
-    await vi.advanceTimersByTimeAsync(799);
+    await vi.advanceTimersByTimeAsync(499);
     expect(arco.getTime()).toBe(10);
     await vi.advanceTimersByTimeAsync(1);
-    expect(arco.getTime()).toBe(50);
+    expect(arco.getTime()).toBe(20);
     expect(arco._z.update).toHaveBeenCalledTimes(1);
-    expect(arco._z.update).toHaveBeenCalledWith({ time: 50 });
+    expect(arco._z.update).toHaveBeenCalledWith({ time: 20 });
+    arco.stop();
+  });
+
+  it("skips time steps instead of ticking faster than the minimum interval", async () => {
+    vi.useFakeTimers();
+    const arco = createPlaybackArco({ values: [10, 20, 50, 100, 200, 300] });
+    arco._playbackSpeed = 32;
+    arco._playing = true;
+
+    arco._tick();
+    await vi.advanceTimersByTimeAsync(125);
+    expect(arco.getTime()).toBe(200);
     arco.stop();
   });
 
   it("retains loading backpressure at higher rates", async () => {
     vi.useFakeTimers();
     const arco = createPlaybackArco({ values: [10, 20, 50, 100] });
-    arco._playbackRate = 10;
+    arco._playbackSpeed = 32;
     arco._playing = true;
     arco._loading = true;
 
@@ -496,19 +511,20 @@ describe("ArcoMapLegend playback controls", () => {
     vi.useFakeTimers();
     const looping = createPlaybackArco({ values: [10, 20, 50] });
     looping._time = 50;
-    looping._playbackRate = 2;
+    // 16 steps/s ticks every 125 ms and skips two steps per tick.
+    looping._playbackSpeed = 16;
     looping._playing = true;
     looping._tick();
-    await vi.advanceTimersByTimeAsync(800);
+    await vi.advanceTimersByTimeAsync(125);
     expect(looping.getTime()).toBe(20);
     looping.stop();
 
     const finite = createPlaybackArco({ values: [10, 20, 50], loop: false });
     finite._time = 20;
-    finite._playbackRate = 2;
+    finite._playbackSpeed = 16;
     finite._playing = true;
     finite._tick();
-    await vi.advanceTimersByTimeAsync(800);
+    await vi.advanceTimersByTimeAsync(125);
     expect(finite.getTime()).toBe(50);
     expect(finite._playing).toBe(false);
     expect(finite._z.update).toHaveBeenCalledWith({ time: 50 });
@@ -516,7 +532,7 @@ describe("ArcoMapLegend playback controls", () => {
 
   it("keeps manual navigation at one frame with wrapping", () => {
     const arco = createPlaybackArco({ values: [10, 20, 50] });
-    arco._playbackRate = 10;
+    arco._playbackSpeed = 32;
 
     arco.stepNext(false);
     expect(arco.getTime()).toBe(20);
@@ -533,7 +549,7 @@ describe("ArcoMapLegend playback controls", () => {
     expect(scalarButtons.querySelectorAll("button")).toHaveLength(6);
     expect(
       scalarButtons.querySelector(".arco--playback_rate").textContent,
-    ).toBe("1×");
+    ).toBe("2/s");
 
     const vector = new ArcoMapLegend({});
     vector._layer_def = { kind: "vector" };
@@ -556,9 +572,9 @@ describe("ArcoMapLegend playback controls", () => {
     await Promise.resolve();
     expect(arco._z.play).toHaveBeenCalledOnce();
 
-    arco._cyclePlaybackRate();
+    arco._cyclePlaybackSpeed();
     expect(arco._z.update).toHaveBeenCalledWith({
-      geoVideo: { playbackRate: 2 },
+      geoVideo: { stepsPerSecond: 4 },
     });
 
     arco.toggleLoop();
@@ -572,7 +588,7 @@ describe("ArcoMapLegend playback controls", () => {
 
   it("preserves native playback state received before controls are built", () => {
     const arco = new ArcoMapLegend({
-      geoVideo: { autoplay: true, loop: true, playbackRate: 2 },
+      geoVideo: { autoplay: true, loop: true, stepsPerSecond: 4 },
     });
     arco._z = { getSource: vi.fn(() => ({ type: "geovideo" })) };
 
@@ -581,12 +597,12 @@ describe("ArcoMapLegend playback controls", () => {
 
     expect(arco.elButtonPlay.classList.contains("playing")).toBe(true);
     expect(arco.elButtonLoop.classList.contains("active")).toBe(true);
-    expect(arco.elButtonRate.textContent).toBe("2×");
+    expect(arco.elButtonRate.textContent).toBe("4/s");
   });
 
   it("forwards generated GeoVideo playback options through update", async () => {
     const arco = new ArcoMapLegend({
-      geoVideo: { autoplay: true, loop: false, playbackRate: 5 },
+      geoVideo: { autoplay: true, loop: false, stepsPerSecond: 5 },
     });
     arco._z = {
       getSource: vi.fn(() => ({ type: "geovideo" })),
@@ -595,14 +611,14 @@ describe("ArcoMapLegend playback controls", () => {
     arco._initialized = true;
 
     await arco.update({
-      geoVideo: { autoplay: true, loop: false, playbackRate: 5 },
+      geoVideo: { autoplay: true, loop: false, stepsPerSecond: 5 },
     });
 
     expect(arco._z.update).toHaveBeenCalledWith({
-      geoVideo: { autoplay: true, loop: false, playbackRate: 5 },
+      geoVideo: { autoplay: true, loop: false, stepsPerSecond: 5 },
     });
     expect(arco._opt.loop).toBe(false);
-    expect(arco._playbackRate).toBe(5);
+    expect(arco._playbackSpeed).toBe(5);
   });
 
   it("keeps native GeoVideo playing through a slider scrub", () => {

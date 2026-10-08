@@ -10242,5 +10242,10 @@
     "id": "source_settings_delete_blocked",
     "en": "This source cannot be deleted while dependent sources or views exist.",
     "fr": "Cette source ne peut pas être supprimée tant que des sources ou des vues en dépendent."
+  },
+  {
+    "id": "arco_playback_speed",
+    "en": "Playback speed (time steps per second)",
+    "fr": "Vitesse de lecture (pas de temps par seconde)"
   }
 ]

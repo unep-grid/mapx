@@ -30,7 +30,7 @@ function handler() {
         layer: "sea-surface-temperature-anomaly",
         source: "geovideo",
         timeRange: { trailing: "P1M" },
-        geoVideo: { autoplay: false, loop: true, playbackRate: 1 },
+        geoVideo: { autoplay: false, loop: true, stepsPerSecond: 2 },
         elLegend: elLegend,
         elInputs: widget.elContent,
       });

@@ -10,6 +10,7 @@ import { ElementCreator } from "../../el/src/index.js";
 import { maplibregl, settings as mxSettings } from "../../mx";
 import { moduleLoad } from "../../modules_loader_async";
 import { setClickHandler, debounce } from "../../mx_helper_misc";
+import { getDictItem } from "../../language";
 import { ArcoChart } from "./chart.js";
 import {
   ArcoColorDomainControl,
@@ -32,7 +33,6 @@ const defaultOptions = {
   elLegend: null,
   title: "ARCO",
   subtitle: null,
-  playbackInterval: 800,
   loop: true,
   geoVideo: null,
   maxPoints: 200,
@@ -44,7 +44,11 @@ const defaultOptions = {
   visible: true,
 };
 
-const playbackRates = [1, 2, 5, 10];
+/** Playback speeds in time steps per second, for GeoVideo and Zarr alike. */
+const playbackSpeeds = [0.25, 0.5, 1, 2, 4, 8, 16, 32];
+const defaultPlaybackSpeed = 2;
+/** Zarr playback never requests frames faster than this; faster speeds skip steps. */
+const minTickMs = 125;
 
 /**
  * ARCO map legend : animated Zarr ocean data (zartigl) with time/depth
@@ -65,7 +69,8 @@ export class ArcoMapLegend {
     this._id_query = 0;
     this._status = null;
     this._playing = false;
-    this._playbackRate = this._opt.geoVideo?.playbackRate ?? playbackRates[0];
+    this._playbackSpeed =
+      this._opt.geoVideo?.stepsPerSecond ?? defaultPlaybackSpeed;
     this._visibility = createVisibilityGate(
       this._opt.map?.getContainer?.() ?? null,
     );
@@ -157,7 +162,7 @@ export class ArcoMapLegend {
       geoVideo: {
         autoplay: this._opt.geoVideo?.autoplay ?? false,
         loop: this._opt.loop,
-        playbackRate: this._playbackRate,
+        stepsPerSecond: this._playbackSpeed,
       },
       before: mxSettings.layerBefore,
       metadata: {
@@ -362,8 +367,8 @@ export class ArcoMapLegend {
       if (change.geoVideo.loop != null) {
         this._opt.loop = change.geoVideo.loop;
       }
-      if (change.geoVideo.playbackRate != null) {
-        this._playbackRate = change.geoVideo.playbackRate;
+      if (change.geoVideo.stepsPerSecond != null) {
+        this._playbackSpeed = change.geoVideo.stepsPerSecond;
       }
     }
   }
@@ -573,22 +578,23 @@ export class ArcoMapLegend {
     void this._updateFromControl({ geoVideo: { loop: this._opt.loop } });
   }
 
-  _cyclePlaybackRate() {
-    const index = playbackRates.indexOf(this._playbackRate);
-    this._playbackRate = playbackRates[(index + 1) % playbackRates.length];
+  _cyclePlaybackSpeed() {
+    const index = playbackSpeeds.indexOf(this._playbackSpeed);
+    this._playbackSpeed = playbackSpeeds[(index + 1) % playbackSpeeds.length];
     void this._updateFromControl({
-      geoVideo: { playbackRate: this._playbackRate },
+      geoVideo: { stepsPerSecond: this._playbackSpeed },
     });
     this._syncPlaybackRateButton();
+    if (this._playing && !this._usesNativePlayback()) {
+      this._tick();
+    }
   }
 
   _syncPlaybackRateButton() {
     if (!this.elButtonRate) {
       return;
     }
-    const label = `${this._playbackRate}×`;
-    this.elButtonRate.textContent = label;
-    this.elButtonRate.title = `Playback rate: ${label}`;
+    this.elButtonRate.textContent = `${this._playbackSpeed}/s`;
   }
 
   _setPlaying(playing) {
@@ -643,7 +649,7 @@ export class ArcoMapLegend {
       }
       // backpressure : do not advance while chunks are loading
       if (!this._loading) {
-        const next = this._timeAtOffset(this._playbackRate, {
+        const next = this._timeAtOffset(this._tickPlan().steps, {
           wrap: this._opt.loop,
         });
         if (next === null) {
@@ -656,7 +662,19 @@ export class ArcoMapLegend {
         this.setTime(next);
       }
       this._tick();
-    }, this._opt.playbackInterval);
+    }, this._tickPlan().interval);
+  }
+
+  /**
+   * Zarr playback cadence for the selected speed: one step per tick, or
+   * several steps per minimum-length tick at high speeds.
+   */
+  _tickPlan() {
+    const interval = Math.max(minTickMs, 1000 / this._playbackSpeed);
+    return {
+      interval,
+      steps: Math.max(1, Math.round((this._playbackSpeed * interval) / 1000)),
+    };
   }
 
   _setVisible(visible) {
@@ -1109,10 +1127,15 @@ export class ArcoMapLegend {
         {
           class: ["btn", "btn-default", "arco--playback_rate"],
           disabled: transportEnabled ? null : true,
-          on: { click: () => this._cyclePlaybackRate() },
+          dataset: { lang_key: "arco_playback_speed", lang_type: "title" },
+          on: { click: () => this._cyclePlaybackSpeed() },
         },
-        `${this._playbackRate}×`,
+        `${this._playbackSpeed}/s`,
       );
+      const elButtonRate = this.elButtonRate;
+      void getDictItem("arco_playback_speed").then((title) => {
+        elButtonRate.title = title;
+      });
       this._syncPlaybackControls();
     }
 
