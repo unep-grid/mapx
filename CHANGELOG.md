@@ -1,3 +1,10 @@
+  - [1.14.1-beta.3](https://github.com/unep-grid/mapx/tree/1.14.1-beta.3) 
+
+    - chore: update submodule
+    - chore: update submodule
+    - fix(arco): hand Zarr timer playback over to native GeoVideo playback
+
+
   - [1.14.1-beta.2](https://github.com/unep-grid/mapx/tree/1.14.1-beta.2) 
 
     - chore: update dictionnaries
