@@ -647,6 +647,11 @@ export class ArcoMapLegend {
       if (this.isDestroyed() || !this._playing || !this._visible) {
         return;
       }
+      // The time reached a scalar GeoVideo source : the video plays on
+      if (this._usesNativePlayback()) {
+        this._playGeoVideo();
+        return;
+      }
       // backpressure : do not advance while chunks are loading
       if (!this._loading) {
         const next = this._timeAtOffset(this._tickPlan().steps, {

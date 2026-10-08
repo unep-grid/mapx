@@ -459,6 +459,27 @@ describe("ArcoMapLegend playback controls", () => {
     expect(arco.getTime()).toBe(10);
   });
 
+  it("hands Zarr timer playback over to a GeoVideo reached on the way", async () => {
+    vi.useFakeTimers();
+    const arco = createPlaybackArco({ values: [10, 20, 50] });
+    let source = { type: "zarr" };
+    arco._z.getSource = vi.fn(() => source);
+    arco._z.play = vi.fn(() => Promise.resolve());
+    arco._playbackSpeed = 1;
+
+    arco.play();
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(arco.getTime()).toBe(20);
+
+    source = { type: "geovideo" };
+    await vi.advanceTimersByTimeAsync(3000);
+    expect(arco.getTime()).toBe(20);
+    expect(arco._z.update).toHaveBeenCalledOnce();
+    expect(arco._z.play).toHaveBeenCalledOnce();
+    expect(arco._playing).toBe(true);
+    arco.stop();
+  });
+
   it("resumes native GeoVideo playback instead of the Zarr timer", () => {
     const arco = new ArcoMapLegend({});
     arco._visible = false;
