@@ -67,6 +67,7 @@ export class ArcoMapLegend {
     this._chart_mode = "time";
     this._point = null;
     this._id_query = 0;
+    this._id_time = 0;
     this._status = null;
     this._playing = false;
     this._playbackSpeed =
@@ -93,8 +94,14 @@ export class ArcoMapLegend {
       this._status = status;
       this._renderStatus();
     };
+    // The video reports its time only while it plays : when paused, the
+    // requested step owns the visible date, even if the frame lags.
     this._on_time_change = (time) => {
-      if (!this._usesNativePlayback() || this._scrub.interacting) {
+      if (
+        !this._playing ||
+        !this._usesNativePlayback() ||
+        this._scrub.interacting
+      ) {
         return;
       }
       const now = performance.now();
@@ -107,6 +114,11 @@ export class ArcoMapLegend {
     this._on_playback_change = (playing) => {
       if (!this._usesNativePlayback() || this._scrub.interacting) {
         return;
+      }
+      // Paused by the media (end, chunk handoff) : show the date of the
+      // last played frame, which the throttled time sync may have skipped.
+      if (!playing && this._playing) {
+        this._syncTime(this._z.getTimeMeta().current ?? this._time);
       }
       this._setPlaying(playing);
     };
@@ -244,6 +256,7 @@ export class ArcoMapLegend {
     }
 
     const next = { ...change };
+    const idTime = change.time != null ? ++this._id_time : this._id_time;
     let nextLayer = null;
     if (change.layer != null) {
       nextLayer = resolveCatalogEntry(change.layer, catalog);
@@ -283,10 +296,13 @@ export class ArcoMapLegend {
       this._meta = null;
     }
     this._syncOptions(change, nextLayer);
+    // A newer time request owns the visible date : an older one resolving
+    // late must not move it back.
+    const keepTime = idTime !== this._id_time;
     if (structural) {
-      this._syncStateFromZartigl();
+      this._syncStateFromZartigl({ keepTime });
     } else if (change.time != null || change.depth != null) {
-      this._syncAxesFromZartigl();
+      this._syncAxesFromZartigl({ keepTime });
     }
     if (structural) {
       if (!this.hasDepth() && this._chart_mode === "depth") {
@@ -302,7 +318,7 @@ export class ArcoMapLegend {
 
     // While scrubbing, the slider owns the time : a resolved, older seek must
     // not move the handle back.
-    if (change.time != null && !this._scrub.interacting) {
+    if (change.time != null && !keepTime && !this._scrub.interacting) {
       this._syncTime(this._time);
     }
     if (change.depth != null) {
@@ -373,8 +389,8 @@ export class ArcoMapLegend {
     }
   }
 
-  _syncStateFromZartigl() {
-    this._syncAxesFromZartigl();
+  _syncStateFromZartigl(opt) {
+    this._syncAxesFromZartigl(opt);
     const appliedSettings = this._z.getDebugInfo?.().settings;
     if (appliedSettings) {
       this._opt.settings = { ...appliedSettings };
@@ -385,14 +401,14 @@ export class ArcoMapLegend {
    * Time and depth state only : cheap enough for every playback or scrub
    * step, unlike getDebugInfo() which reads layout.
    */
-  _syncAxesFromZartigl() {
+  _syncAxesFromZartigl({ keepTime = false } = {}) {
     this._time_meta = this._z.getTimeMeta();
     this._depth_meta = this._z.getDepthMeta();
     this._depths = orderVerticalValues(
       this._depth_meta.values,
       this._depth_meta,
     );
-    if (!this._scrub.interacting) {
+    if (!keepTime && !this._scrub.interacting) {
       this._time = this._time_meta.current ?? this._time_meta.max;
     }
     this._depth =

@@ -666,6 +666,51 @@ describe("ArcoMapLegend playback controls", () => {
     expect(arco._z.play).toHaveBeenCalledTimes(2);
   });
 
+  it("keeps a stepped GeoVideo date while a paused frame reports another", () => {
+    const arco = createPlaybackArco({ values: [10, 20, 30, 40] });
+    arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
+    arco._z.pause = vi.fn();
+
+    arco.stepNext(true);
+    arco._on_time_change(10);
+
+    expect(arco.getTime()).toBe(20);
+  });
+
+  it("keeps the latest step when an older step resolves late", async () => {
+    const arco = createPlaybackArco({ values: [10, 20, 30, 40] });
+    arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
+    arco._z.pause = vi.fn();
+    arco.elTimeSlider = { noUiSlider: { set: vi.fn() } };
+    const seeks = [];
+    arco._z.update = vi.fn(() => new Promise((resolve) => seeks.push(resolve)));
+    // zartigl has applied only the first step
+    arco._z.getTimeMeta = vi.fn(() => ({ ...arco._time_meta, current: 20 }));
+
+    arco.stepNext(true);
+    arco.stepNext(true);
+    arco.elTimeSlider.noUiSlider.set.mockClear();
+    seeks[0]();
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(arco.getTime()).toBe(30);
+    expect(arco.elTimeSlider.noUiSlider.set).not.toHaveBeenCalled();
+  });
+
+  it("shows the last played GeoVideo date when the media pauses itself", () => {
+    const arco = createPlaybackArco({ values: [10, 20, 30, 40] });
+    arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
+    arco._z.play = vi.fn(() => Promise.resolve());
+    arco._z.getTimeMeta = vi.fn(() => ({ ...arco._time_meta, current: 40 }));
+    arco.play();
+
+    arco._on_playback_change(false);
+
+    expect(arco.getTime()).toBe(40);
+    expect(arco._playing).toBe(false);
+  });
+
   it("keeps the scrubbed time when an older seek resolves", async () => {
     const arco = createPlaybackArco({ values: [10, 20, 30, 40] });
     arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
