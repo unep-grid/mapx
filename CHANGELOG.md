@@ -1,3 +1,10 @@
+  - [1.14.1-beta.4](https://github.com/unep-grid/mapx/tree/1.14.1-beta.4) 
+
+    - chore: update zartigl
+    - chore: update submodule
+    - chore: update submodule
+
+
   - [1.14.1-beta.3](https://github.com/unep-grid/mapx/tree/1.14.1-beta.3) 
 
     - chore: update submodule
