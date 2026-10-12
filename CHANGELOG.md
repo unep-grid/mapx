@@ -1,3 +1,8 @@
+  - [1.14.1-beta.5](https://github.com/unep-grid/mapx/tree/1.14.1-beta.5) 
+
+    - fix(ogc_meta): cap pycsw text columns below btree index limit
+
+
   - [1.14.1-beta.4](https://github.com/unep-grid/mapx/tree/1.14.1-beta.4) 
 
     - chore: update zartigl
