@@ -25,6 +25,23 @@ const isoTopicCategories = new Set([
   "utilitiesCommunication",
 ]);
 
+/**
+ * pycsw creates B-Tree indexes on its queryable text columns, and PostgreSQL
+ * rejects B-Tree entries larger than 2704 bytes. Values injected into pycsw
+ * are capped below that limit; MapX metadata and ogc_meta keep full values.
+ */
+const pycswIndexedTextMaxBytes = 2000;
+// Full-record copies and the full-text source are not B-Tree indexed
+const pycswUncappedColumns = new Set([
+  "identifier",
+  "xml",
+  "metadata",
+  "anytext",
+]);
+// JSON arrays parsed by pycsw: shortened by items to stay valid
+const pycswJsonArrayColumns = new Set(["themes", "links", "contacts"]);
+const pycswTruncatedMarker = " [truncated]";
+
 export { buildPycswRecord };
 
 function buildPycswRecord(
@@ -58,7 +75,7 @@ function buildPycswRecord(
     .join("; ");
   const contacts = getContacts(catalogMetadata.contacts);
 
-  return {
+  return fitPycswRecord({
     identifier: row.view_id,
     typename: pycswTypename,
     schema: pycswSchema,
@@ -112,7 +129,58 @@ function buildPycswRecord(
     links: JSON.stringify(links),
     contacts: JSON.stringify(contacts),
     relation: getMultilingualRecordUrl(collectionUrl, row.view_id),
-  };
+  });
+}
+
+function fitPycswRecord(record) {
+  for (const [column, value] of Object.entries(record)) {
+    if (
+      pycswUncappedColumns.has(column) ||
+      typeof value !== "string" ||
+      Buffer.byteLength(value) <= pycswIndexedTextMaxBytes
+    ) {
+      continue;
+    }
+
+    record[column] = pycswJsonArrayColumns.has(column)
+      ? capJsonArray(value, pycswIndexedTextMaxBytes)
+      : capText(value, pycswIndexedTextMaxBytes);
+  }
+
+  return record;
+}
+
+function capText(value, maxBytes) {
+  const budget = maxBytes - Buffer.byteLength(pycswTruncatedMarker);
+  let bytes = 0;
+  let end = 0;
+
+  for (const char of value) {
+    bytes += Buffer.byteLength(char);
+    if (bytes > budget) {
+      break;
+    }
+    end += char.length;
+  }
+
+  const text = value.slice(0, end);
+  const wordEnd = text.search(/\s+\S*$/);
+
+  return `${wordEnd > 0 ? text.slice(0, wordEnd) : text}${pycswTruncatedMarker}`;
+}
+
+function capJsonArray(value, maxBytes) {
+  const items = JSON.parse(value);
+
+  if (!Array.isArray(items)) {
+    return "[]";
+  }
+
+  while (items.length && Buffer.byteLength(JSON.stringify(items)) > maxBytes) {
+    items.pop();
+  }
+
+  return JSON.stringify(items);
 }
 
 function getPycswLinks(links) {

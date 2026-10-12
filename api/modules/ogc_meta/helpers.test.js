@@ -585,6 +585,44 @@ describe("OGC metadata", () => {
     expect(links.some((item) => item.protocol === "OGC:WFS")).toBe(true);
   });
 
+  it("caps pycsw indexed columns without altering the MapX metadata copy", () => {
+    const notes = "Méthodologie détaillée des menaces côtières. ".repeat(160);
+    const record = buildPycswRecord(
+      {
+        ...row,
+        meta_multilingual: {
+          ...row.meta_multilingual,
+          source_notes: { en: notes },
+        },
+        source_contacts: Array.from({ length: 40 }, (_, i) => ({
+          ...row.source_contacts[0],
+          name: `Contact ${i}`,
+        })),
+      },
+      {
+        language: "en",
+        apiBaseUrl: baseUrl.replace("/ogc_meta", ""),
+      },
+    );
+    const metadata = JSON.parse(record.metadata);
+    const contacts = JSON.parse(record.contacts);
+
+    expect(Buffer.byteLength(notes)).toBeGreaterThan(2704);
+    expect(Buffer.byteLength(record.lineage)).toBeLessThanOrEqual(2000);
+    const kept = record.lineage.slice(0, -" [truncated]".length);
+
+    expect(record.lineage.endsWith(" [truncated]")).toBe(true);
+    expect(record.lineage.includes("�")).toBe(false);
+    expect(notes.startsWith(kept)).toBe(true);
+    expect(notes[kept.length]).toBe(" ");
+    expect(metadata.properties.metadata.lineage.statement).toBe(notes.trim());
+    expect(Buffer.byteLength(record.contacts)).toBeLessThanOrEqual(2000);
+    expect(contacts.length).toBeGreaterThan(0);
+    expect(contacts.length).toBeLessThan(40);
+    expect(contacts[0].name).toBe("Contact 0");
+    expect(record.title).toBe("English title");
+  });
+
   it("keeps translated metadata available through the MapX-native OGC endpoint", () => {
     const record = buildRecord(row, {
       language: "fr",
