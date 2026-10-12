@@ -1,3 +1,11 @@
+  - [1.14.1](https://github.com/unep-grid/mapx/tree/1.14.1) 
+
+    - Merge remote-tracking branch 'github/main'
+    - chore: update submodule
+    - Merge pull request #1119 from unep-grid/hotfix/1.14.0-fix.1
+    - fix(map): restore gradient behind transparent canvas
+
+
   - [1.14.1-beta.5](https://github.com/unep-grid/mapx/tree/1.14.1-beta.5) 
 
     - fix(ogc_meta): cap pycsw text columns below btree index limit
