@@ -11,7 +11,7 @@ import { maplibregl, settings as mxSettings } from "../../mx";
 import { moduleLoad } from "../../modules_loader_async";
 import { setClickHandler, debounce } from "../../mx_helper_misc";
 import { getDictItem } from "../../language";
-import { ArcoChart } from "./chart.js";
+import { ArcoChart, formatValue } from "./chart.js";
 import {
   ArcoColorDomainControl,
   isColorDomainEligible,
@@ -287,7 +287,6 @@ export class ArcoMapLegend {
         catalog.defaultLocale,
       );
       this._point = null;
-      this._series = null;
       this._chart_mode = "time";
       this._marker?.remove();
       this._marker = null;
@@ -445,7 +444,9 @@ export class ArcoMapLegend {
       this.elTimeSlider?.noUiSlider?.set(index);
     }
     this._updateTimeReadout(this._time);
-    this._chart?.setCursor(this._time);
+    if (this._chart_mode === "time") {
+      this._chart?.setCursor(this._time);
+    }
     this._updateValueReadout();
     const refreshProfile =
       this._chart_mode === "depth" && this._point && !this._playing;
@@ -525,7 +526,14 @@ export class ArcoMapLegend {
       this.elDepthSlider?.noUiSlider?.set(index);
     }
     this._updateDepthReadout(nearest);
-    if (this._point) {
+    if (!this._point) {
+      return;
+    }
+    // The profile already holds every depth; the time series depends on it
+    if (this._chart_mode === "depth") {
+      this._chart?.setCursor(nearest);
+      this._updateValueReadout();
+    } else {
       this._update_chart_debounced();
     }
   }
@@ -780,6 +788,7 @@ export class ArcoMapLegend {
     }
     if (!this._point) {
       this._chart.showMessage("Use the target button, then click on the map");
+      this._updateValueReadout();
       return;
     }
     const idQuery = ++this._id_query;
@@ -787,6 +796,7 @@ export class ArcoMapLegend {
     const unit = this._z.getVariableMeta().units || this._meta?.unit || "";
     try {
       this._chart.showMessage("Loading…");
+      this._updateValueReadout();
       const result =
         mode === "time"
           ? await this._z.queryTimeSeries({
@@ -802,25 +812,22 @@ export class ArcoMapLegend {
       if (idQuery !== this._id_query || this.isDestroyed()) {
         return;
       }
-      this._series = result.points.map((point) => [
-        point.axisValue,
-        this._sampleValue(point.values),
-      ]);
       this._chart.setSeries({
-        data: this._series,
+        data: result.points.map((point) => [
+          point.axisValue,
+          this._sampleValue(point.values),
+        ]),
         mode: mode,
         unit: unit,
         label: this._layer_label,
         verticalLabel: formatVerticalAxisLabel(this._depth_meta, this._depths),
       });
-      if (mode === "time") {
-        this._chart.setCursor(this._time);
-      }
+      this._chart.setCursor(mode === "time" ? this._time : this.getDepth());
       this._updateValueReadout();
     } catch (error) {
       if (idQuery === this._id_query && !this.isDestroyed()) {
-        this._series = null;
         this._chart.showMessage(`Query failed : ${error.message || error}`);
+        this._updateValueReadout();
       }
     }
   }
@@ -844,20 +851,9 @@ export class ArcoMapLegend {
     if (!this.elValue) {
       return;
     }
-    const series = this._series;
-    if (!series?.length) {
-      this.elValue.innerText = "-";
-      return;
-    }
+    // The series is decimated : read the drawn line, not the nearest sample
     const cursor = this._chart_mode === "time" ? this._time : this.getDepth();
-    let nearest = series[0];
-    for (const point of series) {
-      if (Math.abs(point[0] - cursor) < Math.abs(nearest[0] - cursor)) {
-        nearest = point;
-      }
-    }
-    const value = nearest[1];
-    this.elValue.innerText = isFinite(value) ? value.toPrecision(3) : "-";
+    this.elValue.innerText = formatValue(this._chart?.valueAt(cursor));
   }
 
   /**

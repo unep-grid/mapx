@@ -41,10 +41,12 @@ vi.mock("../../modules_loader_async", () => ({
 
 vi.mock("../../mx", () => ({
   maplibregl: {},
+  theme: { isDark: () => false },
   settings: { layerBefore: null, language: "en" },
 }));
 
 import { ArcoMapLegend } from "./arco_map_legend.js";
+import { ArcoChart, formatValue } from "./chart.js";
 
 const palettes = [{ id: "balance", colors: ["#0000ff", "#ffffff", "#ff0000"] }];
 
@@ -917,5 +919,105 @@ describe("ArcoMapLegend cadence-aware time input", () => {
     expect(byTitle("Stop").disabled).toBe(false);
     expect(byTitle("Loop").disabled).toBe(false);
     expect(row.querySelector(".arco--playback_rate").disabled).toBe(false);
+  });
+});
+
+describe("ArcoMapLegend value readout", () => {
+  const times = Array.from({ length: 17 }, (_, index) => index * 10);
+  const depths = [0, 10, 20];
+
+  function createReadoutArco({ mode, data }) {
+    const arco = createPlaybackArco({ values: times });
+    delete arco._updateValueReadout;
+    arco._depths = depths;
+    arco._depth = depths[0];
+    arco._z.getDepthMeta = vi.fn(() => ({
+      values: depths,
+      label: "depth",
+      current: arco._depth,
+    }));
+    arco._point = { longitude: 1, latitude: 2 };
+    arco._chart_mode = mode;
+    arco._update_chart_debounced = vi.fn();
+    arco.elValue = document.createElement("span");
+    const markers = [];
+    arco._chart = new ArcoChart({
+      echarts: {
+        init: () => ({
+          clear: vi.fn(),
+          getDom: () => document.createElement("div"),
+          getOption: () => ({ series: [{}] }),
+          setOption: vi.fn((option) => {
+            const markPoint = option.series?.[0]?.markPoint;
+            if (markPoint) {
+              markers.push(markPoint.data[0]?.coord);
+            }
+          }),
+        }),
+      },
+      elContainer: document.createElement("div"),
+    });
+    arco._chart.init();
+    arco._chart.setSeries({ data, mode });
+    return { arco, markers };
+  }
+
+  it("follows the drawn line at every step, between decimated samples", () => {
+    // decimated chart series : one sample every 8 steps
+    const { arco, markers } = createReadoutArco({
+      mode: "time",
+      data: [
+        [0, 1],
+        [80, 9],
+        [160, 1],
+      ],
+    });
+
+    const readouts = [];
+    for (let step = 0; step < 3; step++) {
+      arco.stepNext(true);
+      readouts.push(arco.elValue.innerText);
+    }
+
+    expect(readouts).toEqual(["2.00", "3.00", "4.00"]);
+    // the cursor point on the chart carries the same value as the readout
+    expect(markers.slice(-3)).toEqual([
+      [10, 2],
+      [20, 3],
+      [30, 4],
+    ]);
+  });
+
+  it("moves the depth profile cursor without querying the profile again", async () => {
+    const { arco, markers } = createReadoutArco({
+      mode: "depth",
+      data: [
+        [0, 1],
+        [10, 3],
+        [20, 5],
+      ],
+    });
+
+    await arco.setDepth(10);
+
+    expect(arco.elValue.innerText).toBe("3.00");
+    expect(markers.at(-1)).toEqual([10, 3]);
+    expect(arco._update_chart_debounced).not.toHaveBeenCalled();
+  });
+
+  it("queries the time series again when the depth changes", async () => {
+    const { arco, markers } = createReadoutArco({
+      mode: "time",
+      data: [
+        [0, 1],
+        [160, 1],
+      ],
+    });
+    const count = markers.length;
+
+    await arco.setDepth(10);
+
+    expect(arco._update_chart_debounced).toHaveBeenCalled();
+    expect(markers).toHaveLength(count);
   });
 });
