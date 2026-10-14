@@ -68,7 +68,12 @@ function createArco(legend) {
   return { arco, elLegend };
 }
 
-function createPlaybackArco({ values, loop = true }) {
+/**
+ * ArcoMapLegend over a zartigl double: the time axis `values`, GeoVideo
+ * playback when `available`, and steps that start from the last requested
+ * time, as zartigl does.
+ */
+function createPlaybackArco({ values, loop = true, available = true }) {
   const arco = new ArcoMapLegend({ loop });
   arco._time_meta = {
     min: values[0],
@@ -77,13 +82,36 @@ function createPlaybackArco({ values, loop = true }) {
     values,
   };
   arco._time = values[0];
-  arco._z = {
-    update: vi.fn(() => Promise.resolve()),
+  let requested = values[0];
+  const z = {
+    available,
+    source: { id: "video", type: available ? "geovideo" : "zarr" },
+    speeds: [0.25, 0.5, 1, 2, 4, 8, 16, 32],
+    update: vi.fn((change) => {
+      if (change.time != null) {
+        requested = change.time;
+      }
+      return Promise.resolve();
+    }),
     getTimeMeta: vi.fn(() => ({ ...arco._time_meta, current: arco._time })),
     getDepthMeta: vi.fn(() => ({ values: [], label: "depth" })),
+    getSource: vi.fn(() => z.source),
+    getPlaybackState: vi.fn(() => ({
+      available: z.available,
+      playing: arco._playing,
+      loop: arco._opt.loop,
+      stepsPerSecond: arco._playbackSpeed,
+      speeds: z.speeds,
+    })),
+    getSteppedTime: vi.fn(
+      (offset) => values[values.indexOf(requested) + offset],
+    ),
+    play: vi.fn(() => Promise.resolve()),
+    pause: vi.fn(),
     suspend: vi.fn(),
     resume: vi.fn(),
   };
+  arco._z = z;
   arco._initialized = true;
   arco._updateTimeReadout = vi.fn();
   arco._updateValueReadout = vi.fn();
@@ -350,6 +378,22 @@ describe("ArcoMapLegend status text", () => {
 });
 
 describe("ArcoMapLegend playback controls", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  function buttons(arco) {
+    arco._buildPlayerButtons();
+    return {
+      previous: arco.elButtonPrevious,
+      next: arco.elButtonNext,
+      play: arco.elButtonPlay,
+      stop: arco.elButtonStop,
+      loop: arco.elButtonLoop,
+      rate: arco.elButtonRate,
+    };
+  }
+
   it("prefers nested GeoVideo settings over the legacy loop option", () => {
     const arco = new ArcoMapLegend({
       loop: false,
@@ -360,15 +404,10 @@ describe("ArcoMapLegend playback controls", () => {
     expect(arco._playbackSpeed).toBe(5);
   });
 
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
-  it("cycles through playback speeds in steps per second", () => {
+  it("cycles through the speeds zartigl offers", () => {
     const arco = createPlaybackArco({ values: [10, 20] });
     arco.elButtonRate = document.createElement("button");
 
-    expect(arco._playbackSpeed).toBe(2);
     for (const expected of [4, 8, 16, 32, 0.25, 0.5, 1, 2]) {
       arco._cyclePlaybackSpeed();
       expect(arco._playbackSpeed).toBe(expected);
@@ -377,223 +416,209 @@ describe("ArcoMapLegend playback controls", () => {
     expect(arco._z.update).toHaveBeenLastCalledWith({
       geoVideo: { stepsPerSecond: 2 },
     });
+
+    arco._z.speeds = [0.25, 0.5, 1, 2];
+    arco._cyclePlaybackSpeed();
+    expect(arco._playbackSpeed).toBe(0.25);
   });
 
-  it("skips real timestamps on irregular time axes", () => {
-    const arco = createPlaybackArco({ values: [10, 20, 50, 100, 200] });
-    arco._time = 20;
+  it("keeps playback controls visible but inactive where zartigl cannot play", () => {
+    const arco = createPlaybackArco({ values: [10, 20, 30], available: false });
+    const els = buttons(arco);
 
-    expect(arco._timeAtOffset(2, { wrap: false })).toBe(100);
-    expect(arco._timeAtOffset(5, { wrap: false })).toBeNull();
-    expect(arco._timeAtOffset(5, { wrap: true })).toBe(20);
-  });
+    for (const name of ["play", "stop", "loop", "rate"]) {
+      expect(els[name].disabled).toBe(true);
+    }
+    expect(els.previous.disabled).toBe(true);
+    expect(els.next.disabled).toBe(false);
 
-  it("advances one time step per tick at the selected speed", async () => {
-    vi.useFakeTimers();
-    const arco = createPlaybackArco({ values: [10, 20, 50, 100] });
-    arco._playbackSpeed = 2;
-    arco._playing = true;
-
-    arco._tick();
-    await vi.advanceTimersByTimeAsync(499);
-    expect(arco.getTime()).toBe(10);
-    await vi.advanceTimersByTimeAsync(1);
-    expect(arco.getTime()).toBe(20);
-    expect(arco._z.update).toHaveBeenCalledTimes(1);
-    expect(arco._z.update).toHaveBeenCalledWith({ time: 20 });
-    arco.stop();
-  });
-
-  it("skips time steps instead of ticking faster than the minimum interval", async () => {
-    vi.useFakeTimers();
-    const arco = createPlaybackArco({ values: [10, 20, 50, 100, 200, 300] });
-    arco._playbackSpeed = 32;
-    arco._playing = true;
-
-    arco._tick();
-    await vi.advanceTimersByTimeAsync(125);
-    expect(arco.getTime()).toBe(200);
-    arco.stop();
-  });
-
-  it("retains loading backpressure at higher rates", async () => {
-    vi.useFakeTimers();
-    const arco = createPlaybackArco({ values: [10, 20, 50, 100] });
-    arco._playbackSpeed = 32;
-    arco._playing = true;
-    arco._loading = true;
-
-    arco._tick();
-    await vi.advanceTimersByTimeAsync(800);
-
-    expect(arco.getTime()).toBe(10);
+    arco.play();
+    arco.toggleLoop();
+    arco._cyclePlaybackSpeed();
+    expect(arco._z.play).not.toHaveBeenCalled();
     expect(arco._z.update).not.toHaveBeenCalled();
-    arco.stop();
+    expect(arco._playing).toBe(false);
+
+    arco.stepNext();
+    expect(arco._z.update).toHaveBeenCalledWith({ time: 20 });
   });
 
-  it("suspends playback while hidden and resumes without catching up", async () => {
-    vi.useFakeTimers();
+  it("enables playback on vector GeoVideo too", () => {
+    const arco = createPlaybackArco({ values: [10, 20, 30] });
+    arco._layer_def = { kind: "vector" };
+    const els = buttons(arco);
+
+    expect(
+      arco.elButtonPlay.parentElement.querySelectorAll("button"),
+    ).toHaveLength(6);
+    for (const name of ["play", "stop", "loop", "rate"]) {
+      expect(els[name].disabled).toBe(false);
+    }
+    arco.play();
+    expect(arco._z.play).toHaveBeenCalledOnce();
+  });
+
+  it("steps one time step through zartigl and stays at the bounds", () => {
+    const arco = createPlaybackArco({ values: [10, 20, 30] });
+    const els = buttons(arco);
+
+    arco.stepPrevious();
+    expect(arco._z.update).not.toHaveBeenCalled();
+
+    arco.stepNext();
+    arco.stepNext();
+    expect(arco._z.update.mock.calls).toEqual([[{ time: 20 }], [{ time: 30 }]]);
+    expect(arco.getTime()).toBe(30);
+    expect(els.next.disabled).toBe(true);
+    expect(els.previous.disabled).toBe(false);
+
+    arco.stepNext();
+    expect(arco._z.update).toHaveBeenCalledTimes(2);
+  });
+
+  it("stops playback on a manual step", () => {
+    const arco = createPlaybackArco({ values: [10, 20, 30] });
+    buttons(arco);
+    arco.play();
+
+    arco.stepNext();
+
+    expect(arco._z.pause).toHaveBeenCalledOnce();
+    expect(arco._playing).toBe(false);
+    expect(arco.elButtonPlay.classList.contains("playing")).toBe(false);
+  });
+
+  it("follows a pause made by zartigl, such as a depth change", () => {
+    const arco = createPlaybackArco({ values: [10, 20, 30] });
+    buttons(arco);
+    arco.play();
+
+    arco._on_playback_change(false);
+
+    expect(arco._playing).toBe(false);
+  });
+
+  it("rebuilds the controls when an update moves to another source", async () => {
+    const arco = createPlaybackArco({ values: [10, 20, 30] });
+    arco._rebuild = vi.fn();
+    arco._z.update = vi.fn(() => {
+      arco._z.source = { id: "zarr", type: "zarr" };
+      arco._z.available = false;
+      return Promise.resolve();
+    });
+
+    await arco.update({ depth: 20 });
+    expect(arco._rebuild).toHaveBeenCalledOnce();
+
+    await arco.update({ depth: 30 });
+    expect(arco._rebuild).toHaveBeenCalledOnce();
+  });
+
+  it("rebuilds on a source change made by zartigl itself", async () => {
+    const arco = createPlaybackArco({ values: [10, 20, 30] });
+    arco._elContainer = document.createElement("div");
+    arco._rebuild = vi.fn();
+    let resolveUpdate;
+    arco._z.update = vi.fn(
+      () => new Promise((resolve) => (resolveUpdate = resolve)),
+    );
+
+    // Resynchronized by the update that caused it.
+    const pending = arco.update({ settings: { opacity: 0.5 } });
+    arco._on_source_change();
+    expect(arco._rebuild).not.toHaveBeenCalled();
+    resolveUpdate();
+    await pending;
+
+    arco._on_source_change();
+    expect(arco._rebuild).toHaveBeenCalledOnce();
+  });
+
+  it("rebuilds after a slider scrub that moved to another source", async () => {
+    const arco = createPlaybackArco({ values: [10, 20, 30] });
+    arco._rebuild = vi.fn();
+    buttons(arco);
+    arco.play();
+
+    arco._scrub.begin();
+    arco._z.available = false;
+    arco._refreshAfterSourceChange();
+    expect(arco._rebuild).not.toHaveBeenCalled();
+    expect(arco.elButtonPlay.disabled).toBe(true);
+
+    arco._scrub.end();
+    await Promise.resolve();
+    expect(arco._rebuild).toHaveBeenCalledOnce();
+    // Playback cannot resume where the scrub landed.
+    expect(arco._playing).toBe(false);
+    expect(arco._z.play).toHaveBeenCalledOnce();
+  });
+
+  it("resumes after the released seek applies, even across artifacts", async () => {
+    const arco = createPlaybackArco({ values: [10, 20, 30] });
+    buttons(arco);
+    let applySeek;
+    arco._z.update = vi.fn(
+      () => new Promise((resolve) => (applySeek = resolve)),
+    );
+    arco.play();
+
+    arco._scrub.begin();
+    arco._scrub.request(30);
+    arco._scrub.end();
+    expect(arco._z.play).toHaveBeenCalledOnce();
+
+    // The seek loads another artifact, whose new layer starts paused.
+    arco._on_playback_change(false);
+    applySeek();
+    await vi.waitFor(() => expect(arco._z.play).toHaveBeenCalledTimes(2));
+    expect(arco._playing).toBe(true);
+  });
+
+  it("cancels the resume when stopped while the released seek applies", async () => {
+    const arco = createPlaybackArco({ values: [10, 20, 30] });
+    let applySeek;
+    arco._z.update = vi.fn(
+      () => new Promise((resolve) => (applySeek = resolve)),
+    );
+    arco.play();
+
+    arco._scrub.begin();
+    arco._scrub.request(30);
+    arco._scrub.end();
+    arco.stop();
+    applySeek();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(arco._z.play).toHaveBeenCalledOnce();
+    expect(arco._playing).toBe(false);
+  });
+
+  it("suspends while hidden and resumes GeoVideo playback", () => {
     const arco = createPlaybackArco({ values: [10, 20, 50] });
 
     arco.play();
     arco._setVisible(false);
-    await vi.advanceTimersByTimeAsync(2400);
-    expect(arco.getTime()).toBe(10);
     expect(arco._z.suspend).toHaveBeenCalledOnce();
 
     arco._setVisible(true);
     expect(arco._z.resume).toHaveBeenCalledOnce();
-    await vi.advanceTimersByTimeAsync(800);
-    expect(arco.getTime()).toBe(20);
-    arco.stop();
+    expect(arco._z.play).toHaveBeenCalledTimes(2);
   });
 
-  it("does not resume after an explicit stop while hidden", async () => {
-    vi.useFakeTimers();
+  it("does not resume after an explicit stop while hidden", () => {
     const arco = createPlaybackArco({ values: [10, 20, 50] });
 
     arco.play();
     arco._setVisible(false);
     arco.stop();
     arco._setVisible(true);
-    await vi.advanceTimersByTimeAsync(800);
 
-    expect(arco.getTime()).toBe(10);
-  });
-
-  it("hands Zarr timer playback over to a GeoVideo reached on the way", async () => {
-    vi.useFakeTimers();
-    const arco = createPlaybackArco({ values: [10, 20, 50] });
-    let source = { type: "zarr" };
-    arco._z.getSource = vi.fn(() => source);
-    arco._z.play = vi.fn(() => Promise.resolve());
-    arco._playbackSpeed = 1;
-
-    arco.play();
-    await vi.advanceTimersByTimeAsync(1000);
-    expect(arco.getTime()).toBe(20);
-
-    source = { type: "geovideo" };
-    await vi.advanceTimersByTimeAsync(3000);
-    expect(arco.getTime()).toBe(20);
-    expect(arco._z.update).toHaveBeenCalledOnce();
     expect(arco._z.play).toHaveBeenCalledOnce();
-    expect(arco._playing).toBe(true);
-    arco.stop();
   });
 
-  it("resumes native GeoVideo playback instead of the Zarr timer", () => {
-    const arco = new ArcoMapLegend({});
-    arco._visible = false;
-    arco._playing = true;
-    arco._z = {
-      getSource: vi.fn(() => ({ type: "geovideo" })),
-      resume: vi.fn(),
-      play: vi.fn(() => Promise.resolve()),
-    };
-    arco._tick = vi.fn();
-
-    arco._setVisible(true);
-
-    expect(arco._z.resume).toHaveBeenCalledOnce();
-    expect(arco._z.play).toHaveBeenCalledOnce();
-    expect(arco._tick).not.toHaveBeenCalled();
-  });
-
-  it("navigates vector GeoVideo manually without native video playback", () => {
-    const arco = createPlaybackArco({ values: [10, 20, 30] });
-    arco._layer_def = { kind: "vector" };
-    arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
-    arco._z.play = vi.fn(() => Promise.resolve());
-    arco._z.pause = vi.fn();
-
-    expect(arco._usesNativePlayback()).toBe(false);
-    arco.stepNext(true);
-    expect(arco._z.update).toHaveBeenCalledWith({ time: 20 });
-
-    arco._on_time_change(30);
-    expect(arco.getTime()).toBe(20);
-    expect(arco._z.play).not.toHaveBeenCalled();
-    expect(arco._z.pause).not.toHaveBeenCalled();
-  });
-
-  it("enables timeline playback for scalar layers only", () => {
-    const arco = new ArcoMapLegend({});
-    arco._z = { getSource: vi.fn(() => ({ type: "zarr" })) };
-    arco._layer_def = { kind: "scalar" };
-    expect(arco._hasTimelinePlayback()).toBe(true);
-    arco._layer_def = { kind: "vector" };
-    expect(arco._hasTimelinePlayback()).toBe(false);
-    arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
-    expect(arco._hasTimelinePlayback()).toBe(false);
-    arco._layer_def = { kind: "scalar" };
-    expect(arco._usesNativePlayback()).toBe(true);
-  });
-
-  it("wraps skipped playback when looping and stops otherwise", async () => {
-    vi.useFakeTimers();
-    const looping = createPlaybackArco({ values: [10, 20, 50] });
-    looping._time = 50;
-    // 16 steps/s ticks every 125 ms and skips two steps per tick.
-    looping._playbackSpeed = 16;
-    looping._playing = true;
-    looping._tick();
-    await vi.advanceTimersByTimeAsync(125);
-    expect(looping.getTime()).toBe(20);
-    looping.stop();
-
-    const finite = createPlaybackArco({ values: [10, 20, 50], loop: false });
-    finite._time = 20;
-    finite._playbackSpeed = 16;
-    finite._playing = true;
-    finite._tick();
-    await vi.advanceTimersByTimeAsync(125);
-    expect(finite.getTime()).toBe(50);
-    expect(finite._playing).toBe(false);
-    expect(finite._z.update).toHaveBeenCalledWith({ time: 50 });
-  });
-
-  it("keeps manual navigation at one frame with wrapping", () => {
-    const arco = createPlaybackArco({ values: [10, 20, 50] });
-    arco._playbackSpeed = 32;
-
-    arco.stepNext(false);
-    expect(arco.getTime()).toBe(20);
-    arco.stepPrevious(false);
-    expect(arco.getTime()).toBe(10);
-    arco.stepPrevious(false);
-    expect(arco.getTime()).toBe(50);
-  });
-
-  it("shows rate controls only for scalar playback", () => {
-    const scalar = new ArcoMapLegend({});
-    scalar._layer_def = { kind: "scalar" };
-    const scalarButtons = scalar._buildPlayerButtons(!scalar.isVector());
-    expect(scalarButtons.querySelectorAll("button")).toHaveLength(6);
-    expect(
-      scalarButtons.querySelector(".arco--playback_rate").textContent,
-    ).toBe("2/s");
-
-    const vector = new ArcoMapLegend({});
-    vector._layer_def = { kind: "vector" };
-    const vectorButtons = vector._buildPlayerButtons(!vector.isVector());
-    expect(vectorButtons.querySelectorAll("button")).toHaveLength(2);
-    expect(vectorButtons.querySelector(".arco--playback_rate")).toBeNull();
-  });
-
-  it("uses native GeoVideo playback and forwards rate and loop changes", async () => {
-    const arco = new ArcoMapLegend({ loop: true });
-    arco._z = {
-      getSource: vi.fn(() => ({ type: "geovideo" })),
-      play: vi.fn(() => Promise.resolve()),
-      pause: vi.fn(),
-      update: vi.fn(() => Promise.resolve()),
-    };
-    arco._initialized = true;
-
-    arco.play();
-    await Promise.resolve();
-    expect(arco._z.play).toHaveBeenCalledOnce();
+  it("forwards rate and loop changes", () => {
+    const arco = createPlaybackArco({ values: [10, 20] });
 
     arco._cyclePlaybackSpeed();
     expect(arco._z.update).toHaveBeenCalledWith({
@@ -605,18 +630,17 @@ describe("ArcoMapLegend playback controls", () => {
       geoVideo: { loop: false },
     });
 
+    arco.play();
     arco.stop();
     expect(arco._z.pause).toHaveBeenCalledOnce();
   });
 
-  it("preserves native playback state received before controls are built", () => {
-    const arco = new ArcoMapLegend({
-      geoVideo: { autoplay: true, loop: true, stepsPerSecond: 4 },
-    });
-    arco._z = { getSource: vi.fn(() => ({ type: "geovideo" })) };
+  it("preserves playback state received before controls are built", () => {
+    const arco = createPlaybackArco({ values: [10, 20] });
+    arco._playbackSpeed = 4;
 
     arco._on_playback_change(true);
-    arco._buildPlayerButtons(true);
+    buttons(arco);
 
     expect(arco.elButtonPlay.classList.contains("playing")).toBe(true);
     expect(arco.elButtonLoop.classList.contains("active")).toBe(true);
@@ -624,14 +648,7 @@ describe("ArcoMapLegend playback controls", () => {
   });
 
   it("forwards generated GeoVideo playback options through update", async () => {
-    const arco = new ArcoMapLegend({
-      geoVideo: { autoplay: true, loop: false, stepsPerSecond: 5 },
-    });
-    arco._z = {
-      getSource: vi.fn(() => ({ type: "geovideo" })),
-      update: vi.fn(() => Promise.resolve()),
-    };
-    arco._initialized = true;
+    const arco = createPlaybackArco({ values: [10, 20] });
 
     await arco.update({
       geoVideo: { autoplay: true, loop: false, stepsPerSecond: 5 },
@@ -644,13 +661,11 @@ describe("ArcoMapLegend playback controls", () => {
     expect(arco._playbackSpeed).toBe(5);
   });
 
-  it("keeps native GeoVideo playing through a slider scrub", () => {
+  it("keeps GeoVideo playing through a slider scrub", async () => {
     vi.useFakeTimers();
     const arco = createPlaybackArco({ values: [10, 20, 30, 40] });
-    arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
-    arco._z.play = vi.fn(() => Promise.resolve());
     arco._z.pause = vi.fn(() => arco._on_playback_change(false));
-    arco._buildPlayerButtons(true);
+    buttons(arco);
     arco.play();
 
     arco._scrub.begin();
@@ -659,6 +674,7 @@ describe("ArcoMapLegend playback controls", () => {
     arco._on_time_change(20);
     arco._scrub.request(40);
     arco._scrub.end();
+    await vi.advanceTimersByTimeAsync(0);
 
     expect(arco._z.pause).toHaveBeenCalledOnce();
     expect(arco._playing).toBe(true);
@@ -670,10 +686,8 @@ describe("ArcoMapLegend playback controls", () => {
 
   it("keeps a stepped GeoVideo date while a paused frame reports another", () => {
     const arco = createPlaybackArco({ values: [10, 20, 30, 40] });
-    arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
-    arco._z.pause = vi.fn();
 
-    arco.stepNext(true);
+    arco.stepNext();
     arco._on_time_change(10);
 
     expect(arco.getTime()).toBe(20);
@@ -681,16 +695,18 @@ describe("ArcoMapLegend playback controls", () => {
 
   it("keeps the latest step when an older step resolves late", async () => {
     const arco = createPlaybackArco({ values: [10, 20, 30, 40] });
-    arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
-    arco._z.pause = vi.fn();
     arco.elTimeSlider = { noUiSlider: { set: vi.fn() } };
     const seeks = [];
-    arco._z.update = vi.fn(() => new Promise((resolve) => seeks.push(resolve)));
+    const update = arco._z.update;
+    arco._z.update = vi.fn((change) => {
+      update(change);
+      return new Promise((resolve) => seeks.push(resolve));
+    });
     // zartigl has applied only the first step
     arco._z.getTimeMeta = vi.fn(() => ({ ...arco._time_meta, current: 20 }));
 
-    arco.stepNext(true);
-    arco.stepNext(true);
+    arco.stepNext();
+    arco.stepNext();
     arco.elTimeSlider.noUiSlider.set.mockClear();
     seeks[0]();
     await Promise.resolve();
@@ -700,10 +716,8 @@ describe("ArcoMapLegend playback controls", () => {
     expect(arco.elTimeSlider.noUiSlider.set).not.toHaveBeenCalled();
   });
 
-  it("shows the last played GeoVideo date when the media pauses itself", () => {
+  it("shows the last played GeoVideo date when playback stops", () => {
     const arco = createPlaybackArco({ values: [10, 20, 30, 40] });
-    arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
-    arco._z.play = vi.fn(() => Promise.resolve());
     arco._z.getTimeMeta = vi.fn(() => ({ ...arco._time_meta, current: 40 }));
     arco.play();
 
@@ -715,7 +729,6 @@ describe("ArcoMapLegend playback controls", () => {
 
   it("keeps the scrubbed time when an older seek resolves", async () => {
     const arco = createPlaybackArco({ values: [10, 20, 30, 40] });
-    arco._z.getSource = vi.fn(() => ({ type: "geovideo" }));
     arco._z.getDebugInfo = vi.fn(() => ({ settings: {} }));
     arco.elTimeSlider = { noUiSlider: { set: vi.fn() } };
     // zartigl applied the first seek, the handle has moved on
@@ -734,43 +747,22 @@ describe("ArcoMapLegend playback controls", () => {
     arco._scrub.cancel();
   });
 
-  it("resumes timer playback from the scrubbed time", async () => {
-    vi.useFakeTimers();
-    const arco = createPlaybackArco({ values: [10, 20, 30, 40] });
-    arco._z.getSource = vi.fn(() => ({ type: "zarr" }));
-    arco.play();
+  it("seeks once on release where playback is unavailable", () => {
+    const arco = createPlaybackArco({ values: [10, 20, 30], available: false });
 
     arco._scrub.begin();
     arco._scrub.request(20);
     arco._scrub.request(30);
-    await vi.advanceTimersByTimeAsync(800);
     expect(arco._z.update).not.toHaveBeenCalled();
     expect(arco.getTime()).toBe(30);
 
     arco._scrub.end();
     expect(arco._z.update).toHaveBeenCalledOnce();
     expect(arco._z.update).toHaveBeenCalledWith({ time: 30 });
-    await vi.advanceTimersByTimeAsync(800);
-    expect(arco.getTime()).toBe(40);
-    arco.stop();
-  });
-
-  it("seeks without starting playback when scrubbing while stopped", async () => {
-    vi.useFakeTimers();
-    const arco = createPlaybackArco({ values: [10, 20, 30] });
-
-    arco._scrub.begin();
-    arco._scrub.request(20);
-    arco._scrub.end();
-    await vi.advanceTimersByTimeAsync(1600);
-
     expect(arco._playing).toBe(false);
-    expect(arco._z.update).toHaveBeenCalledWith({ time: 20 });
-    expect(arco.getTime()).toBe(20);
   });
 
-  it("does not resume after an explicit stop during a scrub", async () => {
-    vi.useFakeTimers();
+  it("does not resume after an explicit stop during a scrub", () => {
     const arco = createPlaybackArco({ values: [10, 20, 30] });
     arco.play();
 
@@ -778,22 +770,19 @@ describe("ArcoMapLegend playback controls", () => {
     arco._scrub.request(20);
     arco.stop();
     arco._scrub.end();
-    await vi.advanceTimersByTimeAsync(1600);
 
     expect(arco._playing).toBe(false);
     expect(arco.getTime()).toBe(20);
     expect(arco._z.update).not.toHaveBeenCalled();
+    expect(arco._z.play).toHaveBeenCalledOnce();
   });
 
-  it("clears optimistic playback state when native autoplay is rejected", async () => {
+  it("clears optimistic playback state when GeoVideo autoplay is rejected", async () => {
     const error = new Error("autoplay rejected");
-    const arco = new ArcoMapLegend({});
-    arco._z = {
-      getSource: vi.fn(() => ({ type: "geovideo" })),
-      play: vi.fn(() => Promise.reject(error)),
-    };
+    const arco = createPlaybackArco({ values: [10, 20] });
+    arco._z.play = vi.fn(() => Promise.reject(error));
     arco._on_error = vi.fn();
-    arco._buildPlayerButtons(true);
+    buttons(arco);
 
     arco.play();
     await vi.waitFor(() => expect(arco._playing).toBe(false));
@@ -900,6 +889,17 @@ describe("ArcoMapLegend cadence-aware time input", () => {
     const time = Date.UTC(2025, 0, 1);
     const arco = new ArcoMapLegend({});
     arco._layer_def = { kind: "scalar" };
+    // zartigl plays a looping snapshot, which has no step to move to.
+    arco._z = {
+      getPlaybackState: () => ({
+        available: true,
+        playing: false,
+        loop: true,
+        stepsPerSecond: 2,
+        speeds: [2],
+      }),
+      getSteppedTime: () => undefined,
+    };
     arco._time = time;
     arco._time_meta = {
       min: time,

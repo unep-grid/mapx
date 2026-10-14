@@ -44,11 +44,8 @@ const defaultOptions = {
   visible: true,
 };
 
-/** Playback speeds in time steps per second, for GeoVideo and Zarr alike. */
-const playbackSpeeds = [0.25, 0.5, 1, 2, 4, 8, 16, 32];
+/** Playback speed in time steps per second; zartigl owns the offered speeds. */
 const defaultPlaybackSpeed = 2;
-/** Zarr playback never requests frames faster than this; faster speeds skip steps. */
-const minTickMs = 125;
 
 /**
  * ARCO map legend : animated Zarr ocean data (zartigl) with time/depth
@@ -79,6 +76,7 @@ export class ArcoMapLegend {
     this._unsubscribeVisibility = this._visibility.subscribe((visible) => {
       this._setVisible(visible);
     });
+    this._pending_updates = 0;
     this._on_loading = () => this._setLoading(true);
     this._on_loaded = (meta) => {
       this._meta = meta;
@@ -94,14 +92,10 @@ export class ArcoMapLegend {
       this._status = status;
       this._renderStatus();
     };
-    // The video reports its time only while it plays : when paused, the
+    // GeoVideo reports its time only while it plays : when paused, the
     // requested step owns the visible date, even if the frame lags.
     this._on_time_change = (time) => {
-      if (
-        !this._playing ||
-        !this._usesNativePlayback() ||
-        this._scrub.interacting
-      ) {
+      if (!this._playing || this._scrub.interacting) {
         return;
       }
       const now = performance.now();
@@ -111,11 +105,13 @@ export class ArcoMapLegend {
       this._lastVideoUiUpdate = now;
       this._syncTime(time);
     };
+    // zartigl owns the playing state : it stops playback on a date, step or
+    // depth change, a source change, or the end of the timeline.
     this._on_playback_change = (playing) => {
-      if (!this._usesNativePlayback() || this._scrub.interacting) {
+      if (this._scrub.interacting) {
         return;
       }
-      // Paused by the media (end, chunk handoff) : show the date of the
+      // Paused (end, chunk handoff, navigation) : show the date of the
       // last played frame, which the throttled time sync may have skipped.
       if (!playing && this._playing) {
         this._syncTime(this._z.getTimeMeta().current ?? this._time);
@@ -125,16 +121,35 @@ export class ArcoMapLegend {
     // Slider drag : keep the playing state, seek live, resume on release
     this._scrub = new TimeScrub({
       isPlaying: () => this._playing,
-      pause: () => this._suspendPlayback(),
+      pause: () => {
+        this._scrub_resume = null;
+        this._suspendPlayback();
+      },
       present: (time) => this._syncTime(time, { fromSlider: true }),
-      apply: (time) => void this._updateFromControl({ time }),
-      live: () => this._z?.getSource?.()?.type === "geovideo",
+      apply: (time) => {
+        this._scrub_seek = this._updateFromControl({ time });
+      },
+      live: () => this._playbackState().available,
       finish: (_time, resume) => {
+        if (this._refresh_pending) {
+          this._refresh_pending = false;
+          this._syncStateFromZartigl({ keepTime: true });
+          this._refreshAfterSourceChange();
+        }
         if (resume && this._playing) {
-          this._resumePlayback();
+          this._resumeAfterSeek();
         }
       },
     });
+    // A source change made by zartigl itself, such as a fallback after a
+    // GeoVideo failure; changes made through update() resync there.
+    this._on_source_change = () => {
+      if (this._pending_updates > 0 || !this._elContainer) {
+        return;
+      }
+      this._syncStateFromZartigl();
+      this._refreshAfterSourceChange();
+    };
     this._on_pick = this._handlePickClick.bind(this);
     this._update_chart_debounced = debounce(() => this.updateChart(), 350);
   }
@@ -191,6 +206,7 @@ export class ArcoMapLegend {
     this._z.on("status", this._on_status);
     this._z.on("timeChange", this._on_time_change);
     this._z.on("playbackChange", this._on_playback_change);
+    this._z.on("sourceChange", this._on_source_change);
 
     if (!this._visible) {
       this._z.suspend();
@@ -223,6 +239,7 @@ export class ArcoMapLegend {
     this._z?.off("status", this._on_status);
     this._z?.off("timeChange", this._on_time_change);
     this._z?.off("playbackChange", this._on_playback_change);
+    this._z?.off("sourceChange", this._on_source_change);
     this._z?.destroy();
     this._chart?.destroy();
     this._colorDomainControl?.destroy();
@@ -274,10 +291,21 @@ export class ArcoMapLegend {
     if (structural) {
       this.stop();
     }
-    await this._z.update(next);
+    const sourceBefore = this._z.getSource?.();
+    this._pending_updates++;
+    try {
+      await this._z.update(next);
+    } finally {
+      this._pending_updates--;
+    }
     if (this.isDestroyed()) {
       return;
     }
+    // A date or depth change can move between GeoVideo and Zarr.
+    const sourceAfter = this._z.getSource?.();
+    const sourceChanged =
+      sourceBefore?.id !== sourceAfter?.id ||
+      sourceBefore?.type !== sourceAfter?.type;
 
     if (nextLayer) {
       this._layer_def = nextLayer;
@@ -298,20 +326,13 @@ export class ArcoMapLegend {
     // A newer time request owns the visible date : an older one resolving
     // late must not move it back.
     const keepTime = idTime !== this._id_time;
-    if (structural) {
+    if (structural || sourceChanged) {
       this._syncStateFromZartigl({ keepTime });
     } else if (change.time != null || change.depth != null) {
       this._syncAxesFromZartigl({ keepTime });
     }
-    if (structural) {
-      if (!this.hasDepth() && this._chart_mode === "depth") {
-        this._chart_mode = "time";
-      }
-      this._id_query++;
-      this._rebuild();
-      if (this._point) {
-        void this.updateChart();
-      }
+    if (structural || sourceChanged) {
+      this._refreshAfterSourceChange();
       return;
     }
 
@@ -338,6 +359,26 @@ export class ArcoMapLegend {
     }
     if (change.geoVideo) {
       this._syncPlaybackControls();
+    }
+  }
+
+  /**
+   * Rebuild the controls for the time, depth and playback of a new source.
+   * A slider being dragged is rebuilt once released.
+   */
+  _refreshAfterSourceChange() {
+    if (this._scrub.interacting) {
+      this._refresh_pending = true;
+      this._syncPlaybackControls();
+      return;
+    }
+    if (!this.hasDepth() && this._chart_mode === "depth") {
+      this._chart_mode = "time";
+    }
+    this._id_query++;
+    this._rebuild();
+    if (this._point) {
+      void this.updateChart();
     }
   }
 
@@ -434,7 +475,10 @@ export class ArcoMapLegend {
     const { min, max } = this._time_meta;
     const time = Math.max(min, Math.min(max, ms));
     this._syncTime(time, opt);
-    return this._updateFromControl({ time });
+    const pending = this._updateFromControl({ time });
+    // zartigl steps from the time just requested.
+    this._syncStepButtons();
+    return pending;
   }
 
   _syncTime(time, opt = {}) {
@@ -444,6 +488,7 @@ export class ArcoMapLegend {
       this.elTimeSlider?.noUiSlider?.set(index);
     }
     this._updateTimeReadout(this._time);
+    this._syncStepButtons();
     if (this._chart_mode === "time") {
       this._chart?.setCursor(this._time);
     }
@@ -467,17 +512,6 @@ export class ArcoMapLegend {
     return (
       this._time_meta.current ?? this._time_meta.max ?? this._time_meta.min
     );
-  }
-
-  _timeStep() {
-    const { step, values } = this._time_meta;
-    if (step > 0) {
-      return step;
-    }
-    if (values?.length > 1) {
-      return values[1] - values[0];
-    }
-    return 21600000; // PT6H
   }
 
   /**
@@ -539,86 +573,131 @@ export class ArcoMapLegend {
   }
 
   /**
-   * Playback
+   * Playback : GeoVideo only, owned by zartigl. Date, step and depth
+   * navigation stay available on every source.
    */
+  _playbackState() {
+    return (
+      this._z?.getPlaybackState?.() ?? {
+        available: false,
+        playing: false,
+        loop: this._opt.loop,
+        stepsPerSecond: this._playbackSpeed,
+        speeds: [],
+      }
+    );
+  }
+
   play() {
-    if (this._playing) {
+    if (this._playing || !this._playbackState().available) {
       return;
     }
     this._setPlaying(true);
-    if (this._usesNativePlayback()) {
-      this._playGeoVideo();
-      return;
-    }
     if (this._visible) {
-      this._tick();
+      this._playGeoVideo();
     }
   }
 
   stop() {
+    this._scrub_resume = null;
     this._scrub.cancel();
     this._setPlaying(false);
     this._suspendPlayback();
   }
 
   /**
-   * Halt the timer or native video without changing the playing state.
+   * Pause zartigl without changing the playing state, as during a scrub.
    */
   _suspendPlayback() {
-    clearTimeout(this._id_timer);
-    if (this._usesNativePlayback()) {
-      this._z.pause?.();
-    }
+    this._z?.pause?.();
+  }
+
+  /**
+   * Resume once the released seek applied : it may load another artifact,
+   * whose new layer would otherwise drop a playback resumed too early. A
+   * stop or a new scrub meanwhile cancels the resume.
+   */
+  _resumeAfterSeek() {
+    const token = Symbol("resume");
+    this._scrub_resume = token;
+    void Promise.resolve(this._scrub_seek).then(() => {
+      if (this._scrub_resume !== token || this.isDestroyed()) {
+        return;
+      }
+      this._scrub_resume = null;
+      this._setPlaying(true);
+      this._resumePlayback();
+    });
   }
 
   _resumePlayback() {
-    if (!this._visible) {
+    // The scrub may have left GeoVideo, which then cannot resume.
+    if (!this._playbackState().available) {
+      this._setPlaying(false);
       return;
     }
-    if (this._usesNativePlayback()) {
+    if (this._visible) {
       this._playGeoVideo();
-    } else {
-      this._tick();
     }
   }
 
-  stepNext(stop) {
-    if (stop) {
-      this.stop();
-    }
-    this.setTime(this._timeAtOffset(1, { wrap: true }));
+  /**
+   * Manual navigation : one time step, stopping playback. zartigl resolves
+   * the step and keeps it inside the timeline.
+   */
+  stepNext() {
+    this._step(1);
   }
 
-  stepPrevious(stop) {
-    if (stop) {
-      this.stop();
+  stepPrevious() {
+    this._step(-1);
+  }
+
+  _step(offset) {
+    const time = this._z?.getSteppedTime?.(offset);
+    this.stop();
+    if (time !== undefined) {
+      this.setTime(time);
     }
-    this.setTime(this._timeAtOffset(-1, { wrap: true }));
+  }
+
+  _syncStepButtons() {
+    if (this.elButtonPrevious) {
+      this.elButtonPrevious.disabled =
+        this._z?.getSteppedTime?.(-1) === undefined;
+    }
+    if (this.elButtonNext) {
+      this.elButtonNext.disabled = this._z?.getSteppedTime?.(1) === undefined;
+    }
   }
 
   toggleLoop() {
+    if (!this._playbackState().available) {
+      return;
+    }
     this._opt.loop = !this._opt.loop;
     this._syncPlaybackControls();
     void this._updateFromControl({ geoVideo: { loop: this._opt.loop } });
   }
 
   _cyclePlaybackSpeed() {
-    const index = playbackSpeeds.indexOf(this._playbackSpeed);
-    this._playbackSpeed = playbackSpeeds[(index + 1) % playbackSpeeds.length];
+    const { available, speeds, stepsPerSecond } = this._playbackState();
+    if (!available || !speeds.length) {
+      return;
+    }
+    const index = speeds.indexOf(stepsPerSecond);
+    this._playbackSpeed = speeds[(index + 1) % speeds.length];
+    this._syncPlaybackRateButton(this._playbackSpeed);
     void this._updateFromControl({
       geoVideo: { stepsPerSecond: this._playbackSpeed },
     });
-    this._syncPlaybackRateButton();
-    if (this._playing && !this._usesNativePlayback()) {
-      this._tick();
-    }
   }
 
-  _syncPlaybackRateButton() {
+  _syncPlaybackRateButton(speed = this._playbackState().stepsPerSecond) {
     if (!this.elButtonRate) {
       return;
     }
-    this.elButtonRate.textContent = `${this._playbackSpeed}/s`;
+    this.elButtonRate.textContent = `${speed}/s`;
   }
 
   _setPlaying(playing) {
@@ -626,7 +705,19 @@ export class ArcoMapLegend {
     this._syncPlaybackControls();
   }
 
+  /** Playback controls stay visible, disabled where zartigl cannot play. */
   _syncPlaybackControls() {
+    const disabled = !this._playbackState().available;
+    for (const elButton of [
+      this.elButtonPlay,
+      this.elButtonStop,
+      this.elButtonLoop,
+      this.elButtonRate,
+    ]) {
+      if (elButton) {
+        elButton.disabled = disabled;
+      }
+    }
     this.elButtonPlay?.classList.toggle("playing", this._playing);
     this.elButtonLoop?.classList.toggle("active", this._opt.loop);
     this._syncPlaybackRateButton();
@@ -639,80 +730,12 @@ export class ArcoMapLegend {
     });
   }
 
-  _timeAtOffset(offset, { wrap }) {
-    const values = this._time_meta.values || [];
-    if (values.length) {
-      const currentIndex = nearestIndex(values, this._time);
-      const targetIndex = currentIndex + offset;
-      if (!wrap && (targetIndex < 0 || targetIndex >= values.length)) {
-        return null;
-      }
-      const wrappedIndex =
-        ((targetIndex % values.length) + values.length) % values.length;
-      return values[wrappedIndex];
-    }
-
-    const target = this._time + this._timeStep() * offset;
-    if (target > this._time_meta.max) {
-      return wrap ? this._time_meta.min : null;
-    }
-    if (target < this._time_meta.min) {
-      return wrap ? this._time_meta.max : null;
-    }
-    return target;
-  }
-
-  _tick() {
-    clearTimeout(this._id_timer);
-    if (!this._visible) {
-      return;
-    }
-    this._id_timer = setTimeout(() => {
-      if (this.isDestroyed() || !this._playing || !this._visible) {
-        return;
-      }
-      // The time reached a scalar GeoVideo source : the video plays on
-      if (this._usesNativePlayback()) {
-        this._playGeoVideo();
-        return;
-      }
-      // backpressure : do not advance while chunks are loading
-      if (!this._loading) {
-        const next = this._timeAtOffset(this._tickPlan().steps, {
-          wrap: this._opt.loop,
-        });
-        if (next === null) {
-          if (this._time !== this._time_meta.max) {
-            this.setTime(this._time_meta.max);
-          }
-          this.stop();
-          return;
-        }
-        this.setTime(next);
-      }
-      this._tick();
-    }, this._tickPlan().interval);
-  }
-
-  /**
-   * Zarr playback cadence for the selected speed: one step per tick, or
-   * several steps per minimum-length tick at high speeds.
-   */
-  _tickPlan() {
-    const interval = Math.max(minTickMs, 1000 / this._playbackSpeed);
-    return {
-      interval,
-      steps: Math.max(1, Math.round((this._playbackSpeed * interval) / 1000)),
-    };
-  }
-
   _setVisible(visible) {
     if (visible === this._visible || this.isDestroyed()) {
       return;
     }
     this._visible = visible;
     if (!visible) {
-      clearTimeout(this._id_timer);
       this._z?.suspend();
       return;
     }
@@ -723,7 +746,6 @@ export class ArcoMapLegend {
   }
 
   _setLoading(loading) {
-    this._loading = loading;
     this.elStatus?.classList.toggle("loading", loading);
   }
 
@@ -1006,26 +1028,8 @@ export class ArcoMapLegend {
     return this._layer_def?.kind === "vector";
   }
 
-  /**
-   * Native video playback is for scalar GeoVideo. Vector GeoVideo is decoded
-   * frame by frame and steps through time with the timer, like Zarr.
-   */
-  _usesNativePlayback() {
-    return this._z?.getSource?.()?.type === "geovideo" && !this.isVector();
-  }
-
-  /**
-   * Timeline playback controls: scalar layers only. On vector layers the
-   * particles carry the motion : stepping the field at a fixed cadence never
-   * lets the trails settle, so time is navigated manually.
-   */
-  _hasTimelinePlayback() {
-    return !this.isVector();
-  }
-
   _buildTimeRow() {
     const { values } = this._time_meta;
-    const playback = this._hasTimelinePlayback();
 
     this.elTimeInput = this._buildDateInput();
     this.elTimeSlider = el("div", { class: "arco--time_slider" });
@@ -1073,13 +1077,7 @@ export class ArcoMapLegend {
       this.elTimeSlider.classList.add("disabled");
     }
 
-    const navigationEnabled = values.length > 1;
-    const transportEnabled =
-      navigationEnabled || this._time_meta.timelineKind === "snapshot-loop";
-    const elButtons = this._buildPlayerButtons(playback, {
-      navigationEnabled,
-      transportEnabled,
-    });
+    const elButtons = this._buildPlayerButtons();
 
     return el("div", { class: "arco--time_row" }, [
       el("div", { class: "arco--time_header" }, [
@@ -1093,85 +1091,73 @@ export class ArcoMapLegend {
     ]);
   }
 
-  _buildPlayerButtons(
-    playback,
-    { navigationEnabled = true, transportEnabled = navigationEnabled } = {},
-  ) {
-    const elButtonPrevious = el(
+  /**
+   * Step buttons navigate on every source; play, stop, loop and rate stay
+   * visible and are disabled where zartigl cannot play.
+   */
+  _buildPlayerButtons() {
+    this.elButtonPrevious = el(
       "button",
       {
         class: ["btn", "btn-default"],
-        disabled: navigationEnabled ? null : true,
         title: "Previous",
-        on: { click: () => this.stepPrevious(true) },
+        on: { click: () => this.stepPrevious() },
       },
       el("i", { class: ["fa", "fa-step-backward"] }),
     );
-    const elButtonNext = el(
+    this.elButtonNext = el(
       "button",
       {
         class: ["btn", "btn-default"],
-        disabled: navigationEnabled ? null : true,
         title: "Next",
-        on: { click: () => this.stepNext(true) },
+        on: { click: () => this.stepNext() },
       },
       el("i", { class: ["fa", "fa-step-forward"] }),
     );
-
-    if (playback) {
-      this.elButtonPlay = el(
-        "button",
-        {
-          class: ["btn", "btn-default", this._playing ? "playing" : null],
-          disabled: transportEnabled ? null : true,
-          title: "Play",
-          on: { click: () => this.play() },
-        },
-        el("i", { class: ["fa", "fa-play"] }),
-      );
-      this.elButtonLoop = el(
-        "button",
-        {
-          class: ["btn", "btn-default", this._opt.loop ? "active" : null],
-          disabled: transportEnabled ? null : true,
-          title: "Loop",
-          on: { click: () => this.toggleLoop() },
-        },
-        el("i", { class: ["fa", "fa-repeat"] }),
-      );
-      this.elButtonRate = el(
-        "button",
-        {
-          class: ["btn", "btn-default", "arco--playback_rate"],
-          disabled: transportEnabled ? null : true,
-          dataset: { lang_key: "arco_playback_speed", lang_type: "title" },
-          on: { click: () => this._cyclePlaybackSpeed() },
-        },
-        `${this._playbackSpeed}/s`,
-      );
-      const elButtonRate = this.elButtonRate;
-      void getDictItem("arco_playback_speed").then((title) => {
-        elButtonRate.title = title;
-      });
-      this._syncPlaybackControls();
-    }
+    this.elButtonPlay = el(
+      "button",
+      {
+        class: ["btn", "btn-default"],
+        title: "Play",
+        on: { click: () => this.play() },
+      },
+      el("i", { class: ["fa", "fa-play"] }),
+    );
+    this.elButtonStop = el(
+      "button",
+      {
+        class: ["btn", "btn-default"],
+        title: "Stop",
+        on: { click: () => this.stop() },
+      },
+      el("i", { class: ["fa", "fa-stop"] }),
+    );
+    this.elButtonLoop = el(
+      "button",
+      {
+        class: ["btn", "btn-default"],
+        title: "Loop",
+        on: { click: () => this.toggleLoop() },
+      },
+      el("i", { class: ["fa", "fa-repeat"] }),
+    );
+    this.elButtonRate = el("button", {
+      class: ["btn", "btn-default", "arco--playback_rate"],
+      dataset: { lang_key: "arco_playback_speed", lang_type: "title" },
+      on: { click: () => this._cyclePlaybackSpeed() },
+    });
+    const elButtonRate = this.elButtonRate;
+    void getDictItem("arco_playback_speed").then((title) => {
+      elButtonRate.title = title;
+    });
+    this._syncPlaybackControls();
+    this._syncStepButtons();
 
     return el("div", { class: "arco--player_buttons" }, [
-      elButtonPrevious,
+      this.elButtonPrevious,
       this.elButtonPlay,
-      playback
-        ? el(
-            "button",
-            {
-              class: ["btn", "btn-default"],
-              disabled: transportEnabled ? null : true,
-              title: "Stop",
-              on: { click: () => this.stop() },
-            },
-            el("i", { class: ["fa", "fa-stop"] }),
-          )
-        : null,
-      elButtonNext,
+      this.elButtonStop,
+      this.elButtonNext,
       this.elButtonLoop,
       this.elButtonRate,
     ]);
