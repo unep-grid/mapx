@@ -1,3 +1,9 @@
+  - [1.14.2-alpha.0](https://github.com/unep-grid/mapx/tree/1.14.2-alpha.0) 
+
+    - feat(arco): drive playback and step navigation from zartigl capabilities
+    - fix(arco): read cursor value from the drawn chart line
+
+
   - [1.14.1](https://github.com/unep-grid/mapx/tree/1.14.1) 
 
     - Merge remote-tracking branch 'github/main'
