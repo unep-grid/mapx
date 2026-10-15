@@ -1,3 +1,8 @@
+  - [1.14.2-alpha.1](https://github.com/unep-grid/mapx/tree/1.14.2-alpha.1) 
+
+    - chore: update submodule
+
+
   - [1.14.2-alpha.0](https://github.com/unep-grid/mapx/tree/1.14.2-alpha.0) 
 
     - feat(arco): drive playback and step navigation from zartigl capabilities
