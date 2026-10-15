@@ -1,3 +1,9 @@
+  - [1.14.2-alpha.2](https://github.com/unep-grid/mapx/tree/1.14.2-alpha.2) 
+
+    - docs: sdk test refactor draft
+    - fix(sdk): resolve urgent SDK issues #1132 #1133 #1135 #1136 #1137 #1138 #1139
+
+
   - [1.14.2-alpha.1](https://github.com/unep-grid/mapx/tree/1.14.2-alpha.1) 
 
     - chore: update submodule
