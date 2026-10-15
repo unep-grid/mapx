@@ -7,6 +7,12 @@ import {
   getViewJson,
 } from "../../../map_helpers/index.js";
 import { viewFilterToolsInit } from "../../../map_helpers/view_filters.js";
+import { MessageFrameCom } from "../messages.js";
+
+// Map move promise timeout: requested duration (or a default when MapLibre
+// computes it) plus a margin for rendering and event dispatch.
+const MAP_MOVE_DEFAULT_DURATION_MS = 10000;
+const MAP_MOVE_TIMEOUT_MARGIN_MS = 5000;
 
 /**
  * App and Static resolver base
@@ -86,10 +92,28 @@ class ResolversBase {
     return view._filters_tools[type][method](opt.value);
   }
   /**
-   * Error handling
+   * Fail the current request: the worker rejects the manager request with
+   * this key as error code and forwards the error message.
    * @ignore
+   * @param {String} key Dictionary key of the error
+   * @param {Object} vars Template variables
+   * @throws {MessageFrameCom}
    */
   _err(key, vars) {
+    throw new MessageFrameCom({
+      level: "error",
+      key: key,
+      vars: vars,
+    });
+  }
+
+  /**
+   * Report an error message without failing the current request
+   * @ignore
+   * @param {String} key Dictionary key of the error
+   * @param {Object} vars Template variables
+   */
+  _post_error(key, vars) {
     const rslv = this;
     rslv._fw.postMessage({
       level: "error",
@@ -108,15 +132,26 @@ class ResolversBase {
    */
   _map_resolve_when(type, cb, opt) {
     const map = getMap();
+    const duration = Number(opt?.duration);
+    const timeoutMs =
+      (Number.isFinite(duration) && duration >= 0
+        ? duration
+        : MAP_MOVE_DEFAULT_DURATION_MS) + MAP_MOVE_TIMEOUT_MARGIN_MS;
+
     return new Promise((resolve, reject) => {
-      map.stop();
-      map.once(type, () => {
+      const onEvent = () => {
+        clearTimeout(timeout);
         resolve(opt);
-      });
+      };
       /* reject if too slow */
-      setTimeout(() => {
-        reject("timeout");
-      }, 10000);
+      const timeout = setTimeout(() => {
+        map.off(type, onEvent);
+        reject(
+          new Error(`Map "${type}" event not received in ${timeoutMs} ms`),
+        );
+      }, timeoutMs);
+      map.stop();
+      map.once(type, onEvent);
       /* should trigger an event on map */
       cb();
     });

@@ -25,6 +25,7 @@
     "hidePrivacyModal": true
   },
   "container": "body",
+  "iframeTitle": null,
   "style": {
     "width": "100%",
     "height": "100%",

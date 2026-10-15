@@ -137,6 +137,29 @@ export function viewGetOpacityValue(opt) {
 }
 
 /**
+ * Convert a transparency (0: visible, 100: transparent) to an opacity (0-1)
+ * @param {Number|String} transparency Transparency, clamped to 0-100
+ * @return {Number} Opacity
+ */
+export function transparencyToOpacity(transparency) {
+  const value = Number(transparency);
+  if (isEmpty(transparency) || !Number.isFinite(value)) {
+    throw new Error(`Invalid transparency value: ${transparency}`);
+  }
+  return 1 - Math.min(100, Math.max(0, value)) / 100;
+}
+
+/**
+ * Get view layers transparency
+ * @param {Object} opt Options
+ * @param {String} opt.idView View id
+ * @return {Number} Transparency, integer from 0 (visible) to 100 (transparent)
+ */
+export function viewGetTransparencyValue(opt) {
+  return Math.round((1 - viewGetOpacityValue(opt)) * 100);
+}
+
+/**
  * Get filters
  */
 export function viewGetFilters(opt) {
@@ -210,13 +233,13 @@ export function viewFiltersInit(idView) {
  */
 export function viewSetTextFilter(opt) {
   let { attribute, values, idView } = opt;
+  const view = getView(idView);
   if (isEmpty(attribute)) {
     attribute = view?.data?.attribute?.name;
   }
   if (isString(values)) {
     values = [values];
   }
-  const view = getView(idView);
   const filter = ["any"];
   for (const value of values) {
     if (value === settings.valuesMap.null) {

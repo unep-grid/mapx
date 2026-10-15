@@ -163,10 +163,9 @@ export class MapxResolversApp extends MapxResolversStatic {
     const conf = tools[opt.tool];
 
     if (!conf) {
-      rslv._err("err_tool_not_found", {
+      return rslv._err("err_tool_not_found", {
         idTool: opt.tool || "null",
       });
-      return false;
     }
 
     const pass = rslv.check_user_role_breaker(conf.roles, {
@@ -270,7 +269,7 @@ export class MapxResolversApp extends MapxResolversStatic {
     roleReq = roleReq || [];
     const pass = rslv.check_user_role({ role: roleReq, all: false });
     if (!pass && opt.reportError) {
-      rslv._err("err_tool_roles_not_match", {
+      rslv._post_error("err_tool_roles_not_match", {
         idTool: opt.id,
         roles: JSON.stringify(roleReq),
       });
@@ -612,6 +611,7 @@ export class MapxResolversApp extends MapxResolversStatic {
    * @ignore
    */
   _shiny_input(id, opt) {
+    const rslv = this;
     if (settings.mode.app) {
       opt = Object.assign({ time: new Date() }, opt);
       if (opt.randomNumber) {

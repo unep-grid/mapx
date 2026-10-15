@@ -210,3 +210,29 @@ describe("FrameManager request contract", () => {
     expect(manager._req).toHaveLength(0);
   });
 });
+
+describe("FrameManager iframe", () => {
+  it("gives the iframe a default accessible title", () => {
+    const manager = createManager();
+
+    expect(manager._iframe.title).toBe("MapX map");
+  });
+
+  it("translates the default title with the manager language", () => {
+    const manager = createManager({ params: { language: "fr" } });
+
+    expect(manager._iframe.title).toBe("Carte MapX");
+
+    manager.setLang("en");
+    expect(manager._iframe.title).toBe("MapX map");
+  });
+
+  it("keeps a custom title across language changes", () => {
+    const manager = createManager({ iframeTitle: "Risk map" });
+
+    expect(manager._iframe.title).toBe("Risk map");
+
+    manager.setLang("fr");
+    expect(manager._iframe.title).toBe("Risk map");
+  });
+});

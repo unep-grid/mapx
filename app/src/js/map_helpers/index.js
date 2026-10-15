@@ -146,6 +146,7 @@ import { ButtonFilter } from "../button_filter/index.js";
 import { ViewsListUpdate } from "../views_list_update/index.js";
 import { getViewSourceMetadata } from "../metadata/utils.js";
 import { eventToPointBbox } from "./utils.js";
+import { getClickFeaturesData } from "./click_features.js";
 import {
   buildFeatureIdentityFilter,
   setFeatureIdentityProperty,
@@ -1682,8 +1683,13 @@ export async function handleClickEvent(event, idMap) {
 
   const attributes_flat = { ...attributes.vector, ...attributes.raster };
 
+  /**
+   * One "click_features" event per click, including clicks that hit nothing
+   */
+  const clickFeatures = fireClickFeatures(attributes_flat, event);
+
   if (isEmpty(attributes_flat)) {
-    return;
+    return clickFeatures;
   }
 
   if (addHighlight) {
@@ -1731,6 +1737,20 @@ export async function handleClickEvent(event, idMap) {
    * - If something listens to "click_attributes", return values
    */
   await attributesToEvent(attributes_flat, event);
+  await clickFeatures;
+}
+
+/**
+ * Fire a single event with the attributes of all views hit by a click
+ * @param {Object} layersAttributes Promises of attributes, with view id as key
+ * @param {Event} event Map click event
+ */
+async function fireClickFeatures(layersAttributes, event) {
+  const data = await getClickFeaturesData(layersAttributes, event);
+  events.fire({
+    type: "click_features",
+    data: data,
+  });
 }
 
 function getMapContextMenuMapApi() {

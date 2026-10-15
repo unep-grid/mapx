@@ -7,6 +7,11 @@ const mocks = vi.hoisted(() => ({
   setHighlightedCountries: vi.fn(),
   zoomToViewId: vi.fn(),
   zoomToViewIdVisible: vi.fn(),
+  getViewJson: vi.fn(),
+  viewSetOpacity: vi.fn(),
+  spatialDataToView: vi.fn(),
+  viewsListAddSingle: vi.fn(),
+  settings: { mode: { static: true } },
 }));
 
 vi.mock("../../../language/index.js", () => ({
@@ -19,10 +24,24 @@ vi.mock("../../../map_helpers/index.js", () => ({
   setHighlightedCountries: mocks.setHighlightedCountries,
   zoomToViewId: mocks.zoomToViewId,
   zoomToViewIdVisible: mocks.zoomToViewIdVisible,
+  getViewJson: mocks.getViewJson,
+}));
+
+vi.mock("../../../map_helpers/view_filters.js", async (importOriginal) => ({
+  ...(await importOriginal()),
+  viewSetOpacity: mocks.viewSetOpacity,
+}));
+
+vi.mock("../../../mx_helper_map_dragdrop.js", () => ({
+  spatialDataToView: mocks.spatialDataToView,
+}));
+
+vi.mock("../../../views_list_manager", () => ({
+  viewsListAddSingle: mocks.viewsListAddSingle,
 }));
 
 vi.mock("../../../mx.js", () => ({
-  settings: {},
+  settings: mocks.settings,
   highlighter: {},
   spotlight: {},
   theme: {},
@@ -91,5 +110,71 @@ describe("MapxResolversStatic basics", () => {
       filter,
     );
     expect(mocks.setHighlightedCountries).toHaveBeenCalledWith({ countries });
+  });
+});
+
+describe("MapxResolversStatic transparency (static mode)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("converts the 0-100 transparency to a layer opacity", async () => {
+    await MapxResolversStatic.prototype.set_view_layer_transparency({
+      idView: "MX-TEST",
+      value: 30,
+    });
+
+    expect(mocks.viewSetOpacity).toHaveBeenCalledWith({
+      idView: "MX-TEST",
+      opacity: expect.closeTo(0.7),
+    });
+  });
+
+  it("keeps the deprecated opacity option when no value is given", async () => {
+    await MapxResolversStatic.prototype.set_view_layer_transparency({
+      idView: "MX-TEST",
+      opacity: 0.5,
+    });
+
+    expect(mocks.viewSetOpacity).toHaveBeenCalledWith({
+      idView: "MX-TEST",
+      opacity: 0.5,
+    });
+  });
+
+  it("rejects an invalid transparency", async () => {
+    await expect(
+      MapxResolversStatic.prototype.set_view_layer_transparency({
+        idView: "MX-TEST",
+      }),
+    ).rejects.toThrow("Invalid transparency");
+    expect(mocks.viewSetOpacity).not.toHaveBeenCalled();
+  });
+});
+
+describe("MapxResolversStatic geojson views", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mocks.spatialDataToView.mockResolvedValue({ id: "MX-GJ-TEST" });
+    mocks.getViewJson.mockReturnValue({ id: "MX-GJ-TEST" });
+  });
+
+  it("zooms to the new layer by default", async () => {
+    await MapxResolversStatic.prototype.view_geojson_create({ data: {} });
+
+    expect(mocks.spatialDataToView).toHaveBeenCalledWith(
+      expect.objectContaining({ zoomToView: true }),
+    );
+  });
+
+  it("lets callers keep the camera with zoomToView false", async () => {
+    await MapxResolversStatic.prototype.view_geojson_create({
+      data: {},
+      zoomToView: false,
+    });
+
+    expect(mocks.spatialDataToView).toHaveBeenCalledWith(
+      expect.objectContaining({ zoomToView: false }),
+    );
   });
 });

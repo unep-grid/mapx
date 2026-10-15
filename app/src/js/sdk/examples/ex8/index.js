@@ -42,14 +42,15 @@ mapx.on("mapx_ready", async () => {
     }
     const opacity = values[0] * 1;
     try {
+      // transparency: 0 (visible) to 100 (transparent)
       await mapx.ask("set_view_layer_transparency", {
         idView: idView,
-        value: opacity,
+        value: Math.round((1 - opacity) * 100),
       });
-      const opacityEffective = await mapx.ask("get_view_layer_transparency", {
+      const transparency = await mapx.ask("get_view_layer_transparency", {
         idView: idView,
       });
-      elOpacityResult.innerText = `${Math.round(opacityEffective * 100)}%`;
+      elOpacityResult.innerText = `${100 - transparency}%`;
     } catch (e) {
       console.warn(e);
     }

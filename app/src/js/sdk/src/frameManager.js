@@ -4,6 +4,7 @@ import { MessageFrameCom, RequestFrameCom } from "./messages.js";
 import { HOST_VISIBILITY_MESSAGE_TYPE } from "./host_visibility.js";
 import { parse, stringify, patchObject, isObject } from "./helpers.js";
 import { MapxSdkError } from "./sdk_error.js";
+import { Translator } from "./translate.js";
 import { version } from "../package.json";
 
 /**
@@ -16,6 +17,8 @@ import { version } from "../package.json";
  * Class to create a manager to build an iframe and post message to a worker inside
  * @extends Events
  */
+
+const translator = new Translator();
 
 class FrameManager extends Events {
   /**
@@ -43,6 +46,7 @@ class FrameManager extends Events {
    * @param {String} opt.url.host Host of the worker (ex. dev.mapx.localhost)
    * @param {Object} opt.style Style css object
    * @param {Element} opt.container Element that will hold the worker iframe
+   * @param {String} opt.iframeTitle Accessible title of the iframe. Default to a translated "MapX map"
    * @param {Number} opt.maxSimultaneousRequest Maximum concurrent requests
    * @param {Number} opt.requestTimeoutMs Request timeout in milliseconds
    */
@@ -155,6 +159,7 @@ class FrameManager extends Events {
     }
     fm._iframe = document.createElement("iframe");
     fm._iframe.classList.add("framecom");
+    fm._updateIframeTitle();
     for (let s in fm.opt.style) {
       fm._iframe.style[s] = fm.opt.style[s];
     }
@@ -306,7 +311,27 @@ class FrameManager extends Events {
    * @param {String} Two letter string language. e.g. 'en', 'fr'
    */
   setLang(lang) {
-    this.opt.lang = lang;
+    const fm = this;
+    fm.opt.lang = lang;
+    fm._updateIframeTitle();
+  }
+
+  /**
+   * Set the iframe accessible title, custom or translated default
+   * @private
+   */
+  _updateIframeTitle() {
+    const fm = this;
+    if (!fm._iframe) {
+      return;
+    }
+    const custom = fm.opt.iframeTitle;
+    if (typeof custom === "string" && custom.trim()) {
+      fm._iframe.title = custom;
+      return;
+    }
+    const lang = fm.opt.lang || fm.opt.params?.language || "en";
+    fm._iframe.title = translator.get("iframe_title_default", {}, lang);
   }
 
   /**

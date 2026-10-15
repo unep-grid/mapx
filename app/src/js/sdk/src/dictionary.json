@@ -93,5 +93,10 @@
     "key": "warn_destroyed",
     "en": "Instance destroyed, ignore init",
     "fr": "Instance détruite, ignore initialisation"
+  },
+  {
+    "key": "iframe_title_default",
+    "en": "MapX map",
+    "fr": "Carte MapX"
   }
 ]

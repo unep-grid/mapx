@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { FrameWorker } from "./frameWorker.js";
 import { HOST_VISIBILITY_MESSAGE_TYPE } from "./host_visibility.js";
+import { MessageFrameCom } from "./messages.js";
 
 function createWorker(resolvers) {
   const worker = Object.create(FrameWorker.prototype);
@@ -106,6 +107,37 @@ describe("FrameWorker request contract", () => {
       expect.objectContaining({
         type: "message",
         key: "err_resolver_failed",
+      }),
+    );
+  });
+
+  it("rejects requests failed with a resolver error message", async () => {
+    // ResolversBase._err throws this message type
+    const worker = createWorker({
+      view_add: async (opt) => {
+        throw new MessageFrameCom({
+          level: "error",
+          key: "err_view_invalid",
+          vars: opt,
+        });
+      },
+    });
+
+    await worker.handleMessageManager(request("view_add", { idView: "MX-X" }));
+
+    expect(worker.postResponse).toHaveBeenCalledWith({
+      idRequest: 4,
+      success: false,
+      error: expect.objectContaining({
+        code: "err_view_invalid",
+        idResolver: "view_add",
+      }),
+    });
+    expect(worker._post).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: "message",
+        level: "error",
+        key: "err_view_invalid",
       }),
     );
   });

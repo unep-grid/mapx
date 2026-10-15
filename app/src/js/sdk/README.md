@@ -255,6 +255,7 @@ mapx.on("message", (message) => {
 - mapx_disconnected
 - mapx_ready
 - click_attributes
+- click_features
 - views_list_updated
 - view_created
 - layers_ordered
@@ -1464,7 +1465,7 @@ Get current time slider value
 <a name="MapxResolversStatic+set_view_layer_transparency"></a>
 
 #### mapxResolversApp.set\_view\_layer\_transparency(opt) ⇒ <code>void</code>
-Set layer transarency (0 : visible, 100 : 100% transparent)
+Set layer transparency (0 : visible, 100 : 100% transparent)
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)
 
@@ -1472,7 +1473,8 @@ Set layer transarency (0 : visible, 100 : 100% transparent)
 | --- | --- | --- |
 | opt | <code>Options</code> | Options |
 | opt.idView | <code>String</code> | Target view id |
-| opt.value | <code>Numeric</code> | Value |
+| opt.value | <code>Numeric</code> | Transparency, from 0 to 100 |
+| opt.opacity | <code>Numeric</code> | (static mode, deprecated) Opacity from 0 to 1, used when value is missing |
 
 <a name="MapxResolversStatic+get_view_layer_transparency"></a>
 
@@ -1480,7 +1482,7 @@ Set layer transarency (0 : visible, 100 : 100% transparent)
 Get current transparency value for layers of a view
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)
-**Returns**: <code>Number</code> - value
+**Returns**: <code>Number</code> - Transparency, integer from 0 (visible) to 100 (transparent)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1701,6 +1703,7 @@ Add geojson.
 | opt.random.n | <code>Number</code> | number of points |
 | opt.random.latRange | <code>Array</code> | [minLat, maxLat] |
 | opt.random.lngRange | <code>Array</code> | [minLng, maxLng] |
+| opt.zoomToView | <code>Boolean</code> | Fit the map to the data extent. Default = true |
 
 <a name="MapxResolversStatic+view_geojson_set_style"></a>
 
@@ -1736,6 +1739,9 @@ Works with all view, but not permanently.
 #### mapxResolversApp.set\_features\_click\_sdk\_only(opt) ⇒ <code>Array</code>
 Set map feature click handler to sdk only
 A listener could be set to listen to 'click_attributes' events. e.g. mapx.on('click_attributes')
+or to the single 'click_features' event fired once per click, e.g.
+mapx.on('click_features', ({attributes, lngLat, point}) => {}),
+where attributes is an object with view id as key, empty if nothing was hit.
 if this option is enabled, only the SDK will receive the attribute table.
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)
@@ -2822,7 +2828,7 @@ Get current time slider value
 <a name="MapxResolversStatic+set_view_layer_transparency"></a>
 
 #### mapxResolversStatic.set\_view\_layer\_transparency(opt) ⇒ <code>void</code>
-Set layer transarency (0 : visible, 100 : 100% transparent)
+Set layer transparency (0 : visible, 100 : 100% transparent)
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)
 
@@ -2830,7 +2836,8 @@ Set layer transarency (0 : visible, 100 : 100% transparent)
 | --- | --- | --- |
 | opt | <code>Options</code> | Options |
 | opt.idView | <code>String</code> | Target view id |
-| opt.value | <code>Numeric</code> | Value |
+| opt.value | <code>Numeric</code> | Transparency, from 0 to 100 |
+| opt.opacity | <code>Numeric</code> | (static mode, deprecated) Opacity from 0 to 1, used when value is missing |
 
 <a name="MapxResolversStatic+get_view_layer_transparency"></a>
 
@@ -2838,7 +2845,7 @@ Set layer transarency (0 : visible, 100 : 100% transparent)
 Get current transparency value for layers of a view
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)
-**Returns**: <code>Number</code> - value
+**Returns**: <code>Number</code> - Transparency, integer from 0 (visible) to 100 (transparent)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -3059,6 +3066,7 @@ Add geojson.
 | opt.random.n | <code>Number</code> | number of points |
 | opt.random.latRange | <code>Array</code> | [minLat, maxLat] |
 | opt.random.lngRange | <code>Array</code> | [minLng, maxLng] |
+| opt.zoomToView | <code>Boolean</code> | Fit the map to the data extent. Default = true |
 
 <a name="MapxResolversStatic+view_geojson_set_style"></a>
 
@@ -3094,6 +3102,9 @@ Works with all view, but not permanently.
 #### mapxResolversStatic.set\_features\_click\_sdk\_only(opt) ⇒ <code>Array</code>
 Set map feature click handler to sdk only
 A listener could be set to listen to 'click_attributes' events. e.g. mapx.on('click_attributes')
+or to the single 'click_features' event fired once per click, e.g.
+mapx.on('click_features', ({attributes, lngLat, point}) => {}),
+where attributes is an object with view id as key, empty if nothing was hit.
 if this option is enabled, only the SDK will receive the attribute table.
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)

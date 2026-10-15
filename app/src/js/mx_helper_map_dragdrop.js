@@ -180,6 +180,7 @@ export async function spatialDataToView(opt) {
       fileName: idRandom,
       abstract: idRandom,
       fileType: "geojson",
+      zoomToView: true,
     },
     opt,
   );
@@ -221,7 +222,7 @@ export async function spatialDataToView(opt) {
       /*
        * Extent
        */
-      if (m.extent) {
+      if (m.extent && c.zoomToView !== false) {
         // bug with extent +/- 90. See https://github.com/mapbox/mapbox-gl-js/issues/3474
         if (m.extent[0] < -179) {
           m.extent[0] = -179;

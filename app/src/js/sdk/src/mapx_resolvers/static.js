@@ -33,7 +33,8 @@ import {
 
 import {
   viewSetOpacity,
-  viewGetOpacityValue,
+  viewGetTransparencyValue,
+  transparencyToOpacity,
   viewSetNumericFilter,
   viewGetNumericFilterValues,
   viewSetTextFilter,
@@ -49,7 +50,7 @@ import {
   commonLocGetListCodes,
   commonLocGetTableCodes,
 } from "../../../commonloc/index.js";
-import { isArray, isMap, isView } from "./../../../is_test";
+import { isArray, isEmpty, isMap, isNumeric, isView } from "./../../../is_test";
 import { dashboard } from "./../../../dashboards/index.js";
 import {
   getSourceMetadata,
@@ -801,16 +802,21 @@ export class MapxResolversStatic extends MapxResolversPanels {
   }
 
   /**
-   * Set layer transarency (0 : visible, 100 : 100% transparent)
+   * Set layer transparency (0 : visible, 100 : 100% transparent)
    * @param {Options} opt Options
    * @param {String} opt.idView Target view id
-   * @param {Numeric} opt.value Value
+   * @param {Numeric} opt.value Transparency, from 0 to 100
+   * @param {Numeric} opt.opacity (static mode, deprecated) Opacity from 0 to 1, used when value is missing
    * @return {void}
    */
   async set_view_layer_transparency(opt) {
     const rslv = this;
     if (settings.mode.static) {
-      viewSetOpacity(opt);
+      const useOpacity = isEmpty(opt.value) && isNumeric(opt.opacity);
+      viewSetOpacity({
+        idView: opt.idView,
+        opacity: useOpacity ? opt.opacity : transparencyToOpacity(opt.value),
+      });
     } else {
       await rslv._apply_filter_layer_slider("transparencySlider", "set", opt);
     }
@@ -820,10 +826,10 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * Get current transparency value for layers of a view
    * @param {Options} opt Options
    * @param {String} opt.idView Target view id
-   * @return {Number} value
+   * @return {Number} Transparency, integer from 0 (visible) to 100 (transparent)
    */
   get_view_layer_transparency(opt) {
-    return viewGetOpacityValue(opt);
+    return viewGetTransparencyValue(opt);
   }
 
   /**
@@ -1036,6 +1042,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * @param {Number} opt.random.n number of points
    * @param {Array} opt.random.latRange [minLat, maxLat]
    * @param {Array} opt.random.lngRange [minLng, maxLng]
+   * @param {Boolean} opt.zoomToView Fit the map to the data extent. Default = true
    * @return {Object} view
    */
   async view_geojson_create(opt) {
@@ -1050,6 +1057,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
         fileName: id,
         title: id,
         abstract: id,
+        zoomToView: true,
       },
       opt,
     );
@@ -1108,6 +1116,9 @@ export class MapxResolversStatic extends MapxResolversPanels {
   /**
    * Set map feature click handler to sdk only
    * A listener could be set to listen to 'click_attributes' events. e.g. mapx.on('click_attributes')
+   * or to the single 'click_features' event fired once per click, e.g.
+   * mapx.on('click_features', ({attributes, lngLat, point}) => {}),
+   * where attributes is an object with view id as key, empty if nothing was hit.
    * if this option is enabled, only the SDK will receive the attribute table.
    * @param {Object} opt Options
    * @param {Boolean} opt.enable Enable sdk only
