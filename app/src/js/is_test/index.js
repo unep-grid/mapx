@@ -77,13 +77,14 @@ export function isObject(item) {
 
 /**
  * Test if it's a MapX view.
+ * Local GeoJSON views (type gj) may have no project, e.g. in static mode.
  * @param {Object} item to test
  */
 export function isView(item) {
   return (
     isObject(item) &&
     isViewId(item?.id) &&
-    isProjectId(item?.project) &&
+    (isProjectId(item?.project) || item?.type === "gj") &&
     isString(item?.type) &&
     isNotEmpty(item?.data) &&
     !!item.type.match(/^(vt|rt|cc||sm||gj)$/)

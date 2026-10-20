@@ -155,6 +155,21 @@ describe("MapX Specific Validation", () => {
       expect(isView({})).toBe(false);
       expect(isView({ id: "invalid" })).toBe(false);
     });
+
+    it("should accept local geojson views without project only", () => {
+      const viewGj = {
+        id: "MX-GJ-1234567890",
+        type: "gj",
+        data: { some: "data" },
+      };
+      const viewVt = {
+        id: "MX-12345-12345-12345",
+        type: "vt",
+        data: { some: "data" },
+      };
+      expect(isView(viewGj)).toBe(true);
+      expect(isView(viewVt)).toBe(false);
+    });
   });
 
   describe("isViewWms", () => {

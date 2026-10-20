@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Examples</title>
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <style>
+      .input-group {
+        padding: 5px;
+      }
+      .input-group label {
+        margin-bottom: 5px;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Create and replace GeoJSON views</h1>
+    <h3>( in static mode )</h3>
+    <div class="container">
+      <div class="pane-left item">
+        <div class="input-group">
+          <label for="inputCount">Number of random points</label>
+          <input id="inputCount" type="number" min="1" max="1000" value="50" />
+        </div>
+        <div class="input-group">
+          <label>
+            <input id="checkZoom" type="checkbox" checked />
+            Zoom to the new view
+          </label>
+        </div>
+        <div class="input-group">
+          <button id="btnCreate" disabled>Create / replace</button>
+          <button id="btnDelete" disabled>Delete</button>
+        </div>
+        <div class="input-group">
+          <p>
+            Current view:
+            <span id="resView">none</span>
+          </p>
+        </div>
+      </div>
+      <div id="mapx" class="mapx pane-right item"></div>
+    </div>
+    <p>
+      Source
+      <a href="index.js" target="_blank">>></a>
+    </p>
+    <p>
+      Examples home
+      <a href="/index.html">>></a>
+    </p>
+    <script type="module" src="index.js"></script>
+  </body>
+</html>

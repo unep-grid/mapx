@@ -2420,7 +2420,10 @@ export async function viewDelete(view) {
   await viewClear({
     idView: view.id,
   });
-  mData.viewsList.removeItemById(view.id);
+  /**
+   * No views list in static mode
+   */
+  mData.viewsList?.removeItemById(view.id);
 
   if (view.type === "gj") {
     geojsonData.removeItem(view.id);

@@ -12,6 +12,7 @@ import {
   getViewsForJSON,
   getViewsLayersVisibles,
   getView,
+  getViews,
   getViewLegendImage,
   viewRemove,
   viewDelete,
@@ -67,7 +68,6 @@ import {
 } from "../../../mx_helper_misc.js";
 import { getTableAttributeConfigFromView } from "../../../source/display/index.js";
 import { getApiUrl } from "../../../api_routes/index.js";
-import { viewsListAddSingle } from "../../../views_list_manager";
 import { modalCloseAll } from "../../../mx_helper_modal.js";
 import { spatialDataToView } from "../../../mx_helper_map_dragdrop.js";
 import {
@@ -1078,7 +1078,13 @@ export class MapxResolversStatic extends MapxResolversPanels {
       opt.data = getGeoJSONRandomPoints(opt.random);
     }
     const view = await spatialDataToView(opt);
-    await viewsListAddSingle(view, { open: true });
+    if (settings.mode.static) {
+      /**
+       * No views list in static mode: register the view in the map views
+       */
+      getViews().push(view);
+    }
+    await viewAddAuto(view);
     const out = getViewJson(view, { asString: false });
     return out;
   }

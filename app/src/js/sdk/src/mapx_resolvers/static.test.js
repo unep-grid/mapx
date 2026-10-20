@@ -13,7 +13,8 @@ const mocks = vi.hoisted(() => ({
   viewSetNumericFilter: vi.fn(),
   viewSetTimeFilter: vi.fn(),
   spatialDataToView: vi.fn(),
-  viewsListAddSingle: vi.fn(),
+  viewAddAuto: vi.fn(),
+  getViews: vi.fn(),
   settings: { mode: { static: true } },
 }));
 
@@ -28,6 +29,8 @@ vi.mock("../../../map_helpers/index.js", () => ({
   zoomToViewId: mocks.zoomToViewId,
   zoomToViewIdVisible: mocks.zoomToViewIdVisible,
   getViewJson: mocks.getViewJson,
+  getViews: mocks.getViews,
+  viewAddAuto: mocks.viewAddAuto,
 }));
 
 vi.mock("../../../map_helpers/view_filters.js", async (importOriginal) => ({
@@ -40,10 +43,6 @@ vi.mock("../../../map_helpers/view_filters.js", async (importOriginal) => ({
 
 vi.mock("../../../mx_helper_map_dragdrop.js", () => ({
   spatialDataToView: mocks.spatialDataToView,
-}));
-
-vi.mock("../../../views_list_manager", () => ({
-  viewsListAddSingle: mocks.viewsListAddSingle,
 }));
 
 vi.mock("../../../mx.js", () => ({
@@ -310,10 +309,35 @@ describe("MapxResolversStatic transparency (static mode)", () => {
 });
 
 describe("MapxResolversStatic geojson views", () => {
+  const view = { id: "MX-GJ-TEST" };
+  let views;
+
   beforeEach(() => {
     vi.clearAllMocks();
-    mocks.spatialDataToView.mockResolvedValue({ id: "MX-GJ-TEST" });
+    views = [];
+    mocks.getViews.mockReturnValue(views);
+    mocks.spatialDataToView.mockResolvedValue(view);
     mocks.getViewJson.mockReturnValue({ id: "MX-GJ-TEST" });
+  });
+
+  afterEach(() => {
+    mocks.settings.mode = { static: true };
+  });
+
+  it("registers and renders the view in static mode", async () => {
+    await MapxResolversStatic.prototype.view_geojson_create({ data: {} });
+
+    expect(views).toEqual([view]);
+    expect(mocks.viewAddAuto).toHaveBeenCalledWith(view);
+  });
+
+  it("lets the views list register the view in app mode", async () => {
+    mocks.settings.mode = { static: false, app: true };
+
+    await MapxResolversStatic.prototype.view_geojson_create({ data: {} });
+
+    expect(views).toEqual([]);
+    expect(mocks.viewAddAuto).toHaveBeenCalledWith(view);
   });
 
   it("zooms to the new layer by default", async () => {
