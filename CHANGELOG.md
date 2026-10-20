@@ -1,3 +1,9 @@
+  - [1.14.2-alpha.5](https://github.com/unep-grid/mapx/tree/1.14.2-alpha.5) 
+
+    - fix(sdk): support view_geojson_create and view_geojson_delete in static mode #1137
+    - fix(sdk): apply text, numeric and time filters through view tools in app mode #1138
+
+
   - [1.14.2-alpha.4](https://github.com/unep-grid/mapx/tree/1.14.2-alpha.4) 
 
     - chore: update submodule
