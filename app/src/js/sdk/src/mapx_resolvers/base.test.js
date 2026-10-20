@@ -2,11 +2,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   getMap: vi.fn(),
+  getView: vi.fn(),
 }));
 
 vi.mock("../../../map_helpers/index.js", () => ({
   getMap: mocks.getMap,
-  getView: vi.fn(),
+  getView: mocks.getView,
   getViewRandom: vi.fn(),
   getViewJson: vi.fn(),
 }));
@@ -120,5 +121,31 @@ describe("ResolversBase errors", () => {
       key: "err_tool_roles_not_match",
       vars: { idTool: "t" },
     });
+  });
+});
+
+describe("ResolversBase view style attribute", () => {
+  const rslv = new ResolversBase();
+
+  beforeEach(() => {
+    mocks.getView.mockReturnValue({
+      data: { attribute: { name: "cfr_label" } },
+    });
+  });
+
+  it("accepts an empty or the styled attribute", () => {
+    expect(rslv._is_view_style_attribute({ idView: "MX-TEST" })).toBe(true);
+    expect(
+      rslv._is_view_style_attribute({
+        idView: "MX-TEST",
+        attribute: "cfr_label",
+      }),
+    ).toBe(true);
+  });
+
+  it("rejects another attribute", () => {
+    expect(
+      rslv._is_view_style_attribute({ idView: "MX-TEST", attribute: "other" }),
+    ).toBe(false);
   });
 });

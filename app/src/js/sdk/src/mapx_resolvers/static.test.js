@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   getLanguageCurrent: vi.fn(),
@@ -9,6 +9,9 @@ const mocks = vi.hoisted(() => ({
   zoomToViewIdVisible: vi.fn(),
   getViewJson: vi.fn(),
   viewSetOpacity: vi.fn(),
+  viewSetTextFilter: vi.fn(),
+  viewSetNumericFilter: vi.fn(),
+  viewSetTimeFilter: vi.fn(),
   spatialDataToView: vi.fn(),
   viewsListAddSingle: vi.fn(),
   settings: { mode: { static: true } },
@@ -30,6 +33,9 @@ vi.mock("../../../map_helpers/index.js", () => ({
 vi.mock("../../../map_helpers/view_filters.js", async (importOriginal) => ({
   ...(await importOriginal()),
   viewSetOpacity: mocks.viewSetOpacity,
+  viewSetTextFilter: mocks.viewSetTextFilter,
+  viewSetNumericFilter: mocks.viewSetNumericFilter,
+  viewSetTimeFilter: mocks.viewSetTimeFilter,
 }));
 
 vi.mock("../../../mx_helper_map_dragdrop.js", () => ({
@@ -110,6 +116,157 @@ describe("MapxResolversStatic basics", () => {
       filter,
     );
     expect(mocks.setHighlightedCountries).toHaveBeenCalledWith({ countries });
+  });
+});
+
+describe("MapxResolversStatic layer filters", () => {
+  const {
+    set_view_layer_filter_text,
+    set_view_layer_filter_numeric,
+    set_view_layer_filter_time,
+  } = MapxResolversStatic.prototype;
+
+  /**
+   * Resolver stub in app mode, the attribute test result given
+   */
+  function appResolver(isStyleAttribute = true) {
+    mocks.settings.mode = { static: false, app: true };
+    return {
+      _apply_filter_layer_select: vi.fn(),
+      _apply_filter_layer_slider: vi.fn(),
+      _is_view_style_attribute: vi.fn(() => isStyleAttribute),
+    };
+  }
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    mocks.settings.mode = { static: true };
+  });
+
+  it("sets the view search box values in app mode", async () => {
+    const rslv = appResolver();
+
+    await set_view_layer_filter_text.call(rslv, {
+      idView: "MX-TEST",
+      values: ["A"],
+    });
+
+    expect(rslv._apply_filter_layer_select).toHaveBeenCalledWith(
+      "searchBox",
+      "setValue",
+      { idView: "MX-TEST", value: ["A"] },
+    );
+  });
+
+  it("filters text directly in static mode", async () => {
+    await set_view_layer_filter_text.call(
+      {},
+      { idView: "MX-TEST", values: ["A"] },
+    );
+
+    expect(mocks.viewSetTextFilter).toHaveBeenCalledWith(
+      expect.objectContaining({ idView: "MX-TEST", values: ["A"] }),
+    );
+  });
+
+  it("maps the deprecated text value option to values", async () => {
+    await set_view_layer_filter_text.call(
+      {},
+      { idView: "MX-TEST", value: ["A"] },
+    );
+
+    expect(mocks.viewSetTextFilter).toHaveBeenCalledWith(
+      expect.objectContaining({ values: ["A"] }),
+    );
+  });
+
+  it("filters text directly in app mode for another attribute", async () => {
+    const rslv = appResolver(false);
+
+    await set_view_layer_filter_text.call(rslv, {
+      idView: "MX-TEST",
+      attribute: "other",
+      values: ["A"],
+    });
+
+    expect(rslv._apply_filter_layer_select).not.toHaveBeenCalled();
+    expect(mocks.viewSetTextFilter).toHaveBeenCalledWith(
+      expect.objectContaining({ attribute: "other", values: ["A"] }),
+    );
+  });
+
+  it("sets the view numeric slider range in app mode", async () => {
+    const rslv = appResolver();
+
+    await set_view_layer_filter_numeric.call(rslv, {
+      idView: "MX-TEST",
+      from: 1,
+      to: 5,
+    });
+
+    expect(rslv._apply_filter_layer_slider).toHaveBeenCalledWith(
+      "numericSlider",
+      "set",
+      { idView: "MX-TEST", value: [1, 5] },
+    );
+  });
+
+  it("maps the deprecated numeric value option to from and to", async () => {
+    const rslv = appResolver();
+
+    await set_view_layer_filter_numeric.call(rslv, {
+      idView: "MX-TEST",
+      value: [5, 1],
+    });
+
+    expect(rslv._apply_filter_layer_slider).toHaveBeenCalledWith(
+      "numericSlider",
+      "set",
+      { idView: "MX-TEST", value: [1, 5] },
+    );
+  });
+
+  it("filters numeric directly in app mode for another attribute", async () => {
+    const rslv = appResolver(false);
+
+    await set_view_layer_filter_numeric.call(rslv, {
+      idView: "MX-TEST",
+      attribute: "other",
+      from: 1,
+      to: 5,
+    });
+
+    expect(rslv._apply_filter_layer_slider).not.toHaveBeenCalled();
+    expect(mocks.viewSetNumericFilter).toHaveBeenCalledWith(
+      expect.objectContaining({ attribute: "other", from: 1, to: 5 }),
+    );
+  });
+
+  it("sets the view time slider range in app mode", async () => {
+    const rslv = appResolver();
+
+    await set_view_layer_filter_time.call(rslv, {
+      idView: "MX-TEST",
+      from: 1000,
+      to: 2000,
+    });
+
+    expect(rslv._apply_filter_layer_slider).toHaveBeenCalledWith(
+      "timeSlider",
+      "set",
+      { idView: "MX-TEST", value: [1000, 2000] },
+    );
+  });
+
+  it("filters time directly in static mode", async () => {
+    const opt = { idView: "MX-TEST", from: 1000, to: 2000 };
+
+    await set_view_layer_filter_time.call({}, opt);
+
+    expect(mocks.viewSetTimeFilter).toHaveBeenCalledWith(opt);
   });
 });
 

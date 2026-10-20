@@ -1,5 +1,5 @@
 import { bindAll } from "../../../bind_class_methods";
-import { isFunction, isObject, isView } from "../../../is_test";
+import { isEmpty, isFunction, isObject, isView } from "../../../is_test";
 import {
   getMap,
   getView,
@@ -91,6 +91,19 @@ class ResolversBase {
 
     return view._filters_tools[type][method](opt.value);
   }
+
+  /**
+   * Test if the requested attribute is the view's styled attribute, the one
+   * used by the view's filter tools (search box, numeric slider)
+   * @ignore
+   */
+  _is_view_style_attribute(opt) {
+    const view = getView(opt.idView);
+    return (
+      isEmpty(opt.attribute) || opt.attribute === view?.data?.attribute?.name
+    );
+  }
+
   /**
    * Fail the current request: the worker rejects the manager request with
    * this key as error code and forwards the error message.

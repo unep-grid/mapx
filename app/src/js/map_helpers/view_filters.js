@@ -243,7 +243,7 @@ export function viewSetTextFilter(opt) {
   const filter = ["any"];
   for (const value of values) {
     if (value === settings.valuesMap.null) {
-      filter.push(["!has", attribute]);
+      filter.push(["!", ["has", attribute]]);
     } else {
       filter.push(["==", ["get", attribute], value]);
     }

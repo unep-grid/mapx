@@ -1365,7 +1365,8 @@ Filter view layer by text (if attribute is text)
 | opt | <code>Options</code> | Options |
 | opt.idView | <code>String</code> | View id |
 | opt.values | <code>array</code> | Values to use as filter |
-| opt.attribute | <code>string</code> | Attribute to use as filter (default from style) |
+| opt.value | <code>array</code> | Values (Deprecated) |
+| opt.attribute | <code>string</code> | Attribute to use as filter (default from style). In app mode, an attribute other than the styled one filters directly, without updating the view's filter tool. |
 
 <a name="MapxResolversStatic+get_view_layer_filter_text"></a>
 
@@ -1391,7 +1392,7 @@ Filter view layer by numeric (if attribute is numeric)
 | --- | --- | --- |
 | opt | <code>Options</code> | Options |
 | opt.idView | <code>String</code> | Target view id |
-| opt.attribute | <code>String</code> | Attribute name (default from style) |
+| opt.attribute | <code>String</code> | Attribute name (default from style). In app mode, an attribute other than the styled one filters directly, without updating the view's filter tool. |
 | opt.from | <code>Numeric</code> | Value |
 | opt.to | <code>Numeric</code> | Value |
 | opt.value | <code>array</code> | Values (Deprecated) |
@@ -2728,7 +2729,8 @@ Filter view layer by text (if attribute is text)
 | opt | <code>Options</code> | Options |
 | opt.idView | <code>String</code> | View id |
 | opt.values | <code>array</code> | Values to use as filter |
-| opt.attribute | <code>string</code> | Attribute to use as filter (default from style) |
+| opt.value | <code>array</code> | Values (Deprecated) |
+| opt.attribute | <code>string</code> | Attribute to use as filter (default from style). In app mode, an attribute other than the styled one filters directly, without updating the view's filter tool. |
 
 <a name="MapxResolversStatic+get_view_layer_filter_text"></a>
 
@@ -2754,7 +2756,7 @@ Filter view layer by numeric (if attribute is numeric)
 | --- | --- | --- |
 | opt | <code>Options</code> | Options |
 | opt.idView | <code>String</code> | Target view id |
-| opt.attribute | <code>String</code> | Attribute name (default from style) |
+| opt.attribute | <code>String</code> | Attribute name (default from style). In app mode, an attribute other than the styled one filters directly, without updating the view's filter tool. |
 | opt.from | <code>Numeric</code> | Value |
 | opt.to | <code>Numeric</code> | Value |
 | opt.value | <code>array</code> | Values (Deprecated) |

@@ -694,15 +694,22 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * @param {Options} opt Options
    * @param {String} opt.idView View id
    * @param {array} opt.values Values to use as filter
-   * @param {string} opt.attribute Attribute to use as filter (default from style)
+   * @param {array} opt.value Values (Deprecated)
+   * @param {string} opt.attribute Attribute to use as filter (default from style). In app mode, an attribute other than the styled one filters directly, without updating the view's filter tool.
    * @return {void}
    */
   async set_view_layer_filter_text(opt) {
     const rslv = this;
-    if (settings.mode.static) {
+    if (opt.value) {
+      opt.values = opt.value;
+    }
+    if (settings.mode.static || !rslv._is_view_style_attribute(opt)) {
       viewSetTextFilter(opt);
     } else {
-      await rslv._apply_filter_layer_select("searchBox", "setValue", opt);
+      await rslv._apply_filter_layer_select("searchBox", "setValue", {
+        idView: opt.idView,
+        value: opt.values,
+      });
     }
   }
 
@@ -720,7 +727,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * Filter view layer by numeric (if attribute is numeric)
    * @param {Options} opt Options
    * @param {String} opt.idView Target view id
-   * @param {String} opt.attribute Attribute name (default from style)
+   * @param {String} opt.attribute Attribute name (default from style). In app mode, an attribute other than the styled one filters directly, without updating the view's filter tool.
    * @param {Numeric} opt.from Value
    * @param {Numeric} opt.to Value
    * @param {array} opt.value Values (Deprecated)
@@ -732,10 +739,13 @@ export class MapxResolversStatic extends MapxResolversPanels {
       opt.from = Math.min(...opt.value);
       opt.to = Math.max(...opt.value);
     }
-    if (settings.mode.static) {
+    if (settings.mode.static || !rslv._is_view_style_attribute(opt)) {
       viewSetNumericFilter(opt);
     } else {
-      await rslv._apply_filter_layer_slider("numericSlider", "set", opt);
+      await rslv._apply_filter_layer_slider("numericSlider", "set", {
+        idView: opt.idView,
+        value: [opt.from, opt.to],
+      });
     }
   }
 
@@ -787,7 +797,10 @@ export class MapxResolversStatic extends MapxResolversPanels {
     if (settings.mode.static) {
       viewSetTimeFilter(opt);
     } else {
-      await rslv._apply_filter_layer_slider("timeSlider", "set", opt);
+      await rslv._apply_filter_layer_slider("timeSlider", "set", {
+        idView: opt.idView,
+        value: [opt.from, opt.to],
+      });
     }
   }
 

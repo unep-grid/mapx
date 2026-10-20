@@ -75,7 +75,7 @@ describe("viewSetTextFilter", () => {
     });
 
     expect(view._setFilter).toHaveBeenCalledWith({
-      filter: ["any", ["==", ["get", "other"], "A"], ["!has", "other"]],
+      filter: ["any", ["==", ["get", "other"], "A"], ["!", ["has", "other"]]],
       type: "text",
     });
   });
