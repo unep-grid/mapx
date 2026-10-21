@@ -78,6 +78,11 @@ architectural precedent for new work.
   for translated attributes, so an open interface updates when the language
   changes without reloading the application. Let the dictionary runner fill
   missing values for the other supported languages.
+- Give each new module or extension its own dictionary file, e.g.
+  `app/src/data/dict/dict_arco_extension.json`, rather than adding keys to
+  `dict_main.json`. Write only `en` and `fr`: `app/src/node/build_dict.js`
+  merges every file in the folder, machine-translates the other UN languages
+  (without context, so the result is approximate), and builds `_built`.
 - Treat existing translations as unreliable: most non-English values, and
   some French ones, were machine-translated without context by
   `app/src/node/build_dict.js`. Do not reuse a generic key such as `btn_ok`
