@@ -1,0 +1,22 @@
+[
+  {
+    "id": "arco_playback_speed",
+    "en": "Playback speed (time steps per second)",
+    "fr": "Vitesse de lecture (pas de temps par seconde)"
+  },
+  {
+    "id": "arco_particles_backdrop",
+    "en": "Backdrop",
+    "fr": "Fond"
+  },
+  {
+    "id": "arco_particles_backdrop_color",
+    "en": "Backdrop color",
+    "fr": "Couleur du fond"
+  },
+  {
+    "id": "arco_particles_backdrop_opacity",
+    "en": "Backdrop opacity",
+    "fr": "Opacité du fond"
+  }
+]

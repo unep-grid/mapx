@@ -12,12 +12,13 @@ import {
   resolveEntryStyle,
   resolveLocalizedText,
 } from "@fxi/zartigl/catalog";
-import { el } from "../../el_mapx";
+import { el, tt } from "../../el_mapx";
 import { ElementCreator } from "../../el/src/index.js";
 import { maplibregl, settings as mxSettings } from "../../mx";
 import { moduleLoad } from "../../modules_loader_async";
 import { setClickHandler, debounce } from "../../mx_helper_misc";
 import { getDictItem } from "../../language";
+import { colorToHex } from "../../color_utils";
 import { ArcoChart, formatValue } from "./chart.js";
 import {
   ArcoColorDomainControl,
@@ -1468,6 +1469,24 @@ export class ArcoMapLegend {
           ],
           set: (value) => this.updateStyle({ renderMode: value }),
         }),
+        this._buildCheckboxRow({
+          label: tt("arco_particles_backdrop"),
+          get: () => this._style.particles.backdrop.enabled,
+          set: (enabled) => this._updateBackdrop({ enabled }),
+        }),
+        this._buildColorRow({
+          label: tt("arco_particles_backdrop_color"),
+          get: () => this._style.particles.backdrop.color,
+          set: (color) => this._updateBackdrop({ color }),
+        }),
+        this._buildRangeRow({
+          label: tt("arco_particles_backdrop_opacity"),
+          min: 0,
+          max: 1,
+          step: 0.01,
+          get: () => this._style.particles.backdrop.opacity,
+          set: (opacity) => this._updateBackdrop({ opacity }),
+        }),
       );
     }
 
@@ -1559,6 +1578,32 @@ export class ArcoMapLegend {
         ),
       ),
     );
+    return el("div", { class: "arco--settings_row" }, [
+      el("label", label),
+      elInput,
+    ]);
+  }
+
+  /**
+   * The particle backdrop is replaced as a whole: patch the drawn one.
+   * @param {{enabled?: boolean, color?: string, opacity?: number}} patch
+   */
+  _updateBackdrop(patch) {
+    return this.updateStyle({
+      particles: { backdrop: { ...this._style.particles.backdrop, ...patch } },
+    });
+  }
+
+  _buildColorRow(config) {
+    const { label, get, set } = config;
+    const elInput = el("input", {
+      type: "color",
+      // A color input only takes #rrggbb.
+      value: colorToHex(get()),
+      on: {
+        input: debounce((event) => set(event.target.value), 100),
+      },
+    });
     return el("div", { class: "arco--settings_row" }, [
       el("label", label),
       elInput,

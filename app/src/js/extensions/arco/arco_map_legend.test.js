@@ -389,6 +389,34 @@ describe("ArcoMapLegend settings panel", () => {
     );
     expect(arco._style.particles).toMatchObject({ fade: 0.4, density: 0.1 });
   });
+
+  it("sends the whole particle backdrop from one control", async () => {
+    const { arco } = createArco({});
+    arco._z.supportsDynamicStyle = () => false;
+    arco._layer_def = {
+      kind: "vector",
+      defaults: { particles: { backdrop: { color: "#fff", opacity: 0.3 } } },
+    };
+
+    const elSettings = arco._buildSettings();
+    // A color input only takes #rrggbb.
+    expect(elSettings.querySelector('input[type="color"]').value).toBe(
+      "#ffffff",
+    );
+
+    await arco._updateBackdrop({ enabled: false });
+
+    expect(arco._z.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        style: {
+          particles: {
+            backdrop: { enabled: false, color: "#fff", opacity: 0.3 },
+          },
+        },
+      }),
+    );
+    expect(arco._style.particles.backdrop.enabled).toBe(false);
+  });
 });
 
 describe("ArcoMapLegend scalar settings panel", () => {
