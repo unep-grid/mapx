@@ -1,5 +1,25 @@
 [
   {
+    "id": "arco_playback_speed",
+    "en": "Playback speed (time steps per second)",
+    "bn": "প্লেব্যাকের গতি (প্রতি সেকেন্ডে সময় ধাপ)"
+  },
+  {
+    "id": "arco_particles_backdrop",
+    "en": "Backdrop",
+    "bn": "পটভূমি"
+  },
+  {
+    "id": "arco_particles_backdrop_color",
+    "en": "Backdrop color",
+    "bn": "পটভূমির রঙ"
+  },
+  {
+    "id": "arco_particles_backdrop_opacity",
+    "en": "Backdrop opacity",
+    "bn": "ব্যাকড্রপের অস্বচ্ছতা"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "bn": "অটো স্টাইল..."
@@ -6988,11 +7008,6 @@
     "id": "source_settings_delete_blocked",
     "en": "This source cannot be deleted while dependent sources or views exist.",
     "bn": "নির্ভরশীল সোর্স বা ভিউ বিদ্যমান থাকলে এই সোর্সটি মুছে ফেলা যাবে না।"
-  },
-  {
-    "id": "arco_playback_speed",
-    "en": "Playback speed (time steps per second)",
-    "bn": "প্লেব্যাকের গতি (প্রতি সেকেন্ডে সময় ধাপ)"
   },
   {
     "id": "mc_title",

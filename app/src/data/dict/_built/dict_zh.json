@@ -1,5 +1,25 @@
 [
   {
+    "id": "arco_playback_speed",
+    "en": "Playback speed (time steps per second)",
+    "zh": "播放速度（每秒时间步数）"
+  },
+  {
+    "id": "arco_particles_backdrop",
+    "en": "Backdrop",
+    "zh": "背景"
+  },
+  {
+    "id": "arco_particles_backdrop_color",
+    "en": "Backdrop color",
+    "zh": "背景颜色"
+  },
+  {
+    "id": "arco_particles_backdrop_opacity",
+    "en": "Backdrop opacity",
+    "zh": "背景不透明度"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "zh": "汽车风格..."
@@ -6988,11 +7008,6 @@
     "id": "source_settings_delete_blocked",
     "en": "This source cannot be deleted while dependent sources or views exist.",
     "zh": "只要存在依赖源或视图，就无法删除此源。"
-  },
-  {
-    "id": "arco_playback_speed",
-    "en": "Playback speed (time steps per second)",
-    "zh": "播放速度（每秒时间步数）"
   },
   {
     "id": "mc_title",

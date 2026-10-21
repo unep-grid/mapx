@@ -1,5 +1,25 @@
 [
   {
+    "id": "arco_playback_speed",
+    "en": "Playback speed (time steps per second)",
+    "ru": "Скорость воспроизведения (шагов по времени в секунду)"
+  },
+  {
+    "id": "arco_particles_backdrop",
+    "en": "Backdrop",
+    "ru": "Фон"
+  },
+  {
+    "id": "arco_particles_backdrop_color",
+    "en": "Backdrop color",
+    "ru": "Цвет фона"
+  },
+  {
+    "id": "arco_particles_backdrop_opacity",
+    "en": "Backdrop opacity",
+    "ru": "Прозрачность фона"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "ru": "Авто стиль..."
@@ -6988,11 +7008,6 @@
     "id": "source_settings_delete_blocked",
     "en": "This source cannot be deleted while dependent sources or views exist.",
     "ru": "Этот источник нельзя удалить, пока существуют зависимые источники или представления."
-  },
-  {
-    "id": "arco_playback_speed",
-    "en": "Playback speed (time steps per second)",
-    "ru": "Скорость воспроизведения (шагов по времени в секунду)"
   },
   {
     "id": "mc_title",

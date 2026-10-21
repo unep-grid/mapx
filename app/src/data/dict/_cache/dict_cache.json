@@ -18180,11 +18180,50 @@
     "es": "Velocidad de reproducción (pasos de tiempo por segundo)",
     "ru": "Скорость воспроизведения (шагов по времени в секунду)",
     "zh": "播放速度（每秒时间步数）",
-    "ar": "سرعة التشغيل (خطوات زمنية في الثانية)",
+    "de": "Wiedergabegeschwindigkeit (Zeitschritte pro Sekunde)",
+    "bn": "প্লেব্যাকের গতি (প্রতি সেকেন্ডে সময় ধাপ)",
     "fa": "سرعت پخش (گام‌های زمانی در ثانیه)",
     "ps": "د پلې بیک سرعت (په ثانیه کې د وخت ګامونه)",
-    "bn": "প্লেব্যাকের গতি (প্রতি সেকেন্ডে সময় ধাপ)",
-    "de": "Wiedergabegeschwindigkeit (Zeitschritte pro Sekunde)"
+    "ar": "سرعة التشغيل (خطوات زمنية في الثانية)"
+  },
+  {
+    "id": "arco_particles_backdrop",
+    "en": "Backdrop",
+    "fr": "Fond",
+    "es": "Fondo",
+    "ru": "Фон",
+    "zh": "背景",
+    "de": "Hintergrund",
+    "bn": "পটভূমি",
+    "fa": "پس‌زمینه",
+    "ps": "شاليد",
+    "ar": "خلفية"
+  },
+  {
+    "id": "arco_particles_backdrop_color",
+    "en": "Backdrop color",
+    "fr": "Couleur du fond",
+    "es": "Color de fondo",
+    "ru": "Цвет фона",
+    "zh": "背景颜色",
+    "de": "Hintergrundfarbe",
+    "bn": "পটভূমির রঙ",
+    "fa": "رنگ پس‌زمینه",
+    "ps": "د شاليد رنګ",
+    "ar": "لون الخلفية"
+  },
+  {
+    "id": "arco_particles_backdrop_opacity",
+    "en": "Backdrop opacity",
+    "fr": "Opacité du fond",
+    "es": "opacidad del fondo",
+    "ru": "Прозрачность фона",
+    "zh": "背景不透明度",
+    "de": "Hintergrundtransparenz",
+    "bn": "ব্যাকড্রপের অস্বচ্ছতা",
+    "fa": "کدورت پس‌زمینه",
+    "ps": "د شاليد شفافيت",
+    "ar": "شفافية الخلفية"
   },
   {
     "id": "mc_title",

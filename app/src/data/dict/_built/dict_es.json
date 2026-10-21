@@ -1,5 +1,25 @@
 [
   {
+    "id": "arco_playback_speed",
+    "en": "Playback speed (time steps per second)",
+    "es": "Velocidad de reproducción (pasos de tiempo por segundo)"
+  },
+  {
+    "id": "arco_particles_backdrop",
+    "en": "Backdrop",
+    "es": "Fondo"
+  },
+  {
+    "id": "arco_particles_backdrop_color",
+    "en": "Backdrop color",
+    "es": "Color de fondo"
+  },
+  {
+    "id": "arco_particles_backdrop_opacity",
+    "en": "Backdrop opacity",
+    "es": "opacidad del fondo"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "es": "Estilo automático..."
@@ -6988,11 +7008,6 @@
     "id": "source_settings_delete_blocked",
     "en": "This source cannot be deleted while dependent sources or views exist.",
     "es": "Esta fuente no se puede eliminar mientras existan fuentes o vistas dependientes."
-  },
-  {
-    "id": "arco_playback_speed",
-    "en": "Playback speed (time steps per second)",
-    "es": "Velocidad de reproducción (pasos de tiempo por segundo)"
   },
   {
     "id": "mc_title",

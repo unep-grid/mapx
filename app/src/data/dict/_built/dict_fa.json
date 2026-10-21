@@ -1,5 +1,25 @@
 [
   {
+    "id": "arco_playback_speed",
+    "en": "Playback speed (time steps per second)",
+    "fa": "سرعت پخش (گام‌های زمانی در ثانیه)"
+  },
+  {
+    "id": "arco_particles_backdrop",
+    "en": "Backdrop",
+    "fa": "پس‌زمینه"
+  },
+  {
+    "id": "arco_particles_backdrop_color",
+    "en": "Backdrop color",
+    "fa": "رنگ پس‌زمینه"
+  },
+  {
+    "id": "arco_particles_backdrop_opacity",
+    "en": "Backdrop opacity",
+    "fa": "کدورت پس‌زمینه"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "fa": "سبک خودکار ..."
@@ -6988,11 +7008,6 @@
     "id": "source_settings_delete_blocked",
     "en": "This source cannot be deleted while dependent sources or views exist.",
     "fa": "این منبع را نمی‌توان تا زمانی که منابع یا نماهای وابسته وجود دارند، حذف کرد."
-  },
-  {
-    "id": "arco_playback_speed",
-    "en": "Playback speed (time steps per second)",
-    "fa": "سرعت پخش (گام‌های زمانی در ثانیه)"
   },
   {
     "id": "mc_title",
