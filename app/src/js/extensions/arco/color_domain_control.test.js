@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   ArcoColorDomainControl,
   isColorDomainEligible,
-  resolveInitialColorDomain,
 } from "./color_domain_control.js";
 
 describe("ARCO color-domain helpers", () => {
@@ -23,21 +22,6 @@ describe("ARCO color-domain helpers", () => {
     expect(isColorDomainEligible({ kind: "vector", backend: "zarr" })).toBe(
       false,
     );
-  });
-
-  it("preserves an explicit automatic override before catalog defaults", () => {
-    const defaults = { colorDomain: [-3, 3] };
-
-    expect(resolveInitialColorDomain({}, defaults)).toEqual([-3, 3]);
-    expect(
-      resolveInitialColorDomain({ colorDomain: undefined }, defaults),
-    ).toEqual([-3, 3]);
-    expect(
-      resolveInitialColorDomain({ colorDomain: null }, defaults),
-    ).toBeNull();
-    expect(
-      resolveInitialColorDomain({ colorDomain: [-2, 2] }, defaults),
-    ).toEqual([-2, 2]);
   });
 });
 

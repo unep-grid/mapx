@@ -31,6 +31,8 @@ function handler() {
         source: "geovideo",
         timeRange: { trailing: "P1M" },
         geoVideo: { autoplay: false, loop: true, stepsPerSecond: 2 },
+        // Optional: style over the layer own (palette, particles, raster).
+        style: { raster: { opacity: 0.9 } },
         elLegend: elLegend,
         elInputs: widget.elContent,
       });

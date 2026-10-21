@@ -57,9 +57,10 @@ function createArco(legend) {
   arco._z = {
     getLegend: vi.fn(() => legend),
     getPalettes: vi.fn(() => palettes),
-    update: vi.fn(({ settings }) => {
-      if (settings?.colorDomain) {
-        [legend.min, legend.max] = settings.colorDomain;
+    update: vi.fn(({ style }) => {
+      const domain = style?.raster?.colorDomain;
+      if (domain) {
+        [legend.min, legend.max] = domain;
       }
       return Promise.resolve();
     }),
@@ -153,7 +154,8 @@ describe("ArcoMapLegend zartigl 0.5 lifecycle", () => {
       depth: 5,
       visible: false,
       timeRange: { trailing: "P1M" },
-      settings: { opacity: 0.8 },
+      style: { raster: { opacity: 0.8 } },
+      settings: { particleState: "rgba8" },
       geoVideo: { autoplay: false, loop: false, stepsPerSecond: 2 },
     });
     arco.build = vi.fn();
@@ -170,7 +172,8 @@ describe("ArcoMapLegend zartigl 0.5 lifecycle", () => {
       depth: 5,
       visible: false,
       timeRange: { trailing: "P1M" },
-      settings: { opacity: 0.8 },
+      style: { raster: { opacity: 0.8 } },
+      settings: { particleState: "rgba8" },
       geoVideo: { autoplay: false, loop: false, stepsPerSecond: 2 },
     });
     expect(z.init).toHaveBeenCalledOnce();
@@ -284,14 +287,35 @@ describe("ArcoMapLegend legend rendering", () => {
       unit: "K",
     };
     const { arco, elLegend } = createArco(legend);
-    arco._settings = { colorDomain: null };
-    await arco.updateSettings({ colorDomain: [-3, 3] });
+    await arco.updateStyle({ raster: { colorDomain: [-3, 3] } });
 
     expect(
       [...elLegend.querySelectorAll(".arco--legend_meta span")].map(
         (element) => element.innerText,
       ),
     ).toEqual(["-3.00", "K", "3.00"]);
+  });
+
+  it("moves deprecated flat settings to the style, warning once", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { arco } = createArco({ type: "gradient", min: 0, max: 1 });
+    arco._opt.style = { palette: "balance" };
+
+    await arco.updateSettings({ colorDomain: [-3, 3] });
+    await arco.update({ settings: { colorDomain: [-2, 2] } });
+
+    expect(arco._z.update).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        style: { palette: "balance", raster: { colorDomain: [-2, 2] } },
+        settings: undefined,
+      }),
+    );
+    expect(
+      warn.mock.calls.filter(([message]) =>
+        String(message).includes("settings.colorDomain is deprecated"),
+      ),
+    ).toHaveLength(1);
+    warn.mockRestore();
   });
 
   it("keeps the previous legend for a transient incomplete payload", () => {
@@ -323,6 +347,59 @@ describe("ArcoMapLegend legend rendering", () => {
     const image = elLegend.querySelector("img");
     expect(image.src).toBe("https://example.test/legend.svg");
     expect(image.alt).toBe("Surface temperature");
+  });
+});
+
+describe("ArcoMapLegend settings panel", () => {
+  it("starts from the layer style as zartigl resolves it", () => {
+    const { arco } = createArco({});
+    arco._z.supportsDynamicStyle = () => false;
+    arco._opt.style = {
+      particles: { fade: 0.4 },
+      raster: { colorDomain: null },
+    };
+    arco._layer_def = {
+      kind: "vector",
+      defaults: {
+        particles: { speed: 2, grade: "vibrant" },
+        raster: { colorDomain: [0, 1] },
+      },
+    };
+
+    arco._buildSettings();
+
+    expect(arco._style).toMatchObject({
+      renderMode: "particles",
+      particles: { density: 0.05, speed: 2, fade: 0.4, grade: "vibrant" },
+      raster: { opacity: 1, colorDomain: null },
+    });
+  });
+
+  it("patches the style override from a control", async () => {
+    const { arco } = createArco({});
+    arco._layer_def = { kind: "vector", defaults: {} };
+    arco._opt.style = { particles: { fade: 0.4 } };
+
+    await arco.updateStyle({ particles: { density: 0.1 } });
+
+    expect(arco._z.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        style: { particles: { fade: 0.4, density: 0.1 } },
+      }),
+    );
+    expect(arco._style.particles).toMatchObject({ fade: 0.4, density: 0.1 });
+  });
+});
+
+describe("ArcoMapLegend scalar settings panel", () => {
+  it("draws scalar layers as a raster, as zartigl does", () => {
+    const { arco } = createArco({});
+    arco._z.supportsDynamicStyle = () => false;
+    arco._layer_def = { kind: "scalar", defaults: {} };
+
+    arco._buildSettings();
+
+    expect(arco._style.renderMode).toBe("raster");
   });
 });
 

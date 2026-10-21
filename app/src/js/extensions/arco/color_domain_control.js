@@ -14,20 +14,6 @@ export function isColorDomainEligible({ kind, backend, dynamicStyle }) {
 }
 
 /**
- * Preserve an explicit automatic (`null`) override; otherwise use the catalog
- * domain when one exists.
- *
- * @param {Record<string, unknown>} settings
- * @param {Record<string, unknown>} rasterDefaults
- * @returns {unknown}
- */
-export function resolveInitialColorDomain(settings, rasterDefaults) {
-  return settings.colorDomain !== undefined
-    ? settings.colorDomain
-    : (rasterDefaults.colorDomain ?? null);
-}
-
-/**
  * Exact scalar color-domain editor for the compact ARCO settings panel.
  */
 export class ArcoColorDomainControl {

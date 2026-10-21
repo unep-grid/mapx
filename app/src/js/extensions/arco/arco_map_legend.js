@@ -1,8 +1,15 @@
-import { Zartigl, resolveTimeInputSelection } from "@fxi/zartigl";
+import {
+  LEGACY_STYLE_SETTINGS,
+  Zartigl,
+  resolveTimeInputSelection,
+  splitLegacySettings,
+} from "@fxi/zartigl";
 import {
   catalog,
   getCatalogEntry,
   formatVertical,
+  mergeStyles,
+  resolveEntryStyle,
   resolveLocalizedText,
 } from "@fxi/zartigl/catalog";
 import { el } from "../../el_mapx";
@@ -15,7 +22,6 @@ import { ArcoChart, formatValue } from "./chart.js";
 import {
   ArcoColorDomainControl,
   isColorDomainEligible,
-  resolveInitialColorDomain,
 } from "./color_domain_control.js";
 import { createPaletteDropdown } from "./palette_dropdown.js";
 import { TimeScrub } from "./time_scrub.js";
@@ -37,6 +43,7 @@ const defaultOptions = {
   geoVideo: null,
   maxPoints: 200,
   maxDepths: 50,
+  style: null,
   settings: null,
   time: null,
   timeRange: null,
@@ -54,9 +61,49 @@ const defaultPlaybackSpeed = 2;
  * Independent from BaseTimeMapLegend : zartigl owns the layer lifecycle,
  * time/depth metadata and legend data, only the conventions are shared.
  */
+const warnedSettings = new Set();
+
+/**
+ * Move deprecated flat style settings (`opacity`, `particleDensity`…) to
+ * the style, warning once per key: `style` wins over them, else they patch
+ * `base`. `settings` keeps engine tuning only.
+ *
+ * @param {{style?: object | null, settings?: object | null}} change
+ * @param {object} [base] Current style override.
+ * @returns {{style: object | undefined, settings: object | undefined}}
+ */
+export function withLegacySettings({ style, settings }, base) {
+  const legacy = splitLegacySettings(settings ?? undefined);
+  for (const key of legacy.legacyKeys) {
+    if (!warnedSettings.has(key)) {
+      warnedSettings.add(key);
+      console.warn(
+        `ArcoMapLegend: settings.${key} is deprecated: use ${LEGACY_STYLE_SETTINGS[key]}`,
+      );
+    }
+  }
+  const tuning = Object.keys(legacy.settings).length
+    ? legacy.settings
+    : undefined;
+  if (!legacy.legacyKeys.length) {
+    return { style: style ?? undefined, settings: tuning };
+  }
+  return {
+    style:
+      style == null
+        ? mergeStyles(base, legacy.style)
+        : mergeStyles(legacy.style, style),
+    settings: tuning,
+  };
+}
+
 export class ArcoMapLegend {
   constructor(options) {
     this._opt = { ...defaultOptions, ...options };
+    const { style, settings } = withLegacySettings(this._opt);
+    /** Style override over the layer's own. */
+    this._opt.style = style ?? {};
+    this._opt.settings = settings ?? null;
     this._opt.source = options.source ?? options.backend ?? this._opt.source;
     if (this._opt.geoVideo?.loop != null) {
       this._opt.loop = this._opt.geoVideo.loop;
@@ -181,6 +228,7 @@ export class ArcoMapLegend {
       catalog: catalog,
       layer: this._layer_def.id,
       source: this._opt.source,
+      style: this._opt.style,
       settings: this._opt.settings || undefined,
       timeRange: this._opt.timeRange ?? undefined,
       time: this._opt.time ?? undefined,
@@ -272,7 +320,8 @@ export class ArcoMapLegend {
       throw new Error("Call init() before update()");
     }
 
-    const next = { ...change };
+    const { style, settings } = withLegacySettings(change, this._opt.style);
+    const next = { ...change, style, settings };
     const idTime = change.time != null ? ++this._id_time : this._id_time;
     let nextLayer = null;
     if (change.layer != null) {
@@ -322,7 +371,7 @@ export class ArcoMapLegend {
     if (change.layer != null || change.source != null) {
       this._meta = null;
     }
-    this._syncOptions(change, nextLayer);
+    this._syncOptions(next, nextLayer);
     // A newer time request owns the visible date : an older one resolving
     // late must not move it back.
     const keepTime = idTime !== this._id_time;
@@ -344,18 +393,10 @@ export class ArcoMapLegend {
     if (change.depth != null) {
       this._syncDepth(this._depth);
     }
-    if (change.settings) {
-      this._syncSettings(change.settings);
-      if (
-        "palette" in change.settings ||
-        "logScale" in change.settings ||
-        "colorDomain" in change.settings
-      ) {
-        this.renderLegend();
-      }
-      if ("colorDomain" in change.settings) {
-        this._syncColorDomainControl();
-      }
+    if (style !== undefined) {
+      this._syncStyle();
+      this.renderLegend();
+      this._syncColorDomainControl();
     }
     if (change.geoVideo) {
       this._syncPlaybackControls();
@@ -409,6 +450,9 @@ export class ArcoMapLegend {
     if (change.visible != null) {
       this._opt.visible = change.visible;
     }
+    if (change.style !== undefined) {
+      this._opt.style = change.style;
+    }
     if (change.settings) {
       this._opt.settings = {
         ...(this._opt.settings || {}),
@@ -431,9 +475,18 @@ export class ArcoMapLegend {
 
   _syncStateFromZartigl(opt) {
     this._syncAxesFromZartigl(opt);
-    const appliedSettings = this._z.getDebugInfo?.().settings;
-    if (appliedSettings) {
-      this._opt.settings = { ...appliedSettings };
+    // A layer switch keeps only the override keys the new layer draws.
+    const override = this._z.getStyleOverride?.();
+    if (override) {
+      this._opt.style = override;
+    }
+    this._syncStyle();
+  }
+
+  /** The style drawn, as the settings panel shows it. */
+  _syncStyle() {
+    if (this._layer_def) {
+      this._style = resolveEntryStyle(this._layer_def, this._opt.style);
     }
   }
 
@@ -879,20 +932,22 @@ export class ArcoMapLegend {
   }
 
   /**
-   * Settings
+   * Patch the style override, e.g. `{ raster: { opacity: 0.5 } }`.
+   *
+   * @param {import("@fxi/zartigl/catalog").LayerStyleInput} patch
+   * @returns {Promise<void>}
    */
-  updateSettings(settings) {
-    this._syncSettings(settings);
-    return this._updateFromControl({ settings });
+  updateStyle(patch) {
+    this._opt.style = mergeStyles(this._opt.style, patch);
+    this._syncStyle();
+    return this._updateFromControl({ style: this._opt.style });
   }
 
-  _syncSettings(settings) {
-    if (!this._settings) {
-      return;
-    }
-    for (const [key, value] of Object.entries(settings)) {
-      this._settings[key] = value;
-    }
+  /**
+   * @deprecated Use updateStyle(); flat style keys move to the style.
+   */
+  updateSettings(settings) {
+    return this._updateFromControl({ settings });
   }
 
   /**
@@ -1325,39 +1380,19 @@ export class ArcoMapLegend {
    * zartigl demo-prod tweakpane configuration.
    */
   _buildSettings() {
-    const defaults = this._layer_def.defaults || {};
-    const raster = defaults.raster || {};
-    const particles = defaults.particles || {};
-    const settings = this._opt.settings || {};
     const isVector = this.isVector();
     const dynamicStyle = this._z.supportsDynamicStyle();
-    const renderMode =
-      settings.renderMode ?? defaults.renderMode ?? "particles";
-
-    this._settings = {
-      palette: settings.palette ?? defaults.palette,
-      opacity: settings.opacity ?? raster.opacity ?? 1,
-      vibrance: settings.vibrance ?? raster.vibrance ?? 0,
-      logScale: settings.logScale ?? raster.logScale ?? false,
-      colorDomain: resolveInitialColorDomain(settings, raster),
-      particleDensity: settings.particleDensity ?? particles.density ?? 0.01,
-      speed: settings.speed ?? particles.speed ?? 1,
-      fade: settings.fade ?? particles.fade ?? 0.7,
-      renderMode,
-    };
+    this._syncStyle();
 
     const rows = [
-      dynamicStyle ? this._buildPaletteRow(defaults) : null,
+      dynamicStyle ? this._buildPaletteRow() : null,
       this._buildRangeRow({
         label: "Opacity",
         min: 0,
         max: 1,
         step: 0.01,
-        get: () => this._settings.opacity,
-        set: (value) => {
-          this._settings.opacity = value;
-          this.updateSettings({ opacity: value });
-        },
+        get: () => this._style.raster.opacity,
+        set: (value) => this.updateStyle({ raster: { opacity: value } }),
       }),
       dynamicStyle
         ? this._buildRangeRow({
@@ -1365,21 +1400,15 @@ export class ArcoMapLegend {
             min: -1,
             max: 1,
             step: 0.01,
-            get: () => this._settings.vibrance,
-            set: (value) => {
-              this._settings.vibrance = value;
-              this.updateSettings({ vibrance: value });
-            },
+            get: () => this._style.raster.vibrance,
+            set: (value) => this.updateStyle({ raster: { vibrance: value } }),
           })
         : null,
       dynamicStyle
         ? this._buildCheckboxRow({
             label: "Log scale",
-            get: () => this._settings.logScale,
-            set: (value) => {
-              this._settings.logScale = value;
-              this.updateSettings({ logScale: value });
-            },
+            get: () => this._style.raster.logScale,
+            set: (value) => this.updateStyle({ raster: { logScale: value } }),
           })
         : null,
     ];
@@ -1396,7 +1425,8 @@ export class ArcoMapLegend {
     ) {
       this._colorDomainControl = new ArcoColorDomainControl({
         document: this._opt.elInputs.ownerDocument,
-        onChange: (colorDomain) => this.updateSettings({ colorDomain }),
+        onChange: (colorDomain) =>
+          this.updateStyle({ raster: { colorDomain } }),
       });
       this._syncColorDomainControl();
       rows.push(this._colorDomainControl.elRoot);
@@ -1407,45 +1437,36 @@ export class ArcoMapLegend {
         this._buildRangeRow({
           label: "Density",
           min: 0.001,
-          max: 0.15,
+          max: 0.2,
           step: 0.001,
-          get: () => this._settings.particleDensity,
-          set: (value) => {
-            this._settings.particleDensity = value;
-            this.updateSettings({ particleDensity: value });
-          },
+          get: () => this._style.particles.density,
+          set: (value) => this.updateStyle({ particles: { density: value } }),
         }),
         this._buildRangeRow({
           label: "Speed",
           min: 0.1,
           max: 8,
           step: 0.1,
-          get: () => this._settings.speed,
-          set: (value) => {
-            this._settings.speed = value;
-            this.updateSettings({ speed: value });
-          },
+          get: () => this._style.particles.speed,
+          set: (value) => this.updateStyle({ particles: { speed: value } }),
         }),
         this._buildRangeRow({
           label: "Fade",
           min: 0,
           max: 1,
           step: 0.01,
-          get: () => this._settings.fade,
-          set: (value) => {
-            this._settings.fade = value;
-            this.updateSettings({ fade: value });
-          },
+          get: () => this._style.particles.fade,
+          set: (value) => this.updateStyle({ particles: { fade: value } }),
         }),
         this._buildSelectRow({
           label: "Render mode",
-          value: this._settings.renderMode,
+          value: this._style.renderMode,
           options: [
             ["particles", "Particles"],
             ["raster", "Raster"],
             ["raster+particles", "Raster + particles"],
           ],
-          set: (value) => this.updateSettings({ renderMode: value }),
+          set: (value) => this.updateStyle({ renderMode: value }),
         }),
       );
     }
@@ -1459,7 +1480,7 @@ export class ArcoMapLegend {
   }
 
   _syncColorDomainControl() {
-    if (!this._colorDomainControl || !this._settings) {
+    if (!this._colorDomainControl || !this._style) {
       return;
     }
     const min = this._meta?.min;
@@ -1469,24 +1490,20 @@ export class ArcoMapLegend {
         ? [min, max]
         : null;
     this._colorDomainControl.sync({
-      colorDomain: this._settings.colorDomain,
+      colorDomain: this._style.raster.colorDomain,
       frameDomain,
     });
   }
 
-  _buildPaletteRow(defaults) {
+  _buildPaletteRow() {
     const palettes = this._z.getPalettes();
-    const paletteDefault =
-      this._settings.palette || defaults.palette || palettes[0]?.id;
+    const paletteDefault = this._style.palette || palettes[0]?.id;
     this._paletteDropdown?.destroy();
     const elPalette = createPaletteDropdown({
       document: this._opt.elInputs.ownerDocument,
       palettes,
       value: paletteDefault,
-      onChange: (value) => {
-        this._settings.palette = value;
-        this.updateSettings({ palette: value });
-      },
+      onChange: (value) => this.updateStyle({ palette: value }),
     });
     this._paletteDropdown = elPalette;
     return el("div", { class: "arco--settings_row" }, [

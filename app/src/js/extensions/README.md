@@ -63,6 +63,7 @@ const arco = new ArcoMapLegend({
   source: "geovideo",
   timeRange: { trailing: "P1M" },
   geoVideo: { autoplay: false, loop: true, stepsPerSecond: 2 },
+  style: { palette: "balance", raster: { opacity: 0.9 } },
   elLegend: elLegend,
   elInputs: widget.elContent,
 });
@@ -70,10 +71,18 @@ await arco.init();
 
 await arco.update({
   time: new Date("2025-01-01T00:00:00Z"),
-  settings: { opacity: 0.8 },
   geoVideo: { stepsPerSecond: 4 },
 });
+await arco.updateStyle({ raster: { opacity: 0.8 } });
 ```
+
+`style` is the zartigl layer style (see the zartigl README, "Layer style"):
+`palette`, `renderMode`, `particles` (`density`, `speed`, `fade`,
+`grade`) and `raster` (`opacity`, `logScale`, `vibrance`,
+`colorDomain`), over the catalog layer's own. `update({ style })` replaces
+the override (`{}` returns to the layer's own); `updateStyle(patch)` patches
+it, as the settings panel does. The zartigl demo's "Copy MapX widget code"
+writes the style keys that differ from the layer's own.
 
 Playback speed is in time steps per second (0.25–32 in the legend), so it means
 the same for monthly and hourly data, for GeoVideo and Zarr playback alike.
@@ -83,10 +92,16 @@ Zarr, and archive playback continues from one monthly or yearly chunk to the
 next.
 
 `update()` accepts the same runtime fields as zartigl (`layer`, `source`,
-`timeRange`, `time`, `depth`, `settings`, `geoVideo`, and `visible`). The
-constructor-only `backend` alias remains supported for older widgets; new code
-should use `source`. Existing `setTime()`, `setDepth()`, and `updateSettings()`
-calls remain as compatibility adapters to `update()`.
+`timeRange`, `time`, `depth`, `style`, `settings`, `geoVideo`, and
+`visible`). `settings` is engine tuning only (`particleState`,
+`rgba8MaxParticleZoom`).
+
+Saved widgets keep working: flat style keys in `settings` (`opacity`,
+`particleDensity`, `palette`…), in the constructor, `update()` or the
+deprecated `updateSettings()`, move to the style with one console warning
+per key. The constructor-only `backend` alias remains supported; new code
+should use `source`. Existing `setTime()` and `setDepth()` calls remain as
+compatibility adapters to `update()`.
 
 Build note : `submodules/zartigl/dist/` is gitignored. After a fresh clone
 or zartigl changes, run `cd submodules/zartigl && npm install && npm run build:lib`
