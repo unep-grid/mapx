@@ -1,3 +1,12 @@
+  - [1.14.2-alpha.6](https://github.com/unep-grid/mapx/tree/1.14.2-alpha.6) 
+
+    - build(arco): replace zartigl submodule with npm dependency
+    - chore: update dict
+    - docs: dict handling instruction
+    - feat(arco): add particle backdrop controls and move arco keys to their own dictionary
+    - feat(arco): accept the zartigl layer style and deprecate flat style settings
+
+
   - [1.14.2-alpha.5](https://github.com/unep-grid/mapx/tree/1.14.2-alpha.5) 
 
     - fix(sdk): support view_geojson_create and view_geojson_delete in static mode #1137
