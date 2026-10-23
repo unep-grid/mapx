@@ -1,8 +1,8 @@
 # JavaScript and TypeScript quality
 
 Use Node.js 22 and install the root tooling with `npm ci`. In MapX, initialize
-both Git submodules with `git submodule update --init --recursive` first.
-Each submodule also supports these commands in a standalone clone after its
+the mapx-style Git submodule with `git submodule update --init --recursive` first.
+The submodule also supports these commands in a standalone clone after its
 own `npm ci`.
 
 | Command | Purpose |
@@ -13,7 +13,7 @@ own `npm ci`.
 | `npm run lint:fix` | Apply available ESLint fixes; review the result |
 | `npm run quality` | Run all quality checks without writing |
 
-MapX root commands include both submodules. Their own commands work locally.
+MapX root commands include the submodule. Its own commands work locally.
 MapX also provides `format:local`, `format:check:local`, `lint:local`, and
 `lint:fix:local` to check only the parent repository. App, API, and maintenance
 package commands delegate to root tooling, so install the root dependencies
@@ -44,7 +44,8 @@ The three repositories keep identical `.prettierrc.json` and
 `quality/style.config.mjs` files and pin identical shared tool versions in their
 manifests and lockfiles. Repository-specific ESLint environments and exclusions
 may differ. Update the shared files and versions together; MapX's
-`npm run quality:policy` detects drift and missing submodules.
+`npm run quality:policy` checks mapx-style for drift; zartigl and projversor
+are standalone repositories that apply the same policy in their own CI.
 
 CI runs quality checks on pull requests and pushes. MapX image builds/publishing
 and submodule deployment/publishing also run behind quality checks. Configure

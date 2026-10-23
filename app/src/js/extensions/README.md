@@ -39,7 +39,7 @@ extensions/
 ## ARCO Extension (zartigl)
 
 `ArcoMapLegend` does **not** extend `BaseTimeMapLegend` : it renders Zarr
-ocean data client-side through the [`@fxi/zartigl`](../../../../submodules/zartigl)
+ocean data client-side through the [`@fxi/zartigl`](https://www.npmjs.com/package/@fxi/zartigl)
 MapLibre plugin (GPU particle advection for vector fields, palette rasters
 for scalars), so capabilities parsing, tile URL construction and raster
 cross-fade do not apply. It follows the same conventions (options object,
@@ -103,9 +103,10 @@ per key. The constructor-only `backend` alias remains supported; new code
 should use `source`. Existing `setTime()` and `setDepth()` calls remain as
 compatibility adapters to `update()`.
 
-Build note : `submodules/zartigl/dist/` is gitignored. After a fresh clone
-or zartigl changes, run `cd submodules/zartigl && npm install && npm run build:lib`
-before building the app (webpack aliases point at the prebuilt dist).
+Build note : zartigl is an npm dependency (webpack aliases point at its
+prebuilt `dist`). To develop against a local checkout, run
+`npm run build:lib -- --watch` in `../zartigl` and start the app with
+`ZARTIGL_DIR=../../zartigl npm run dev` (path relative to `app/`).
 
 ## Features
 

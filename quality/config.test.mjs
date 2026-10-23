@@ -140,11 +140,7 @@ test("generated output is ignored while owned build tests stay checked", async (
 });
 
 test("standalone submodules enforce the same formatting and brace policy", async () => {
-  for (const directory of [
-    ".",
-    "submodules/mapx-style",
-    "submodules/zartigl",
-  ]) {
+  for (const directory of [".", "submodules/mapx-style"]) {
     const cwd = fileURLToPath(
       new URL(`${directory}/`, new URL("../", import.meta.url)),
     );

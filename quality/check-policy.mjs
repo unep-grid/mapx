@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
 const root = new URL("../", import.meta.url);
-const repositories = ["submodules/mapx-style/", "submodules/zartigl/"];
+const repositories = ["submodules/mapx-style/"];
 const tools = [
   "eslint",
   "@typescript-eslint/parser",

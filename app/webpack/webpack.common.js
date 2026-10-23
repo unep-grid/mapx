@@ -1,7 +1,25 @@
+const fs = require("fs");
 const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const WebpackPwaManifest = require("webpack-pwa-manifest");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
+
+/**
+ * zartigl comes from npm. For local development against a sibling
+ * checkout, set ZARTIGL_DIR (e.g. ../../zartigl, relative to app/) and
+ * keep `npm run build:lib -- --watch` running there.
+ */
+const zartiglDir = process.env.ZARTIGL_DIR
+  ? path.resolve(process.env.ZARTIGL_DIR)
+  : path.resolve(__dirname, "../node_modules/@fxi/zartigl");
+if (process.env.ZARTIGL_DIR) {
+  if (!fs.existsSync(path.join(zartiglDir, "dist/zartigl.js"))) {
+    throw new Error(
+      `ZARTIGL_DIR: ${zartiglDir}/dist/zartigl.js not found, run npm run build:lib there`,
+    );
+  }
+  console.log(`Using local zartigl from ${zartiglDir}`);
+}
 /**
  * To remove in dev
  */
@@ -75,14 +93,8 @@ module.exports = {
       ),
       // webpack 4 ignores the package "exports" field : alias the
       // subpath first, then the package root (exact match with $)
-      "@fxi/zartigl/catalog$": path.resolve(
-        __dirname,
-        "../../submodules/zartigl/dist/catalog.js",
-      ),
-      "@fxi/zartigl$": path.resolve(
-        __dirname,
-        "../../submodules/zartigl/dist/zartigl.js",
-      ),
+      "@fxi/zartigl/catalog$": path.join(zartiglDir, "dist/catalog.js"),
+      "@fxi/zartigl$": path.join(zartiglDir, "dist/zartigl.js"),
       // webpack 4 ignores the package "exports" field : alias the
       // vendored meilisearch client ( app/src/js/search sub-package )
       meilisearch$: path.resolve(
