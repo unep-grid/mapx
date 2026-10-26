@@ -1,3 +1,8 @@
+  - [1.14.2-beta.0](https://github.com/unep-grid/mapx/tree/1.14.2-beta.0) 
+
+    - fix: view lifecycle
+
+
   - [1.14.2-alpha.7](https://github.com/unep-grid/mapx/tree/1.14.2-alpha.7) 
 
     - chore: update zartigl
