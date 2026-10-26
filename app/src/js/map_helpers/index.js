@@ -32,7 +32,12 @@ import { MapControlAttribution } from "./../map_controls";
 import { NotifCenter } from "./../notif_center/";
 import { cleanDiacritic } from "./../string_util/";
 import { mirrorUrlCreate } from "./../mirror_util";
-import { isStoryPlaying, storyClose, storyRead } from "./../story_map/index.js";
+import {
+  getStoryViewsId,
+  isStoryPlaying,
+  storyClose,
+  storyRead,
+} from "./../story_map/index.js";
 import { wmsQuery } from "./../wms/index.js";
 import { clearMapxCache, getVersion } from "./../app_utils";
 import { onNextFrame } from "./../animation_frame/index.js";
@@ -158,6 +163,9 @@ import { CustomCodeView } from "./view_custom_code.js";
 import { handleMapContextMenuEvent } from "../map_context_menu/index.ts";
 export * from "./view_filters.js";
 export { sortLayers } from "./sort_layers.js";
+
+/** Pending operations by view id, see runViewOperation */
+const viewOperations = new Map();
 
 /**
  * Storage
@@ -2234,9 +2242,13 @@ export function viewLiAction(o) {
  * Get views order from list
  *  - app : ui list / user order
  *  - static :views_active / original order
+ *  - story : current step views
  * @returns {Array}
  */
 export function getViewsOrder() {
+  if (isStoryPlaying()) {
+    return getStoryViewsId(true);
+  }
   const isStatic = !!settings.mode.static;
   const order = isStatic
     ? Array.from(mx_local.views_active)
@@ -2446,7 +2458,12 @@ export async function viewDelete(view) {
  * @param {Object} options.view - View object to be cleared (optional).
  * @returns {Promise<boolean>} Resolves to true when cleanup is complete.
  */
-export async function viewClear(options) {
+export function viewClear(options) {
+  const idView = options.view?.id ?? options.idView;
+  return runViewOperation(idView, () => viewClearNow(options));
+}
+
+async function viewClearNow(options) {
   const { idView, view: providedView } = options;
   /*
    * Can't use getViewAuto :
@@ -2867,8 +2884,41 @@ export function existsInList(li, it, val, inverse) {
  * @param {string} o.before Layer before which insert this view layer(s)
  * @param
  */
-export async function viewRender(o) {
-  await viewClear(o);
+export function viewRender(o) {
+  const idView = isString(o.view) ? o.view : (o.view?.id ?? o.idView);
+  return runViewOperation(idView?.split(settings.separators.sublayer)[0], () =>
+    viewRenderNow(o),
+  );
+}
+
+/**
+ * Operations on one view, one at a time : a render and a clear of the same
+ * view never overlap, so none removes what the other adds.
+ * Story views own no layer or widget, and closing one restores the views
+ * opened before, possibly itself : they are not queued.
+ * @param {string} idView View id
+ * @param {Function} operation Async operation
+ * @return {Promise<*>} Operation result
+ */
+function runViewOperation(idView, operation) {
+  if (!isViewId(idView) || isViewSm(getView(idView))) {
+    return operation();
+  }
+  const previous = viewOperations.get(idView) ?? Promise.resolve();
+  const current = previous.catch(() => {}).then(operation);
+  viewOperations.set(idView, current);
+  current
+    .finally(() => {
+      if (viewOperations.get(idView) === current) {
+        viewOperations.delete(idView);
+      }
+    })
+    .catch(() => {});
+  return current;
+}
+
+async function viewRenderNow(o) {
+  await viewClearNow(o);
 
   const m = getMapData(o.id);
   if (o.idView) {

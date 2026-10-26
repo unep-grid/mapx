@@ -101,6 +101,8 @@ export async function storyRead(opt) {
 async function init(opt) {
   const state = getState();
 
+  // An update re-reads a playing story : its pending steps must stop.
+  interruptStoryActivity();
   Object.assign(state, opt);
 
   if (state.elStory) {
@@ -1908,6 +1910,10 @@ async function updatePanelBehaviour(settings, step, operationToken) {
     for (const v of idViews) {
       if (!isStoryOperationCurrent(state, operationToken)) {
         return;
+      }
+      // A view kept from the previous step keeps its widgets.
+      if (dashboard.hasViewWidgets(v)) {
+        continue;
       }
       await dashboard.addWidgetsToView(v);
       if (!isStoryOperationCurrent(state, operationToken)) {

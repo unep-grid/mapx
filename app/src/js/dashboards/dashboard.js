@@ -185,6 +185,9 @@ class Dashboard extends EventSimple {
      */
     d.opt.dashboard.modules = Array.from(modulesNames);
     const modules = await modulesLoad(d.opt.dashboard.modules);
+    if (d.isDestroyed()) {
+      return [];
+    }
 
     for (const name of modulesNames) {
       const module = modules[idM++];

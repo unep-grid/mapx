@@ -144,7 +144,11 @@ export class DashboardManager {
     if (!isView(view)) {
       return false;
     }
-    return isArray(view._widgets) && view._widgets.length > 0;
+    // Destroying the dashboard destroys widgets the view still references.
+    return (
+      isArray(view._widgets) &&
+      view._widgets.some((widget) => !widget.destroyed)
+    );
   }
 
   /**
@@ -154,11 +158,39 @@ export class DashboardManager {
    */
   async removeWidgetsFromView(idView) {
     const dm = this;
+    // Widgets still being added to the view are removed once added.
+    dm.nextWidgetsToken(idView);
+    return dm.clearViewWidgets(idView);
+  }
+
+  /**
+   * Invalidates the widgets being added to a view.
+   * @param {string} idView
+   * @returns {number} Token of the next widgets of the view
+   * @internal
+   */
+  nextWidgetsToken(idView) {
+    const view = getView(idView);
+    if (!isView(view)) {
+      return;
+    }
+    view._widgets_token = (view._widgets_token || 0) + 1;
+    return view._widgets_token;
+  }
+
+  /**
+   * Destroys the widgets added to a view.
+   * @param {string} idView
+   * @returns {Promise<boolean>} Done
+   * @internal
+   */
+  async clearViewWidgets(idView) {
+    const dm = this;
+    const view = getView(idView);
     const hasWidgets = dm.hasViewWidgets(idView);
     if (!hasWidgets) {
       return;
     }
-    const view = getView(idView);
 
     for (const widget of view._widgets) {
       await widget.destroy();
@@ -183,14 +215,22 @@ export class DashboardManager {
     }
     const view = getView(idView);
     const map = getMap();
-    await dm.removeWidgetsFromView(idView);
+    const token = dm.nextWidgetsToken(idView);
+    await dm.clearViewWidgets(idView);
     const dashboard = await dm.getOrCreate(config);
-    view._widgets = await dashboard.addWidgets({
+    const widgets = await dashboard.addWidgets({
       widgets: config.widgets,
       modules: config.modules,
       view: view,
       map: map,
     });
+    if (token !== view._widgets_token || dashboard.isDestroyed()) {
+      for (const widget of widgets) {
+        await widget.destroy();
+      }
+      return [];
+    }
+    view._widgets = widgets;
     return view._widgets;
   }
 

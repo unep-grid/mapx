@@ -29,6 +29,7 @@ import { createPaletteDropdown } from "./palette_dropdown.js";
 import { TimeScrub } from "./time_scrub.js";
 import { formatVerticalAxisLabel, orderVerticalValues } from "./vertical.js";
 import { createVisibilityGate } from "../../app_visibility/index.js";
+import { layersOrderAuto } from "../../map_helpers/index.js";
 import "../shared/style.less";
 import "./style.less";
 
@@ -199,6 +200,8 @@ export class ArcoMapLegend {
       this._syncStateFromZartigl();
       this._refreshAfterSourceChange();
     };
+    // zartigl adds its layer once loaded, after MapX ordered the views.
+    this._on_layer_attach = () => layersOrderAuto("arco");
     this._on_pick = this._handlePickClick.bind(this);
     this._update_chart_debounced = debounce(() => this.updateChart(), 350);
   }
@@ -208,6 +211,9 @@ export class ArcoMapLegend {
       moduleLoad("nouislider"),
       moduleLoad("echarts"),
     ]);
+    if (this.isDestroyed()) {
+      return;
+    }
     this._noUiSlider = noUiSlider;
     this._echarts = echarts;
     this._layer_def = resolveCatalogEntry(this._opt.layer, catalog);
@@ -257,6 +263,7 @@ export class ArcoMapLegend {
     this._z.on("timeChange", this._on_time_change);
     this._z.on("playbackChange", this._on_playback_change);
     this._z.on("sourceChange", this._on_source_change);
+    this._z.on("layerAttach", this._on_layer_attach);
 
     if (!this._visible) {
       this._z.suspend();
@@ -290,6 +297,7 @@ export class ArcoMapLegend {
     this._z?.off("timeChange", this._on_time_change);
     this._z?.off("playbackChange", this._on_playback_change);
     this._z?.off("sourceChange", this._on_source_change);
+    this._z?.off("layerAttach", this._on_layer_attach);
     this._z?.destroy();
     this._chart?.destroy();
     this._colorDomainControl?.destroy();

@@ -185,7 +185,20 @@ class Widget extends EventSimple {
 
       widget.updateSize(false);
 
-      await widget.onAdd(widget); //script cb
+      widget._adding = true;
+      try {
+        await widget.onAdd(widget); //script cb
+      } finally {
+        widget._adding = false;
+        // Destroyed while adding : onRemove once onAdd is done, so it
+        // removes everything onAdd added.
+        if (widget.destroyed && !widget._skip_on_remove) {
+          await widget.onRemove(widget);
+        }
+      }
+      if (widget.destroyed) {
+        return;
+      }
       await widget.setUpdateDataMethod();
       widget._ready = true;
       widget.fire("ready");
@@ -682,6 +695,7 @@ class Widget extends EventSimple {
         return;
       }
       widget._destroyed = true;
+      widget._skip_on_remove = !!skipOnRemove;
       if (!widget.initializing) {
         return;
       }
@@ -719,9 +733,9 @@ class Widget extends EventSimple {
       /*
        * Exec widget on remove
        */
-      if (!skipOnRemove && isFunction(widget.onRemove)) {
+      if (!skipOnRemove && !widget._adding && isFunction(widget.onRemove)) {
         /*
-         * Case normal remove
+         * Case normal remove. While adding, init() calls it.
          */
         await widget.onRemove(widget);
       }

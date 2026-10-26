@@ -39,6 +39,10 @@ vi.mock("../../modules_loader_async", () => ({
   moduleLoad: vi.fn(() => Promise.resolve({})),
 }));
 
+const mapHelpersMock = vi.hoisted(() => ({ layersOrderAuto: vi.fn() }));
+
+vi.mock("../../map_helpers/index.js", () => mapHelpersMock);
+
 vi.mock("../../mx", () => ({
   maplibregl: {},
   theme: { isDark: () => false },
@@ -207,6 +211,33 @@ describe("ArcoMapLegend zartigl 0.5 lifecycle", () => {
     expect(forwarded.source).toBe("geovideo");
     expect(arco.stop).toHaveBeenCalledOnce();
     expect(arco._rebuild).toHaveBeenCalledOnce();
+  });
+
+  it("orders MapX layers once zartigl adds its layer, until destroyed", async () => {
+    const arco = new ArcoMapLegend({ layer: "ocean-current-velocity" });
+    arco.build = vi.fn();
+    arco.renderLegend = vi.fn();
+    await arco.init();
+    const z = zartiglMock.instances[0];
+    const [, onAttach] = z.on.mock.calls.find(
+      ([event]) => event === "layerAttach",
+    );
+
+    onAttach("MX-arco");
+    expect(mapHelpersMock.layersOrderAuto).toHaveBeenCalledWith("arco");
+
+    arco.destroy();
+    expect(z.off).toHaveBeenCalledWith("layerAttach", onAttach);
+  });
+
+  it("creates no zartigl instance when destroyed while loading modules", async () => {
+    const arco = new ArcoMapLegend({ layer: "ocean-current-velocity" });
+
+    const init = arco.init();
+    arco.destroy();
+    await init;
+
+    expect(zartiglMock.instances).toHaveLength(0);
   });
 
   it("does not resynchronize UI after destruction during an update", async () => {
