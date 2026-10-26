@@ -1,3 +1,9 @@
+  - [1.14.2-alpha.7](https://github.com/unep-grid/mapx/tree/1.14.2-alpha.7) 
+
+    - chore: update zartigl
+    - feat(arco): format variable units in chart and cursor readout with zartigl 0.8
+
+
   - [1.14.2-alpha.6](https://github.com/unep-grid/mapx/tree/1.14.2-alpha.6) 
 
     - build(arco): replace zartigl submodule with npm dependency
