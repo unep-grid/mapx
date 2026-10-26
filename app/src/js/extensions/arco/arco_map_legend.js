@@ -1,6 +1,7 @@
 import {
   LEGACY_STYLE_SETTINGS,
   Zartigl,
+  formatUnit,
   resolveTimeInputSelection,
   splitLegacySettings,
 } from "@fxi/zartigl";
@@ -869,7 +870,9 @@ export class ArcoMapLegend {
     }
     const idQuery = ++this._id_query;
     const mode = this._chart_mode;
-    const unit = this._z.getVariableMeta().units || this._meta?.unit || "";
+    const unit = formatUnit(
+      this._z.getVariableMeta().units || this._meta?.unit,
+    );
     try {
       this._chart.showMessage("Loading…");
       this._updateValueReadout();
@@ -1320,7 +1323,7 @@ export class ArcoMapLegend {
   }
 
   _buildChartCol() {
-    const unit = this._z.getVariableMeta().units || "";
+    const unit = formatUnit(this._z.getVariableMeta().units);
     const verticalLabel = formatVerticalAxisLabel(
       this._depth_meta,
       this._depths,
