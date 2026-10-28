@@ -1505,7 +1505,7 @@ async function appStateRestore() {
    * Restore
    */
   if (hasSavedState) {
-    await runSafe(() => setMapProjection({ name: state?.projection?.name }));
+    await runSafe(() => setMapProjection({ name: state?.projection?.type }));
     await runSafe(() => {
       const pos = state.position;
       map.jumpTo({

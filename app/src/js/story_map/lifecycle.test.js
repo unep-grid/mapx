@@ -190,7 +190,7 @@ function createMap() {
     once: vi.fn(() => new Promise(() => {})),
     getMaxBounds: () => null,
     setMaxBounds: vi.fn(),
-    getProjection: () => ({ name: "mercator" }),
+    getProjection: () => ({ type: "mercator" }),
     resize: vi.fn(),
     jumpTo: vi.fn(),
     easeTo: vi.fn(),
@@ -240,6 +240,15 @@ describe("story map lifecycle", () => {
     mocks.map.elContainer.remove();
     elBtnPreview.remove();
     vi.useRealTimers();
+  });
+
+  it("restores the projection used before the story", async () => {
+    await storyRead({ view: mocks.storyView });
+    const closing = storyClose();
+    await settle();
+    await closing;
+
+    expect(setMapProjection).toHaveBeenCalledWith({ name: "mercator" });
   });
 
   it("removes the story at once when the map never gets idle", async () => {
