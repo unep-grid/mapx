@@ -1,3 +1,9 @@
+  - [1.14.2-beta.2](https://github.com/unep-grid/mapx/tree/1.14.2-beta.2) 
+
+    - fix(story_map): restore the pre-story projection from maplibre projection type
+    - fix(story_map): make story read and close safe against overlaps and stalled views
+
+
   - [1.14.2-beta.1](https://github.com/unep-grid/mapx/tree/1.14.2-beta.1) 
 
     - build: depend on zartigl 0.10.2
