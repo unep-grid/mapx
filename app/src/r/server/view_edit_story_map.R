@@ -78,6 +78,10 @@ observeEvent(input$btnViewPreviewStory, {
     id = "btnViewPreviewStory",
     disable = TRUE
   )
+  # Values come back after a round trip : the editor can be closed or
+  # reopened meanwhile. A modal closed client side, e.g. by a project switch,
+  # is not reported here : the client ignores a preview without editor.
+  reactData$storyPreviewPending <- TRUE
   jedTriggerGetValues("storyEdit", "preview")
 })
 
@@ -86,12 +90,11 @@ observeEvent(input$btnViewCloseStory, {
 
   view <- reactData$viewDataEdited
 
-  if (isTRUE(reactData$storyPreviewed)) {
-    reactData$storyPreviewed <- FALSE
-    mglReadStory(
-      close = TRUE
-    )
-  }
+  # A preview can still be starting client side : always close
+  reactData$storyPreviewPending <- NULL
+  mglReadStory(
+    close = TRUE
+  )
   if (isTRUE(reactData$storySaved)) {
     reactData$storySaved <- FALSE
     mglUpdateView(view)
@@ -148,12 +151,16 @@ observeEvent(input$storyEdit_values, {
 
   switch(idEvent,
     "preview" = {
-      mglReadStory(
-        view = view,
-        edit = TRUE,
-        update = TRUE
-      )
-      reactData$storyPreviewed <- TRUE
+      # Editor closed before the values came back : no preview
+      isPending <- isTRUE(reactData$storyPreviewPending)
+      reactData$storyPreviewPending <- NULL
+      if (isPending) {
+        mglReadStory(
+          view = view,
+          edit = TRUE,
+          update = TRUE
+        )
+      }
     },
     "save" = {
       #

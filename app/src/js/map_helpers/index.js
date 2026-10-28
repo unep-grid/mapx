@@ -2491,7 +2491,9 @@ async function viewClearNow(options) {
 
   await viewModulesRemove(view);
 
-  if (isStory) {
+  // Only a playing story : a story starting or closing clears its own
+  // view, and must not close itself.
+  if (isStory && isStoryPlaying()) {
     await storyClose();
   }
 

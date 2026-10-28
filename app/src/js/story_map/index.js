@@ -37,6 +37,8 @@ import {
   isEmpty,
   isNotEmpty,
   isView,
+  isBoolean,
+  isPromise,
 } from "./../is_test/index.js";
 import {
   getMapPos,
@@ -60,6 +62,34 @@ const state = {};
 window._sm = { story, state };
 
 /**
+ * Lifecycle
+ * - Each read and each close starts a new generation : a read whose
+ *   generation is outdated stops at its next step.
+ * - A close is shared by concurrent callers and bounds its waits : views
+ *   and widgets run user code that may never settle.
+ * - A close waits for the read steps in progress : a step that finishes
+ *   after the restore would overwrite it.
+ */
+const closeWaitMax = 3000;
+let storyGeneration = 0;
+let storyClosing = null;
+const readStepsPending = new Set();
+
+const readSteps = [
+  initStory,
+  initSettings,
+  initControls,
+  initLegendPanel,
+  build,
+  initState,
+  initTheme,
+  initProjection,
+  initListeners,
+  handleMissingImages,
+  initAdaptiveLayout,
+];
+
+/**
  * Read and evaluate story map
  * @param {Object} opt options
  * @param {String} opt.idView View id. If no view is given, fetch one by id
@@ -70,32 +100,88 @@ window._sm = { story, state };
  * @param {Boolean} opt.storyAutoStart Bypass everything, start story, don't display back button
  */
 export async function storyRead(opt) {
+  if (opt.close) {
+    await storyClose();
+    return true;
+  }
+  if (opt.edit && !getEditorPreviewButton()) {
+    // Preview requested by an editor closed since, e.g. by a project
+    // switch : R is not told when a modal closes.
+    return true;
+  }
+  // Taken before waiting : a close requested meanwhile cancels this read
+  const generation = ++storyGeneration;
+  if (storyClosing) {
+    await storyClosing;
+  }
+  if (readStepsPending.size > 0) {
+    // A superseded read stops at its next step : its step in progress
+    // must end before this read changes the state.
+    await maxWait(readStepsSettled(), closeWaitMax);
+  }
   try {
-    if (opt.close) {
-      await storyClose();
+    if (!isReadCurrent(generation)) {
       return true;
     }
     await init(opt);
-    await initStory();
-    await initSettings();
-    await initControls();
-    await initLegendPanel();
-    await build();
-    await initState();
-    await initTheme();
-    await initProjection();
-    await initListeners();
-    await handleMissingImages();
-    await initAdaptiveLayout();
+    for (const step of readSteps) {
+      if (!isReadCurrent(generation)) {
+        return true;
+      }
+      await trackReadStep(step(generation));
+    }
+    if (!isReadCurrent(generation)) {
+      return true;
+    }
     // start  = infinite loop rendering
     start().catch((e) => {
       errorHandler(e);
     });
   } catch (e) {
     errorHandler(e);
-  } finally {
-    return true;
+    // A story built but not started has no exit : remove it.
+    if (isReadCurrent(generation)) {
+      await storyClose();
+    }
   }
+  return true;
+}
+
+/**
+ * Test if a read is still the latest story read or close
+ * @param {number} generation Generation of the read
+ * @return {boolean} The read is current
+ */
+function isReadCurrent(generation) {
+  return generation === storyGeneration;
+}
+
+/**
+ * Keep a read step pending until it settles, for the close to wait on it
+ * @param {Promise} prom Read step
+ * @return {Promise} Read step
+ */
+function trackReadStep(prom) {
+  readStepsPending.add(prom);
+  return prom.finally(() => {
+    readStepsPending.delete(prom);
+  });
+}
+
+/**
+ * Wait for the read steps in progress, failed or not
+ * @return {Promise<Array>} Settled steps
+ */
+function readStepsSettled() {
+  return Promise.allSettled([...readStepsPending]);
+}
+
+/**
+ * Get the preview button of the story editor, a legacy R modal
+ * @return {Element|null} Button, if the editor is open
+ */
+function getEditorPreviewButton() {
+  return document.getElementById("btnViewPreviewStory");
 }
 
 async function init(opt) {
@@ -103,7 +189,13 @@ async function init(opt) {
 
   // An update re-reads a playing story : its pending steps must stop.
   interruptStoryActivity();
-  Object.assign(state, opt);
+  // Options not given are reset : a previous read must not leak its mode.
+  Object.assign(
+    state,
+    { view: null, edit: false, update: false, autoStart: false },
+    opt,
+  );
+  state.phase = "starting";
 
   if (state.elStory) {
     state.update = true;
@@ -117,14 +209,18 @@ async function init(opt) {
   state.enable = false;
 }
 
-async function initListeners() {
+async function initListeners(generation) {
   removeAllListeners();
   /**
    * Edit mode
    */
   if (state.edit) {
+    const isCurrent = () => isReadCurrent(generation);
     const { initEditing } = await import("./editor.js");
-    await initEditing(state);
+    await initEditing(state, isCurrent);
+    if (!isCurrent()) {
+      return;
+    }
   } else {
     initMouseMoveListener();
   }
@@ -345,56 +441,89 @@ function getStory() {
   return story || {};
 }
 
+/**
+ * Clear active views and story views
+ * - A story view still rendering is not yet active : its clear is queued
+ *   after the render, which removes what a late render adds.
+ */
 export async function cleanRemoveViews() {
   const state = getState();
   const elLegendContainer = state?.button_legend?.elPanelContent;
-  const idViews = getViewsActive();
+  const idViews = new Set([...getViewsActive(), ...getStoryViewsId()]);
 
-  for (const idView of idViews) {
-    await viewClear({
-      idView: idView,
-      elLegendContainer,
-    });
-  }
+  // Queued at once : a view re-added after a clear that timed out is
+  // queued after that clear, not before.
+  await Promise.allSettled(
+    [...idViews].map((idView) => viewClear({ idView, elLegendContainer })),
+  );
   return true;
 }
 
 /**
  * Remove ui elements
+ * - Elements are removed even if the build failed midway
  */
-async function storyUiClear() {
+function storyUiClear() {
   const state = getState();
-  if (state._init_ui) {
-    state.elStory.remove();
-    state.elStoryContainer.remove();
-    state.elStoryNav.remove();
-    state._init_ui = false;
-  }
+  state.elStory?.remove();
+  state.elStoryContainer?.remove();
+  state.elStoryNav?.remove();
+  state._init_ui = false;
 }
 
 /**
- * Close current story if any.
+ * Close current story if any : playing, starting, or left without
+ * exit by a failed start.
+ * @return {Promise<void>}
  */
-export async function storyClose() {
+export function storyClose() {
+  // Also cancels a read waiting for the close in progress
+  storyGeneration++;
+  if (storyClosing) {
+    return storyClosing;
+  }
   const state = getState();
-  if (isEmpty(state) || !state.enable) {
-    return;
+  if (isEmpty(state.phase)) {
+    return Promise.resolve();
   }
-  interruptStoryActivity();
-  state.enable = false;
-  events.fire("story_close");
-  removeAllListeners();
-  if (state.ct_editor_remove) {
-    state.ct_editor_remove();
+  storyClosing = storyCloseNow().finally(() => {
+    storyClosing = null;
+  });
+  return storyClosing;
+}
+
+async function storyCloseNow() {
+  const state = getState();
+  try {
+    // Remove the story first : steps below may fail, and waits depend
+    // on views' user code.
+    state.enable = false;
+    state.phase = "closing";
+    // Synchronous : the story disappears on the close request
+    runSafe(interruptStoryActivity);
+    runSafe(removeAllListeners);
+    runSafe(storyUiClear);
+    events.fire("story_close");
+    if (state.ct_editor_remove) {
+      runSafe(state.ct_editor_remove);
+    }
+    await waitTimeoutAsync(100);
+    await maxWait(
+      Promise.allSettled([
+        runSafe(storyStop),
+        ...(state.storyOperations || []),
+        readStepsSettled(),
+      ]),
+      closeWaitMax,
+    );
+    await storyMapLock("lock");
+    new FlashItem("sign-out");
+    await appStateRestore();
+  } catch (e) {
+    console.warn(e);
+  } finally {
+    await cleanState();
   }
-  await waitTimeoutAsync(100);
-  await storyStop();
-  await Promise.allSettled([...(state.storyOperations || [])]);
-  await storyUiClear();
-  await storyMapLock("lock");
-  new FlashItem("sign-out");
-  await appStateRestore();
-  await cleanState();
 }
 
 export async function storyStop() {
@@ -407,7 +536,8 @@ export async function storyStop() {
   }
   const mapBusy = !map.isStyleLoaded();
   if (mapBusy) {
-    await map.once("idle");
+    // Continuous source updates can prevent idle
+    await maxWait(map.once("idle"), closeWaitMax);
   }
 }
 
@@ -442,9 +572,14 @@ async function cleanState() {
 /**
  * Get story view or fetch it remotely
  */
-async function initStory() {
+async function initStory(generation) {
   const state = getState();
-  state.view = await getViewAuto(state.view || state.idView);
+  const view = await getViewAuto(state.view || state.idView);
+  if (!isReadCurrent(generation)) {
+    // The state now belongs to the close or to a newer read
+    return;
+  }
+  state.view = view;
   if (isStory(state.view)) {
     state.idView = state.view.id;
   } else {
@@ -453,7 +588,10 @@ async function initStory() {
       content: "Invalid or empty story",
       addBackground: true,
     });
-    await cleanState();
+    // A re-read leaves a story on screen : the read's close removes it
+    if (!state.elStory) {
+      await cleanState();
+    }
     throw new Error("No story to read");
   }
   Object.assign(story, state.view.data.story);
@@ -469,6 +607,7 @@ async function start() {
     throw new Error("Story already playing");
   }
   state.enable = true;
+  state.phase = "playing";
 
   if (state.update) {
     events.fire("story_update");
@@ -590,13 +729,13 @@ export function getStoryViewsId(onlyCurrentStep) {
   const views = [];
   const story = getStory();
   const state = getState();
-  for (const step of story.steps) {
+  for (const step of story.steps || []) {
     if (onlyCurrentStep) {
       if (step !== state?.step) {
         continue;
       }
     }
-    for (const item of step.views) {
+    for (const item of step.views || []) {
       const idView = getStepViewId(item);
       if (isViewId(idView)) {
         views.push(idView);
@@ -854,12 +993,16 @@ const keyState = {
   idTimeout: 0,
 };
 
-function getStoryOperationToken(state) {
-  return state.storyOperationToken || 0;
+// Outlives the story state : an operation left by a closed story must not
+// match a token of the next story.
+let storyOperationToken = 0;
+
+function getStoryOperationToken() {
+  return storyOperationToken;
 }
 
 function isStoryOperationCurrent(state, token) {
-  return state.enable && getStoryOperationToken(state) === token;
+  return state.enable && getStoryOperationToken() === token;
 }
 
 function trackStoryOperation(state, operation) {
@@ -878,7 +1021,7 @@ function interruptStoryActivity({
   stopAutoplay = true,
 } = {}) {
   const state = getState();
-  state.storyOperationToken = getStoryOperationToken(state) + 1;
+  storyOperationToken++;
   state.storyStepPending = null;
   cancelScrollFromTo();
   state.map?.stop(false);
@@ -890,7 +1033,7 @@ function interruptStoryActivity({
     keyState.idTimeout = 0;
     keyState.keys.length = 0;
   }
-  return state.storyOperationToken;
+  return storyOperationToken;
 }
 
 function requestStoryGoTo(to, useTimeout) {
@@ -1056,17 +1199,21 @@ export async function storyGoTo(
 }
 
 /**
- * Prmise race
+ * Wait for a promise, at most duration ms
+ * @param {Promise} prom Promise to wait for
+ * @param {number} duration Max wait in ms
+ * @return {Promise} Promise result, or true on timeout
  */
 function maxWait(prom, duration) {
-  return Promise.race([
-    prom,
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true);
-      }, duration);
-    }),
-  ]);
+  let idTimeout;
+  const timeout = new Promise((resolve) => {
+    idTimeout = setTimeout(() => {
+      resolve(true);
+    }, duration);
+  });
+  return Promise.race([prom, timeout]).finally(() => {
+    clearTimeout(idTimeout);
+  });
 }
 
 export async function storyAutoPlay(cmd, operationToken = null) {
@@ -1230,7 +1377,7 @@ async function storyControlsEnable() {
   /**
    * Preview button ( edit mode )
    */
-  const elBtnPreview = document.querySelector("#btnViewPreviewStory");
+  const elBtnPreview = getEditorPreviewButton();
   if (elBtnPreview) {
     elBtnPreview.removeAttribute("disabled");
   }
@@ -1241,14 +1388,23 @@ async function storyControlsEnable() {
   await storyMapLock("recalc");
 }
 
-async function initTheme() {
+async function initTheme(generation) {
   const s = getSettings();
   const useTheme = isNotEmpty(s.theme) && s.theme !== "default";
+  const idThemeSaved = getState().idTheme;
   /*
    * Set theme
    */
   if (useTheme) {
     await theme.set(s.theme, { sound: false, save: false, save_url: false });
+    if (!isReadCurrent(generation) && isNotEmpty(idThemeSaved)) {
+      // Closed during a remote theme fetch : theme.set skipped the restore
+      await theme.set(idThemeSaved, {
+        sound: false,
+        save: false,
+        save_url: true,
+      });
+    }
   }
 }
 
@@ -1264,7 +1420,7 @@ async function initProjection() {
   }
 }
 
-async function initState() {
+async function initState(generation) {
   const state = getState();
   const map = getMap();
   if (state._app_state_saved) {
@@ -1304,23 +1460,8 @@ async function initState() {
    */
   const projection = map.getProjection();
 
-  /**
-   * Clear views
-   * viewRemove also close the UI item
-   */
-  for (const id of oldViews) {
-    await viewRemove(id);
-  }
-
-  /**
-   * Hide modes
-   */
-  state.ctrlAerial.action("hide");
-  state.ctrlMode3d.action("hide");
-  controls.sizeOptimizer();
-
   /*
-   * save in state
+   * save in state : a close during the views removal restores them
    */
   Object.assign(state, {
     idTheme,
@@ -1331,53 +1472,104 @@ async function initState() {
     hasAerial,
     has3d,
   });
+
+  /**
+   * Clear views
+   * viewRemove also close the UI item
+   */
+  for (const id of oldViews) {
+    if (!isReadCurrent(generation)) {
+      return;
+    }
+    await viewRemove(id);
+  }
+
+  /**
+   * Hide modes
+   */
+  state.ctrlAerial.action("hide");
+  state.ctrlMode3d.action("hide");
+  controls.sizeOptimizer();
 }
 
+/**
+ * Restore the app state saved by initState
+ * - Each step runs even if a previous one failed
+ * - A story closed before initState only removes what it added
+ */
 async function appStateRestore() {
   const state = getState();
   const map = getMap();
+  const hasSavedState = isNotEmpty(state.position);
   /**
    * Restore
    */
-  const idTheme = state.idTheme;
-  const pos = state.position;
+  if (hasSavedState) {
+    await runSafe(() => setMapProjection({ name: state?.projection?.name }));
+    await runSafe(() => {
+      const pos = state.position;
+      map.jumpTo({
+        zoom: pos.z,
+        bearing: pos.b,
+        pitch: pos.p,
+        center: [pos.lng, pos.lat],
+      });
+      map.setMaxBounds(state.maxBounds);
+    });
+    runSafe(() =>
+      theme.set(state.idTheme, { sound: false, save: false, save_url: true }),
+    );
+  }
 
-  await setMapProjection({ name: state?.projection?.name });
+  runSafe(resetMapStyle);
+  runSafe(resetControls);
+  runSafe(resetPanels);
+  runSafe(removeLegendPanel);
 
-  map.jumpTo({
-    zoom: pos.z,
-    bearing: pos.b,
-    pitch: pos.p,
-    center: [pos.lng, pos.lat],
-  });
+  if (!hasSavedState) {
+    // Views are removed by initState and added by steps : none changed
+    return;
+  }
 
-  map.setMaxBounds(state.maxBounds);
+  await maxWait(runSafe(cleanRemoveViews), closeWaitMax);
 
-  theme.set(idTheme, { sound: false, save: false, save_url: true });
+  // Sequential, to keep the views order, and awaited : nothing starts after
+  // the close. One bound per view : a stalled view delays the others but
+  // does not drop them. A view added after its bound can't be cancelled.
+  for (const id of state.oldViews || []) {
+    await maxWait(
+      runSafe(() => viewAdd(id)),
+      closeWaitMax,
+    );
+  }
+}
 
-  resetMapStyle();
-  resetControls();
-  resetPanels();
-  removeLegendPanel();
-
-  await cleanRemoveViews();
-
-  for (const id of state.oldViews) {
-    await viewAdd(id);
+/**
+ * Run a close step, log its error
+ * - A synchronous step stays synchronous
+ * @param {Function} fun Step
+ * @return {*} Step result, or a promise of it for an async step
+ */
+function runSafe(fun) {
+  try {
+    const res = fun();
+    if (isPromise(res)) {
+      return res.catch((e) => {
+        console.warn(e);
+      });
+    }
+    return res;
+  } catch (e) {
+    console.warn(e);
   }
 }
 
 function resetControls() {
   const state = getState();
-  if (state.hasAerial) {
-    state.ctrlAerial.action("show");
-  } else {
-    state.ctrlAerial.action("hide");
-  }
-  if (state.has3d) {
-    state.ctrlMode3d.action("show");
-  } else {
-    state.ctrlMode3d.action("hide");
+  const hasSavedModes = isBoolean(state.hasAerial);
+  if (hasSavedModes) {
+    state.ctrlAerial.action(state.hasAerial ? "show" : "hide");
+    state.ctrlMode3d.action(state.has3d ? "show" : "hide");
   }
   if (isArray(state.controlsAdded)) {
     for (const ctrl of state.controlsAdded) {
@@ -1438,7 +1630,7 @@ function updateLegendsSize() {
 function removeLegendPanel() {
   const state = getState();
   events.offGroup("story_legends");
-  state.button_legend.destroy();
+  state.button_legend?.destroy();
   delete state.button_legend;
 }
 
@@ -1663,7 +1855,7 @@ export function storySetTransform(o) {
 
 export function storyPlayStep(stepNum) {
   const state = getState();
-  const operationToken = getStoryOperationToken(state);
+  const operationToken = getStoryOperationToken();
   return trackStoryOperation(state, storyPlayStepImpl(stepNum, operationToken));
 }
 

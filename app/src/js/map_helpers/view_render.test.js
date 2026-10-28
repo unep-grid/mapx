@@ -154,10 +154,20 @@ describe("view operations", () => {
   it("lets closing a story view render it again", async () => {
     const view = mocks.views[3];
     await viewRender({ view });
+    mocks.isStoryPlaying.mockReturnValueOnce(true);
     mocks.storyClose.mockImplementationOnce(() => viewRender({ view }));
 
     expect(await viewClear({ view })).toBe(true);
     expect(mocks.storyClose).toHaveBeenCalled();
+  });
+
+  it("does not close a story starting or closing when its view is cleared", async () => {
+    const view = mocks.views[3];
+    await viewRender({ view });
+
+    expect(await viewClear({ view })).toBe(true);
+    expect(mocks.storyClose).not.toHaveBeenCalled();
+    expect(getViewsActive()).not.toContain(view.id);
   });
 });
 

@@ -43,16 +43,22 @@ const defaults = {
 
 /**
  * Init editing function
- * @param {Object} sate Story state
+ * @param {Object} state Story state
+ * @param {Function} [isCurrent] Returns false once the story read is outdated
  */
-export async function initEditing(state) {
+export async function initEditing(state, isCurrent = () => true) {
   const ContentTools = await loadContentTools();
+
+  if (!isCurrent()) {
+    return;
+  }
 
   if (state.ct_editor_remove) {
     state.ct_editor_remove();
   }
 
-  state.ct_editor = ContentTools.EditorApp.get();
+  const ctEditor = ContentTools.EditorApp.get();
+  state.ct_editor = ctEditor;
 
   /**
    * Add custom button logic
@@ -62,16 +68,18 @@ export async function initEditing(state) {
   const elModalEditView = document.getElementById("modalViewEdit");
   /**
    * Set a remove function for custom buttons
+   * - Runs once : the story close calls it after a removal on empty editing
    */
   state.ct_editor_remove = () => {
-    state.ct_editor.destroy();
+    delete state.ct_editor_remove;
     delete state.ct_editor;
+    ctEditor.destroy();
   };
 
   function preventEmptyEditing() {
     const elRegions = document.querySelectorAll(defaults.selector);
     if (elRegions.length === 0) {
-      state.ct_editor_remove();
+      state.ct_editor_remove?.();
       return false;
     }
     return true;
@@ -80,7 +88,7 @@ export async function initEditing(state) {
   /**
    * Init editor
    */
-  state.ct_editor.init(
+  ctEditor.init(
     defaults.selector, // class of region editable
     "data-name", // name of regions
     null, // fixture test
@@ -90,7 +98,7 @@ export async function initEditing(state) {
   /**
    * On start
    */
-  state.ct_editor.addEventListener("start", () => {
+  ctEditor.addEventListener("start", () => {
     const ok = preventEmptyEditing();
 
     if (!ok) {
@@ -110,7 +118,7 @@ export async function initEditing(state) {
   /**
    * On cancel
    */
-  state.ct_editor.addEventListener("revert", () => {
+  ctEditor.addEventListener("revert", () => {
     const ok = preventEmptyEditing();
 
     if (!ok) {
@@ -128,7 +136,7 @@ export async function initEditing(state) {
   /**
    * On save
    */
-  state.ct_editor.addEventListener("saved", function (ev) {
+  ctEditor.addEventListener("saved", function (ev) {
     const ok = preventEmptyEditing();
 
     if (!ok) {

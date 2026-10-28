@@ -64,6 +64,8 @@ observe({
         # Keep a version of the view edited
         #
         reactData$viewDataEdited <- viewData
+        # A preview requested in a previous editor must not start
+        reactData$storyPreviewPending <- NULL
 
         #
         # Check if the request gave edit flag to the user
