@@ -20,6 +20,21 @@
     "ru": "Прозрачность фона"
   },
   {
+    "id": "arco_palette_reverse",
+    "en": "Reverse palette",
+    "ru": "Обратная палитра"
+  },
+  {
+    "id": "arco_alpha_fade_low",
+    "en": "Fade low values",
+    "ru": "Снижение низких значений"
+  },
+  {
+    "id": "arco_alpha_fade_high",
+    "en": "Fade high values",
+    "ru": "Снижение высоких значений"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "ru": "Авто стиль..."

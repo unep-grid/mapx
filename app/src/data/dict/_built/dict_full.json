@@ -52,6 +52,45 @@
     "ar": "شفافية الخلفية"
   },
   {
+    "id": "arco_palette_reverse",
+    "en": "Reverse palette",
+    "fr": "Inverser la palette",
+    "es": "Paleta inversa",
+    "ru": "Обратная палитра",
+    "zh": "反向调色板",
+    "de": "Umgekehrte Farbpalette",
+    "bn": "বিপরীত প্যালেট",
+    "fa": "پالت معکوس",
+    "ps": "د رنګ برعکس رنګ",
+    "ar": "لوحة ألوان معكوسة"
+  },
+  {
+    "id": "arco_alpha_fade_low",
+    "en": "Fade low values",
+    "fr": "Estomper les valeurs basses",
+    "es": "Atenuar valores bajos",
+    "ru": "Снижение низких значений",
+    "zh": "淡化低值",
+    "de": "Niedrige Werte ausblenden",
+    "bn": "নিম্ন মান ম্লান হয়ে যায়",
+    "fa": "محو شدن مقادیر کم",
+    "ps": "د کم ارزښتونو کموالی",
+    "ar": "قيم منخفضة متلاشية"
+  },
+  {
+    "id": "arco_alpha_fade_high",
+    "en": "Fade high values",
+    "fr": "Estomper les valeurs hautes",
+    "es": "Atenuar valores altos",
+    "ru": "Снижение высоких значений",
+    "zh": "淡化高值",
+    "de": "Hohe Werte reduzieren",
+    "bn": "উচ্চ মান ম্লান হয়ে যায়",
+    "fa": "محو کردن مقادیر بالا",
+    "ps": "لوړ ارزښتونه کم کړئ",
+    "ar": "تلاشت القيم العالية"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "fr": "Style automatique...",

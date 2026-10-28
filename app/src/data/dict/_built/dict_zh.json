@@ -20,6 +20,21 @@
     "zh": "背景不透明度"
   },
   {
+    "id": "arco_palette_reverse",
+    "en": "Reverse palette",
+    "zh": "反向调色板"
+  },
+  {
+    "id": "arco_alpha_fade_low",
+    "en": "Fade low values",
+    "zh": "淡化低值"
+  },
+  {
+    "id": "arco_alpha_fade_high",
+    "en": "Fade high values",
+    "zh": "淡化高值"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "zh": "汽车风格..."

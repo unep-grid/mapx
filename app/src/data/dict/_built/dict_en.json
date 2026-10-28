@@ -16,6 +16,18 @@
     "en": "Backdrop opacity"
   },
   {
+    "id": "arco_palette_reverse",
+    "en": "Reverse palette"
+  },
+  {
+    "id": "arco_alpha_fade_low",
+    "en": "Fade low values"
+  },
+  {
+    "id": "arco_alpha_fade_high",
+    "en": "Fade high values"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style..."
   },

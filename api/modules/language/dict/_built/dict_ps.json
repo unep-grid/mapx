@@ -20,6 +20,21 @@
     "ps": "د شاليد شفافيت"
   },
   {
+    "id": "arco_palette_reverse",
+    "en": "Reverse palette",
+    "ps": "د رنګ برعکس رنګ"
+  },
+  {
+    "id": "arco_alpha_fade_low",
+    "en": "Fade low values",
+    "ps": "د کم ارزښتونو کموالی"
+  },
+  {
+    "id": "arco_alpha_fade_high",
+    "en": "Fade high values",
+    "ps": "لوړ ارزښتونه کم کړئ"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "ps": "اتومات سټایل ..."

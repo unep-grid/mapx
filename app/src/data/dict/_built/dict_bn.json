@@ -20,6 +20,21 @@
     "bn": "ব্যাকড্রপের অস্বচ্ছতা"
   },
   {
+    "id": "arco_palette_reverse",
+    "en": "Reverse palette",
+    "bn": "বিপরীত প্যালেট"
+  },
+  {
+    "id": "arco_alpha_fade_low",
+    "en": "Fade low values",
+    "bn": "নিম্ন মান ম্লান হয়ে যায়"
+  },
+  {
+    "id": "arco_alpha_fade_high",
+    "en": "Fade high values",
+    "bn": "উচ্চ মান ম্লান হয়ে যায়"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "bn": "অটো স্টাইল..."

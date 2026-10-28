@@ -20,6 +20,21 @@
     "de": "Hintergrundtransparenz"
   },
   {
+    "id": "arco_palette_reverse",
+    "en": "Reverse palette",
+    "de": "Umgekehrte Farbpalette"
+  },
+  {
+    "id": "arco_alpha_fade_low",
+    "en": "Fade low values",
+    "de": "Niedrige Werte ausblenden"
+  },
+  {
+    "id": "arco_alpha_fade_high",
+    "en": "Fade high values",
+    "de": "Hohe Werte reduzieren"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "de": "Auto-Stil..."

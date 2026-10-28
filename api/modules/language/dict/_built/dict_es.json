@@ -20,6 +20,21 @@
     "es": "opacidad del fondo"
   },
   {
+    "id": "arco_palette_reverse",
+    "en": "Reverse palette",
+    "es": "Paleta inversa"
+  },
+  {
+    "id": "arco_alpha_fade_low",
+    "en": "Fade low values",
+    "es": "Atenuar valores bajos"
+  },
+  {
+    "id": "arco_alpha_fade_high",
+    "en": "Fade high values",
+    "es": "Atenuar valores altos"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "es": "Estilo automático..."

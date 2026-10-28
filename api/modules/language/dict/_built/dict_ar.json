@@ -20,6 +20,21 @@
     "ar": "شفافية الخلفية"
   },
   {
+    "id": "arco_palette_reverse",
+    "en": "Reverse palette",
+    "ar": "لوحة ألوان معكوسة"
+  },
+  {
+    "id": "arco_alpha_fade_low",
+    "en": "Fade low values",
+    "ar": "قيم منخفضة متلاشية"
+  },
+  {
+    "id": "arco_alpha_fade_high",
+    "en": "Fade high values",
+    "ar": "تلاشت القيم العالية"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "ar": "نمط تلقائي ..."
