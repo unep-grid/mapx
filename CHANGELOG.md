@@ -1,3 +1,12 @@
+  - [1.14.2-beta.1](https://github.com/unep-grid/mapx/tree/1.14.2-beta.1) 
+
+    - build: depend on zartigl 0.10.2
+    - chore: update dict
+    - feat(arco): palette reverse and alpha fades in settings and legend
+    - build: depend on zartigl 0.10.1
+    - feat(arco): live zartigl catalog, inline entry, tolerant widget styles
+
+
   - [1.14.2-beta.0](https://github.com/unep-grid/mapx/tree/1.14.2-beta.0) 
 
     - fix: view lifecycle
