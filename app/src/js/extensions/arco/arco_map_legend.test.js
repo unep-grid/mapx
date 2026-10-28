@@ -49,8 +49,16 @@ vi.mock("../../mx", () => ({
   settings: { layerBefore: null, language: "en" },
 }));
 
+import { catalog } from "@fxi/zartigl/catalog";
 import { ArcoMapLegend } from "./arco_map_legend.js";
 import { ArcoChart, formatValue } from "./chart.js";
+
+// Tests stay offline: the live catalog falls back to the bundled one, unless
+// a test serves its own.
+vi.stubGlobal(
+  "fetch",
+  vi.fn(() => Promise.reject(new Error("offline in tests"))),
+);
 
 const palettes = [{ id: "balance", colors: ["#0000ff", "#ffffff", "#ff0000"] }];
 
@@ -264,6 +272,83 @@ describe("ArcoMapLegend zartigl 0.5 lifecycle", () => {
     await expect(arco.update({ time: 10 })).rejects.toThrow(
       "Call init() before update()",
     );
+  });
+});
+
+describe("ArcoMapLegend catalog and widget styles", () => {
+  const scalar = catalog.layers.find((layer) => layer.kind === "scalar");
+  const remoteOnly = { ...scalar, id: "f0000000-0000-4000-8000-000000000001" };
+  const serve = (body) =>
+    vi.mocked(fetch).mockImplementationOnce(() =>
+      Promise.resolve(new Response(JSON.stringify(body))),
+    );
+  const start = async (options) => {
+    const arco = new ArcoMapLegend(options);
+    arco.build = vi.fn();
+    arco.renderLegend = vi.fn();
+    await arco.init();
+    return { arco, z: zartiglMock.instances[zartiglMock.instances.length - 1] };
+  };
+
+  beforeEach(() => {
+    zartiglMock.instances.length = 0;
+    vi.spyOn(console, "warn").mockImplementation(() => undefined);
+  });
+  afterEach(() => vi.mocked(console.warn).mockRestore());
+
+  it("finds a layer that only the live catalog has", async () => {
+    serve({ ...catalog, layers: [...catalog.layers, remoteOnly] });
+    const { arco, z } = await start({
+      layer: remoteOnly.id,
+      catalogUrl: "https://test.example/live-a.json",
+    });
+    expect(z.options.layer).toBe(remoteOnly.id);
+    expect(z.options.catalog.layers).toContainEqual(remoteOnly);
+
+    // Later layer changes resolve in the same catalog.
+    arco.stop = vi.fn();
+    arco._rebuild = vi.fn();
+    await arco.update({ layer: remoteOnly.id });
+    expect(z.update).toHaveBeenCalledWith(
+      expect.objectContaining({ layer: remoteOnly.id }),
+    );
+  });
+
+  it("falls back to the bundled catalog when the live one is unreadable", async () => {
+    const { z } = await start({
+      layer: "ocean-current-velocity",
+      catalogUrl: "https://test.example/offline.json",
+    });
+    expect(z.options.catalog).toBe(catalog);
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining("using the bundled catalog"),
+    );
+  });
+
+  it("uses an inline entry first, as the layer when none is named", async () => {
+    const entry = { ...scalar, title: { en: "Inline title" } };
+    const { z } = await start({ entry, catalogUrl: null });
+    expect(z.options.layer).toBe(entry.id);
+    expect(z.options.catalog.layers[0]).toBe(entry);
+    expect(
+      z.options.catalog.layers.filter((layer) => layer.id === entry.id),
+    ).toHaveLength(1);
+  });
+
+  it("drops style keys this zartigl does not know, with a warning", async () => {
+    const { z } = await start({
+      layer: "ocean-current-velocity",
+      catalogUrl: null,
+      style: { raster: { opacity: 0.5, keyOfTheFuture: 1 } },
+    });
+    expect(z.options.style).toEqual({ raster: { opacity: 0.5 } });
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining("ArcoMapLegend.style.raster.keyOfTheFuture"),
+    );
+    expect(
+      () =>
+        new ArcoMapLegend({ style: { raster: { opacity: 2 } }, catalogUrl: null }),
+    ).toThrow("ArcoMapLegend.style.raster.opacity must be a number in [0, 1]");
   });
 });
 

@@ -81,8 +81,22 @@ await arco.updateStyle({ raster: { opacity: 0.8 } });
 `grade`) and `raster` (`opacity`, `logScale`, `vibrance`,
 `colorDomain`), over the catalog layer's own. `update({ style })` replaces
 the override (`{}` returns to the layer's own); `updateStyle(patch)` patches
-it, as the settings panel does. The zartigl demo's "Copy MapX widget code"
-writes the style keys that differ from the layer's own.
+it, as the settings panel does. The zartigl explorer's "Copy MapX widget
+code" writes the style keys that differ from the layer's own.
+
+Layers are found in the live zartigl catalog, published on the zartigl bucket
+on every catalog change (`catalogUrl`, default `CATALOG_URL` from
+`@fxi/zartigl/catalog`), so a newly published layer works without a MapX
+release; it is read once per page and falls back to the catalog bundled with
+MapX when it cannot be read (`catalogUrl: null` uses the bundled one only).
+`entry` takes a whole catalog entry inline, for a layer neither catalog has
+(the explorer's "embed layer definition" writes it); it becomes the layer
+when `layer` is not given.
+
+A widget can be newer than MapX's zartigl: style keys this zartigl does not
+know (say `raster.alphaFadeLow` on an older MapX) are dropped with one
+warning each, and a palette it does not know is drawn with `rdylbu`, so the
+layer still renders. A known key with an invalid value still throws.
 
 Playback speed is in time steps per second (0.25–32 in the legend), so it means
 the same for monthly and hourly data, for GeoVideo and Zarr playback alike.

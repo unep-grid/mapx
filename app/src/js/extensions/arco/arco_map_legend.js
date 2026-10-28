@@ -6,10 +6,13 @@ import {
   splitLegacySettings,
 } from "@fxi/zartigl";
 import {
+  CATALOG_URL,
   catalog,
   getCatalogEntry,
   formatVertical,
+  loadCatalog,
   mergeStyles,
+  parseLayerStyle,
   resolveEntryStyle,
   resolveLocalizedText,
 } from "@fxi/zartigl/catalog";
@@ -52,6 +55,10 @@ const defaultOptions = {
   timeRange: null,
   depth: null,
   visible: true,
+  /** Live catalog read at init; null uses the catalog bundled with MapX. */
+  catalogUrl: CATALOG_URL,
+  /** Inline catalog entry, for a layer the catalogs may not have. */
+  entry: null,
 };
 
 /** Playback speed in time steps per second; zartigl owns the offered speeds. */
@@ -76,6 +83,7 @@ const warnedSettings = new Set();
  * @returns {{style: object | undefined, settings: object | undefined}}
  */
 export function withLegacySettings({ style, settings }, base) {
+  style = tolerantStyle(style);
   const legacy = splitLegacySettings(settings ?? undefined);
   for (const key of legacy.legacyKeys) {
     if (!warnedSettings.has(key)) {
@@ -100,9 +108,58 @@ export function withLegacySettings({ style, settings }, base) {
   };
 }
 
+/**
+ * A widget style with the keys this zartigl does not know dropped, one
+ * warning each: a widget exported from a newer explorer still renders.
+ * Invalid values of known keys still throw.
+ *
+ * @param {object | null | undefined} style
+ * @returns {object | null | undefined}
+ */
+export function tolerantStyle(style) {
+  return style == null
+    ? style
+    : parseLayerStyle(style, "ArcoMapLegend.style", { unknownKeys: "drop" });
+}
+
+/** Live catalogs by url, fetched once per page. */
+const liveCatalogs = new Map();
+
+/**
+ * The catalog a widget resolves its layer in: the live catalog of
+ * `catalogUrl` (the bundled one when it is null or cannot be read), with an
+ * inline `entry` in front of the entry of the same id.
+ *
+ * @param {{catalogUrl?: string | null, entry?: object | null}} options
+ * @returns {Promise<import("@fxi/zartigl/catalog").Catalog>}
+ */
+export async function widgetCatalog({ catalogUrl, entry }) {
+  let base = catalog;
+  if (catalogUrl) {
+    if (!liveCatalogs.has(catalogUrl)) {
+      liveCatalogs.set(
+        catalogUrl,
+        loadCatalog(catalogUrl).then((loaded) => loaded.catalog),
+      );
+    }
+    base = await liveCatalogs.get(catalogUrl);
+  }
+  return entry
+    ? {
+        ...base,
+        layers: [entry, ...base.layers.filter((layer) => layer.id !== entry.id)],
+      }
+    : base;
+}
+
 export class ArcoMapLegend {
   constructor(options) {
     this._opt = { ...defaultOptions, ...options };
+    if (options.entry && options.layer == null) {
+      this._opt.layer = options.entry.id;
+    }
+    /** Catalog of the layer, set by init(). */
+    this._catalog = catalog;
     const { style, settings } = withLegacySettings(this._opt);
     /** Style override over the layer's own. */
     this._opt.style = style ?? {};
@@ -207,16 +264,18 @@ export class ArcoMapLegend {
   }
 
   async init() {
-    const [noUiSlider, echarts] = await Promise.all([
+    const [noUiSlider, echarts, widgetCatalogData] = await Promise.all([
       moduleLoad("nouislider"),
       moduleLoad("echarts"),
+      widgetCatalog(this._opt),
     ]);
     if (this.isDestroyed()) {
       return;
     }
     this._noUiSlider = noUiSlider;
     this._echarts = echarts;
-    this._layer_def = resolveCatalogEntry(this._opt.layer, catalog);
+    this._catalog = widgetCatalogData;
+    this._layer_def = resolveCatalogEntry(this._opt.layer, this._catalog);
 
     if (!this._layer_def) {
       throw new Error(`ARCO catalog layer '${this._opt.layer}' not found`);
@@ -224,7 +283,7 @@ export class ArcoMapLegend {
     this._layer_label = resolveLocalizedText(
       this._layer_def.title,
       mxSettings.language,
-      catalog.defaultLocale,
+      this._catalog.defaultLocale,
     );
 
     const idView = this._opt.idView || "arco";
@@ -233,7 +292,7 @@ export class ArcoMapLegend {
     this._z = new Zartigl({
       id: idLayer,
       map: this._opt.map,
-      catalog: catalog,
+      catalog: this._catalog,
       layer: this._layer_def.id,
       source: this._opt.source,
       style: this._opt.style,
@@ -335,7 +394,7 @@ export class ArcoMapLegend {
     const idTime = change.time != null ? ++this._id_time : this._id_time;
     let nextLayer = null;
     if (change.layer != null) {
-      nextLayer = resolveCatalogEntry(change.layer, catalog);
+      nextLayer = resolveCatalogEntry(change.layer, this._catalog);
       if (!nextLayer) {
         throw new Error(`ARCO catalog layer '${change.layer}' not found`);
       }
@@ -371,7 +430,7 @@ export class ArcoMapLegend {
       this._layer_label = resolveLocalizedText(
         nextLayer.title,
         mxSettings.language,
-        catalog.defaultLocale,
+        this._catalog.defaultLocale,
       );
       this._point = null;
       this._chart_mode = "time";
