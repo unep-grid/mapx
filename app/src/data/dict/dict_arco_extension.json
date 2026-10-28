@@ -18,5 +18,20 @@
     "id": "arco_particles_backdrop_opacity",
     "en": "Backdrop opacity",
     "fr": "Opacité du fond"
+  },
+  {
+    "id": "arco_palette_reverse",
+    "en": "Reverse palette",
+    "fr": "Inverser la palette"
+  },
+  {
+    "id": "arco_alpha_fade_low",
+    "en": "Fade low values",
+    "fr": "Estomper les valeurs basses"
+  },
+  {
+    "id": "arco_alpha_fade_high",
+    "en": "Fade high values",
+    "fr": "Estomper les valeurs hautes"
   }
 ]

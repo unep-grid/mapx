@@ -50,7 +50,7 @@ vi.mock("../../mx", () => ({
 }));
 
 import { catalog } from "@fxi/zartigl/catalog";
-import { ArcoMapLegend } from "./arco_map_legend.js";
+import { ArcoMapLegend, legendGradient } from "./arco_map_legend.js";
 import { ArcoChart, formatValue } from "./chart.js";
 
 // Tests stay offline: the live catalog falls back to the bundled one, unless
@@ -279,9 +279,11 @@ describe("ArcoMapLegend catalog and widget styles", () => {
   const scalar = catalog.layers.find((layer) => layer.kind === "scalar");
   const remoteOnly = { ...scalar, id: "f0000000-0000-4000-8000-000000000001" };
   const serve = (body) =>
-    vi.mocked(fetch).mockImplementationOnce(() =>
-      Promise.resolve(new Response(JSON.stringify(body))),
-    );
+    vi
+      .mocked(fetch)
+      .mockImplementationOnce(() =>
+        Promise.resolve(new Response(JSON.stringify(body))),
+      );
   const start = async (options) => {
     const arco = new ArcoMapLegend(options);
     arco.build = vi.fn();
@@ -347,7 +349,10 @@ describe("ArcoMapLegend catalog and widget styles", () => {
     );
     expect(
       () =>
-        new ArcoMapLegend({ style: { raster: { opacity: 2 } }, catalogUrl: null }),
+        new ArcoMapLegend({
+          style: { raster: { opacity: 2 } },
+          catalogUrl: null,
+        }),
     ).toThrow("ArcoMapLegend.style.raster.opacity must be a number in [0, 1]");
   });
 });
@@ -532,6 +537,70 @@ describe("ArcoMapLegend settings panel", () => {
       }),
     );
     expect(arco._style.particles.backdrop.enabled).toBe(false);
+  });
+});
+
+describe("ArcoMapLegend palette reverse and alpha fades", () => {
+  it("offers them with dynamic styles and patches the style override", async () => {
+    const { arco } = createArco({});
+    arco._opt.elInputs = document.createElement("div");
+    arco._layer_def = { kind: "scalar", defaults: { palette: "heat" } };
+    arco._z.supportsDynamicStyle = () => true;
+    arco._z.getSource = () => ({ type: "zarr" });
+    const configs = [];
+    for (const builder of ["_buildCheckboxRow", "_buildRangeRow"]) {
+      const original = arco[builder].bind(arco);
+      vi.spyOn(arco, builder).mockImplementation((config) => {
+        configs.push(config);
+        return original(config);
+      });
+    }
+    const updateStyle = vi.spyOn(arco, "updateStyle");
+
+    arco._buildSettings();
+
+    // tt() labels are spans that keep their dictionary key.
+    const keyOf = (label) => label?.dataset?.lang_key ?? label;
+    const by = (key) => configs.find((config) => keyOf(config.label) === key);
+    expect(by("arco_palette_reverse").get()).toBe(false);
+    expect(by("arco_alpha_fade_low").get()).toBe(0);
+    expect(by("arco_alpha_fade_high").get()).toBe(0);
+    by("arco_palette_reverse").set(true);
+    by("arco_alpha_fade_low").set(0.25);
+    by("arco_alpha_fade_high").set(0.5);
+    expect(updateStyle.mock.calls.map(([patch]) => patch)).toEqual([
+      { reversePalette: true },
+      { raster: { alphaFadeLow: 0.25 } },
+      { raster: { alphaFadeHigh: 0.5 } },
+    ]);
+  });
+
+  it("leaves them out without dynamic styles (WMTS)", () => {
+    const { arco } = createArco({});
+    arco._layer_def = { kind: "scalar", defaults: {} };
+    arco._z.supportsDynamicStyle = () => false;
+    const labels = [];
+    const original = arco._buildCheckboxRow.bind(arco);
+    vi.spyOn(arco, "_buildCheckboxRow").mockImplementation((config) => {
+      labels.push(config.label?.dataset?.lang_key ?? config.label);
+      return original(config);
+    });
+
+    arco._buildSettings();
+
+    expect(labels).not.toContain("arco_palette_reverse");
+  });
+
+  it("draws the legend ramp reversed and faded as the layer is", () => {
+    expect(legendGradient({ palette: "heat" })).toMatch(
+      /^linear-gradient\(to right, #fde725 0%, .*#3a0007 100%\)$/,
+    );
+    expect(legendGradient({ palette: "heat", reverse: true })).toMatch(
+      /^linear-gradient\(to right, #3a0007 0%/,
+    );
+    const faded = legendGradient({ palette: "heat", alphaFade: { low: 0.5 } });
+    expect(faded).toMatch(/^linear-gradient\(to right, #fde72500 0%/);
+    expect(faded).toContain("repeating-conic-gradient");
   });
 });
 

@@ -77,9 +77,13 @@ await arco.updateStyle({ raster: { opacity: 0.8 } });
 ```
 
 `style` is the zartigl layer style (see the zartigl README, "Layer style"):
-`palette`, `renderMode`, `particles` (`density`, `speed`, `fade`,
-`grade`) and `raster` (`opacity`, `logScale`, `vibrance`,
-`colorDomain`), over the catalog layer's own. `update({ style })` replaces
+`palette`, `reversePalette`, `renderMode`, `particles` (`density`, `speed`,
+`fade`, `grade`) and `raster` (`opacity`, `logScale`, `vibrance`,
+`colorDomain`, `alphaFadeLow`, `alphaFadeHigh`, `alphaFadeCurve`), over the
+catalog layer's own. The settings panel sets the palette, its reversal and
+the low/high fades (fractions of the color range fading to transparent,
+particles included); the legend draws the ramp as the layer does, over a
+checkerboard where it is transparent. `update({ style })` replaces
 the override (`{}` returns to the layer's own); `updateStyle(patch)` patches
 it, as the settings panel does. The zartigl explorer's "Copy MapX widget
 code" writes the style keys that differ from the layer's own.

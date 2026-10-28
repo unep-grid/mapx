@@ -2,6 +2,7 @@ import {
   LEGACY_STYLE_SETTINGS,
   Zartigl,
   formatUnit,
+  resolveColorRamp,
   resolveTimeInputSelection,
   splitLegacySettings,
 } from "@fxi/zartigl";
@@ -147,7 +148,10 @@ export async function widgetCatalog({ catalogUrl, entry }) {
   return entry
     ? {
         ...base,
-        layers: [entry, ...base.layers.filter((layer) => layer.id !== entry.id)],
+        layers: [
+          entry,
+          ...base.layers.filter((layer) => layer.id !== entry.id),
+        ],
       }
     : base;
 }
@@ -1039,18 +1043,15 @@ export class ArcoMapLegend {
         alt: this._layer_label,
       });
     } else if (legend.type === "gradient") {
-      const palette = this._z
+      const known = this._z
         .getPalettes()
-        .find((candidate) => candidate.id === legend.palette);
-      const colors = palette?.colors;
-      if (!colors?.length) {
+        .some((candidate) => candidate.id === legend.palette);
+      if (!known) {
         return;
       }
       const elBar = el("div", {
         class: "arco--legend_bar",
-        style: {
-          background: `linear-gradient(to right, ${colors.join(", ")})`,
-        },
+        style: { background: legendGradient(legend) },
       });
       const format = (value) =>
         Number.isFinite(value) ? Number(value).toPrecision(3) : "";
@@ -1457,6 +1458,35 @@ export class ArcoMapLegend {
 
     const rows = [
       dynamicStyle ? this._buildPaletteRow() : null,
+      // How the palette is drawn; particles fade with it too. The fade curve
+      // (raster.alphaFadeCurve) is a style key without a control.
+      ...(dynamicStyle
+        ? [
+            this._buildCheckboxRow({
+              label: tt("arco_palette_reverse"),
+              get: () => this._style.reversePalette,
+              set: (value) => this.updateStyle({ reversePalette: value }),
+            }),
+            this._buildRangeRow({
+              label: tt("arco_alpha_fade_low"),
+              min: 0,
+              max: 1,
+              step: 0.01,
+              get: () => this._style.raster.alphaFadeLow,
+              set: (value) =>
+                this.updateStyle({ raster: { alphaFadeLow: value } }),
+            }),
+            this._buildRangeRow({
+              label: tt("arco_alpha_fade_high"),
+              min: 0,
+              max: 1,
+              step: 0.01,
+              get: () => this._style.raster.alphaFadeHigh,
+              set: (value) =>
+                this.updateStyle({ raster: { alphaFadeHigh: value } }),
+            }),
+          ]
+        : []),
       this._buildRangeRow({
         label: "Opacity",
         min: 0,
@@ -1815,6 +1845,33 @@ function formatTimeTick(ms, granularity) {
     return iso.slice(0, 10);
   }
   return `${iso.slice(5, 10)} ${iso.slice(11, 16)}`;
+}
+
+const LEGEND_CHECKERBOARD =
+  "repeating-conic-gradient(#555 0 25%, #333 0 50%) 0 0 / 8px 8px";
+
+/**
+ * Css background of a gradient legend: the ramp zartigl draws, reversed and
+ * faded as the layer is, over a checkerboard when part of it is transparent.
+ * Stops are sorted numerically: integer-like keys would enumerate first.
+ *
+ * @param {{palette: string, reverse?: boolean, alphaFade?: object}} legend
+ * @returns {string}
+ */
+export function legendGradient(legend) {
+  const stops = Object.entries(
+    resolveColorRamp(legend.palette, {
+      reverse: legend.reverse,
+      alphaFade: legend.alphaFade,
+    }),
+  )
+    .map(([position, color]) => [Number(position), color])
+    .sort((a, b) => a[0] - b[0]);
+  const gradient = `linear-gradient(to right, ${stops
+    .map(([position, color]) => `${color} ${position * 100}%`)
+    .join(", ")})`;
+  const transparent = stops.some(([, color]) => /^#[0-9a-f]{8}$/i.test(color));
+  return transparent ? `${gradient}, ${LEGEND_CHECKERBOARD}` : gradient;
 }
 
 function toMapxLayerId(id) {
