@@ -337,6 +337,70 @@ describe("ArcoMapLegend catalog and widget styles", () => {
     ).toHaveLength(1);
   });
 
+  it("heads the legend with the layer title, provider and description", async () => {
+    const { arco } = await start({ layer: scalar.id, catalogUrl: null });
+    const elHeader = arco._buildHeader();
+    const elTitle = elHeader.querySelector(".arco--title");
+    expect(elTitle.textContent).toBe(scalar.title.en);
+    expect(elTitle.hasAttribute("title")).toBe(false);
+    expect(elHeader.querySelector(".arco--description").textContent).toBe(
+      scalar.description.en,
+    );
+    expect(elHeader.querySelector(".arco--subtitle").textContent).toBe(
+      "Copernicus Marine Service",
+    );
+  });
+
+  it("heads the legend with the widget's own text, plain or localized", async () => {
+    const { arco } = await start({
+      layer: scalar.id,
+      catalogUrl: null,
+      title: { en: "Own title" },
+      subtitle: "Own subtitle",
+      description: { en: "Own description" },
+    });
+    const elHeader = arco._buildHeader();
+    const elTitle = elHeader.querySelector(".arco--title");
+    expect(elTitle.textContent).toBe("Own title");
+    expect(elHeader.querySelector(".arco--description").textContent).toBe(
+      "Own description",
+    );
+    expect(elHeader.querySelector(".arco--subtitle").textContent).toBe(
+      "Own subtitle",
+    );
+  });
+
+  it("toggles the description from the info button, one panel at a time", async () => {
+    const { arco } = await start({ layer: scalar.id, catalogUrl: null });
+    const elHeader = arco._buildHeader();
+    arco._elSettings = document.createElement("div");
+    const elButtonInfo = elHeader.querySelector(".arco--btn_info");
+    const elDescription = elHeader.querySelector(".arco--description");
+    expect(elButtonInfo.getAttribute("aria-controls")).toBe(elDescription.id);
+    expect(elButtonInfo.getAttribute("aria-expanded")).toBe("false");
+
+    elButtonInfo.click();
+    expect(elDescription.classList.contains("active")).toBe(true);
+    expect(elButtonInfo.getAttribute("aria-expanded")).toBe("true");
+
+    arco._elButtonSettings.click();
+    expect(elDescription.classList.contains("active")).toBe(false);
+    expect(elButtonInfo.getAttribute("aria-expanded")).toBe("false");
+    expect(arco._elSettings.classList.contains("active")).toBe(true);
+    expect(arco._elButtonSettings.getAttribute("aria-expanded")).toBe("true");
+
+    arco._elButtonSettings.click();
+    expect(arco._elSettings.classList.contains("active")).toBe(false);
+  });
+
+  it("has no info button without a description", async () => {
+    const entry = { ...scalar, description: undefined };
+    const { arco } = await start({ entry, catalogUrl: null });
+    const elHeader = arco._buildHeader();
+    expect(elHeader.querySelector(".arco--btn_info")).toBeNull();
+    expect(elHeader.querySelector(".arco--description")).toBeNull();
+  });
+
   it("drops style keys this zartigl does not know, with a warning", async () => {
     const { z } = await start({
       layer: "ocean-current-velocity",

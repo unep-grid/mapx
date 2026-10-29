@@ -91,6 +91,19 @@
     "ar": "تلاشت القيم العالية"
   },
   {
+    "id": "arco_layer_description",
+    "en": "Layer description",
+    "fr": "Description de la couche",
+    "es": "Descripción de la capa",
+    "ru": "Описание слоя",
+    "zh": "图层描述",
+    "de": "Ebenenbeschreibung",
+    "bn": "স্তর বর্ণনা",
+    "fa": "توضیحات لایه",
+    "ps": "د طبقې توضیحات",
+    "ar": "وصف الطبقة"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "fr": "Style automatique...",

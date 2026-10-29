@@ -35,6 +35,11 @@
     "fa": "محو کردن مقادیر بالا"
   },
   {
+    "id": "arco_layer_description",
+    "en": "Layer description",
+    "fa": "توضیحات لایه"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "fa": "سبک خودکار ..."

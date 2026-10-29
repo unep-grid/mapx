@@ -35,6 +35,11 @@
     "de": "Hohe Werte reduzieren"
   },
   {
+    "id": "arco_layer_description",
+    "en": "Layer description",
+    "de": "Ebenenbeschreibung"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "de": "Auto-Stil..."

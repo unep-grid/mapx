@@ -35,6 +35,11 @@
     "fr": "Estomper les valeurs hautes"
   },
   {
+    "id": "arco_layer_description",
+    "en": "Layer description",
+    "fr": "Description de la couche"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "fr": "Style automatique..."

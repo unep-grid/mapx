@@ -35,6 +35,11 @@
     "ru": "Снижение высоких значений"
   },
   {
+    "id": "arco_layer_description",
+    "en": "Layer description",
+    "ru": "Описание слоя"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "ru": "Авто стиль..."

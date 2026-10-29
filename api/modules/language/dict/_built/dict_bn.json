@@ -35,6 +35,11 @@
     "bn": "উচ্চ মান ম্লান হয়ে যায়"
   },
   {
+    "id": "arco_layer_description",
+    "en": "Layer description",
+    "bn": "স্তর বর্ণনা"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "bn": "অটো স্টাইল..."

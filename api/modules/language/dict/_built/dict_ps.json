@@ -35,6 +35,11 @@
     "ps": "لوړ ارزښتونه کم کړئ"
   },
   {
+    "id": "arco_layer_description",
+    "en": "Layer description",
+    "ps": "د طبقې توضیحات"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "ps": "اتومات سټایل ..."

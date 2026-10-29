@@ -28,6 +28,10 @@
     "en": "Fade high values"
   },
   {
+    "id": "arco_layer_description",
+    "en": "Layer description"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style..."
   },

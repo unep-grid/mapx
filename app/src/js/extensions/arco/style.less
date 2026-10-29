@@ -173,6 +173,16 @@
     flex: none;
   }
 
+  .arco--btn_info {
+    flex: none;
+    width: 1.6em;
+    height: 1.6em;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 0.75em;
+    line-height: 1;
+  }
+
   .btn.active {
     background-color: var(--mx_ui_background_accent);
     box-shadow: var(--mx_ui_box_shadow_inset);
@@ -229,25 +239,41 @@
   * Settings : floating box anchored under the header gear,
   * space is limited in the widget
   */
-  .arco--settings {
+  .arco--settings,
+  .arco--description {
     display: none;
     position: absolute;
     top: 55px;
     right: 15px;
     z-index: 2;
-    width: min(320px, calc(100% - 30px));
     max-height: calc(100% - 80px);
     overflow-y: auto;
-    flex-direction: column;
-    gap: 8px;
     padding: 10px;
     border: 1px solid var(--mx_ui_border);
     border-radius: 4px;
     background-color: var(--mx_ui_background);
     box-shadow: var(--mx_ui_box_shadow);
+  }
+
+  .arco--settings {
+    width: min(320px, calc(100% - 30px));
+    flex-direction: column;
+    gap: 8px;
 
     &.active {
       display: flex;
+    }
+  }
+
+  /**
+  * Layer description : same floating box, as wide as the widget
+  */
+  .arco--description {
+    left: 15px;
+    white-space: pre-line;
+
+    &.active {
+      display: block;
     }
   }
 

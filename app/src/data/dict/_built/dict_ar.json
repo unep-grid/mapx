@@ -35,6 +35,11 @@
     "ar": "تلاشت القيم العالية"
   },
   {
+    "id": "arco_layer_description",
+    "en": "Layer description",
+    "ar": "وصف الطبقة"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "ar": "نمط تلقائي ..."

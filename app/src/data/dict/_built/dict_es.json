@@ -35,6 +35,11 @@
     "es": "Atenuar valores altos"
   },
   {
+    "id": "arco_layer_description",
+    "en": "Layer description",
+    "es": "Descripción de la capa"
+  },
+  {
     "id": "auto_style_start",
     "en": "Auto style...",
     "es": "Estilo automático..."

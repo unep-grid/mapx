@@ -33,5 +33,10 @@
     "id": "arco_alpha_fade_high",
     "en": "Fade high values",
     "fr": "Estomper les valeurs hautes"
+  },
+  {
+    "id": "arco_layer_description",
+    "en": "Layer description",
+    "fr": "Description de la couche"
   }
 ]

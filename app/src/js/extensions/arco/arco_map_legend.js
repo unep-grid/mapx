@@ -9,6 +9,7 @@ import {
 import {
   CATALOG_URL,
   catalog,
+  entryHeader,
   getCatalogEntry,
   formatVertical,
   loadCatalog,
@@ -21,7 +22,7 @@ import { el, tt } from "../../el_mapx";
 import { ElementCreator } from "../../el/src/index.js";
 import { maplibregl, settings as mxSettings } from "../../mx";
 import { moduleLoad } from "../../modules_loader_async";
-import { setClickHandler, debounce } from "../../mx_helper_misc";
+import { setClickHandler, debounce, makeId } from "../../mx_helper_misc";
 import { getDictItem } from "../../language";
 import { colorToHex } from "../../color_utils";
 import { ArcoChart, formatValue } from "./chart.js";
@@ -44,8 +45,10 @@ const defaultOptions = {
   source: "auto",
   elInputs: null,
   elLegend: null,
-  title: "ARCO",
+  /** Legend header, text or localized text; unset, read from the layer. */
+  title: null,
   subtitle: null,
+  description: null,
   loop: true,
   geoVideo: null,
   maxPoints: 200,
@@ -1087,17 +1090,67 @@ export class ArcoMapLegend {
     this._opt.elInputs.appendChild(this._elContainer);
   }
 
+  /**
+   * Title, subtitle and description: the widget's own, else the layer's
+   * title, provider and description.
+   */
+  _header() {
+    const header = entryHeader(
+      this._layer_def,
+      this._z?.getSource?.()?.id,
+      this._catalog.defaultLocale,
+    );
+    const text = (value) =>
+      typeof value === "string"
+        ? value
+        : resolveLocalizedText(
+            value,
+            mxSettings.language,
+            this._catalog.defaultLocale,
+          );
+    return {
+      title: text(this._opt.title ?? header.title),
+      subtitle: text(this._opt.subtitle ?? header.subtitle),
+      description: text(this._opt.description ?? header.description),
+    };
+  }
+
   _buildHeader() {
+    const header = this._header();
     this.elStatus = el("span", { class: "arco--status_dot" });
+    this._elDescription = null;
+    this._elButtonInfo = null;
+    if (header.description) {
+      const idDescription = `arco_description_${makeId(10)}`;
+      this._elDescription = el("div", {
+        class: "arco--description",
+        id: idDescription,
+      });
+      this._elDescription.textContent = header.description;
+      this._elButtonInfo = el(
+        "button",
+        {
+          type: "button",
+          class: ["btn", "btn-default", "arco--btn_info"],
+          "aria-expanded": "false",
+          "aria-controls": idDescription,
+          dataset: { lang_key: "arco_layer_description", lang_type: "title" },
+          on: { click: () => this._togglePanel(this._elDescription) },
+        },
+        el("i", { class: ["fa", "fa-info-circle"], "aria-hidden": "true" }),
+      );
+      const elButtonInfo = this._elButtonInfo;
+      void getDictItem("arco_layer_description").then((label) => {
+        elButtonInfo.title = label;
+        elButtonInfo.setAttribute("aria-label", label);
+      });
+    }
     const elTitle = el("div", { class: "arco--title" }, [
       this.elStatus,
-      el("span", this._opt.title),
+      el("span", header.title),
+      this._elButtonInfo,
     ]);
-    const elSubtitle = el(
-      "span",
-      { class: "arco--subtitle" },
-      this._opt.subtitle || this._layer_label,
-    );
+    const elSubtitle = el("span", { class: "arco--subtitle" }, header.subtitle);
     this.elStatusText = el("span", {
       class: "arco--status",
       "aria-live": "polite",
@@ -1107,19 +1160,43 @@ export class ArcoMapLegend {
       this.elStatusText,
     ]);
     this._renderStatus();
-    const elButtonSettings = el(
+    this._elButtonSettings = el(
       "button",
       {
+        type: "button",
         class: ["btn", "btn-default", "arco--btn_icon"],
         title: "Settings",
-        on: { click: () => this._elSettings.classList.toggle("active") },
+        "aria-expanded": "false",
+        on: { click: () => this._togglePanel(this._elSettings) },
       },
       el("i", { class: ["fa", "fa-gear"] }),
     );
     return el("div", { class: "arco--header" }, [
       el("div", [elTitle, elSubtitleLine]),
-      elButtonSettings,
+      this._elButtonSettings,
+      this._elDescription,
     ]);
+  }
+
+  /**
+   * Open or close a header overlay panel, closing the other one: only one
+   * floating panel fits in the widget.
+   */
+  _togglePanel(elPanel) {
+    const panels = [
+      [this._elDescription, this._elButtonInfo],
+      [this._elSettings, this._elButtonSettings],
+    ];
+    const open = !elPanel?.classList.contains("active");
+    for (const [elItem, elButton] of panels) {
+      if (!elItem) {
+        continue;
+      }
+      const active = open && elItem === elPanel;
+      elItem.classList.toggle("active", active);
+      elButton?.classList.toggle("active", active);
+      elButton?.setAttribute("aria-expanded", String(active));
+    }
   }
 
   _renderStatus() {
