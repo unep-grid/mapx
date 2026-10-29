@@ -1,3 +1,8 @@
+  - [1.14.2-beta.3](https://github.com/unep-grid/mapx/tree/1.14.2-beta.3) 
+
+    - fix(view_edit): detect attribute type from first non-null value on vector view save
+
+
   - [1.14.2-beta.2](https://github.com/unep-grid/mapx/tree/1.14.2-beta.2) 
 
     - fix(story_map): restore the pre-story projection from maplibre projection type
