@@ -1152,16 +1152,37 @@ mxDbConfigSet <- function(key, value) {
 }
 
 #' Get layer attribute type
+#'
+#' JSON type of the first non-null value. When every value is null, the
+#' declared column type is mapped to a JSON type instead.
+#'
 #' @param table {character} Layer name
 #' @param attribute {character} Attribute name
 #' @export
 mxDbGetTableAttributeJsonType <- function(table = NULL, attribute = NULL) {
   q <- sprintf(
-    '
-    SELECT
-    JSON_typeof(to_json("%1$s")) as type
-    FROM %2$s limit 1
-    ',
+    "
+    SELECT COALESCE(
+      (
+        SELECT json_typeof(to_json(\"%1$s\"))
+        FROM %2$s
+        WHERE \"%1$s\" IS NOT NULL
+        LIMIT 1
+      ),
+      (
+        SELECT CASE
+          WHEN pg_typeof(\"%1$s\")::text IN (
+            'smallint', 'integer', 'bigint', 'numeric', 'real', 'double precision'
+          ) THEN 'number'
+          WHEN pg_typeof(\"%1$s\")::text = 'boolean' THEN 'boolean'
+          WHEN pg_typeof(\"%1$s\")::text IN ('json', 'jsonb') THEN 'object'
+          ELSE 'string'
+        END
+        FROM %2$s
+        LIMIT 1
+      )
+    ) AS type
+    ",
     attribute,
     table
   )

@@ -951,8 +951,20 @@ observeEvent(input$btnViewSave, {
         useMask = useMask
       )
 
-      if (!sourceDataValid || !sourceMaskValid) {
-        stop("The selected source summary is unavailable or invalid")
+      if (!sourceDataValid) {
+        stop(sprintf(
+          "The selected source summary is unavailable or invalid (source: %s, attribute: %s, attribute type: %s, geometry type: %s)",
+          toString(layerMain),
+          toString(attribute),
+          toString(.get(sourceData, c("variableType"), "none")),
+          toString(.get(sourceData, c("geomType"), "none"))
+        ))
+      }
+      if (!sourceMaskValid) {
+        stop(sprintf(
+          "The selected mask source summary is unavailable or invalid (mask: %s)",
+          toString(layerMask)
+        ))
       }
 
       #
