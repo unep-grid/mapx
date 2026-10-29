@@ -1,3 +1,8 @@
+  - [1.14.2](https://github.com/unep-grid/mapx/tree/1.14.2) 
+
+    - feat(arco): show the layer description in a toggle panel from an info button
+
+
   - [1.14.2-beta.3](https://github.com/unep-grid/mapx/tree/1.14.2-beta.3) 
 
     - fix(view_edit): detect attribute type from first non-null value on vector view save
