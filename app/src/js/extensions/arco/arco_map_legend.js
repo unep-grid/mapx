@@ -247,8 +247,14 @@ export class ArcoMapLegend {
       finish: (_time, resume) => {
         if (this._refresh_pending) {
           this._refresh_pending = false;
-          this._syncStateFromZartigl({ keepTime: true });
-          this._refreshAfterSourceChange();
+          // The axes may have changed meanwhile: once the last seek
+          // applied, show the date zartigl shows on them.
+          void Promise.resolve(this._scrub_seek).then(() => {
+            if (!this.isDestroyed()) {
+              this._syncStateFromZartigl();
+              this._refreshAfterSourceChange();
+            }
+          });
         }
         if (resume && this._playing) {
           this._resumeAfterSeek();
@@ -262,6 +268,19 @@ export class ArcoMapLegend {
         return;
       }
       this._syncStateFromZartigl();
+      this._refreshAfterSourceChange();
+    };
+    // Another depth of a GeoVideo archive has its own timeline. During an
+    // update(), the change is noted and the update rebuilds the controls.
+    this._on_axes_change = () => {
+      if (this._pending_updates > 0) {
+        this._axes_changed = true;
+        return;
+      }
+      if (!this._elContainer) {
+        return;
+      }
+      this._syncAxesFromZartigl();
       this._refreshAfterSourceChange();
     };
     // zartigl adds its layer once loaded, after MapX ordered the views.
@@ -329,6 +348,7 @@ export class ArcoMapLegend {
     this._z.on("timeChange", this._on_time_change);
     this._z.on("playbackChange", this._on_playback_change);
     this._z.on("sourceChange", this._on_source_change);
+    this._z.on("axesChange", this._on_axes_change);
     this._z.on("layerAttach", this._on_layer_attach);
 
     if (!this._visible) {
@@ -363,6 +383,7 @@ export class ArcoMapLegend {
     this._z?.off("timeChange", this._on_time_change);
     this._z?.off("playbackChange", this._on_playback_change);
     this._z?.off("sourceChange", this._on_source_change);
+    this._z?.off("axesChange", this._on_axes_change);
     this._z?.off("layerAttach", this._on_layer_attach);
     this._z?.destroy();
     this._chart?.destroy();
@@ -426,11 +447,14 @@ export class ArcoMapLegend {
     if (this.isDestroyed()) {
       return;
     }
-    // A date or depth change can move between GeoVideo and Zarr.
     const sourceAfter = this._z.getSource?.();
     const sourceChanged =
       sourceBefore?.id !== sourceAfter?.id ||
       sourceBefore?.type !== sourceAfter?.type;
+    // Another depth of a GeoVideo archive can bring another timeline. The
+    // note stays until an update settles with it, even after a failed one.
+    const axesChanged = this._axes_changed;
+    this._axes_changed = false;
 
     if (nextLayer) {
       this._layer_def = nextLayer;
@@ -451,12 +475,12 @@ export class ArcoMapLegend {
     // A newer time request owns the visible date : an older one resolving
     // late must not move it back.
     const keepTime = idTime !== this._id_time;
-    if (structural || sourceChanged) {
+    if (structural || sourceChanged || axesChanged) {
       this._syncStateFromZartigl({ keepTime });
     } else if (change.time != null || change.depth != null) {
       this._syncAxesFromZartigl({ keepTime });
     }
-    if (structural || sourceChanged) {
+    if (structural || sourceChanged || axesChanged) {
       this._refreshAfterSourceChange();
       return;
     }
@@ -1416,7 +1440,8 @@ export class ArcoMapLegend {
 
   _buildBody() {
     const children = [];
-    if (this.hasDepth()) {
+    // Depths not published in GeoVideo yet: the column shows, fixed.
+    if (this.hasDepth() || this._depth_meta?.locked) {
       children.push(this._buildDepthCol());
     }
     children.push(this._buildChartCol());
@@ -1429,25 +1454,35 @@ export class ArcoMapLegend {
     const start = depths.indexOf(this.getDepth());
     const axisLabel = formatVerticalAxisLabel(this._depth_meta, depths);
 
+    // A single level (depths not published yet) still needs a range.
+    const locked = depths.length < 2;
     this.elDepthReadout = el("span", { class: "arco--readout_value" });
-    this.elDepthSlider = el("div", { class: "arco--depth_slider" });
+    this.elDepthSlider = el("div", {
+      class: "arco--depth_slider",
+      title: locked ? "Depths are not published yet" : null,
+    });
     this._noUiSlider.create(this.elDepthSlider, {
-      range: { min: 0, max: depths.length - 1 },
+      range: { min: 0, max: Math.max(1, depths.length - 1) },
       start: start > -1 ? start : 0,
       step: 1,
       orientation: "vertical",
       connect: [true, false],
       behaviour: "tap",
-      pips: {
-        mode: "count",
-        values: 6,
-        density: 100,
-        stepped: true,
-        format: {
-          to: (index) => formatVertical(depths[Math.round(index)], label),
-        },
-      },
+      pips: locked
+        ? undefined
+        : {
+            mode: "count",
+            values: 6,
+            density: 100,
+            stepped: true,
+            format: {
+              to: (index) => formatVertical(depths[Math.round(index)], label),
+            },
+          },
     });
+    if (locked) {
+      this.elDepthSlider.setAttribute("disabled", true);
+    }
     this.elDepthSlider.noUiSlider.on("update", (values) => {
       const depth = depths[Math.round(Number(values[0]))];
       this._updateDepthReadout(depth);

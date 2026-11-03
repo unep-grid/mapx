@@ -1375,3 +1375,71 @@ describe("ArcoMapLegend value readout", () => {
     expect(markers).toHaveLength(count);
   });
 });
+
+describe("ArcoMapLegend GeoVideo depth levels", () => {
+  it("rebuilds the controls when a depth brings another timeline", async () => {
+    const arco = createPlaybackArco({ values: [10, 20] });
+    arco._syncStateFromZartigl = vi.fn();
+    arco._refreshAfterSourceChange = vi.fn();
+    // zartigl reports the axes change while the update runs.
+    arco._z.update = vi.fn(async () => arco._on_axes_change());
+    await arco.update({ depth: -100 });
+    expect(arco._syncStateFromZartigl).toHaveBeenCalled();
+    expect(arco._refreshAfterSourceChange).toHaveBeenCalledOnce();
+
+    // A plain depth update without new axes does not rebuild.
+    arco._refreshAfterSourceChange.mockClear();
+    arco._z.update = vi.fn(() => Promise.resolve());
+    await arco.update({ depth: -0.5 });
+    expect(arco._refreshAfterSourceChange).not.toHaveBeenCalled();
+  });
+
+  it("keeps an axes change noted by an update that failed", async () => {
+    const arco = createPlaybackArco({ values: [10, 20] });
+    arco._syncStateFromZartigl = vi.fn();
+    arco._refreshAfterSourceChange = vi.fn();
+    arco._z.update = vi.fn(async () => {
+      arco._on_axes_change();
+      throw new Error("level unavailable");
+    });
+    await expect(arco.update({ depth: -100 })).rejects.toThrow();
+    arco._z.update = vi.fn(() => Promise.resolve());
+    await arco.update({ depth: -0.5 });
+    expect(arco._refreshAfterSourceChange).toHaveBeenCalledOnce();
+  });
+
+  it("follows an axes change zartigl makes on its own", () => {
+    const arco = createPlaybackArco({ values: [10, 20] });
+    arco._elContainer = document.createElement("div");
+    arco._refreshAfterSourceChange = vi.fn();
+    arco._on_axes_change();
+    expect(arco._refreshAfterSourceChange).toHaveBeenCalledOnce();
+  });
+
+  it("shows a fixed depth slider while depths are not published", () => {
+    const arco = createPlaybackArco({ values: [10, 20] });
+    const created = [];
+    arco._noUiSlider = {
+      create: vi.fn((element, options) => {
+        created.push(options);
+        element.noUiSlider = { on: vi.fn(), set: vi.fn(), destroy: vi.fn() };
+      }),
+    };
+    arco._depth_meta = {
+      values: [-0.5],
+      label: "elevation",
+      units: "m",
+      current: -0.5,
+      locked: true,
+    };
+    arco._depths = [-0.5];
+    arco._depth = -0.5;
+    arco._updateDepthReadout = vi.fn();
+    expect(arco.hasDepth()).toBe(false);
+    const column = arco._buildDepthCol();
+    expect(column).toBeInstanceOf(HTMLElement);
+    expect(arco.elDepthSlider.getAttribute("disabled")).toBe("true");
+    expect(created[0]).toMatchObject({ range: { min: 0, max: 1 } });
+    expect(created[0].pips).toBeUndefined();
+  });
+});
