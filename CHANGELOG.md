@@ -1,3 +1,9 @@
+  - [1.14.3-alpha.0](https://github.com/unep-grid/mapx/tree/1.14.3-alpha.0) 
+
+    - build: depend on zartigl 0.13.0
+    - feat(arco): follow GeoVideo depth levels and show unpublished depths locked
+
+
   - [1.14.2](https://github.com/unep-grid/mapx/tree/1.14.2) 
 
     - feat(arco): show the layer description in a toggle panel from an info button
