@@ -21,6 +21,19 @@ if (process.env.ZARTIGL_DIR) {
   console.log(`Using local zartigl from ${zartiglDir}`);
 }
 /**
+ * zartigl's own numcodecs (nested or hoisted, also under ZARTIGL_DIR):
+ * its Blosc codec is imported as "numcodecs/blosc", an "exports"-only
+ * subpath webpack 4 cannot resolve.
+ */
+const numcodecsDir = require("module")
+  .createRequire(path.join(zartiglDir, "package.json"))
+  .resolve.paths("numcodecs")
+  .map((dir) => path.join(dir, "numcodecs"))
+  .find((dir) => fs.existsSync(path.join(dir, "dist/blosc.js")));
+if (!numcodecsDir) {
+  throw new Error(`numcodecs not found for zartigl at ${zartiglDir}`);
+}
+/**
  * To remove in dev
  */
 module.exports = {
@@ -95,6 +108,7 @@ module.exports = {
       // subpath first, then the package root (exact match with $)
       "@fxi/zartigl/catalog$": path.join(zartiglDir, "dist/catalog.js"),
       "@fxi/zartigl$": path.join(zartiglDir, "dist/zartigl.js"),
+      "numcodecs/blosc$": path.join(numcodecsDir, "dist/blosc.js"),
       // webpack 4 ignores the package "exports" field : alias the
       // vendored meilisearch client ( app/src/js/search sub-package )
       meilisearch$: path.resolve(
