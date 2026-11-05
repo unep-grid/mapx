@@ -2235,6 +2235,11 @@
     "zh": "源文件无法自动修复。未保存任何更改。"
   },
   {
+    "id": "fw_raster_no_data",
+    "en": "No data",
+    "zh": "无数据"
+  },
+  {
     "id": "gc_btn_save",
     "en": "Save results as view",
     "zh": "将结果保存为视图"

@@ -5811,6 +5811,19 @@
     "de": "Die Quelle konnte nicht automatisch repariert werden. Es wurden keine Änderungen gespeichert."
   },
   {
+    "id": "fw_raster_no_data",
+    "en": "No data",
+    "fr": "Aucune donnée",
+    "es": "No hay datos",
+    "ru": "Нет данных",
+    "zh": "无数据",
+    "de": "Keine Daten",
+    "bn": "কোন ডেটা নেই",
+    "fa": "بدون داده",
+    "ps": "هیڅ معلومات نشته",
+    "ar": "لا توجد بيانات"
+  },
+  {
     "id": "gc_btn_save",
     "en": "Save results as view",
     "fr": "Enregistrer comme vue",

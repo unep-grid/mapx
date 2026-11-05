@@ -2235,6 +2235,11 @@
     "es": "No se pudo reparar el origen automáticamente. No se guardaron los cambios."
   },
   {
+    "id": "fw_raster_no_data",
+    "en": "No data",
+    "es": "No hay datos"
+  },
+  {
     "id": "gc_btn_save",
     "en": "Save results as view",
     "es": "Guardar resultados como vista"

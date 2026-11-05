@@ -2235,6 +2235,11 @@
     "fr": "La source n'a pas pu être réparée automatiquement. Aucune modification n'a été enregistrée."
   },
   {
+    "id": "fw_raster_no_data",
+    "en": "No data",
+    "fr": "Aucune donnée"
+  },
+  {
     "id": "gc_btn_save",
     "en": "Save results as view",
     "fr": "Enregistrer comme vue"

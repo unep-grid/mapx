@@ -1788,6 +1788,10 @@
     "en": "The source could not be repaired automatically. No changes were saved."
   },
   {
+    "id": "fw_raster_no_data",
+    "en": "No data"
+  },
+  {
     "id": "gc_btn_save",
     "en": "Save results as view"
   },
