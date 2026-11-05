@@ -373,6 +373,7 @@ MapX resolvers available in app only
     * [.get_view_table_attribute_url(opt)](#MapxResolversStatic+get_view_table_attribute_url) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.get_view_table_attribute(opt)](#MapxResolversStatic+get_view_table_attribute) ⇒ <code>Array.&lt;Object&gt;</code>
     * [.get_view_legend_image(opt)](#MapxResolversStatic+get_view_legend_image) ⇒ <code>String</code>
+    * [.get_view_legend_json(opt)](#MapxResolversStatic+get_view_legend_json) ⇒ <code>Promise.&lt;{idView:String, type:String, provider: (String\|null), supported:Boolean, data: (Object\|null), reason: (String\|undefined)}&gt;</code>
     * [.set_view_legend_state(opt)](#MapxResolversStatic+set_view_legend_state) ⇒ <code>void</code> \| <code>Error</code>
     * [.get_view_legend_state(opt)](#MapxResolversStatic+get_view_legend_state) ⇒ <code>Array</code> \| <code>Error</code>
     * [.get_view_legend_values(opt)](#MapxResolversStatic+get_view_legend_values) ⇒ <code>Array</code>
@@ -417,6 +418,8 @@ MapX resolvers available in app only
     * [.map_set_bounds_array(opt)](#MapxResolversStatic+map_set_bounds_array)
     * [.map_get_max_bounds_array()](#MapxResolversStatic+map_get_max_bounds_array) ⇒ <code>Array</code> \| <code>null</code>
     * [.map_set_max_bounds_array(opt)](#MapxResolversStatic+map_set_max_bounds_array) ⇒ <code>boolean</code>
+    * [.set_map_interactions(opt)](#MapxResolversStatic+set_map_interactions) ⇒ <code>Object.&lt;string, boolean&gt;</code>
+    * [.get_map_interactions()](#MapxResolversStatic+get_map_interactions) ⇒ <code>Object.&lt;string, boolean&gt;</code>
     * [.map(opt)](#MapxResolversStatic+map) ⇒ <code>Promise.&lt;(Any\|Boolean)&gt;</code>
     * [.map_wait_idle()](#MapxResolversStatic+map_wait_idle) ⇒ <code>Boolean</code>
     * [.common_loc_get_list_codes()](#MapxResolversStatic+common_loc_get_list_codes) ⇒ <code>Array</code>
@@ -1230,6 +1233,38 @@ Get view legend
 | opt.idView | <code>String</code> | Id of the view |
 | opt.format | <code>String</code> |  |
 
+<a name="MapxResolversStatic+get_view_legend_json"></a>
+
+#### mapxResolversApp.get\_view\_legend\_json(opt) ⇒ <code>Promise.&lt;{idView:String, type:String, provider: (String\|null), supported:Boolean, data: (Object\|null), reason: (String\|undefined)}&gt;</code>
+Get view legend as structured data, to render a custom legend.
+
+The result always has the same envelope; `data` depends on `provider`:
+- `mapx` (vt views): `{title, geometry, attribute:{name,type}, rules}`,
+  rules as displayed in the MapX legend:
+  `{value, value_to, label, labels, color, opacity, size, sprite, color_border}`.
+- `geoserver` (rt views with a WMS GetLegendGraphic legend URL): the
+  GeoServer JSON legend, unchanged (`{Legend:[...]}`), see
+  https://docs.geoserver.org/latest/en/user/services/wms/get_legend_graphic/
+
+When no structured legend is available, `supported` is false and
+`reason` is one of `no_legend`, `custom_style`, `unsupported_provider`,
+`unsupported_view_type`, `fetch_failed`, `invalid_response`.
+Use `get_view_legend_image` as fallback.
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | options |
+| opt.idView | <code>String</code> | Id of the view |
+
+**Example**
+```js
+const legend = await mapx.ask("get_view_legend_json", { idView });
+if (legend.provider === "geoserver") {
+  const rules = legend.data.Legend[0].rules;
+}
+```
 <a name="MapxResolversStatic+set_view_legend_state"></a>
 
 #### mapxResolversApp.set\_view\_legend\_state(opt) ⇒ <code>void</code> \| <code>Error</code>
@@ -1743,6 +1778,10 @@ A listener could be set to listen to 'click_attributes' events. e.g. mapx.on('cl
 or to the single 'click_features' event fired once per click, e.g.
 mapx.on('click_features', ({attributes, lngLat, point}) => {}),
 where attributes is an object with view id as key, empty if nothing was hit.
+Raster (WMS) samples without data are `null`, e.g.
+`{ "MX-123": [{ GRAY_INDEX: null }] }`: the view was queried, and the
+cell has no data (GeoServer `exclude_nodata_result`). Other WMS servers
+may still return their own no-data marker.
 if this option is enabled, only the SDK will receive the attribute table.
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)
@@ -1846,6 +1885,40 @@ Set current max bounds / world
 | opt | <code>Object</code> | Options |
 | opt.bounds | <code>array</code> | [west, south, east, north] If empty or null = reset |
 
+<a name="MapxResolversStatic+set_map_interactions"></a>
+
+#### mapxResolversApp.set\_map\_interactions(opt) ⇒ <code>Object.&lt;string, boolean&gt;</code>
+Enable or disable map user interactions. Interactions not listed keep
+their current state; all are enabled by default.
+
+Available interactions (MapLibre handlers):
+- `boxZoom`: Shift + drag, zoom to a box
+- `dragRotate`: Ctrl + drag and right-click drag, rotate and tilt
+- `dragPan`: drag to pan
+- `scrollZoom`: mouse wheel / trackpad zoom
+- `keyboard`: arrow keys, +/- zoom
+- `doubleClickZoom`: double click / double tap zoom
+- `touchZoomRotate`: pinch zoom and rotation
+- `touchPitch`: two fingers vertical drag tilt
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)
+**Returns**: <code>Object.&lt;string, boolean&gt;</code> - State of all interactions
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object.&lt;string, boolean&gt;</code> | Interaction name as key, enabled as value |
+
+**Example**
+```js
+mapx.ask("set_map_interactions", { boxZoom: false, dragRotate: false });
+```
+<a name="MapxResolversStatic+get_map_interactions"></a>
+
+#### mapxResolversApp.get\_map\_interactions() ⇒ <code>Object.&lt;string, boolean&gt;</code>
+Get the state of map user interactions
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)
+**Returns**: <code>Object.&lt;string, boolean&gt;</code> - Interaction name as key, enabled as value. See `set_map_interactions`.
 <a name="MapxResolversStatic+map"></a>
 
 #### mapxResolversApp.map(opt) ⇒ <code>Promise.&lt;(Any\|Boolean)&gt;</code>
@@ -2137,6 +2210,7 @@ MapX resolvers available in static and app
     * [.get_view_table_attribute_url(opt)](#MapxResolversStatic+get_view_table_attribute_url) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.get_view_table_attribute(opt)](#MapxResolversStatic+get_view_table_attribute) ⇒ <code>Array.&lt;Object&gt;</code>
     * [.get_view_legend_image(opt)](#MapxResolversStatic+get_view_legend_image) ⇒ <code>String</code>
+    * [.get_view_legend_json(opt)](#MapxResolversStatic+get_view_legend_json) ⇒ <code>Promise.&lt;{idView:String, type:String, provider: (String\|null), supported:Boolean, data: (Object\|null), reason: (String\|undefined)}&gt;</code>
     * [.set_view_legend_state(opt)](#MapxResolversStatic+set_view_legend_state) ⇒ <code>void</code> \| <code>Error</code>
     * [.get_view_legend_state(opt)](#MapxResolversStatic+get_view_legend_state) ⇒ <code>Array</code> \| <code>Error</code>
     * [.get_view_legend_values(opt)](#MapxResolversStatic+get_view_legend_values) ⇒ <code>Array</code>
@@ -2181,6 +2255,8 @@ MapX resolvers available in static and app
     * [.map_set_bounds_array(opt)](#MapxResolversStatic+map_set_bounds_array)
     * [.map_get_max_bounds_array()](#MapxResolversStatic+map_get_max_bounds_array) ⇒ <code>Array</code> \| <code>null</code>
     * [.map_set_max_bounds_array(opt)](#MapxResolversStatic+map_set_max_bounds_array) ⇒ <code>boolean</code>
+    * [.set_map_interactions(opt)](#MapxResolversStatic+set_map_interactions) ⇒ <code>Object.&lt;string, boolean&gt;</code>
+    * [.get_map_interactions()](#MapxResolversStatic+get_map_interactions) ⇒ <code>Object.&lt;string, boolean&gt;</code>
     * [.map(opt)](#MapxResolversStatic+map) ⇒ <code>Promise.&lt;(Any\|Boolean)&gt;</code>
     * [.map_wait_idle()](#MapxResolversStatic+map_wait_idle) ⇒ <code>Boolean</code>
     * [.common_loc_get_list_codes()](#MapxResolversStatic+common_loc_get_list_codes) ⇒ <code>Array</code>
@@ -2594,6 +2670,38 @@ Get view legend
 | opt.idView | <code>String</code> | Id of the view |
 | opt.format | <code>String</code> |  |
 
+<a name="MapxResolversStatic+get_view_legend_json"></a>
+
+#### mapxResolversStatic.get\_view\_legend\_json(opt) ⇒ <code>Promise.&lt;{idView:String, type:String, provider: (String\|null), supported:Boolean, data: (Object\|null), reason: (String\|undefined)}&gt;</code>
+Get view legend as structured data, to render a custom legend.
+
+The result always has the same envelope; `data` depends on `provider`:
+- `mapx` (vt views): `{title, geometry, attribute:{name,type}, rules}`,
+  rules as displayed in the MapX legend:
+  `{value, value_to, label, labels, color, opacity, size, sprite, color_border}`.
+- `geoserver` (rt views with a WMS GetLegendGraphic legend URL): the
+  GeoServer JSON legend, unchanged (`{Legend:[...]}`), see
+  https://docs.geoserver.org/latest/en/user/services/wms/get_legend_graphic/
+
+When no structured legend is available, `supported` is false and
+`reason` is one of `no_legend`, `custom_style`, `unsupported_provider`,
+`unsupported_view_type`, `fetch_failed`, `invalid_response`.
+Use `get_view_legend_image` as fallback.
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | options |
+| opt.idView | <code>String</code> | Id of the view |
+
+**Example**
+```js
+const legend = await mapx.ask("get_view_legend_json", { idView });
+if (legend.provider === "geoserver") {
+  const rules = legend.data.Legend[0].rules;
+}
+```
 <a name="MapxResolversStatic+set_view_legend_state"></a>
 
 #### mapxResolversStatic.set\_view\_legend\_state(opt) ⇒ <code>void</code> \| <code>Error</code>
@@ -3107,6 +3215,10 @@ A listener could be set to listen to 'click_attributes' events. e.g. mapx.on('cl
 or to the single 'click_features' event fired once per click, e.g.
 mapx.on('click_features', ({attributes, lngLat, point}) => {}),
 where attributes is an object with view id as key, empty if nothing was hit.
+Raster (WMS) samples without data are `null`, e.g.
+`{ "MX-123": [{ GRAY_INDEX: null }] }`: the view was queried, and the
+cell has no data (GeoServer `exclude_nodata_result`). Other WMS servers
+may still return their own no-data marker.
 if this option is enabled, only the SDK will receive the attribute table.
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)
@@ -3210,6 +3322,40 @@ Set current max bounds / world
 | opt | <code>Object</code> | Options |
 | opt.bounds | <code>array</code> | [west, south, east, north] If empty or null = reset |
 
+<a name="MapxResolversStatic+set_map_interactions"></a>
+
+#### mapxResolversStatic.set\_map\_interactions(opt) ⇒ <code>Object.&lt;string, boolean&gt;</code>
+Enable or disable map user interactions. Interactions not listed keep
+their current state; all are enabled by default.
+
+Available interactions (MapLibre handlers):
+- `boxZoom`: Shift + drag, zoom to a box
+- `dragRotate`: Ctrl + drag and right-click drag, rotate and tilt
+- `dragPan`: drag to pan
+- `scrollZoom`: mouse wheel / trackpad zoom
+- `keyboard`: arrow keys, +/- zoom
+- `doubleClickZoom`: double click / double tap zoom
+- `touchZoomRotate`: pinch zoom and rotation
+- `touchPitch`: two fingers vertical drag tilt
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)
+**Returns**: <code>Object.&lt;string, boolean&gt;</code> - State of all interactions
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object.&lt;string, boolean&gt;</code> | Interaction name as key, enabled as value |
+
+**Example**
+```js
+mapx.ask("set_map_interactions", { boxZoom: false, dragRotate: false });
+```
+<a name="MapxResolversStatic+get_map_interactions"></a>
+
+#### mapxResolversStatic.get\_map\_interactions() ⇒ <code>Object.&lt;string, boolean&gt;</code>
+Get the state of map user interactions
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)
+**Returns**: <code>Object.&lt;string, boolean&gt;</code> - Interaction name as key, enabled as value. See `set_map_interactions`.
 <a name="MapxResolversStatic+map"></a>
 
 #### mapxResolversStatic.map(opt) ⇒ <code>Promise.&lt;(Any\|Boolean)&gt;</code>

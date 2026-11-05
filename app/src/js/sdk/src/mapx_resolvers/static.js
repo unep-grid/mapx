@@ -607,7 +607,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * Use `get_view_legend_image` as fallback.
    * @param {Object} opt options
    * @param {String} opt.idView Id of the view
-   * @return {Promise<{idView:String, type:String, provider:String|null, supported:Boolean, data:Object|null, reason?:String}>}
+   * @return {Promise<{idView:String, type:String, provider:(String|null), supported:Boolean, data:(Object|null), reason:(String|undefined)}>}
    * @example
    * const legend = await mapx.ask("get_view_legend_json", { idView });
    * if (legend.provider === "geoserver") {
