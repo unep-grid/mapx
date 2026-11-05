@@ -1189,6 +1189,46 @@ mapx.once("ready", async () => {
     ],
   });
 
+  t.check("Get view vt legend json", {
+    init: async () => {
+      const view = await mapx.ask("_get_random_view", {
+        type: ["vt"],
+        vtHasRules: true,
+      });
+      return mapx.ask("get_view_legend_json", { idView: view.id });
+    },
+    tests: [
+      {
+        name: "is mapx legend with rules",
+        test: (r) => {
+          return (
+            r.supported === true &&
+            r.provider === "mapx" &&
+            t.valid.isArrayOfObject(r.data.rules)
+          );
+        },
+      },
+    ],
+  });
+
+  t.check("Get view rt legend json", {
+    init: async () => {
+      const view = await mapx.ask("_get_random_view", {
+        type: ["rt"],
+        rtHasLegendLink: true,
+      });
+      return mapx.ask("get_view_legend_json", { idView: view.id });
+    },
+    tests: [
+      {
+        name: "is a legend envelope",
+        test: (r) => {
+          return r.type === "rt" && typeof r.supported === "boolean";
+        },
+      },
+    ],
+  });
+
   t.check("Get view meta", {
     timeout: 10000,
     init: async () => {

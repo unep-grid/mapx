@@ -80,6 +80,7 @@ import {
   getQueryParametersInit,
 } from "./../url_utils";
 import { LegendVt } from "./../legend_vt/index.js";
+import { dedupeLegendRules } from "./../legend_vt/rules.js";
 import { getViewMapboxLayers } from "./../style_vt/index.js";
 import { moduleLoad } from "./../modules_loader_async";
 import {
@@ -153,6 +154,7 @@ import { getViewSourceMetadata } from "../metadata/utils.js";
 import { eventToPointBbox } from "./utils.js";
 import { getClickFeaturesData } from "./click_features.js";
 import { enableMapInteractionIfAllowed } from "./interactions.js";
+import { getViewRtLegendUrl } from "./legend_rt.js";
 import {
   buildFeatureIdentityFilter,
   setFeatureIdentityProperty,
@@ -3335,8 +3337,8 @@ export async function getViewLegendImage(opt) {
   }
 
   if (isRt) {
-    const legendUrl = path(view, "data.source.legend", null);
-    if (!isUrl(legendUrl)) {
+    const legendUrl = getViewRtLegendUrl(view);
+    if (!legendUrl) {
       return Promise.reject("no legend");
     }
     return urlToImageBase64(legendUrl);
@@ -3539,10 +3541,8 @@ async function viewRenderRt(o) {
     return true;
   }
 
-  const legendUrlFetch = useMirror ? mirrorUrlCreate(legendUrl) : legendUrl;
-
   /* Get a base64 image from url */
-  legendB64 = await urlToImageBase64(legendUrlFetch);
+  legendB64 = await urlToImageBase64(getViewRtLegendUrl(view));
 
   /* If empty data or length < 'data:image/png;base64,' length */
   if (!isBase64img(legendB64)) {
@@ -3682,34 +3682,7 @@ function setVtLegend(options) {
     elLegendContainer = null, // elLegendBuild find it
   } = options;
 
-  let pos = 0;
-  const idRulesToRemove = [];
-  for (const rule of rules) {
-    const ruleNext = rules[++pos];
-    const hasSprite = rule?.sprite !== "none";
-    const nextHasSprite = !!ruleNext && ruleNext?.sprite !== "none";
-
-    const isDuplicated =
-      ruleNext &&
-      ruleNext.value === rule.value &&
-      ruleNext.value_to === rule.value_to;
-
-    if (!hasSprite) {
-      rule.sprite = null;
-    }
-
-    if (isDuplicated) {
-      if (nextHasSprite) {
-        rule.sprite = ruleNext.sprite;
-      }
-      idRulesToRemove.push(pos);
-    }
-  }
-
-  while (idRulesToRemove.length) {
-    const rulePos = idRulesToRemove.pop();
-    rules.splice(rulePos, 1);
-  }
+  dedupeLegendRules(rules);
 
   /**
    * Copy rules

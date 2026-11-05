@@ -43,6 +43,7 @@ import {
   viewSetTimeFilter,
   viewGetTimeFilterValues,
 } from "../../../map_helpers/view_filters.js";
+import { getViewLegendJson } from "../../../map_helpers/legend_json.js";
 import {
   getMapInteractions,
   setMapInteractions,
@@ -587,6 +588,34 @@ export class MapxResolversStatic extends MapxResolversPanels {
    */
   get_view_legend_image(opt) {
     return getViewLegendImage({ view: opt.idView, format: opt.format });
+  }
+
+  /**
+   * Get view legend as structured data, to render a custom legend.
+   *
+   * The result always has the same envelope; `data` depends on `provider`:
+   * - `mapx` (vt views): `{title, geometry, attribute:{name,type}, rules}`,
+   *   rules as displayed in the MapX legend:
+   *   `{value, value_to, label, labels, color, opacity, size, sprite, color_border}`.
+   * - `geoserver` (rt views with a WMS GetLegendGraphic legend URL): the
+   *   GeoServer JSON legend, unchanged (`{Legend:[...]}`), see
+   *   https://docs.geoserver.org/latest/en/user/services/wms/get_legend_graphic/
+   *
+   * When no structured legend is available, `supported` is false and
+   * `reason` is one of `no_legend`, `custom_style`, `unsupported_provider`,
+   * `unsupported_view_type`, `fetch_failed`, `invalid_response`.
+   * Use `get_view_legend_image` as fallback.
+   * @param {Object} opt options
+   * @param {String} opt.idView Id of the view
+   * @return {Promise<{idView:String, type:String, provider:String|null, supported:Boolean, data:Object|null, reason?:String}>}
+   * @example
+   * const legend = await mapx.ask("get_view_legend_json", { idView });
+   * if (legend.provider === "geoserver") {
+   *   const rules = legend.data.Legend[0].rules;
+   * }
+   */
+  get_view_legend_json(opt) {
+    return getViewLegendJson({ view: opt.idView });
   }
 
   /**
