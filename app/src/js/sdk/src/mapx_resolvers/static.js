@@ -1142,6 +1142,10 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * or to the single 'click_features' event fired once per click, e.g.
    * mapx.on('click_features', ({attributes, lngLat, point}) => {}),
    * where attributes is an object with view id as key, empty if nothing was hit.
+   * Raster (WMS) samples without data are `null`, e.g.
+   * `{ "MX-123": [{ GRAY_INDEX: null }] }`: the view was queried, and the
+   * cell has no data (GeoServer `exclude_nodata_result`). Other WMS servers
+   * may still return their own no-data marker.
    * if this option is enabled, only the SDK will receive the attribute table.
    * @param {Object} opt Options
    * @param {Boolean} opt.enable Enable sdk only

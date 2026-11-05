@@ -177,6 +177,12 @@ export async function wmsQuery(opt) {
     height: 9,
     srs: "EPSG:4326",
     bbox: wmsBbox,
+    /**
+     * GeoServer vendor parameter: return raster no-data as null instead of
+     * the dataset no-data marker. Other servers ignore unknown parameters.
+     * https://docs.geoserver.org/latest/en/user/services/wms/reference/#getfeatureinfo
+     */
+    exclude_nodata_result: true,
   };
   /**
    * Update formats using capabilities
@@ -239,7 +245,7 @@ export async function wmsQuery(opt) {
   const response = await fetch(urlFetch);
 
   if (response.exceptions) {
-    console.warn(res.exceptions);
+    console.warn(response.exceptions);
     return props;
   }
 

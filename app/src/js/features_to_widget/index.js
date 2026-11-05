@@ -10,15 +10,16 @@ import {
   isNumeric,
   isViewVt,
   isViewGj,
+  isViewRt,
   isEmpty,
   isString,
 } from "../is_test_mapx/index.js";
 import { getAttributesAlias } from "../metadata/utils.js";
-import { getAttributesNames } from "./attributes.js";
+import { formatAttributeValue, getAttributesNames } from "./attributes.js";
 import { dashboard } from "../dashboards/index.js";
 import { EventSimple } from "../event_simple/index.js";
 import { Widget } from "../dashboards/widget.js";
-import { elWait, el } from "../el_mapx/index.js";
+import { elWait, el, tt } from "../el_mapx/index.js";
 import "./style.less";
 import { onNextFrame, waitTimeoutAsync } from "../animation_frame/index.js";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
@@ -243,6 +244,7 @@ export class FeaturesToWidget extends EventSimple {
     const view = getView(idView);
     const isVt = isViewVt(view);
     const isVector = isVt || isViewGj(view);
+    const isRaster = isViewRt(view);
     const title = getViewTitle(idView);
     const labels = {};
     let item;
@@ -308,13 +310,12 @@ export class FeaturesToWidget extends EventSimple {
           headerTooltip: true,
           vertAlign: "middle",
           tooltip: false,
-          formatter: (cell) => {
-            const v = cell.getValue();
-            if (v === settings.valuesMap.null) {
-              return "";
-            }
-            return v;
-          },
+          formatter: (cell) =>
+            formatAttributeValue(cell.getValue(), {
+              isRaster: isRaster,
+              nullValue: settings.valuesMap.null,
+              noData: () => tt("fw_raster_no_data"),
+            }),
           cellClick: (_, cell) => {
             if (isVector) {
               fw._handleCellClick(idView, cell);

@@ -15,3 +15,26 @@ export function getAttributesNames(rows = []) {
   }
   return [...names];
 }
+
+/**
+ * Display value of an attribute cell.
+ *
+ * Raster (WMS GetFeatureInfo) samples are requested with no-data as null:
+ * a null raster value means "no data", not an empty attribute.
+ * @param {*} value Cell value
+ * @param {Object} opt Options
+ * @param {boolean} [opt.isRaster=false] Value comes from a raster view
+ * @param {*} [opt.nullValue] Placeholder used for null in vector attributes
+ * @param {function(): (string|Element)} opt.noData No data content factory
+ * @return {*} Value, empty string or no data content
+ */
+export function formatAttributeValue(value, opt) {
+  const { isRaster = false, nullValue, noData } = opt || {};
+  if (isRaster && value === null) {
+    return noData();
+  }
+  if (value === nullValue) {
+    return "";
+  }
+  return value;
+}
