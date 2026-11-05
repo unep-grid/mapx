@@ -9,6 +9,7 @@ import { settings as settingsMapx } from "./../settings";
 import { settings as storySettings } from "./settings.js";
 import { theme, panels, events, controls, listeners } from "./../mx";
 import { ButtonPanelLegend } from "../panel_legend/index.js";
+import { enableMapInteractionIfAllowed } from "../map_helpers/interactions.js";
 import {
   onNextFrame,
   cancelFrame,
@@ -299,7 +300,7 @@ function initKeydownListener() {
     group: "story_map",
     onRemove: () => {
       if (state.map_keyboard_enabled) {
-        map.keyboard.enable();
+        enableMapInteractionIfAllowed(map, "keyboard");
       }
     },
   });

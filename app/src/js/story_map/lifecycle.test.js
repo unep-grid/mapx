@@ -169,6 +169,10 @@ import {
   viewsLayersOrderUpdate,
 } from "./../map_helpers/index.js";
 import { theme } from "./../mx";
+import {
+  MAP_INTERACTIONS,
+  setMapInteractions,
+} from "./../map_helpers/interactions.js";
 
 function createMap() {
   const elContainer = document.createElement("div");
@@ -581,5 +585,33 @@ describe("story map lifecycle", () => {
       "light",
       expect.objectContaining({ save_url: true }),
     );
+  });
+
+  it("keeps the keyboard disabled by the SDK after closing", async () => {
+    for (const name of MAP_INTERACTIONS) {
+      mocks.map[name] ??= {
+        isEnabled: () => true,
+        enable: vi.fn(),
+        disable: vi.fn(),
+      };
+    }
+    await storyRead({ view: mocks.storyView });
+    expect(mocks.map.keyboard.disable).toHaveBeenCalled();
+    setMapInteractions(mocks.map, { keyboard: false });
+
+    const closing = storyClose();
+    await settle();
+    await closing;
+
+    expect(mocks.map.keyboard.enable).not.toHaveBeenCalled();
+  });
+
+  it("restores the keyboard after closing", async () => {
+    await storyRead({ view: mocks.storyView });
+    const closing = storyClose();
+    await settle();
+    await closing;
+
+    expect(mocks.map.keyboard.enable).toHaveBeenCalled();
   });
 });

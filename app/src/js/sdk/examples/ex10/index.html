@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Examples</title>
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <style>
+      .input-group {
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Enable or disable map interactions</h1>
+    <h3>( in static mode )</h3>
+    <div class="container">
+      <div class="pane-left item">
+        <p>
+          Shift + drag :
+          <code>boxZoom</code>
+          .
+          <br />
+          Ctrl + drag, right-click drag :
+          <code>dragRotate</code>
+          .
+        </p>
+        <div id="interactions"></div>
+        <div class="input-group">
+          <button id="btnModifiers" disabled>
+            Disable Shift / Ctrl + drag only
+          </button>
+        </div>
+      </div>
+      <div id="mapx" class="mapx pane-right item"></div>
+    </div>
+    <p>
+      Source
+      <a href="index.js" target="_blank">>></a>
+    </p>
+    <p>
+      Examples home
+      <a href="/index.html">>></a>
+    </p>
+    <script type="module" src="index.js"></script>
+  </body>
+</html>

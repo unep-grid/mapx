@@ -43,6 +43,10 @@ import {
   viewSetTimeFilter,
   viewGetTimeFilterValues,
 } from "../../../map_helpers/view_filters.js";
+import {
+  getMapInteractions,
+  setMapInteractions,
+} from "../../../map_helpers/interactions.js";
 
 import { mapComposerModalAuto } from "../../../map_composer";
 import {
@@ -1263,6 +1267,36 @@ export class MapxResolversStatic extends MapxResolversPanels {
     }
     map.setMaxBounds(opt.bounds);
     return true;
+  }
+
+  /**
+   * Enable or disable map user interactions. Interactions not listed keep
+   * their current state; all are enabled by default.
+   *
+   * Available interactions (MapLibre handlers):
+   * - `boxZoom`: Shift + drag, zoom to a box
+   * - `dragRotate`: Ctrl + drag and right-click drag, rotate and tilt
+   * - `dragPan`: drag to pan
+   * - `scrollZoom`: mouse wheel / trackpad zoom
+   * - `keyboard`: arrow keys, +/- zoom
+   * - `doubleClickZoom`: double click / double tap zoom
+   * - `touchZoomRotate`: pinch zoom and rotation
+   * - `touchPitch`: two fingers vertical drag tilt
+   * @param {Object<string, boolean>} opt Interaction name as key, enabled as value
+   * @return {Object<string, boolean>} State of all interactions
+   * @example
+   * mapx.ask("set_map_interactions", { boxZoom: false, dragRotate: false });
+   */
+  set_map_interactions(opt) {
+    return setMapInteractions(getMap(), opt);
+  }
+
+  /**
+   * Get the state of map user interactions
+   * @return {Object<string, boolean>} Interaction name as key, enabled as value. See `set_map_interactions`.
+   */
+  get_map_interactions() {
+    return getMapInteractions(getMap());
   }
 
   /**

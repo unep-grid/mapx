@@ -428,6 +428,27 @@ mapx.once("ready", async () => {
           return true;
         },
       },
+      {
+        name: "Disable and restore box zoom / drag rotate",
+        test: async () => {
+          const off = await mapx.ask("set_map_interactions", {
+            boxZoom: false,
+            dragRotate: false,
+          });
+          const on = await mapx.ask("set_map_interactions", {
+            boxZoom: true,
+            dragRotate: true,
+          });
+          const state = await mapx.ask("get_map_interactions");
+          return (
+            off.boxZoom === false &&
+            off.dragRotate === false &&
+            off.dragPan === true &&
+            on.boxZoom === true &&
+            state.dragRotate === true
+          );
+        },
+      },
     ],
   });
 

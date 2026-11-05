@@ -152,6 +152,7 @@ import { ViewsListUpdate } from "../views_list_update/index.js";
 import { getViewSourceMetadata } from "../metadata/utils.js";
 import { eventToPointBbox } from "./utils.js";
 import { getClickFeaturesData } from "./click_features.js";
+import { enableMapInteractionIfAllowed } from "./interactions.js";
 import {
   buildFeatureIdentityFilter,
   setFeatureIdentityProperty,
@@ -4526,7 +4527,7 @@ export async function setMapPos(opt) {
        */
       await waitTimeoutAsync(duration);
       map.setMaxBounds(map.getBounds());
-      map.scrollZoom.enable();
+      enableMapInteractionIfAllowed(map, "scrollZoom");
     }
 
     if (p.theme && !hasThemeQuery) {
