@@ -1,3 +1,14 @@
+  - [1.14.3-alpha.1](https://github.com/unep-grid/mapx/tree/1.14.3-alpha.1) 
+
+    - fix: sdk dock
+    - chore: update dict
+    - feat(sdk): add get_view_legend_json for vector and GeoServer raster views (#288)
+    - fix(wms): exclude GeoServer no-data in raster inspection and show no data (#1154)
+    - feat(sdk): add set_map_interactions and get_map_interactions (#1153)
+    - chore: update zartigl
+    - build: alias numcodecs/blosc for webpack 4
+
+
   - [1.14.3-alpha.0](https://github.com/unep-grid/mapx/tree/1.14.3-alpha.0) 
 
     - build: depend on zartigl 0.13.0
