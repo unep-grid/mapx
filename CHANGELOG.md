@@ -1,3 +1,8 @@
+  - [1.14.3](https://github.com/unep-grid/mapx/tree/1.14.3) 
+
+    - chore: update caniusedb
+
+
   - [1.14.3-alpha.1](https://github.com/unep-grid/mapx/tree/1.14.3-alpha.1) 
 
     - fix: sdk dock
